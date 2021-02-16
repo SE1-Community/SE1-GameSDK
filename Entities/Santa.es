@@ -140,7 +140,7 @@ functions:
     }
 
     CEntity *penSpawned = GetWorld()->CopyEntityInWorld( *penItem,
-      CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0, 0, 0)) );
+      CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0.0f, 0.0f, 0.0f)) );
 
     // teleport back
     CPlacement3D pl = GetPlacement();

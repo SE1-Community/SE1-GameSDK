@@ -113,11 +113,11 @@ functions:
   void AddRiders()
   {
     GetModelObject()->RemoveAllAttachmentModels();
-    for( INDEX i=0; i<CT_BIGHEADS; i++)
+    for (INDEX i=0; i<CT_BIGHEADS; i++)
     {
       AddAttachment(CRATEBUS_ATTACHMENT_1+i, MODEL_MENTAL, TEXTURE_MENTAL);
       CAttachmentModelObject *pamoMental = GetModelObject()->GetAttachmentModel(CRATEBUS_ATTACHMENT_1+i);
-      if( pamoMental==NULL) { continue; }
+      if (pamoMental==NULL) { continue; }
       CModelObject &moMental=pamoMental->amo_moModelObject;
       AddAttachmentToModel(this, moMental, MENTAL_ATTACHMENT_HEAD, MODEL_HEAD, TEXTURE_HEAD, 0, 0, 0);
       CAttachmentModelObject *pamoHead = moMental.GetAttachmentModel(MENTAL_ATTACHMENT_HEAD);
@@ -139,7 +139,7 @@ functions:
       }
       INDEX iRndLeft=IRnd()%(sizeof(_aiLeftAnimations)/sizeof(INDEX));
       INDEX iRndRight=IRnd()%(sizeof(_aiRightAnimations)/sizeof(INDEX));
-      if(i&1)
+      if (i&1)
       {
         moMental.PlayAnim(_aiRightAnimations[iRndRight], AOF_LOOPING);
       }
@@ -156,7 +156,7 @@ functions:
   void RenderParticles(void)
   {
     CEntity *penParent=GetParent();
-    if( m_bShowTrail && penParent!=NULL)
+    if (m_bShowTrail && penParent!=NULL)
     {
       Particles_AfterBurner( penParent, 0.0f, 0.5f);
       //Particles_RocketTrail(penParent, 25.0f);
@@ -165,12 +165,12 @@ functions:
 
   void SpawnExplosion(INDEX iCharacter, FLOAT fAddY, FLOAT fSize)
   {
-    FLOAT3D vOffset=FLOAT3D(0,0,0);
+    FLOAT3D vOffset=FLOAT3D(0.0f, 0.0f, 0.0f);
     // spawn explosion
-    if(iCharacter>=0)
+    if (iCharacter>=0)
     {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(iCharacter);
-      if( pamo==NULL && fAddY>=0) {return;}
+      if (pamo==NULL && fAddY>=0) {return;}
       GetModelObject()->RemoveAttachmentModel(iCharacter);
       m_ctMentals--;
       // character pos
@@ -181,7 +181,7 @@ functions:
     else
     {
       // rnd pos
-      vOffset=FLOAT3D( (FRnd()-0.5f)*4.0f, 3.0f+(FRnd())*1.0f+fAddY, (FRnd()-0.5f)*36.0f)*m_fStretch;
+      vOffset=FLOAT3D((FRnd()-0.5f)*4.0f, 3.0f+(FRnd())*1.0f+fAddY, (FRnd()-0.5f)*36.0f)*m_fStretch;
     }
 
     CPlacement3D plExplosion = GetPlacement();
@@ -221,17 +221,17 @@ procedures:
     /*
     m_tmDeath=_pTimer->CurrentTick();
     m_ctMentals=TEXTURE_HEAD20-TEXTURE_HEAD01;
-    while((_pTimer->CurrentTick()<m_tmDeath+12.0f) && (m_ctMentals>0))
+    while ((_pTimer->CurrentTick()<m_tmDeath+12.0f) && (m_ctMentals>0))
     {
       autowait(_pTimer->TickQuantum);
       SpawnExplosion(IRnd()%(TEXTURE_HEAD20-TEXTURE_HEAD01),0,1);
-      if(IRnd()%1) { SpawnExplosion(-1,0,1);}
-      if(IRnd()%1) {SpawnExplosion(IRnd()%(TEXTURE_HEAD20-TEXTURE_HEAD01),0,1);}
-      if(IRnd()%1) { SpawnExplosion(-1,0,1);}
+      if (IRnd()%1) { SpawnExplosion(-1,0,1);}
+      if (IRnd()%1) {SpawnExplosion(IRnd()%(TEXTURE_HEAD20-TEXTURE_HEAD01),0,1);}
+      if (IRnd()%1) { SpawnExplosion(-1,0,1);}
     }
     */
 
-    for(INDEX iChar=0; iChar<CT_BIGHEADS; iChar+=1)
+    for (INDEX iChar=0; iChar<CT_BIGHEADS; iChar+=1)
     {
       // character pos
       INDEX iX=iChar%2;
@@ -239,7 +239,7 @@ procedures:
       FLOAT fAddY=1.0f*m_fStretch;
       FLOAT3D vOffset=FLOAT3D(-1.0f+iX*2.0f, 3.0f+(FRnd())*1.0f+fAddY, -14.5f+iZ*2.8f)*m_fStretch;
       FLOAT3D vPos = GetPlacement().pl_PositionVector+vOffset;
-      CEntityPointer penDebris = GetWorld()->CreateEntity_t( CPlacement3D(vPos, ANGLE3D(0,0,0)),
+      CEntityPointer penDebris = GetWorld()->CreateEntity_t( CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)),
         CTFILENAME("Classes\\Debris.ecl"));
       // prepare parameters
       ESpawnDebris eSpawn;
@@ -257,21 +257,21 @@ procedures:
       eSpawn.ptdBump = NULL;
       eSpawn.iModelAnim = 0;
       eSpawn.fSize = m_fStretch;
-      eSpawn.vStretch = FLOAT3D(1,1,1);
+      eSpawn.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
       eSpawn.penFallFXPapa=NULL;
       // initialize it
       penDebris->Initialize(eSpawn);
 
       // speed it up
-      FLOAT3D vSpeed = FLOAT3D( FRnd()-0.5f, 0.25f+FRnd()*0.75f, FRnd()-0.5f)*60.0f;
-      FLOAT3D vRot   = FLOAT3D( FRnd()-0.5f, FRnd()-0.5f, FRnd()-0.5f)*200.0f;
+      FLOAT3D vSpeed = FLOAT3D(FRnd()-0.5f, 0.25f+FRnd()*0.75f, FRnd()-0.5f)*60.0f;
+      FLOAT3D vRot   = FLOAT3D(FRnd()-0.5f, FRnd()-0.5f, FRnd()-0.5f)*200.0f;
       ((CMovableEntity&)*penDebris).LaunchAsFreeProjectile( vSpeed, NULL);
       ((CMovableEntity&)*penDebris).SetDesiredRotation( vRot);
 
       GetModelObject()->RemoveAttachmentModel(iChar);
     }
     
-    {for(INDEX iChar=0; iChar<CT_BIGHEADS; iChar+=3)
+    {for (INDEX iChar=0; iChar<CT_BIGHEADS; iChar+=3)
     {
       SpawnExplosion(iChar, -2.0f, 4.0f);
     }}
@@ -288,7 +288,7 @@ procedures:
  ************************************************************/
   Main(EVoid) {
     // declare yourself as a model
-    if( m_bActive)
+    if (m_bActive)
     {
       InitAsModel();
     }
@@ -312,7 +312,7 @@ procedures:
     autowait(0.1f);
 
     CEntity *penParent=GetParent();
-    if( penParent!=NULL)
+    if (penParent!=NULL)
     {
       //Particles_RocketTrail_Prepare(penParent);
       Particles_AfterBurner_Prepare(penParent);

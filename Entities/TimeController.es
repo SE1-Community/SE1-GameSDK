@@ -45,7 +45,7 @@ procedures:
   ChangeTimeStretch(EVoid)
   {
     m_fMyTimer=0.0f;
-    while( m_fMyTimer<m_tmFadeIn-_pTimer->TickQuantum/2.0f)
+    while (m_fMyTimer<m_tmFadeIn-_pTimer->TickQuantum/2.0f)
     {
       autowait(_pTimer->TickQuantum);
       m_fMyTimer+=_pTimer->TickQuantum/_pNetwork->GetRealTimeFactor();
@@ -59,7 +59,7 @@ procedures:
   ApplyTimeStretch(EVoid)
   {
     autocall ChangeTimeStretch() EReturn;
-    if( m_tmInterval>0)
+    if (m_tmInterval>0)
     {
       autowait(m_tmInterval);
       autocall ResetTimeStretch() EReturn;
@@ -69,7 +69,7 @@ procedures:
 
   ResetTimeStretch(EVoid)
   {
-    if(_pNetwork->GetRealTimeFactor()==1) {return EReturn(); };
+    if (_pNetwork->GetRealTimeFactor()==1) {return EReturn(); };
     m_fOldTimeStretch=_pNetwork->GetRealTimeFactor();
     m_fNewTimeStretch=1.0f;
     autocall ChangeTimeStretch(EVoid()) EReturn;

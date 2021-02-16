@@ -69,7 +69,7 @@ functions:
 
   BOOL LoadOneFile(const CTFileName &fnm)
   {
-    if(fnm=="") { return FALSE; }
+    if (fnm=="") { return FALSE; }
     try 
     {
       _toTexture.SetData_t(fnm);
@@ -109,19 +109,19 @@ functions:
     }
     
     FLOAT fNow=_pTimer->CurrentTick();
-    if( fNow<m_tmFadeInStart) { return 0; }
-    if( fNow>m_tmFadeOutStart+m_tmFadeOutLen) { return 0;}
+    if (fNow<m_tmFadeInStart) { return 0; }
+    if (fNow>m_tmFadeOutStart+m_tmFadeOutLen) { return 0;}
 
     CDrawPort *pdpCurr=pdp;
     pdp->Unlock();
     pdpCurr->Lock();
     
     FLOAT fRatio=1.0f;
-    if( fNow>m_tmFadeOutStart)
+    if (fNow>m_tmFadeOutStart)
     {
       fRatio=CalculateRatio(fNow, m_tmFadeOutStart, m_tmFadeOutStart+m_tmFadeOutLen, 0, 1);
     }
-    if( fNow<m_tmFadeInStart+m_tmFadeInLen)
+    if (fNow<m_tmFadeInStart+m_tmFadeInLen)
     {
       fRatio=CalculateRatio(fNow, m_tmFadeInStart, m_tmFadeInStart+m_tmFadeInLen, 1, 0);
     }
@@ -133,7 +133,7 @@ functions:
     const MEX mexTexW = ptd->GetWidth();
     const MEX mexTexH = ptd->GetHeight();
     FLOAT fPicRatioW, fPicRatioH;
-    if( mexTexW > mexTexH) {
+    if (mexTexW > mexTexH) {
       fPicRatioW = mexTexW/mexTexH;
       fPicRatioH = 1.0f;
     } else {
@@ -169,7 +169,7 @@ procedures:
   {
     m_tmFadeOutStart = _pTimer->CurrentTick();
     CWorldSettingsController *pwsc = GetWSC(this);
-    if( pwsc!=NULL)
+    if (pwsc!=NULL)
     {
       autowait(m_tmFadeOutLen);
       CWorldSettingsController *pwsc = GetWSC(this);
@@ -193,7 +193,7 @@ procedures:
 
     autowait(0.05f);
 
-    if( !Picture_On(m_fnmPicture))
+    if (!Picture_On(m_fnmPicture))
     {
       Picture_Off();
       return;
@@ -208,14 +208,14 @@ procedures:
       on (EStart eStart): 
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if( pwsc!=NULL)
+        if (pwsc!=NULL)
         {
           m_tmFadeInStart = _pTimer->CurrentTick();
           EHudPicFX etfx;
           etfx.bStart=TRUE;
           etfx.penSender=this;
           pwsc->SendEvent(etfx);
-          if( m_tmAutoFadeOut!=-1)
+          if (m_tmAutoFadeOut!=-1)
           {
             call WaitAndFadeOut();
           }

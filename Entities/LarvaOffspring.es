@@ -115,7 +115,7 @@ void InitializeProjectile(void) {
   PlaySound(m_soEffect, SOUND_LARVETTE, SOF_3D|SOF_LOOP);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 12.0f;
   m_fDamageAmount = 10.0f;
   m_aRotateSpeed = 275.0f;
@@ -131,10 +131,10 @@ void LarvaTailExplosion(void) {
   // explosion
   ese.colMuliplier = C_WHITE|CT_OPAQUE;
   ese.betType = BET_ROCKET;
-  ese.vStretch = FLOAT3D(1,1,1);
+  ese.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
   SpawnEffect(GetPlacement(), ese);
   // spawn sound event in range
-  if( IsDerivedFromClass( m_penLauncher, "Player")) {
+  if (IsDerivedFromClass( m_penLauncher, "Player")) {
     SpawnRangeSound( m_penLauncher, this, SNDT_PLAYER, m_fSoundRange);
   }
 
@@ -152,15 +152,15 @@ void LarvaTailExplosion(void) {
       // stain
       ese.betType = BET_EXPLOSIONSTAIN;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // shock wave
       ese.betType = BET_SHOCKWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // second explosion on plane
       ese.betType = BET_ROCKET_PLANE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 }
@@ -178,7 +178,7 @@ void ProjectileTouch(CEntityPointer penHit)
   // direct damage
   FLOAT3D vDirection;
   FLOAT fTransLen = en_vIntendedTranslation.Length();
-  if( fTransLen>0.5f)
+  if (fTransLen>0.5f)
   {
     vDirection = en_vIntendedTranslation/fTransLen;
   }
@@ -258,7 +258,7 @@ procedures:
       return EEnd();
     }
     // fly loop
-    while( _pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
+    while (_pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
     {
       FLOAT fWaitFrequency = 0.1f;
       if (m_penTarget!=NULL) {
@@ -292,7 +292,7 @@ procedures:
         FLOAT fRNDHeading = (FRnd()-0.5f)*180*fDistanceFactor;
         
         // if we are looking near direction of target
-        if( Abs( aWantedHeading) < 30.0f)
+        if (Abs( aWantedHeading) < 30.0f)
         {
           // adjust heading and pich
           SetDesiredRotation(ANGLE3D(aHeading+fRNDHeading,0,0));

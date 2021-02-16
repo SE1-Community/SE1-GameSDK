@@ -82,7 +82,7 @@ procedures:
     autowait( GetModelObject()->GetAnimLength(BOOK_ANIM_OPENING));
     autowait( 0.1f);
     m_iCurrentPage=TEXTURE_PAGE01;
-    while(m_iCurrentPage<TEXTURE_PAGE07)
+    while (m_iCurrentPage<TEXTURE_PAGE07)
     {
       autowait( m_tmPageWait);
       AddAttachment(BOOK_ATTACHMENT_PAGE03, MODEL_PAGE, m_iCurrentPage);

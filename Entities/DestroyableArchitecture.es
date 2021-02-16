@@ -67,7 +67,7 @@ properties:
   1 CTString m_strName                  "Name" 'N' = "DestroyableArchitecture",              // name
   2 FLOAT m_fHealth                     "Health" 'H' = -1.0f,                                // health
   3 enum EffectorEffectType m_etType    "Type" 'Y' = ET_DESTROY_OBELISK,                     // name
-  4 FLOAT3D m_vDamageDir = FLOAT3D(0,0,0),                                                   // direction of damage
+  4 FLOAT3D m_vDamageDir = FLOAT3D(0.0f, 0.0f, 0.0f),                                                   // direction of damage
   5 FLOAT m_fStretch                    "Stretch" 'S' = 1.0f,                                // debris stretch
   6 CEntityPointer m_penGradient        "Gradient" 'R',
 
@@ -122,7 +122,7 @@ functions:
     PrecacheModel     (MODEL_STONE      );
     PrecacheTexture   (TEXTURE_STONE    );
     // precache acording to destroying architecture
-    switch( m_etType)
+    switch (m_etType)
     {
     case ET_DESTROY_OBELISK:
       PrecacheTexture   (TEXTURE_OBELISK        );
@@ -154,13 +154,13 @@ functions:
   // Validate offered target for one property
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if(penTarget==NULL)
+    if (penTarget==NULL)
     {
       return FALSE;
     }
     
     // if gradient marker
-    if( slPropertyOffset==offsetof(CDestroyableArchitecture, m_penGradient) )
+    if (slPropertyOffset==offsetof(CDestroyableArchitecture, m_penGradient) )
     {
       return (IsDerivedFromClass(penTarget, "Gradient Marker"));
     }
@@ -187,7 +187,7 @@ functions:
   void UncacheShadowsForGradient(class CGradientMarker *penDiscard)
   {
     CGradientMarker *pgm = (CGradientMarker *)&*m_penGradient;
-    if(pgm == penDiscard)
+    if (pgm == penDiscard)
     {
       CEntity::UncacheShadowsForGradient(1);
     }
@@ -211,14 +211,14 @@ functions:
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
     // if not destroyable
-    if(m_fHealth<0) {
+    if (m_fHealth<0) {
       // ignore damages
       return;
     }
     
-    if(m_bBlowupByDamager)
+    if (m_bBlowupByDamager)
     {
-      if( dmtType == DMT_DAMAGER)
+      if (dmtType == DMT_DAMAGER)
       {
         CMovableBrushEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
       }
@@ -226,7 +226,7 @@ functions:
     else
     {
       // react only on explosions
-      if( (dmtType == DMT_EXPLOSION) ||
+      if ((dmtType == DMT_EXPLOSION) ||
           (dmtType == DMT_PROJECTILE) ||
           (dmtType == DMT_CANNONBALL) )
       {
@@ -237,13 +237,13 @@ functions:
 
   void DestroyObelisk()
   {
-    for( INDEX iDebris=0; iDebris<ARRAYCOUNT(_ObeliskDebrisInfo); iDebris++)
+    for (INDEX iDebris=0; iDebris<ARRAYCOUNT(_ObeliskDebrisInfo); iDebris++)
     {
       DebrisInfo &di = _ObeliskDebrisInfo[iDebris];
-      FLOAT3D vOffset = FLOAT3D( di.vOffset[0], di.vOffset[1], di.vOffset[2])*m_fStretch;
+      FLOAT3D vOffset = FLOAT3D(di.vOffset[0], di.vOffset[1], di.vOffset[2])*m_fStretch;
       FLOAT3D vPos = GetPlacement().pl_PositionVector+vOffset;
       CEntityPointer penDebris = GetWorld()->CreateEntity_t(
-        CPlacement3D(vPos, ANGLE3D(0,0,0)), CTFILENAME("Classes\\Debris.ecl"));
+        CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CTFILENAME("Classes\\Debris.ecl"));
       // prepare parameters
       ESpawnDebris eSpawn;
       eSpawn.fDustStretch=m_fDustStretch;
@@ -260,18 +260,18 @@ functions:
       eSpawn.ptdBump = NULL;
       eSpawn.iModelAnim = 0;
       eSpawn.fSize = m_fStretch;
-      eSpawn.vStretch = FLOAT3D(1,1,1);
+      eSpawn.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
       eSpawn.penFallFXPapa=NULL;
       // initialize it
       penDebris->Initialize(eSpawn);
 
       // speed it up
       FLOAT fHeightRatio = di.vOffset[1]*m_fStretch/120.0f;
-      FLOAT3D vSpeed = FLOAT3D( FRnd()-0.5f, 0.0f, FRnd()-0.5f)*(1.0f-fHeightRatio)*160.0f;
-      FLOAT3D vRot   = FLOAT3D( FRnd()-0.5f, (FRnd()-0.5f)*(1.0f-fHeightRatio), FRnd()-0.5f)*200.0f;
+      FLOAT3D vSpeed = FLOAT3D(FRnd()-0.5f, 0.0f, FRnd()-0.5f)*(1.0f-fHeightRatio)*160.0f;
+      FLOAT3D vRot   = FLOAT3D(FRnd()-0.5f, (FRnd()-0.5f)*(1.0f-fHeightRatio), FRnd()-0.5f)*200.0f;
       /*
-      vSpeed = FLOAT3D( 0,0,0);
-      vRot   = FLOAT3D( 0,0,0);*/
+      vSpeed = FLOAT3D(0,0,0);
+      vRot   = FLOAT3D(0,0,0);*/
       ((CMovableEntity&)*penDebris).LaunchAsFreeProjectile( vSpeed, NULL);
       ((CMovableEntity&)*penDebris).SetDesiredRotation( vRot);
     }
@@ -304,13 +304,13 @@ functions:
 
   void DestroyPylon()
   {
-    for( INDEX iDebris=0; iDebris<ARRAYCOUNT(_PylonDebrisInfo); iDebris++)
+    for (INDEX iDebris=0; iDebris<ARRAYCOUNT(_PylonDebrisInfo); iDebris++)
     {
       DebrisInfo &di = _PylonDebrisInfo[iDebris];
-      FLOAT3D vOffset = FLOAT3D( di.vOffset[0], di.vOffset[1], di.vOffset[2])*m_fStretch;
+      FLOAT3D vOffset = FLOAT3D(di.vOffset[0], di.vOffset[1], di.vOffset[2])*m_fStretch;
       FLOAT3D vPos = GetPlacement().pl_PositionVector+vOffset;
       CEntityPointer penDebris = GetWorld()->CreateEntity_t(
-        CPlacement3D(vPos, ANGLE3D(0,0,0)), CTFILENAME("Classes\\Debris.ecl"));
+        CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CTFILENAME("Classes\\Debris.ecl"));
       // prepare parameters
       ESpawnDebris eSpawn;
       eSpawn.fDustStretch=m_fDustStretch;
@@ -327,15 +327,15 @@ functions:
       eSpawn.ptdBump = NULL;
       eSpawn.iModelAnim = 0;
       eSpawn.fSize = m_fStretch;
-      eSpawn.vStretch = FLOAT3D(1,1,1);
+      eSpawn.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
       eSpawn.penFallFXPapa=NULL;
       // initialize it
       penDebris->Initialize(eSpawn);
 
       // speed it up
       FLOAT fHeightRatio = di.vOffset[1]*m_fStretch/120.0f;
-      FLOAT3D vSpeed = (m_vDamageDir*2.0f+FLOAT3D( FRnd()-0.5f, 0.0f, FRnd()))*fHeightRatio*160.0f;
-      FLOAT3D vRot   = FLOAT3D( FRnd()-0.5f, (FRnd()-0.5f)*fHeightRatio, FRnd()-0.5f)*300.0f;
+      FLOAT3D vSpeed = (m_vDamageDir*2.0f+FLOAT3D(FRnd()-0.5f, 0.0f, FRnd()))*fHeightRatio*160.0f;
+      FLOAT3D vRot   = FLOAT3D(FRnd()-0.5f, (FRnd()-0.5f)*fHeightRatio, FRnd()-0.5f)*300.0f;
       ((CMovableEntity&)*penDebris).LaunchAsFreeProjectile( vSpeed, NULL);
       ((CMovableEntity&)*penDebris).SetDesiredRotation( vRot);
     }
@@ -398,7 +398,7 @@ procedures:
       on (EBrushDestroyedByDevil ebdbd) :
       {
         m_vDamageDir = ebdbd.vDamageDir;
-        switch( m_etType)
+        switch (m_etType)
         {
         case ET_DESTROY_OBELISK:
           DestroyObelisk();
@@ -413,15 +413,15 @@ procedures:
         // get your size
         FLOATaabbox3D box;
         GetSize(box);
-        if( m_ctDebrises<=0)
+        if (m_ctDebrises<=0)
         {
           m_ctDebrises=1;
         }
         FLOAT fEntitySize = pow(box.Size()(1)*box.Size()(2)*box.Size()(3)/m_ctDebrises, 1.0f/3.0f)*m_fCubeFactor;
         
         Debris_Begin(EIBT_ROCK, DPT_NONE, BET_NONE, fEntitySize, FLOAT3D(1.0f,2.0f,3.0f),
-          FLOAT3D(0,0,0), 1.0f+m_fCandyEffect/2.0f, m_fCandyEffect, m_colDebrises);
-        for(INDEX iDebris = 0; iDebris<m_ctDebrises; iDebris++) {
+          FLOAT3D(0.0f, 0.0f, 0.0f), 1.0f+m_fCandyEffect/2.0f, m_fCandyEffect, m_colDebrises);
+        for (INDEX iDebris = 0; iDebris<m_ctDebrises; iDebris++) {
           Debris_Spawn(this, this, MODEL_STONE, TEXTURE_STONE, 0, 0, 0, IRnd()%4, 1.0f,
             FLOAT3D(FRnd()*0.8f+0.1f, FRnd()*0.8f+0.1f, FRnd()*0.8f+0.1f));
         }

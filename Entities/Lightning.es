@@ -96,11 +96,11 @@ functions:
 
   void RenderParticles(void)
   {
-    if( m_penTarget==NULL || m_tmLightningStart == -1) {return;};
+    if (m_penTarget==NULL || m_tmLightningStart == -1) {return;};
 
     TIME tmNow = _pTimer->GetLerpedCurrentTick();
     // if lightning is traveling
-    if(
+    if (
       ((tmNow-m_tmLightningStart) > 0.0f) &&
       ((tmNow-m_tmLightningStart) < 1.5f) )
     {
@@ -116,14 +116,14 @@ procedures:
   {
     // choose random sound
     m_iSoundPlaying = 1+IRnd()%( ARRAYCOUNT(_atiThunderSounds)-1);
-    if( m_fSoundDelay != 0)
+    if (m_fSoundDelay != 0)
     {
       m_iSoundPlaying=0;
     }
     m_soThunder.SetVolume(1.5f*m_fLightningPower, 1.5f*m_fLightningPower);
     m_soThunder.SetPitch(Lerp(0.9f, 1.2f, FRnd()));
     
-    if( m_fSoundDelay == 0.0f)
+    if (m_fSoundDelay == 0.0f)
     {
       // play thunder !
       PlaySound(m_soThunder, _atiThunderSounds[ m_iSoundPlaying].ti_iSound, 0);
@@ -143,7 +143,7 @@ procedures:
     ((CWorldSettingsController *)&*m_penwsc)->m_fLightningPower = m_fLightningPower;
 
     // trigger light animation
-    if( m_penLight != NULL)
+    if (m_penLight != NULL)
     {
       EChangeAnim eChange;
       eChange.iLightAnim  = m_iLightAnim;
@@ -151,7 +151,7 @@ procedures:
       m_penLight->SendEvent(eChange);
     }
 
-    if( m_fSoundDelay != 0.0f)
+    if (m_fSoundDelay != 0.0f)
     {
       // wait given delay time
       autowait( m_fSoundDelay);
@@ -199,7 +199,7 @@ procedures:
 
     // obtain bcg viewer entity
     CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) GetWorld()->GetBackgroundViewer();
-    if( penBcgViewer == NULL)
+    if (penBcgViewer == NULL)
     {
       // don't do anything
       return;
@@ -207,7 +207,7 @@ procedures:
 
     // obtain world settings controller 
     m_penwsc = penBcgViewer->m_penWorldSettingsController;
-    if( m_penwsc == NULL)
+    if (m_penwsc == NULL)
     {
       // don't do anything
       return;
@@ -221,9 +221,9 @@ procedures:
     }
 
     // lightning target must be marker
-    if( (m_penTarget == NULL) || (!IsOfClass(m_penTarget, "Marker")) )
+    if ((m_penTarget == NULL) || (!IsOfClass(m_penTarget, "Marker")) )
     {
-      if( m_penTarget != NULL)
+      if (m_penTarget != NULL)
       {
         WarningMessage("Target '%s' is not of Marker class!", m_penTarget->GetName());
       }

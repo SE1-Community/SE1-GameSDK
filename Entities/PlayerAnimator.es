@@ -273,7 +273,7 @@ properties:
  18 BOOL m_bDisableAnimating = FALSE,
 
 // player soft eyes on Y axis
- 20 FLOAT3D m_vLastPlayerPosition = FLOAT3D(0,0,0), // last player position for eyes movement
+ 20 FLOAT3D m_vLastPlayerPosition = FLOAT3D(0.0f, 0.0f, 0.0f), // last player position for eyes movement
  21 FLOAT m_fEyesYLastOffset = 0.0f,                 // eyes offset from player position
  22 FLOAT m_fEyesYOffset = 0.0f,
  23 FLOAT m_fEyesYSpeed = 0.0f,                      // eyes speed
@@ -780,8 +780,8 @@ functions:
       CAttachmentModelObject *pamo = pl.GetModelObject()->GetAttachmentModelList(PLAYER_ATTACHMENT_TORSO, BODY_ATTACHMENT_ITEM, -1);
       pmoModel = &(pamo->amo_moModelObject);
       pmoModel->Copy(*pmo);
-      pmoModel->StretchModel(FLOAT3D(1,1,1));
-      pamo->amo_plRelative = CPlacement3D(FLOAT3D(0,0,0), ANGLE3D(0,0,0));
+      pmoModel->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
+      pamo->amo_plRelative = CPlacement3D(FLOAT3D(0.0f, 0.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
     }
     // sync apperances
     SyncWeapon();
@@ -1027,7 +1027,7 @@ functions:
     CAttachmentModelObject *pamoBody = pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO);
     ANGLE3D a = plView.pl_OrientationAngle;
     if (!(pl.GetFlags()&ENF_ALIVE)) {
-      a = ANGLE3D(0,0,0);
+      a = ANGLE3D(0.0f, 0.0f, 0.0f);
     }
     pamoBody->amo_plRelative.pl_OrientationAngle = a;
     pamoBody->amo_plRelative.pl_OrientationAngle(3) *= 4.0f;
@@ -1506,14 +1506,14 @@ functions:
       PLAYER_ATTACHMENT_TORSO, iAttachWeapon, iAttachObject, iAttachFlare, -1);
     if (pamo!=NULL) {
       CModelObject &mo = pamo->amo_moModelObject;
-      mo.StretchModel(FLOAT3D(0, 0, 0));
+      mo.StretchModel(FLOAT3D(0.0f, 0.0f, 0.0f));
     }
   };
 
   // flare attachment
   void ControlFlareAttachment(void) 
   {
-/*    if(!IsPredictionHead()) {
+/*    if (!IsPredictionHead()) {
       return;
     }
     */
@@ -1538,7 +1538,7 @@ functions:
     if (pen->m_iFlare==FLARE_ADD) {
       pen->m_iFlare = FLARE_REMOVE;
       pen->m_tmFlareAdded = _pTimer->CurrentTick();
-      switch(iWeapon) {
+      switch (iWeapon) {
         case WEAPON_DOUBLECOLT: case WEAPON_COLT:
           ShowFlare(BODY_ATTACHMENT_COLT_RIGHT, COLTITEM_ATTACHMENT_BODY, COLTMAIN_ATTACHMENT_FLARE);
           break;
@@ -1561,7 +1561,7 @@ functions:
     // remove
     } else if (m_iFlare==FLARE_REMOVE &&
       _pTimer->CurrentTick()>pen->m_tmFlareAdded+_pTimer->TickQuantum) {
-      switch(iWeapon) {
+      switch (iWeapon) {
         case WEAPON_DOUBLECOLT: case WEAPON_COLT:
           HideFlare(BODY_ATTACHMENT_COLT_RIGHT, COLTITEM_ATTACHMENT_BODY, COLTMAIN_ATTACHMENT_FLARE);
           break;
@@ -1596,7 +1596,7 @@ procedures:
       case AA_CROUCH: m_iCrouchDownWait--; ASSERT(m_iCrouchDownWait>=0); break;
       case AA_RISE: m_iRiseUpWait--; ASSERT(m_iRiseUpWait>=0); break;
       case AA_PULLWEAPON: m_bChangeWeapon = FALSE; break;
-      case AA_ATTACK: if(m_tmAttackingDue<=_pTimer->CurrentTick()) { m_bAttacking = FALSE; } break;
+      case AA_ATTACK: if (m_tmAttackingDue<=_pTimer->CurrentTick()) { m_bAttacking = FALSE; } break;
       default: ASSERTALWAYS("Animator - unknown reminder action.");
     }
     return EBegin();

@@ -94,10 +94,10 @@ properties:
 
  30 FLOAT m_tmAtMarker = 0.0f,                                        // time when current marker was reached
  31 FLOAT m_tmDelta = 0.0f,                                           // time to reach next marker
- 32 FLOAT3D m_vPNp0 = FLOAT3D(0,0,0),
- 33 FLOAT3D m_vPNp1 = FLOAT3D(0,0,0),
- 34 FLOAT3D m_vTNp0 = FLOAT3D(0,0,0),
- 35 FLOAT3D m_vTNp1 = FLOAT3D(0,0,0),
+ 32 FLOAT3D m_vPNp0 = FLOAT3D(0.0f, 0.0f, 0.0f),
+ 33 FLOAT3D m_vPNp1 = FLOAT3D(0.0f, 0.0f, 0.0f),
+ 34 FLOAT3D m_vTNp0 = FLOAT3D(0.0f, 0.0f, 0.0f),
+ 35 FLOAT3D m_vTNp1 = FLOAT3D(0.0f, 0.0f, 0.0f),
  36 FLOATquat3D m_qPNp0 = FLOATquat3D(0,0,0,0),
  37 FLOATquat3D m_qPNp1 = FLOATquat3D(0,0,0,0),
  38 FLOATquat3D m_qANp0 = FLOATquat3D(0,0,0,0),
@@ -158,11 +158,11 @@ functions:
 
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if(penTarget==NULL)
+    if (penTarget==NULL)
     {
       return FALSE;
     }
-    if( slPropertyOffset==offsetof(CPyramidSpaceShip, m_penTarget) ||
+    if (slPropertyOffset==offsetof(CPyramidSpaceShip, m_penTarget) ||
         slPropertyOffset==offsetof(CPyramidSpaceShip, m_penFlyAwayTarget))
     {
       return( IsDerivedFromClass(penTarget, "Pyramid Space Ship Marker"));
@@ -210,11 +210,11 @@ functions:
 
   void HideBeamMachine(void)
   {
-    if(GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_BEAM_RIM) != NULL)
+    if (GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_BEAM_RIM) != NULL)
     {
       RemoveAttachment(SPACESHIP_ATTACHMENT_BEAM_RIM);
     }
-    if(GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_BEAM) != NULL)
+    if (GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_BEAM) != NULL)
     {
       RemoveAttachment(SPACESHIP_ATTACHMENT_BEAM);
     }
@@ -237,13 +237,13 @@ functions:
     // check all markers for correct type and numbers
     INDEX ctMarkers=1;
     CPyramidSpaceShipMarker *pcm0 = (CPyramidSpaceShipMarker*)&*m_penTarget;
-    if( pcm0 == NULL)
+    if (pcm0 == NULL)
     {
       return;
     }
     CPyramidSpaceShipMarker *pcm  = (CPyramidSpaceShipMarker*)&*pcm0->m_penTarget;
     // loop thru markers
-    while( pcm!=NULL && pcm->m_penTarget!=pcm0)
+    while (pcm!=NULL && pcm->m_penTarget!=pcm0)
     {
       pcm = (CPyramidSpaceShipMarker*)&*pcm->m_penTarget;
       if (pcm==NULL) {
@@ -257,7 +257,7 @@ functions:
       }
     }
     // check if we have enough markers to do smooth interpolation
-    if( ctMarkers<2) {
+    if (ctMarkers<2) {
       WarningMessage( "Space ship path requires at least 2 markers in order to work!");
       return;
     }
@@ -284,7 +284,7 @@ functions:
     BOOL bLerping = TRUE;
 
     // if we hit a marker
-    if( tmCurrent > (m_tmAtMarker+m_tmDelta - _pTimer->TickQuantum*3/2)) 
+    if (tmCurrent > (m_tmAtMarker+m_tmDelta - _pTimer->TickQuantum*3/2)) 
     {
       // get markers
       CPyramidSpaceShipMarker *pcmNm1 = &(CPyramidSpaceShipMarker&)*m_penLast;
@@ -329,13 +329,13 @@ functions:
       FLOATquat3D qPNp2; qPNp2.FromEuler(aPNp2);
 
       // make all angles between quaternion pairs acute
-      if( qPNm1%qPNp0<0 ) {
+      if (qPNm1%qPNp0<0 ) {
         qPNp0 = -qPNp0;
       }
-      if( qPNp0%qPNp1<0 ) {
+      if (qPNp0%qPNp1<0 ) {
         qPNp1 = -qPNp1;
       }
-      if( qPNp1%qPNp2<0 ) {
+      if (qPNp1%qPNp2<0 ) {
         qPNp2 = -qPNp2;
       }
 
@@ -387,7 +387,7 @@ functions:
       m_qANp1 = qPNp1*Exp( (Log(qPNp0.Inv()*qPNp1) - qTNp1)/2 );
 
       // check for stop moving
-      if( cmNp0.m_bStopMoving && m_fRotSpeed==0.0f) {
+      if (cmNp0.m_bStopMoving && m_fRotSpeed==0.0f) {
         m_bStopMoving = TRUE;
       }
     }
@@ -443,7 +443,7 @@ functions:
     }
 
     //
-    if( m_bStopMoving) {
+    if (m_bStopMoving) {
       m_bMoving = FALSE;
       // mark for removing from list of movers
       en_ulFlags |= ENF_INRENDERING;
@@ -457,10 +457,10 @@ functions:
   {
     // spawn small beam machine flares
     CPlacement3D plSpaceShip = GetPlacement();
-    CPlacement3D plFlare1 = CPlacement3D( FLOAT3D(  BM_DX, BM_DY+BM_FLARE_DY,      0), ANGLE3D(0,0,0));
-    CPlacement3D plFlare2 = CPlacement3D( FLOAT3D(      0, BM_DY+BM_FLARE_DY, -BM_DZ), ANGLE3D(0,0,0));
-    CPlacement3D plFlare3 = CPlacement3D( FLOAT3D( -BM_DX, BM_DY+BM_FLARE_DY,      0), ANGLE3D(0,0,0));
-    CPlacement3D plFlare4 = CPlacement3D( FLOAT3D(      0, BM_DY+BM_FLARE_DY,  BM_DZ), ANGLE3D(0,0,0));
+    CPlacement3D plFlare1 = CPlacement3D( FLOAT3D(BM_DX, BM_DY+BM_FLARE_DY,      0), ANGLE3D(0.0f, 0.0f, 0.0f));
+    CPlacement3D plFlare2 = CPlacement3D( FLOAT3D(0, BM_DY+BM_FLARE_DY, -BM_DZ), ANGLE3D(0.0f, 0.0f, 0.0f));
+    CPlacement3D plFlare3 = CPlacement3D( FLOAT3D(-BM_DX, BM_DY+BM_FLARE_DY,      0), ANGLE3D(0.0f, 0.0f, 0.0f));
+    CPlacement3D plFlare4 = CPlacement3D( FLOAT3D(0, BM_DY+BM_FLARE_DY,  BM_DZ), ANGLE3D(0.0f, 0.0f, 0.0f));
     
     plFlare1.RelativeToAbsolute(plSpaceShip);
     plFlare2.RelativeToAbsolute(plSpaceShip);
@@ -487,7 +487,7 @@ functions:
   {
     // spawn main flare
     CPlacement3D plSpaceShip = GetPlacement();
-    CPlacement3D plFlare = CPlacement3D( FLOAT3D(0, BM_MASTER_Y+BM_FLARE_DY, 0), ANGLE3D(0,0,0));
+    CPlacement3D plFlare = CPlacement3D( FLOAT3D(0, BM_MASTER_Y+BM_FLARE_DY, 0), ANGLE3D(0.0f, 0.0f, 0.0f));
     plFlare.RelativeToAbsolute(GetPlacement());
     CEntity *penFlare = CreateEntity( plFlare, CLASS_EFFECTOR);
     ESpawnEffector eSpawnFlare;
@@ -499,10 +499,10 @@ functions:
 
   void ShowBeamMachineHitFlare(void)
   {
-    if( m_penHitPlaceFlare!=NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
+    if (m_penHitPlaceFlare!=NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
     {
       CModelObject *pmo = m_penHitPlaceFlare->GetModelObject();
-      if( pmo != NULL) 
+      if (pmo != NULL) 
       {
         m_penHitPlaceFlare->SwitchToModel();
       }
@@ -512,10 +512,10 @@ functions:
   void HideBeamMachineHitFlare(void)
   {
     m_tmHitFlareTime = -1;
-    if( m_penHitPlaceFlare!=NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
+    if (m_penHitPlaceFlare!=NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
     {
       CModelObject *pmo = m_penHitPlaceFlare->GetModelObject();
-      if( pmo != NULL) 
+      if (pmo != NULL) 
       {
         m_penHitPlaceFlare->SwitchToEditorModel();
         pmo->mo_colBlendColor = C_WHITE|CT_OPAQUE;
@@ -526,12 +526,12 @@ functions:
   void SpawnBeamMachineLightnings(void)
   {
     // spawn beam lightnings
-    CPlacement3D plLightning1 = CPlacement3D( FLOAT3D(BM_DX, BM_DY, 0), ANGLE3D(0,0,0));
-    CPlacement3D plLightning2 = CPlacement3D( FLOAT3D(0, BM_DY, -BM_DZ), ANGLE3D(0,0,0));
-    CPlacement3D plLightning3 = CPlacement3D( FLOAT3D(-BM_DX, BM_DY, 0), ANGLE3D(0,0,0));
-    CPlacement3D plLightning4 = CPlacement3D( FLOAT3D(0, BM_DY, BM_DZ), ANGLE3D(0,0,0));
+    CPlacement3D plLightning1 = CPlacement3D( FLOAT3D(BM_DX, BM_DY, 0), ANGLE3D(0.0f, 0.0f, 0.0f));
+    CPlacement3D plLightning2 = CPlacement3D( FLOAT3D(0, BM_DY, -BM_DZ), ANGLE3D(0.0f, 0.0f, 0.0f));
+    CPlacement3D plLightning3 = CPlacement3D( FLOAT3D(-BM_DX, BM_DY, 0), ANGLE3D(0.0f, 0.0f, 0.0f));
+    CPlacement3D plLightning4 = CPlacement3D( FLOAT3D(0, BM_DY, BM_DZ), ANGLE3D(0.0f, 0.0f, 0.0f));
     
-    CPlacement3D plLightningDest = CPlacement3D( FLOAT3D(0, BM_MASTER_Y, 0), ANGLE3D(0,0,0));
+    CPlacement3D plLightningDest = CPlacement3D( FLOAT3D(0, BM_MASTER_Y, 0), ANGLE3D(0.0f, 0.0f, 0.0f));
     CPlacement3D plSpaceShip = GetPlacement();
     plLightningDest.RelativeToAbsolute(plSpaceShip);
     
@@ -561,9 +561,9 @@ functions:
   void SpawnBeamMachineMainLightning(void)
   {
     // spawn main lightning
-    FLOAT3D vDestination = GetPlacement().pl_PositionVector + FLOAT3D( 0, BM_MASTER_Y, 0);
-    CPlacement3D plSource = CPlacement3D( vDestination, ANGLE3D(0,0,0));
-    if( m_penBeamHit != NULL)
+    FLOAT3D vDestination = GetPlacement().pl_PositionVector + FLOAT3D(0, BM_MASTER_Y, 0);
+    CPlacement3D plSource = CPlacement3D( vDestination, ANGLE3D(0.0f, 0.0f, 0.0f));
+    if (m_penBeamHit != NULL)
     {
       plSource.pl_PositionVector = m_penBeamHit->GetPlacement().pl_PositionVector;
       CEntity *penEffector = CreateEntity( plSource, CLASS_EFFECTOR);
@@ -579,10 +579,10 @@ functions:
 
   void SpawnMovingRing(void)
   {
-    if( m_penBeamHit != NULL)
+    if (m_penBeamHit != NULL)
     {
-      FLOAT3D vStart = GetPlacement().pl_PositionVector + FLOAT3D( 0, BM_MASTER_Y, 0);
-      CPlacement3D plSource = CPlacement3D( vStart, ANGLE3D(0,0,0));
+      FLOAT3D vStart = GetPlacement().pl_PositionVector + FLOAT3D(0, BM_MASTER_Y, 0);
+      CPlacement3D plSource = CPlacement3D( vStart, ANGLE3D(0.0f, 0.0f, 0.0f));
       FLOAT3D vHitPlace = m_penBeamHit->GetPlacement().pl_PositionVector;
       CEntity *penEffector = CreateEntity( plSource, CLASS_EFFECTOR);
       ESpawnEffector eSpawnEffector;
@@ -597,7 +597,7 @@ functions:
 
   void TurnOnLightBeam(void)
   {
-    if( m_penLightBeam!=NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
+    if (m_penLightBeam!=NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
     {
       CModelObject *pmo = m_penLightBeam->GetModelObject();
       m_penLightBeam->SwitchToModel();
@@ -609,7 +609,7 @@ functions:
   {
     m_tmBeamTime=-1.0f;
 
-    if( m_penLightBeam!=NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
+    if (m_penLightBeam!=NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
     {
       m_penLightBeam->SwitchToEditorModel();
       CModelObject *pmo = m_penLightBeam->GetModelObject();
@@ -621,12 +621,12 @@ functions:
     FLOAT fBeamRatio = 1.0f;
     
     // light beam
-    if( m_penLightBeam!=NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
+    if (m_penLightBeam!=NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
     {
       CModelObject *pmo = m_penLightBeam->GetModelObject();
-      if( pmo != NULL) 
+      if (pmo != NULL) 
       {
-        if( m_tmBeamTime>-1.0f)
+        if (m_tmBeamTime>-1.0f)
         {
           FLOAT fT = _pTimer->CurrentTick()-m_tmBeamTime;
           fBeamRatio = 1.0f-ClampUp(fT/2.0f, 1.0f);
@@ -638,16 +638,16 @@ functions:
     }
 
     // hit flare
-    if( m_penHitPlaceFlare!=NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
+    if (m_penHitPlaceFlare!=NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
     {
       CModelObject *pmo = m_penHitPlaceFlare->GetModelObject();
-      if( pmo != NULL) 
+      if (pmo != NULL) 
       {
-        if( m_tmHitFlareTime>-1.0f)
+        if (m_tmHitFlareTime>-1.0f)
         {
           FLOAT fT = _pTimer->CurrentTick()-m_tmHitFlareTime;
           FLOAT fRatio = (Sin(fT*2000)*0.5f+0.5f)*(Sin(fT*1333)*0.5f+0.5f);
-          /*if(fRatio>0.5f)
+          /*if (fRatio>0.5f)
           {
             fRatio=0.0f;
           }
@@ -686,7 +686,7 @@ procedures:
   OpenDoors()
   {
     // if ship inside not yet added
-    if( GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_SHIPINSIDE) == NULL)
+    if (GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_SHIPINSIDE) == NULL)
     {
       // add it
       AddAttachment( SPACESHIP_ATTACHMENT_SHIPINSIDE, MODEL_SHIP_INSIDE, TEXTURE_BODY);
@@ -694,7 +694,7 @@ procedures:
     }
     ShowBeamMachine();
 
-    if( !m_bImmediateAnimations)
+    if (!m_bImmediateAnimations)
     {
       PlaySound( m_soPlates, SOUND_PLATES, SOF_3D);
       GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_DOOR1)->amo_moModelObject.PlayAnim(DOOR_ANIM_OPENING, 0); 
@@ -721,9 +721,9 @@ procedures:
     // all children lights named pulsating should pulsate
     FOREACHINLIST( CEntity, en_lnInParent, en_lhChildren, iten)
     {
-      if( IsOfClass(iten, "Light"))
+      if (IsOfClass(iten, "Light"))
       {
-        if( iten->GetName() == "Pulsating")
+        if (iten->GetName() == "Pulsating")
         {
           CLight *penLight = (CLight *) &*iten;
           EChangeAnim eChange;
@@ -731,7 +731,7 @@ procedures:
           eChange.bLightLoop=TRUE;
           penLight->SendEvent(eChange);
         }
-        else if( iten->GetName() == "Motors")
+        else if (iten->GetName() == "Motors")
         {
           CLight *penLight = (CLight *) &*iten;
           EChangeAnim eChange;
@@ -750,7 +750,7 @@ procedures:
   {
     m_epssState=PSSS_DOORS_CLOSED;
     // if ship inside attachment added
-    if( GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_SHIPINSIDE) != NULL)
+    if (GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_SHIPINSIDE) != NULL)
     {
       PlaySound( m_soPlates, SOUND_PLATES, SOF_3D);
       GetModelObject()->GetAttachmentModel( SPACESHIP_ATTACHMENT_DOOR1)->amo_moModelObject.PlayAnim(DOOR_ANIM_CLOSING, 0); 
@@ -774,17 +774,17 @@ procedures:
 
   FireLightBeam()
   {
-    if(m_epssState==PSSS_DOORS_CLOSED)
+    if (m_epssState==PSSS_DOORS_CLOSED)
     {
       return;
     }
 
-    if(m_epssState==PSSS_BEAM_DEACTIVATED)
+    if (m_epssState==PSSS_BEAM_DEACTIVATED)
     {
       m_bFireingDeactivatedBeam=TRUE;
     }
 
-    if( !m_bImmediateAnimations)
+    if (!m_bImmediateAnimations)
     {
       PlaySound( m_soBeamMachine, SOUND_BEAMMACHINE, SOF_3D);
       GetModelObject()->PlayAnim(SPACESHIP_ANIM_OPENING, 0); 
@@ -795,7 +795,7 @@ procedures:
       GetModelObject()->PlayAnim(SPACESHIP_ANIM_OPEN, 0); 
     }
 
-    if( !m_bImmediateAnimations)
+    if (!m_bImmediateAnimations)
     {
       PlaySound( m_soBeamMachine, SOUND_WARMUP, SOF_3D);
       SpawnBeamMachineFlares();
@@ -807,20 +807,20 @@ procedures:
     }
 
     SpawnBeamMachineLightnings();
-    if( !m_bImmediateAnimations)
+    if (!m_bImmediateAnimations)
     {
       autowait( SMALL_LIGHTNING_WAIT);
     }
 
     SpawnBeamMachineMainFlare();
-    if( !m_bImmediateAnimations)
+    if (!m_bImmediateAnimations)
     {
       autowait( BIG_FLARE_WAIT);
     }
 
     // turn on light beam
     TurnOnLightBeam();
-    if(!m_bFireingDeactivatedBeam)
+    if (!m_bFireingDeactivatedBeam)
     {
       SpawnBeamMachineMainLightning();
     }
@@ -831,10 +831,10 @@ procedures:
     m_tmHitFlareTime = _pTimer->CurrentTick();
     
     m_iRingCounter = 0;
-    while(_pTimer->CurrentTick()<m_tmHitFlareTime+BIG_LIGHT_BEAM_LIFE_TIME)
+    while (_pTimer->CurrentTick()<m_tmHitFlareTime+BIG_LIGHT_BEAM_LIFE_TIME)
     {
       // spawn one moving ring
-      if( m_iRingCounter < 16)
+      if (m_iRingCounter < 16)
       {
         SpawnMovingRing();
         m_iRingCounter++;
@@ -842,14 +842,14 @@ procedures:
 
       // apply beam damage
       m_tmTemp = _pTimer->CurrentTick();
-      while( _pTimer->CurrentTick() < m_tmTemp+0.49f)
+      while (_pTimer->CurrentTick() < m_tmTemp+0.49f)
       {
         autowait(_pTimer->TickQuantum);
         // cast ray for possible damage
-        if( m_penBeamHit != NULL && !m_bFireingDeactivatedBeam)
+        if (m_penBeamHit != NULL && !m_bFireingDeactivatedBeam)
         {
           // cast ray
-          FLOAT3D vSource = GetPlacement().pl_PositionVector + FLOAT3D( 0, BM_MASTER_Y, 0);
+          FLOAT3D vSource = GetPlacement().pl_PositionVector + FLOAT3D(0, BM_MASTER_Y, 0);
           FLOAT3D vDestination = m_penBeamHit->GetPlacement().pl_PositionVector;
           CCastRay crRay( this, vSource, vDestination);
           crRay.cr_bHitTranslucentPortals = FALSE;
@@ -859,11 +859,11 @@ procedures:
           GetWorld()->CastRay(crRay);
         
           // if entity is hit
-          if( crRay.cr_penHit != NULL)
+          if (crRay.cr_penHit != NULL)
           {
             InflictDirectDamage( crRay.cr_penHit, this, DMT_BULLET, 
               10000.0f/GetGameDamageMultiplier()*_pTimer->TickQuantum/0.5f/16.0f,
-              FLOAT3D(0, 0, 0), (vSource-vDestination).Normalize());
+              FLOAT3D(0.0f, 0.0f, 0.0f), (vSource-vDestination).Normalize());
             crRay.cr_penHit->SendEvent( EHitBySpaceShipBeam());
           }
         }
@@ -871,7 +871,7 @@ procedures:
     }
 
     m_tmBeamTime = _pTimer->CurrentTick();
-    while(_pTimer->CurrentTick()<m_tmBeamTime+2.0f)
+    while (_pTimer->CurrentTick()<m_tmBeamTime+2.0f)
     {
       autowait(_pTimer->TickQuantum);
       FLOAT tmNow = _pTimer->CurrentTick();
@@ -893,7 +893,7 @@ procedures:
     m_tmHitFlareTime = -1.0f;
     m_tmBeamTime = -1.0f;
 
-    if(m_bFireingDeactivatedBeam)
+    if (m_bFireingDeactivatedBeam)
     {
       jump CloseDoors();
     }
@@ -946,7 +946,7 @@ procedures:
     wait() {
       on( EActivate):
       {
-        if( !m_bInvisible)
+        if (!m_bInvisible)
         {
           SwitchToModel();
         }
@@ -955,19 +955,19 @@ procedures:
       }
       on( ETrigger):
       {
-        if(m_epssState == PSSS_IDLE)
+        if (m_epssState == PSSS_IDLE)
         {
           // ignore all triggs
         }
-        else if( m_epssState==PSSS_KILLING_BEAM_FIREING)
+        else if (m_epssState==PSSS_KILLING_BEAM_FIREING)
         {
           call FireLightBeam();
         }
-        else if(m_epssState==PSSS_BEAM_DEACTIVATED)
+        else if (m_epssState==PSSS_BEAM_DEACTIVATED)
         {
           call FireLightBeam();
         }
-        else if(m_epssState == PSSS_REACHED_DESTINATION)
+        else if (m_epssState == PSSS_REACHED_DESTINATION)
         {
           call OpenDoors();
         }
@@ -975,7 +975,7 @@ procedures:
       }
       on (EForcePathMarker eForcePathMarker):
       {
-        if(m_epssState != PSSS_IDLE)
+        if (m_epssState != PSSS_IDLE)
         {
           m_penTarget = eForcePathMarker.penForcedPathMarker;
           InitializePathMoving((CPyramidSpaceShipMarker*)&*m_penTarget);

@@ -35,7 +35,7 @@ properties:
   1 CTString m_strName "Name" 'N' = "Env. particles holder", // class name
   6 CTString m_strDescription = "",
   2 CTFileName m_fnHeightMap "Height map" 'R' = CTString(""),
-  3 FLOATaabbox3D m_boxHeightMap "Height map box" 'B' = FLOATaabbox3D(FLOAT3D(0,0,0), FLOAT3D(1,1,1)),
+  3 FLOATaabbox3D m_boxHeightMap "Height map box" 'B' = FLOATaabbox3D(FLOAT3D(0.0f, 0.0f, 0.0f), FLOAT3D(1.0f, 1.0f, 1.0f)),
   4 enum EnvironmentParticlesHolderType m_eptType "Type" 'Y' = EPTH_NONE,
   5 CEntityPointer m_penNextHolder "Next env. particles holder" 'T',
 
@@ -83,7 +83,7 @@ functions:
   void Precache(void)
   {
     CTextureData *ptdHeightMap = (CTextureData *) m_moHeightMapHolder.mo_toTexture.GetData();
-    if( ptdHeightMap!=NULL) {
+    if (ptdHeightMap!=NULL) {
       ptdHeightMap->Force(TEX_CONSTANT|TEX_STATIC|TEX_KEEPCOLOR);
     }
   }
@@ -91,7 +91,7 @@ functions:
 
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if( slPropertyOffset == offsetof(CEnvironmentParticlesHolder, m_penNextHolder))
+    if (slPropertyOffset == offsetof(CEnvironmentParticlesHolder, m_penNextHolder))
     {
       if (IsOfClass(penTarget, "EnvironmentParticlesHolder")) { return TRUE; }
       else { return FALSE; }
@@ -105,15 +105,15 @@ functions:
     FLOAT fRainFactor = 0.0f;
     TIME tmNow = _pTimer->GetLerpedCurrentTick();
     // if we have Rain
-    if( tmNow>m_tmRainStart && tmNow<m_tmRainEnd+m_fRainAppearLen)
+    if (tmNow>m_tmRainStart && tmNow<m_tmRainEnd+m_fRainAppearLen)
     {
       // Rain is on
-      if( tmNow>m_tmRainStart+m_fRainAppearLen && tmNow<m_tmRainEnd)
+      if (tmNow>m_tmRainStart+m_fRainAppearLen && tmNow<m_tmRainEnd)
       {
         fRainFactor = 1.0f;
       }
       // Rain is turning off
-      else if( tmNow>m_tmRainEnd)
+      else if (tmNow>m_tmRainEnd)
       {
         fRainFactor = 1.0f-(tmNow-m_tmRainEnd)/m_fRainAppearLen;
       }
@@ -132,15 +132,15 @@ functions:
     FLOAT fSnowFactor = 0.0f;
     TIME tmNow = _pTimer->GetLerpedCurrentTick();
     // if we have Snow
-    if( tmNow>m_tmSnowStart && tmNow<m_tmSnowEnd+m_fSnowAppearLen)
+    if (tmNow>m_tmSnowStart && tmNow<m_tmSnowEnd+m_fSnowAppearLen)
     {
       // Snow is on
-      if( tmNow>m_tmSnowStart+m_fSnowAppearLen && tmNow<m_tmSnowEnd)
+      if (tmNow>m_tmSnowStart+m_fSnowAppearLen && tmNow<m_tmSnowEnd)
       {
         fSnowFactor = 1.0f;
       }
       // Snow is turning off
-      else if( tmNow>m_tmSnowEnd)
+      else if (tmNow>m_tmSnowEnd)
       {
         fSnowFactor = 1.0f-(tmNow-m_tmSnowEnd)/m_fSnowAppearLen;
       }
@@ -178,7 +178,7 @@ procedures:
     SetCollisionFlags(ECF_IMMATERIAL);
 
     // try to obtain height map
-    if( m_fnHeightMap != CTString(""))
+    if (m_fnHeightMap != CTString(""))
     {
       try
       {
@@ -188,7 +188,7 @@ procedures:
       }
     }
 
-    if( m_fnTexture != CTString(""))
+    if (m_fnTexture != CTString(""))
     {
       try
       {
@@ -214,7 +214,7 @@ procedures:
     m_tmSnowStart = 1e5-1.0f;
     m_tmSnowEnd = 1e5;
 
-    switch(m_eptType) {
+    switch (m_eptType) {
     case EPTH_GROWTH:
       m_strDescription = "Growth";  
       break;

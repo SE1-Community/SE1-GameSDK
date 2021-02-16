@@ -38,7 +38,7 @@ properties:
   8 COLOR m_colFade      "Fade Color" 'C' = 0,     // camera fading color
   9 CEntityPointer m_penTrigger "Trigger" 'G', // camera triggers when at this marker
  10 CEntityPointer m_penViewTarget "View Target" 'V', // camera will targeting this entity
- 11 FLOAT3D m_vPosRatio = FLOAT3D(0,0,0),
+ 11 FLOAT3D m_vPosRatio = FLOAT3D(0.0f, 0.0f, 0.0f),
  12 FLOAT m_fRatioX "View pos ratio X" 'X' = 0.5f,
  13 FLOAT m_fRatioY "View pos ratio Y" 'Y' = 0.5f,
  14 FLOAT m_fRatioZ "View pos ratio Z" 'Z' = 0.5f,
@@ -90,7 +90,7 @@ procedures:
     SetModel(MODEL_MARKER);
     SetModelMainTexture(TEXTURE_MARKER);
 
-    if( m_penTarget!=NULL && !IsOfClass( m_penTarget, "Camera Marker")) {
+    if (m_penTarget!=NULL && !IsOfClass( m_penTarget, "Camera Marker")) {
       WarningMessage( "Entity '%s' is not of Camera Marker class!", m_penTarget);
       m_penTarget = NULL;
     }

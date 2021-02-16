@@ -173,11 +173,11 @@ static EntityInfo eiWaterElementalLarge = {
 #define FIRE_ROCKS_BIG    FLOAT3D(-3.6f, 6.4f, -4.0f)
 #define FIRE_ROCKS_LARGE  FLOAT3D(-14.4f, 25.6f, -16.0f)
 #define WATER_LEFT          FLOAT3D(-0.75f,  1.3f,  -1.2f)
-#define WATER_RIGHT         FLOAT3D( 0.75f,  1.3f,  -1.2f)
+#define WATER_RIGHT         FLOAT3D(0.75f,  1.3f,  -1.2f)
 #define WATER_BIG_LEFT      FLOAT3D(-3.0f,   5.2f,  -4.8f)
-#define WATER_BIG_RIGHT     FLOAT3D( 3.0f,   5.2f,  -4.8f)
+#define WATER_BIG_RIGHT     FLOAT3D(3.0f,   5.2f,  -4.8f)
 #define WATER_LARGE_LEFT    FLOAT3D(-12.0f, 20.8f, -19.2f)
-#define WATER_LARGE_RIGHT   FLOAT3D( 12.0f, 20.8f, -19.2f)
+#define WATER_LARGE_RIGHT   FLOAT3D(12.0f, 20.8f, -19.2f)
 
 %}
 
@@ -302,7 +302,7 @@ functions:
     if (m_EesCurrentState==ELS_NORMAL)
     {
       FLOAT fDeathFactor=1.0f;
-      if( m_fSpiritStartTime!=0.0f)
+      if (m_fSpiritStartTime!=0.0f)
       {
         fDeathFactor=1.0f-Clamp((_pTimer->CurrentTick()-m_fSpiritStartTime)/DEATH_BURN_TIME, 0.0f, 1.0f);
       }
@@ -314,15 +314,15 @@ functions:
   {
     CEnemyBase::Precache();
 
-    switch(m_EetType)
+    switch (m_EetType)
     {
     case ELT_LAVA:
       {
-        if( m_EecChar == ELC_LARGE)
+        if (m_EecChar == ELC_LARGE)
         {
           PrecacheClass(CLASS_PROJECTILE, PRT_LAVAMAN_BIG_BOMB);
         }
-        if( (m_EecChar == ELC_LARGE) || (m_EecChar == ELC_BIG) )
+        if ((m_EecChar == ELC_LARGE) || (m_EecChar == ELC_BIG) )
         {
           PrecacheClass(CLASS_PROJECTILE, PRT_LAVAMAN_BOMB);
         }
@@ -353,28 +353,28 @@ functions:
   void *GetEntityInfo(void) {
     switch (m_EetType) {
       case ELT_AIR:
-        switch(m_EecChar) {
+        switch (m_EecChar) {
           case ELC_LARGE: return &eiAirElementalLarge;
           case ELC_BIG: return &eiAirElementalBig;
           default: { return &eiAirElementalSmall; }
         }
         break;
       case ELT_ICE:
-        switch(m_EecChar) {
+        switch (m_EecChar) {
           case ELC_LARGE: return &eiIceElementalLarge;
           case ELC_BIG: return &eiIceElementalBig;
           default: { return &eiIceElementalSmall; }
         }
         break;
       case ELT_LAVA:
-        switch(m_EecChar) {
+        switch (m_EecChar) {
           case ELC_LARGE: return &eiLavaElementalLarge;
           case ELC_BIG: return &eiLavaElementalBig;
           default: { return &eiLavaElementalSmall; }
         }
         break;
       case ELT_STONE:
-        switch(m_EecChar) {
+        switch (m_EecChar) {
           case ELC_LARGE: return &eiStoneElementalLarge;
           case ELC_BIG: return &eiStoneElementalBig;
           default: { return &eiStoneElementalSmall; }
@@ -382,7 +382,7 @@ functions:
         break;
       //case ELT_WATER:
       default: {
-        switch(m_EecChar) {
+        switch (m_EecChar) {
           case ELC_LARGE: return &eiWaterElementalLarge;
           case ELC_BIG: return &eiWaterElementalBig;
           default: { return &eiWaterElementalSmall; }
@@ -394,14 +394,14 @@ functions:
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
-    switch(m_EetType) {
+    switch (m_EetType) {
     case ELT_WATER : { pes->es_strName+=" Water"; } break;
     case ELT_AIR   : { pes->es_strName+=" Air"; } break;
     case ELT_STONE : { pes->es_strName+=" Stone"; } break;
     case ELT_LAVA  : { pes->es_strName+=" Lava"; } break;
     case ELT_ICE   : { pes->es_strName+=" Ice"; } break;
     }
-    switch(m_EecChar) {
+    switch (m_EecChar) {
     case ELC_LARGE: pes->es_strName+=" Large"; break;
     case ELC_BIG:   pes->es_strName+=" Big"; break;
     case ELC_SMALL: pes->es_strName+=" Small"; break;
@@ -414,18 +414,18 @@ functions:
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
     // elemental can't harm elemental
-    if( IsOfClass(penInflictor, "Elemental")) {
+    if (IsOfClass(penInflictor, "Elemental")) {
       return;
     }
 
     // boss can't be telefragged
-    if( m_EecChar==ELC_LARGE && dmtType==DMT_TELEPORT)
+    if (m_EecChar==ELC_LARGE && dmtType==DMT_TELEPORT)
     {
       return;
     }
 
     // elementals take less damage from heavy bullets (e.g. sniper)
-    if( m_EecChar==ELC_BIG && dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (m_EecChar==ELC_BIG && dmtType==DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount/=2.5f;
     }
@@ -439,7 +439,7 @@ functions:
     if (m_bSpawnEnabled && m_bSpawnWhenHarmed && (m_EecChar==ELC_LARGE || m_EecChar==ELC_BIG))
     {
       INDEX ctShouldSpawn = Clamp( INDEX((m_fMaxHealth-GetHealth())/m_fSpawnDamage), INDEX(0), INDEX(10));
-      if(m_ctSpawned<ctShouldSpawn)
+      if (m_ctSpawned<ctShouldSpawn)
       {
         SendEvent( EForceWound() );
       }
@@ -573,7 +573,7 @@ functions:
     }
 
     ASSERT(m_ctSpawned<=ctShouldSpawn);
-    if(m_ctSpawned>=ctShouldSpawn)
+    if (m_ctSpawned>=ctShouldSpawn)
     {
       return;
     }
@@ -635,7 +635,7 @@ functions:
     switch (m_EecChar) {
       case ELC_LARGE: {
         vPos = FIRE_ROCKS_LARGE;
-        ShootProjectile(EptProjectile, vPos, ANGLE3D(0, 0, 0));
+        ShootProjectile(EptProjectile, vPos, ANGLE3D(0.0f, 0.0f, 0.0f));
         aAngle = ANGLE3D(FRnd()*5.0f+5.0f, FRnd()*3.0f-2.0f, 0);
         ShootProjectile(EptProjectile, vPos, aAngle);
         aAngle = ANGLE3D(FRnd()*-5.0f-5.0f, FRnd()*3.0f-2.0f, 0);
@@ -643,7 +643,7 @@ functions:
         break; }
       case ELC_BIG: {
         vPos = FIRE_ROCKS_BIG;
-        ShootProjectile(EptProjectile, vPos, ANGLE3D(0, 0, 0));
+        ShootProjectile(EptProjectile, vPos, ANGLE3D(0.0f, 0.0f, 0.0f));
         aAngle = ANGLE3D(FRnd()*4.0f+4.0f, FRnd()*3.0f-2.0f, 0);
         ShootProjectile(EptProjectile, vPos, aAngle);
         aAngle = ANGLE3D(FRnd()*-4.0f-4.0f, FRnd()*3.0f-2.0f, 0);
@@ -651,7 +651,7 @@ functions:
         break; }
       default: {
         vPos = FIRE_ROCKS;
-        ShootProjectile(EptProjectile, vPos, ANGLE3D(0, 0, 0));
+        ShootProjectile(EptProjectile, vPos, ANGLE3D(0.0f, 0.0f, 0.0f));
         aAngle = ANGLE3D(FRnd()*3.0f+3.0f, FRnd()*3.0f-2.0f, 0);
         ShootProjectile(EptProjectile, vPos, aAngle);
         aAngle = ANGLE3D(FRnd()*-3.0f-3.0f, FRnd()*3.0f-2.0f, 0);
@@ -681,7 +681,7 @@ functions:
     GetEntityInfoPosition(m_penEnemy, peiTarget->vTargetCenter, vShootTarget);
     // launch
     CPlacement3D pl;
-    PrepareFreeFlyingProjectile(pl, vShootTarget, vFireingRel, ANGLE3D( fRelativeHdg, fPitch, 0));
+    PrepareFreeFlyingProjectile(pl, vShootTarget, vFireingRel, ANGLE3D(fRelativeHdg, fPitch, 0));
     CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
     ELaunchProjectile eLaunch;
     eLaunch.penLauncher = this;
@@ -727,7 +727,7 @@ functions:
   // hit ground
   void HitGround(void) {
     FLOAT3D vSource;
-    if( m_penEnemy != NULL)
+    if (m_penEnemy != NULL)
     {
       vSource = GetPlacement().pl_PositionVector +
       FLOAT3D(m_penEnemy->en_mRotation(1, 2), m_penEnemy->en_mRotation(2, 2), m_penEnemy->en_mRotation(3, 2));
@@ -766,31 +766,31 @@ functions:
     if (m_EecChar==ELC_LARGE) {
       ew.EwsSize = WTS_LARGE;
       // launch
-      PreparePropelledProjectile(pl, vShootTarget, WATER_LARGE_LEFT, ANGLE3D(0, 0, 0));
+      PreparePropelledProjectile(pl, vShootTarget, WATER_LARGE_LEFT, ANGLE3D(0.0f, 0.0f, 0.0f));
       CEntityPointer penWater = CreateEntity(pl, CLASS_WATER);
       penWater->Initialize(ew);
       // launch
-      PreparePropelledProjectile(pl, vShootTarget, WATER_LARGE_RIGHT, ANGLE3D(0, 0, 0));
+      PreparePropelledProjectile(pl, vShootTarget, WATER_LARGE_RIGHT, ANGLE3D(0.0f, 0.0f, 0.0f));
       penWater = CreateEntity(pl, CLASS_WATER);
       penWater->Initialize(ew);
     } else if (m_EecChar==ELC_BIG) {
       ew.EwsSize = WTS_BIG;
       // launch
-      PreparePropelledProjectile(pl, vShootTarget, WATER_BIG_LEFT, ANGLE3D(0, 0, 0));
+      PreparePropelledProjectile(pl, vShootTarget, WATER_BIG_LEFT, ANGLE3D(0.0f, 0.0f, 0.0f));
       CEntityPointer penWater = CreateEntity(pl, CLASS_WATER);
       penWater->Initialize(ew);
       // launch
-      PreparePropelledProjectile(pl, vShootTarget, WATER_BIG_RIGHT, ANGLE3D(0, 0, 0));
+      PreparePropelledProjectile(pl, vShootTarget, WATER_BIG_RIGHT, ANGLE3D(0.0f, 0.0f, 0.0f));
       penWater = CreateEntity(pl, CLASS_WATER);
       penWater->Initialize(ew);
     } else {
       ew.EwsSize = WTS_SMALL;
       // launch
-      PreparePropelledProjectile(pl, vShootTarget, WATER_LEFT, ANGLE3D(0, 0, 0));
+      PreparePropelledProjectile(pl, vShootTarget, WATER_LEFT, ANGLE3D(0.0f, 0.0f, 0.0f));
       CEntityPointer penWater = CreateEntity(pl, CLASS_WATER);
       penWater->Initialize(ew);
       // launch
-      PreparePropelledProjectile(pl, vShootTarget, WATER_RIGHT, ANGLE3D(0, 0, 0));
+      PreparePropelledProjectile(pl, vShootTarget, WATER_RIGHT, ANGLE3D(0.0f, 0.0f, 0.0f));
       penWater = CreateEntity(pl, CLASS_WATER);
       penWater->Initialize(ew);
     }
@@ -1062,7 +1062,7 @@ procedures:
       GetEntityInfoPosition(m_penEnemy, peiTarget->vTargetCenter, vShootTarget);
       // launch
       CPlacement3D pl;
-      PrepareFreeFlyingProjectile(pl, vShootTarget, LAVAMAN_FIRE_BIG, ANGLE3D( fRelativeHdg, fPitch, 0));
+      PrepareFreeFlyingProjectile(pl, vShootTarget, LAVAMAN_FIRE_BIG, ANGLE3D(fRelativeHdg, fPitch, 0));
       CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
       ELaunchProjectile eLaunch;
       eLaunch.penLauncher = this;
@@ -1077,7 +1077,7 @@ procedures:
       FLOAT tmWait = mo.GetAnimLength( mo.ao_iCurrentAnim )-mo.GetPassedTime();
       StartModelAnim(ELEMENTALLAVA_ANIM_ATTACKLEFTHAND, AOF_SMOOTHCHANGE);
       autowait(tmWait+0.8f);
-      ShootProjectile(PRT_LAVAMAN_STONE, LAVAMAN_FIRE_SMALL, ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_LAVAMAN_STONE, LAVAMAN_FIRE_SMALL, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soSound, SOUND_LAVA_FIRE, SOF_3D);
     }
 
@@ -1221,7 +1221,7 @@ procedures:
   // Play wound animation and falling body part
   BeWounded(EDamage eDamage) : CEnemyBase::BeWounded {
     // spawn additional elemental
-    if( m_bSpawnEnabled)
+    if (m_bSpawnEnabled)
     {
       SpawnNewElemental();
     }
@@ -1375,7 +1375,7 @@ procedures:
       PlaySound(m_soBackground, SOUND_LAVA_LAVABURN, SOF_3D|SOF_LOOP);
     }
 
-    if( m_EecChar==ELC_LARGE)
+    if (m_EecChar==ELC_LARGE)
     {
       autocall BossAppear() EReturn;
     }

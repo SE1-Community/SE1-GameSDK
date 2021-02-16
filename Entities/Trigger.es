@@ -151,12 +151,12 @@ procedures:
     }
 
     // if max trig count is used for counting
-    if(m_ctMaxTrigs > 0)
+    if (m_ctMaxTrigs > 0)
     {
       // decrease count
       m_ctMaxTrigs-=1;
       // if we trigged max times
-      if( m_ctMaxTrigs <= 0)
+      if (m_ctMaxTrigs <= 0)
       {
         // cease to exist
         Destroy();

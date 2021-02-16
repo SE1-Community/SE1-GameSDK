@@ -87,8 +87,8 @@ properties:
  78 BOOL m_bRotating = FALSE,         // the brush is rotating
  79 BOOL m_bForceStop = FALSE,        // the brush should stop immediately
  80 BOOL m_bNoRotation = FALSE,       // don't rotate to marker orientation
- 21 FLOAT3D m_vDesiredTranslation = FLOAT3D(0,0,0),    // desired translation
- 22 ANGLE3D m_aDesiredRotation = FLOAT3D(0,0,0),       // desired rotation
+ 21 FLOAT3D m_vDesiredTranslation = FLOAT3D(0.0f, 0.0f, 0.0f),    // desired translation
+ 22 ANGLE3D m_aDesiredRotation = FLOAT3D(0.0f, 0.0f, 0.0f),       // desired rotation
  23 BOOL m_bInverseRotate = FALSE,    // use inverse rotation to target
  24 BOOL m_bStopMoving = FALSE,       // stop moving brush on next target
  25 BOOL m_bMoveToMarker = FALSE,     // PerMoving acknowledge od brush moving
@@ -104,8 +104,8 @@ properties:
  35 ANGLE m_aBLimitSign = 0.0f,
 
  // continuous speed change
- 40 FLOAT3D m_vStartTranslation = FLOAT3D(0,0,0),  // start translation
- 41 ANGLE3D m_aStartRotation = ANGLE3D(0,0,0),     // start rotation
+ 40 FLOAT3D m_vStartTranslation = FLOAT3D(0.0f, 0.0f, 0.0f),  // start translation
+ 41 ANGLE3D m_aStartRotation = ANGLE3D(0.0f, 0.0f, 0.0f),     // start rotation
  42 FLOAT m_fCourseLength = 0.0f,        // course length
  43 ANGLE m_aHeadLenght = 0.0f,          // head lenght  
  44 ANGLE m_aPitchLenght = 0.0f,         // pitch lenght
@@ -177,7 +177,7 @@ functions:
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
-    if( m_bMoveOnDamage)
+    if (m_bMoveOnDamage)
     {
       EHit eHit;
       SendEvent( eHit);
@@ -185,12 +185,12 @@ functions:
     }
 
     // send event on damage
-    if(m_tdeSendEventOnDamage!=TDE_TOUCHONLY && CanReactOnEntity(penInflictor)) {
+    if (m_tdeSendEventOnDamage!=TDE_TOUCHONLY && CanReactOnEntity(penInflictor)) {
       SendToTarget(m_penTouchEvent, m_eetTouchEvent, penInflictor);
     }
 
     // if not destroyable
-    if(m_fHealth<0) {
+    if (m_fHealth<0) {
       // ignore damages
       return;
     }
@@ -199,19 +199,19 @@ functions:
     if (m_bBlowupByBull)
     {
       // if impact by bull
-      if( dmtType == DMT_IMPACT && IsOfClass(penInflictor, "Werebull"))
+      if (dmtType == DMT_IMPACT && IsOfClass(penInflictor, "Werebull"))
       {
         // receive the damage so large to blowup
         CMovableBrushEntity::ReceiveDamage(penInflictor, dmtType, m_fHealth*2, vHitPoint, vDirection);
         // kill the bull in place, but make sure it doesn't blow up
         ((CLiveEntity*)penInflictor)->SetHealth(0.0f);
         InflictDirectDamage(penInflictor, this, DMT_IMPACT, 1.0f, 
-          GetPlacement().pl_PositionVector, FLOAT3D(0,1,0));
+          GetPlacement().pl_PositionVector, FLOAT3D(0.0f, 1.0f, 0.0f));
       }
     }
-    else if(m_bBlowupByDamager)
+    else if (m_bBlowupByDamager)
     {
-      if( dmtType == DMT_DAMAGER)
+      if (dmtType == DMT_DAMAGER)
       {
         CMovableBrushEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
       }
@@ -219,7 +219,7 @@ functions:
     else
     {
       // react only on explosions
-      if( (dmtType == DMT_EXPLOSION) ||
+      if ((dmtType == DMT_EXPLOSION) ||
           (dmtType == DMT_PROJECTILE) ||
           (dmtType == DMT_CANNONBALL) )
       {
@@ -276,7 +276,7 @@ functions:
     default: {
       iMirror-=9;
       INDEX ctMirrorMarkers = &m_penMirror4-&m_penMirror0;
-      if (iMirror<ctMirrorMarkers){
+      if (iMirror<ctMirrorMarkers) {
         CMirrorMarker *pfm = (CMirrorMarker *)&*(&m_penMirror0)[iMirror];
         if (pfm != NULL) {
           return pfm->GetMirrorName();
@@ -301,7 +301,7 @@ functions:
     }
     iMirror-=9;
     INDEX ctMirrorMarkers = &m_penMirror4-&m_penMirror0;
-    if (iMirror<ctMirrorMarkers){
+    if (iMirror<ctMirrorMarkers) {
       CMirrorMarker *pmm = (CMirrorMarker *)&*(&m_penMirror0)[iMirror];
       if (pmm != NULL) {
         pmm->GetMirror(mpMirror);
@@ -392,7 +392,7 @@ functions:
         } else if (!m_tmBankingRotation && !m_bNoRotation) {
           SetDesiredRotation(aSpeed);
         } else {
-          SetDesiredRotation(ANGLE3D(0,0,0));
+          SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
         }
       }
 
@@ -559,7 +559,7 @@ functions:
   void DeactivateRotation(void)
   {
     m_bRotating = FALSE;
-    SetDesiredRotation(ANGLE3D(0.0f,0.0f,0.0f));  
+    SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));  
   }
 
   void SetCombinedRotation(ANGLE3D aRotAngle, ANGLE3D aAddAngle)
@@ -646,7 +646,7 @@ procedures:
       on (EBlock eBlock) : {
         // inflict damage to entity that block brush
         InflictDirectDamage(eBlock.penOther, this, DMT_BRUSH, m_fBlockDamage,
-          FLOAT3D(0.0f,0.0f,0.0f), (FLOAT3D &)eBlock.plCollision);
+          FLOAT3D(0.0f, 0.0f, 0.0f), (FLOAT3D &)eBlock.plCollision);
         if (m_ebaAction == BA_BOUNCE) {
           // change direction for two ticks
           SetDesiredTranslation(-m_vDesiredTranslation);
@@ -694,7 +694,7 @@ procedures:
 
   RotInactive()
   {
-    SetDesiredRotation(ANGLE3D(0,0,0));
+    SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
     wait() {
       on (EActivate) : {
         jump RotActive();
@@ -801,13 +801,13 @@ procedures:
     INDEX ctMarkers=0;
     // new moving target
     CMovingBrushMarker *pmbm = (CMovingBrushMarker *) &*m_penTarget;
-    while( pmbm!=NULL && IsOfClass(pmbm->m_penTarget, "Moving Brush Marker") && !pmbm->m_bStopMoving && ctMarkers<50)
+    while (pmbm!=NULL && IsOfClass(pmbm->m_penTarget, "Moving Brush Marker") && !pmbm->m_bStopMoving && ctMarkers<50)
     {      
       pmbm = (CMovingBrushMarker *) &*pmbm->m_penTarget;
       ctMarkers++;
     }
 
-    if( pmbm!=NULL && IsOfClass(pmbm, "Moving Brush Marker") && ctMarkers<50)
+    if (pmbm!=NULL && IsOfClass(pmbm, "Moving Brush Marker") && ctMarkers<50)
     {
       SetPlacement(pmbm->GetPlacement());
       en_plLastPlacement=pmbm->GetPlacement();
@@ -863,7 +863,7 @@ procedures:
         if (m_bAutoStart) {
           // if not already moving and have target
           MaybeActivateRotation();
-          if(!m_bMoving && m_bValidMarker) {
+          if (!m_bMoving && m_bValidMarker) {
             call MoveBrush();
           }
         }
@@ -879,17 +879,17 @@ procedures:
       // move on touch
       on (ETouch eTouch) : {
         // inflict damage if required
-        if( m_fTouchDamage != 0.0f)
+        if (m_fTouchDamage != 0.0f)
         {
           InflictDirectDamage( eTouch.penOther, this, DMT_SPIKESTAB, m_fTouchDamage,
                      eTouch.penOther->GetPlacement().pl_PositionVector, eTouch.plCollision);
         }
         // send event on touch
-        if(m_tdeSendEventOnDamage!=TDE_DAMAGEONLY && CanReactOnEntity(eTouch.penOther)) {
+        if (m_tdeSendEventOnDamage!=TDE_DAMAGEONLY && CanReactOnEntity(eTouch.penOther)) {
           SendToTarget(m_penTouchEvent, m_eetTouchEvent);
         }
         // if not already moving
-        if(!m_bMoving) {
+        if (!m_bMoving) {
           // move brush
           if (m_bMoveOnTouch && CanReactOnEntity(eTouch.penOther) && m_bValidMarker) {
             MaybeActivateRotation();
@@ -909,7 +909,7 @@ procedures:
             if (fImpactSpeed>m_fHealth) {
               // receive artificial impact damage
               ReceiveDamage(eTouch.penOther, DMT_IMPACT, m_fHealth*2, 
-                FLOAT3D(0,0,0), FLOAT3D(0,0,0));
+                FLOAT3D(0.0f, 0.0f, 0.0f), FLOAT3D(0.0f, 0.0f, 0.0f));
             }
           }
         }
@@ -918,7 +918,7 @@ procedures:
       on (EBlock eBlock) : {
         // inflict damage to entity that block brush
         InflictDirectDamage(eBlock.penOther, this, DMT_BRUSH, m_fBlockDamage,
-          FLOAT3D(0.0f,0.0f,0.0f), (FLOAT3D &)eBlock.plCollision);
+          FLOAT3D(0.0f, 0.0f, 0.0f), (FLOAT3D &)eBlock.plCollision);
         if (m_ebaAction == BA_BOUNCE) {
           // change direction for two ticks
           SetDesiredTranslation(-m_vDesiredTranslation);
@@ -936,7 +936,7 @@ procedures:
       // move on start (usually trigger)
       on (EStart) : {
         // if not already moving and have target
-        if(!m_bMoving && m_bValidMarker) {
+        if (!m_bMoving && m_bValidMarker) {
           call MoveBrush();
         }
         resume;
@@ -951,7 +951,7 @@ procedures:
       }
       on (ETrigger) : {
         // if not already moving and have target
-        if(!m_bMoving && m_bValidMarker) {
+        if (!m_bMoving && m_bValidMarker) {
           call MoveBrush();
         }
         resume;
@@ -970,13 +970,13 @@ procedures:
         // get your size
         FLOATaabbox3D box;
         GetSize(box);
-        if( m_ctDebrises>0)
+        if (m_ctDebrises>0)
         {
           FLOAT fEntitySize = pow(box.Size()(1)*box.Size()(2)*box.Size()(3)/m_ctDebrises, 1.0f/3.0f)*m_fCubeFactor;
           
           Debris_Begin(EIBT_ROCK, DPT_NONE, BET_NONE, fEntitySize, FLOAT3D(1.0f,2.0f,3.0f),
-            FLOAT3D(0,0,0), 1.0f+m_fCandyEffect/2.0f, m_fCandyEffect, m_colDebrises);
-          for(INDEX iDebris = 0; iDebris<m_ctDebrises; iDebris++) {
+            FLOAT3D(0.0f, 0.0f, 0.0f), 1.0f+m_fCandyEffect/2.0f, m_fCandyEffect, m_colDebrises);
+          for (INDEX iDebris = 0; iDebris<m_ctDebrises; iDebris++) {
             Debris_Spawn(this, this, MODEL_STONE, TEXTURE_STONE, 0, 0, 0, IRnd()%4, 1.0f,
               FLOAT3D(FRnd()*0.8f+0.1f, FRnd()*0.8f+0.1f, FRnd()*0.8f+0.1f));
           }

@@ -557,7 +557,7 @@ void ReleaseMapData(void)
 
 void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
 {
-  if( !ObtainMapData())
+  if (!ObtainMapData())
   {
     ReleaseMapData();
     return;
@@ -575,7 +575,7 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
   CTextureObject* _toMapBcgRD = &_toMapBcgRDSE;
   CTextureObject* _toMapBcgRU = &_toMapBcgRUSE;
 
-  if(map_bIsFirstEncounter) {
+  if (map_bIsFirstEncounter) {
     _toMapBcgLD = &_toMapBcgLDFE;
     _toMapBcgLU = &_toMapBcgLUFE;
     _toMapBcgRD = &_toMapBcgRDFE;
@@ -589,11 +589,11 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
   FLOAT fStretch = 0.25f;
 
   // determine max available picture stretch
-  if( pixdpw>=imgw*2 && pixdph>=imgh*2) {
+  if (pixdpw>=imgw*2 && pixdph>=imgh*2) {
     fStretch = 2.0f;
-  } else if(pixdpw>=imgw && pixdph>=imgh) {
+  } else if (pixdpw>=imgw && pixdph>=imgh) {
     fStretch = 1.0f;
-  } else if(pixdpw>=imgw/2 && pixdph>=imgh/2) {
+  } else if (pixdpw>=imgw/2 && pixdph>=imgh/2) {
     fStretch = 0.5f;
   }
 
@@ -627,10 +627,10 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
     pdp->PutTexture( _toMapBcgRD, PIXaabbox2D( PIX2D(pixC2S,pixR2S), PIX2D(pixC2E,pixR2E)), C_WHITE|255);
 
     // render icons
-    for( INDEX iIcon=(!map_bIsFirstEncounter); iIcon<ctLevels; iIcon++)
+    for (INDEX iIcon=(!map_bIsFirstEncounter); iIcon<ctLevels; iIcon++)
     {
       // if level's icon should be rendered
-      if( ulLevelMask & (1UL<<iIcon))
+      if (ulLevelMask & (1UL<<iIcon))
       {
         PIX pixX = aIconCoords[iIcon][0]*fStretch+pixC1S;
         PIX pixY = aIconCoords[iIcon][1]*fStretch+pixR1S;
@@ -643,29 +643,29 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
   }
 
   // render paths
-  for( INDEX iPath=0; iPath<ctLevels; iPath++)
+  for (INDEX iPath=0; iPath<ctLevels; iPath++)
   {
     INDEX iPrevLevelBit = aPathPrevNextLevels[iPath][0];
     INDEX iNextLevelBit = aPathPrevNextLevels[iPath][1];
 
     // if path dots should be rendered:
     // if path src and dst levels were discovered and secret level isn't inbetween or hasn't been discovered
-    if( ulLevelMask&(1UL<<iPrevLevelBit) &&
+    if (ulLevelMask&(1UL<<iPrevLevelBit) &&
         ulLevelMask&(1UL<<iNextLevelBit) &&
         ((iNextLevelBit-iPrevLevelBit)==1 || !(ulLevelMask&(1UL<<(iNextLevelBit-1)))))
     {
-      for( INDEX iDot=0; iDot<10; iDot++)
+      for (INDEX iDot=0; iDot<10; iDot++)
       {
         PIX pixDotX=pixC1S+aPathDots[iPath][iDot][0]*fStretch;
         PIX pixDotY=pixR1S+aPathDots[iPath][iDot][1]*fStretch;
-        if(aPathDots[iPath][iDot][0]==-1) break;
+        if (aPathDots[iPath][iDot][0]==-1) break;
         pdp->PutTexture( &_toPathDot, PIXaabbox2D( PIX2D(pixDotX, pixDotY), PIX2D(pixDotX+8*fStretch, pixDotY+8*fStretch)),
           (map_bIsFirstEncounter ? C_WHITE : C_BLACK)|255);
       }
     }
   }
 
-  if( pphi != NULL)
+  if (pphi != NULL)
   {
     // set font
     pdp->SetFont( _pfdDisplayFont);
@@ -675,7 +675,7 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
     INDEX iPosX, iPosY;
     COLOR colText = RGBToColor(200,128,56)|CT_OPAQUE;
 
-    if(!map_bIsFirstEncounter) {
+    if (!map_bIsFirstEncounter) {
       // set coordinates and dot colors
       if (ulLevelMask == 0x00000001) {
         iPosX = 200;
@@ -691,20 +691,20 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
     PIX pixhtcx = pixC1S+iPosX*fStretch;
     PIX pixhtcy = pixR1S+iPosY*fStretch;
 
-    if(map_bIsFirstEncounter) {
+    if (map_bIsFirstEncounter) {
       pixhtcx = pixC1S+116*fStretch;
       pixhtcy = pixR1S+220*fStretch;
     }
 
     pdp->PutTextC( pphi->phi_strDescription, pixhtcx, pixhtcy, colText);
-    for( INDEX iProgresDot=0; iProgresDot<16; iProgresDot+=1)
+    for (INDEX iProgresDot=0; iProgresDot<16; iProgresDot+=1)
     {
-      if(map_bIsFirstEncounter) {
+      if (map_bIsFirstEncounter) {
         PIX pixDotX=pixC1S+(48+iProgresDot*8)*fStretch;
         PIX pixDotY=pixR1S+249*fStretch;
 
         COLOR colDot = C_WHITE|255;
-        if(iProgresDot>pphi->phi_fCompleted*16) {
+        if (iProgresDot>pphi->phi_fCompleted*16) {
           colDot = C_WHITE|64;
         }
         pdp->PutTexture( &_toPathDot, PIXaabbox2D( PIX2D(pixDotX, pixDotY),
@@ -714,7 +714,7 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
         PIX pixDotY=pixR1S+(iPosY+19)*fStretch;
 
         COLOR colDot = colText|255;
-        if(iProgresDot>pphi->phi_fCompleted*16) {
+        if (iProgresDot>pphi->phi_fCompleted*16) {
           colDot = C_BLACK|64;
         }
         pdp->PutTexture( &_toPathDot, PIXaabbox2D( PIX2D(pixDotX, pixDotY),

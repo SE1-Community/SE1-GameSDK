@@ -39,10 +39,10 @@ properties:
 
  10 FLOAT m_tmAtMarker = 0.0f, // time when current marker was reached
  11 FLOAT m_tmDelta = 0.0f, // time to reach next marker
- 13 FLOAT3D m_vPNp0 = FLOAT3D(0,0,0),
- 14 FLOAT3D m_vPNp1 = FLOAT3D(0,0,0),
- 15 FLOAT3D m_vTNp0 = FLOAT3D(0,0,0),
- 16 FLOAT3D m_vTNp1 = FLOAT3D(0,0,0),
+ 13 FLOAT3D m_vPNp0 = FLOAT3D(0.0f, 0.0f, 0.0f),
+ 14 FLOAT3D m_vPNp1 = FLOAT3D(0.0f, 0.0f, 0.0f),
+ 15 FLOAT3D m_vTNp0 = FLOAT3D(0.0f, 0.0f, 0.0f),
+ 16 FLOAT3D m_vTNp1 = FLOAT3D(0.0f, 0.0f, 0.0f),
  17 FLOAT m_fFOVp0 = 0.0f,
  18 FLOAT m_fFOVp1 = 0.0f,
  19 FLOAT m_fTFOVp0 = 0.0f,
@@ -63,8 +63,8 @@ properties:
  53 CEntityPointer m_penViewTarget0,
  54 CEntityPointer m_penViewTarget1,
 
- 55 FLOAT3D m_vPosRatio0 = FLOAT3D(0,0,0),
- 56 FLOAT3D m_vPosRatio1 = FLOAT3D(0,0,0),
+ 55 FLOAT3D m_vPosRatio0 = FLOAT3D(0.0f, 0.0f, 0.0f),
+ 56 FLOAT3D m_vPosRatio1 = FLOAT3D(0.0f, 0.0f, 0.0f),
 
  60 FLOAT m_fMyTimer = 0.0f,
  61 FLOAT m_fMyTimerLast = 0.0f,
@@ -79,7 +79,7 @@ properties:
 
  70 CEntityPointer m_penAutoCameraEndTarget "Auto camera end target",
  71 enum EventEType m_eetAutoCameraEndEvent "Auto camera end event" = EET_STOP,
- 72 FLOAT3D m_vRelTargetOffset = FLOAT3D(0,0,0),
+ 72 FLOAT3D m_vRelTargetOffset = FLOAT3D(0.0f, 0.0f, 0.0f),
 
 components:
 
@@ -151,7 +151,7 @@ functions:
       fLerpFactor = _pTimer->GetLerpFactor2();
     }
     
-    if( m_bAutoRotation && m_bMoving)
+    if (m_bAutoRotation && m_bMoving)
     {
       FLOAT fTime=Lerp(m_fMyTimerLast, m_fMyTimer, fLerpFactor);
 
@@ -159,11 +159,11 @@ functions:
       FLOATmatrix3D mRot;
       CPlacement3D plNew;
       // get target placement
-      FLOAT3D vTarget=FLOAT3D(0,0,0);
-      if( m_penTarget!=NULL)
+      FLOAT3D vTarget=FLOAT3D(0.0f, 0.0f, 0.0f);
+      if (m_penTarget!=NULL)
       {
         CCameraMarker *pcm = &(CCameraMarker&)*m_penTarget;
-        if( pcm->m_penViewTarget!=NULL)
+        if (pcm->m_penViewTarget!=NULL)
         {
           vTarget=pcm->m_penViewTarget->GetLerpedPlacement().pl_PositionVector+m_vRelTargetOffset;
         }
@@ -172,7 +172,7 @@ functions:
       GetAutoRotatePlacement( fTime, vPos, mRot, plNew, vTarget);
       return plNew;
     }
-    else if(m_penViewTarget0!=NULL)
+    else if (m_penViewTarget0!=NULL)
     {
       CPlacement3D plNew=LerpPlacementsPrecise(en_plLastPlacement, en_plPlacement, fLerpFactor);
       FLOATmatrix3D mRot;
@@ -214,7 +214,7 @@ functions:
       return;
     }
     FLOAT tmCurrent;
-    if( !m_bIgnoreTimeStretch)
+    if (!m_bIgnoreTimeStretch)
     {
       tmCurrent= _pTimer->CurrentTick();
     }
@@ -225,10 +225,10 @@ functions:
       tmCurrent = m_fMyTimer;
     }
 
-    if( m_bAutoRotation)
+    if (m_bAutoRotation)
     {
       // if we're finished with auto rotating camera
-      if( tmCurrent>m_fRotateTime)
+      if (tmCurrent>m_fRotateTime)
       {
         m_bStopMoving=TRUE;
         return;
@@ -237,11 +237,11 @@ functions:
       FLOATmatrix3D mRot;
       CPlacement3D plNew;
       // get target placement
-      FLOAT3D vTarget=FLOAT3D(0,0,0);
-      if( m_penTarget!=NULL)
+      FLOAT3D vTarget=FLOAT3D(0.0f, 0.0f, 0.0f);
+      if (m_penTarget!=NULL)
       {
         CCameraMarker *pcm = &(CCameraMarker&)*m_penTarget;
-        if( pcm->m_penViewTarget!=NULL)
+        if (pcm->m_penViewTarget!=NULL)
         {
           vTarget=pcm->m_penViewTarget->GetPlacement().pl_PositionVector+m_vRelTargetOffset;
         }
@@ -258,7 +258,7 @@ functions:
     BOOL bLerping = TRUE;
 
     // if we hit a marker
-    if( tmCurrent > (m_tmAtMarker+m_tmDelta - _pTimer->TickQuantum*3/2)) 
+    if (tmCurrent > (m_tmAtMarker+m_tmDelta - _pTimer->TickQuantum*3/2)) 
     {
       // get markers
       CCameraMarker *pcmNm1 = &(CCameraMarker&)*m_penLast;
@@ -317,13 +317,13 @@ functions:
       m_colFade1 = cmNp1.m_colFade;
       m_penViewTarget0 = cmNp0.m_penViewTarget;
       m_penViewTarget1 = cmNp1.m_penViewTarget;
-      m_vPosRatio0=FLOAT3D(0,0,0);
-      m_vPosRatio1=FLOAT3D(0,0,0);
-      if( m_penViewTarget0!=NULL)
+      m_vPosRatio0=FLOAT3D(0.0f, 0.0f, 0.0f);
+      m_vPosRatio1=FLOAT3D(0.0f, 0.0f, 0.0f);
+      if (m_penViewTarget0!=NULL)
       {
         m_vPosRatio0=cmNp0.m_vPosRatio;
       }
-      if( m_penViewTarget1!=NULL)
+      if (m_penViewTarget1!=NULL)
       {
         m_vPosRatio1=cmNp1.m_vPosRatio;
       }
@@ -335,13 +335,13 @@ functions:
       FLOATquat3D qPNp2; qPNp2.FromEuler(aPNp2);
 
       // make all angles between quaternion pairs acute
-      if( qPNm1%qPNp0<0 ) {
+      if (qPNm1%qPNp0<0 ) {
         qPNp0 = -qPNp0;
       }
-      if( qPNp0%qPNp1<0 ) {
+      if (qPNp0%qPNp1<0 ) {
         qPNp1 = -qPNp1;
       }
-      if( qPNp1%qPNp2<0 ) {
+      if (qPNp1%qPNp2<0 ) {
         qPNp2 = -qPNp2;
       }
 
@@ -393,7 +393,7 @@ functions:
       m_qANp1 = qPNp1*Exp( (Log(qPNp0.Inv()*qPNp1) - qTNp1)/2 );
 
       // check for stop moving
-      if( cmNp0.m_bStopMoving) {
+      if (cmNp0.m_bStopMoving) {
         m_bStopMoving = TRUE;
       }
     }
@@ -461,7 +461,7 @@ functions:
       return;
     }
     //
-    if( m_bStopMoving) {
+    if (m_bStopMoving) {
       m_bMoving = FALSE;
       // mark for removing from list of movers
       en_ulFlags |= ENF_INRENDERING;
@@ -501,7 +501,7 @@ procedures:
         ECameraStop eStop;
         eStop.penCamera=this;
         m_penPlayer->SendEvent(eStop);
-        if( m_penAutoCameraEndTarget!=NULL)
+        if (m_penAutoCameraEndTarget!=NULL)
         {
           SendToTarget(m_penAutoCameraEndTarget, m_eetAutoCameraEndEvent, m_penPlayer);
         }
@@ -528,7 +528,7 @@ procedures:
     CCameraMarker *pcm0 = (CCameraMarker*)&*m_penTarget;
     CCameraMarker *pcm  = (CCameraMarker*)&*pcm0->m_penTarget;
     // loop thru markers
-    while( pcm!=NULL && pcm->m_penTarget!=pcm0)
+    while (pcm!=NULL && pcm->m_penTarget!=pcm0)
     {
       pcm = (CCameraMarker*)&*pcm->m_penTarget;
       if (pcm==NULL) {
@@ -545,19 +545,19 @@ procedures:
       }
     }
     // check if we have enough markers to do smooth interpolation
-    if( ctMarkers<2) {
+    if (ctMarkers<2) {
       WarningMessage( "Movable camera requires at least 2 markers in order to work!");
       return;
     }
     // check if we have enough markers to do smooth interpolation
-    if( ctNonSkipped<1) {
+    if (ctNonSkipped<1) {
       WarningMessage( "Movable camera requires at least 1 non-skipped marker!");
       return;
     }
 
     // prepare internal variables
     FLOAT tmCurrent;
-    if( !m_bIgnoreTimeStretch)
+    if (!m_bIgnoreTimeStretch)
     {
       tmCurrent= _pTimer->CurrentTick();
     }
@@ -602,12 +602,12 @@ procedures:
     // eventually add to movers list
     CCameraMarker &cm = (CCameraMarker&)*m_penTarget;
     // if auto rotating
-    if( m_bAutoRotation)
+    if (m_bAutoRotation)
     {
       jump PlayAutoRotatingCamera();
     }
     // if there is at least one marker
-    else if( &cm!=NULL)
+    else if (&cm!=NULL)
     {
       // treat camera as movable
       jump PlayMovingCamera();
@@ -633,35 +633,35 @@ procedures:
     SetModelMainTexture(TEXTURE_CAMERA);
     m_fLastFOV = m_fFOV;
 
-    if( m_penTarget!=NULL && !IsOfClass( m_penTarget, "Camera Marker")) {
+    if (m_penTarget!=NULL && !IsOfClass( m_penTarget, "Camera Marker")) {
       WarningMessage( "Entity '%s' is not of Camera Marker class!", m_penTarget);
       m_penTarget = NULL;
     }
 
-    if( m_bAutoRotation || m_penTarget!=NULL)
+    if (m_bAutoRotation || m_penTarget!=NULL)
     {
       autowait(0.1f);
     }
 
-    m_vRelTargetOffset=FLOAT3D(0,0,0);
-    if( m_penTarget!=NULL)
+    m_vRelTargetOffset=FLOAT3D(0.0f, 0.0f, 0.0f);
+    if (m_penTarget!=NULL)
     {
       CCameraMarker *pcm = &(CCameraMarker&)*m_penTarget;
-      if( pcm->m_penViewTarget!=NULL)
+      if (pcm->m_penViewTarget!=NULL)
       {
-        FLOAT3D vAbsTarget=FLOAT3D(0,0,0);
+        FLOAT3D vAbsTarget=FLOAT3D(0.0f, 0.0f, 0.0f);
         pcm->m_penViewTarget->GetEntityPointRatio(pcm->m_vPosRatio, vAbsTarget, FALSE);
         m_vRelTargetOffset=vAbsTarget-pcm->m_penViewTarget->GetPlacement().pl_PositionVector;
       }
     }
 
-    while(TRUE)
+    while (TRUE)
     {
       wait() {
         on (ETrigger eTrigger) : {
           CEntity *penCaused;
           penCaused = FixupCausedToPlayer(this, eTrigger.penCaused, FALSE);
-          if( IsDerivedFromClass(penCaused, "Player")) {
+          if (IsDerivedFromClass(penCaused, "Player")) {
             m_penPlayer = penCaused;
             call PlayCamera();
           }

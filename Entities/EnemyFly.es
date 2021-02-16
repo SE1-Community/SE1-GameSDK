@@ -338,14 +338,14 @@ procedures:
   {
     // land on brush
     SetDesiredTranslation(FLOAT3D(0, -m_fAirToGroundSpeed, 0));
-    SetDesiredRotation(ANGLE3D(0, 0, 0));
+    SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
     WalkingAnim();
     wait() {
       on (EBegin) : { resume; }
       // on brush stop
       on (ETouch etouch) : {
         if (etouch.penOther->GetRenderType() & RT_BRUSH) {
-          SetDesiredTranslation(FLOAT3D(0, 0, 0));
+          SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
           stop;
         }
         resume;
@@ -374,7 +374,7 @@ procedures:
     SetPhysicsFlags((GetPhysicsFlags() & ~EPF_MODEL_WALKING) | EPF_MODEL_FLYING);
     m_bInAir = TRUE;
     SetDesiredTranslation(FLOAT3D(0, m_fGroundToAirSpeed, 0));
-    SetDesiredRotation(ANGLE3D(0, 0, 0));
+    SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
     ChangeCollisionToAir();
     // animation
     wait(GroundToAirAnim()) {
@@ -391,7 +391,7 @@ procedures:
       on (ETimer) : { stop; }
       otherwise() : { resume; }
     }
-    SetDesiredTranslation(FLOAT3D(0, 0, 0));
+    SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
     return EReturn();
   };
 

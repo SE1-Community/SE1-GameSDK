@@ -68,7 +68,7 @@ features  "HasName", "IsTargetable", "CanBePredictable";
 
 properties:
   1 CEntityPointer m_penWatcher,      // watcher
-  2 FLOAT3D m_vStartPosition = FLOAT3D(0,0,0),         // start position
+  2 FLOAT3D m_vStartPosition = FLOAT3D(0.0f, 0.0f, 0.0f),         // start position
   3 CEntityPointer m_penEnemy,        // current enemy
   4 enum TargetType m_ttTarget = TT_NONE, // type of target
   5 CTString m_strDescription = "Enemy base",
@@ -101,17 +101,17 @@ properties:
  40 FLOAT m_fBlowUpAmount = 0.0f,             // damage in minus for blow up
  41 INDEX m_fBodyParts = 4,                   // number of spawned body parts
  42 FLOAT m_fDamageWounded = 0.0f,            // damage amount to be wounded
- 43 FLOAT3D m_vDamage = FLOAT3D(0,0,0),       // current damage impact
+ 43 FLOAT3D m_vDamage = FLOAT3D(0.0f, 0.0f, 0.0f),       // current damage impact
  44 FLOAT m_tmLastDamage = -1000.0f,
  46 BOOL m_bRobotBlowup = FALSE,    // set for robots parts blowup, otherwise blowup flesh
  47 FLOAT m_fBlowUpSize = 2.0f,
 
  // logic temporary variables -> DO NOT USE
 133 FLOAT m_fMoveTime = 0.0f,
- 52 FLOAT3D m_vDesiredPosition = FLOAT3D(0,0,0),
+ 52 FLOAT3D m_vDesiredPosition = FLOAT3D(0.0f, 0.0f, 0.0f),
  53 enum DestinationType m_dtDestination =  DT_PLAYERCURRENT, // type of current desired position
  59 CEntityPointer m_penPathMarker,   // current path finding marker
- 18 FLOAT3D m_vPlayerSpotted =  FLOAT3D(0,0,0), // where player was last spotted
+ 18 FLOAT3D m_vPlayerSpotted =  FLOAT3D(0.0f, 0.0f, 0.0f), // where player was last spotted
  54 FLOAT m_fMoveFrequency = 0.0f,
  55 FLOAT m_fMoveSpeed = 0.0f,
  56 ANGLE m_aRotateSpeed = 0,
@@ -166,14 +166,14 @@ properties:
 147 FLOAT m_fSprayDamage = 0.0f,     // total ammount of damage
 148 CEntityPointer m_penSpray,       // the blood spray
 149 FLOAT m_fMaxDamageAmmount  = 0.0f, // max ammount of damage received in in last few ticks
-150 FLOAT3D m_vLastStain  = FLOAT3D(0,0,0), // where last stain was left
+150 FLOAT3D m_vLastStain  = FLOAT3D(0.0f, 0.0f, 0.0f), // where last stain was left
 151 enum SprayParticlesType m_sptType = SPT_BLOOD, // type of particles
 
 160 CEntityPointer m_penTacticsHolder "Tactics Holder",
 161 BOOL  m_bTacticActive = FALSE,
 162 FLOAT m_tmTacticsActivation = 0.0f,
 // warning! tactic variables are also used for dust spawning
-163 FLOAT3D m_vTacticsStartPosition = FLOAT3D(0,0,0),
+163 FLOAT3D m_vTacticsStartPosition = FLOAT3D(0.0f, 0.0f, 0.0f),
 165 FLOAT m_fTacticVar1 = 0.0f,
 166 FLOAT m_fTacticVar2 = 0.0f,
 167 FLOAT m_fTacticVar3 = 0.0f,
@@ -355,10 +355,10 @@ functions:
 
   BOOL IfTargetCrushed(CEntity *penOther, const FLOAT3D &vDirection)
   {
-    if( IsOfClass(penOther, "ModelHolder2"))
+    if (IsOfClass(penOther, "ModelHolder2"))
     {
       FLOAT fCrushHealth = GetCrushHealth();
-      if( fCrushHealth>((CRationalEntity &)*penOther).GetHealth())
+      if (fCrushHealth>((CRationalEntity &)*penOther).GetHealth())
       {
         InflictDirectDamage(penOther, this, 
           DMT_EXPLOSION, fCrushHealth, GetPlacement().pl_PositionVector, vDirection);
@@ -507,7 +507,7 @@ functions:
       fTime = Sqrt(2.0f)*Sqrt((fA*fXt+fShootHeight-fYt)/en_fGravityA);
       vNewTarget = vTarget+vSpeedDest*fTime;
     }
-    while( (Abs(fTime-fLastTime) > _pTimer->TickQuantum) && (iIterations<10) );
+    while ((Abs(fTime-fLastTime) > _pTimer->TickQuantum) && (iIterations<10) );
 
     // calculate launch speed
     fLaunchSpeed = fXt/(fTime*Cos(aPitch));
@@ -539,7 +539,7 @@ functions:
       vNewTarget(2) = ClampDn( vNewTarget(2), fClampY);
       vDistance = vNewTarget-vShootPos;
     }
-    while( (Abs(fTime-fLastTime) > _pTimer->TickQuantum) && (iIterations<10) );
+    while ((Abs(fTime-fLastTime) > _pTimer->TickQuantum) && (iIterations<10) );
     return vNewTarget;
   }
   
@@ -593,7 +593,7 @@ functions:
  
     /*INDEX ctStates = en_stslStateStack.Count();
     strm.FPrintF_t("state stack @%gs:\n", _pTimer->CurrentTick());
-    for(INDEX iState=ctStates-1; iState>=0; iState--) {
+    for (INDEX iState=ctStates-1; iState>=0; iState--) {
       SLONG slState = en_stslStateStack[iState];
       strm.FPrintF_t("  0x%08x %s\n", slState, en_pecClass->ec_pdecDLLClass->HandlerNameForState(slState));
     }*/
@@ -648,7 +648,7 @@ functions:
       return;
     }
     FLOAT fKickDamage = fNewDamage;
-    if( (dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
+    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
     {
       fKickDamage*=1.5;
     }
@@ -672,7 +672,7 @@ functions:
 
     // fade damage out
     if (tmDelta>=_pTimer->TickQuantum*3) {
-      m_vDamage=FLOAT3D(0,0,0);
+      m_vDamage=FLOAT3D(0.0f, 0.0f, 0.0f);
     }
     // add new damage
     FLOAT3D vDirectionFixed;
@@ -682,7 +682,7 @@ functions:
       vDirectionFixed = -en_vGravityDir;
     }
     FLOAT3D vDamageOld = m_vDamage;
-/*    if( (dmtType == DMT_EXPLOSION) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
+/*    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
     {
       m_vDamage+=(vDirectionFixed/2-en_vGravityDir/2)*fKickDamage;
     }
@@ -698,12 +698,12 @@ functions:
 
     FLOAT fMassFactor = 300.0f/((EntityInfo*)GetEntityInfo())->fMass;
     
-    if( !(en_ulFlags & ENF_ALIVE))
+    if (!(en_ulFlags & ENF_ALIVE))
     {
       fMassFactor /= 3;
     }
 
-    if(fOldLen != 0.0f)
+    if (fOldLen != 0.0f)
     {
       // cancel last push
       GiveImpulseTranslationAbsolute( -vDamageOld/fOldRootLen*fMassFactor);
@@ -718,7 +718,7 @@ functions:
       m_fSprayDamage+fNewDamage>50.0f)
       && m_fSpiritStartTime==0) {*/
     
-    if( m_fMaxDamageAmmount<fDamageAmmount)
+    if (m_fMaxDamageAmmount<fDamageAmmount)
     {
       m_fMaxDamageAmmount = fDamageAmmount;
     }
@@ -730,9 +730,9 @@ functions:
       !(dmtType==DMT_BURNING && GetHealth()<0) ) {
 
       // spawn blood spray
-      CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0, 0, 0));
+      CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
       m_penSpray = CreateEntity( plSpray, CLASS_BLOOD_SPRAY);
-      if(m_sptType != SPT_ELECTRICITY_SPARKS)
+      if (m_sptType != SPT_ELECTRICITY_SPARKS)
       {
         m_penSpray->SetParent( this);
       }
@@ -740,11 +740,11 @@ functions:
       ESpawnSpray eSpawnSpray;
       eSpawnSpray.colBurnColor=C_WHITE|CT_OPAQUE;
       
-      if( m_fMaxDamageAmmount > 10.0f)
+      if (m_fMaxDamageAmmount > 10.0f)
       {
         eSpawnSpray.fDamagePower = 3.0f;
       }
-      else if(m_fSprayDamage+fNewDamage>50.0f)
+      else if (m_fSprayDamage+fNewDamage>50.0f)
       {
         eSpawnSpray.fDamagePower = 2.0f;
       }
@@ -795,11 +795,11 @@ functions:
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
     colAmbient = AddColors( colAmbient, m_colColor);
-    if( m_bFadeOut) {
+    if (m_bFadeOut) {
       FLOAT fTimeRemain = m_fFadeStartTime + m_fFadeTime - _pTimer->CurrentTick();
-      if( fTimeRemain < 0.0f) { fTimeRemain = 0.0f; }
+      if (fTimeRemain < 0.0f) { fTimeRemain = 0.0f; }
       COLOR colAlpha;
-      if(en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
+      if (en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
         colAlpha = GetModelInstance()->GetModelColor();
         colAlpha = (colAlpha&0xFFFFFF00) + (COLOR(fTimeRemain/m_fFadeTime*0xFF)&0xFF);
         GetModelInstance()->SetModelColor(colAlpha);
@@ -813,7 +813,7 @@ functions:
     } else {
       if (GetSP()->sp_bMental) {
         if (GetHealth()<=0) {
-          if(en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
+          if (en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
             GetModelInstance()->SetModelColor(C_WHITE&0xFF);
           } else {
             GetModelObject()->mo_colBlendColor = C_WHITE&0xFF;
@@ -836,7 +836,7 @@ functions:
             fFactor = CalculateRatio(tmTime, 0, tmExist, tmFade/tmExist, tmFade/tmExist);
           }
           
-          if(en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
+          if (en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
             GetModelInstance()->SetModelColor(C_WHITE|INDEX(0xFF*fFactor)); 
           } else {
             GetModelObject()->mo_colBlendColor = C_WHITE|INDEX(0xFF*fFactor);
@@ -844,7 +844,7 @@ functions:
         }
       }
     }
-    if(m_colBurning!=COLOR(C_WHITE|CT_OPAQUE))
+    if (m_colBurning!=COLOR(C_WHITE|CT_OPAQUE))
     {
       colAmbient = MulColors( colAmbient, m_colBurning);
       colLight = MulColors( colLight, m_colBurning);
@@ -1179,7 +1179,7 @@ functions:
     // if we may not rotate
     } else {
       // stop rotating
-      SetDesiredRotation(ANGLE3D(0, 0, 0));
+      SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
     }
 
     // if we may move
@@ -1196,7 +1196,7 @@ functions:
     // if we may not move
     } else {
       // stop translating
-      SetDesiredTranslation(FLOAT3D(0, 0, 0));
+      SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
     }
 
     return ulFlags;
@@ -1212,7 +1212,7 @@ functions:
   // stop desired rotation
   void StopRotating() 
   {
-    SetDesiredRotation(ANGLE3D(0, 0, 0));
+    SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   };
 
   // stop desired translation
@@ -1446,7 +1446,7 @@ functions:
       FLOAT fDistanceRatio = 0.0f;
       FLOAT fTimeRatio = 0.0f;
 
-      switch(penTactics->m_tctType)
+      switch (penTactics->m_tctType)
       {
       case TCT_DAMP_ANGLE_STRIFE: {
         // if very close to player, stop using tactics
@@ -1455,14 +1455,14 @@ functions:
         }
         
         fDistanceRatio=1.0f;
-        if(m_fTacticVar3>0) {
+        if (m_fTacticVar3>0) {
           // get enemy distance
           FLOAT fClamped=Clamp(CalcDist(m_penEnemy)-(m_fTacticVar4*m_fTacticVar3), 0.0f, m_fTacticVar4);
           fDistanceRatio=fClamped/(m_fTacticVar4*(1-m_fTacticVar3));
         }
         
         fTimeRatio=1.0f;
-        if(m_fTacticVar2>0) {
+        if (m_fTacticVar2>0) {
           fTimeRatio=1.0f-(ClampUp((_pTimer->CurrentTick() - m_tmTacticsActivation)/m_fTacticVar2, 1.0f));
         }
       
@@ -1766,20 +1766,20 @@ functions:
     FLOAT3D vBodySpeed = en_vCurrentTranslationAbsolute-en_vGravityDir*(en_vGravityDir%en_vCurrentTranslationAbsolute);
 
     // if allowed and fleshy
-    if( bGibs && !m_bRobotBlowup)
+    if (bGibs && !m_bRobotBlowup)
     {
       // readout blood type
       const INDEX iBloodType = GetSP()->sp_iBlood;
       // determine debris texture (color)
       ULONG ulFleshTexture = TEXTURE_FLESH_GREEN;
       ULONG ulFleshModel   = MODEL_FLESH;
-      if( iBloodType==2) { ulFleshTexture = TEXTURE_FLESH_RED; }
+      if (iBloodType==2) { ulFleshTexture = TEXTURE_FLESH_RED; }
       // spawn debris
       Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, m_fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
-      for( INDEX iDebris = 0; iDebris<m_fBodyParts; iDebris++) {
+      for (INDEX iDebris = 0; iDebris<m_fBodyParts; iDebris++) {
         // flowerpower mode?
-        if( iBloodType==3) {
-          switch( IRnd()%5) {
+        if (iBloodType==3) {
+          switch (IRnd()%5) {
           case 1:  { ulFleshModel = MODEL_FLESH_APPLE;   ulFleshTexture = TEXTURE_FLESH_APPLE;   break; }
           case 2:  { ulFleshModel = MODEL_FLESH_BANANA;  ulFleshTexture = TEXTURE_FLESH_BANANA;  break; }
           case 3:  { ulFleshModel = MODEL_FLESH_BURGER;  ulFleshTexture = TEXTURE_FLESH_BURGER;  break; }
@@ -1795,11 +1795,11 @@ functions:
     }
 
     // if allowed and robot/machine
-    if( bGibs && m_bRobotBlowup)
+    if (bGibs && m_bRobotBlowup)
     {
       // spawn debris
       Debris_Begin(EIBT_ROBOT, DPR_SMOKETRAIL, BET_EXPLOSIONSTAIN, m_fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
-      for( INDEX iDebris = 0; iDebris<m_fBodyParts; iDebris++) {
+      for (INDEX iDebris = 0; iDebris<m_fBodyParts; iDebris++) {
         Debris_Spawn( this, this, MODEL_MACHINE, TEXTURE_MACHINE, 0, 0, 0, IRnd()%4, 0.2f,
                       FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
       }
@@ -1837,9 +1837,9 @@ functions:
     GetBoundingBox(box);
   
     // on plane
-    if( GetNearestPolygon(vPoint, vPlaneNormal, fDistanceToEdge)) {
+    if (GetNearestPolygon(vPoint, vPlaneNormal, fDistanceToEdge)) {
       // if near to polygon and away from last stain point
-      if( (vPoint-GetPlacement().pl_PositionVector).Length()<0.5f
+      if ((vPoint-GetPlacement().pl_PositionVector).Length()<0.5f
         && (m_vLastStain-vPoint).Length()>1.0f ) {
         m_vLastStain = vPoint;
         FLOAT fStretch = box.Size().Length();
@@ -1847,15 +1847,15 @@ functions:
         // stain
         if (bGrow) {
           ese.betType    = BET_BLOODSTAINGROW;
-          ese.vStretch   = FLOAT3D( fStretch*1.5f, fStretch*1.5f, 1.0f);
+          ese.vStretch   = FLOAT3D(fStretch*1.5f, fStretch*1.5f, 1.0f);
         } else {
           ese.betType    = BET_BLOODSTAIN;
-          ese.vStretch   = FLOAT3D( fStretch*0.75f, fStretch*0.75f, 1.0f);
+          ese.vStretch   = FLOAT3D(fStretch*0.75f, fStretch*0.75f, 1.0f);
         }
-        ese.vNormal    = FLOAT3D( vPlaneNormal);
-        ese.vDirection = FLOAT3D( 0, 0, 0);
+        ese.vNormal    = FLOAT3D(vPlaneNormal);
+        ese.vDirection = FLOAT3D(0, 0, 0);
         FLOAT3D vPos = vPoint+ese.vNormal/50.0f*(FRnd()+0.5f);
-        CEntityPointer penEffect = CreateEntity( CPlacement3D(vPos, ANGLE3D(0,0,0)), CLASS_BASIC_EFFECT);
+        CEntityPointer penEffect = CreateEntity( CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
         penEffect->Initialize(ese);
       }
     }
@@ -1876,7 +1876,7 @@ functions:
 /*
     CSessionProperties::GameDificulty gd = GetSP()->sp_gdGameDificulty;
 
-    switch(gd) {
+    switch (gd) {
     case CSessionProperties::GD_EASY: {
                                       } break;
     case CSessionProperties::GD_NORMAL: {
@@ -1958,7 +1958,7 @@ functions:
       return;
     }
     // if is dead
-    if( m_fSpiritStartTime != 0.0f)
+    if (m_fSpiritStartTime != 0.0f)
     {
       // const FLOAT tmNow = _pTimer->CurrentTick();
       // Particles_ModelGlow(this, tmNow + 20,PT_STAR08, 0.15f, 2, 0.03f, 0xff00ff00);
@@ -1974,7 +1974,7 @@ functions:
   {
     if (ee.ee_slEvent==EVENTCODE_ETouch)
     {
-      if( GetCrushHealth() != 0.0f)
+      if (GetCrushHealth() != 0.0f)
       {
         ETouch eTouch = ((ETouch &) ee);
         if (IsOfClass(eTouch.penOther, "ModelHolder2") ||
@@ -1992,7 +1992,7 @@ functions:
   // returns length of animation
   FLOAT GetAnimLength(int iAnim)
   {
-    if(en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType==RT_SKAMODEL) {
       return GetModelInstance()->GetAnimLength(iAnim);
     } else {
       return GetModelObject()->GetAnimLength(iAnim);
@@ -2002,7 +2002,7 @@ functions:
   // returns lenght of current anim length
   FLOAT GetCurrentAnimLength()
   {
-    if(en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType==RT_SKAMODEL) {
       return 0.5f;
     } else {
       return GetModelObject()->GetCurrentAnimLength();
@@ -2012,7 +2012,7 @@ functions:
   // is animation finished
   BOOL IsAnimFinished()
   {
-    if(en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType==RT_SKAMODEL) {
       return TRUE;
     } else {
       return GetModelObject()->IsAnimFinished();
@@ -2022,7 +2022,7 @@ functions:
   // 
   FLOAT GetPassedTime()
   {
-    if(en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType==RT_SKAMODEL) {
       return 0.0f;
     } else { 
       return GetModelObject()->GetPassedTime();
@@ -2031,7 +2031,7 @@ functions:
 
   FLOAT3D &GetModelStretch()
   {
-    if(en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType==RT_SKAMODEL) {
       return GetModelInstance()->mi_vStretch;
     } else {
       return GetModelObject()->mo_Stretch;
@@ -2041,7 +2041,7 @@ functions:
   // Stretch model
   void StretchModel(FLOAT3D vStretch)
   {
-    if(en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType==RT_SKAMODEL) {
       GetModelInstance()->StretchModel( vStretch);
     } else {
       GetModelObject()->StretchModel( vStretch);
@@ -2051,7 +2051,7 @@ functions:
   // Stretch single model
   void StretchSingleModel( FLOAT3D vStretch)
   {
-    if(en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType==RT_SKAMODEL) {
       GetModelInstance()->StretchSingleModel( vStretch);
     } else {
       GetModelObject()->StretchSingleModel( vStretch);
@@ -2148,7 +2148,7 @@ procedures:
   DoPatrolling()
   {
     // repeat forever
-    while(TRUE) {
+    while (TRUE) {
       // stop where you are
       StopMoving();
       StandingAnim();
@@ -2169,7 +2169,7 @@ procedures:
     StandingAnim();
 
     // repeat forever
-    while(TRUE) {
+    while (TRUE) {
       // wait some time
       autowait(Lerp(5.0f, 20.0f, FRnd()));
       // play idle sound
@@ -2262,7 +2262,7 @@ procedures:
       SetBoolFromBoolEType(m_bDeaf,  pem->m_betDeaf);
 
       // if should start tactics
-      if (pem->m_bStartTactics){
+      if (pem->m_bStartTactics) {
         // start to see/hear
         m_bBlind = FALSE;
         m_bDeaf = FALSE;
@@ -2419,7 +2419,7 @@ procedures:
     m_dtDestination = DT_PLAYERCURRENT;
 
     // repeat
-    while(TRUE)
+    while (TRUE)
     {
       // if attacking is futile
       if (ShouldCeaseAttack()) {
@@ -2546,7 +2546,7 @@ procedures:
         }
         // if touched something
         on (ETouch eTouch) : { 
-          if( IfTargetCrushed(eTouch.penOther, (FLOAT3D&)eTouch.plCollision))
+          if (IfTargetCrushed(eTouch.penOther, (FLOAT3D&)eTouch.plCollision))
           {
             resume;
           }
@@ -2717,7 +2717,7 @@ procedures:
           FLOAT3D vSpeed;
           GetHeadingDirection(m_fChargeHitAngle, vSpeed);
           // damage entity in that direction
-          InflictDirectDamage(etouch.penOther, this, DMT_CLOSERANGE, m_fChargeHitDamage, FLOAT3D(0, 0, 0), vSpeed);
+          InflictDirectDamage(etouch.penOther, this, DMT_CLOSERANGE, m_fChargeHitDamage, FLOAT3D(0.0f, 0.0f, 0.0f), vSpeed);
           // push it away
           vSpeed = vSpeed * m_fChargeHitSpeed;
           KickEntity(etouch.penOther, vSpeed);
@@ -2781,7 +2781,7 @@ procedures:
       EReceiveScore eScore;
       eScore.iPoints = m_iScore;
       penKiller->SendEvent(eScore);
-      if( CountAsKill())
+      if (CountAsKill())
       {
         penKiller->SendEvent(EKilledEnemy());
       }
@@ -2873,31 +2873,31 @@ procedures:
     // start death anim
     INDEX iAnim = AnimForDeath();
     // use tactic variables for temporary data
-    m_vTacticsStartPosition=FLOAT3D(1,1,1);
+    m_vTacticsStartPosition=FLOAT3D(1.0f, 1.0f, 1.0f);
     m_fTacticVar4=WaitForDust(m_vTacticsStartPosition);
     // remember start time
     m_fTacticVar5=_pTimer->CurrentTick();
     // mark that we didn't spawned dust yet
     m_fTacticVar3=-1;
     // if no dust should be spawned
-    if( m_fTacticVar4<0)
+    if (m_fTacticVar4<0)
     {
       autowait(GetAnimLength(iAnim));
     }
     // should spawn dust
-    else if( TRUE)
+    else if (TRUE)
     {
-      while(_pTimer->CurrentTick()<m_fTacticVar5+GetCurrentAnimLength())
+      while (_pTimer->CurrentTick()<m_fTacticVar5+GetCurrentAnimLength())
       {
         autowait(_pTimer->TickQuantum);
-        if(en_penReference!=NULL && _pTimer->CurrentTick()>=m_fTacticVar5+m_fTacticVar4 && m_fTacticVar3<0)
+        if (en_penReference!=NULL && _pTimer->CurrentTick()>=m_fTacticVar5+m_fTacticVar4 && m_fTacticVar3<0)
         {
           // spawn dust effect
           CPlacement3D plFX=GetPlacement();
           ESpawnEffect ese;
           ese.colMuliplier = C_WHITE|CT_OPAQUE;
           ese.vStretch = m_vTacticsStartPosition;
-          ese.vNormal = FLOAT3D(0,1,0);
+          ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
           ese.betType = BET_DUST_FALL;
           CPlacement3D plSmoke=plFX;
           plSmoke.pl_PositionVector+=FLOAT3D(0,0.35f*m_vTacticsStartPosition(2),0);

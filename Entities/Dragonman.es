@@ -62,11 +62,11 @@ static EntityInfo eiDragonmanFly4 = {
   0.0f, 0.0f, 0.0f,
 };
 
-#define FLY_FIRE1           FLOAT3D( 0.0f, 0.25f, -1.5f)
-#define GROUND_RIGHT_FIRE1  FLOAT3D( 0.3f, 2.2f, -0.85f)
+#define FLY_FIRE1           FLOAT3D(0.0f, 0.25f, -1.5f)
+#define GROUND_RIGHT_FIRE1  FLOAT3D(0.3f, 2.2f, -0.85f)
 #define GROUND_LEFT_FIRE1   FLOAT3D(-0.3f, 1.7f, -0.85f)
-#define FLAME_AIR1          FLOAT3D( 0.0f, 0.1f, -1.75f)
-#define FLAME_GROUND1       FLOAT3D( 0.0f, 2.7f, -0.85f)
+#define FLAME_AIR1          FLOAT3D(0.0f, 0.1f, -1.75f)
+#define FLAME_GROUND1       FLOAT3D(0.0f, 2.7f, -0.85f)
 %}
 
 
@@ -76,7 +76,7 @@ thumbnail "Thumbnails\\Dragonman.tbn";
 
 properties:
   1 enum DragonmanType m_EdtType "Character" 'C' = DT_SOLDIER,       // type
-  2 FLOAT3D m_vFlameSource = FLOAT3D(0,0,0),
+  2 FLOAT3D m_vFlameSource = FLOAT3D(0.0f, 0.0f, 0.0f),
   3 CEntityPointer m_penFlame,
   4 BOOL m_bBurnEnemy = FALSE,
   5 FLOAT m_fFireTime = 0.0f,
@@ -102,7 +102,7 @@ functions:
   /* Entity info */
   void *GetEntityInfo(void) {
     if (m_bInAir) {
-      switch(m_EdtType) {
+      switch (m_EdtType) {
       case DT_SOLDIER:
         return &eiDragonmanFly1;
         break;
@@ -117,7 +117,7 @@ functions:
                } break;
       }
     } else {
-      switch(m_EdtType) {
+      switch (m_EdtType) {
       case DT_SOLDIER:
         return &eiDragonmanStand1;
         break;
@@ -138,7 +138,7 @@ functions:
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
-    switch(m_EdtType) {
+    switch (m_EdtType) {
     case DT_SOLDIER  : { pes->es_strName+=" Soldier"; } break;
     case DT_SERGEANT : { pes->es_strName+=" Sergeant"; } break;
     case DT_MONSTER  : { pes->es_strName+=" Monster"; } break;
@@ -158,7 +158,7 @@ functions:
 
   FLOAT3D GetStretchedVector(const FLOAT3D&v)
   {
-    switch(m_EdtType) {
+    switch (m_EdtType) {
     case DT_SOLDIER:
       return v;
       break;
@@ -289,7 +289,7 @@ functions:
     }
 
     // create flame
-    CEntityPointer penFlame = ShootProjectile(PRT_FLAME, vFlamePos, ANGLE3D(0, 0, 0));
+    CEntityPointer penFlame = ShootProjectile(PRT_FLAME, vFlamePos, ANGLE3D(0.0f, 0.0f, 0.0f));
     // link last flame with this one (if not NULL or deleted)
     if (m_penFlame!=NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
       ((CProjectile&)*m_penFlame).m_penParticles = penFlame;
@@ -322,16 +322,16 @@ procedures:
     StartModelAnim(DRAGONMAN_ANIM_AIRATTACK02, 0);
     autowait(0.4f);
     if (m_EdtType != DT_MONSTER) {
-      ShootProjectile(PRT_DRAGONMAN_FIRE, GetStretchedVector(FLY_FIRE1), ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_DRAGONMAN_FIRE, GetStretchedVector(FLY_FIRE1), ANGLE3D(0.0f, 0.0f, 0.0f));
     } else {
-      ShootProjectile(PRT_DRAGONMAN_STRONG_FIRE, GetStretchedVector(FLY_FIRE1), ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_DRAGONMAN_STRONG_FIRE, GetStretchedVector(FLY_FIRE1), ANGLE3D(0.0f, 0.0f, 0.0f));
     }
     PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
     autowait(0.15f);
     if (m_EdtType != DT_MONSTER) {
-      ShootProjectile(PRT_DRAGONMAN_FIRE, GetStretchedVector(FLY_FIRE1), ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_DRAGONMAN_FIRE, GetStretchedVector(FLY_FIRE1), ANGLE3D(0.0f, 0.0f, 0.0f));
     } else if (m_EdtType == DT_MONSTER) {
-      ShootProjectile(PRT_DRAGONMAN_STRONG_FIRE, GetStretchedVector(FLY_FIRE1), ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_DRAGONMAN_STRONG_FIRE, GetStretchedVector(FLY_FIRE1), ANGLE3D(0.0f, 0.0f, 0.0f));
     }
     PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
     autowait(0.85f);
@@ -439,16 +439,16 @@ procedures:
     StartModelAnim(DRAGONMAN_ANIM_GROUNDATTACKCLOSELOOP, 0);
     autowait(0.3f);
     if (m_EdtType != DT_MONSTER) {
-      ShootProjectile(PRT_DRAGONMAN_FIRE, GetStretchedVector(GROUND_RIGHT_FIRE1), ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_DRAGONMAN_FIRE, GetStretchedVector(GROUND_RIGHT_FIRE1), ANGLE3D(0.0f, 0.0f, 0.0f));
     } else {
-      ShootProjectile(PRT_DRAGONMAN_STRONG_FIRE, GetStretchedVector(GROUND_RIGHT_FIRE1), ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_DRAGONMAN_STRONG_FIRE, GetStretchedVector(GROUND_RIGHT_FIRE1), ANGLE3D(0.0f, 0.0f, 0.0f));
     }
     PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
     autowait(0.8f);
     if (m_EdtType != DT_MONSTER) {
-      ShootProjectile(PRT_DRAGONMAN_FIRE, GetStretchedVector(GROUND_LEFT_FIRE1), ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_DRAGONMAN_FIRE, GetStretchedVector(GROUND_LEFT_FIRE1), ANGLE3D(0.0f, 0.0f, 0.0f));
     } else if (m_EdtType == DT_MONSTER) {
-      ShootProjectile(PRT_DRAGONMAN_STRONG_FIRE, GetStretchedVector(GROUND_LEFT_FIRE1), ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_DRAGONMAN_STRONG_FIRE, GetStretchedVector(GROUND_LEFT_FIRE1), ANGLE3D(0.0f, 0.0f, 0.0f));
     }
     PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
     autowait(0.55f);
@@ -619,7 +619,7 @@ procedures:
     m_fBlowUpAmount = 100.0f;
     m_fBodyParts = 8;
     // flame source
-    m_vFlameSource = FLOAT3D(0, 0, 0);
+    m_vFlameSource = FLOAT3D(0.0f, 0.0f, 0.0f);
     m_fGroundToAirSpeed = m_fFlyAttackRunSpeed;
     m_fAirToGroundSpeed = m_fFlyAttackRunSpeed*2;
     m_fAirToGroundMin = 0.1f;

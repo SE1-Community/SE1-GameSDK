@@ -80,7 +80,7 @@ components:
 functions:
   void Precache(void)
   {
-    switch(m_betType)
+    switch (m_betType)
     {
       case EMT_BASIC_EFFECT:
         CDLLEntityClass *pdec = &CBasicEffect_DLLClass;
@@ -93,12 +93,12 @@ functions:
   // Validate offered target for one property
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if(penTarget==NULL)
+    if (penTarget==NULL)
     {
       return FALSE;
     }
     // if should be modelobject
-    if( slPropertyOffset==offsetof(CEffectMarker, m_penModel) ||
+    if (slPropertyOffset==offsetof(CEffectMarker, m_penModel) ||
         slPropertyOffset==offsetof(CEffectMarker, m_penModel2) )
     {
       return IsOfClass(penTarget, "ModelHolder2");
@@ -111,11 +111,11 @@ functions:
   {
     if (ee.ee_slEvent==EVENTCODE_ETrigger)
     {
-      switch(m_emtType)
+      switch (m_emtType)
       {
         case EMT_SET_PLACEMENT:
         {
-          if(m_penModel!=NULL && m_penModel2!=NULL)
+          if (m_penModel!=NULL && m_penModel2!=NULL)
           {
             m_penModel->Teleport(m_penModel2->GetPlacement(), FALSE);
           }
@@ -123,7 +123,7 @@ functions:
         }
         case EMT_SET_PARENT:
         {
-          if(m_penModel!=NULL && m_penModel2!=NULL)
+          if (m_penModel!=NULL && m_penModel2!=NULL)
           {
             m_penModel->SetParent(m_penModel2);
           }
@@ -131,7 +131,7 @@ functions:
         }
         case EMT_CLEAR_PARENT:
         {
-          if(m_penModel!=NULL)
+          if (m_penModel!=NULL)
           {
             m_penModel->SetParent(NULL);
           }
@@ -143,7 +143,7 @@ functions:
           CWorldSettingsController *pwsc = NULL;
           // obtain bcg viewer
           CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) GetWorld()->GetBackgroundViewer();
-          if( penBcgViewer!=NULL && penBcgViewer->m_penWorldSettingsController!=NULL)
+          if (penBcgViewer!=NULL && penBcgViewer->m_penWorldSettingsController!=NULL)
           {
             pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
             pwsc->m_tmShakeStarted = _pTimer->CurrentTick();
@@ -162,7 +162,7 @@ functions:
         }
         case EMT_HIDE_ENTITY:
         {
-          if( m_penTarget!=NULL)
+          if (m_penTarget!=NULL)
           {
             m_penTarget->SetFlags(m_penTarget->GetFlags()|ENF_HIDDEN);
           }
@@ -170,17 +170,17 @@ functions:
         }
         case EMT_SHOW_ENTITY:
         {
-          if( m_penTarget!=NULL)
+          if (m_penTarget!=NULL)
           {
             m_penTarget->SetFlags(m_penTarget->GetFlags()&~ENF_HIDDEN);
           }
           break;
         }
         case EMT_PLAYER_APPEAR:
-          if( m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2") )
+          if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2") )
           {
             CModelObject *pmo = m_penModel->GetModelObject();
-            if( pmo != NULL) 
+            if (pmo != NULL) 
             {
               // spawn effect
               CPlacement3D plFX= m_penModel->GetPlacement();
@@ -206,14 +206,14 @@ functions:
             break;
           }
         case EMT_BLEND_MODELS:
-        if(m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2") &&
+        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2") &&
            m_penModel2!=NULL && IsOfClass(m_penModel2, "ModelHolder2") )
         {
-          if( m_penEffector == NULL)
+          if (m_penEffector == NULL)
           {
             CModelObject *pmo1 = m_penModel->GetModelObject();
             CModelObject *pmo2 = m_penModel2->GetModelObject();
-            if( pmo1 != NULL && pmo2 != NULL)
+            if (pmo1 != NULL && pmo2 != NULL)
             {
               // spawn effect
               CPlacement3D plFX= m_penModel->GetPlacement();
@@ -234,12 +234,12 @@ functions:
         }
         break;
         case EMT_DISAPPEAR_MODEL:
-        if(m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
+        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
         {
-          if( m_penEffector == NULL)
+          if (m_penEffector == NULL)
           {
             CModelObject *pmo = m_penModel->GetModelObject();
-            if( pmo != NULL)
+            if (pmo != NULL)
             {
               // spawn effect
               CPlacement3D plFX= m_penModel->GetPlacement();
@@ -259,12 +259,12 @@ functions:
         }
         break;
         case EMT_APPEAR_MODEL:
-        if(m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
+        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
         {
-          if( m_penEffector == NULL)
+          if (m_penEffector == NULL)
           {
             CModelObject *pmo = m_penModel->GetModelObject();
-            if( pmo != NULL)
+            if (pmo != NULL)
             {
               // spawn effect
               CPlacement3D plFX= m_penModel->GetPlacement();
@@ -310,13 +310,13 @@ functions:
     }
     else if (ee.ee_slEvent==EVENTCODE_EActivate)
     {
-      switch(m_emtType)
+      switch (m_emtType)
       {
         case EMT_APPEAR_DISAPPEAR:
-        if(m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
+        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
         {
           CModelObject *pmo = m_penModel->GetModelObject();
-          if( pmo != NULL)
+          if (pmo != NULL)
           {
             // spawn effect
             CPlacement3D plFX= m_penModel->GetPlacement();
@@ -334,13 +334,13 @@ functions:
     }
     else if (ee.ee_slEvent==EVENTCODE_EDeactivate)
     {
-      switch(m_emtType)
+      switch (m_emtType)
       {
         case EMT_APPEAR_DISAPPEAR:
-        if(m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
+        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
         {
           CModelObject *pmo = m_penModel->GetModelObject();
-          if( pmo != NULL)
+          if (pmo != NULL)
           {
             // spawn effect
             CPlacement3D plFX= m_penModel->GetPlacement();

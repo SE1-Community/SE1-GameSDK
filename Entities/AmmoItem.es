@@ -392,8 +392,8 @@ procedures:
     if (epass.penOther->ReceiveItem(eAmmo)) {
       // play the pickup sound
       m_soPick.Set3DParameters(50.0f, 1.0f, 1.0f, 1.0f);
-      if(_pNetwork->IsPlayerLocal(epass.penOther)) {IFeel_PlayEffect("PU_Ammo");}
-      if( (m_EaitType == AIT_SERIOUSPACK) || (m_EaitType == AIT_BACKPACK) )
+      if (_pNetwork->IsPlayerLocal(epass.penOther)) {IFeel_PlayEffect("PU_Ammo");}
+      if ((m_EaitType == AIT_SERIOUSPACK) || (m_EaitType == AIT_BACKPACK) )
       {
         PlaySound(m_soPick, SOUND_DEFAULT, SOF_3D);
         CPrintF("^cFF0000^f5Warning!!! Replace old serious pack with new, BackPack entity!^r\n");

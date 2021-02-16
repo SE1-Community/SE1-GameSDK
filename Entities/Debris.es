@@ -66,12 +66,12 @@ properties:
   3 BOOL m_bFade = FALSE,                       // fade debris
   4 FLOAT m_fFadeStartTime = 0.0f,              // fade start time
   5 FLOAT m_fFadeTime = 0.0f,                   // fade time
-  6 FLOAT3D m_fLastStainHitPoint = FLOAT3D(0,0,0), // last stain hit point
+  6 FLOAT3D m_fLastStainHitPoint = FLOAT3D(0.0f, 0.0f, 0.0f), // last stain hit point
   7 enum BasicEffectType m_betStain = BET_NONE, // type of stain left
   8 INDEX m_ctLeftStains = 0,                   // count of stains already left
   9 FLOAT m_tmStarted = 0.0f,                   // time when spawned
   10 FLOAT m_fStretch = 1.0f,                   // stretch
-  11 ANGLE3D m_aShadingDirection = ANGLE3D(0,0,0),
+  11 ANGLE3D m_aShadingDirection = ANGLE3D(0.0f, 0.0f, 0.0f),
   12 BOOL m_bCustomShading = FALSE,
   13 COLOR m_colCustomAmbient = COLOR(C_WHITE|CT_OPAQUE),
   14 COLOR m_colCustomDiffuse = COLOR(C_WHITE|CT_OPAQUE),
@@ -111,7 +111,7 @@ functions:
 
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
-    if(m_bCustomShading)
+    if (m_bCustomShading)
     {
       colLight = m_colCustomDiffuse;
       colAmbient = m_colCustomAmbient;
@@ -167,8 +167,8 @@ functions:
         GetNormalComponent( en_vCurrentTranslationAbsolute, plPlaneNormal, ese.vDirection);
         FLOAT fLength = ese.vDirection.Length() / 7.5f;
         fLength = Clamp( fLength, 1.0f, 15.0f);
-        ese.vStretch = FLOAT3D( 1.0f, fLength*1.0f, 1.0f);
-        SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f*(FRnd()+0.5f), ANGLE3D(0, 0, 0)), ese);
+        ese.vStretch = FLOAT3D(1.0f, fLength*1.0f, 1.0f);
+        SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f*(FRnd()+0.5f), ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
         m_ctLeftStains++;
       }
     }
@@ -189,7 +189,7 @@ functions:
       // don't render particles
       return;
     }
-    switch(m_dptParticles) {
+    switch (m_dptParticles) {
     case DPT_BLOODTRAIL: {
       Particles_BloodTrail( this);
                          } break;
@@ -257,7 +257,7 @@ procedures:
 
     // set appearance
     m_dptParticles = eSpawn.dptParticles;
-    if(m_dptParticles==DPT_AFTERBURNER)
+    if (m_dptParticles==DPT_AFTERBURNER)
     {
       Particles_AfterBurner_Prepare(this);
     }
@@ -269,7 +269,7 @@ procedures:
     GetModelObject()->mo_toSpecular.SetData(eSpawn.ptdSpec);
     GetModelObject()->mo_toBump.SetData(eSpawn.ptdBump);
     GetModelObject()->PlayAnim(eSpawn.iModelAnim, AOF_LOOPING);
-    GetModelObject()->mo_Stretch = FLOAT3D( eSpawn.fSize, eSpawn.fSize, eSpawn.fSize);
+    GetModelObject()->mo_Stretch = FLOAT3D(eSpawn.fSize, eSpawn.fSize, eSpawn.fSize);
     GetModelObject()->mo_Stretch(1)*=eSpawn.vStretch(1);
     GetModelObject()->mo_Stretch(2)*=eSpawn.vStretch(2);
     GetModelObject()->mo_Stretch(3)*=eSpawn.vStretch(3);
@@ -277,7 +277,7 @@ procedures:
     // adjust color
     GetModelObject()->mo_colBlendColor = eSpawn.colDebris|CT_OPAQUE;
     m_bCustomShading = eSpawn.bCustomShading;
-    if( m_bCustomShading)
+    if (m_bCustomShading)
     {
       en_ulFlags|=ENF_NOSHADINGINFO;
     }
@@ -313,7 +313,7 @@ procedures:
         if (etouch.penOther->GetRenderType()==RT_BRUSH)
         {
           // shake or some other effect
-          if( m_penFallFXPapa!=NULL && !m_bTouchedGround)
+          if (m_penFallFXPapa!=NULL && !m_bTouchedGround)
           {
             // loop all children of FX papa
             FOREACHINLIST( CEntity, en_lnInParent, m_penFallFXPapa->en_lhChildren, iten)
@@ -321,7 +321,7 @@ procedures:
               // start it
               CEntity *penNew = GetWorld()->CopyEntityInWorld( *iten, GetPlacement());
               penNew->SetParent(NULL);
-              if( IsOfClass(&*penNew, "SoundHolder"))
+              if (IsOfClass(&*penNew, "SoundHolder"))
               {
                 penNew->SendEvent( EStart());
               }
@@ -332,7 +332,7 @@ procedures:
             }
           }
 
-          if( m_fDustStretch>0 && !m_bTouchedGround)
+          if (m_fDustStretch>0 && !m_bTouchedGround)
           {
             // spawn dust
             CPlacement3D plDust=GetPlacement();
@@ -341,7 +341,7 @@ procedures:
             ESpawnEffect ese;
             ese.colMuliplier = C_WHITE|CT_OPAQUE;
             ese.vStretch = FLOAT3D(m_fDustStretch,m_fDustStretch,m_fDustStretch);
-            ese.vNormal = FLOAT3D(0,1,0);
+            ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
             ese.betType = BET_DUST_FALL;
             CEntityPointer penFX = CreateEntity(plDust, CLASS_BASIC_EFFECT);
             penFX->Initialize(ese);
@@ -359,7 +359,7 @@ procedures:
             resume;
           }
         }
-        if( m_bImmaterialASAP)
+        if (m_bImmaterialASAP)
         {
           SetCollisionFlags(ECF_DEBRIS);
         }

@@ -133,7 +133,7 @@ functions:
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
     // take less damage from heavy bullets (e.g. sniper)
-    if(dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount*=0.5f;
     }
@@ -154,7 +154,7 @@ functions:
 
   // death
   INDEX AnimForDeath(void) {
-    if( m_penFireFX != NULL)
+    if (m_penFireFX != NULL)
     {
       m_penFireFX->SendEvent(EStop());
       m_penFireFX = NULL;
@@ -183,7 +183,7 @@ functions:
   };
 
   void WalkingAnim(void) {
-    /*if(_pTimer->CurrentTick()>=_tmLastStandingAnim-_pTimer->TickQuantum &&
+    /*if (_pTimer->CurrentTick()>=_tmLastStandingAnim-_pTimer->TickQuantum &&
        _pTimer->CurrentTick()<=_tmLastStandingAnim+_pTimer->TickQuantum)
     {
       BREAKPOINT;
@@ -286,7 +286,7 @@ procedures:
       {
         FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
         vDirection.Normalize();
-        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 50.0f, FLOAT3D(0, 0, 0), vDirection);
+        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 50.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       }
       autowait(1.5f);
       MaybeSwitchToAnotherPlayer();

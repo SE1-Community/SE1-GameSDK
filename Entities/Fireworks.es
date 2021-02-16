@@ -63,7 +63,7 @@ functions:
   void RenderParticles(void)
   {
     FLOAT tmNow = _pTimer->CurrentTick();
-    if( tmNow>m_tmLastAnimation)
+    if (tmNow>m_tmLastAnimation)
     {
       FLOAT fRatio=CalculateRatio(m_tmActivated-tmNow,0.0f,6.0f,1,0);
       FLOAT fGPower=(Min(fRatio,0.5f)-0.5f)*2.0f*10.0f;
@@ -71,14 +71,14 @@ functions:
       m_emEmiter.AnimateParticles();
       m_tmLastAnimation=tmNow;
       
-      for(INDEX i=0; i<m_emEmiter.em_aepParticles.Count(); i++)
+      for (INDEX i=0; i<m_emEmiter.em_aepParticles.Count(); i++)
       {
         CEmittedParticle &ep=m_emEmiter.em_aepParticles[i];
-        if(ep.ep_tmEmitted<0) {continue;};
+        if (ep.ep_tmEmitted<0) {continue;};
         FLOAT fLiving=tmNow-ep.ep_tmEmitted;
         FLOAT fSpeed=0.0f;
 
-        if( fLiving>=6.0f)
+        if (fLiving>=6.0f)
         {
           fSpeed=0.0f;
         }
@@ -108,10 +108,10 @@ procedures:
     PlaySound(m_soExplosion, SOUND_EXPLODE, 0);
 
     // add emited firework sparks
-    FLOAT3D vRndPos=FLOAT3D( RAND_05, RAND_05, RAND_05)*m_rRndRadius;
+    FLOAT3D vRndPos=FLOAT3D(RAND_05, RAND_05, RAND_05)*m_rRndRadius;
     FLOAT3D vPos=GetPlacement().pl_PositionVector+vRndPos;
     
-    m_emEmiter.em_vG=FLOAT3D(0,0,0);
+    m_emEmiter.em_vG=FLOAT3D(0.0f, 0.0f, 0.0f);
     m_emEmiter.em_iGlobal=FRnd()*16;
     
     UBYTE ubRndH = UBYTE( FRnd()*255);
@@ -122,12 +122,12 @@ procedures:
     FLOAT tmNow = _pTimer->CurrentTick();
     m_tmActivated=tmNow;
     INDEX ctSparks=128;
-    for( INDEX iSpark=0; iSpark<ctSparks; iSpark++)
+    for (INDEX iSpark=0; iSpark<ctSparks; iSpark++)
     {
       FLOAT tmBirth=tmNow+(iSpark+RAND_05)*_pTimer->TickQuantum/ctSparks*2.0f;
       FLOAT fLife=4.0f+RAND_05*2.0f;
       FLOAT fStretch=(1.0f+RAND_05*0.25f)*2.5f;
-      FLOAT3D vSpeed=FLOAT3D( RAND_05, RAND_05, RAND_05);
+      FLOAT3D vSpeed=FLOAT3D(RAND_05, RAND_05, RAND_05);
       vSpeed=vSpeed.Normalize()*LAUNCH_SPEED;
       FLOAT fRotSpeed=RAND_05*360.0f;
       

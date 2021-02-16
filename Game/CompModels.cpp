@@ -71,7 +71,7 @@ static ANGLE3D _aRotation;
 static BOOL _bHasFloor = FALSE;
 static FLOAT _fFloorY = 0.0f;
 static FLOAT _fFOV = 90.0f;
-static FLOAT3D _vLightDir = FLOAT3D( -0.2f, -0.2f, -0.2f);
+static FLOAT3D _vLightDir = FLOAT3D(-0.2f, -0.2f, -0.2f);
 static COLOR _colLight = C_GRAY;
 static COLOR _colAmbient = C_vdGRAY;
 static COLOR _iParticleType = PARTICLES_NONE;
@@ -102,11 +102,11 @@ CModelObject *AddAttachment_t(CModelObject *pmoParent, INDEX iPosition,
 extern void SetupCompModel_t(const CTString &strName)
 {
   CModelObject *pmo = &_moModel;
-  _aRotation = ANGLE3D(0,0,0);
+  _aRotation = ANGLE3D(0.0f, 0.0f, 0.0f);
   _bHasFloor = FALSE;
   _fFloorY = 0.0f;
   _fFOV = 90.0f;
-  _vLightDir = FLOAT3D( -0.2f, -0.2f, -0.2f);
+  _vLightDir = FLOAT3D(-0.2f, -0.2f, -0.2f);
   _colLight = C_GRAY;
   _colAmbient = C_vdGRAY;
   _iParticleType = PARTICLES_NONE;
@@ -175,7 +175,7 @@ extern void SetupCompModel_t(const CTString &strName)
     pmo->PlayAnim(EYEMAN_ANIM_WALK, AOF_LOOPING);
     pmo->mo_toTexture.SetData_t(CTFILENAME("Models\\Enemies\\Eyeman\\Eyeman4.tex"));
     _plModel = CPlacement3D(FLOAT3D(0,-0.9f,-1.5), ANGLE3D(210,0,0));
-    pmo->StretchModel(FLOAT3D(1,1,1));
+    pmo->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
     _bHasFloor = TRUE;
 
   } else if (strName=="EyemanGreen") {
@@ -191,7 +191,7 @@ extern void SetupCompModel_t(const CTString &strName)
     pmo->PlayAnim(BONEMAN_ANIM_WALKCOMPUTER, AOF_LOOPING);
     pmo->mo_toTexture.SetData_t(CTFILENAME("Models\\Enemies\\Boneman\\Boneman.tex"));
     _plModel = CPlacement3D(FLOAT3D(0,-1.0f,-3.0), ANGLE3D(210,0,0));
-    pmo->StretchModel(FLOAT3D(1,1,1));
+    pmo->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
     _bHasFloor = TRUE;
 
   } else if (strName=="Bull") {
@@ -199,7 +199,7 @@ extern void SetupCompModel_t(const CTString &strName)
     pmo->PlayAnim(WEREBULL_ANIM_WALK, AOF_LOOPING);
     pmo->mo_toTexture.SetData_t(CTFILENAME("Models\\Enemies\\Werebull\\Werebull.tex"));
     _plModel = CPlacement3D(FLOAT3D(0.0f,-1.5f,-4.0), ANGLE3D(-110,0,0));
-    pmo->StretchModel(FLOAT3D(1,1,1));
+    pmo->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
     _bHasFloor = TRUE;
 
   } else if (strName=="ScorpmanSoldier") {
@@ -210,7 +210,7 @@ extern void SetupCompModel_t(const CTString &strName)
 //    _plModel = CPlacement3D(FLOAT3D(0+0.2f*2,-2,-13), ANGLE3D(150,0,0));
 //    _fFOV = 30;
     _plModel = CPlacement3D(FLOAT3D(0+0.5f*3,-3.0f,-7.0)*2/3, ANGLE3D(135,0,0));
-    _vLightDir = FLOAT3D( 0.2f, -0.2f, -0.2f);
+    _vLightDir = FLOAT3D(0.2f, -0.2f, -0.2f);
     _colLight = C_lGRAY;
     _colAmbient = C_vdGRAY;
 
@@ -229,7 +229,7 @@ extern void SetupCompModel_t(const CTString &strName)
 //    _plModel = CPlacement3D(FLOAT3D(0+0.2f*3,-4,-19), ANGLE3D(150,0,0));
 //    _fFOV = 30;
     _plModel = CPlacement3D(FLOAT3D(0+0.5f*3,-3.0f,-7.0), ANGLE3D(135,0,0));
-    _vLightDir = FLOAT3D( 0.2f, -0.2f, -0.2f);
+    _vLightDir = FLOAT3D(0.2f, -0.2f, -0.2f);
     _colLight = C_lGRAY;
     _colAmbient = C_vdGRAY;
 
@@ -275,7 +275,7 @@ extern void SetupCompModel_t(const CTString &strName)
       CTFILENAME(""),
       CTFILENAME("Models\\SpecularTextures\\Medium.tex"));
     _plModel = CPlacement3D(FLOAT3D(0,-4.0f,-10.0), ANGLE3D(210,0,0));
-    pmo->StretchModel(FLOAT3D(1,1,1));
+    pmo->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
     _bHasFloor = TRUE;
 
   } else if (strName=="Woman") {
@@ -283,7 +283,7 @@ extern void SetupCompModel_t(const CTString &strName)
     pmo->PlayAnim(WOMAN_ANIM_AIRSTAND, AOF_LOOPING);
     pmo->mo_toTexture.SetData_t(CTFILENAME("Models\\Enemies\\Woman\\Woman.tex"));
     _plModel = CPlacement3D(FLOAT3D(0,0.0f,-2.0), ANGLE3D(210,30,0));
-    pmo->StretchModel(FLOAT3D(1,1,1));
+    pmo->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
     _bHasFloor = TRUE;
     _fFloorY = -1.5f;
 
@@ -292,7 +292,7 @@ extern void SetupCompModel_t(const CTString &strName)
     pmo->PlayAnim(GIZMO_ANIM_IDLE, AOF_LOOPING);
     pmo->mo_toTexture.SetData_t(CTFILENAME("Models\\Enemies\\Gizmo\\Gizmo.tex"));
     _plModel = CPlacement3D(FLOAT3D(0,-0.5f,-1.2f), ANGLE3D(150,0,0));
-    pmo->StretchModel(FLOAT3D(1,1,1));
+    pmo->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
     _fFloorY = 0.0f;
     _bHasFloor = TRUE;
 
@@ -302,7 +302,7 @@ extern void SetupCompModel_t(const CTString &strName)
     pmo->mo_toTexture.SetData_t(CTFILENAME("Models\\Enemies\\Fish\\Fish1.tex"));
     pmo->mo_toSpecular.SetData_t(CTFILENAME("Models\\SpecularTextures\\Medium.tex"));
     _plModel = CPlacement3D(FLOAT3D(-0.2f,-0.5f,-3.0), ANGLE3D(250,0,0));
-    pmo->StretchModel(FLOAT3D(1,1,1));
+    pmo->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
     _bHasFloor = TRUE;
     _fFloorY = -1.0f;
 
@@ -370,7 +370,7 @@ extern void SetupCompModel_t(const CTString &strName)
     _plModel = CPlacement3D(FLOAT3D(0.0f,-2.0f,-5.75f), ANGLE3D(210,0,0));
     _fFOV = 70.0f;
     
-    _vLightDir = FLOAT3D( -0.1f, -0.1f, -0.175f);
+    _vLightDir = FLOAT3D(-0.1f, -0.1f, -0.175f);
     
     //_plModel = CPlacement3D(FLOAT3D(tmp_af[5],tmp_af[6],tmp_af[7]), ANGLE3D(tmp_af[8],0,0));
     //_fFOV = tmp_af[9];
@@ -390,8 +390,8 @@ extern void SetupCompModel_t(const CTString &strName)
     _plModel = CPlacement3D(FLOAT3D(0.0f,-1.5f,-3.7f), ANGLE3D(165.0f,0.0f,0.0f));
     _fFOV = 70.0f;
     
-    _vLightDir = FLOAT3D( -0.1f, -0.2f, -0.2f);
-    //_vLightDir = FLOAT3D( tmp_af[2], tmp_af[3], tmp_af[4]);
+    _vLightDir = FLOAT3D(-0.1f, -0.2f, -0.2f);
+    //_vLightDir = FLOAT3D(tmp_af[2], tmp_af[3], tmp_af[4]);
 
     pmo->StretchModel(FLOAT3D(1.2f, 1.2f, 1.2f));
     _fFloorY = 0.0f;
@@ -407,7 +407,7 @@ extern void SetupCompModel_t(const CTString &strName)
     _plModel = CPlacement3D(FLOAT3D(0.0f,-1.65f,-3.9f), ANGLE3D(165.0f,0.0f,0.0f));
     _fFOV = 70.0f;
     
-    _vLightDir = FLOAT3D( -0.1f, -0.2f, -0.2f);
+    _vLightDir = FLOAT3D(-0.1f, -0.2f, -0.2f);
     
     pmo->StretchModel(FLOAT3D(1.4f, 1.4f, 1.4f));
     _fFloorY = 0.0f;
@@ -484,7 +484,7 @@ extern void SetupCompModel_t(const CTString &strName)
     
     _plModel = CPlacement3D(FLOAT3D(0.25f, -7.0f, -31.0f), ANGLE3D(160.0f, 0.0f, 0.0f));
     _fFOV = 50.0f;
-    _vLightDir = FLOAT3D( 0.1f, -0.3f, -0.2f);
+    _vLightDir = FLOAT3D(0.1f, -0.3f, -0.2f);
 
     pmo->StretchModel(FLOAT3D(7.0f, 7.0f, 7.0f));
     _fFloorY = 0.0f;
@@ -541,8 +541,8 @@ extern void SetupCompModel_t(const CTString &strName)
     _plModel = CPlacement3D(FLOAT3D(0.5f, -8.0f, -21.0f), ANGLE3D(165.0f, 0.0f, 0.0f));
     _fFOV = 70.0f;
 
-    _aRotation = ANGLE3D( 10.0f, 0, 0 );
-	  _vLightDir = FLOAT3D( -0.1f, -0.2f, -0.2f);
+    _aRotation = ANGLE3D(10.0f, 0, 0 );
+	  _vLightDir = FLOAT3D(-0.1f, -0.2f, -0.2f);
     
     pmo->StretchModelRelative(FLOAT3D(2.5f, 2.5f, 2.5f));
     //pmo->StretchModel(FLOAT3D(2.5f, 2.5f, 2.5f));
@@ -560,7 +560,7 @@ extern void SetupCompModel_t(const CTString &strName)
     //_plModel = CPlacement3D(FLOAT3D(tmp_af[5],tmp_af[6],tmp_af[7]), ANGLE3D(tmp_af[8],0,0));
     //_fFOV = tmp_af[9];
     //CPrintF("%f %f %f : %f : %f\n", tmp_af[5],tmp_af[6],tmp_af[7], tmp_af[8], tmp_af[9]);
-    //_vLightDir = FLOAT3D( tmp_af[2], tmp_af[3], tmp_af[4]);
+    //_vLightDir = FLOAT3D(tmp_af[2], tmp_af[3], tmp_af[4]);
 
     pmo->StretchModel(FLOAT3D(14.0f, 14.0f, 14.0f));
     _fFloorY = -2.0f;
@@ -574,7 +574,7 @@ extern void SetupCompModel_t(const CTString &strName)
     pmo->mo_toTexture.SetData_t(CTFILENAME("ModelsMP\\Enemies\\Beast\\BeastBiggest.tex"));
     
     _plModel = CPlacement3D(FLOAT3D(-0.5f, -12.0f, -30.0f), ANGLE3D(170.0f, 0.0f, 0.0f));
-    _vLightDir = FLOAT3D( -0.1f, -0.3f, -0.2f);
+    _vLightDir = FLOAT3D(-0.1f, -0.3f, -0.2f);
 
     pmo->StretchModel(FLOAT3D(11.0f, 11.0f, 11.0f));
     _fFloorY = 0.0f;
@@ -692,7 +692,7 @@ extern void SetupCompModel_t(const CTString &strName)
     _plModel = CPlacement3D(FLOAT3D(0,-0.4f,-4.0f), ANGLE3D(0,10,0));
     _aRotation = ANGLE3D(100,0,0);
     _fFOV = 50.0f;
-    _vLightDir = FLOAT3D( -0.1f, -0.2f, -0.2f);  
+    _vLightDir = FLOAT3D(-0.1f, -0.2f, -0.2f);  
 
     AddAttachment_t(pmo, SNIPERITEM_ATTACHMENT_BODY, 
       CTFILENAME("ModelsMP\\Weapons\\Sniper\\Body.mdl"), 0,
@@ -709,7 +709,7 @@ extern void SetupCompModel_t(const CTString &strName)
     _plModel = CPlacement3D(FLOAT3D(0,-0.4f,-3.0f), ANGLE3D(0,10,0));
     _aRotation = ANGLE3D(100,0,0);
     _fFOV = 60.0f;
-    _vLightDir = FLOAT3D( -0.1f, -0.2f, -0.2f);  
+    _vLightDir = FLOAT3D(-0.1f, -0.2f, -0.2f);  
 
     AddAttachment_t(pmo, CHAINSAWITEM_ATTACHMENT_CHAINSAW, 
       CTFILENAME("ModelsMP\\Weapons\\Chainsaw\\BodyForPlayer.mdl"), 0,
@@ -738,7 +738,7 @@ extern void SetupCompModel_t(const CTString &strName)
     _plModel = CPlacement3D(FLOAT3D(0,-0.4f,-2.2f), ANGLE3D(0,10,0));
     _aRotation = ANGLE3D(100,0,0);
     _fFOV = 70.0f;
-    _vLightDir = FLOAT3D( -0.1f, -0.2f, -0.2f);  
+    _vLightDir = FLOAT3D(-0.1f, -0.2f, -0.2f);  
 
     AddAttachment_t(pmo, FLAMERITEM_ATTACHMENT_BODY, 
       CTFILENAME("ModelsMP\\Weapons\\Flamer\\Body.mdl"), 0,
@@ -952,7 +952,7 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel)
     );
     pr.AspectRatioL() = 1.0f;
     pr.FrontClipDistanceL() = 0.3f;
-    pr.ViewerPlacementL() = CPlacement3D(FLOAT3D(0,0,0), ANGLE3D(0,0,0));
+    pr.ViewerPlacementL() = CPlacement3D(FLOAT3D(0.0f, 0.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
   
     // setup stereo rendering
     Stereo_SetBuffer(iEye);
@@ -968,10 +968,10 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel)
     const FLOAT fDistance = 1+ 10*(1/(_fMsgAppearFade+0.01) - 1/(1+0.01));
 
     // if model needs floor
-    if( _bHasFloor) {
+    if (_bHasFloor) {
       // set floor's position
       CPlacement3D pl = _plModel;
-      pl.pl_OrientationAngle = ANGLE3D(0,0,0);
+      pl.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
       pl.pl_PositionVector   = _plModel.pl_PositionVector;
       pl.pl_PositionVector(2) += _fFloorY;
       pl.pl_PositionVector(3) *= fDistance;
@@ -996,9 +996,9 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel)
     rm.rm_colAmbient = _colAmbient;
     rm.rm_fDistanceFactor = -999; // force highest mip disregarding stretch factors
     _moModel.SetupModelRendering(rm);
-    FLOATplane3D plFloorPlane = FLOATplane3D( FLOAT3D( 0.0f, 1.0f, 0.0f), _plModel.pl_PositionVector(2)+_fFloorY);
+    FLOATplane3D plFloorPlane = FLOATplane3D( FLOAT3D(0.0f, 1.0f, 0.0f), _plModel.pl_PositionVector(2)+_fFloorY);
     CPlacement3D plLightPlacement = CPlacement3D( _plModel.pl_PositionVector
-                                  + rm.rm_vLightDirection * _plModel.pl_PositionVector(3) *5, ANGLE3D(0,0,0));
+                                  + rm.rm_vLightDirection * _plModel.pl_PositionVector(3) *5, ANGLE3D(0.0f, 0.0f, 0.0f));
     _moModel.RenderShadow( rm, plLightPlacement, 200.0f, 200.0f, 1.0f, plFloorPlane);
     _moModel.RenderModel(rm);
 
@@ -1006,7 +1006,7 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel)
     if (_iParticleType!=PARTICLES_NONE) {
       Particle_PrepareSystem(pdp, apr);
       Particle_PrepareEntity( 1, 0, 0, NULL);
-      switch(_iParticleType) {
+      switch (_iParticleType) {
       case PARTICLES_AIR_ELEMENTAL:
         Particles_AirElemental_Comp(&_moModel, 1.0f, 1.0f, pl);
         break;

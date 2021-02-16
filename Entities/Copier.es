@@ -61,7 +61,7 @@ functions:
     }
 
     CEntity *pen = GetWorld()->CopyEntityInWorld( *m_penTarget,
-      CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0, 0, 0)) );
+      CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0.0f, 0.0f, 0.0f)) );
 
     // teleport back
     CPlacement3D pl = GetPlacement();
@@ -73,7 +73,7 @@ functions:
       ESpawnEffect ese;
       ese.colMuliplier = C_WHITE|CT_OPAQUE;
       ese.betType = BET_TELEPORT;
-      ese.vNormal = FLOAT3D(0,1,0);
+      ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
       FLOATaabbox3D box;
       pen->GetBoundingBox(box);
       FLOAT fEntitySize = box.Size().MaxNorm()*2;

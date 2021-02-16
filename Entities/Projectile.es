@@ -627,7 +627,7 @@ functions:
   {
     CMovableModelEntity::Read_t(istr);
     // setup light source
-    if( m_bLightSource) {
+    if (m_bLightSource) {
       SetupLightSource(TRUE);
     }
   }
@@ -653,7 +653,7 @@ functions:
   /* Get static light source information. */
   CLightSource *GetLightSource(void)
   {
-    if( m_bLightSource && !IsPredictor()) {
+    if (m_bLightSource && !IsPredictor()) {
       return &m_lsLightSource;
     } else {
       return NULL;
@@ -699,7 +699,7 @@ functions:
       case PRT_ROCKET:
       case PRT_WALKER_ROCKET:
       case PRT_DEVIL_ROCKET:
-        if( bLive)
+        if (bLive)
         {
           lsNew.ls_colColor = 0xA0A080FF;
         }
@@ -843,14 +843,14 @@ functions:
           FLOAT3D vDirLeader=en_vCurrentTranslationAbsolute;
           vDirLeader.Normalize();
           // if last is not flame thrower pipe
-          if(IsOfClass(m_penParticles, "Projectile"))
+          if (IsOfClass(m_penParticles, "Projectile"))
           {
             CProjectile &prLast=(CProjectile &)*m_penParticles;
             // if pre last is flame thrower pipe
-            if( IsOfClass(prLast.m_penParticles, "Player Weapons"))
+            if (IsOfClass(prLast.m_penParticles, "Player Weapons"))
             {
               CPlayerWeapons &plw=(CPlayerWeapons&)*prLast.m_penParticles;
-              if(!(plw.GetPlayer()->GetFlags()&ENF_ALIVE))
+              if (!(plw.GetPlayer()->GetFlags()&ENF_ALIVE))
               {
                 return;
               }
@@ -876,7 +876,7 @@ functions:
           // draw particles with player weapons
           } else if (IsOfClass(m_penParticles, "Player Weapons")) {
             CPlayerWeapons &plw=(CPlayerWeapons&)*m_penParticles;
-            if(!(plw.GetPlayer()->GetFlags()&ENF_ALIVE))
+            if (!(plw.GetPlayer()->GetFlags()&ENF_ALIVE))
             {
               return;
             }
@@ -970,12 +970,12 @@ void PlayerRocket(void) {
   SetModelMainTexture(TEXTURE_ROCKET);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   // play the flying sound
   m_soEffect.Set3DParameters(20.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);
   m_fFlyTime = 30.0f;
-  if( GetSP()->sp_bCooperative)
+  if (GetSP()->sp_bCooperative)
   {
     m_fDamageAmount = 100.0f;
     m_fRangeDamageAmount = 50.0f;
@@ -1008,7 +1008,7 @@ void WalkerRocket(void) {
   SetModelMainTexture(TEXTURE_ROCKET);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   // play the flying sound
   m_soEffect.Set3DParameters(20.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);
@@ -1047,10 +1047,10 @@ void PlayerRocketExplosion(void) {
   // explosion
   ese.colMuliplier = C_WHITE|CT_OPAQUE;
   ese.betType = BET_ROCKET;
-  ese.vStretch = FLOAT3D(1,1,1);
+  ese.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
   SpawnEffect(GetPlacement(), ese);
   // spawn sound event in range
-  if( IsDerivedFromClass( m_penLauncher, "Player")) {
+  if (IsDerivedFromClass( m_penLauncher, "Player")) {
     SpawnRangeSound( m_penLauncher, this, SNDT_PLAYER, m_fSoundRange);
   }
 
@@ -1068,15 +1068,15 @@ void PlayerRocketExplosion(void) {
       // stain
       ese.betType = BET_EXPLOSIONSTAIN;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // shock wave
       ese.betType = BET_SHOCKWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // second explosion on plane
       ese.betType = BET_ROCKET_PLANE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 };
@@ -1124,10 +1124,10 @@ void PlayerGrenadeExplosion(void) {
   // explosion
   ese.colMuliplier = C_WHITE|CT_OPAQUE;
   ese.betType = BET_GRENADE;
-  ese.vStretch = FLOAT3D(1,1,1);
+  ese.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
   SpawnEffect(GetPlacement(), ese);
   // spawn sound event in range
-  if( IsDerivedFromClass( m_penLauncher, "Player")) {
+  if (IsDerivedFromClass( m_penLauncher, "Player")) {
     SpawnRangeSound( m_penLauncher, this, SNDT_PLAYER, m_fSoundRange);
   }
 
@@ -1137,15 +1137,15 @@ void PlayerGrenadeExplosion(void) {
       // wall stain
       ese.betType = BET_EXPLOSIONSTAIN;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // shock wave
       ese.betType = BET_SHOCKWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // second explosion on plane
       ese.betType = BET_GRENADE_PLANE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 };
@@ -1173,7 +1173,7 @@ void PlayerFlame(void) {
   FLOAT fSpeedFwd = ClampDn( vDirection%vFront, 0.0f);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -(25.0f+fSpeedFwd)), penPlayer);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 1.0f;
   m_fDamageAmount = (GetSP()->sp_bCooperative) ? 10.0f : 4.0f;
   m_fSoundRange = 0.0f;
@@ -1199,14 +1199,14 @@ void PlayerLaserRay(void) {
   SetFlags(GetFlags() | ENF_SEETHROUGH);
   SetModel(MODEL_LASER);
   CModelObject *pmo = GetModelObject();
-  if(pmo != NULL)
+  if (pmo != NULL)
   {
     pmo->PlayAnim( LASERPROJECTILE_ANIM_GROW, 0);
   }
   SetModelMainTexture(TEXTURE_GREEN_LASER);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -120.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 3.0f;
   m_fDamageAmount = 20.0f;
   m_fSoundRange = 0.0f;
@@ -1234,7 +1234,7 @@ void PlayerLaserWave(void) {
       ese.colMuliplier = C_dRED|CT_OPAQUE;
       ese.betType = BET_LASERWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 };
@@ -1254,7 +1254,7 @@ void CatmanProjectile(void) {
   SetModelMainTexture(TEXTURE_CATMAN_FIRE);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -15.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fDamageAmount = 5.0f;
   m_fSoundRange = 0.0f;
@@ -1313,7 +1313,7 @@ void HeadmanRocketman(void) {
   ModelChangeNotify();
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fDamageAmount = 5.0f;
   m_fSoundRange = 0.0f;
@@ -1368,10 +1368,10 @@ void HeadmanBombermanExplosion(void) {
       // wall stain
       ese.betType = BET_EXPLOSIONSTAIN;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       ese.betType = BET_GRENADE_PLANE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 };
@@ -1394,10 +1394,10 @@ void CyborgBombExplosion(void)
       // wall stain
       ese.betType = BET_EXPLOSIONSTAIN;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       ese.betType = BET_GRENADE_PLANE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 };
@@ -1415,7 +1415,7 @@ void BonemanProjectile(void) {
   SetModelMainTexture(TEXTURE_BONEMAN_FIRE);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fDamageAmount = 10.0f;
   m_fSoundRange = 0.0f;
@@ -1442,7 +1442,7 @@ void WomanProjectile(void) {
   SetModelMainTexture(TEXTURE_WOMAN_FIRE);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fDamageAmount = 8.0f;
   m_fSoundRange = 0.0f;
@@ -1479,7 +1479,7 @@ void DragonmanProjectile(INDEX iType) {
     LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
     m_fDamageAmount = 7.0f;
   }
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fSoundRange = 0.0f;
   m_bExplode = FALSE;
@@ -1630,7 +1630,7 @@ void LavamanBombExplosion(void)
       ese.colMuliplier = C_WHITE|CT_OPAQUE;
       ese.betType = BET_SHOCKWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 
@@ -1654,7 +1654,7 @@ void LavamanBombExplosion(void)
   penSpray->Initialize( eSpawnSpray);
 
   // spawn smaller lava bombs
-  for( INDEX iDebris=0; iDebris<3+IRnd()%3; iDebris++)
+  for (INDEX iDebris=0; iDebris<3+IRnd()%3; iDebris++)
   {
     FLOAT fHeading = (FRnd()-0.5f)*180.0f;
     FLOAT fPitch = 10.0f+FRnd()*40.0f;
@@ -1704,7 +1704,7 @@ void LavamanBombDebrisExplosion(void)
       ese.colMuliplier = C_WHITE|CT_OPAQUE;
       ese.betType = BET_SHOCKWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 
@@ -1745,7 +1745,7 @@ void HuanmanProjectile(void) {
   ModelChangeNotify();
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fDamageAmount = 10.0f;
   m_fSoundRange = 0.0f;
@@ -1780,7 +1780,7 @@ void BeastProjectile(void) {
   PlaySound(m_soEffect, SOUND_BEAST_FLYING, SOF_3D|SOF_LOOP);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -60.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 10.0f;
   m_fDamageAmount = 10.0f;
   m_fSoundRange = 0.0f;
@@ -1815,7 +1815,7 @@ void BeastBigProjectile(void) {
   PlaySound(m_soEffect, SOUND_BEAST_FLYING, SOF_3D|SOF_LOOP);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -60.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 10.0f;
   m_fDamageAmount = 20.0f;
   m_fSoundRange = 0.0f;
@@ -1845,7 +1845,7 @@ void BeastDebris(void)
   ModelChangeNotify();
   // start moving
   LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -20.0f), (CMovableEntity*)&*m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 10.0f;
   m_fDamageAmount = 0.0f;
   m_fSoundRange = 0.0f;
@@ -1874,7 +1874,7 @@ void BeastBigDebris(void)
   ModelChangeNotify();
   // start moving
   LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -20.0f), (CMovableEntity*)&*m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 10.0f;
   m_fDamageAmount = 0.0f;
   m_fSoundRange = 0.0f;
@@ -1917,7 +1917,7 @@ void BeastBigDebrisExplosion(void)
   ESpawnEffect ese;
   ese.colMuliplier = C_WHITE|CT_OPAQUE;
   ese.betType = BET_LIGHT_CANNON;
-  ese.vStretch = FLOAT3D(1,1,1);
+  ese.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
   SpawnEffect(GetPlacement(), ese);
 
   // spawn particles
@@ -1958,7 +1958,7 @@ void BeastProjectileExplosion(void)
 
   FLOAT fHeading = 20.0f+(FRnd()-0.5f)*60.0f;
   // debris
-  for( INDEX iDebris=0; iDebris<2; iDebris++)
+  for (INDEX iDebris=0; iDebris<2; iDebris++)
   {
     FLOAT fPitch = 10.0f+FRnd()*10.0f;
     FLOAT fSpeed = 5.0+FRnd()*20.0f;
@@ -2015,7 +2015,7 @@ void BeastBigProjectileExplosion(void)
   penSpray->Initialize( eSpawnSpray);
 
   // debris
-  for( INDEX iDebris=0; iDebris<3+IRnd()%2; iDebris++)
+  for (INDEX iDebris=0; iDebris<3+IRnd()%2; iDebris++)
   {
     FLOAT fHeading = (FRnd()-0.5f)*180.0f;
     FLOAT fPitch = 10.0f+FRnd()*40.0f;
@@ -2061,7 +2061,7 @@ void FishmanProjectile(void) {
   ModelChangeNotify();
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fDamageAmount = 5.0f;
   m_fSoundRange = 0.0f;
@@ -2088,7 +2088,7 @@ void MantamanProjectile(void) {
   ModelChangeNotify();
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -35.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fDamageAmount = 7.0f;
   m_fSoundRange = 0.0f;
@@ -2115,7 +2115,7 @@ void DevilLaser(void) {
   ModelChangeNotify();
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -DEVIL_LASER_SPEED), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fDamageAmount = 10.0f;
   m_fSoundRange = 0.0f;
@@ -2138,7 +2138,7 @@ void DevilRocket(void) {
   ModelChangeNotify();
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -DEVIL_ROCKET_SPEED), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   // play the flying sound
   m_soEffect.Set3DParameters(100.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);
@@ -2171,7 +2171,7 @@ void DevilRocketExplosion(void) {
   ese.vStretch = FLOAT3D(2,2,2);
   SpawnEffect(GetPlacement(), ese);
   // spawn sound event in range
-  if( IsDerivedFromClass( m_penLauncher, "Player")) {
+  if (IsDerivedFromClass( m_penLauncher, "Player")) {
     SpawnRangeSound( m_penLauncher, this, SNDT_PLAYER, m_fSoundRange);
   }
 
@@ -2182,17 +2182,17 @@ void DevilRocketExplosion(void) {
       ese.betType = BET_EXPLOSIONSTAIN;
       ese.vNormal = FLOAT3D(vPlaneNormal);
       ese.vStretch = FLOAT3D(2,2,2);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // shock wave
       ese.betType = BET_SHOCKWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
       ese.vStretch = FLOAT3D(2,2,2);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // second explosion on plane
       ese.betType = BET_GRENADE_PLANE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
       ese.vStretch = FLOAT3D(2,2,2);
-      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 };
@@ -2216,7 +2216,7 @@ void DevilGuidedProjectile(void) {
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -80.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 20.0f;
   m_fDamageAmount = 20.0f;
   m_fSoundRange = 0.0f;
@@ -2254,7 +2254,7 @@ void DevilGuidedProjectileExplosion(void)
   penSpray->Initialize( eSpawnSpray);
 
   // debris
-  for( INDEX iDebris=0; iDebris<3+IRnd()%2; iDebris++)
+  for (INDEX iDebris=0; iDebris<3+IRnd()%2; iDebris++)
   {
     FLOAT fHeading = (FRnd()-0.5f)*180.0f;
     FLOAT fPitch = 10.0f+FRnd()*40.0f;
@@ -2300,7 +2300,7 @@ void CyborgLaser(void) {
   ModelChangeNotify();
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -60.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 4.0f;
   m_fDamageAmount = 5.0f;
   m_fSoundRange = 0.0f;
@@ -2323,7 +2323,7 @@ void CyborgBomb(void)
   ModelChangeNotify();
   // just freefall
   LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -m_fSpeed), (CMovableEntity*)&*m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 2.5f;
   m_fDamageAmount = 10.0f;
   m_fRangeDamageAmount = 15.0f;
@@ -2381,7 +2381,7 @@ void LavaBallExplosion(void) {
       ese.colMuliplier = C_WHITE|CT_OPAQUE;
       ese.betType = BET_SHOCKWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 };
@@ -2398,14 +2398,14 @@ void GruntSoldierLaser(void) {
   SetFlags(GetFlags() | ENF_SEETHROUGH);
   SetModel(MODEL_GRUNT_PROJECTILE);
   CModelObject *pmo = GetModelObject();
-  if(pmo != NULL)
+  if (pmo != NULL)
   {
     pmo->PlayAnim(GRUNTPROJECTILE_ANIM_DEFAULT, 0);
   }
   SetModelMainTexture(TEXTURE_GRUNT_PROJECTILE_01);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -45.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 3.0f;
   m_fDamageAmount = 10.0f;
   m_fSoundRange = 0.0f;
@@ -2428,14 +2428,14 @@ void GruntCommanderLaser(void) {
   SetFlags(GetFlags() | ENF_SEETHROUGH);
   SetModel(MODEL_GRUNT_PROJECTILE);
   CModelObject *pmo = GetModelObject();
-  if(pmo != NULL)
+  if (pmo != NULL)
   {
     pmo->PlayAnim(GRUNTPROJECTILE_ANIM_DEFAULT, 0);
   }
   SetModelMainTexture(TEXTURE_GRUNT_PROJECTILE_02);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -55.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 3.0f;
   m_fDamageAmount = 10.0f;
   m_fSoundRange = 0.0f;
@@ -2465,14 +2465,14 @@ void GuffyProjectile(void) {
   GetModelObject()->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
 
   CModelObject *pmo = GetModelObject();
-  if(pmo != NULL)
+  if (pmo != NULL)
   {
     pmo->PlayAnim(GUFFYPROJECTILE_ANIM_ROTATE01, AOF_LOOPING);
   }
   
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -50.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   // play the flying sound
   m_soEffect.Set3DParameters(20.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);
@@ -2522,7 +2522,7 @@ void DemonFireball(void) {
   PlaySound(m_soEffect, SOUND_BEAST_FLYING, SOF_3D|SOF_LOOP);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -100.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 12.0f;
   m_fDamageAmount = 20.0f;
   m_fSoundRange = 0.0f;
@@ -2579,12 +2579,12 @@ void LarvaPlasma(void) {
 
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -60.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   // play the flying sound
   m_soEffect.Set3DParameters(20.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);
   m_fFlyTime = 30.0f;
-  if( GetSP()->sp_bCooperative)
+  if (GetSP()->sp_bCooperative)
   {
     m_fDamageAmount = 30.0f;
     m_fRangeDamageAmount = 30.0f;
@@ -2652,7 +2652,7 @@ void LarvaTail(void) {
   PlaySound(m_soEffect, SOUND_LARVETTE, SOF_3D|SOF_LOOP);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 12.0f;
   m_fDamageAmount = 10.0f;
   m_fSoundRange = 0.0f;
@@ -2687,7 +2687,7 @@ void WindBlast(void) {
   ModelChangeNotify();
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -50.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 5.0f;
   m_fDamageAmount = 20.0f;
   m_fSoundRange = 0.0f;
@@ -2721,7 +2721,7 @@ void Meteor() {
 
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -m_fSpeed), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   // play the flying sound
   m_soEffect.Set3DParameters(250.0f, 10.0f, 2.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);
@@ -2769,7 +2769,7 @@ void MeteorExplosion() {
   ese.vStretch = FLOAT3D(5,5,5);
   SpawnEffect(GetPlacement(), ese);
   // spawn sound event in range
-  if( IsDerivedFromClass( m_penLauncher, "Player")) {
+  if (IsDerivedFromClass( m_penLauncher, "Player")) {
     SpawnRangeSound( m_penLauncher, this, SNDT_PLAYER, m_fSoundRange);
   }
 
@@ -2787,15 +2787,15 @@ void MeteorExplosion() {
       // stain
       ese.betType = BET_EXPLOSIONSTAIN;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // shock wave
       ese.betType = BET_SHOCKWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // second explosion on plane
       ese.betType = BET_ROCKET_PLANE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
   m_soExplosion.Set3DParameters(150.0f, 10.0f, 1.5f, 1.0f);
@@ -2817,7 +2817,7 @@ void ShooterWoodenDart(void) {
   
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   /*// play the flying sound
   m_soEffect.Set3DParameters(20.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);*/
@@ -2865,7 +2865,7 @@ void ShooterFireball(void) {
 
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -30.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   /*// play the flying sound
   m_soEffect.Set3DParameters(20.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);*/
@@ -2910,7 +2910,7 @@ void ShooterFlame(void) {
   SetModel(MODEL_FLAME);
   // start moving
   LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -10.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, 0, 0));
+  SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   m_fFlyTime = 1.0f;
   m_fDamageAmount = 3.0f;
   m_fSoundRange = 0.0f;
@@ -2962,7 +2962,7 @@ void ProjectileTouch(CEntityPointer penHit)
   // direct damage
   FLOAT3D vDirection;
   FLOAT fTransLen = en_vIntendedTranslation.Length();
-  if( fTransLen>0.5f)
+  if (fTransLen>0.5f)
   {
     vDirection = en_vIntendedTranslation/fTransLen;
   }
@@ -2990,17 +2990,17 @@ void ProjectileTouch(CEntityPointer penHit)
     }
 
     EntityInfo *pei=(EntityInfo *)penHit->GetEntityInfo();
-    if(pei!=NULL && pei->Eeibt==EIBT_ICE)
+    if (pei!=NULL && pei->Eeibt==EIBT_ICE)
     {
       bSpawnFlame=FALSE;
       bInflictDamage=FALSE;
     }
 
-    if( bSpawnFlame)
+    if (bSpawnFlame)
     {
       SpawnFlame(m_penLauncher, penHit, GetPlacement().pl_PositionVector);
     }
-    if(bInflictDamage)
+    if (bInflictDamage)
     {
       InflictDirectDamage(penHit, m_penLauncher, DMT_BURNING, m_fDamageAmount*fDamageMul,
                  GetPlacement().pl_PositionVector, vDirection);
@@ -3188,7 +3188,7 @@ procedures:
       return EEnd();
     }
     // fly loop
-    while( _pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
+    while (_pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
     {
       FLOAT fWaitFrequency = 0.1f;
       // beast big projectile destroys soon after passing near the player
@@ -3234,7 +3234,7 @@ procedures:
         FLOAT fRNDPitch = (FRnd()-0.5f)*90*fDistanceFactor;
 
         // if we are looking near direction of target
-        if( Abs( aWantedHeading) < 30.0f)
+        if (Abs( aWantedHeading) < 30.0f)
         {
           // calculate pitch speed
           ANGLE aWantedPitch = GetRelativePitch( vDesiredDirection);
@@ -3294,7 +3294,7 @@ procedures:
       return EEnd();
     }
     // fly loop
-    while( _pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
+    while (_pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
     {
       FLOAT fWaitFrequency = 0.1f;
       // beast big projectile destroys soon after passing near the player
@@ -3334,7 +3334,7 @@ procedures:
         fDistanceFactor = ClampUp(fDistanceFactor, 4.0f);
         
         // if we are looking near direction of target
-        if( Abs( aWantedHeading) < 30.0f)
+        if (Abs( aWantedHeading) < 30.0f)
         {
           bLockedOn = TRUE;
           // calculate pitch speed
@@ -3427,7 +3427,7 @@ procedures:
       return EEnd();
     }
     // fly loop
-    while( _pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
+    while (_pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
     {
       FLOAT fWaitFrequency = 0.1f;
       if (m_penTarget!=NULL) {
@@ -3461,7 +3461,7 @@ procedures:
         FLOAT fRNDHeading = (FRnd()-0.5f)*180*fDistanceFactor;
         
         // if we are looking near direction of target
-        if( Abs( aWantedHeading) < 30.0f)
+        if (Abs( aWantedHeading) < 30.0f)
         {
           // adjust heading and pich
           SetDesiredRotation(ANGLE3D(aHeading+fRNDHeading,0,0));
@@ -3554,7 +3554,7 @@ procedures:
         // ignore brushes
         BOOL bHit;
         bHit = !(etouch.penOther->GetRenderType() & RT_BRUSH);
-        if( m_prtType==PRT_FLAME && !bHit && !m_bLeftFlame)
+        if (m_prtType==PRT_FLAME && !bHit && !m_bLeftFlame)
         {
           SpawnFlame(m_penLauncher, etouch.penOther, GetPlacement().pl_PositionVector);
           m_bLeftFlame=TRUE;
@@ -3756,7 +3756,7 @@ procedures:
     // fly
     m_fStartTime = _pTimer->CurrentTick();
     // if guided projectile
-    if( m_pmtMove == PMT_GUIDED) {
+    if (m_pmtMove == PMT_GUIDED) {
       autocall ProjectileGuidedFly() EEnd;
     } else if (m_pmtMove==PMT_GUIDED_FAST) {
       autocall ProjectileGuidedFastFly() EEnd;

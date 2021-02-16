@@ -99,7 +99,7 @@ components:
 functions:
   void Precache(void) {
     PrecacheClass(CLASS_BASIC_EFFECT, BET_EXPLOSIONSTAIN);
-    switch(m_ddtDebris) {
+    switch (m_ddtDebris) {
     case DDT_STONE: { 
       PrecacheModel(MODEL_STONE);
       PrecacheTexture(TEXTURE_STONE);
@@ -118,10 +118,10 @@ functions:
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset)
   {
-    if(slPropertyOffset==offsetof(CModelDestruction, m_iStartAnim)) 
+    if (slPropertyOffset==offsetof(CModelDestruction, m_iStartAnim)) 
     {
       CModelHolder2 *pmh=GetModel(0);
-      if(pmh!=NULL)
+      if (pmh!=NULL)
       {
         return pmh->GetModelObject()->GetData();
       }
@@ -131,9 +131,9 @@ functions:
 
   const CTString &GetDescription(void) const {
     INDEX ct = GetModelsCount();
-    if(ct==0) {
+    if (ct==0) {
       ((CTString&)m_strDescription).PrintF("(%g): no more", m_fHealth);
-    } else if(ct==1) {
+    } else if (ct==1) {
       ((CTString&)m_strDescription).PrintF("(%g): %s", m_fHealth, m_penModel0->GetName());
     } else if (TRUE) {
       ((CTString&)m_strDescription).PrintF("(%g): %s,...(%d)", m_fHealth, m_penModel0->GetName(), ct);
@@ -189,18 +189,18 @@ functions:
     FLOATaabbox3D box;
     penmhDestroyed->GetBoundingBox(box);
     FLOAT fEntitySize = box.Size().MaxNorm();
-    switch(m_ddtDebris) {
+    switch (m_ddtDebris) {
     case DDT_STONE: {
-      Debris_Begin(EIBT_ROCK, DPT_NONE, BET_NONE, fEntitySize, FLOAT3D(0,0,0), FLOAT3D(0,0,0), 1.0f, 0.0f);
-      for(INDEX iDebris = 0; iDebris<m_ctDebris; iDebris++) {
+      Debris_Begin(EIBT_ROCK, DPT_NONE, BET_NONE, fEntitySize, FLOAT3D(0.0f, 0.0f, 0.0f), FLOAT3D(0.0f, 0.0f, 0.0f), 1.0f, 0.0f);
+      for (INDEX iDebris = 0; iDebris<m_ctDebris; iDebris++) {
         Debris_Spawn(penmhDestroyed, this, MODEL_STONE, TEXTURE_STONE, 0, 0, 0, IRnd()%4, m_fDebrisSize,
           FLOAT3D(FRnd()*0.8f+0.1f, FRnd()*0.8f+0.1f, FRnd()*0.8f+0.1f));
       }
                     } break;
     case DDT_WOOD:
     {
-      Debris_Begin(EIBT_WOOD, DPT_NONE, BET_NONE, fEntitySize, FLOAT3D(0,0,0), FLOAT3D(0,0,0), 1.0f, 0.0f);
-      for(INDEX iDebris = 0; iDebris<m_ctDebris; iDebris++)
+      Debris_Begin(EIBT_WOOD, DPT_NONE, BET_NONE, fEntitySize, FLOAT3D(0.0f, 0.0f, 0.0f), FLOAT3D(0.0f, 0.0f, 0.0f), 1.0f, 0.0f);
+      for (INDEX iDebris = 0; iDebris<m_ctDebris; iDebris++)
       {
         Debris_Spawn(penmhDestroyed, this, MODEL_WOOD, TEXTURE_WOOD, 0, 0, 0, 0, m_fDebrisSize,
           FLOAT3D(0.5f, 0.5f, 0.5f));
@@ -209,14 +209,14 @@ functions:
     }
     case DDT_CHILDREN_CUSTOM:
     {
-      Debris_Begin(EIBT_WOOD, DPT_NONE, BET_NONE, 1.0f, FLOAT3D(10,10,10), FLOAT3D(0,0,0), 5.0f, 2.0f);
+      Debris_Begin(EIBT_WOOD, DPT_NONE, BET_NONE, 1.0f, FLOAT3D(10,10,10), FLOAT3D(0.0f, 0.0f, 0.0f), 5.0f, 2.0f);
       // launch all children of model holder type
       FOREACHINLIST( CEntity, en_lnInParent, en_lhChildren, iten)
       {
-        if( IsOfClass(&*iten, "ModelHolder2"))
+        if (IsOfClass(&*iten, "ModelHolder2"))
         {
           CModelHolder2 &mhTemplate=(CModelHolder2 &)*iten;
-          if( mhTemplate.GetModelObject()==NULL || penmhDestroyed->GetModelObject()==NULL)
+          if (mhTemplate.GetModelObject()==NULL || penmhDestroyed->GetModelObject()==NULL)
           {
             continue;
           }
@@ -242,7 +242,7 @@ functions:
           ANGLE3D angRotSpeed=ANGLE3D(m_fRndRotH*2.0f*(FRnd()-0.5f),m_fRndRotP*(FRnd()-0.5f),m_fRndRotB*(FRnd()-0.5f));
           
           FLOAT fDustSize=0.0f;
-          if( FRnd()<m_fDebrisDustRandom)
+          if (FRnd()<m_fDebrisDustRandom)
           {
             fDustSize=m_fDebrisDustStretch;
           }
@@ -251,7 +251,7 @@ functions:
             penmhDestroyed, this, &mhTemplate, vStretchTemplate, mhTemplate.m_fStretchAll, plLaunch,
             vLaunchDir, angRotSpeed, m_bDebrisImmaterialASAP, fDustSize, penmhDestroyed->m_colBurning);
         }
-        if( IsOfClass(&*iten, "SoundHolder"))
+        if (IsOfClass(&*iten, "SoundHolder"))
         {
           CSoundHolder &ensh=(CSoundHolder &)*iten;
           // copy it at the placement of destroyed model
@@ -263,7 +263,7 @@ functions:
       break;
     }
     case DDT_PALM: {
-      Debris_Begin(EIBT_WOOD, DPT_NONE, BET_NONE, fEntitySize, penmhDestroyed->m_vDamage*0.3f, FLOAT3D(0,0,0), 1.0f, 0.0f);
+      Debris_Begin(EIBT_WOOD, DPT_NONE, BET_NONE, fEntitySize, penmhDestroyed->m_vDamage*0.3f, FLOAT3D(0.0f, 0.0f, 0.0f), 1.0f, 0.0f);
       Debris_Spawn(penmhDestroyed, this, MODEL_WOOD, TEXTURE_WOOD, 0, 0, 0, 0, m_fDebrisSize,
         FLOAT3D(0.5f, 0.2f, 0.5f));
       Debris_Spawn(penmhDestroyed, this, MODEL_WOOD, TEXTURE_WOOD, 0, 0, 0, 1, m_fDebrisSize,
@@ -282,13 +282,13 @@ functions:
     default: {} break;
     };
     
-    if( m_ctDustFall>0)
+    if (m_ctDustFall>0)
     {
       FLOAT fHeight=box.Size()(2);
       FLOAT fMinHeight=fHeight*m_fMinDustFallHeightRatio;
       FLOAT fMaxHeight=fHeight*m_fMaxDustFallHeightRatio;
       FLOAT fHeightSteep=(fMaxHeight-fMinHeight)/m_ctDustFall;
-      for(INDEX iDust=0; iDust<m_ctDustFall; iDust++)
+      for (INDEX iDust=0; iDust<m_ctDustFall; iDust++)
       {
         FLOAT fY=fMinHeight+iDust*fHeightSteep;
         CPlacement3D plDust=penmhDestroyed->GetPlacement();
@@ -297,7 +297,7 @@ functions:
         ESpawnEffect ese;
         ese.colMuliplier = C_WHITE|CT_OPAQUE;
         ese.vStretch = FLOAT3D(m_fDustStretch,m_fDustStretch,m_fDustStretch);
-        ese.vNormal = FLOAT3D(0,1,0);
+        ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
         ese.betType = BET_DUST_FALL;
         CEntityPointer penFX = CreateEntity(plDust, CLASS_BASIC_EFFECT);
         penFX->Initialize(ese);

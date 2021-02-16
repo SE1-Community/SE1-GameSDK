@@ -48,7 +48,7 @@ properties:
  15 CEntityPointer m_penBattery06 "Wall Battery 06", 
 
  20 BOOL m_bCustomShading "Custom Shading" = FALSE,
- 21 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D( AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
+ 21 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D(AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
  22 COLOR m_colLight "Light Color" = C_WHITE,
  23 COLOR m_colAmbient "Ambient Light Color" = C_BLACK,
  
@@ -75,7 +75,7 @@ functions:
  
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if( slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery01) ||
+    if (slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery01) ||
         slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery02) ||
         slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery03) ||
         slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery04) ||

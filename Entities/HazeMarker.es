@@ -63,32 +63,32 @@ functions:
     FLOAT fR=0.0f, fG=0.0f, fB=0.0f, fA=0.0f;
     FLOAT fSum = 255.0f / (Abs(vViewDir(1))+Abs(vViewDir(2))+Abs(vViewDir(3)));
 
-    if( vViewDir(1) < 0.0f) {
+    if (vViewDir(1) < 0.0f) {
       colMul = (COLOR)(-vViewDir(1)*fSum);
       colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colWest, colMul));
     }
-    if( vViewDir(1) > 0.0f) {
+    if (vViewDir(1) > 0.0f) {
       colMul = (COLOR)(+vViewDir(1)*fSum);
       colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colEast, colMul));
     }
-    if( vViewDir(2) < 0.0f) {
+    if (vViewDir(2) < 0.0f) {
       colMul = (COLOR)(-vViewDir(2)*fSum);
       colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colDown, colMul));
     }
-    if( vViewDir(2) > 0.0f) {
+    if (vViewDir(2) > 0.0f) {
       colMul = (COLOR)(+vViewDir(2)*fSum);
       colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colUp, colMul));
     }
-    if( vViewDir(3) < 0.0f) {
+    if (vViewDir(3) < 0.0f) {
       colMul = (COLOR)(-vViewDir(3)*fSum);
       colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colNorth, colMul));
     }
-    if( vViewDir(3) > 0.0f) {
+    if (vViewDir(3) > 0.0f) {
       colMul = (COLOR)(+vViewDir(3)*fSum);
       colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colSouth, colMul));

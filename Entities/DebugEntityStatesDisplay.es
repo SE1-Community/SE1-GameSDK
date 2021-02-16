@@ -55,7 +55,7 @@ procedures:
     
     // setup target for stack display every 1/10th of the second so
     // that after a reload or restart everything will work allright
-    while(TRUE) {
+    while (TRUE) {
       wait(0.1f)
       {
         on (EBegin) : {

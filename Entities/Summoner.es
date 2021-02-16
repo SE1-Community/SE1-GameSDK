@@ -220,7 +220,7 @@ functions:
         return FALSE; 
       }
     }
-    if( slPropertyOffset == offsetof(CSummoner, m_penControlArea))
+    if (slPropertyOffset == offsetof(CSummoner, m_penControlArea))
     {
       if (IsDerivedFromClass(penTarget, "AreaMarker")) {
         return TRUE;
@@ -228,7 +228,7 @@ functions:
         return FALSE;
       }
     }
-    if( slPropertyOffset == offsetof(CSummoner, m_penSpawnMarker))
+    if (slPropertyOffset == offsetof(CSummoner, m_penSpawnMarker))
     {
       if (IsDerivedFromClass(penTarget, "Enemy Marker")) {
         return TRUE;
@@ -236,7 +236,7 @@ functions:
         return FALSE;
       }
     }
-    if( slPropertyOffset == offsetof(CSummoner, m_penTeleportMarker) ||
+    if (slPropertyOffset == offsetof(CSummoner, m_penTeleportMarker) ||
         slPropertyOffset == offsetof(CSummoner, m_penDeathMarker))
     {
       if (IsDerivedFromClass(penTarget, "SummonerMarker")) {
@@ -343,7 +343,7 @@ functions:
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
     
-    for(INDEX i=0; i<ctMaxPlayers; i++) {
+    for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
       if (penPlayer) {
         if (DistanceTo(this, penPlayer)<fDistance) {
@@ -381,7 +381,7 @@ functions:
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
     
-    for(INDEX i=0; i<ctMaxPlayers; i++) {
+    for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
       if (penPlayer) {
         // set totals for level and increment for game
@@ -402,18 +402,18 @@ functions:
     }
 
     // summoner doesn't receive damage from other monsters
-    if(!IsOfClass(penInflictor, "Player")) {
+    if (!IsOfClass(penInflictor, "Player")) {
       return;
     }
 
     // boss cannot be telefragged
-    if(dmtType==DMT_TELEPORT)
+    if (dmtType==DMT_TELEPORT)
     {
       return;
     }
 
     // cannonballs inflict less damage then the default
-    if(dmtType==DMT_CANNONBALL)
+    if (dmtType==DMT_CANNONBALL)
     {
       fDamageAmmount *= 0.5f;
     }
@@ -518,7 +518,7 @@ functions:
     CalculateAngularLaunchParams( vShooting, 0.0f, vTarget,
       FLOAT3D(0.0f, 0.0f, 0.0f), fPitch, fLaunchSpeed, fRelativeHdg);
     
-    PrepareFreeFlyingProjectile(pl, vTarget, vFirePos, ANGLE3D( fRelativeHdg, fPitch, 0.0f));
+    PrepareFreeFlyingProjectile(pl, vTarget, vFirePos, ANGLE3D(fRelativeHdg, fPitch, 0.0f));
     
     ESpawnerProjectile esp;
     CEntityPointer penSProjectile = CreateEntity(pl, CLASS_SPAWNER_PROJECTILE);
@@ -641,9 +641,9 @@ functions:
     ESpawnEffect ese;
     ese.colMuliplier = C_WHITE|CT_OPAQUE;
     ese.vStretch = FLOAT3D(3,3,3);
-    ese.vNormal = FLOAT3D(0,1,0);
+    ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
     ese.betType = BET_DUST_FALL;
-    for( INDEX iSmoke=0; iSmoke<3; iSmoke++)
+    for (INDEX iSmoke=0; iSmoke<3; iSmoke++)
     {
       CPlacement3D plSmoke=plFX;
       plSmoke.pl_PositionVector+=FLOAT3D(0,iSmoke*4+4.0f,0);
@@ -664,7 +664,7 @@ functions:
     ESpawnEffect ese;
     ese.colMuliplier = C_lMAGENTA|CT_OPAQUE;
     ese.vStretch = FLOAT3D(5,5,5);
-    ese.vNormal = FLOAT3D(0,1,0);
+    ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
 
     // explosion debris
     ese.betType = BET_EXPLOSION_DEBRIS;
@@ -757,18 +757,18 @@ functions:
   void RenderParticles(void)
   {
     FLOAT tmNow = _pTimer->CurrentTick();
-    if( tmNow>m_tmParticlesDisappearStart && tmNow<m_tmParticlesDisappearStart+4.0f)
+    if (tmNow>m_tmParticlesDisappearStart && tmNow<m_tmParticlesDisappearStart+4.0f)
     {
       Particles_SummonerDisappear(this, m_tmParticlesDisappearStart);
     }
 
-    if( tmNow>m_tmLastAnimation)
+    if (tmNow>m_tmLastAnimation)
     {
       INDEX ctInterpolations=2;
       // if invisible or dead don't add new sparks
-      if(!m_bInvulnerable && !m_bExploded && GetHealth()>0)
+      if (!m_bInvulnerable && !m_bExploded && GetHealth()>0)
       {
-        for( INDEX iInter=0; iInter<ctInterpolations; iInter++)
+        for (INDEX iInter=0; iInter<ctInterpolations; iInter++)
         {
           // for holding attachment data
           FLOATmatrix3D mEn=GetRotationMatrix();
@@ -790,7 +790,7 @@ functions:
           pamo->amo_moModelObject.GetAttachmentTransformations( STAFF_ATTACHMENT_PARTICLES, mRot, vPos, TRUE);
           vPos=GetPlacement().pl_PositionVector+vPos*GetRotationMatrix();
 
-          FLOAT3D vSpeed=FLOAT3D( 0.1f+RAND_05, 0.1f+RAND_05, -1.0f-RAND_05);
+          FLOAT3D vSpeed=FLOAT3D(0.1f+RAND_05, 0.1f+RAND_05, -1.0f-RAND_05);
           vSpeed=vSpeed.Normalize()*8.0f;
           m_emEmiter.AddParticle(vPos, vSpeed*mRot*mEn, RAND_05*360.0f, fRotSpeed, tmBirth, fLife, fStretch, col);
         }
@@ -1047,7 +1047,7 @@ procedures:
 
       CPlacement3D plPos = CPlacement3D (vPos, aAng);
       
-      switch(i%3) {
+      switch (i%3) {
       case 0:
         Debris_Spawn_Independent(this, this, MODEL_DEBRIS01, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
           plPos, vSpeed*70.0f, aAng);

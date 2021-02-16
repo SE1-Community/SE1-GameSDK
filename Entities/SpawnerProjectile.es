@@ -73,7 +73,7 @@ functions:
     CEntity *pen = NULL;
     // copy template entity
     pen = GetWorld()->CopyEntityInWorld( *m_penTemplate,
-      CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0, 0, 0)) );
+      CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0.0f, 0.0f, 0.0f)) );
     
     // change needed properties
     pen->End();

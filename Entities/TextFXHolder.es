@@ -74,7 +74,7 @@ functions:
 
   BOOL LoadOneFile(const CTFileName &fnm)
   {
-    if(fnm=="") { return FALSE; }
+    if (fnm=="") { return FALSE; }
     try 
     {
       // open the file
@@ -83,7 +83,7 @@ functions:
 
       // count number of lines
       INDEX ctLines = 0;
-      while(!strm.AtEOF())
+      while (!strm.AtEOF())
       {
         CTString strLine;
         strm.GetLine_t(strLine);
@@ -94,7 +94,7 @@ functions:
       // allocate that much
       CTString *astr = _astrLines.Push(ctLines);
       // load all lines
-      for(INDEX iLine = 0; iLine<ctLines && !strm.AtEOF(); iLine++)
+      for (INDEX iLine = 0; iLine<ctLines && !strm.AtEOF(); iLine++)
       {
         strm.GetLine_t(astr[iLine]);
       }
@@ -137,8 +137,8 @@ functions:
     }
     
     FLOAT fNow=_pTimer->CurrentTick();
-    if( fNow<m_tmFadeInStart) { return 0; }
-    if( fNow>m_tmFadeOutStart+m_tmFadeOutLen) { return 0;}
+    if (fNow<m_tmFadeInStart) { return 0; }
+    if (fNow>m_tmFadeOutStart+m_tmFadeOutLen) { return 0;}
 
     PIX pixW = 0;
     PIX pixH = 0;
@@ -168,11 +168,11 @@ functions:
       pdp->SetTextScaling( fResolutionScaling);
       pdp->SetTextAspect( 1.0f);
       FLOAT fRatio=1.0f;
-      if( fNow>m_tmFadeOutStart)
+      if (fNow>m_tmFadeOutStart)
       {
         fRatio=CalculateRatio(fNow, m_tmFadeOutStart, m_tmFadeOutStart+m_tmFadeOutLen, 0, 1);
       }
-      if( fNow<m_tmFadeInStart+m_tmFadeInLen)
+      if (fNow<m_tmFadeInStart+m_tmFadeInLen)
       {
         fRatio=CalculateRatio(fNow, m_tmFadeInStart, m_tmFadeInStart+m_tmFadeInLen, 1, 0);
       }
@@ -200,7 +200,7 @@ procedures:
   {
     m_tmFadeOutStart = _pTimer->CurrentTick();
     CWorldSettingsController *pwsc = GetWSC(this);
-    if( pwsc!=NULL)
+    if (pwsc!=NULL)
     {
       autowait(m_tmFadeOutLen);
       CWorldSettingsController *pwsc = GetWSC(this);
@@ -224,7 +224,7 @@ procedures:
 
     autowait(0.05f);
 
-    if( !Text_On(m_fnmMessage))
+    if (!Text_On(m_fnmMessage))
     {
       Text_Off();
       return;
@@ -239,14 +239,14 @@ procedures:
       on (EStart eStart): 
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if( pwsc!=NULL)
+        if (pwsc!=NULL)
         {
           m_tmFadeInStart = _pTimer->CurrentTick();
           ETextFX etfx;
           etfx.bStart=TRUE;
           etfx.penSender=this;
           pwsc->SendEvent(etfx);
-          if( m_tmAutoFadeOut!=-1)
+          if (m_tmAutoFadeOut!=-1)
           {
             call WaitAndFadeOut();
           }

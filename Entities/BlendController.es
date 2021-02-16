@@ -55,14 +55,14 @@ functions:
   {
     // obtain world settings controller
     CWorldSettingsController *pwsc = GetWSC(this);
-    if( pwsc == NULL) {
+    if (pwsc == NULL) {
       return FALSE;
     }
     FLOAT tmNow = _pTimer->CurrentTick();
 
     if (ee.ee_slEvent==EVENTCODE_EActivate)
     {
-      switch(m_bctType)
+      switch (m_bctType)
       {
         case BCT_PYRAMID_PLATES:
           pwsc->m_tmPyramidPlatesStart = tmNow;
@@ -90,7 +90,7 @@ functions:
     }
     else if (ee.ee_slEvent==EVENTCODE_EDeactivate)
     {
-      switch(m_bctType)
+      switch (m_bctType)
       {
         case BCT_ACTIVATE_PLATE_1:
           pwsc->m_tmDeactivatedPlate1 = tmNow;

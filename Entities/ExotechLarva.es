@@ -64,8 +64,8 @@ static EntityInfo eiExotechLarva = {
 #define FIREPOS_PLASMA_LEFT   FLOAT3D(-3.08f, -1.20f+LARVA_HANDLE_TRANSLATE, -0.16f)
 #define FIREPOS_LASER_RIGHT   FLOAT3D(+2.31f,  0.16f+LARVA_HANDLE_TRANSLATE, -3.57f)
 #define FIREPOS_LASER_LEFT    FLOAT3D(-2.20f,  0.18f+LARVA_HANDLE_TRANSLATE, -3.57f)
-#define FIREPOS_TAIL          FLOAT3D( 0.00f, -2.64f+LARVA_HANDLE_TRANSLATE, -0.22f)
-//#define FIREPOS_MOUTH         FLOAT3D( 0.00f, -0.75f, -2.09f)
+#define FIREPOS_TAIL          FLOAT3D(0.00f, -2.64f+LARVA_HANDLE_TRANSLATE, -0.22f)
+//#define FIREPOS_MOUTH         FLOAT3D(0.00f, -0.75f, -2.09f)
 
 
 // PERCENT_RIGHTBLOW has to be greater then PERCENT_LEFTBLOW or some things
@@ -117,9 +117,9 @@ properties:
  60 FLOAT m_tmLastTargateChange = 0.0f,
 
  // internal positions for explosions
- 70 CPlacement3D m_plExpArmPos = CPlacement3D(FLOAT3D(0,0,0), ANGLE3D(0,0,0)),
+ 70 CPlacement3D m_plExpArmPos = CPlacement3D(FLOAT3D(0.0f, 0.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f)),
  71 FLOAT3D m_aExpArmRot = FLOAT3D(0.0f, 0.0f, 0.0f),
- 72 CPlacement3D m_plExpGunPos = CPlacement3D(FLOAT3D(0,0,0), ANGLE3D(0,0,0)),
+ 72 CPlacement3D m_plExpGunPos = CPlacement3D(FLOAT3D(0.0f, 0.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f)),
  73 FLOAT3D m_aExpGunRot = FLOAT3D(0.0f, 0.0f, 0.0f),
  74 FLOAT3D m_vExpDamage = FLOAT3D(0.0f, 0.0f, 0.0f),
  75 INDEX m_iExplosions = 0,
@@ -204,12 +204,12 @@ functions:
   
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if( slPropertyOffset == offsetof(CExotechLarva, m_penMarkerNew))
+    if (slPropertyOffset == offsetof(CExotechLarva, m_penMarkerNew))
     {
       if (IsOfClass(penTarget, "NavigationMarker")) { return TRUE; }
       else { return FALSE; }
     }   
-    if( slPropertyOffset == offsetof(CExotechLarva, m_penRecharger))
+    if (slPropertyOffset == offsetof(CExotechLarva, m_penRecharger))
     {
       if (IsOfClass(penTarget, "ExotechLarvaCharger")) { return TRUE; }
       else { return FALSE; }
@@ -242,7 +242,7 @@ functions:
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
     
-    for(INDEX i=0; i<ctMaxPlayers; i++) {
+    for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
       if (penPlayer!=NULL && DistanceTo(this, penPlayer)<200.0f) {
         // if there is no valid enemy
@@ -262,7 +262,7 @@ functions:
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
     
-    for(INDEX i=0; i<ctMaxPlayers; i++) {
+    for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
       if (penPlayer!=NULL) {
         if ((penPlayer->GetFlags()&ENF_ALIVE) && 
@@ -291,7 +291,7 @@ functions:
     CWorldSettingsController *pwsc = NULL;
     // obtain bcg viewer
     CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) GetWorld()->GetBackgroundViewer();
-    if( penBcgViewer != NULL) {
+    if (penBcgViewer != NULL) {
       // obtain world settings controller 
       pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
     }
@@ -382,12 +382,12 @@ functions:
 
     // preliminary adjustment of damage
     // take less damage from heavy bullets (e.g. sniper)
-    if(dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount *= 0.66f;
     }
     // cannonballs inflict less damage then the default
-    if(dmtType==DMT_CANNONBALL)
+    if (dmtType==DMT_CANNONBALL)
     {
       fDamageAmmount *= 0.5f;
     }
@@ -426,15 +426,15 @@ functions:
     }
 
     // spawn blood spray
-    CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0, 0, 0));
+    CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
     m_penSpray = CreateEntity( plSpray, CLASS_BLOOD_SPRAY);
     ESpawnSpray eSpawnSpray;
     eSpawnSpray.colBurnColor=C_WHITE|CT_OPAQUE;
-    if( m_fMaxDamageAmmount > 10.0f)
+    if (m_fMaxDamageAmmount > 10.0f)
     {
       eSpawnSpray.fDamagePower = 3.0f;
     }
-    else if(m_fSprayDamage+fDamageAmmount>50.0f)
+    else if (m_fSprayDamage+fDamageAmmount>50.0f)
     {
       eSpawnSpray.fDamagePower = 2.0f;
     }
@@ -442,7 +442,7 @@ functions:
     {
       eSpawnSpray.fDamagePower = 1.0f;
     }
-    switch(IRnd()%4) {
+    switch (IRnd()%4) {
     case 0: case 1: case 2:
       // blood spray
       m_penSpray->SetParent(this);
@@ -707,7 +707,7 @@ functions:
   };
 
   void MoveToMarker(CEntity *penMarker) {
-    if(penMarker==NULL) { return; }
+    if (penMarker==NULL) { return; }
     FLOAT3D vDesiredDir = penMarker->GetPlacement().pl_PositionVector -
                    GetPlacement().pl_PositionVector;
     if (vDesiredDir.Length()>0.0f) {
@@ -829,13 +829,13 @@ functions:
     GetWorld()->CastRay(crRay1);
     
     // if entity is hit
-    if( crRay1.cr_penHit != NULL) {
+    if (crRay1.cr_penHit != NULL) {
       m_bRenderLeftLaser = TRUE;
       m_vLeftLaserTarget = crRay1.cr_vHit;
 
       // apply damage
       InflictDirectDamage( crRay1.cr_penHit, this, DMT_BURNING, 25.0f,
-          FLOAT3D(0, 0, 0), (m_vFirePosLeftLaserAbs-m_vLeftLaserTarget).Normalize());
+          FLOAT3D(0.0f, 0.0f, 0.0f), (m_vFirePosLeftLaserAbs-m_vLeftLaserTarget).Normalize());
       
       if (crRay1.cr_penHit->GetRenderType()!=RT_BRUSH) {
         crRay1.cr_ttHitModels = CCastRay::TT_NONE;
@@ -857,13 +857,13 @@ functions:
     GetWorld()->CastRay(crRay2);
     
     // if entity is hit
-    if( crRay2.cr_penHit != NULL) {
+    if (crRay2.cr_penHit != NULL) {
       m_bRenderRightLaser = TRUE;
       m_vRightLaserTarget = crRay2.cr_vHit;
 
       // apply damage
       InflictDirectDamage( crRay2.cr_penHit, this, DMT_BURNING, 25.0f,
-          FLOAT3D(0, 0, 0), (m_vFirePosRightLaserAbs-m_vRightLaserTarget).Normalize());
+          FLOAT3D(0.0f, 0.0f, 0.0f), (m_vFirePosRightLaserAbs-m_vRightLaserTarget).Normalize());
 
       if (crRay2.cr_penHit->GetRenderType()!=RT_BRUSH) {
         crRay2.cr_ttHitModels = CCastRay::TT_NONE;
@@ -960,7 +960,7 @@ procedures:
       amo0.amo_moModelObject.GetAttachmentTransformations(ARM_ATTACHMENT_PLASMAGUN, mRot, vPos, FALSE);
       m_plExpGunPos.pl_PositionVector = vPos*GetRotationMatrix() + GetPlacement().pl_PositionVector;
       m_plExpGunPos.pl_OrientationAngle = GetPlacement().pl_OrientationAngle;
-      m_vExpDamage = FLOAT3D( +12.0f, 15.0f, 0.0f);
+      m_vExpDamage = FLOAT3D(+12.0f, 15.0f, 0.0f);
 
       if (m_penLeftArmDestroyTarget) {
         SendToTarget(m_penLeftArmDestroyTarget, EET_TRIGGER, FixupCausedToPlayer(this, m_penEnemy));
@@ -979,7 +979,7 @@ procedures:
       amo0.amo_moModelObject.GetAttachmentTransformations(ARM_ATTACHMENT_PLASMAGUN, mRot, vPos, FALSE);
       m_plExpGunPos.pl_PositionVector = vPos*GetRotationMatrix() + GetPlacement().pl_PositionVector;
       m_plExpGunPos.pl_OrientationAngle = GetPlacement().pl_OrientationAngle;
-      m_vExpDamage = FLOAT3D( -12.0f, 15.0f, 0.0f);
+      m_vExpDamage = FLOAT3D(-12.0f, 15.0f, 0.0f);
 
       if (m_penRightArmDestroyTarget) {        
         SendToTarget(m_penRightArmDestroyTarget, EET_TRIGGER, FixupCausedToPlayer(this, m_penEnemy));
@@ -1098,7 +1098,7 @@ procedures:
     penExplosion = CreateEntity(plExplosion, CLASS_BASIC_EFFECT);
     penExplosion->Initialize(eSpawnEffect);
     // end debris
-    m_vExpDamage = FLOAT3D( 0.0f, 15.0f, 0.0f);
+    m_vExpDamage = FLOAT3D(0.0f, 15.0f, 0.0f);
     FLOAT3D vTranslation = m_vExpDamage;
     CPlacement3D plDebris = GetPlacement();
     plDebris.pl_PositionVector += FLOAT3D(0.0f, LARVA_HANDLE_TRANSLATE, 0.0f);
@@ -1119,7 +1119,7 @@ procedures:
     // explosion
     eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
     eSpawnEffect.betType = BET_EXPLOSION_DEBRIS;
-    eSpawnEffect.vStretch = FLOAT3D(1,1,1);
+    eSpawnEffect.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
     penExplosion = CreateEntity(plExplosion, CLASS_BASIC_EFFECT);
     penExplosion->Initialize(eSpawnEffect);
     // explosion smoke
@@ -1160,10 +1160,10 @@ procedures:
         return EReturn();
       }
       
-      while(m_iRnd>0) {
+      while (m_iRnd>0) {
         if (m_bLeftArmActive) {
           PlaySound(m_soFire1, SOUND_FIRE_PLASMA, SOF_3D);
-          ShootProjectile(PRT_LARVA_PLASMA, m_vFirePosLeftPlasmaRel, ANGLE3D(0, 0, 0));
+          ShootProjectile(PRT_LARVA_PLASMA, m_vFirePosLeftPlasmaRel, ANGLE3D(0.0f, 0.0f, 0.0f));
           RemoveAttachmentFromModel(*PlasmaLeftModel(), PLASMAGUN_ATTACHMENT_PROJECTILE);
           autowait(0.25f);
           PlasmaLeftModel()->PlayAnim(PLASMAGUN_ANIM_SPAWNING, 0);  
@@ -1174,7 +1174,7 @@ procedures:
         }
         if (m_bRightArmActive) {
           PlaySound(m_soFire2, SOUND_FIRE_PLASMA, SOF_3D);
-          ShootProjectile(PRT_LARVA_PLASMA, m_vFirePosRightPlasmaRel, ANGLE3D(0, 0, 0));
+          ShootProjectile(PRT_LARVA_PLASMA, m_vFirePosRightPlasmaRel, ANGLE3D(0.0f, 0.0f, 0.0f));
           RemoveAttachmentFromModel(*PlasmaRightModel(), PLASMAGUN_ATTACHMENT_PROJECTILE);
           autowait(0.25f);
           PlasmaRightModel()->PlayAnim(PLASMAGUN_ANIM_SPAWNING, 0);  

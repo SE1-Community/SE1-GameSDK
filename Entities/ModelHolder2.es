@@ -65,7 +65,7 @@ properties:
 
  // parameters for custom shading of a model (overrides automatic shading calculation)
  14 enum CustomShadingType m_cstCustomShading "Custom shading" 'H' = CST_NONE,
- 15 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D( AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
+ 15 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D(AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
  16 COLOR m_colLight            "Light color" 'O' = C_WHITE,
  17 COLOR m_colAmbient          "Ambient color" 'A' = C_BLACK,
  18 CTFileName m_fnmLightAnimation "Light animation file" = CTString(""),
@@ -92,7 +92,7 @@ properties:
 
  // destruction values
  60 CEntityPointer m_penDestruction "Destruction" 'Q' COLOR(C_BLACK|0x20),    // model destruction entity
- 61 FLOAT3D m_vDamage = FLOAT3D(0,0,0),    // current damage impact
+ 61 FLOAT3D m_vDamage = FLOAT3D(0.0f, 0.0f, 0.0f),    // current damage impact
  62 FLOAT m_tmLastDamage = -1000.0f,
  63 CEntityPointer m_penDestroyTarget "Destruction Target" COLOR(C_WHITE|0xFF), // targeted when destroyed
  64 CEntityPointer m_penLastDamager,
@@ -141,7 +141,7 @@ functions:
   // classification box multiplier
   FLOAT3D GetClassificationBoxStretch(void)
   {
-    return FLOAT3D( m_fClassificationStretch, m_fClassificationStretch, m_fClassificationStretch);
+    return FLOAT3D(m_fClassificationStretch, m_fClassificationStretch, m_fClassificationStretch);
   }
 
 
@@ -163,7 +163,7 @@ functions:
       // do nothing
       return;
     }
-    if( dmtType==DMT_BURNING)
+    if (dmtType==DMT_BURNING)
     {
       UBYTE ubR, ubG, ubB, ubA;
       ColorToRGBA(m_colBurning, ubR, ubG, ubB, ubA);
@@ -180,7 +180,7 @@ functions:
       return;
     }
     FLOAT fKickDamage = fNewDamage;
-    if( (dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
+    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
     {
       fKickDamage*=1.5f;
     }
@@ -190,10 +190,10 @@ functions:
     if (dmtType == DMT_CHAINSAW) {
       fKickDamage=0.0f;
     }    
-    if(dmtType == DMT_BULLET && penDestruction->m_eibtBodyType==EIBT_ROCK) {
+    if (dmtType == DMT_BULLET && penDestruction->m_eibtBodyType==EIBT_ROCK) {
       fKickDamage=0.0f;
     }
-    if( dmtType==DMT_BURNING)
+    if (dmtType==DMT_BURNING)
     {
       fKickDamage=0.0f;
     }
@@ -208,14 +208,14 @@ functions:
 
     // fade damage out
     if (tmDelta>=_pTimer->TickQuantum*3) {
-      m_vDamage=FLOAT3D(0,0,0);
+      m_vDamage=FLOAT3D(0.0f, 0.0f, 0.0f);
     }
     // add new damage
     FLOAT3D vDirectionFixed;
     if (vDirection.ManhattanNorm()>0.5f) {
       vDirectionFixed = vDirection;
     } else {
-      vDirectionFixed = FLOAT3D(0,1,0);
+      vDirectionFixed = FLOAT3D(0.0f, 1.0f, 0.0f);
     }
     FLOAT3D vDamageOld = m_vDamage;
     m_vDamage += vDirectionFixed*fKickDamage;
@@ -232,25 +232,25 @@ functions:
       }
     }
 
-    if( m_fMaxDamageAmmount<fDamageAmmount) {
+    if (m_fMaxDamageAmmount<fDamageAmmount) {
       m_fMaxDamageAmmount = fDamageAmmount;
     }
 
     // if it has no spray, or if this damage overflows it
-    if( (dmtType!=DMT_BURNING) && (dmtType!=DMT_CHAINSAW) &&
+    if ((dmtType!=DMT_BURNING) && (dmtType!=DMT_CHAINSAW) &&
       (m_tmSpraySpawned<=_pTimer->CurrentTick()-_pTimer->TickQuantum*8 || 
       m_fSprayDamage+fNewDamage>50.0f))
     {
       // spawn blood spray
-      CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0, 0, 0));
+      CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
       m_penSpray = CreateEntity( plSpray, CLASS_BLOOD_SPRAY);
       m_penSpray->SetParent( this);
       ESpawnSpray eSpawnSpray;
     
       // adjust spray power
-      if( m_fMaxDamageAmmount > 10.0f) {
+      if (m_fMaxDamageAmmount > 10.0f) {
         eSpawnSpray.fDamagePower = 3.0f;
-      } else if(m_fSprayDamage+fNewDamage>50.0f) {
+      } else if (m_fSprayDamage+fNewDamage>50.0f) {
         eSpawnSpray.fDamagePower = 2.0f;
       } else {
         eSpawnSpray.fDamagePower = 1.0f;
@@ -283,10 +283,10 @@ functions:
       m_fMaxDamageAmmount = 0.0f;
     }
     
-    if( dmtType==DMT_CHAINSAW && m_fChainSawCutDamage>0)
+    if (dmtType==DMT_CHAINSAW && m_fChainSawCutDamage>0)
     {
       m_fChainSawCutDamage-=fDamageAmmount;
-      if(m_fChainSawCutDamage<=0)
+      if (m_fChainSawCutDamage<=0)
       {
         EDeath eDeath;  // we don't need any extra parameters
         SendEvent(eDeath);
@@ -301,7 +301,7 @@ functions:
   // Entity info
   void *GetEntityInfo(void) {
     CModelDestruction *pmd=GetDestruction();
-    if( pmd!=NULL)
+    if (pmd!=NULL)
     {
       return GetStdEntityInfo(pmd->m_eibtBodyType);
     }
@@ -338,13 +338,13 @@ functions:
     // if should fade last mip
     if (m_fMipFadeDist>0) {
       CModelObject *pmo = GetModelObject();
-      if(pmo==NULL) {
+      if (pmo==NULL) {
         return;
       }
       // adjust for stretch
       FLOAT fMipForFade = fMipFactor;
       // TODO: comment the next 3 lines for mip factors conversion
-      /*if (pmo->mo_Stretch != FLOAT3D(1,1,1)) {
+      /*if (pmo->mo_Stretch != FLOAT3D(1.0f, 1.0f, 1.0f)) {
         fMipForFade -= Log2( Max(pmo->mo_Stretch(1),Max(pmo->mo_Stretch(2),pmo->mo_Stretch(3))));
       }*/
 
@@ -376,7 +376,7 @@ functions:
   /* Adjust model shading parameters if needed. */
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
-    switch( m_cstCustomShading)
+    switch (m_cstCustomShading)
     {
     case CST_FULL_CUSTOMIZED:
       {
@@ -411,7 +411,7 @@ functions:
 
         // obtain world settings controller
         CWorldSettingsController *pwsc = GetWSC(this);
-        if( pwsc!=NULL && pwsc->m_bApplyShadingToModels)
+        if (pwsc!=NULL && pwsc->m_bApplyShadingToModels)
         {
           // apply animating shading
           COLOR colShade = GetWorld()->wo_atbTextureBlendings[9].tb_colMultiply;
@@ -443,7 +443,7 @@ functions:
       }
     }
 
-    if(m_colBurning!=COLOR(C_WHITE|CT_OPAQUE))
+    if (m_colBurning!=COLOR(C_WHITE|CT_OPAQUE))
     {
       colAmbient = MulColors( colAmbient, m_colBurning);
       colLight = MulColors( colLight, m_colBurning);
@@ -507,13 +507,13 @@ functions:
       m_fnModel=CTFILENAME("Models\\Editor\\Axis.mdl");
     }
 
-    if( m_fnReflection == CTString("Models\\Editor\\Vector.tex")) {
+    if (m_fnReflection == CTString("Models\\Editor\\Vector.tex")) {
       m_fnReflection = CTString("");
     }
-    if( m_fnSpecular == CTString("Models\\Editor\\Vector.tex")) {
+    if (m_fnSpecular == CTString("Models\\Editor\\Vector.tex")) {
       m_fnSpecular = CTString("");
     }
-    if( m_fnBump == CTString("Models\\Editor\\Vector.tex")) {
+    if (m_fnBump == CTString("Models\\Editor\\Vector.tex")) {
       m_fnBump = CTString("");
     }
 
@@ -526,7 +526,7 @@ functions:
     SetModel(m_fnModel);
     INDEX iAnim=m_iModelAnimation;
     FLOAT tmOffsetPhase=0.0f;
-    if(m_iFirstRandomAnimation>=0)
+    if (m_iFirstRandomAnimation>=0)
     {
       INDEX ctAnims=GetModelObject()->GetAnimsCt()-m_iFirstRandomAnimation;
       iAnim=m_iFirstRandomAnimation+Clamp(INDEX(FRnd()*ctAnims), INDEX(0), ctAnims);
@@ -553,7 +553,7 @@ functions:
       }
     }
     
-    if( m_bAttachments)
+    if (m_bAttachments)
     {
       GetModelObject()->AutoSetAttachments();
     }
@@ -585,7 +585,7 @@ functions:
       SetCollisionFlags(ECF_IMMATERIAL);
     }
 
-    switch(m_stClusterShadows) {
+    switch (m_stClusterShadows) {
     case ST_NONE:
       {
         SetFlags(GetFlags()&~ENF_CLUSTERSHADOWS);
@@ -675,7 +675,7 @@ procedures:
       ((CModelHolder2 *)penNew)->m_colBurning=m_colBurning;
       ((CModelHolder2 *)penNew)->m_fChainSawCutDamage=m_fChainSawCutDamage;
 
-      if( pmd->m_iStartAnim!=-1)
+      if (pmd->m_iStartAnim!=-1)
       {
         penNew->GetModelObject()->PlayAnim(pmd->m_iStartAnim, 0);
       }
@@ -691,7 +691,7 @@ procedures:
       mhNew.m_fMipMul = m_fMipMul;
 
       // domino death for cannonball
-      if( /*m_dmtLastDamageType==DMT_CANNONBALL ||*/ m_dmtLastDamageType==DMT_CHAINSAW)
+      if (/*m_dmtLastDamageType==DMT_CANNONBALL ||*/ m_dmtLastDamageType==DMT_CHAINSAW)
       {
         EDeath eDeath;  // we don't need any extra parameters
         mhNew.m_fChainSawCutDamage=0.0f;

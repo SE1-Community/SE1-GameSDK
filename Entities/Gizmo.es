@@ -164,20 +164,20 @@ functions:
     GetBoundingBox(box);
   
     // on plane
-    if( GetNearestPolygon(vPoint, vPlaneNormal, fDistanceToEdge))
+    if (GetNearestPolygon(vPoint, vPlaneNormal, fDistanceToEdge))
     {
       // if near to polygon and away from last stain point
-      if( (vPoint-GetPlacement().pl_PositionVector).Length()<0.5f )
+      if ((vPoint-GetPlacement().pl_PositionVector).Length()<0.5f )
       {
         FLOAT fStretch = box.Size().Length();
         // stain
         ese.colMuliplier = C_WHITE|CT_OPAQUE;
         ese.betType    = BET_GIZMOSTAIN;
-        ese.vStretch   = FLOAT3D( fStretch*0.75f, fStretch*0.75f, 1.0f);
-        ese.vNormal    = FLOAT3D( vPlaneNormal);
-        ese.vDirection = FLOAT3D( 0, 0, 0);
+        ese.vStretch   = FLOAT3D(fStretch*0.75f, fStretch*0.75f, 1.0f);
+        ese.vNormal    = FLOAT3D(vPlaneNormal);
+        ese.vDirection = FLOAT3D(0, 0, 0);
         FLOAT3D vPos = vPoint+ese.vNormal/50.0f*(FRnd()+0.5f);
-        CEntityPointer penEffect = CreateEntity( CPlacement3D(vPos, ANGLE3D(0,0,0)), CLASS_BASIC_EFFECT);
+        CEntityPointer penEffect = CreateEntity( CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
         penEffect->Initialize(ese);
       }
     }
@@ -202,7 +202,7 @@ procedures:
       
       // stop moving
       SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
-      SetDesiredRotation(ANGLE3D(0, 0, 0));
+      SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
 
       // ------------ Wait for some time on the ground
       FLOAT fWaitTime = 0.25f+FRnd()*0.4f;
@@ -225,7 +225,7 @@ procedures:
     m_vDesiredPosition = m_penEnemy->GetPlacement().pl_PositionVector;
     m_fMoveFrequency = 0.1f;
     // if we are close enough for mortal jump
-    if( CalcPlaneDist(m_penEnemy) < 10.0f)
+    if (CalcPlaneDist(m_penEnemy) < 10.0f)
     {
       // set mortal jump parameters (no random)
       m_fMoveSpeed = m_fCloseRunSpeed*1.5f;
@@ -234,7 +234,7 @@ procedures:
       FLOAT fSpeedY = 10.0f;
       FLOAT fSpeedZ = -m_fMoveSpeed;
       // if can't see enemy
-      if( !IsInFrustum(m_penEnemy, CosFast(30.0f)))
+      if (!IsInFrustum(m_penEnemy, CosFast(30.0f)))
       {
         // rotate a lot
         m_aRotateSpeed = m_aCloseRotateSpeed*1.5f;
@@ -285,7 +285,7 @@ procedures:
         on (ETouch etouch) :
         {
           // if we touched ground
-          if( etouch.penOther->GetRenderType() & RT_BRUSH)
+          if (etouch.penOther->GetRenderType() & RT_BRUSH)
           {
             return EReturn();
           }

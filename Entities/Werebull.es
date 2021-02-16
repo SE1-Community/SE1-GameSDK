@@ -135,12 +135,12 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if(GetModelObject()->GetAnim()==WEREBULL_ANIM_DEATHRUN)
+    if (GetModelObject()->GetAnim()==WEREBULL_ANIM_DEATHRUN)
     {
       vStretch=FLOAT3D(1,1,2)*2.0f;
       return 0.6f;
     }
-    else if(GetModelObject()->GetAnim()==WEREBULL_ANIM_DEATH)
+    else if (GetModelObject()->GetAnim()==WEREBULL_ANIM_DEATH)
     {
       vStretch=FLOAT3D(1,1,2)*2.0f;
       return 0.7f;
@@ -225,7 +225,7 @@ functions:
         FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
         vDirection.Normalize();
         InflictDirectDamage(etouch.penOther, this, DMT_CLOSERANGE, -aHitAngle*40.0f,
-          FLOAT3D(0, 0, 0), vDirection);
+          FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
         // kick touched entity
         FLOAT3D vSpeed = -FLOAT3D(etouch.plCollision);
         vSpeed = vSpeed*10.0f;
@@ -279,7 +279,7 @@ procedures:
       if (m_bHornHit) {
         FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
         vDirection.Normalize();
-        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 20.0f, FLOAT3D(0, 0, 0), vDirection);
+        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 20.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
         FLOAT3D vSpeed;
         GetPitchDirection(AngleDeg(90.0f), vSpeed);
         vSpeed = vSpeed * 10.0f;

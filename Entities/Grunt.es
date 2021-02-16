@@ -107,7 +107,7 @@ functions:
   virtual const CTFileName &GetComputerMessageName(void) const {
     static DECLARE_CTFILENAME(fnmSoldier,     "DataMP\\Messages\\Enemies\\GruntSoldier.txt");
     static DECLARE_CTFILENAME(fnmCommander,   "DataMP\\Messages\\Enemies\\GruntCommander.txt");
-    switch(m_gtType) {
+    switch (m_gtType) {
     default: ASSERT(FALSE);
     case GT_SOLDIER:  return fnmSoldier;
     case GT_COMMANDER: return fnmCommander;
@@ -164,11 +164,11 @@ functions:
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
     vStretch=FLOAT3D(1,1,2);
-    if(GetModelObject()->GetAnim()==GRUNT_ANIM_DEATHBACKWARD)
+    if (GetModelObject()->GetAnim()==GRUNT_ANIM_DEATHBACKWARD)
     {
       return 0.5f;
     }
-    else if(GetModelObject()->GetAnim()==GRUNT_ANIM_DEATHFORWARD)
+    else if (GetModelObject()->GetAnim()==GRUNT_ANIM_DEATHFORWARD)
     {
       return 1.0f;
     }
@@ -232,7 +232,7 @@ procedures:
     } else if (m_gtType == GT_COMMANDER) {
       autocall CommanderAttack() EEnd;
     // should never get here
-    } else{
+    } else {
       ASSERT(FALSE);
     }
     return EReturn();
@@ -244,12 +244,12 @@ procedures:
     autowait(0.2f + FRnd()*0.25f);
 
     StartModelAnim(GRUNT_ANIM_FIRE, 0);
-    ShootProjectile(PRT_GRUNT_PROJECTILE_SOL, FIREPOS_SOLDIER, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_GRUNT_PROJECTILE_SOL, FIREPOS_SOLDIER, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soFire1, SOUND_FIRE, SOF_3D);
 
     autowait(0.15f + FRnd()*0.1f);
     StartModelAnim(GRUNT_ANIM_FIRE, 0);
-    ShootProjectile(PRT_GRUNT_PROJECTILE_SOL, FIREPOS_SOLDIER, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_GRUNT_PROJECTILE_SOL, FIREPOS_SOLDIER, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soFire2, SOUND_FIRE, SOF_3D);
     
 
@@ -268,7 +268,7 @@ procedures:
     FLOAT   fLaserSpeed  = 45.0f; // m/s
     FLOAT3D vPredictedEnemyPosition = CalculatePredictedPosition(vGunPosAbs,
       vEnemyPos, fLaserSpeed, vEnemySpeed, GetPlacement().pl_PositionVector(2) );
-    ShootPredictedProjectile(PRT_GRUNT_LASER, vPredictedEnemyPosition, FLOAT3D(0.0f, 1.0f, 0.0f), ANGLE3D(0, 0, 0));*/
+    ShootPredictedProjectile(PRT_GRUNT_LASER, vPredictedEnemyPosition, FLOAT3D(0.0f, 1.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));*/
 
     StartModelAnim(GRUNT_ANIM_FIRE, 0);
     ShootProjectile(PRT_GRUNT_PROJECTILE_COM, FIREPOS_COMMANDER_DN, ANGLE3D(-20, 0, 0));
@@ -281,7 +281,7 @@ procedures:
 
     autowait(0.035f);
     StartModelAnim(GRUNT_ANIM_FIRE, 0);
-    ShootProjectile(PRT_GRUNT_PROJECTILE_COM, FIREPOS_COMMANDER_DN, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_GRUNT_PROJECTILE_COM, FIREPOS_COMMANDER_DN, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soFire1, SOUND_FIRE, SOF_3D);
 
     autowait(0.035f);

@@ -135,7 +135,7 @@ procedures:
     GetModelObject()->mo_toTexture.PlayAnim(m_iTextureOFFAnimation, 0);
     m_bSwitchON = FALSE;
     // if exists off target
-    if(m_penOffTarget!=NULL)
+    if (m_penOffTarget!=NULL)
     {
       SendToTarget(m_penOffTarget, m_eetOffEvent, m_penCaused);
     }

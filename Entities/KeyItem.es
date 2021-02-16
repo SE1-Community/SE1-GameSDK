@@ -50,7 +50,7 @@ event EKey {
 
 const char *GetKeyName(enum KeyItemType kit)
 {
-  switch(kit) {
+  switch (kit) {
   case KIT_BOOKOFWISDOM     :  return TRANS("Book of wisdom"); break;
   case KIT_CROSSWOODEN      :  return TRANS("Wooden cross"); break;
   case KIT_CROSSGOLD        :  return TRANS("Gold cross"); break;
@@ -336,7 +336,7 @@ procedures:
     eKey.kitType = m_kitType;
     // if health is received
     if (epass.penOther->ReceiveItem(eKey)) {
-      if(_pNetwork->IsPlayerLocal(epass.penOther)) {IFeel_PlayEffect("PU_Key");}
+      if (_pNetwork->IsPlayerLocal(epass.penOther)) {IFeel_PlayEffect("PU_Key");}
       // play the pickup sound
       m_soPick.Set3DParameters(50.0f, 1.0f, 1.0f, 1.0f);
       PlaySound(m_soPick, m_iSoundComponent, SOF_3D);

@@ -175,7 +175,7 @@ static void DoLevelSafetyChecks()
   CPrintF("STEP 3 - Checking other important entities...\n");
   CWorldSettingsController *pwsc = NULL;
   class CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) pwo->GetBackgroundViewer();
-  if( penBcgViewer != NULL) {
+  if (penBcgViewer != NULL) {
     // obtain world settings controller 
     pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
   }
@@ -198,10 +198,10 @@ void SetPyramidPlateActivateAlpha(CWorld *pwo, INDEX iBlending,
   FLOAT fRatio;
 
   // get alpha
-  if( tmNow>tmDeactivated)
+  if (tmNow>tmDeactivated)
   {
     // if plate is deactivated
-    if( tmNow>tmDeactivated+tmStop)
+    if (tmNow>tmDeactivated+tmStop)
     {
       fRatio = 0;
     }
@@ -211,10 +211,10 @@ void SetPyramidPlateActivateAlpha(CWorld *pwo, INDEX iBlending,
       fRatio = CalculateRatio(tmNow, tmDeactivated, tmDeactivated+tmStop, 0.0f, 1.0f);
     }
   }
-  else if( tmNow>tmActivated)
+  else if (tmNow>tmActivated)
   {
     // if full visible
-    if( tmNow>tmActivated+tmStop)
+    if (tmNow>tmActivated+tmStop)
     {
       fRatio = 1;
     }
@@ -230,18 +230,18 @@ void SetPyramidPlateActivateAlpha(CWorld *pwo, INDEX iBlending,
     fRatio = 0;
   }
   FLOAT fSinFactor = 1.0f;
-  if( bPulsate)
+  if (bPulsate)
   {
     fSinFactor = Sin((tmNow-tmActivated) * 720.0f)*0.5f+0.5f;
   }
   
   UBYTE ub = UBYTE( fRatio*fSinFactor*255.0f);
   // apply blend or add
-  if( pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ALPHA)
+  if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ALPHA)
   {
     pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = C_WHITE|ub;
   }
-  else if( pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ADD)
+  else if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ADD)
   {
     pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = RGBAToColor(ub,ub,ub,255);
   }
@@ -254,10 +254,10 @@ void SetPyramidMorphRoomAlpha(CWorld *pwo, INDEX iBlending, TIME tmActivated)
   FLOAT fRatio;
   FLOAT tmAppear=10.0f;
 
-  if( tmNow<=tmActivated) { return;}
+  if (tmNow<=tmActivated) { return;}
   
   // get alpha
-  if( tmNow>=tmActivated+tmAppear)
+  if (tmNow>=tmActivated+tmAppear)
   {
     fRatio = 1;
   }
@@ -272,11 +272,11 @@ void SetPyramidMorphRoomAlpha(CWorld *pwo, INDEX iBlending, TIME tmActivated)
   UBYTE ub = UBYTE((fRatio+(1.0f-fRatio)*fSinFactor)*255.0f);
 
   // apply blend or add
-  if( pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ALPHA)
+  if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ALPHA)
   {
     pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = C_WHITE|ub;
   }
-  else if( pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ADD)
+  else if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ADD)
   {
     pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = RGBAToColor(ub,ub,ub,255);
   }
@@ -815,7 +815,7 @@ void CWorldBase_OnWorldRender(CWorld *pwo)
   CWorldSettingsController *pwsc = NULL;
   // obtain bcg viewer
   CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) pwo->GetBackgroundViewer();
-  if( penBcgViewer != NULL)
+  if (penBcgViewer != NULL)
   {
     // obtain world settings controller 
     pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
@@ -823,7 +823,7 @@ void CWorldBase_OnWorldRender(CWorld *pwo)
   
   // ***** Storm effects
   // if world settings controller is valid
-  if( pwsc != NULL)
+  if (pwsc != NULL)
   {
     FLOAT fStormFactor = pwsc->GetStormFactor();
     COLOR colBlend = LerpColor( pwsc->m_colBlendStart, pwsc->m_colBlendStop, fStormFactor);
@@ -833,7 +833,7 @@ void CWorldBase_OnWorldRender(CWorld *pwo)
     COLOR colShade = LerpColor( pwsc->m_colShadeStart, pwsc->m_colShadeStop, fStormFactor);
 
     // apply lightning FX
-    if( pwsc->m_tmLightningStart != -1)
+    if (pwsc->m_tmLightningStart != -1)
     {
       FLOAT tmLightningLife = tmNow-pwsc->m_tmLightningStart;
       _aoLightningColor.ao_llAnimStart = CTimer::InTicks(pwsc->m_tmLightningStart);
@@ -849,7 +849,7 @@ void CWorldBase_OnWorldRender(CWorld *pwo)
 
   // ***** Pyramid blending effects
   // if world settings controller is valid
-  if( pwsc != NULL)
+  if (pwsc != NULL)
   {
     // set alpha values for switch-controlled pyramid plate activating
     SetPyramidPlateActivateAlpha(pwo, 10, pwsc->m_tmPyramidPlatesStart, 1e6, FALSE);
@@ -907,10 +907,10 @@ public:
 
 static CFixedForce affFixedForces[] = 
 {
-  CFixedForce ("Normal D", FLOAT3D( 0,-1, 0), 30, 70),
-  CFixedForce ("Normal U", FLOAT3D( 0,+1, 0), 30, 70),
-  CFixedForce ("Normal N", FLOAT3D( 0, 0,-1), 30, 70),
-  CFixedForce ("Normal S", FLOAT3D( 0, 0,+1), 30, 70),
+  CFixedForce ("Normal D", FLOAT3D(0,-1, 0), 30, 70),
+  CFixedForce ("Normal U", FLOAT3D(0,+1, 0), 30, 70),
+  CFixedForce ("Normal N", FLOAT3D(0, 0,-1), 30, 70),
+  CFixedForce ("Normal S", FLOAT3D(0, 0,+1), 30, 70),
   CFixedForce ("Normal E", FLOAT3D(-1, 0, 0), 30, 70),
   CFixedForce ("Normal W", FLOAT3D(+1, 0, 0), 30, 70),
   CFixedForce ("ZeroG",    FLOAT3D(+1, 0, 0), 0, 0),
@@ -1021,7 +1021,7 @@ functions:
   // Validate offered target for one property
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if(penTarget==NULL)
+    if (penTarget==NULL)
     {
       return FALSE;
     }
@@ -1033,14 +1033,14 @@ functions:
     ulFirst = offsetof(CWorldBase, m_penGradient0);
     ulLast  = offsetof(CWorldBase, m_penGradient19);
     strClass = "Gradient Marker";
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
     // if gravity marker
     ulFirst = offsetof(CWorldBase, m_penGravity0);
     ulLast  = offsetof(CWorldBase, m_penGravity9);
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
       return 
         IsDerivedFromClass(penTarget, "Gravity Marker")||
         IsDerivedFromClass(penTarget, "Gravity Router");
@@ -1050,7 +1050,7 @@ functions:
     ulFirst = offsetof(CWorldBase, m_penMirror0);
     ulLast  = offsetof(CWorldBase, m_penMirror4);
     strClass = "Mirror Marker";
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
@@ -1058,7 +1058,7 @@ functions:
     ulFirst = offsetof(CWorldBase, m_penFog0);
     ulLast  = offsetof(CWorldBase, m_penFog9);
     strClass = "Fog Marker";
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
@@ -1066,7 +1066,7 @@ functions:
     ulFirst = offsetof(CWorldBase, m_penHaze0);
     ulLast  = offsetof(CWorldBase, m_penHaze4);
     strClass = "Haze Marker";
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
@@ -1083,7 +1083,7 @@ functions:
     if (iForce<ctFixedForces) {
       return affFixedForces[iForce].ff_strName;
     } else {
-      if (iForce-ctFixedForces<=ctGravityMarkers){
+      if (iForce-ctFixedForces<=ctGravityMarkers) {
         CEntity *pen = &*(&m_penGravity0)[iForce-ctFixedForces];
         if (pen != NULL) {
           return pen->GetForceName(0);
@@ -1103,7 +1103,7 @@ functions:
     if (iForce<ctFixedForces) {
       fsGravity = affFixedForces[iForce].ff_fsGravity;
     } else {
-      if (iForce-ctFixedForces<ctGravityMarkers){
+      if (iForce-ctFixedForces<ctGravityMarkers) {
         CEntity *pen = &*(&m_penGravity0)[iForce-ctFixedForces];
         if (pen != NULL) {
           pen->GetForce(0, vPoint, fsGravity, fsField);
@@ -1112,7 +1112,7 @@ functions:
       }
       fsGravity.fs_fAcceleration = 30;
       fsGravity.fs_fVelocity = 70;
-      fsGravity.fs_vDirection = FLOAT3D(1,0,0);
+      fsGravity.fs_vDirection = FLOAT3D(1.0f, 0.0f, 0.0f);
     }
     fsField.fs_fAcceleration = 0;
     fsField.fs_fVelocity = 0;
@@ -1125,7 +1125,7 @@ functions:
     if (iForce<ctFixedForces) {
       return NULL;
     } else {
-      if (iForce-ctFixedForces<ctGravityMarkers){
+      if (iForce-ctFixedForces<ctGravityMarkers) {
         CEntity *pen = &*(&m_penGravity0)[iForce-ctFixedForces];
         if (pen != NULL) {
           return pen->GetForceController(0);
@@ -1140,7 +1140,7 @@ functions:
     INDEX ctFogMarkers = &m_penFog9-&m_penFog0+1;
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    if (iFog<ctFogMarkers){
+    if (iFog<ctFogMarkers) {
       CFogMarker *pfm = (CFogMarker *)&*(&m_penFog0)[iFog];
       if (pfm != NULL) {
         return pfm->GetFogName();
@@ -1154,7 +1154,7 @@ functions:
   BOOL GetFog(INDEX iFog, class CFogParameters &fpFog)
   {
     INDEX ctFogMarkers = &m_penFog8-&m_penFog0+1;
-    if (iFog<ctFogMarkers){
+    if (iFog<ctFogMarkers) {
       CFogMarker *pfm = (CFogMarker *)&*(&m_penFog0)[iFog];
       if (pfm != NULL) {
         pfm->GetFog(fpFog);
@@ -1170,7 +1170,7 @@ functions:
     INDEX ctHazeMarkers = &m_penHaze4-&m_penHaze0+1;
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    if (iHaze<ctHazeMarkers){
+    if (iHaze<ctHazeMarkers) {
       CHazeMarker *pfm = (CHazeMarker *)&*(&m_penHaze0)[iHaze];
       if (pfm != NULL) {
         return pfm->GetHazeName();
@@ -1185,7 +1185,7 @@ functions:
   BOOL GetHaze(INDEX iHaze, class CHazeParameters &hpHaze, FLOAT3D &vViewDir)
   {
     INDEX ctHazeMarkers = &m_penHaze4-&m_penHaze0+1;
-    if (iHaze<ctHazeMarkers){
+    if (iHaze<ctHazeMarkers) {
       CHazeMarker *phm = (CHazeMarker *)&*(&m_penHaze0)[iHaze];
       if (phm != NULL) {
         phm->GetHaze(hpHaze, vViewDir);
@@ -1216,7 +1216,7 @@ functions:
     default: {
       iMirror-=9;
       INDEX ctMirrorMarkers = &m_penMirror4-&m_penMirror0+1;
-      if (iMirror<ctMirrorMarkers){
+      if (iMirror<ctMirrorMarkers) {
         CMirrorMarker *pfm = (CMirrorMarker *)&*(&m_penMirror0)[iMirror];
         if (pfm != NULL) {
           return pfm->GetMirrorName();
@@ -1241,7 +1241,7 @@ functions:
     }
     iMirror-=9;
     INDEX ctMirrorMarkers = &m_penMirror4-&m_penMirror0+1;
-    if (iMirror<ctMirrorMarkers){
+    if (iMirror<ctMirrorMarkers) {
       CMirrorMarker *pmm = (CMirrorMarker *)&*(&m_penMirror0)[iMirror];
       if (pmm != NULL) {
         pmm->GetMirror(mpMirror);
@@ -1257,7 +1257,7 @@ functions:
     INDEX ctGradientMarkers = &m_penGradient19-&m_penGradient0+1;
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    if (iGradient<ctGradientMarkers){
+    if (iGradient<ctGradientMarkers) {
       CGradientMarker *pgm = (CGradientMarker *)&*(&m_penGradient0)[iGradient];
       if (pgm != NULL) {
         return pgm->GetGradientName();
@@ -1271,10 +1271,10 @@ functions:
   void UncacheShadowsForGradient(class CGradientMarker *penDiscard)
   {
     INDEX ctGradientMarkers = &m_penGradient19-&m_penGradient0+1;
-    for( INDEX iGradient=0; iGradient<ctGradientMarkers; iGradient++)
+    for (INDEX iGradient=0; iGradient<ctGradientMarkers; iGradient++)
     {
       CGradientMarker *pgm = (CGradientMarker *)&*(&m_penGradient0)[iGradient];
-      if(pgm == penDiscard)
+      if (pgm == penDiscard)
       {
         CEntity::UncacheShadowsForGradient( iGradient+1);
       }
@@ -1285,7 +1285,7 @@ functions:
   BOOL GetGradient(INDEX iGradient, class CGradientParameters &fpGradient)
   {
     INDEX ctGradientMarkers = &m_penGradient19-&m_penGradient0+1;
-    if ( (iGradient<ctGradientMarkers) && (iGradient>0) ){
+    if ( (iGradient<ctGradientMarkers) && (iGradient>0) ) {
       CGradientMarker *pgm = (CGradientMarker *)&*(&m_penGradient0)[iGradient-1];
       if (pgm != NULL) {
         return pgm->GetGradient(0, fpGradient);
@@ -1340,7 +1340,7 @@ procedures:
     SetCollisionFlags(ECF_BRUSH);
     
     // set zoning
-    if( m_bZoning) {
+    if (m_bZoning) {
       m_strDescription = "zoning";
       SetFlags(GetFlags()|ENF_ZONING);
     } else {
@@ -1349,7 +1349,7 @@ procedures:
     }
 
     // set background
-    if( m_bBackground) {
+    if (m_bBackground) {
       m_strDescription += " background";
       SetFlags(GetFlags()|ENF_BACKGROUND);
     } else {
@@ -1357,7 +1357,7 @@ procedures:
     }
 
     // set anchor for SEd
-    if( m_bAnchored) {
+    if (m_bAnchored) {
       m_strDescription += " anchored";
       SetFlags(GetFlags()|ENF_ANCHORED);
     } else {

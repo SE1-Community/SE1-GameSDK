@@ -227,7 +227,7 @@ static void NextUnreadMessage(void)
 void LastUnreadMessage(void)
 {
   BOOL bFound = FALSE;
-  for(_iActiveMessage=_acmMessages.Count()-1; _iActiveMessage>=0; _iActiveMessage--) {
+  for (_iActiveMessage=_acmMessages.Count()-1; _iActiveMessage>=0; _iActiveMessage--) {
     if (!_acmMessages[_iActiveMessage].cm_bRead) {
       bFound = TRUE;
       break;
@@ -367,7 +367,7 @@ static void UpdateFirstOnScreen(void)
   _iFirstMessageOnScreen = Clamp(_iFirstMessageOnScreen, INDEX(0), _acmMessages.Count());
 
   // for each message
-  for(INDEX i=0; i<_acmMessages.Count(); i++) {
+  for (INDEX i=0; i<_acmMessages.Count(); i++) {
     CCompMessage &cm = _acmMessages[i];
     // if on screen
     if (i>=_iWantedFirstMessageOnScreen
@@ -393,7 +393,7 @@ static void UpdateType(BOOL bForce=FALSE)
   _acmMessages.Clear();
   // for each player's message
   CDynamicStackArray<CCompMessageID> &acmiMsgs = _ppenPlayer->m_acmiMessages;
-  for(INDEX i=0; i<acmiMsgs.Count(); i++) {
+  for (INDEX i=0; i<acmiMsgs.Count(); i++) {
     CCompMessageID &cmi = acmiMsgs[i];
     // if it is of given type
     if (cmi.cmi_cmtType == _cmtWantedType) {
@@ -487,7 +487,7 @@ static void UpdateSize(CDrawPort *pdp)
   PIX pixD = 5;
   PIX pixH = (pixJ2Up-pixJ1Dn-pixD*(CMT_COUNT-1))/CMT_COUNT;
   INDEX i;
-  for( i=0; i<CMT_COUNT; i++) {
+  for (i=0; i<CMT_COUNT; i++) {
     _boxButton[i] = PIXaabbox2D( 
       PIX2D(0,       pixJ1Dn+(pixH+pixD)*i),
       PIX2D(pixI1Lt, pixJ1Dn+(pixH+pixD)*i+pixH));
@@ -508,7 +508,7 @@ static void UpdateSize(CDrawPort *pdp)
   // animate box positions
   _boxTitle -= PIX2D( fGroup1, 0);
   _boxExit  += PIX2D( fGroup1, 0);
-  for( i=0; i<CMT_COUNT; i++) {
+  for (i=0; i<CMT_COUNT; i++) {
     FLOAT fOffs = ClampDn(fGroup1-(CMT_COUNT-i)*_pixMarginJ*10, 0.0f);
     _boxButton[i] -= PIX2D(fOffs, 0);
   }
@@ -541,7 +541,7 @@ void PrintButton(CDrawPort *pdp, INDEX iButton)
   INDEX ctTotal=0;
   INDEX ctRead=0;
   CDynamicStackArray<CCompMessageID> &acmiMsgs = _ppenPlayer->m_acmiMessages;
-  {for(INDEX i=0; i<acmiMsgs.Count(); i++) {
+  {for (INDEX i=0; i<acmiMsgs.Count(); i++) {
     CCompMessageID &cmi = acmiMsgs[i];
     if (cmi.cmi_cmtType==iButton) {
       ctTotal++;
@@ -604,7 +604,7 @@ void PrintMessageList(CDrawPort *pdp)
   if (iFirst>iLast) {
     pdp->PutText( TRANS("no messages"), pixTextX, pixYLine, _colDark);
   }
-  for(INDEX i=iFirst; i<=iLast; i++) {
+  for (INDEX i=iFirst; i<=iLast; i++) {
     COLOR col = _colMedium;
     if (_acmMessages[i].cm_bRead) {
       col = _colDark;
@@ -762,7 +762,7 @@ void RenderMessageStats(CDrawPort *pdp)
       pdp->Fill( 1, 1, pixSizeI-2, pixSizeJ-2, C_BLACK|CT_OPAQUE);
       // render the map if not fading
       COLOR colFade = LCDFadedColor(C_WHITE|255);
-      if( (colFade&255) == 255) {
+      if ((colFade&255) == 255) {
         RenderMap( pdp, ulLevelMask, NULL);
       }
       pdp->Unlock();
@@ -813,7 +813,7 @@ void RenderMessageImage(CDrawPort *pdp)
 static BOOL FindGroupWithUnread(void)
 {
   CDynamicStackArray<CCompMessageID> &acmiMsgs = _ppenPlayer->m_acmiMessages;
-  for(INDEX i=acmiMsgs.Count()-1; i>=0; i--) {
+  for (INDEX i=acmiMsgs.Count()-1; i>=0; i--) {
     CCompMessageID &cmi = acmiMsgs[i];
     // if it unread
     if (!cmi.cmi_bRead) {
@@ -1017,14 +1017,14 @@ void CGame::ComputerKeyDown(MSG msg)
       _iSliderDragLine = _iFirstMessageOnScreen;
     }}
     // if over some button
-    {for(INDEX i=0; i<CMT_COUNT; i++) {
+    {for (INDEX i=0; i<CMT_COUNT; i++) {
       if (_boxButton[i]>=_vpixMouse) {
         // switch to that message type
         _cmtWantedType = (CompMsgType)i;
       }
     }}
     // if over some message
-    {for(INDEX i=0; i<_ctMessagesOnScreen; i++) {
+    {for (INDEX i=0; i<_ctMessagesOnScreen; i++) {
       if (GetMsgListBox(i)>=_vpixMouse && !bOverMsgSlider) {
         // switch to that message
         SelectMessage(_iFirstMessageOnScreen+i);
@@ -1141,11 +1141,11 @@ void CGame::ComputerRender(CDrawPort *pdp)
   FLOAT fFadeSpeed    = (FLOAT)(tvDelta.GetSeconds() / tmComputerFade);
 
   // if computer is dropping down
-  if( _pGame->gm_csComputerState==CS_TURNINGON) {
+  if (_pGame->gm_csComputerState==CS_TURNINGON) {
     // move it down
     fComputerFadeValue += fFadeSpeed;
     // if finished moving
-    if( fComputerFadeValue>1.0f) {
+    if (fComputerFadeValue>1.0f) {
       // stop
       fComputerFadeValue = 1.0f;
       _pGame->gm_csComputerState   = CS_ON;
@@ -1153,11 +1153,11 @@ void CGame::ComputerRender(CDrawPort *pdp)
     }
   }
   // if computer is pulling up
-  if( _pGame->gm_csComputerState==CS_TURNINGOFF) {
+  if (_pGame->gm_csComputerState==CS_TURNINGOFF) {
     // move it up
     fComputerFadeValue -= fFadeSpeed;
     // if finished moving
-    if( fComputerFadeValue<0.0f) {
+    if (fComputerFadeValue<0.0f) {
       // stop
       fComputerFadeValue = 0.0f;
       _pGame->gm_csComputerState   = CS_OFF;
@@ -1175,7 +1175,7 @@ void CGame::ComputerRender(CDrawPort *pdp)
 
   // lock drawport
   CDrawPort dpComp(pdp, FALSE);
-  if(!dpComp.Lock()) {
+  if (!dpComp.Lock()) {
     // do nothing
     return;
   }

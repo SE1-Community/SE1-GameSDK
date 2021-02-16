@@ -66,7 +66,7 @@ procedures:
     SetModel(MODEL_MANAGER);
     SetModelMainTexture(TEXTURE_MANAGER);
  
-    while(TRUE) {
+    while (TRUE) {
       wait()
       {
         on (ETrigger) : {

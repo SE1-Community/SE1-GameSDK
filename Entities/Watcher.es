@@ -64,7 +64,7 @@ functions:
     INDEX ctMaxPlayers = GetMaxPlayers();
     // find actual number of players
     INDEX ctActivePlayers = 0;
-    {for(INDEX i=0; i<ctMaxPlayers; i++) {
+    {for (INDEX i=0; i<ctMaxPlayers; i++) {
       if (GetPlayerEntity(i)!=NULL) {
         ctActivePlayers++;
       }
@@ -83,7 +83,7 @@ functions:
 
     // find its physical index
     INDEX iActivePlayer = 0;
-    {for(INDEX i=0; i<ctMaxPlayers; i++) {
+    {for (INDEX i=0; i<ctMaxPlayers; i++) {
       if (GetPlayerEntity(i)!=NULL) {
         if (iActivePlayer==iChosenActivePlayer) {
 //          CPrintF("actual index %d\n", iActivePlayer);
@@ -136,7 +136,7 @@ functions:
   void CheckIfPlayerVisible(void)
   {
     // if the owner is blind
-    if( GetOwner()->m_bBlind) {
+    if (GetOwner()->m_bBlind) {
       // don't even bother checking
       return;
     }
@@ -238,7 +238,7 @@ functions:
   CEntity *CheckCloserPlayer(CEntity *penCurrentTarget, FLOAT fRange)
   {
     // if the owner is blind
-    if( GetOwner()->m_bBlind) {
+    if (GetOwner()->m_bBlind) {
       // don't even bother checking
       return NULL;
     }
@@ -276,7 +276,7 @@ functions:
   CEntity *CheckAnotherPlayer(CEntity *penCurrentTarget)
   {
     // if the owner is blind, or no current target
-    if( GetOwner()->m_bBlind || penCurrentTarget==NULL) {
+    if (GetOwner()->m_bBlind || penCurrentTarget==NULL) {
       // don't even check
       return NULL;
     }

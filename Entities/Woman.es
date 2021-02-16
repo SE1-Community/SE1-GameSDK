@@ -143,12 +143,12 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if(GetModelObject()->GetAnim()==WOMAN_ANIM_AIRDEATH)
+    if (GetModelObject()->GetAnim()==WOMAN_ANIM_AIRDEATH)
     {
       vStretch=FLOAT3D(1,1,2)*1.0f;
       return 0.6f;
     }
-    else if(GetModelObject()->GetAnim()==WOMAN_ANIM_GROUNDDEATH01)
+    else if (GetModelObject()->GetAnim()==WOMAN_ANIM_GROUNDDEATH01)
     {
       vStretch=FLOAT3D(1,1,2)*0.75f;
       return 0.525f;
@@ -267,7 +267,7 @@ functions:
       // see if any of players are close enough to drop the kamikaze
       INDEX ctMaxPlayers = GetMaxPlayers();
       CEntity *penPlayer;
-      for(INDEX i=0; i<ctMaxPlayers; i++) {
+      for (INDEX i=0; i<ctMaxPlayers; i++) {
         penPlayer=GetPlayerEntity(i);
         if (penPlayer!=NULL) {
           if (DistanceTo(this, penPlayer)<m_rKamikazeDropDistance && IsVisible(penPlayer)) {
@@ -296,7 +296,7 @@ procedures:
     // fire projectile
     StartModelAnim(WOMAN_ANIM_AIRATTACK02, 0);
     autowait(0.6f);
-    ShootProjectile(PRT_WOMAN_FIRE, FIRE_AIR, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_WOMAN_FIRE, FIRE_AIR, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
     autowait(0.6f);
     StandingAnim();
@@ -367,7 +367,7 @@ procedures:
     // fire projectile
     StartModelAnim(WOMAN_ANIM_GROUNDATTACK02, 0);
     autowait(0.3f);
-    ShootProjectile(PRT_WOMAN_FIRE, FIRE_GROUND, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_WOMAN_FIRE, FIRE_GROUND, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
     autowait(0.3f);
     StandingAnim();

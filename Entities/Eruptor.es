@@ -88,7 +88,7 @@ functions:
       fTime = Sqrt(2.0f)*Sqrt((fa*fd-fyd0)/penTarget->en_fGravityA);
       vNewTarget = vTarget+vSpeedDest*fTime;
     }
-    while( Abs(fTime-fLastTime) > _pTimer->TickQuantum && iIterations<10);
+    while (Abs(fTime-fLastTime) > _pTimer->TickQuantum && iIterations<10);
 
     // calculate launch speed
     fLaunchSpeed = 0.707108f*fd/
@@ -158,7 +158,7 @@ functions:
     FLOAT fSpeed = (m_fMaxSpeed-m_fMinSpeed)*FRnd() + m_fMinSpeed;
     ANGLE3D aAngle((FRnd()*2-1)*m_fAngle, (FRnd()*2-1)*m_fAngle, 0);
     // create placement
-    CPlacement3D plLava(FLOAT3D(0, 0, 0), aAngle);
+    CPlacement3D plLava(FLOAT3D(0.0f, 0.0f, 0.0f), aAngle);
     plLava.RelativeToAbsolute(GetPlacement());
 
     SpawnProjectile(plLava, fSpeed);

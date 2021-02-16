@@ -73,17 +73,17 @@ features  "ImplementsOnPrecache";
 properties:
   1 CEntityPointer m_penOwner,                  // entity which owns it
   2 FLOAT   m_fSize = 1.0f,                     // size
-  3 FLOAT3D m_vSpeed = FLOAT3D(0,0,0),          // current speed
+  3 FLOAT3D m_vSpeed = FLOAT3D(0.0f, 0.0f, 0.0f),          // current speed
   4 INDEX   m_sgnSpinDir = 1,                   // spin clockwise
   5 BOOL    m_bGrow = TRUE,                     // grow to full size?
   6 FLOAT   m_tmLastMove = 0.0f,                // when moving has started
-  7 FLOAT3D m_aSpeedRotation = FLOAT3D(0,0,0),
+  7 FLOAT3D m_aSpeedRotation = FLOAT3D(0.0f, 0.0f, 0.0f),
   8 BOOL    m_bMoving = FALSE,
   9 BOOL    m_bMovingAllowed = TRUE,
   
  // internal -> do not use
- 10 FLOAT3D m_vDesiredPosition = FLOAT3D(0,0,0),
- 11 FLOAT3D m_vDesiredAngle = FLOAT3D(0,0,0),
+ 10 FLOAT3D m_vDesiredPosition = FLOAT3D(0.0f, 0.0f, 0.0f),
+ 11 FLOAT3D m_vDesiredAngle = FLOAT3D(0.0f, 0.0f, 0.0f),
  12 FLOAT m_fStopTime = 0.0f,
  13 FLOAT m_fActionRadius = 0.0f,
  14 FLOAT m_fActionTime = 0.0f,
@@ -121,7 +121,7 @@ functions:
   // render burning particles
   void RenderParticles(void)
   {
-    if(m_bMovingAllowed)
+    if (m_bMovingAllowed)
     {
       Particles_Twister(this, m_fSize/15.0f, m_fStartTime, m_fFadeStartTime, 1.0f);
     }
@@ -129,7 +129,7 @@ functions:
     {
       CEntity *penParent=GetParent();
       FLOAT fStretch=1.0f;
-      if(penParent!=NULL)
+      if (penParent!=NULL)
       {
         CAirElemental *penAir=(CAirElemental *)penParent;
         FLOAT fStretchRatio=penAir->GetCurrentStretchRatio();
@@ -196,7 +196,7 @@ functions:
         // spin projectiles a bit longer but not so high
         if (IsOfClass(pen, "Projectile"))
         {
-          switch(((CProjectile &)*pen).m_prtType) {
+          switch (((CProjectile &)*pen).m_prtType) {
           case PRT_GRENADE:
           case PRT_HEADMAN_BOMBERMAN:
           case PRT_DEMON_FIREBALL:
@@ -215,12 +215,12 @@ functions:
             break;
           }
         // cannon ball - short but powerfull
-        } else if (IsOfClass(pen, "Cannon ball")){
+        } else if (IsOfClass(pen, "Cannon ball")) {
           esi.tmSpinTime = 0.2f;
           esi.vRotationAngle = ANGLE3D(-m_sgnSpinDir*500.0f, 0, 0);
           esi.fUpSpeed = m_fDiffMultiply*3.0f;          
         // don't take it easy with players
-        } else if (IsOfClass(pen, "Player")){
+        } else if (IsOfClass(pen, "Player")) {
           esi.tmSpinTime = 3.0f;
           esi.vRotationAngle = ANGLE3D(-m_sgnSpinDir*220.0f, 0, 0);
           esi.bImpulse = TRUE;
@@ -314,7 +314,7 @@ procedures:
     m_bMoving = m_bMovingAllowed;
 
     // move in range
-    while(_pTimer->CurrentTick() < m_fStopTime) {
+    while (_pTimer->CurrentTick() < m_fStopTime) {
       FLOAT fMoveTime = FRndIn(2.0f, 4.0f);
       m_aSpeedRotation = FLOAT3D(FRndIn(8.0f, 16.0f), 0.0f, 0.0f);
       m_tmLastMove = _pTimer->CurrentTick();

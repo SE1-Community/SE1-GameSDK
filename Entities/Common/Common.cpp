@@ -263,7 +263,7 @@ CEntityPointer SpawnReminder(CEntity *penOwner, FLOAT fWaitTime, INDEX iValue) {
 EffectParticlesType GetParticleEffectTypeForSurface(INDEX iSurfaceType)
 {
   EffectParticlesType eptType = EPT_BULLET_STONE;
-  switch( iSurfaceType)
+  switch (iSurfaceType)
   {
     case SURFACE_SAND:     {eptType=EPT_BULLET_SAND; break;}
     case SURFACE_RED_SAND: {eptType=EPT_BULLET_RED_SAND; break;}
@@ -281,7 +281,7 @@ EffectParticlesType GetParticleEffectTypeForSurface(INDEX iSurfaceType)
 BulletHitType GetBulletHitTypeForSurface(INDEX iSurfaceType)
 {
   BulletHitType bhtType = BHT_BRUSH_STONE;
-  switch( iSurfaceType)
+  switch (iSurfaceType)
   {
     case SURFACE_SAND:     {bhtType=BHT_BRUSH_SAND; break;}
     case SURFACE_RED_SAND: {bhtType=BHT_BRUSH_RED_SAND; break;}
@@ -313,27 +313,27 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
     {
       // bullet stain
       ESpawnEffect ese;
-      if( bSound)
+      if (bSound)
       {
-        if( bhtType == BHT_BRUSH_STONE)         {ese.betType = BET_BULLETSTAINSTONE;};
-        if( bhtType == BHT_BRUSH_SAND)          {ese.betType = BET_BULLETSTAINSAND;};
-        if( bhtType == BHT_BRUSH_RED_SAND)      {ese.betType = BET_BULLETSTAINREDSAND;};
-        if( bhtType == BHT_BRUSH_WATER)         {ese.betType = BET_BULLETSTAINWATER;};
-        if( bhtType == BHT_BRUSH_UNDER_WATER)   {ese.betType = BET_BULLETSTAINUNDERWATER;};
-        if( bhtType == BHT_BRUSH_GRASS)         {ese.betType = BET_BULLETSTAINGRASS;};
-        if( bhtType == BHT_BRUSH_WOOD)          {ese.betType = BET_BULLETSTAINWOOD;};
-        if( bhtType == BHT_BRUSH_SNOW)          {ese.betType = BET_BULLETSTAINSNOW;};
+        if (bhtType == BHT_BRUSH_STONE)         {ese.betType = BET_BULLETSTAINSTONE;};
+        if (bhtType == BHT_BRUSH_SAND)          {ese.betType = BET_BULLETSTAINSAND;};
+        if (bhtType == BHT_BRUSH_RED_SAND)      {ese.betType = BET_BULLETSTAINREDSAND;};
+        if (bhtType == BHT_BRUSH_WATER)         {ese.betType = BET_BULLETSTAINWATER;};
+        if (bhtType == BHT_BRUSH_UNDER_WATER)   {ese.betType = BET_BULLETSTAINUNDERWATER;};
+        if (bhtType == BHT_BRUSH_GRASS)         {ese.betType = BET_BULLETSTAINGRASS;};
+        if (bhtType == BHT_BRUSH_WOOD)          {ese.betType = BET_BULLETSTAINWOOD;};
+        if (bhtType == BHT_BRUSH_SNOW)          {ese.betType = BET_BULLETSTAINSNOW;};
       }
       else
       {
-        if( bhtType == BHT_BRUSH_STONE)         {ese.betType = BET_BULLETSTAINSTONENOSOUND;};
-        if( bhtType == BHT_BRUSH_SAND)          {ese.betType = BET_BULLETSTAINSANDNOSOUND;};
-        if( bhtType == BHT_BRUSH_RED_SAND)      {ese.betType = BET_BULLETSTAINREDSANDNOSOUND;};
-        if( bhtType == BHT_BRUSH_WATER)         {ese.betType = BET_BULLETSTAINWATERNOSOUND;};
-        if( bhtType == BHT_BRUSH_UNDER_WATER)   {ese.betType = BET_BULLETSTAINUNDERWATERNOSOUND;};
-        if( bhtType == BHT_BRUSH_GRASS)         {ese.betType = BET_BULLETSTAINGRASSNOSOUND;};
-        if( bhtType == BHT_BRUSH_WOOD)          {ese.betType = BET_BULLETSTAINWOODNOSOUND;};
-        if( bhtType == BHT_BRUSH_SNOW)          {ese.betType = BET_BULLETSTAINSNOWNOSOUND;};
+        if (bhtType == BHT_BRUSH_STONE)         {ese.betType = BET_BULLETSTAINSTONENOSOUND;};
+        if (bhtType == BHT_BRUSH_SAND)          {ese.betType = BET_BULLETSTAINSANDNOSOUND;};
+        if (bhtType == BHT_BRUSH_RED_SAND)      {ese.betType = BET_BULLETSTAINREDSANDNOSOUND;};
+        if (bhtType == BHT_BRUSH_WATER)         {ese.betType = BET_BULLETSTAINWATERNOSOUND;};
+        if (bhtType == BHT_BRUSH_UNDER_WATER)   {ese.betType = BET_BULLETSTAINUNDERWATERNOSOUND;};
+        if (bhtType == BHT_BRUSH_GRASS)         {ese.betType = BET_BULLETSTAINGRASSNOSOUND;};
+        if (bhtType == BHT_BRUSH_WOOD)          {ese.betType = BET_BULLETSTAINWOODNOSOUND;};
+        if (bhtType == BHT_BRUSH_SNOW)          {ese.betType = BET_BULLETSTAINSNOWNOSOUND;};
       }
 
       ese.vNormal = vHitNormal;
@@ -346,7 +346,7 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
       FLOAT fRVx = vIncommingBulletDir(1) - 2*fNx*fNV;
       FLOAT fRVy = vIncommingBulletDir(2) - 2*fNy*fNV;
       FLOAT fRVz = vIncommingBulletDir(3) - 2*fNz*fNV;
-      ese.vStretch = FLOAT3D( fRVx, fRVy, fRVz);
+      ese.vStretch = FLOAT3D(fRVx, fRVy, fRVz);
 
       try
       {
@@ -369,11 +369,11 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
       ese.colMuliplier = C_WHITE|CT_OPAQUE;
       // if there is exit wound blood spill place
       FLOAT fDistance = vDistance.Length();
-      if( fDistance>0.01f && !(pen->IRnd()%2) )
+      if (fDistance>0.01f && !(pen->IRnd()%2) )
       {
         // spawn bullet exit wound blood patch
         ese.betType = BET_BLOODSPILL;
-        if( bhtType == BHT_ACID)
+        if (bhtType == BHT_ACID)
         {
           ese.colMuliplier = BLOOD_SPILL_GREEN;
         }
@@ -388,7 +388,7 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
           FLOAT fLength = ese.vDirection.Length();
           fLength   = Clamp( fLength*3.0f, 1.0f, 3.0f);
           fDistance = Clamp( (FLOAT)log10(fDistance), 0.5f, 2.0f);
-          ese.vStretch = FLOAT3D( fDistance, fLength*fDistance, 1.0f);
+          ese.vStretch = FLOAT3D(fDistance, fLength*fDistance, 1.0f);
           try
           {
             // spawn effect
@@ -411,7 +411,7 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
 CEntityPointer SpawnFlame(CEntity *penOwner, CEntity *penAttach, const FLOAT3D &vSource)
 {
   // owner can't flame himself
-  if( penOwner==penAttach) return NULL;
+  if (penOwner==penAttach) return NULL;
   FLOAT3D vPos = vSource;
   // prepare flame event
   EFlame ef;
@@ -436,7 +436,7 @@ CEntityPointer SpawnFlame(CEntity *penOwner, CEntity *penAttach, const FLOAT3D &
 
   // create new flame
   try {
-    CPlacement3D plFlame(vPos, ANGLE3D(0, 0, 0));
+    CPlacement3D plFlame(vPos, ANGLE3D(0.0f, 0.0f, 0.0f));
     penFlame = penAttach->GetWorld()->CreateEntity_t(plFlame, CTFILENAME("Classes\\Flame.ecl"));
   } catch (char *strError) {
     FatalError(TRANS("Cannot create flame entity class: %s"), strError);
@@ -724,7 +724,7 @@ INDEX _ctLines;
 CTString GetNonEmptyLine_t(CTStream &strm)
 {
   FOREVER {
-   if(strm.AtEOF()) {
+   if (strm.AtEOF()) {
      ThrowF_t(TRANS("Unexpected end of file"));
    }
    CTString str;
@@ -770,7 +770,7 @@ void SkipBlock_t(CTStream &strm)
       ctLevel--;
     }
   // until we close down all brackets
-  } while(ctLevel>0);
+  } while (ctLevel>0);
 }
 
 void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview)
@@ -1033,8 +1033,8 @@ CEntityPointer Debris_Spawn(
 {
   // create debris at same world as spawner
   FLOAT3D vPos;
-  FLOAT3D vStretch=FLOAT3D(1,1,1);
-  if( (penSpawner->en_RenderType==CEntity::RT_MODEL ||
+  FLOAT3D vStretch=FLOAT3D(1.0f, 1.0f, 1.0f);
+  if ((penSpawner->en_RenderType==CEntity::RT_MODEL ||
        penSpawner->en_RenderType==CEntity::RT_EDITORMODEL) &&
        penSpawner->GetModelObject()!=NULL)
   {
@@ -1042,7 +1042,7 @@ CEntityPointer Debris_Spawn(
   }
   penSpawner->GetEntityPointRatio(vPosRatio, vPos);
   CEntityPointer penDebris = penSpawner->GetWorld()->CreateEntity_t(
-    CPlacement3D(vPos, ANGLE3D(0,0,0)), CTFILENAME("Classes\\Debris.ecl"));
+    CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CTFILENAME("Classes\\Debris.ecl"));
   // prepare parameters
   ESpawnDebris eSpawn;
   eSpawn.bImmaterialASAP=FALSE;
@@ -1057,7 +1057,7 @@ CEntityPointer Debris_Spawn(
   eSpawn.ptdBump = penComponents->GetTextureDataForComponent(idBumpTextureComponent);
   eSpawn.iModelAnim = iModelAnim;
   eSpawn.colDebris = _colDebris;
-  eSpawn.vStretch = FLOAT3D(1,1,1);
+  eSpawn.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
   if (fSize==0) {
     eSpawn.fSize = 1.0f;
   } else {
@@ -1127,7 +1127,7 @@ CEntityPointer Debris_Spawn_Independent(
   eSpawn.iModelAnim = iModelAnim;
   eSpawn.colDebris = _colDebris;
   eSpawn.fSize = fSize;
-  eSpawn.vStretch = FLOAT3D(1,1,1);
+  eSpawn.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
   
   // initialize it
   penDebris->Initialize(eSpawn);
@@ -1156,7 +1156,7 @@ CEntityPointer Debris_Spawn_Template(
   FLOAT fDustStretch,
   COLOR colBurning)
 {
-  if(penmhTemplate==NULL || penmhTemplate->GetModelObject()==NULL)
+  if (penmhTemplate==NULL || penmhTemplate->GetModelObject()==NULL)
   {
     return NULL;
   }
@@ -1182,7 +1182,7 @@ CEntityPointer Debris_Spawn_Template(
   eSpawn.vStretch = vStretch;
   eSpawn.bCustomShading=FALSE;
   eSpawn.penFallFXPapa=penmhTemplate;
-  if( penmhDestroyed->m_cstCustomShading==CST_FULL_CUSTOMIZED)
+  if (penmhDestroyed->m_cstCustomShading==CST_FULL_CUSTOMIZED)
   {
     eSpawn.bCustomShading=TRUE;
     eSpawn.aShadingDirection=penmhDestroyed->m_aShadingDirection;
@@ -1216,7 +1216,7 @@ static EntityInfo eiIce   = {EIBT_ICE  };
 // get default entity info for given body type
 EntityInfo *GetStdEntityInfo(EntityInfoBodyType eibt)
 {
-  switch(eibt) {
+  switch (eibt) {
   case EIBT_FLESH: {return &eiFlesh; } break;
   case EIBT_WATER: {return &eiWater; } break;
   case EIBT_ROCK : {return &eiRock ; } break;
@@ -1239,61 +1239,61 @@ EntityInfo *GetStdEntityInfo(EntityInfoBodyType eibt)
 // damage control functions
 FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage)
 {
-  switch(eibtBody) {
+  switch (eibtBody) {
   case EIBT_FLESH:
     return 1.0f;
   case EIBT_WATER:
-    switch(dtDamage) {
+    switch (dtDamage) {
     case DMT_CLOSERANGE:  return 0.0f;
     case DMT_BURNING:  return 0.0f;
     case DMT_DROWNING: return 0.0f;
     }
     return 1.0f;
   case EIBT_ROCK :
-    switch(dtDamage) {
+    switch (dtDamage) {
     case DMT_CLOSERANGE:  return 0.0f;
     case DMT_BURNING:   return 0.0f;
     case DMT_FREEZING:  return 0.0f;
     }
     return 1.0f;
   case EIBT_ICE :
-    switch(dtDamage) {
+    switch (dtDamage) {
     case DMT_CLOSERANGE:  return 0.5f;
     case DMT_BURNING:  return 3.0f;
     case DMT_FREEZING:  return 0.0f;
     }
     return 1.0f;
   case EIBT_FIRE :
-    switch(dtDamage) {
+    switch (dtDamage) {
     case DMT_CLOSERANGE:  return 0.5f;
     case DMT_BURNING:   return 0.0f;
     }
     return 1.0f;
   case EIBT_AIR  :
-    switch(dtDamage) {
+    switch (dtDamage) {
     case DMT_CLOSERANGE:  return 0.0f;
     case DMT_BURNING:   return 0.5f;
     }
     return 1.0f;
   case EIBT_BONES:
-    switch(dtDamage) {
+    switch (dtDamage) {
     case DMT_FREEZING:  return 0.0f;
     }
     return 1.0f;
   case EIBT_WOOD :
-    switch(dtDamage) {
+    switch (dtDamage) {
     case DMT_FREEZING:  return 0.0f;
     }
     return 1.0f;
   case EIBT_METAL:
-    switch(dtDamage) {
+    switch (dtDamage) {
     case DMT_CLOSERANGE:  return 0.0f;
     case DMT_BURNING:   return 0.0f;
     case DMT_FREEZING:  return 0.0f;
     }
     return 1.0f;
   case EIBT_ROBOT:
-    switch(dtDamage) {
+    switch (dtDamage) {
     case DMT_CLOSERANGE:return 0.5f;
     case DMT_BURNING:   return 0.5f;
     case DMT_FREEZING:  return 0.5f;
@@ -1418,7 +1418,7 @@ FLOAT GetGameDamageMultiplier(void)
 // get entity's serious damage multiplier
 FLOAT GetSeriousDamageMultiplier( CEntity *pen)
 {
-  if( !IsOfClass(pen,"Player")) return 1.0f;
+  if (!IsOfClass(pen,"Player")) return 1.0f;
   const TICK llNow = _pTimer->GetGameTick();
   const TICK llDamage = ((CPlayer*)pen)->m_llSeriousDamage;
   if (llDamage > llNow) return 4.0f;
@@ -1430,7 +1430,7 @@ class CWorldSettingsController *GetWSC(CEntity *pen)
   CWorldSettingsController *pwsc = NULL;
   // obtain bcg viewer
   class CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) pen->GetWorld()->GetBackgroundViewer();
-  if( penBcgViewer != NULL) {
+  if (penBcgViewer != NULL) {
     // obtain world settings controller 
     pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
   }

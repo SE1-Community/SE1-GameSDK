@@ -166,7 +166,7 @@ functions:
       }
 
       // if neither ambient nor difuse animation is set, apply direct color change
-      if( (m_aoLightAnimation.GetData()==NULL) && (m_aoAmbientLightAnimation.GetData()==NULL) )
+      if ((m_aoLightAnimation.GetData()==NULL) && (m_aoAmbientLightAnimation.GetData()==NULL) )
       {
         m_colColor = eChange.colDiffuse;
         m_colAmbient = eChange.colAmbient;
@@ -211,7 +211,7 @@ functions:
   // prepare and transfer light source variables
   void SetupLightSource( CLightSource &lsNew)
   {
-    switch( m_ltType) {
+    switch (m_ltType) {
     case LT_POINT:
     case LT_STRONG_POINT:
       lsNew.ls_ulFlags = LSF_CASTSHADOWS;
@@ -224,12 +224,12 @@ functions:
       lsNew.ls_ulFlags = 0;
       break;
     }
-    if( m_bSubstractSectorAmbient) { lsNew.ls_ulFlags |= LSF_SUBSTRACTSECTORAMBIENT;  }
-    if( m_bLensFlareOnly)          { lsNew.ls_ulFlags |= LSF_LENSFLAREONLY; }
-    if( m_bDynamic)                { lsNew.ls_ulFlags |= LSF_DYNAMIC; }
+    if (m_bSubstractSectorAmbient) { lsNew.ls_ulFlags |= LSF_SUBSTRACTSECTORAMBIENT;  }
+    if (m_bLensFlareOnly)          { lsNew.ls_ulFlags |= LSF_LENSFLAREONLY; }
+    if (m_bDynamic)                { lsNew.ls_ulFlags |= LSF_DYNAMIC; }
     // directional light cannot be dark
-    if( m_bDarkLight) {
-      if( m_ltType==LT_DIRECTIONAL) {
+    if (m_bDarkLight) {
+      if (m_ltType==LT_DIRECTIONAL) {
         lsNew.ls_ulFlags &= ~LSF_DARKLIGHT;
         m_bDarkLight = FALSE;
       } else {
@@ -237,8 +237,8 @@ functions:
       }
     }
     // ambient and directional lights doesn't support diffusion
-    if( m_bDiffusion) { 
-      if( m_bDynamic || m_ltType==LT_AMBIENT || m_ltType==LT_STRONG_AMBIENT) {
+    if (m_bDiffusion) { 
+      if (m_bDynamic || m_ltType==LT_AMBIENT || m_ltType==LT_STRONG_AMBIENT) {
         lsNew.ls_ulFlags &= ~LSF_DIFFUSION;
         m_bDiffusion = FALSE;
       } else {
@@ -251,16 +251,16 @@ functions:
     lsNew.ls_fNearClipDistance = m_fNearClip;
     lsNew.ls_fFarClipDistance  = m_fFarClip;
     // hot spot for strong lights is 90% of light range
-    if( m_ltType == LT_STRONG_AMBIENT || m_ltType == LT_STRONG_POINT) {
+    if (m_ltType == LT_STRONG_AMBIENT || m_ltType == LT_STRONG_POINT) {
       lsNew.ls_rHotSpot = lsNew.ls_rFallOff*0.9f;
     }
 
     lsNew.ls_colColor   = m_colColor;
     lsNew.ls_colAmbient = C_BLACK; // only directional lights are allowed to have ambient component
-    if( lsNew.ls_ulFlags&LSF_DIRECTIONAL) { lsNew.ls_colAmbient = m_colAmbient; }
+    if (lsNew.ls_ulFlags&LSF_DIRECTIONAL) { lsNew.ls_colAmbient = m_colAmbient; }
     lsNew.ls_ubPolygonalMask = (UBYTE) m_itIllumination;
 
-    switch(m_lftLensFlare)
+    switch (m_lftLensFlare)
     {
       case LFT_NONE:
         lsNew.ls_plftLensFlare = NULL;
@@ -364,7 +364,7 @@ procedures:
     }
 
     // only directional lights are allowed to have ambient component
-    if( m_ltType!=LT_DIRECTIONAL) {
+    if (m_ltType!=LT_DIRECTIONAL) {
       m_colAmbient = C_BLACK;
     }
 
@@ -373,9 +373,9 @@ procedures:
     SetCollisionFlags(ECF_IMMATERIAL);
 
     // set model stretch -- MUST BE DONE BEFORE SETTING MODEL!
-    if( m_bRenderAsSmallLight)
+    if (m_bRenderAsSmallLight)
     {
-      GetModelObject()->mo_Stretch = FLOAT3D( 0.25f, 0.25f, 0.25f);
+      GetModelObject()->mo_Stretch = FLOAT3D(0.25f, 0.25f, 0.25f);
     }
     else
     {
@@ -386,12 +386,12 @@ procedures:
         if (fFactor<LIGHT_MINSIZE) {
           fFactor=LIGHT_MINSIZE;
         }
-        GetModelObject()->mo_Stretch = FLOAT3D( fFactor, fFactor, fFactor);
+        GetModelObject()->mo_Stretch = FLOAT3D(fFactor, fFactor, fFactor);
       }
     }
 
     CTString strType;
-    if( m_ltType == LT_POINT || m_ltType == LT_STRONG_POINT)
+    if (m_ltType == LT_POINT || m_ltType == LT_STRONG_POINT)
     {
       strType = "point";
       // set model to light source
@@ -400,7 +400,7 @@ procedures:
       SetModelMainTexture(TEXTURE_POINT_LIGHT);
     }
     // initialize ambient light
-    else if( m_ltType == LT_AMBIENT)
+    else if (m_ltType == LT_AMBIENT)
     {
       strType = "ambient";
       // set model to light source
@@ -409,7 +409,7 @@ procedures:
       SetModelMainTexture(TEXTURE_AMBIENT_LIGHT);
     }
     // initialize real ambient light
-    else if( m_ltType == LT_STRONG_AMBIENT)
+    else if (m_ltType == LT_STRONG_AMBIENT)
     {
       strType = "ambient";
       // set model to light source
@@ -418,7 +418,7 @@ procedures:
       SetModelMainTexture(TEXTURE_REAL_AMBIENT_LIGHT);
     }
     // initialize spot light
-    else if( m_ltType == LT_DIRECTIONAL)
+    else if (m_ltType == LT_DIRECTIONAL)
     {
       strType = "directional";
       // set model to spot light
@@ -427,7 +427,7 @@ procedures:
       SetModelMainTexture(TEXTURE_SPOT_LIGHT);
     }
 
-    if( m_bDarkLight)
+    if (m_bDarkLight)
     {
       strType = strType+", dark";
     }

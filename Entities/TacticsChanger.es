@@ -61,7 +61,7 @@ procedures:
  
     autowait(0.1f);
     
-    while(TRUE) {
+    while (TRUE) {
       wait()
       {
         on (ETrigger) : {

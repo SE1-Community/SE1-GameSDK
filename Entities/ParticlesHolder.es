@@ -80,7 +80,7 @@ functions:
   // render particles
   void RenderParticles(void)
   {
-    if( !m_bActive)
+    if (!m_bActive)
     {
       return;
     }
@@ -210,7 +210,7 @@ procedures:
   Active()
   {
     m_bActive = TRUE;
-    while( TRUE)
+    while (TRUE)
     {
       // wait defined time
       wait( m_fParam2+FRnd()*m_fParam3)
@@ -218,7 +218,7 @@ procedures:
         on (ETimer) : 
         {
           // for randomly spawned particles
-          if( m_phtType == PHT_LAVAERUPTING)
+          if (m_phtType == PHT_LAVAERUPTING)
           {
             // spawn new particles
             m_fActivateTime = _pTimer->CurrentTick();

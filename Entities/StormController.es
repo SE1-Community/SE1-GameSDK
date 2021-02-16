@@ -117,10 +117,10 @@ procedures:
 
   StormInternal()
   {
-    while(m_bStormOn &&
+    while (m_bStormOn &&
           _pTimer->CurrentTick()<((CWorldSettingsController *)&*m_penwsc)->m_tmStormEnd+m_tmStormDisappearTime)
     {
-      while( _pTimer->CurrentTick()<m_fNextLightningStrike &&
+      while (_pTimer->CurrentTick()<m_fNextLightningStrike &&
              _pTimer->CurrentTick()<((CWorldSettingsController *)&*m_penwsc)->m_tmStormEnd+m_tmStormDisappearTime &&
              m_bStormOn)
       {
@@ -146,7 +146,7 @@ procedures:
       FLOAT fLightningMax=fLightningStart+m_fMaxStormPowerTime;
       FLOAT fRatio;
       // if storm is finished
-      if(_pTimer->CurrentTick()>((CWorldSettingsController *)&*m_penwsc)->m_tmStormEnd-m_tmStormDisappearTime)
+      if (_pTimer->CurrentTick()>((CWorldSettingsController *)&*m_penwsc)->m_tmStormEnd-m_tmStormDisappearTime)
       {
         m_bStormOn = FALSE;
       }
@@ -219,7 +219,7 @@ procedures:
 
     // obtain bcg viewer entity
     CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) GetWorld()->GetBackgroundViewer();
-    if( penBcgViewer == NULL)
+    if (penBcgViewer == NULL)
     {
       // don't do anything
       return;
@@ -227,7 +227,7 @@ procedures:
 
     // obtain world settings controller 
     m_penwsc = penBcgViewer->m_penWorldSettingsController;
-    if( m_penwsc == NULL)
+    if (m_penwsc == NULL)
     {
       // don't do anything
       return;
@@ -266,7 +266,7 @@ procedures:
         }
         on (EStart eStart) :
         {
-          if( !m_bStormOn)
+          if (!m_bStormOn)
           {
             TIME tmNow = _pTimer->CurrentTick();
             ((CWorldSettingsController *)&*m_penwsc)->m_tmStormStart = tmNow;
@@ -278,7 +278,7 @@ procedures:
         }
         on (EStop eStop) :
         {
-          if( m_bStormOn)
+          if (m_bStormOn)
           {
             TIME tmNow = _pTimer->CurrentTick();
             ((CWorldSettingsController *)&*m_penwsc)->m_tmStormEnd = tmNow;

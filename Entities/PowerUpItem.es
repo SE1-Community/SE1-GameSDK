@@ -89,7 +89,7 @@ functions:
 
   void Precache(void)
   {
-    switch( m_puitType) {
+    switch (m_puitType) {
     case PUIT_INVISIB :  /*PrecacheSound(SOUND_INVISIB );  break;*/
     case PUIT_INVULNER:  /*PrecacheSound(SOUND_INVULNER);  break; */                                    
     case PUIT_DAMAGE  :  /*PrecacheSound(SOUND_DAMAGE  );  break;*/
@@ -108,7 +108,7 @@ functions:
     pes->es_fValue = 0;     // !!!!
     pes->es_iScore = 0;//m_iScore;
     
-    switch( m_puitType) {
+    switch (m_puitType) {
     case PUIT_INVISIB :  pes->es_strName += " invisibility";     break;
     case PUIT_INVULNER:  pes->es_strName += " invulnerability";  break;
     case PUIT_DAMAGE  :  pes->es_strName += " serious damage";   break;
@@ -122,11 +122,11 @@ functions:
   void RenderParticles(void)
   {
     // no particles when not existing or in DM modes
-    if( GetRenderType()!=CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
+    if (GetRenderType()!=CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
       || !ShowItemParticles()) {
       return;
     }
-    switch( m_puitType) {
+    switch (m_puitType) {
       case PUIT_INVISIB:
         Particles_Stardust( this, 2.0f*0.75f, 1.00f*0.75f, PT_STAR08, 320);
         break;
@@ -148,7 +148,7 @@ functions:
   // set health properties depending on health type
   void SetProperties(void)
   {
-    switch( m_puitType)
+    switch (m_puitType)
     {
       case PUIT_INVISIB:
         StartModelAnim( ITEMHOLDER_ANIM_SMALLOSCILATION, AOF_LOOPING|AOF_NORESTART);
@@ -214,10 +214,10 @@ procedures:
       }
     }
 
-    if( !(m_bPickupOnce||m_bRespawn)) {
+    if (!(m_bPickupOnce||m_bRespawn)) {
       // if already picked by this player
       BOOL bWasPicked = MarkPickedBy(epass.penOther);
-      if( bWasPicked) {
+      if (bWasPicked) {
         // don't pick again
         return;
       }
@@ -227,9 +227,9 @@ procedures:
     EPowerUp ePowerUp;
     ePowerUp.puitType = m_puitType;
     // if powerup is received
-    if( epass.penOther->ReceiveItem(ePowerUp)) {
+    if (epass.penOther->ReceiveItem(ePowerUp)) {
 
-      if(_pNetwork->IsPlayerLocal(epass.penOther))
+      if (_pNetwork->IsPlayerLocal(epass.penOther))
       {
         switch (m_puitType)
         {
@@ -250,7 +250,7 @@ procedures:
         PlaySound(m_soPick, SOUND_PICKUP, SOF_3D);
         m_fPickSoundLen = GetSoundLength(SOUND_PICKUP);
       }
-      if( (m_bPickupOnce||m_bRespawn)) { jump CItem::ItemReceived(); }
+      if ((m_bPickupOnce||m_bRespawn)) { jump CItem::ItemReceived(); }
     }
     return;
   };

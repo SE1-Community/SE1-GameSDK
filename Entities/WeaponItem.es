@@ -248,7 +248,7 @@ functions:
   void SetProperties(void)
   {
     BOOL bDM = FALSE;//m_bRespawn || m_bDropped;
-    FLOAT3D vDMStretch = FLOAT3D( 2.0f, 2.0f, 2.0f);
+    FLOAT3D vDMStretch = FLOAT3D(2.0f, 2.0f, 2.0f);
     
     switch (m_EwitType) {
     // *********** COLT ***********
@@ -419,7 +419,7 @@ procedures:
     eWeapon.bDropped = m_bDropped;
     // if weapon is received
     if (epass.penOther->ReceiveItem(eWeapon)) {
-      if(_pNetwork->IsPlayerLocal(epass.penOther)) {IFeel_PlayEffect("PU_Weapon");}
+      if (_pNetwork->IsPlayerLocal(epass.penOther)) {IFeel_PlayEffect("PU_Weapon");}
       // play the pickup sound
       m_soPick.Set3DParameters(50.0f, 1.0f, 1.0f, 1.0f);
       PlaySound(m_soPick, SOUND_PICK, SOF_3D);

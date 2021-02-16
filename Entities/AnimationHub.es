@@ -82,7 +82,7 @@ procedures:
   {
     // for each target
     m_iCounter=0;
-    while(m_iCounter<10) {
+    while (m_iCounter<10) {
       // get delay
       FLOAT fDelay = m_tmDelayEach + (&m_tmDelay0)[m_iCounter];
       // if has delay
@@ -119,7 +119,7 @@ procedures:
   WaitChange()
   {
     // wait forever
-    while(TRUE) {
+    while (TRUE) {
       wait() {
         on (EChangeAnim eca) : {
           m_iModelAnim    = eca.iModelAnim  ;

@@ -141,12 +141,12 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if(GetModelObject()->GetAnim()==FREAK_ANIM_DEATHRUN)
+    if (GetModelObject()->GetAnim()==FREAK_ANIM_DEATHRUN)
     {
       vStretch=FLOAT3D(1,1,2)*1.0f;
       return 0.65f;
     }
-    else if(GetModelObject()->GetAnim()==FREAK_ANIM_DEATHSTAND)
+    else if (GetModelObject()->GetAnim()==FREAK_ANIM_DEATHSTAND)
     {
       vStretch=FLOAT3D(1,1,2)*1.5f;
       return 0.72f;
@@ -169,7 +169,7 @@ functions:
     //DeactivateRunningSound();
   };
   void RunningAnim(void) {
-    switch(m_iRunType)
+    switch (m_iRunType)
     {
     case 0:
       StartModelAnim(FREAK_ANIM_ATTACKRUN, AOF_LOOPING|AOF_NORESTART);
@@ -246,7 +246,7 @@ functions:
         FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
         vDirection.Normalize();
         InflictDirectDamage(etouch.penOther, this, DMT_CHAINSAW, -aHitAngle*40.0f,
-          FLOAT3D(0, 0, 0), vDirection);
+          FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
         // kick touched entity
         FLOAT3D vSpeed = -FLOAT3D(etouch.plCollision);
         vSpeed = vSpeed*10.0f;
@@ -317,7 +317,7 @@ procedures:
       if (m_bSawHit) {
         FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
         vDirection.Normalize();
-        InflictDirectDamage(m_penEnemy, this, DMT_CHAINSAW, 20.0f, FLOAT3D(0, 0, 0), vDirection);
+        InflictDirectDamage(m_penEnemy, this, DMT_CHAINSAW, 20.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
         
         vDirection = vDirection * 10.0f;
         //GetPitchDirection(AngleDeg(90.0f), vSpeed);
@@ -351,7 +351,7 @@ procedures:
   PostRunAwayFromEnemy(EVoid) : CEnemyRunInto::PostRunAwayFromEnemy {
     StartModelAnim(FREAK_ANIM_ATTACKRUNFAR, 0);
     autowait(0.25f);
-    SetDesiredTranslation(FLOAT3D(0,0,0));
+    SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
     StartModelAnim(FREAK_ANIM_IDLE, 0);
     autowait(0.25f);
     return EReturn();

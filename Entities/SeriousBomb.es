@@ -98,7 +98,7 @@ functions:
         if (penEnemy->m_bBoss==TRUE || DistanceTo(this, penEnemy)>250.0f) {
           continue;
         }
-        this->InflictDirectDamage(pen, this, DMT_EXPLOSION, penEnemy->GetHealth()+100.0f, pen->GetPlacement().pl_PositionVector, FLOAT3D(0,1,0));
+        this->InflictDirectDamage(pen, this, DMT_EXPLOSION, penEnemy->GetHealth()+100.0f, pen->GetPlacement().pl_PositionVector, FLOAT3D(0.0f, 1.0f, 0.0f));
       }
     }}
   }
@@ -114,7 +114,7 @@ procedures:
       
       m_soBlow.Set3DParameters(500.0f, 250.0f, 3.0f, 1.0f);
       PlaySound(m_soBlow, SOUND_BLOW, SOF_3D);
-      if(_pNetwork->IsPlayerLocal(m_penOwner)) {IFeel_PlayEffect("SeriousBombBlow");}
+      if (_pNetwork->IsPlayerLocal(m_penOwner)) {IFeel_PlayEffect("SeriousBombBlow");}
       
       //Glare(tmp_af[5], tmp_af[6], tmp_af[7], tmp_af[8]);
       Glare(1.0f, 2.8f, 0.3f, 0.3f);

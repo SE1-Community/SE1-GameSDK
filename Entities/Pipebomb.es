@@ -141,10 +141,10 @@ void PipebombExplosion(void) {
   // explosion
   ese.colMuliplier = C_WHITE|CT_OPAQUE;
   ese.betType = BET_GRENADE;
-  ese.vStretch = FLOAT3D(1,1,1);
+  ese.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
   SpawnEffect(GetPlacement(), ese);
   // spawn sound event in range
-  if( IsDerivedFromClass( m_penLauncher, "Player")) {
+  if (IsDerivedFromClass( m_penLauncher, "Player")) {
     SpawnRangeSound( m_penLauncher, this, SNDT_PLAYER, 50.0f);
   }
 
@@ -154,15 +154,15 @@ void PipebombExplosion(void) {
       // wall stain
       ese.betType = BET_EXPLOSIONSTAIN;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // shock wave
       ese.betType = BET_SHOCKWAVE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       // second explosion on plane
       ese.betType = BET_GRENADE_PLANE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
     }
   }
 };

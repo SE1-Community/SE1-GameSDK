@@ -104,7 +104,7 @@ functions:
   // get link with given index or null if no more (for iteration along the graph)
   CNavigationMarker *GetLink(INDEX i)
   {
-    for(INDEX iTarget=0; iTarget<MAX_TARGETS; iTarget++) {
+    for (INDEX iTarget=0; iTarget<MAX_TARGETS; iTarget++) {
       CNavigationMarker *penLink = &Target(iTarget);
       if (penLink==NULL) {
         continue;

@@ -40,7 +40,7 @@ functions:
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
-    if( !m_bActive)
+    if (!m_bActive)
     {
       return;
     }
@@ -64,7 +64,7 @@ functions:
     FLOAT fNewSpeed = m_fSpeed*m_fDampFactor-m_fPendulumFactor*fCurrentBanking;
     
     // if maximum angle achieved, stop in place and turn back
-    if( Abs( fCurrentBanking) > m_fMaxAngle && Sgn(fNewSpeed)==Sgn(fCurrentBanking))
+    if (Abs( fCurrentBanking) > m_fMaxAngle && Sgn(fNewSpeed)==Sgn(fCurrentBanking))
     {
       fNewSpeed = 0.0f;
     }
@@ -110,7 +110,7 @@ procedures:
       }
       on( ETrigger):
       {
-        if( m_bActive)
+        if (m_bActive)
         {
           // apply impulse
           m_fSpeed += m_fTriggerImpulse;

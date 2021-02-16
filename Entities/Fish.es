@@ -135,7 +135,7 @@ functions:
 
   void RenderParticles(void)
   {
-    if( m_bAttackingByElectricity && m_penEnemy!=NULL)
+    if (m_bAttackingByElectricity && m_penEnemy!=NULL)
     {
       // render one lightning toward enemy
       FLOAT3D vSource = GetPlacement().pl_PositionVector;
@@ -144,7 +144,7 @@ functions:
       Particles_Ghostbuster(vSource, vTarget, 32, 1.0f);
 
       // random lightnings arround
-      for( INDEX i=0; i<4; i++)
+      for (INDEX i=0; i<4; i++)
       {
         FLOAT3D vDirection = vSource;
         vDirection(1) += ((FLOAT(rand())/RAND_MAX)-0.5f) * DISTANCE_ELECTRICITY/1.0f;
@@ -206,10 +206,10 @@ functions:
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
     FLOAT fTimePassed = _pTimer->GetLerpedCurrentTick()-m_tmElectricityTimeStart;
-    if( m_bAttackingByElectricity && (fTimePassed>0))
+    if (m_bAttackingByElectricity && (fTimePassed>0))
     {
       FLOAT fDieFactor = 1.0f;
-      if( fTimePassed > 0.25f)
+      if (fTimePassed > 0.25f)
       {
         // calculate light dying factor
         fDieFactor = 1.0-(ClampUp(fTimePassed-0.25f,0.5f)/0.5f);

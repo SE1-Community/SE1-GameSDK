@@ -186,7 +186,7 @@ procedures:
     SetComponents(this, *GetModelObject(), MODEL_WATER, TEXTURE_WATER, 0, TEX_SPEC_STRONG, 0);
 
     // setup
-    switch(m_EwsSize) {
+    switch (m_EwsSize) {
       case WTS_SMALL:
         m_fDamageAmount = 10.0f;
         m_fPushAwayFactor = 10.0f;

@@ -96,7 +96,7 @@ functions:
     static DECLARE_CTFILENAME(fnmNormal, "Data\\Messages\\Enemies\\BeastNormal.txt");
     static DECLARE_CTFILENAME(fnmBig, "Data\\Messages\\Enemies\\BeastBig.txt");
     static DECLARE_CTFILENAME(fnmHuge, "DataMP\\Messages\\Enemies\\BeastBiggest.txt");
-    switch(m_bcType) {
+    switch (m_bcType) {
     default: ASSERT(FALSE);
     case BT_NORMAL: return fnmNormal;
     case BT_BIG: return fnmBig;
@@ -175,13 +175,13 @@ functions:
   {
     
     // take less damage from heavy bullets (e.g. sniper)
-    if(dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount*=0.5f;
     }
 
     // cannonballs inflict less damage then the default
-    if(m_bcType==BT_BIG && dmtType==DMT_CANNONBALL)
+    if (m_bcType==BT_BIG && dmtType==DMT_CANNONBALL)
     {
       fDamageAmmount *= 0.3333f;
     }
@@ -196,7 +196,7 @@ functions:
   // damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
     INDEX iAnim;
-    if((m_bcType==BT_BIG || m_bcType==BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
+    if ((m_bcType==BT_BIG || m_bcType==BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
       iAnim = BEAST_ANIM_ANGER;
     } else {
       iAnim = BEAST_ANIM_WOUND;
@@ -208,7 +208,7 @@ functions:
   // death
   INDEX AnimForDeath(void) {
     INDEX iAnim;
-    if(m_bcType==BT_BIG || m_bcType==BT_HUGE) {
+    if (m_bcType==BT_BIG || m_bcType==BT_HUGE) {
       iAnim = BEAST_ANIM_DEATHBIG;
     } else {
       iAnim = BEAST_ANIM_DEATH;
@@ -219,7 +219,7 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if(GetModelObject()->GetAnim()==BEAST_ANIM_DEATH)
+    if (GetModelObject()->GetAnim()==BEAST_ANIM_DEATH)
     {
       vStretch=FLOAT3D(1,1,2)*2.0f;
       return 0.3f;
@@ -239,13 +239,13 @@ functions:
   };
 
   void WalkingAnim(void) {
-    if(_pTimer->CurrentTick()>=_tmLastStandingAnim-_pTimer->TickQuantum &&
+    if (_pTimer->CurrentTick()>=_tmLastStandingAnim-_pTimer->TickQuantum &&
        _pTimer->CurrentTick()<=_tmLastStandingAnim+_pTimer->TickQuantum)
     {
       //BREAKPOINT;
     }
 
-    if(m_bcType==BT_BIG || m_bcType==BT_HUGE) {
+    if (m_bcType==BT_BIG || m_bcType==BT_HUGE) {
       StartModelAnim(BEAST_ANIM_WALKBIG, AOF_LOOPING|AOF_NORESTART);
     } else {
       StartModelAnim(BEAST_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
@@ -267,7 +267,7 @@ functions:
     PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
   };
   void WoundSound(void) {
-    if((m_bcType==BT_BIG || m_bcType==BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
+    if ((m_bcType==BT_BIG || m_bcType==BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
       PlaySound(m_soSound, SOUND_ANGER, SOF_3D);
     } else {
       PlaySound(m_soSound, SOUND_WOUND, SOF_3D);
@@ -329,7 +329,7 @@ procedures:
     ESpawnEffect ese;
     ese.colMuliplier = C_WHITE|CT_OPAQUE;
     ese.vStretch = FLOAT3D(1,1,2)*15.0f;
-    ese.vNormal = FLOAT3D(0,1,0);
+    ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
     ese.betType = BET_DUST_FALL;
     CPlacement3D plSmoke=plFX;
     plSmoke.pl_PositionVector+=FLOAT3D(0,0.35f*ese.vStretch(2),0);
@@ -349,21 +349,21 @@ procedures:
     StartModelAnim(BEAST_ANIM_WALKTOIDLE, AOF_SMOOTHCHANGE);
     autocall CMovableModelEntity::WaitUntilScheduledAnimStarts() EReturn;    
 
-    if( m_bcType == BT_NORMAL)
+    if (m_bcType == BT_NORMAL)
     {
       StartModelAnim(BEAST_ANIM_ATTACK, AOF_SMOOTHCHANGE);
       autocall CMovableModelEntity::WaitUntilScheduledAnimStarts() EReturn;    
       PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
       autowait(0.51f);
 
-      ShootProjectile(PRT_BEAST_PROJECTILE, FLOAT3D( 0.0f, 1.5f*BEAST_STRETCH, 0.0f),
+      ShootProjectile(PRT_BEAST_PROJECTILE, FLOAT3D(0.0f, 1.5f*BEAST_STRETCH, 0.0f),
         ANGLE3D(AngleDeg((FRnd()-0.5)*30.0f), AngleDeg(FRnd()*10.0f), 0));
       autowait(0.3f);
     }
     
-    if(m_bcType == BT_BIG)
+    if (m_bcType == BT_BIG)
     {
-      if( GetHealth() <= m_fMaxHealth/2)
+      if (GetHealth() <= m_fMaxHealth/2)
       {
         m_iCounter = 0;
         while ( m_iCounter<6)
@@ -373,16 +373,16 @@ procedures:
 
           PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
           autowait(0.34f);
-          ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D( 0.0f, 1.5f*BIG_BEAST_STRETCH, 0.0f),
+          ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D(0.0f, 1.5f*BIG_BEAST_STRETCH, 0.0f),
             ANGLE3D(0.0f, 0.0f, 0.0f));
-            //ANGLE3D( AngleDeg(40.0f*Cos(m_iCounter*360.0/6.0f)), AngleDeg(20.0f*Sin(m_iCounter*180.0/6.0f)), 0));
+            //ANGLE3D(AngleDeg(40.0f*Cos(m_iCounter*360.0/6.0f)), AngleDeg(20.0f*Sin(m_iCounter*180.0/6.0f)), 0));
           //autowait(0.15f);
           m_iCounter++;
         }
         m_fAttackFireTime = 7.0f;
       }
       
-      if( GetHealth() > m_fMaxHealth/2)
+      if (GetHealth() > m_fMaxHealth/2)
       {
         m_iCounter = 0;
         while ( m_iCounter<3)
@@ -392,19 +392,19 @@ procedures:
 
           PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
           autowait(0.5f);
-          ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D( 0.0f, 1.5f*BIG_BEAST_STRETCH, 0.0f),
+          ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D(0.0f, 1.5f*BIG_BEAST_STRETCH, 0.0f),
             ANGLE3D(0.0f, 0.0f, 0.0f));
-            //ANGLE3D( AngleDeg(20.0f*Cos(m_iCounter*360.0/3.0f)), AngleDeg(10.0f*Sin(m_iCounter*180.0/3.0f)), 0));
-            //ANGLE3D( FRnd()*20.0f-10.0f, FRnd()*10.0f-5.0f, 0));
+            //ANGLE3D(AngleDeg(20.0f*Cos(m_iCounter*360.0/3.0f)), AngleDeg(10.0f*Sin(m_iCounter*180.0/3.0f)), 0));
+            //ANGLE3D(FRnd()*20.0f-10.0f, FRnd()*10.0f-5.0f, 0));
           //autowait(0.25f);
           m_iCounter++;
         }
       }
     }
 
-    if(m_bcType == BT_HUGE)
+    if (m_bcType == BT_HUGE)
     {
-      if( GetHealth() <= m_fMaxHealth/2)
+      if (GetHealth() <= m_fMaxHealth/2)
       {
         m_iCounter = 0;
         while ( m_iCounter<6)
@@ -414,16 +414,16 @@ procedures:
 
           PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
           autowait(0.34f);
-          ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D( 0.0f, 1.5f*HUGE_BEAST_STRETCH, 0.0f),
+          ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D(0.0f, 1.5f*HUGE_BEAST_STRETCH, 0.0f),
             ANGLE3D(0.0f, 0.0f, 0.0f));
-            //ANGLE3D( AngleDeg(40.0f*Cos(m_iCounter*360.0/6.0f)), AngleDeg(20.0f*Sin(m_iCounter*180.0/6.0f)), 0));
+            //ANGLE3D(AngleDeg(40.0f*Cos(m_iCounter*360.0/6.0f)), AngleDeg(20.0f*Sin(m_iCounter*180.0/6.0f)), 0));
           //autowait(0.15f);
           m_iCounter++;
         }
         m_fAttackFireTime = 7.0f;
       }
       
-      if( GetHealth() > m_fMaxHealth/2)
+      if (GetHealth() > m_fMaxHealth/2)
       {
         m_iCounter = 0;
         while ( m_iCounter<3)
@@ -433,10 +433,10 @@ procedures:
 
           PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
           autowait(0.5f);
-          ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D( 0.0f, 1.5f*HUGE_BEAST_STRETCH, 0.0f),
+          ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D(0.0f, 1.5f*HUGE_BEAST_STRETCH, 0.0f),
             ANGLE3D(0.0f, 0.0f, 0.0f));
-            //ANGLE3D( AngleDeg(20.0f*Cos(m_iCounter*360.0/3.0f)), AngleDeg(10.0f*Sin(m_iCounter*180.0/3.0f)), 0));
-            //ANGLE3D( FRnd()*20.0f-10.0f, FRnd()*10.0f-5.0f, 0));
+            //ANGLE3D(AngleDeg(20.0f*Cos(m_iCounter*360.0/3.0f)), AngleDeg(10.0f*Sin(m_iCounter*180.0/3.0f)), 0));
+            //ANGLE3D(FRnd()*20.0f-10.0f, FRnd()*10.0f-5.0f, 0));
           //autowait(0.25f);
           m_iCounter++;
         }
@@ -447,10 +447,10 @@ procedures:
 
     autowait(FRnd()/2 + _pTimer->TickQuantum); 
 
-    if( m_penEnemy != NULL)
+    if (m_penEnemy != NULL)
     {
       FLOAT fEnemyDistance = CalcDist(m_penEnemy);
-      if( fEnemyDistance>m_fCloseDistance*1.25f)
+      if (fEnemyDistance>m_fCloseDistance*1.25f)
       {
         StartModelAnim(BEAST_ANIM_IDLETOWALK, AOF_SMOOTHCHANGE);
         autocall CMovableModelEntity::WaitUntilScheduledAnimStarts() EReturn;    
@@ -476,11 +476,11 @@ procedures:
       FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
       vDirection.Normalize();
       if (m_bcType == BT_BIG) {
-        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 80.0f, FLOAT3D(0, 0, 0), vDirection);
+        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 80.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       } else if (m_bcType == BT_HUGE) {
-        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 120.0f, FLOAT3D(0, 0, 0), vDirection);
+        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 120.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       } else  {
-        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 40.0f, FLOAT3D(0, 0, 0), vDirection);
+        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 40.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       }
     }
 

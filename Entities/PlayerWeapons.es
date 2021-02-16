@@ -568,10 +568,10 @@ properties:
  30 CEntityPointer m_penRayHit,         // entity hit by ray
  31 FLOAT m_fRayHitDistance = 100.0f,   // distance from hit point
  32 FLOAT m_fEnemyHealth    = 0.0f,     // normalized health of enemy in target (for coloring of crosshair)
- 33 FLOAT3D m_vRayHit     = FLOAT3D(0,0,0), // coordinates where ray hit
- 34 FLOAT3D m_vRayHitLast = FLOAT3D(0,0,0), // for lerping
- 35 FLOAT3D m_vBulletSource = FLOAT3D(0,0,0), // bullet launch position remembered here
- 36 FLOAT3D m_vBulletTarget = FLOAT3D(0,0,0), // bullet hit (if hit) position remembered here
+ 33 FLOAT3D m_vRayHit     = FLOAT3D(0.0f, 0.0f, 0.0f), // coordinates where ray hit
+ 34 FLOAT3D m_vRayHitLast = FLOAT3D(0.0f, 0.0f, 0.0f), // for lerping
+ 35 FLOAT3D m_vBulletSource = FLOAT3D(0.0f, 0.0f, 0.0f), // bullet launch position remembered here
+ 36 FLOAT3D m_vBulletTarget = FLOAT3D(0.0f, 0.0f, 0.0f), // bullet hit (if hit) position remembered here
 
  // ammo for all weapons
  40 INDEX m_iBullets        = 0,
@@ -865,17 +865,17 @@ functions:
   CModelObject *GetChainSawTeeth(void)
   {
     CPlayer *ppl=GetPlayer();
-    if(ppl==NULL) { return NULL;}
+    if (ppl==NULL) { return NULL;}
     CModelObject *pmoPlayer = ppl->GetModelObject();
-    if(pmoPlayer==NULL) { return NULL;}
+    if (pmoPlayer==NULL) { return NULL;}
     CAttachmentModelObject *pamoTorso = pmoPlayer->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO);
-    if(pamoTorso==NULL) { return NULL;}
+    if (pamoTorso==NULL) { return NULL;}
     CAttachmentModelObject *pamoChainSaw = pamoTorso->amo_moModelObject.GetAttachmentModel(BODY_ATTACHMENT_MINIGUN);
-    if(pamoChainSaw==NULL) { return NULL;}
+    if (pamoChainSaw==NULL) { return NULL;}
     CAttachmentModelObject *pamoBlade = pamoChainSaw->amo_moModelObject.GetAttachmentModel(CHAINSAWFORPLAYER_ATTACHMENT_BLADE);
-    if(pamoBlade==NULL) { return NULL;}
+    if (pamoBlade==NULL) { return NULL;}
     CAttachmentModelObject *pamoTeeth = pamoBlade->amo_moModelObject.GetAttachmentModel(BLADE_ATTACHMENT_TEETH);
-    if(pamoTeeth==NULL) { return NULL;}
+    if (pamoTeeth==NULL) { return NULL;}
     return &pamoTeeth->amo_moModelObject;
   }
 
@@ -903,7 +903,7 @@ functions:
     // flare attachment
     ControlFlareAttachment();
 
-    if( !bRender || m_iCurrentWeapon==WEAPON_NONE
+    if (!bRender || m_iCurrentWeapon==WEAPON_NONE
      || GetPlayer()->GetSettings()->ps_ulFlags&PSF_HIDEWEAPON) { return; }
 
     // nuke and iron cannons have the same view settings
@@ -940,12 +940,12 @@ functions:
     ColorToRGB( colViewerAmbient, ubAR,ubAG,ubAB);
     INDEX iMinDL = Min( Min(ubLR,ubLG),ubLB) -32;
     INDEX iMinDA = Min( Min(ubAR,ubAG),ubAB) -32;
-    if( iMinDL<0) {
+    if (iMinDL<0) {
       ubLR = ClampUp( ubLR-iMinDL, (INDEX)255);
       ubLG = ClampUp( ubLG-iMinDL, (INDEX)255);
       ubLB = ClampUp( ubLB-iMinDL, (INDEX)255);
     }
-    if( iMinDA<0) {
+    if (iMinDA<0) {
       ubAR = ClampUp( ubAR-iMinDA, (INDEX)255);
       ubAG = ClampUp( ubAG-iMinDA, (INDEX)255);
       ubAB = ClampUp( ubAB-iMinDA, (INDEX)255);
@@ -960,7 +960,7 @@ functions:
     //FLOAT tmInvulnerability = ((CPlayer *)&*m_penPlayer)->m_tmInvulnerability;
     if (tmInvisibility>tmNow) {
       FLOAT fIntensity=0.0f;      
-      if((tmInvisibility-tmNow)<3.0f)
+      if ((tmInvisibility-tmNow)<3.0f)
       {
         fIntensity = 0.5f-0.5f*cos((tmInvisibility-tmNow)*(6.0f*3.1415927f/3.0f));
         ubBlend =(INDEX)(INVISIBILITY_ALPHA_LOCAL+(FLOAT)(254-INVISIBILITY_ALPHA_LOCAL)*fIntensity);      
@@ -970,7 +970,7 @@ functions:
     // DRAW WEAPON MODEL
     //  Double colt - second colt in mirror
     //  Double shotgun - hand with ammo
-    if( iWeaponData==WEAPON_DOUBLECOLT|| iWeaponData==WEAPON_DOUBLESHOTGUN )
+    if (iWeaponData==WEAPON_DOUBLECOLT|| iWeaponData==WEAPON_DOUBLESHOTGUN )
     { 
       // prepare render model structure and projection
       CRenderModel rmMain;
@@ -982,7 +982,7 @@ functions:
       CPlacement3D plWeaponMirror( FLOAT3D(wpn_fX[iWeaponData], wpn_fY[iWeaponData], wpn_fZ[iWeaponData]),
                                    ANGLE3D(AngleDeg(wpn_fH[iWeaponData]), AngleDeg(wpn_fP[iWeaponData]),
                                            AngleDeg(wpn_fB[iWeaponData])));
-      if( iWeaponData==WEAPON_DOUBLECOLT /*|| iWeaponData==WEAPON_PIPEBOMB*/) {
+      if (iWeaponData==WEAPON_DOUBLECOLT /*|| iWeaponData==WEAPON_PIPEBOMB*/) {
         FLOATmatrix3D mRotation;
         MakeRotationMatrixFast(mRotation, plView.pl_OrientationAngle);
         plWeaponMirror.pl_PositionVector(1) = -plWeaponMirror.pl_PositionVector(1);
@@ -1013,7 +1013,7 @@ functions:
     }
 
     // minigun specific (update rotation)
-    if( iWeaponData==WEAPON_MINIGUN) { RotateMinigun(); }
+    if (iWeaponData==WEAPON_MINIGUN) { RotateMinigun(); }
 
     // prepare render model structure
     CRenderModel rmMain;
@@ -1077,14 +1077,14 @@ functions:
     plPos(1) += fXOffset;
     plPos(2) += fYOffset;
     // apply grenade launcher pumping
-    if( m_iCurrentWeapon == WEAPON_GRENADELAUNCHER)
+    if (m_iCurrentWeapon == WEAPON_GRENADELAUNCHER)
     {
       // obtain moving part attachment
       CAttachmentModelObject *amo = m_moWeapon.GetAttachmentModel(GRENADELAUNCHER_ATTACHMENT_MOVING_PART);
       FLOAT fLerpedMovement = Lerp(m_fWeaponDrawPowerOld, m_fWeaponDrawPower, _pTimer->GetLerpFactor());
       amo->amo_plRelative.pl_PositionVector(3) = fLerpedMovement;
       plPos(3) += fLerpedMovement/2.0f;
-      if( m_tmDrawStartTime != 0.0f)
+      if (m_tmDrawStartTime != 0.0f)
       {
         FLOAT tmPassed = _pTimer->GetLerpedCurrentTick()-m_tmDrawStartTime;
         plPos(1) += Sin(tmPassed*360.0f*10)*0.0125f*tmPassed/6.0f;
@@ -1092,12 +1092,12 @@ functions:
       }
     }
     // apply cannon draw
-    else if( (m_iCurrentWeapon == WEAPON_IRONCANNON) /*||
+    else if ((m_iCurrentWeapon == WEAPON_IRONCANNON) /*||
              (m_iCurrentWeapon == WEAPON_NUKECANNON) */)
     {
       FLOAT fLerpedMovement = Lerp(m_fWeaponDrawPowerOld, m_fWeaponDrawPower, _pTimer->GetLerpFactor());
       plPos(3) += fLerpedMovement;
-      if( m_tmDrawStartTime != 0.0f)
+      if (m_tmDrawStartTime != 0.0f)
       {
         FLOAT tmPassed = _pTimer->GetLerpedCurrentTick()-m_tmDrawStartTime;
         plPos(1) += Sin(tmPassed*360.0f*10)*0.0125f*tmPassed/2.0f;
@@ -1156,7 +1156,7 @@ functions:
       }
     } else {
       // if enemy prediction is on an it is an enemy
-      if( cli_tmPredictEnemy>0 && IsDerivedFromClass( penYou, "Enemy Base")) {
+      if (cli_tmPredictEnemy>0 && IsDerivedFromClass( penYou, "Enemy Base")) {
         // if this player is local
         if (_pNetwork->IsPlayerLocal(penMe)) {
           // set enemy prediction time
@@ -1192,32 +1192,32 @@ functions:
 
     // set some targeting properties (snooping and such...)
     TIME tmNow = _pTimer->CurrentTick();
-    if( m_penRayHit!=NULL)
+    if (m_penRayHit!=NULL)
     {
       CEntity *pen = m_penRayHit;
       // if alive 
-      if( pen->GetFlags()&ENF_ALIVE)
+      if (pen->GetFlags()&ENF_ALIVE)
       {
         // check the target for time prediction updating
         CheckTargetPrediction(pen);
 
         // if player
-        if( IsOfClass( pen, "Player")) {
+        if (IsOfClass( pen, "Player")) {
           // rememer when targeting begun  
-          if( m_tmTargetingStarted==0) {
+          if (m_tmTargetingStarted==0) {
             m_penTargeting = pen;
             m_tmTargetingStarted = tmNow;
           }
           // keep player name, mana and health for eventual printout or coloring
           m_fEnemyHealth = ((CPlayer*)pen)->GetHealth() / ((CPlayer*)pen)->m_fMaxHealth;
           m_strLastTarget.PrintF( "%s", ((CPlayer*)pen)->GetPlayerName());
-          if( GetSP()->sp_gmGameMode==CSessionProperties::GM_SCOREMATCH) {
+          if (GetSP()->sp_gmGameMode==CSessionProperties::GM_SCOREMATCH) {
             // add mana to player name
             CTString strMana="";
             strMana.PrintF( " (%d)", ((CPlayer*)pen)->m_iMana);
             m_strLastTarget += strMana;
           }
-          if( hud_bShowPlayerName) { m_tmLastTarget = tmNow+1.5f; }
+          if (hud_bShowPlayerName) { m_tmLastTarget = tmNow+1.5f; }
         }
         // not targeting player
         else {
@@ -1225,11 +1225,11 @@ functions:
           m_tmTargetingStarted = 0; 
         }
         // keep enemy health for eventual crosshair coloring
-        if( IsDerivedFromClass( pen, "Enemy Base")) {
+        if (IsDerivedFromClass( pen, "Enemy Base")) {
           m_fEnemyHealth = ((CEnemyBase*)pen)->GetHealth() / ((CEnemyBase*)pen)->m_fMaxHealth;
         }
          // cannot snoop while firing
-        if( m_bFireWeapon) { m_tmTargetingStarted = 0; }
+        if (m_bFireWeapon) { m_tmTargetingStarted = 0; }
       }
       // if not alive
       else
@@ -1238,28 +1238,28 @@ functions:
         m_tmTargetingStarted = 0; 
 
         // check switch relaying by moving brush
-        if( IsOfClass( pen, "Moving Brush") && ((CMovingBrush&)*pen).m_penSwitch!=NULL) {
+        if (IsOfClass( pen, "Moving Brush") && ((CMovingBrush&)*pen).m_penSwitch!=NULL) {
           pen = ((CMovingBrush&)*pen).m_penSwitch;
         }
         // if switch and near enough
-        if( IsOfClass( pen, "Switch") && m_fRayHitDistance<2.0f) {
+        if (IsOfClass( pen, "Switch") && m_fRayHitDistance<2.0f) {
           CSwitch &enSwitch = (CSwitch&)*pen;
           // if switch is useable
-          if( enSwitch.m_bUseable) {
+          if (enSwitch.m_bUseable) {
             // show switch message
-            if( enSwitch.m_strMessage!="") { m_strLastTarget = enSwitch.m_strMessage; }
+            if (enSwitch.m_strMessage!="") { m_strLastTarget = enSwitch.m_strMessage; }
             else { m_strLastTarget = TRANS("Use"); }
             m_tmLastTarget = tmNow+0.5f;
           }
         }
         // if analyzable
-        if( IsOfClass( pen, "MessageHolder") 
+        if (IsOfClass( pen, "MessageHolder") 
          && m_fRayHitDistance < ((CMessageHolder*)&*pen)->m_fDistance
          && ((CMessageHolder*)&*pen)->m_bActive) {
           const CTFileName &fnmMessage = ((CMessageHolder*)&*pen)->m_fnmMessage;
           // if player doesn't have that message it database
           CPlayer &pl = (CPlayer&)*m_penPlayer;
-          if( !pl.HasMessage(fnmMessage)) {
+          if (!pl.HasMessage(fnmMessage)) {
             // show analyse message
             m_strLastTarget = TRANS("Analyze");
             m_tmLastTarget  = tmNow+0.5f;
@@ -1279,7 +1279,7 @@ functions:
 
     // determine snooping time
     TIME tmDelta = tmNow - m_tmTargetingStarted; 
-    if( m_tmTargetingStarted>0 && plr_tmSnoopingDelay>0 && tmDelta>plr_tmSnoopingDelay) {
+    if (m_tmTargetingStarted>0 && plr_tmSnoopingDelay>0 && tmDelta>plr_tmSnoopingDelay) {
       m_tmSnoopingStarted = tmNow;
     }
   }
@@ -1292,13 +1292,13 @@ functions:
     INDEX iCrossHair = GetPlayer()->GetSettings()->ps_iCrossHairType+1;
 
     // adjust crosshair type
-    if( iCrossHair<=0) {
+    if (iCrossHair<=0) {
       iCrossHair  = 0;
       _iLastCrosshairType = 0;
     }
 
     // create new crosshair texture (if needed)
-    if( _iLastCrosshairType != iCrossHair) {
+    if (_iLastCrosshairType != iCrossHair) {
       _iLastCrosshairType = iCrossHair;
       CTString fnCrosshair;
       fnCrosshair.PrintF( "Textures\\Interface\\Crosshairs\\Crosshair%d.tex", iCrossHair);
@@ -1321,18 +1321,18 @@ functions:
     //const FLOAT3D vRayHit = Lerp( m_vRayHitLast, m_vRayHit, _pTimer->GetLerpFactor());
     const FLOAT3D vRayHit = m_vRayHit;  // lerping doesn't seem to work ???
     // if hit anything
-    if( m_penRayHit!=NULL) {
+    if (m_penRayHit!=NULL) {
 
       CEntity *pen = m_penRayHit;
       // do screen projection
       prProjection.ViewerPlacementL() = plViewSource;
-      prProjection.ObjectPlacementL() = CPlacement3D( FLOAT3D(0.0f, 0.0f, 0.0f), ANGLE3D( 0, 0, 0));
+      prProjection.ObjectPlacementL() = CPlacement3D( FLOAT3D(0.0f, 0.0f, 0.0f), ANGLE3D(0, 0, 0));
       prProjection.Prepare();
       prProjection.ProjectCoordinate( vRayHit, vOnScreen);
       // if required, show enemy health thru crosshair color
-      if( hud_bCrosshairColoring && m_fEnemyHealth>0) {
-             if( m_fEnemyHealth<0.25f) { colCrosshair = C_RED;    }
-        else if( m_fEnemyHealth<0.60f) { colCrosshair = C_YELLOW; }
+      if (hud_bCrosshairColoring && m_fEnemyHealth>0) {
+             if (m_fEnemyHealth<0.25f) { colCrosshair = C_RED;    }
+        else if (m_fEnemyHealth<0.60f) { colCrosshair = C_YELLOW; }
         else                         { colCrosshair = C_GREEN;  }
       }
     }
@@ -1346,7 +1346,7 @@ functions:
     }
 
     // if croshair should be of fixed position
-    if( hud_bCrosshairFixed || GetPlayer()->m_iViewState == PVT_3RDPERSONVIEW) {
+    if (hud_bCrosshairFixed || GetPlayer()->m_iViewState == PVT_3RDPERSONVIEW) {
       // reset it to screen center
       vOnScreen(1) = (FLOAT)pdp->GetWidth()  *0.5f;
       vOnScreen(2) = (FLOAT)pdp->GetHeight() *0.5f;
@@ -1359,7 +1359,7 @@ functions:
     hud_fCrosshairOpacity = Clamp( hud_fCrosshairOpacity, 0.1f, 1.0f);
     const ULONG ulAlpha = NormFloatToByte( hud_fCrosshairOpacity);
     // draw crosshair if needed
-    if( iCrossHair>0) {
+    if (iCrossHair>0) {
       // determine crosshair size
       const FLOAT fMinD =   1.0f;
       const FLOAT fMaxD = 100.0f;
@@ -1380,7 +1380,7 @@ functions:
 
     // if there is still time
     TIME tmDelta = m_tmLastTarget - tmNow;
-    if( tmDelta>0) {
+    if (tmDelta>0) {
       // printout current target info
       SLONG slDPWidth  = pdp->GetWidth();
       SLONG slDPHeight = pdp->GetHeight();
@@ -1395,7 +1395,7 @@ functions:
     }
 
     // printout crosshair world coordinates if needed
-    if( hud_bShowCoords) { 
+    if (hud_bShowCoords) { 
       CTString strCoords;
       SLONG slDPWidth  = pdp->GetWidth();
       SLONG slDPHeight = pdp->GetHeight();
@@ -1406,7 +1406,7 @@ functions:
       // do printout only if coordinates are valid
       const FLOAT fMax = Max( Max( vRayHit(1), vRayHit(2)), vRayHit(3));
       const FLOAT fMin = Min( Min( vRayHit(1), vRayHit(2)), vRayHit(3));
-      if( fMax<+100000 && fMin>-100000) {
+      if (fMax<+100000 && fMin>-100000) {
         strCoords.PrintF( "%.0f,%.0f,%.0f", vRayHit(1), vRayHit(2), vRayHit(3));
         pdp->PutTextC( strCoords, slDPWidth*0.5f, slDPHeight*0.10f, C_WHITE|CT_OPAQUE);
       }
@@ -1432,7 +1432,7 @@ functions:
   void HideFlare(CModelObject &moWeapon, INDEX iAttachObject, INDEX iAttachFlare) {
     CModelObject *pmo = &(moWeapon.GetAttachmentModel(iAttachObject)->amo_moModelObject);
     pmo = &(pmo->GetAttachmentModel(iAttachFlare)->amo_moModelObject);
-    pmo->StretchModel(FLOAT3D(0, 0, 0));
+    pmo->StretchModel(FLOAT3D(0.0f, 0.0f, 0.0f));
   };
 
   void SetFlare(INDEX iFlare, INDEX iAction)
@@ -1480,7 +1480,7 @@ functions:
     // add flare
     if (pen->m_iFlare==FLARE_ADD) {
       pen->m_iFlare = FLARE_REMOVE;
-      switch(m_iCurrentWeapon) {
+      switch (m_iCurrentWeapon) {
         case WEAPON_DOUBLECOLT: case WEAPON_COLT:
           ShowFlare(m_moWeapon, COLT_ATTACHMENT_COLT, COLTMAIN_ATTACHMENT_FLARE, 0.75f);
           break;
@@ -1502,7 +1502,7 @@ functions:
       }
     // remove
     } else if (pen->m_iFlare==FLARE_REMOVE) {
-      switch(m_iCurrentWeapon) {
+      switch (m_iCurrentWeapon) {
         case WEAPON_DOUBLECOLT: case WEAPON_COLT:
           HideFlare(m_moWeapon, COLT_ATTACHMENT_COLT, COLTMAIN_ATTACHMENT_FLARE);
           break;
@@ -1587,7 +1587,7 @@ functions:
         SetComponents(this, m_moWeaponSecond, MODEL_DS_HANDWITHAMMO, TEXTURE_HAND, 0, 0, 0);
         CModelObject &mo = m_moWeapon.GetAttachmentModel(DOUBLESHOTGUN_ATTACHMENT_BARRELS)->amo_moModelObject;
         AddAttachmentToModel(this, mo, DSHOTGUNBARRELS_ATTACHMENT_FLARE, MODEL_FLARE01, TEXTURE_FLARE01, 0, 0, 0);
-        m_moWeaponSecond.StretchModel(FLOAT3D(1,1,1));
+        m_moWeaponSecond.StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
         m_moWeapon.PlayAnim(DOUBLESHOTGUN_ANIM_WAIT1, 0);
         break; }
       case WEAPON_TOMMYGUN: {
@@ -1633,7 +1633,7 @@ functions:
         AddAttachmentToModel(this, m_moWeaponSecond, HANDWITHSTICK_ATTACHMENT_STICK, MODEL_PB_STICK, TEXTURE_PB_STICK, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
         AddAttachmentToModel(this, m_moWeaponSecond, HANDWITHSTICK_ATTACHMENT_SHIELD, MODEL_PB_SHIELD, TEXTURE_PB_STICK, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
         AddAttachmentToModel(this, m_moWeaponSecond, HANDWITHSTICK_ATTACHMENT_BUTTON, MODEL_PB_BUTTON, TEXTURE_PB_STICK, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        m_moWeaponSecond.StretchModel(FLOAT3D(1,1,1));
+        m_moWeaponSecond.StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
         break;
         */
       case WEAPON_FLAMER:
@@ -1708,20 +1708,20 @@ functions:
 
   // calc weapon position for 3rd person view
   void CalcWeaponPosition3rdPersonView(FLOAT3D vPos, CPlacement3D &plPos, BOOL bResetZ) {
-    plPos.pl_OrientationAngle = ANGLE3D(0, 0, 0);
+    plPos.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
     // weapon handle
     if (!m_bMirrorFire) {
-      plPos.pl_PositionVector = FLOAT3D( wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
+      plPos.pl_PositionVector = FLOAT3D(wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
                                          wpn_fZ[m_iCurrentWeapon]);
     } else {
-      plPos.pl_PositionVector = FLOAT3D( -wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
+      plPos.pl_PositionVector = FLOAT3D(-wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
                                           wpn_fZ[m_iCurrentWeapon]);
     }
     // weapon offset
     if (!m_bMirrorFire) {
-      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0, 0, 0)));
+      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)));
     } else {
-      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0, 0, 0)));
+      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)));
     }
     plPos.pl_PositionVector(1) *= SinFast(wpn_fFOV[m_iCurrentWeapon]/2) / SinFast(90.0f/2);
     plPos.pl_PositionVector(2) *= SinFast(wpn_fFOV[m_iCurrentWeapon]/2) / SinFast(90.0f/2);
@@ -1740,23 +1740,23 @@ functions:
 
   // calc weapon position
   void CalcWeaponPosition(FLOAT3D vPos, CPlacement3D &plPos, BOOL bResetZ) {
-    plPos.pl_OrientationAngle = ANGLE3D(0, 0, 0);
+    plPos.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
     // weapon handle
     if (!m_bMirrorFire) {
-      plPos.pl_PositionVector = FLOAT3D( wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
+      plPos.pl_PositionVector = FLOAT3D(wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
                                          wpn_fZ[m_iCurrentWeapon]);
       if (m_bSniping) {
-        plPos.pl_PositionVector = FLOAT3D( 0.0f, 0.0f, 0.0f );
+        plPos.pl_PositionVector = FLOAT3D(0.0f, 0.0f, 0.0f );
       }
     } else {
-      plPos.pl_PositionVector = FLOAT3D( -wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
+      plPos.pl_PositionVector = FLOAT3D(-wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
                                           wpn_fZ[m_iCurrentWeapon]);
     }
     // weapon offset
     if (!m_bMirrorFire) {
-      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0, 0, 0)));
+      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)));
     } else {
-      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0, 0, 0)));
+      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)));
     }
     plPos.pl_PositionVector(1) *= SinFast(wpn_fFOV[m_iCurrentWeapon]/2) / SinFast(90.0f/2);
     plPos.pl_PositionVector(2) *= SinFast(wpn_fFOV[m_iCurrentWeapon]/2) / SinFast(90.0f/2);
@@ -1777,23 +1777,23 @@ functions:
   // calc lerped weapon position
   void CalcLerpedWeaponPosition(FLOAT3D vPos, CPlacement3D &plPos, BOOL bResetZ)
   {
-    plPos.pl_OrientationAngle = ANGLE3D(0, 0, 0);
+    plPos.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
     // weapon handle
     if (!m_bMirrorFire) {
-      plPos.pl_PositionVector = FLOAT3D( wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
+      plPos.pl_PositionVector = FLOAT3D(wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
                                          wpn_fZ[m_iCurrentWeapon]);
       if (m_bSniping) {
-        plPos.pl_PositionVector = FLOAT3D( 0.0f, 0.0f, 0.0f );
+        plPos.pl_PositionVector = FLOAT3D(0.0f, 0.0f, 0.0f );
       }
     } else {
-      plPos.pl_PositionVector = FLOAT3D( -wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
+      plPos.pl_PositionVector = FLOAT3D(-wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
                                           wpn_fZ[m_iCurrentWeapon]);
     }
     // weapon offset
     if (!m_bMirrorFire) {
-      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0, 0, 0)));
+      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)));
     } else {
-      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0, 0, 0)));
+      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)));
     }
     plPos.pl_PositionVector(1) *= SinFast(wpn_fFOV[m_iCurrentWeapon]/2) / SinFast(90.0f/2);
     plPos.pl_PositionVector(2) *= SinFast(wpn_fFOV[m_iCurrentWeapon]/2) / SinFast(90.0f/2);
@@ -1814,20 +1814,20 @@ functions:
     plPos.pl_OrientationAngle = ANGLE3D((FRnd()-0.5f)*fImprecissionAngle, (FRnd()-0.5f)*fImprecissionAngle, 0);
     // weapon handle
     if (!m_bMirrorFire) {
-      plPos.pl_PositionVector = FLOAT3D( wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
+      plPos.pl_PositionVector = FLOAT3D(wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
                                          wpn_fZ[m_iCurrentWeapon]);
       if (m_bSniping) {
-        plPos.pl_PositionVector = FLOAT3D( 0.0f, 0.0f, 0.0f );
+        plPos.pl_PositionVector = FLOAT3D(0.0f, 0.0f, 0.0f );
       }
     } else {
-      plPos.pl_PositionVector = FLOAT3D( -wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
+      plPos.pl_PositionVector = FLOAT3D(-wpn_fX[m_iCurrentWeapon], wpn_fY[m_iCurrentWeapon],
                                           wpn_fZ[m_iCurrentWeapon]);
     }
     // weapon offset
     if (!m_bMirrorFire) {
-      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0, 0, 0)));
+      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)));
     } else {
-      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0, 0, 0)));
+      plPos.RelativeToAbsoluteSmooth(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)));
     }
     plPos.pl_PositionVector(1) *= SinFast(wpn_fFOV[m_iCurrentWeapon]/2) / SinFast(90.0f/2);
     plPos.pl_PositionVector(2) *= SinFast(wpn_fFOV[m_iCurrentWeapon]/2) / SinFast(90.0f/2);
@@ -1905,7 +1905,7 @@ functions:
         vHit = crRay.cr_vHit;
         
         if (i==0) {
-          if(crRay.cr_penHit->GetRenderType()==RT_BRUSH)
+          if (crRay.cr_penHit->GetRenderType()==RT_BRUSH)
           {
             INDEX iSurfaceType=crRay.cr_pbpoBrushPolygon->bpo_bppProperties.bpp_ubSurfaceType;
             EffectParticlesType eptType=GetParticleEffectTypeForSurface(iSurfaceType);
@@ -1914,18 +1914,18 @@ functions:
             FLOAT3D vReflected = vDir-vNormal*(2.0f*(vNormal%vDir));
             ((CPlayer&)*m_penPlayer).AddBulletSpray( vBase+vFront, eptType, vReflected);
           }
-          else if(crRay.cr_penHit->GetRenderType()==RT_MODEL)
+          else if (crRay.cr_penHit->GetRenderType()==RT_MODEL)
           {
             BOOL bRender=TRUE;
             FLOAT3D vSpillDir=-((CPlayer&)*m_penPlayer).en_vGravityDir*0.5f;
             SprayParticlesType sptType=SPT_NONE;
             COLOR colParticles=C_WHITE|CT_OPAQUE;
             FLOAT fPower=4.0f;
-            if( IsOfClass(crRay.cr_penHit, "ModelHolder2"))
+            if (IsOfClass(crRay.cr_penHit, "ModelHolder2"))
             {
               bRender=FALSE;
               CModelDestruction *penDestruction = ((CModelHolder2&)*crRay.cr_penHit).GetDestruction();
-              if( penDestruction!=NULL)
+              if (penDestruction!=NULL)
               {
                 bRender=TRUE;
                 sptType= penDestruction->m_sptType;
@@ -1933,8 +1933,8 @@ functions:
               CModelHolder2 *pmh2=(CModelHolder2*)crRay.cr_penHit;
               colParticles=pmh2->m_colBurning;
             }
-            FLOATaabbox3D boxCutted=FLOATaabbox3D(FLOAT3D(0,0,0),FLOAT3D(1,1,1));
-            if(bRender)
+            FLOATaabbox3D boxCutted=FLOATaabbox3D(FLOAT3D(0.0f, 0.0f, 0.0f),FLOAT3D(1.0f, 1.0f, 1.0f));
+            if (bRender)
             {
               crRay.cr_penHit->en_pmoModelObject->GetCurrentFrameBBox( boxCutted);
               ((CPlayer&)*m_penPlayer).AddGoreSpray( vBase+vFront, vHit, sptType,
@@ -2009,9 +2009,9 @@ functions:
         vDir.Normalize();
         vHit = crRay.cr_vHit;
 
-        if(i==0)
+        if (i==0)
         {
-          if(crRay.cr_penHit->GetRenderType()==RT_BRUSH)
+          if (crRay.cr_penHit->GetRenderType()==RT_BRUSH)
           {
             INDEX iSurfaceType=crRay.cr_pbpoBrushPolygon->bpo_bppProperties.bpp_ubSurfaceType;
             EffectParticlesType eptType=GetParticleEffectTypeForSurface(iSurfaceType);
@@ -2026,7 +2026,7 @@ functions:
             ((CPlayer&)*m_penPlayer).m_llChainShakeEnd = _pTimer->GetGameTick() + CTimer::InTicks(CHAINSAW_UPDATETIME*1.5f);
 
           }
-          else if(crRay.cr_penHit->GetRenderType()==RT_MODEL)
+          else if (crRay.cr_penHit->GetRenderType()==RT_MODEL)
           {
             BOOL bRender=TRUE;
             FLOAT3D vSpillDir=-((CPlayer&)*m_penPlayer).en_vGravityDir*0.5f;
@@ -2036,33 +2036,33 @@ functions:
               sptType=SPT_NONE;
             }
             FLOAT fPower=4.0f;
-            if( IsOfClass(crRay.cr_penHit, "Boneman"))   {sptType=SPT_BONES; fPower=6.0f;}
-            if( IsOfClass(crRay.cr_penHit, "Gizmo") ||
+            if (IsOfClass(crRay.cr_penHit, "Boneman"))   {sptType=SPT_BONES; fPower=6.0f;}
+            if (IsOfClass(crRay.cr_penHit, "Gizmo") ||
                 IsOfClass(crRay.cr_penHit, "Beast"))     {sptType=SPT_SLIME; fPower=4.0f;}
-            if( IsOfClass(crRay.cr_penHit, "Woman"))     {sptType=SPT_FEATHER; fPower=3.0f;}
-            if( IsOfClass(crRay.cr_penHit, "Elemental")) {sptType=SPT_LAVA_STONES; fPower=3.0f;}
-            if( IsOfClass(crRay.cr_penHit, "Walker"))    {sptType=SPT_ELECTRICITY_SPARKS; fPower=30.0f;}
-            if( IsOfClass(crRay.cr_penHit, "AirElemental"))    {sptType=SPT_AIRSPOUTS; fPower=6.0f;}
-            if( IsOfClass(crRay.cr_penHit, "CannonRotating") ||
+            if (IsOfClass(crRay.cr_penHit, "Woman"))     {sptType=SPT_FEATHER; fPower=3.0f;}
+            if (IsOfClass(crRay.cr_penHit, "Elemental")) {sptType=SPT_LAVA_STONES; fPower=3.0f;}
+            if (IsOfClass(crRay.cr_penHit, "Walker"))    {sptType=SPT_ELECTRICITY_SPARKS; fPower=30.0f;}
+            if (IsOfClass(crRay.cr_penHit, "AirElemental"))    {sptType=SPT_AIRSPOUTS; fPower=6.0f;}
+            if (IsOfClass(crRay.cr_penHit, "CannonRotating") ||
                 IsOfClass(crRay.cr_penHit, "CannonStatic"))    {sptType=SPT_WOOD;}
-            if( IsOfClass(crRay.cr_penHit, "ModelHolder2"))
+            if (IsOfClass(crRay.cr_penHit, "ModelHolder2"))
             {
               bRender=FALSE;
               CModelDestruction *penDestruction = ((CModelHolder2&)*crRay.cr_penHit).GetDestruction();
               CModelHolder2 *pmh2=(CModelHolder2*)crRay.cr_penHit;
               colParticles=pmh2->m_colBurning;
-              if( penDestruction!=NULL)
+              if (penDestruction!=NULL)
               {
                 bRender=TRUE;
                 sptType= penDestruction->m_sptType;
-                if(sptType==SPT_COLOREDSTONE)
+                if (sptType==SPT_COLOREDSTONE)
                 {
                   colParticles=MulColors(colParticles,penDestruction->m_colParticles);
                 }
               }
             }
-            FLOATaabbox3D boxCutted=FLOATaabbox3D(FLOAT3D(0,0,0),FLOAT3D(1,1,1));
-            if(bRender && m_tmLastChainsawSpray+0.2f<_pTimer->CurrentTick())
+            FLOATaabbox3D boxCutted=FLOATaabbox3D(FLOAT3D(0.0f, 0.0f, 0.0f),FLOAT3D(1.0f, 1.0f, 1.0f));
+            if (bRender && m_tmLastChainsawSpray+0.2f<_pTimer->CurrentTick())
             {
               crRay.cr_penHit->en_pmoModelObject->GetCurrentFrameBBox( boxCutted);
               ((CPlayer&)*m_penPlayer).AddGoreSpray( vBase+vFront, vHit, sptType,
@@ -2078,7 +2078,7 @@ functions:
           }
         }
 
-        if(crRay.cr_penHit->GetRenderType()==RT_MODEL && crRay.cr_fHitDistance<=fDistance)
+        if (crRay.cr_penHit->GetRenderType()==RT_MODEL && crRay.cr_fHitDistance<=fDistance)
         {
           // if this is primary ray
           if (i==0)
@@ -2311,7 +2311,7 @@ functions:
       fRDY = -0.1f;
     }
 
-    switch(m_iLaserBarrel) {
+    switch (m_iLaserBarrel) {
       case 0:   // barrel lu (*o-oo)
         CalcWeaponPosition(FLOAT3D(fFX+fLUX, fFY+fLUY, 0), plLaserRay, TRUE);
         break;
@@ -2367,7 +2367,7 @@ functions:
     eLaunch.penLauncher = m_penPlayer;
     eLaunch.fLaunchPower = 60.0f+iPower*4.0f; // ranges from 60-140 (since iPower can be max 20)
     eLaunch.fSize = 3.0f;
-    /*if( m_iCurrentWeapon == WEAPON_NUKECANNON)
+    /*if (m_iCurrentWeapon == WEAPON_NUKECANNON)
     {
       eLaunch.cbtType = CBT_NUKE;
     }
@@ -2382,7 +2382,7 @@ functions:
   // weapon sound when firing
   void SpawnRangeSound( FLOAT fRange)
   {
-    if( _pTimer->CurrentTick()>m_tmRangeSoundSpawned+0.5f) {
+    if (_pTimer->CurrentTick()>m_tmRangeSoundSpawned+0.5f) {
       m_tmRangeSoundSpawned = _pTimer->CurrentTick();
       ::SpawnRangeSound( m_penPlayer, m_penPlayer, SNDT_PLAYER, fRange);
     }
@@ -2428,7 +2428,7 @@ functions:
     // find which weapons are new
     ULONG ulNewWeapons = m_iAvailableWeapons&~ulOldWeapons;
     // for each new weapon
-    for(INDEX iWeapon=WEAPON_KNIFE; iWeapon<WEAPON_LAST; iWeapon++) {
+    for (INDEX iWeapon=WEAPON_KNIFE; iWeapon<WEAPON_LAST; iWeapon++) {
       if ( ulNewWeapons & (1<<(iWeapon-1)) ) {
         // add default amount of ammo
         AddDefaultAmmoForWeapon(iWeapon, fMaxAmmoRatio);
@@ -2448,15 +2448,15 @@ functions:
     m_iMaxSniperBullets  = ClampUp((INDEX) ceil(MAX_SNIPERBULLETS*fModifier), INDEX(999));
 
     // take away ammo
-    if( iTakeAmmo & (1<<AMMO_BULLETS))       {m_iBullets    = 0;}
-    if( iTakeAmmo & (1<<AMMO_SHELLS))        {m_iShells     = 0;}
-    if( iTakeAmmo & (1<<AMMO_ROCKETS))       {m_iRockets    = 0;}
-    if( iTakeAmmo & (1<<AMMO_GRENADES))      {m_iGrenades   = 0;}
-    if( iTakeAmmo & (1<<AMMO_NAPALM))        {m_iNapalm     = 0;}
-    if( iTakeAmmo & (1<<AMMO_ELECTRICITY))   {m_iElectricity= 0;}
-//    if( iTakeAmmo & (1<<AMMO_NUKEBALLS))     {m_iNukeBalls  = 0;}
-    if( iTakeAmmo & (1<<AMMO_IRONBALLS))     {m_iIronBalls  = 0;}
-    if( iTakeAmmo & (1<<AMMO_SNIPERBULLETS)) {m_iSniperBullets = 0;}
+    if (iTakeAmmo & (1<<AMMO_BULLETS))       {m_iBullets    = 0;}
+    if (iTakeAmmo & (1<<AMMO_SHELLS))        {m_iShells     = 0;}
+    if (iTakeAmmo & (1<<AMMO_ROCKETS))       {m_iRockets    = 0;}
+    if (iTakeAmmo & (1<<AMMO_GRENADES))      {m_iGrenades   = 0;}
+    if (iTakeAmmo & (1<<AMMO_NAPALM))        {m_iNapalm     = 0;}
+    if (iTakeAmmo & (1<<AMMO_ELECTRICITY))   {m_iElectricity= 0;}
+//    if (iTakeAmmo & (1<<AMMO_NUKEBALLS))     {m_iNukeBalls  = 0;}
+    if (iTakeAmmo & (1<<AMMO_IRONBALLS))     {m_iIronBalls  = 0;}
+    if (iTakeAmmo & (1<<AMMO_SNIPERBULLETS)) {m_iSniperBullets = 0;}
 
     // precache eventual new weapons
     Precache();
@@ -2710,7 +2710,7 @@ functions:
     pwi->CEntity::Initialize();
     
     const FLOATmatrix3D &m = GetPlayer()->GetRotationMatrix();
-    FLOAT3D vSpeed = FLOAT3D( 5.0f, 10.0f, -7.5f);
+    FLOAT3D vSpeed = FLOAT3D(5.0f, 10.0f, -7.5f);
     pwi->GiveImpulseTranslationAbsolute(vSpeed*m);
   }
 
@@ -2747,7 +2747,7 @@ functions:
 //    m_iAvailableWeapons &= ~WEAPONS_DISABLEDMASK;
 
 /*
-    if( Ewi.iWeapon == WEAPON_IRONCANNON)
+    if (Ewi.iWeapon == WEAPON_IRONCANNON)
     {
       m_iAvailableWeapons |= 1<<(WEAPON_NUKECANNON-1);
       m_iAvailableWeapons &= ~WEAPONS_DISABLEDMASK;
@@ -2969,7 +2969,7 @@ functions:
 
     ASSERT(ee.ee_slEvent == EVENTCODE_EAmmoPackItem);
     EAmmoPackItem &eapi = (EAmmoPackItem &)ee;
-    if( (eapi.iShells>0 && m_iShells<m_iMaxShells) ||
+    if ((eapi.iShells>0 && m_iShells<m_iMaxShells) ||
         (eapi.iBullets>0 && m_iBullets<m_iMaxBullets) ||
         (eapi.iRockets>0 && m_iRockets<m_iMaxRockets) ||
         (eapi.iGrenades>0 && m_iGrenades<m_iMaxGrenades) ||
@@ -2993,21 +2993,21 @@ functions:
       // preapare message string and count different types of ammo
       INDEX iAmmoTypes = 0;
       CTString strMessage;
-      if( eapi.iShells != 0)        { strMessage.PrintF("%s %d %s,", strMessage, eapi.iShells, TRANS("Shells")); iAmmoTypes++; }
-      if( eapi.iBullets != 0)       { strMessage.PrintF("%s %d %s,", strMessage, eapi.iBullets, TRANS("Bullets")); iAmmoTypes++; }
-      if( eapi.iRockets != 0)       { strMessage.PrintF("%s %d %s,", strMessage, eapi.iRockets, TRANS("Rockets")); iAmmoTypes++; }
-      if( eapi.iGrenades != 0)      { strMessage.PrintF("%s %d %s,", strMessage, eapi.iGrenades, TRANS("Grenades")); iAmmoTypes++; }
-      if( eapi.iNapalm != 0)        { strMessage.PrintF("%s %d %s,", strMessage, eapi.iNapalm, TRANS("Napalm")); iAmmoTypes++; }
-      if( eapi.iElectricity != 0)   { strMessage.PrintF("%s %d %s,", strMessage, eapi.iElectricity, TRANS("Cells")); iAmmoTypes++; }
-      if( eapi.iIronBalls != 0)     { strMessage.PrintF("%s %d %s,", strMessage, eapi.iIronBalls, TRANS("Cannonballs")); iAmmoTypes++; }
-      if( eapi.iSniperBullets != 0) { strMessage.PrintF("%s %d %s,", strMessage, eapi.iSniperBullets, TRANS("Sniper bullets")); iAmmoTypes++; }
+      if (eapi.iShells != 0)        { strMessage.PrintF("%s %d %s,", strMessage, eapi.iShells, TRANS("Shells")); iAmmoTypes++; }
+      if (eapi.iBullets != 0)       { strMessage.PrintF("%s %d %s,", strMessage, eapi.iBullets, TRANS("Bullets")); iAmmoTypes++; }
+      if (eapi.iRockets != 0)       { strMessage.PrintF("%s %d %s,", strMessage, eapi.iRockets, TRANS("Rockets")); iAmmoTypes++; }
+      if (eapi.iGrenades != 0)      { strMessage.PrintF("%s %d %s,", strMessage, eapi.iGrenades, TRANS("Grenades")); iAmmoTypes++; }
+      if (eapi.iNapalm != 0)        { strMessage.PrintF("%s %d %s,", strMessage, eapi.iNapalm, TRANS("Napalm")); iAmmoTypes++; }
+      if (eapi.iElectricity != 0)   { strMessage.PrintF("%s %d %s,", strMessage, eapi.iElectricity, TRANS("Cells")); iAmmoTypes++; }
+      if (eapi.iIronBalls != 0)     { strMessage.PrintF("%s %d %s,", strMessage, eapi.iIronBalls, TRANS("Cannonballs")); iAmmoTypes++; }
+      if (eapi.iSniperBullets != 0) { strMessage.PrintF("%s %d %s,", strMessage, eapi.iSniperBullets, TRANS("Sniper bullets")); iAmmoTypes++; }
 
       INDEX iLen = strlen(strMessage);
-      if( iLen>0 && strMessage[iLen-1]==',')
+      if (iLen>0 && strMessage[iLen-1]==',')
       {
         strMessage.DeleteChar(iLen-1);
       };
-      if( iAmmoTypes>4 ) {
+      if (iAmmoTypes>4 ) {
         strMessage.PrintF(TRANS("Ammo pack"));
       };
 
@@ -3022,7 +3022,7 @@ functions:
    */
   // get weapon from selected number
   WeaponType GetStrongerWeapon(INDEX iWeapon) {
-    switch(iWeapon) {
+    switch (iWeapon) {
       case 1: return WEAPON_CHAINSAW;
       case 2: return WEAPON_DOUBLECOLT;
       case 3: return WEAPON_DOUBLESHOTGUN;
@@ -3037,7 +3037,7 @@ functions:
 
   // get selected number for weapon
   INDEX GetSelectedWeapon(WeaponType EwtSelectedWeapon) {
-    switch(EwtSelectedWeapon) {
+    switch (EwtSelectedWeapon) {
       case WEAPON_KNIFE: case WEAPON_CHAINSAW: return 1;
       case WEAPON_COLT: case WEAPON_DOUBLECOLT: return 2;
       case WEAPON_SINGLESHOTGUN: case WEAPON_DOUBLESHOTGUN: return 3;
@@ -3171,7 +3171,7 @@ functions:
    *  >>>---   DEFAULT ANIM   ---<<<
    */
   void PlayDefaultAnim(void) {
-    switch(m_iCurrentWeapon) {
+    switch (m_iCurrentWeapon) {
       case WEAPON_NONE:
         break;
       case WEAPON_KNIFE:
@@ -3588,26 +3588,26 @@ functions:
 
   void MinigunSmoke()
   {
-    if( !hud_bShowWeapon)
+    if (!hud_bShowWeapon)
     {
       return;
     }
     // smoke
     CPlayer &pl = (CPlayer&)*m_penPlayer;
-    if( pl.m_pstState!=PST_DIVE)
+    if (pl.m_pstState!=PST_DIVE)
     {
       BOOL b3rdPersonView = TRUE;
-      if(pl.m_penCamera==NULL && pl.m_pen3rdPersonView==NULL)
+      if (pl.m_penCamera==NULL && pl.m_pen3rdPersonView==NULL)
       {
         b3rdPersonView = FALSE;
       }
 
       INDEX ctBulletsFired = ClampUp(m_iBulletsOnFireStart-m_iBullets, INDEX(200));
-      for( INDEX iSmoke=0; iSmoke<ctBulletsFired/10; iSmoke++)
+      for (INDEX iSmoke=0; iSmoke<ctBulletsFired/10; iSmoke++)
       {
         ShellLaunchData *psldSmoke = &pl.m_asldData[pl.m_iFirstEmptySLD];
         CPlacement3D plPipe;
-        if( b3rdPersonView)
+        if (b3rdPersonView)
         {
           CalcWeaponPosition3rdPersonView(FLOAT3D(afMinigunPipe3rdView[0],
             afMinigunPipe3rdView[1], afMinigunPipe3rdView[2]), plPipe, FALSE);
@@ -3681,14 +3681,14 @@ procedures:
     if (m_iCurrentWeapon!=m_iWantedWeapon) {
 /*
       // iron/nuke cannon changing is special
-      if( (m_iCurrentWeapon == WEAPON_IRONCANNON) && (m_iWantedWeapon == WEAPON_NUKECANNON) )
+      if ((m_iCurrentWeapon == WEAPON_IRONCANNON) && (m_iWantedWeapon == WEAPON_NUKECANNON) )
       {
         autocall ChangeToNukeCannon() EEnd;
         // mark that weapon change has ended
         m_tmWeaponChangeRequired = 0.0f;
         jump Idle();
       }
-      else if( (m_iCurrentWeapon == WEAPON_NUKECANNON) && (m_iWantedWeapon == WEAPON_IRONCANNON) )
+      else if ((m_iCurrentWeapon == WEAPON_NUKECANNON) && (m_iWantedWeapon == WEAPON_IRONCANNON) )
       {
         autocall ChangeToIronCannon() EEnd;
         // mark that weapon change has ended
@@ -3710,7 +3710,7 @@ procedures:
         CPlayer &pl = (CPlayer&)*m_penPlayer;
         pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 1.0f, 1.0f);        
         PlaySound(pl.m_soWeaponAmbient, SOUND_CS_IDLE, SOF_3D|SOF_VOLUMETRIC|SOF_LOOP|SOF_SMOOTHCHANGE);                
-        if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawIdle");}
+        if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawIdle");}
       }
 
     // knife change stand
@@ -3776,7 +3776,7 @@ procedures:
       case WEAPON_CHAINSAW: {
         CPlayer &pl = (CPlayer&)*m_penPlayer;
         PlaySound(pl.m_soWeaponAmbient, SOUND_CS_BRINGDOWN, SOF_3D|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);                
-        if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("ChainsawIdle");}
+        if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("ChainsawIdle");}
         m_iAnim = CHAINSAW_ANIM_DEACTIVATE;
         break; }
       case WEAPON_LASER:
@@ -3951,7 +3951,7 @@ procedures:
     autowait(m_moWeapon.GetAnimLength(m_iAnim));
 
 /*
-    if( m_iCurrentWeapon == WEAPON_NUKECANNON)
+    if (m_iCurrentWeapon == WEAPON_NUKECANNON)
     {
       autocall ChangeToNukeCannon() EEnd;
     }
@@ -4066,11 +4066,11 @@ procedures:
         switch (iSwing) {
           case 0: m_iAnim = KNIFE_ANIM_ATTACK01; m_fAnimWaitTime = 0.25f;
             PlaySound(pl.m_soWeapon0, SOUND_KNIFE_BACK, SOF_3D|SOF_VOLUMETRIC);
-            if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Knife_back");}
+            if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Knife_back");}
             break;
           case 1: m_iAnim = KNIFE_ANIM_ATTACK02; m_fAnimWaitTime = 0.35f;
             PlaySound(pl.m_soWeapon1, SOUND_KNIFE_BACK, SOF_3D|SOF_VOLUMETRIC);
-            if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Knife_back");}
+            if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Knife_back");}
             break;
         }
         break;
@@ -4079,11 +4079,11 @@ procedures:
         switch (iSwing) {
           case 0: m_iAnim = KNIFE_ANIM_ATTACK01; m_fAnimWaitTime = 0.50f;
             PlaySound(pl.m_soWeapon1, SOUND_KNIFE_BACK, SOF_3D|SOF_VOLUMETRIC);
-            if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Knife_back");}
+            if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Knife_back");}
             break;
           case 1: m_iAnim = KNIFE_ANIM_ATTACK02; m_fAnimWaitTime = 0.50f;
             PlaySound(pl.m_soWeapon3, SOUND_KNIFE_BACK, SOF_3D|SOF_VOLUMETRIC);
-            if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Knife_back");}
+            if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Knife_back");}
             break;
         }
         break;
@@ -4112,7 +4112,7 @@ procedures:
       ((GetSP()->sp_bCooperative) ? 10.0f : 20.0f));
 
 
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_fire");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_fire");}
     DoRecoil();
     SpawnRangeSound(40.0f);
     m_iColtBullets--;
@@ -4124,7 +4124,7 @@ procedures:
     PlaySound(pl.m_soWeapon0, SOUND_COLT_FIRE, SOF_3D|SOF_VOLUMETRIC);
 
     /*
-    if( pl.m_pstState!=PST_DIVE)
+    if (pl.m_pstState!=PST_DIVE)
     {
       // smoke
       ShellLaunchData &sldRight = pl.m_asldData[pl.m_iFirstEmptySLD];
@@ -4163,7 +4163,7 @@ procedures:
     PlaySound(pl.m_soWeapon1, SOUND_COLT_RELOAD, SOF_3D|SOF_VOLUMETRIC);
 
     m_moWeapon.PlayAnim(COLT_ANIM_RELOAD, 0);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_reload");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_reload");}
     autowait(m_moWeapon.GetAnimLength(COLT_ANIM_RELOAD));
     m_iColtBullets = 6;
     return EEnd();
@@ -4174,11 +4174,11 @@ procedures:
     // fire first colt - one bullet less in colt
     GetAnimator()->FireAnimation(BODY_ANIM_COLT_FIRERIGHT, 0);
     FireOneBullet(wpn_fFX[WEAPON_DOUBLECOLT], wpn_fFY[WEAPON_DOUBLECOLT], 500.0f, 10.0f);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_fire");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_fire");}
     
     /*
     CPlayer &pl1 = (CPlayer&)*m_penPlayer;
-    if( pl1.m_pstState!=PST_DIVE)
+    if (pl1.m_pstState!=PST_DIVE)
     {
       // smoke
       ShellLaunchData &sldRight = pl1.m_asldData[pl1.m_iFirstEmptySLD];
@@ -4211,11 +4211,11 @@ procedures:
     GetAnimator()->FireAnimation(BODY_ANIM_COLT_FIRELEFT, 0);
     m_bMirrorFire = TRUE;
     FireOneBullet(wpn_fFX[WEAPON_DOUBLECOLT], wpn_fFY[WEAPON_DOUBLECOLT], 500.0f, 10.0f);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_fire");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_fire");}
 
     /*
     CPlayer &pl2 = (CPlayer&)*m_penPlayer;
-    if( pl2.m_pstState!=PST_DIVE)
+    if (pl2.m_pstState!=PST_DIVE)
     {
       // smoke
       ShellLaunchData &sldLeft = pl2.m_asldData[pl2.m_iFirstEmptySLD];
@@ -4261,7 +4261,7 @@ procedures:
     // sound
     CPlayer &pl = (CPlayer&)*m_penPlayer;
     PlaySound(pl.m_soWeapon3, SOUND_COLT_RELOAD, SOF_3D|SOF_VOLUMETRIC);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_reload");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Colt_reload");}
 
     // wait second halt minus half shortest fire animation
     autowait(m_moWeapon.GetAnimLength(COLT_ANIM_RELOAD)-0.25f);
@@ -4279,7 +4279,7 @@ procedures:
         500.0f, 10.0f, 7, afSingleShotgunPellets, 0.2f, 0.03f);
       DoRecoil();
       SpawnRangeSound(60.0f);
-      if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Snglshotgun_fire");}
+      if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Snglshotgun_fire");}
       DecAmmo(m_iShells, 1);
       SetFlare(0, FLARE_ADD);
       PlayLightAnim(LIGHT_ANIM_COLT_SHOTGUN, 0);
@@ -4288,9 +4288,9 @@ procedures:
       CPlayer &pl = (CPlayer&)*m_penPlayer;
       PlaySound(pl.m_soWeapon0, SOUND_SINGLESHOTGUN_FIRE, SOF_3D|SOF_VOLUMETRIC);
       
-      if( hud_bShowWeapon)
+      if (hud_bShowWeapon)
       {
-        if( pl.m_pstState==PST_DIVE)
+        if (pl.m_pstState==PST_DIVE)
         {
           // bubble
           ShellLaunchData &sldBubble = pl.m_asldData[pl.m_iFirstEmptySLD];
@@ -4337,7 +4337,7 @@ procedures:
       FLOATmatrix3D mRot;
       MakeRotationMatrixFast(mRot, plShell.pl_OrientationAngle);
 
-      if( hud_bShowWeapon)
+      if (hud_bShowWeapon)
       {
         CPlayer *penPlayer = GetPlayer();
         ShellLaunchData &sld = penPlayer->m_asldData[penPlayer->m_iFirstEmptySLD];
@@ -4376,7 +4376,7 @@ procedures:
         500.0f, 10.0f, 14, afDoubleShotgunPellets, 0.3f, 0.03f);
       DoRecoil();
       SpawnRangeSound(70.0f);
-      if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Dblshotgun_fire");}
+      if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Dblshotgun_fire");}
       DecAmmo(m_iShells, 2);
       SetFlare(0, FLARE_ADD);
       PlayLightAnim(LIGHT_ANIM_COLT_SHOTGUN, 0);
@@ -4387,9 +4387,9 @@ procedures:
       pl.m_soWeapon0.Set3DParameters(50.0f, 5.0f, 1.5f, 1.0f);      // fire
       PlaySound(pl.m_soWeapon0, SOUND_DOUBLESHOTGUN_FIRE, SOF_3D|SOF_VOLUMETRIC);
 
-      if( hud_bShowWeapon)
+      if (hud_bShowWeapon)
       {
-        if( pl.m_pstState==PST_DIVE)
+        if (pl.m_pstState==PST_DIVE)
         {
           // bubble (pipe 1)
           ShellLaunchData &sldBubble1 = pl.m_asldData[pl.m_iFirstEmptySLD];
@@ -4471,10 +4471,10 @@ procedures:
   TommyGunStop() {
     // smoke
     CPlayer &pl = (CPlayer&)*m_penPlayer;
-    if( pl.m_pstState!=PST_DIVE && hud_bShowWeapon)
+    if (pl.m_pstState!=PST_DIVE && hud_bShowWeapon)
     {
       INDEX ctBulletsFired = ClampUp(m_iBulletsOnFireStart-m_iBullets, INDEX(100));
-      for( INDEX iSmoke=0; iSmoke<ctBulletsFired/6.0; iSmoke++)
+      for (INDEX iSmoke=0; iSmoke<ctBulletsFired/6.0; iSmoke++)
       {
         ShellLaunchData *psldSmoke = &pl.m_asldData[pl.m_iFirstEmptySLD];
         CPlacement3D plPipe;
@@ -4506,7 +4506,7 @@ procedures:
         500.0f, 10.0f, ((GetSP()->sp_bCooperative) ? 0.01f : 0.03f),
         ((GetSP()->sp_bCooperative) ? 0.5f : 0.0f));
       SpawnRangeSound(50.0f);
-      if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Tommygun_fire");}
+      if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Tommygun_fire");}
       DecAmmo(m_iBullets, 1);
       SetFlare(0, FLARE_ADD);
       m_moWeapon.PlayAnim(TOMMYGUN_ANIM_FIRE, AOF_LOOPING|AOF_NORESTART);
@@ -4517,7 +4517,7 @@ procedures:
       FLOATmatrix3D mRot;
       MakeRotationMatrixFast(mRot, plShell.pl_OrientationAngle);
 
-      if( hud_bShowWeapon)
+      if (hud_bShowWeapon)
       {
         // empty bullet shell
         CPlayer &pl = *GetPlayer();
@@ -4533,7 +4533,7 @@ procedures:
         pl.m_iFirstEmptySLD = (pl.m_iFirstEmptySLD+1) % MAX_FLYING_SHELLS;
 
         // bubble
-        if( pl.m_pstState==PST_DIVE)
+        if (pl.m_pstState==PST_DIVE)
         {
           ShellLaunchData &sldBubble = pl.m_asldData[pl.m_iFirstEmptySLD];
           CalcWeaponPosition(FLOAT3D(afTommygunShellPos[0], afTommygunShellPos[1], afTommygunShellPos[2]), plShell, FALSE);
@@ -4587,7 +4587,7 @@ procedures:
         pl.m_soWeapon0.Set3DParameters(250.0f, 75.0f, 1.5f, 1.0f);
       }
       PlaySound(pl.m_soWeapon0, SOUND_SNIPER_FIRE, SOF_3D|SOF_VOLUMETRIC);
-      if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("SniperFire");}
+      if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("SniperFire");}
       
       // animation
       m_moWeapon.PlayAnim(SNIPER_ANIM_FIRE, 0);
@@ -4600,7 +4600,7 @@ procedures:
       FLOATmatrix3D mRot;
       MakeRotationMatrixFast(mRot, plShell.pl_OrientationAngle);
       
-      if( hud_bShowWeapon)
+      if (hud_bShowWeapon)
       {
         CPlayer *penPlayer = GetPlayer();
         ShellLaunchData &sld = penPlayer->m_asldData[penPlayer->m_iFirstEmptySLD];
@@ -4617,7 +4617,7 @@ procedures:
         penPlayer->m_iFirstEmptySLD = (penPlayer->m_iFirstEmptySLD+1) % MAX_FLYING_SHELLS;
         
         // bubble
-        if( penPlayer->m_pstState==PST_DIVE)
+        if (penPlayer->m_pstState==PST_DIVE)
         {
           ShellLaunchData &sldBubble = penPlayer->m_asldData[penPlayer->m_iFirstEmptySLD];
           CalcWeaponPosition(FLOAT3D(afTommygunShellPos[0], afTommygunShellPos[1], afTommygunShellPos[2]), plShell, FALSE);
@@ -4665,7 +4665,7 @@ procedures:
     PlaySound(pl.m_soWeapon2, SOUND_MINIGUN_CLICK, SOF_3D|SOF_VOLUMETRIC);
     PlaySound(pl.m_soWeapon1, SOUND_MINIGUN_SPINUP, SOF_3D|SOF_VOLUMETRIC);
     //pl.m_soWeapon1.SetOffset((m_aMiniGunSpeed/MINIGUN_FULLSPEED)*MINIGUN_SPINUPSOUND);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Minigun_rotateup");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Minigun_rotateup");}
     // while not at full speed and fire is held
     while (m_aMiniGunSpeed<MINIGUN_FULLSPEED && HoldingFire()) {
       // every tick
@@ -4691,9 +4691,9 @@ procedures:
     // spinning sound
     CPlayer &pl = (CPlayer&)*m_penPlayer;
     PlaySound(pl.m_soWeapon1, SOUND_MINIGUN_ROTATE, SOF_3D|SOF_LOOP|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Minigun_rotate");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Minigun_rotate");}
   // if firing
-    if(HoldingFire() && m_iBullets>0) {
+    if (HoldingFire() && m_iBullets>0) {
       // play fire sound
       PlaySound(pl.m_soWeapon0, SOUND_MINIGUN_FIRE, SOF_3D|SOF_LOOP|SOF_VOLUMETRIC);
       PlayLightAnim(LIGHT_ANIM_TOMMYGUN, AOF_LOOPING);
@@ -4707,7 +4707,7 @@ procedures:
       if (!m_bHasAmmo && m_iBullets>0) {
         CPlayer &pl = (CPlayer&)*m_penPlayer;
         PlaySound(pl.m_soWeapon0, SOUND_MINIGUN_FIRE, SOF_3D|SOF_LOOP|SOF_VOLUMETRIC);
-        if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Minigun_fire");}
+        if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Minigun_fire");}
         PlayLightAnim(LIGHT_ANIM_TOMMYGUN, AOF_LOOPING);
         GetAnimator()->FireAnimation(BODY_ANIM_MINIGUN_FIRESHORT, AOF_LOOPING);
         m_bHasAmmo = TRUE;
@@ -4729,7 +4729,7 @@ procedures:
 
         // if 1st person view
         CPlayer &pl = (CPlayer&)*m_penPlayer;
-        if(pl.m_penCamera==NULL && pl.m_pen3rdPersonView==NULL)
+        if (pl.m_penCamera==NULL && pl.m_pen3rdPersonView==NULL)
         {
           CalcWeaponPosition(FLOAT3D(afMinigunShellPos[0], afMinigunShellPos[1], afMinigunShellPos[2]), plShell, FALSE);
         }
@@ -4744,7 +4744,7 @@ procedures:
         FLOATmatrix3D mRot;
         MakeRotationMatrixFast(mRot, plShell.pl_OrientationAngle);
 
-        if( hud_bShowWeapon)
+        if (hud_bShowWeapon)
         {
           CPlayer &pl = *GetPlayer();
           ShellLaunchData &sld = pl.m_asldData[pl.m_iFirstEmptySLD];
@@ -4760,7 +4760,7 @@ procedures:
           pl.m_iFirstEmptySLD = (pl.m_iFirstEmptySLD+1) % MAX_FLYING_SHELLS;
 
           // bubble
-          if( pl.m_pstState==PST_DIVE)
+          if (pl.m_pstState==PST_DIVE)
           {
             ShellLaunchData &sldBubble = pl.m_asldData[pl.m_iFirstEmptySLD];
             CalcWeaponPosition(FLOAT3D(afMinigunShellPos[0], afMinigunShellPos[1], afMinigunShellPos[2]), plShell, FALSE);
@@ -4776,7 +4776,7 @@ procedures:
         }
       // if no ammo
       } else {
-        if( m_bHasAmmo)
+        if (m_bHasAmmo)
         {
           MinigunSmoke();
         }
@@ -4793,7 +4793,7 @@ procedures:
       m_aMiniGun+=m_aMiniGunSpeed*MINIGUN_TICKTIME;
     }
 
-    if( m_bHasAmmo)
+    if (m_bHasAmmo)
     {
       MinigunSmoke();
     }
@@ -4812,8 +4812,8 @@ procedures:
     // spin down sounds
     PlaySound(pl.m_soWeapon3, SOUND_MINIGUN_CLICK, SOF_3D|SOF_VOLUMETRIC);
     PlaySound(pl.m_soWeapon1, SOUND_MINIGUN_SPINDOWN, SOF_3D|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("Minigun_rotate");}
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Minigun_rotatedown");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("Minigun_rotate");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Minigun_rotatedown");}
     //pl.m_soWeapon1.SetOffset((1-m_aMiniGunSpeed/MINIGUN_FULLSPEED)*MINIGUN_SPINDNSOUND);
 
     // while still spinning and should not fire
@@ -4853,7 +4853,7 @@ procedures:
     // if out of ammo
     if (m_iBullets<=0) { 
       // can wait without changing while holding fire - specific for movie sequence
-      while(HoldingFire() && m_iBullets<=0) {
+      while (HoldingFire() && m_iBullets<=0) {
         autowait(0.1f);
       }
       if (m_iBullets<=0) {
@@ -4874,11 +4874,11 @@ procedures:
 
       DoRecoil();
       SpawnRangeSound(20.0f);
-      if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Rocketlauncher_fire");}
+      if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Rocketlauncher_fire");}
       DecAmmo(m_iRockets, 1);
       // sound
       CPlayer &pl = (CPlayer&)*m_penPlayer;
-      if( pl.m_soWeapon0.IsPlaying())
+      if (pl.m_soWeapon0.IsPlaying())
       {
         PlaySound(pl.m_soWeapon1, SOUND_ROCKETLAUNCHER_FIRE, SOF_3D|SOF_VOLUMETRIC);
       }
@@ -4890,7 +4890,7 @@ procedures:
       autowait(0.05f);
 
       CModelObject *pmo = &(m_moWeapon.GetAttachmentModel(ROCKETLAUNCHER_ATTACHMENT_ROCKET1)->amo_moModelObject);
-      pmo->StretchModel(FLOAT3D(0, 0, 0));
+      pmo->StretchModel(FLOAT3D(0.0f, 0.0f, 0.0f));
 
       autowait(m_moWeapon.GetAnimLength(ROCKETLAUNCHER_ANIM_FIRE)-0.05f);
 
@@ -4934,7 +4934,7 @@ procedures:
       INDEX iPower = INDEX((_pTimer->CurrentTick()-F_TEMP)/_pTimer->TickQuantum);
       FireGrenade( iPower);
       SpawnRangeSound(10.0f);
-      if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Gnadelauncher");}
+      if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Gnadelauncher");}
       DecAmmo(m_iGrenades, 1);
       // sound
       CPlayer &pl = (CPlayer&)*m_penPlayer;
@@ -4961,7 +4961,7 @@ procedures:
       {
         SelectNewWeapon();
       }
-      else if( TRUE)
+      else if (TRUE)
       {
         autowait(0.25f);
       }
@@ -5063,9 +5063,9 @@ procedures:
     pl.m_soWeapon0.Set3DParameters(50.0f, 5.0f, 2.0f, 0.31f);
     pl.m_soWeapon2.Set3DParameters(50.0f, 5.0f, 2.0f, 0.3f);
     PlaySound(pl.m_soWeapon0, SOUND_FL_FIRE, SOF_3D|SOF_LOOP|SOF_VOLUMETRIC);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("FlamethrowerFire");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("FlamethrowerFire");}
     PlaySound(pl.m_soWeapon2, SOUND_FL_START, SOF_3D|SOF_VOLUMETRIC);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("FlamethrowerStart");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("FlamethrowerStart");}
     FireFlame();
     DecAmmo(m_iNapalm, 1);
     autowait(0.05f);
@@ -5093,8 +5093,8 @@ procedures:
     m_tmFlamerStop=_pTimer->CurrentTick();
     CPlayer &pl = (CPlayer&)*m_penPlayer;
     PlaySound(pl.m_soWeapon0, SOUND_FL_STOP, SOF_3D|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("FlamethrowerFire");}
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("FlamethrowerStop");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("FlamethrowerFire");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("FlamethrowerStop");}
     //PlaySound(pl.m_soWeapon1, SOUND_FL_STOP, SOF_3D|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);
     FireFlame();
     // link last flame with nothing (if not NULL or deleted)
@@ -5121,7 +5121,7 @@ procedures:
     // set the firing sound level
     pl.m_soWeapon0.Set3DParameters(50.0f, 5.0f, 1.5f, 1.0f);
     PlaySound(pl.m_soWeapon0, SOUND_CS_BEGINFIRE, SOF_3D|SOF_VOLUMETRIC);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawBeginFire");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawBeginFire");}
 
   
     // bring the chainsaw down to cutting height (fire position)
@@ -5132,7 +5132,7 @@ procedures:
     pa.FireAnimation(BODY_ANIM_MINIGUN_FIRELONG, 0);
     
     CModelObject *pmoTeeth=GetChainSawTeeth();
-    if( pmoTeeth!=NULL)
+    if (pmoTeeth!=NULL)
     {
       pmoTeeth->PlayAnim(TEETH_ANIM_ROTATE, AOF_LOOPING|AOF_NORESTART);
     }
@@ -5143,8 +5143,8 @@ procedures:
     pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 0.5f, 1.0f);        
     
     PlaySound(pl.m_soWeapon0, SOUND_CS_FIRE, SOF_3D|SOF_LOOP|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("ChainsawIdle");}
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawFire");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("ChainsawIdle");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawFire");}
 
     m_moWeapon.PlayAnim(CHAINSAW_ANIM_FIRE, AOF_LOOPING|AOF_NORESTART);  
 
@@ -5166,9 +5166,9 @@ procedures:
 
     CPlayer &pl = (CPlayer&)*m_penPlayer;
     PlaySound(pl.m_soWeapon0, SOUND_CS_ENDFIRE, SOF_3D|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("ChainsawFire");}
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawEnd");}
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawIdle");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("ChainsawFire");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawEnd");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawIdle");}
 //    PlaySound(pl.m_soWeapon0, SOUND_SILENCE, SOF_3D|SOF_VOLUMETRIC/*|SOF_SMOOTHCHANGE*/);
     // restore volume to engine sound
     pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 1.0f, 1.0f);        
@@ -5182,7 +5182,7 @@ procedures:
     pmo2->PlayAnim(TEETH_ANIM_DEFAULT, 0);
 
     CModelObject *pmoTeeth=GetChainSawTeeth();
-    if( pmoTeeth!=NULL)
+    if (pmoTeeth!=NULL)
     {
       pmoTeeth->PlayAnim(TEETH_ANIM_DEFAULT, 0);
     }
@@ -5205,13 +5205,13 @@ procedures:
       autowait(0.1f);
       m_moWeapon.PlayAnim(LASER_ANIM_FIRE, AOF_LOOPING|AOF_NORESTART);
       FireLaserRay();
-      if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Laser_fire");}
+      if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Laser_fire");}
       DecAmmo(m_iElectricity, 1);
       // sound
       SpawnRangeSound(20.0f);
       CPlayer &pl = (CPlayer&)*m_penPlayer;
       // activate barrel anim
-      switch(m_iLaserBarrel) {
+      switch (m_iLaserBarrel) {
         case 0: {   // barrel lu
           CModelObject *pmo = &(m_moWeapon.GetAttachmentModel(LASER_ATTACHMENT_LEFTUP)->amo_moModelObject);
           pmo->PlayAnim(BARREL_ANIM_FIRE, 0);
@@ -5297,7 +5297,7 @@ procedures:
     F_OFFSET_CHG = 0.0f;
     m_fWeaponDrawPower = 0.0f;
     CPlayer &pl = (CPlayer&)*m_penPlayer;
-    if( m_iIronBalls&1)
+    if (m_iIronBalls&1)
     {
       pl.m_soWeapon0.Set3DParameters(50.0f, 5.0f, 3.0f, 1.0f);
       PlaySound(pl.m_soWeapon0, SOUND_CANNON_PREPARE, SOF_3D|SOF_VOLUMETRIC);
@@ -5308,7 +5308,7 @@ procedures:
       PlaySound(pl.m_soWeapon1, SOUND_CANNON_PREPARE, SOF_3D|SOF_VOLUMETRIC);
     }
 
-    if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Canon_prepare");}
+    if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Canon_prepare");}
     while (HoldingFire() && ((_pTimer->CurrentTick()-TM_START)<1.0f) )
     {
       autowait(_pTimer->TickQuantum);
@@ -5319,7 +5319,7 @@ procedures:
     }
     m_tmDrawStartTime = 0.0f;
     CPlayer &pl = (CPlayer&)*m_penPlayer;
-    if( m_iIronBalls&1)
+    if (m_iIronBalls&1)
     {
       // turn off the sound
       pl.m_soWeapon0.Set3DParameters(50.0f, 5.0f, 0.0f, 1.0f);
@@ -5346,7 +5346,7 @@ procedures:
       }
 
       // adjust volume of cannon firing acording to launch power
-      if( m_iIronBalls&1)
+      if (m_iIronBalls&1)
       {
         pl.m_soWeapon2.Set3DParameters(fRange, fFalloff, 2.0f+iPower*0.05f, 1.0f);
         PlaySound(pl.m_soWeapon2, SOUND_CANNON, SOF_3D|SOF_VOLUMETRIC);
@@ -5360,7 +5360,7 @@ procedures:
       m_moWeapon.PlayAnim(CANNON_ANIM_FIRE, 0);
       FireCannonBall( iPower);
 
-      if(_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Canon");}
+      if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("Canon");}
         DecAmmo(m_iIronBalls, 1);
 
       SpawnRangeSound(30.0f);

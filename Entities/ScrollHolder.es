@@ -75,7 +75,7 @@ functions:
 
   BOOL LoadOneFile(const CTFileName &fnm)
   {
-    if(fnm=="") { return FALSE; }
+    if (fnm=="") { return FALSE; }
     try 
     {
       // open the file
@@ -84,7 +84,7 @@ functions:
 
       // count number of lines
       INDEX ctLines = 0;
-      while(!strm.AtEOF())
+      while (!strm.AtEOF())
       {
         CTString strLine;
         strm.GetLine_t(strLine);
@@ -95,7 +95,7 @@ functions:
       // allocate that much
       CTString *astr = _astrCredits.Push(ctLines);
       // load all lines
-      for(INDEX iLine = 0; iLine<ctLines && !strm.AtEOF(); iLine++)
+      for (INDEX iLine = 0; iLine<ctLines && !strm.AtEOF(); iLine++)
       {
         strm.GetLine_t(astr[iLine]);
       }
@@ -219,7 +219,7 @@ procedures:
 
     autowait(0.05f);
     
-    if( !Credits_On(m_fnmMessage))
+    if (!Credits_On(m_fnmMessage))
     {
       Credits_Off();
       return;
@@ -230,7 +230,7 @@ procedures:
       on (EStart eStart):
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if( pwsc!=NULL)
+        if (pwsc!=NULL)
         {
           m_fMyTimer = 0;
           m_fMyTimerLast = 0;
@@ -244,7 +244,7 @@ procedures:
       on (EStop eStop): 
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if( pwsc!=NULL)
+        if (pwsc!=NULL)
         {
           EScroll escr;
           escr.bStart=FALSE;

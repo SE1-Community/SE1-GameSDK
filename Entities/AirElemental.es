@@ -161,7 +161,7 @@ functions:
 
   /*BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if( slPropertyOffset == offsetof(Classname, propert_var) {
+    if (slPropertyOffset == offsetof(Classname, propert_var) {
       if (IsOfClass(penTarget, "???")) { return TRUE; }
       else { return FALSE; }
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
@@ -236,18 +236,18 @@ functions:
 
 
     // elemental can't harm elemental
-    if(IsOfClass(penInflictor, "AirElemental")) {
+    if (IsOfClass(penInflictor, "AirElemental")) {
       return;
     }
 
     // boss cannot be telefragged
-    if(dmtType==DMT_TELEPORT)
+    if (dmtType==DMT_TELEPORT)
     {
       return;
     }
     
     // air elemental cannot be harmed by following kinds of damage:
-    if(dmtType==DMT_CLOSERANGE ||
+    if (dmtType==DMT_CLOSERANGE ||
        dmtType==DMT_BULLET ||
        dmtType==DMT_IMPACT ||
        dmtType==DMT_CHAINSAW)
@@ -256,7 +256,7 @@ functions:
     }
     
     // cannonballs inflict less damage then the default
-    if(dmtType==DMT_CANNONBALL)
+    if (dmtType==DMT_CANNONBALL)
     {
       fDamageAmmount *= 0.6f;
     }
@@ -403,7 +403,7 @@ functions:
     CalculateAngularLaunchParams( vShooting, peiTarget->vTargetCenter[1]-6.0f/3.0f,
       vTarget, FLOAT3D(0.0f, 0.0f, 0.0f), 0.0f, fLaunchSpeed, fRelativeHdg);
     
-    PrepareFreeFlyingProjectile(pl, vTarget, vFirePos, ANGLE3D( fRelativeHdg, 0.0f, 0.0f));
+    PrepareFreeFlyingProjectile(pl, vTarget, vFirePos, ANGLE3D(fRelativeHdg, 0.0f, 0.0f));
     
     ETwister et;
     CEntityPointer penTwister = CreateEntity(pl, CLASS_TWISTER);
@@ -426,7 +426,7 @@ functions:
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
         
-    for(INDEX i=0; i<ctMaxPlayers; i++) {
+    for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
       if (penPlayer!=NULL) {
         if (DistanceTo(this, penPlayer)<m_fShockwaveTreshold &&
@@ -478,7 +478,7 @@ functions:
       ElementalModel()->StretchModel(FLOAT3D(fSize, fSize, fSize));
     }
 
-    if(m_bRenderParticles)
+    if (m_bRenderParticles)
     {
       FLOAT fStretchRatio=GetCurrentStretchRatio();
       FLOAT fStretch=1.0f+(fStretchRatio)*6.0f;
@@ -521,7 +521,7 @@ procedures:
       PlaySound(m_soFire, SOUND_FIREWINDBLAST, SOF_3D);
 
       autowait(1.8f);
-      while(m_iWind<5)
+      while (m_iWind<5)
       {
         FLOAT3D vFirePos;
         vFirePos = Lerp(m_fWindBlastFirePosBegin*m_fAttSizeCurrent, 

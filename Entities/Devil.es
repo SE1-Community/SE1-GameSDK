@@ -144,14 +144,14 @@ properties:
   11 FLOAT m_tmLastPause = 0.0f,                        // last pause between two fireings
   12 enum DevilState m_dsDevilState = DS_NOT_EXISTING,// current devil state
   13 FLOAT m_tmLastAngry = -1.0f,                       // last angry state
-  14 CPlacement3D m_plTeleport = CPlacement3D(FLOAT3D(0,0,0), ANGLE3D(0,0,0)),
+  14 CPlacement3D m_plTeleport = CPlacement3D(FLOAT3D(0.0f, 0.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f)),
   16 FLOAT m_tmTemp = 0,
   17 enum DevilState m_dsLastDevilState = DS_REGENERATION_IMPULSE,// last devil state
   18 enum DevilAttackPower m_dapAttackPower = DAP_PLAYER_HUNT,// current devil state
   19 enum DevilAttackPower m_dapLastAttackPower = DAP_NOT_ATTACKING,
   20 BOOL m_bHasUpperWeapons = FALSE,
-  21 FLOAT3D m_vElectricitySource = FLOAT3D( 0,0,0),      // position of electricity ray target
-  22 FLOAT3D m_vElectricityTarget = FLOAT3D( 0,0,0),      // position of electricity ray target
+  21 FLOAT3D m_vElectricitySource = FLOAT3D(0,0,0),      // position of electricity ray target
+  22 FLOAT3D m_vElectricityTarget = FLOAT3D(0,0,0),      // position of electricity ray target
   23 BOOL m_bRenderElectricity = FALSE,                   // if electricity particles are rendered
   24 FLOAT m_fAdjustWeaponTime = 0.0f,                    // time for weapon to lock enemy
   25 BOOL m_bWasOnceInMainLoop = FALSE,                   // if MainLoop was called at least once 
@@ -161,8 +161,8 @@ properties:
   29 FLOAT m_fLastWalkTime = -1.0f,                       // last walk time
   30 FLOAT m_tmFireBreathStart = UpperLimit(0.0f),        // time when fire breath started
   31 FLOAT m_tmFireBreathStop = 0.0f,                     // time when fire breath stopped
-  32 FLOAT3D m_vFireBreathSource =  FLOAT3D( 0,0,0),      // position of fire breath source
-  33 FLOAT3D m_vFireBreathTarget =  FLOAT3D( 0,0,0),      // position of fire breath target
+  32 FLOAT3D m_vFireBreathSource =  FLOAT3D(0,0,0),      // position of fire breath source
+  33 FLOAT3D m_vFireBreathTarget =  FLOAT3D(0,0,0),      // position of fire breath target
   34 FLOAT m_tmRegenerationStart = UpperLimit(0.0f),      // time when regeneration started
   35 FLOAT m_tmRegenerationStop = 0.0f,                   // time when regeneration stopped
   36 FLOAT m_tmNextFXTime = 0.0f,                         // next effect time
@@ -317,7 +317,7 @@ functions:
   // Validate offered target for one property
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if(penTarget==NULL)
+    if (penTarget==NULL)
     {
       return FALSE;
     }
@@ -376,7 +376,7 @@ functions:
 
   void SetSpeedsToDesiredPosition(const FLOAT3D &vPosDelta, FLOAT fPosDist, BOOL bGoingToPlayer)
   {
-    if(m_penEnemy!=NULL)
+    if (m_penEnemy!=NULL)
     {
       FLOAT fEnemyDistance = CalcDist(m_penEnemy);
       FLOAT fRadius1 = 75.0f;
@@ -385,13 +385,13 @@ functions:
       FLOAT fSpeedRadius2 = 14.0f;
 
       FLOAT fDistanceRatio = CalculateRatio( fEnemyDistance, fRadius1, fRadius2, 1, 0);
-      if( fEnemyDistance>=fRadius2)
+      if (fEnemyDistance>=fRadius2)
       {
         fDistanceRatio = 1.0f;
       }
       m_fAttackRunSpeed = fSpeedRadius1+fDistanceRatio*(fSpeedRadius2-fSpeedRadius1);
       m_fCloseRunSpeed = m_fAttackRunSpeed;
-      if( cht_bDebugFinalBoss)
+      if (cht_bDebugFinalBoss)
       {
         CPrintF( "Enm dist:%g, Speed=%g\n", fEnemyDistance, m_fAttackRunSpeed);
       }
@@ -406,7 +406,7 @@ functions:
 
   void SelectRandomAnger(void)
   {
-    if( IRnd()%2) {
+    if (IRnd()%2) {
       m_iAngryAnim = DEVIL_ANIM_ANGER01;
       m_iAngrySound = SOUND_ANGER01;
     } else {
@@ -506,13 +506,13 @@ functions:
     }
 
     // WARNING !!! foot variable names are switched
-    if( tmAnim!=-1)
+    if (tmAnim!=-1)
     {
       FLOAT tmAnimLast = tmAnim+INDEX((tmNow-tmAnim)/tmWalkLen)*tmWalkLen;
       FLOAT tmLeftFootDown  = tmAnimLast+tmLeftFootOffset;
       FLOAT tmRightFootDown = tmAnimLast+tmRightFootOffset;
       CWorldSettingsController *pwsc = GetWSC(this);
-      if( pwsc!=NULL)
+      if (pwsc!=NULL)
       {
         if (tmNow>=tmRightFootDown && pwsc->m_tmShakeStarted<tmRightFootDown-0.1f)
         {
@@ -559,39 +559,39 @@ functions:
   // render particles
   void RenderParticles(void)
   {
-    if( m_bRenderElectricity)
+    if (m_bRenderElectricity)
     {
       // calculate electricity ray source pos
       Particles_Ghostbuster(m_vElectricitySource, m_vElectricityTarget, 24, 2.0f, 2.0f, 96.0f);
     }
 
     // fire breath particles
-    if( _pTimer->CurrentTick()>m_tmFireBreathStart)
+    if (_pTimer->CurrentTick()>m_tmFireBreathStart)
     {
       // render fire breath particles
       INDEX ctRendered = Particles_FireBreath(this, m_vFireBreathSource, m_vFireBreathTarget,
         m_tmFireBreathStart, m_tmFireBreathStop);
       // if should stop rendering fire breath particles
-      if( _pTimer->CurrentTick()>m_tmFireBreathStop && ctRendered==0)
+      if (_pTimer->CurrentTick()>m_tmFireBreathStop && ctRendered==0)
       {
         m_tmFireBreathStart = UpperLimit(0.0f);
       }
     }
 
     // regeneration particles
-    if( _pTimer->CurrentTick()>m_tmRegenerationStart)
+    if (_pTimer->CurrentTick()>m_tmRegenerationStart)
     {
       // render fire breath particles
       INDEX ctRendered = Particles_Regeneration(this, m_tmRegenerationStart, m_tmRegenerationStop, 1.0f, FALSE);
       // if should stop rendering regeneration particles
-      if( _pTimer->CurrentTick()>m_tmRegenerationStop && ctRendered==0)
+      if (_pTimer->CurrentTick()>m_tmRegenerationStop && ctRendered==0)
       {
         m_tmRegenerationStart = UpperLimit(0.0f);
       }
     }
 
     // if is dead
-    if( m_tmDeathTime != -1.0f && _pTimer->CurrentTick()>m_tmDeathTime && _pTimer->CurrentTick()<m_tmDeathTime+4.0f)
+    if (m_tmDeathTime != -1.0f && _pTimer->CurrentTick()>m_tmDeathTime && _pTimer->CurrentTick()<m_tmDeathTime+4.0f)
     {
       INDEX ctRendered = Particles_Regeneration(this, m_tmDeathTime, m_tmDeathTime+2.0f, 0.25f, TRUE);
     }
@@ -602,8 +602,8 @@ functions:
   FLOAT3D GetWeaponPositionRelative(void)
   {
     CAttachmentModelObject &amo = *GetModelObject()->GetAttachmentModel(m_iAttID);
-    FLOAT3D vAttachment = FLOAT3D(0,0,0);
-    switch(m_iAttID)
+    FLOAT3D vAttachment = FLOAT3D(0.0f, 0.0f, 0.0f);
+    switch (m_iAttID)
     {
     case DEVIL_ATTACHMENT_LASER:
       vAttachment = ATT_LASER;
@@ -631,9 +631,9 @@ functions:
   FLOAT3D GetFireingPositionRelative(void)
   {
     CAttachmentModelObject &amo = *GetModelObject()->GetAttachmentModel(m_iAttID);
-    FLOAT3D vWeaponPipe = FLOAT3D(0,0,0);
-    FLOAT3D vAttachment = FLOAT3D(0,0,0);
-    switch(m_iAttID)
+    FLOAT3D vWeaponPipe = FLOAT3D(0.0f, 0.0f, 0.0f);
+    FLOAT3D vAttachment = FLOAT3D(0.0f, 0.0f, 0.0f);
+    switch (m_iAttID)
     {
     case DEVIL_ATTACHMENT_LASER:
       vWeaponPipe = LASER_PIPE;
@@ -678,14 +678,14 @@ functions:
   */
   void ApplyTickRegeneration(void) 
   {
-    if( cht_bKillFinalBoss && GetSP()->sp_bSinglePlayer)
+    if (cht_bKillFinalBoss && GetSP()->sp_bSinglePlayer)
     {
       cht_bKillFinalBoss=FALSE;
       SetHealth(-1);
       return;
     }
     // if currently regenerating or died or out of healing range or recently hit by space ship beam
-    if(m_dsDevilState == DS_REGENERATION_IMPULSE ||
+    if (m_dsDevilState == DS_REGENERATION_IMPULSE ||
        GetHealth()<=0 || GetHealth()>=HEALTH_CLASS_4 || 
        _pTimer->CurrentTick()<m_tmHitBySpaceShipBeam+0.5f)
     {
@@ -696,19 +696,19 @@ functions:
     FLOAT fDmgCannonsPerTick = 2959.0f/10.0f*_pTimer->TickQuantum;
     FLOAT fRegeneration = 0.0f;
 
-    if(GetHealth()<HEALTH_CLASS_1)
+    if (GetHealth()<HEALTH_CLASS_1)
     {
       SendEvent(ERegenerationImpuls());
     }
-    else if(GetHealth()<HEALTH_CLASS_2)
+    else if (GetHealth()<HEALTH_CLASS_2)
     {
       fRegeneration = fDmgCannonsPerTick*CLASS_2_CANNON_FACTOR;
     }
-    else if(GetHealth()<HEALTH_CLASS_3)
+    else if (GetHealth()<HEALTH_CLASS_3)
     {
       fRegeneration = fDmgRocketsPerTick*CLASS_3_ROCKETLAUNCHER_FACTOR;
     }
-    else if(GetHealth()<HEALTH_CLASS_4)
+    else if (GetHealth()<HEALTH_CLASS_4)
     {
       fRegeneration = fDmgRocketsPerTick*CLASS_4_ROCKETLAUNCHER_FACTOR;
     }
@@ -731,19 +731,19 @@ functions:
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
     // don't allow telefrag damage
-    if( dmtType == DMT_TELEPORT)
+    if (dmtType == DMT_TELEPORT)
     {
        return;
     }
 
-    if( !(m_dsDevilState==DS_ENEMY || m_dsDevilState==DS_PYRAMID_FIGHT) || penInflictor==this)
+    if (!(m_dsDevilState==DS_ENEMY || m_dsDevilState==DS_PYRAMID_FIGHT) || penInflictor==this)
     {
       return;
     }
     
-    if(m_dsDevilState!=DS_PYRAMID_FIGHT)
+    if (m_dsDevilState!=DS_PYRAMID_FIGHT)
     {
-      if( GetHealth()<1000.0f)
+      if (GetHealth()<1000.0f)
       {
         return;
       }
@@ -755,10 +755,10 @@ functions:
 
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
-    if( cht_bDebugFinalBoss)
+    if (cht_bDebugFinalBoss)
     {
       // print state change
-      if( m_dsDevilState!=m_dsLastDevilState)
+      if (m_dsDevilState!=m_dsLastDevilState)
       {
         m_dsLastDevilState = m_dsDevilState;
         CTString strDevilState = DevilState_enum.NameForValue(INDEX(m_dsDevilState));
@@ -766,7 +766,7 @@ functions:
       }
 
       // print fire power state change
-      if( m_dapAttackPower!=m_dapLastAttackPower)
+      if (m_dapAttackPower!=m_dapLastAttackPower)
       {
         m_dapLastAttackPower = m_dapAttackPower;
         CTString strAttackPower = DevilAttackPower_enum.NameForValue(INDEX(m_dapAttackPower));
@@ -774,7 +774,7 @@ functions:
       }
 
       // print radius of attack change
-      if( (vLastStartPosition != m_vStartPosition) ||
+      if ((vLastStartPosition != m_vStartPosition) ||
           (vLastAttackRadius != m_fAttackRadius) )
       {
         vLastStartPosition = m_vStartPosition;
@@ -785,7 +785,7 @@ functions:
       }
     }
 
-    if(cht_bDebugFinalBossAnimations)
+    if (cht_bDebugFinalBossAnimations)
     {
       CModelObject &mo = *GetModelObject();
       // obtain current and scheduled animation
@@ -801,7 +801,7 @@ functions:
         iScheduledAnim = -1;
       }
 
-      if( iCurrentAnim!=m_iLastCurrentAnim || iScheduledAnim!=m_iLastScheduledAnim)
+      if (iCurrentAnim!=m_iLastCurrentAnim || iScheduledAnim!=m_iLastScheduledAnim)
       {
         CAnimData *pad = mo.GetData();
         CAnimInfo aiCurrent;
@@ -809,7 +809,7 @@ functions:
         CTString strCurrentAnimName = aiCurrent.ai_AnimName;
 
         CTString strScheduledAnimName = ".....";
-        if(iScheduledAnim != -1)
+        if (iScheduledAnim != -1)
         {
           CAnimInfo aiScheduled;
           mo.GetAnimInfo(iScheduledAnim, aiScheduled);
@@ -822,7 +822,7 @@ functions:
       m_iLastScheduledAnim = iScheduledAnim;
     }
     
-    if( cht_bDumpFinalBossData)
+    if (cht_bDumpFinalBossData)
     {
       cht_bDumpFinalBossData=FALSE;
       // dump devil data to console
@@ -862,7 +862,7 @@ functions:
 
       CPrintF( "m_penWatcher %x\n", m_penWatcher);
       CTString strEnemyName = "Null ptr, no name";
-      if( m_penEnemy != NULL) 
+      if (m_penEnemy != NULL) 
       {
         strEnemyName = m_penEnemy->GetName();
       }
@@ -909,14 +909,14 @@ functions:
       CPrintF( "m_fActivityRange = %g\n", m_fActivityRange);
 
       CTString strMarkerName = "Null ptr, no name";
-      if( m_penMarker != NULL) 
+      if (m_penMarker != NULL) 
       {
         strMarkerName = m_penMarker->GetName();
       }
       CPrintF( "m_penMarker %x, marker name: %s\n", m_penMarker, strMarkerName);
 
       CTString strMainMusicHolderName = "Null ptr, no name";
-      if( m_penMainMusicHolder != NULL) 
+      if (m_penMainMusicHolder != NULL) 
       {
         strMainMusicHolderName = m_penMainMusicHolder->GetName();
       }
@@ -962,7 +962,7 @@ functions:
   };
 
   void WalkingAnim(void) {
-    if( !m_bForMPIntro)
+    if (!m_bForMPIntro)
     {
       CModelObject &mo = *GetModelObject();
       INDEX iAnim = mo.GetAnim();
@@ -1054,7 +1054,7 @@ functions:
     m_vDesiredPosition = CalculatePredictedPosition(vWpnPipeAbs, vTarget, fSpeedSrc,
       vSpeedDst, GetPlacement().pl_PositionVector(2) );
     // shoot predicted propelled projectile
-    ShootPredictedProjectile(PRT_DEVIL_ROCKET, m_vDesiredPosition, vWpnPipeRel, ANGLE3D(0, 0, 0));
+    ShootPredictedProjectile(PRT_DEVIL_ROCKET, m_vDesiredPosition, vWpnPipeRel, ANGLE3D(0.0f, 0.0f, 0.0f));
     //PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
     PlayLightAnim(LIGHT_ANIM_FIRE, AOF_LOOPING);
 
@@ -1129,7 +1129,7 @@ functions:
     GetEntityInfoPosition(m_penEnemy, peiTarget->vTargetCenter, vShootTarget);
     // launch
     CPlacement3D pl;
-    PrepareFreeFlyingProjectile(pl, vShootTarget, vFireingRel, ANGLE3D( fRelativeHdg, fPitch, 0));
+    PrepareFreeFlyingProjectile(pl, vShootTarget, vFireingRel, ANGLE3D(fRelativeHdg, fPitch, 0));
     CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
     ELaunchProjectile eLaunch;
     eLaunch.penLauncher = this;
@@ -1144,14 +1144,14 @@ functions:
     if (ee.ee_slEvent==EVENTCODE_EDevilCommand)
     {
       EDevilCommand eDevilCommand = ((EDevilCommand &) ee);
-      if( eDevilCommand.dctType == DC_FORCE_ATTACK_RADIUS)
+      if (eDevilCommand.dctType == DC_FORCE_ATTACK_RADIUS)
       {
         m_fAttackRadius = eDevilCommand.fAttackRadius;
         m_vStartPosition = eDevilCommand.vCenterOfAttack;
       }
-      if( eDevilCommand.dctType == DC_DECREASE_ATTACK_RADIUS)
+      if (eDevilCommand.dctType == DC_DECREASE_ATTACK_RADIUS)
       {
-        if( m_fAttackRadius>21.0f)
+        if (m_fAttackRadius>21.0f)
         {
           m_fAttackRadius -= 20.0f;
         }
@@ -1203,55 +1203,55 @@ procedures:
   {
     m_soSound.Set3DParameters(1000.0f, 500.0f, 3.0f, 1.0f);
 
-    while(TRUE)
+    while (TRUE)
     {
-      if( GetAction()->m_datType == DAT_RISE)
+      if (GetAction()->m_datType == DAT_RISE)
       {
         autocall Rise() EReturn;
       }
-      else if( GetAction()->m_datType == DAT_ROAR)
+      else if (GetAction()->m_datType == DAT_ROAR)
       {
         SelectRandomAnger();
         autocall Angry() EReturn;
       }
-      else if( GetAction()->m_datType == DAT_SMASH)
+      else if (GetAction()->m_datType == DAT_SMASH)
       {
         autocall Smash() EReturn;
       }
-      else if( GetAction()->m_datType == DAT_PUNCH)
+      else if (GetAction()->m_datType == DAT_PUNCH)
       {
         autocall Punch() EReturn;
       }
-      else if( GetAction()->m_datType == DAT_HIT_GROUND)
+      else if (GetAction()->m_datType == DAT_HIT_GROUND)
       {
         autocall HitGround() EReturn;
       }
-      else if( GetAction()->m_datType == DAT_JUMP)
+      else if (GetAction()->m_datType == DAT_JUMP)
       {
         // do nothing, obsolete
       }
-      else if( GetAction()->m_datType == DAT_WAIT)
+      else if (GetAction()->m_datType == DAT_WAIT)
       {
         autocall WaitCurrentAnimEnd() EReturn;
         StartModelAnim(DEVIL_ANIM_IDLE, 0);
         autowait(GetModelObject()->GetAnimLength(DEVIL_ANIM_IDLE)*GetAction()->m_iWaitIdles);
       }
-      else if( GetAction()->m_datType == DAT_WALK)
+      else if (GetAction()->m_datType == DAT_WALK)
       {
         autocall WalkTo() EReturn;
       }
-      else if( GetAction()->m_datType == DAT_STOP_DESTROYING)
+      else if (GetAction()->m_datType == DAT_STOP_DESTROYING)
       {
         return EReturn();
       }
-      else if(TRUE)
+      else if (TRUE)
       {
         StartModelAnim(DEVIL_ANIM_IDLE, 0);
         autowait(GetModelObject()->GetAnimLength(DEVIL_ANIM_IDLE));
       }
       // switch to next action
       m_penAction = GetAction()->m_penTarget;
-      if( GetAction()->m_penTrigger != NULL)
+      if (GetAction()->m_penTrigger != NULL)
       {
         GetAction()->m_penTrigger->SendEvent(ETrigger());
       }
@@ -1263,10 +1263,10 @@ procedures:
     autowait(_pTimer->TickQuantum);
     CModelObject &mo = *GetModelObject();
     FLOAT tmWait = mo.GetAnimLength( mo.ao_iCurrentAnim )-mo.GetPassedTime();
-    if( tmWait > _pTimer->TickQuantum)
+    if (tmWait > _pTimer->TickQuantum)
     {
       FLOAT fTimeToWait = tmWait-_pTimer->TickQuantum*2;
-      if( fTimeToWait>=_pTimer->TickQuantum)
+      if (fTimeToWait>=_pTimer->TickQuantum)
       {
         autowait(fTimeToWait);
       }
@@ -1276,7 +1276,7 @@ procedures:
 
   WaitWalkToEnd()
   {
-    if(GetModelObject()->GetAnim()==DEVIL_ANIM_WALK) 
+    if (GetModelObject()->GetAnim()==DEVIL_ANIM_WALK) 
     {
       autocall WaitCurrentAnimEnd() EReturn;
       StartModelAnim(DEVIL_ANIM_FROMWALKTOIDLE, AOF_SMOOTHCHANGE);
@@ -1288,19 +1288,19 @@ procedures:
 
   WaitWalkOrIdleToEnd()
   {
-    if(GetModelObject()->GetAnim()==DEVIL_ANIM_WALK) 
+    if (GetModelObject()->GetAnim()==DEVIL_ANIM_WALK) 
     {
       autocall WaitCurrentAnimEnd() EReturn;
       StartModelAnim(DEVIL_ANIM_FROMWALKTOIDLE, AOF_SMOOTHCHANGE);
       autowait( GetModelObject()->GetAnimLength(DEVIL_ANIM_FROMWALKTOIDLE)-0.1f);
     }
-    else if(GetModelObject()->GetAnim()==DEVIL_ANIM_FROMIDLETOWALK) 
+    else if (GetModelObject()->GetAnim()==DEVIL_ANIM_FROMIDLETOWALK) 
     {
       autocall WaitCurrentAnimEnd() EReturn;
       StartModelAnim(DEVIL_ANIM_FROMWALKTOIDLE, AOF_SMOOTHCHANGE);
       autowait( GetModelObject()->GetAnimLength(DEVIL_ANIM_FROMWALKTOIDLE)-0.1f);
     }
-    else if(GetModelObject()->GetAnim()==DEVIL_ANIM_IDLE) 
+    else if (GetModelObject()->GetAnim()==DEVIL_ANIM_IDLE) 
     {
       autocall WaitCurrentAnimEnd() EReturn;
     }
@@ -1348,7 +1348,7 @@ procedures:
   }
   SubBeamDamage2()
   {
-    while(TRUE) {
+    while (TRUE) {
       wait(0.1f)
       {
         on (EBegin) : { resume; }
@@ -1395,17 +1395,17 @@ procedures:
     autowait(0.05f);
     PlaySound(m_soSound, SOUND_SMASH, SOF_3D);
     autowait(0.7f);
-    if( GetAction()->m_penToDestroy1 != NULL)
+    if (GetAction()->m_penToDestroy1 != NULL)
     {
       EBrushDestroyedByDevil ebdbd;
-      ebdbd.vDamageDir = FLOAT3D( -0.125f, 0.0f, -0.5f);
+      ebdbd.vDamageDir = FLOAT3D(-0.125f, 0.0f, -0.5f);
       GetAction()->m_penToDestroy1->SendEvent(ebdbd);
     }
     autowait(2.8f-1.0f);
-    if( GetAction()->m_penToDestroy2 != NULL)
+    if (GetAction()->m_penToDestroy2 != NULL)
     {
       EBrushDestroyedByDevil ebdbd;
-      ebdbd.vDamageDir = FLOAT3D( -0.125f, 0.0f, -0.5f);
+      ebdbd.vDamageDir = FLOAT3D(-0.125f, 0.0f, -0.5f);
       GetAction()->m_penToDestroy2->SendEvent(ebdbd);
     }
     return EReturn();
@@ -1424,17 +1424,17 @@ procedures:
     autowait(0.05f);
     PlaySound(m_soSound, SOUND_PUNCH, SOF_3D);
     autowait(0.8f);
-    if( GetAction()->m_penToDestroy1 != NULL)
+    if (GetAction()->m_penToDestroy1 != NULL)
     {
       EBrushDestroyedByDevil ebdbd;
-      ebdbd.vDamageDir = FLOAT3D( -0.125f, 0.0f, -0.5f);
+      ebdbd.vDamageDir = FLOAT3D(-0.125f, 0.0f, -0.5f);
       GetAction()->m_penToDestroy1->SendEvent(ebdbd);
     }
     autowait(2.8f-1.1f);
-    if( GetAction()->m_penToDestroy2 != NULL)
+    if (GetAction()->m_penToDestroy2 != NULL)
     {
       EBrushDestroyedByDevil ebdbd;
-      ebdbd.vDamageDir = FLOAT3D( 0.125f, 0.0f, -0.5f);
+      ebdbd.vDamageDir = FLOAT3D(0.125f, 0.0f, -0.5f);
       GetAction()->m_penToDestroy2->SendEvent(ebdbd);
     }
 
@@ -1458,7 +1458,7 @@ procedures:
     eSpawnEffector.tmLifeTime = 6.0f;
     eSpawnEffector.fSize = 1.0f;
     eSpawnEffector.eetType = ET_HIT_GROUND;
-    eSpawnEffector.vDamageDir = FLOAT3D( 0.0f, 2.0f, 0.0f);
+    eSpawnEffector.vDamageDir = FLOAT3D(0.0f, 2.0f, 0.0f);
     // initialize spray
     penEffector->Initialize( eSpawnEffector);
 
@@ -1561,10 +1561,10 @@ procedures:
     PlaySound(m_soSound, SOUND_ATTACKCLOSE, SOF_3D);
     autowait(1.4f);
     ShakeItBaby(_pTimer->CurrentTick(), 5.0f);
-    if( CalcDist(m_penEnemy) < m_fCloseDistance)
+    if (CalcDist(m_penEnemy) < m_fCloseDistance)
     {
       InflictDirectDamage(m_penEnemy, this, DMT_IMPACT, 1000.0f,
-        m_penEnemy->GetPlacement().pl_PositionVector, FLOAT3D(0,1,0));
+        m_penEnemy->GetPlacement().pl_PositionVector, FLOAT3D(0.0f, 1.0f, 0.0f));
     }
     InflictHoofDamage( DEVIL_HIT_HOOF_OFFSET);
 
@@ -1586,7 +1586,7 @@ procedures:
     m_fAttackFireTime = 10.0f;
     m_fPauseStretcher = 1.0f;
 
-    if( m_dapAttackPower==DAP_MEDIUM_POWER_ATTACK &&
+    if (m_dapAttackPower==DAP_MEDIUM_POWER_ATTACK &&
         (_pTimer->CurrentTick()-m_fLastWalkTime) > 6.0f)
     {
       m_fAttackFireTime = 6.0f;
@@ -1594,10 +1594,10 @@ procedures:
       return;
     }
     
-    switch( m_dapAttackPower)
+    switch (m_dapAttackPower)
     {
       case DAP_PLAYER_HUNT:
-        if( _pTimer->CurrentTick()-m_tmLastAngry > 10.0f)
+        if (_pTimer->CurrentTick()-m_tmLastAngry > 10.0f)
         {
           m_fAttackFireTime = 7.5+FRnd()*5;
           m_tmLastAngry = _pTimer->CurrentTick();
@@ -1624,13 +1624,13 @@ procedures:
     }
     
     INDEX iRnd = IRnd()%5;
-    if( !m_bHasUpperWeapons)
+    if (!m_bHasUpperWeapons)
     {
       iRnd = IRnd()%3;
     }
    
     /*iRnd = Clamp(INDEX(tmp_af[0]), INDEX(0), INDEX(4));*/
-    switch(iRnd)
+    switch (iRnd)
     {
     case 0:
         jump FirePredictedProjectile();
@@ -1704,13 +1704,13 @@ procedures:
     FLOAT3D vDir = (vEnemy-vAbsWeapon).Normalize();
     ANGLE3D aAngles;
     DirectionVectorToAngles(vDir, aAngles);
-    CPlacement3D plRelPl = CPlacement3D(FLOAT3D(0,0,0),aAngles);
+    CPlacement3D plRelPl = CPlacement3D(FLOAT3D(0.0f, 0.0f, 0.0f),aAngles);
     plRelPl.AbsoluteToRelative(GetPlacement());
     FLOAT fWantedHdg   = plRelPl.pl_OrientationAngle(1);
     FLOAT fWantedPitch = plRelPl.pl_OrientationAngle(2);
 
     // adjust angle of projectile gun
-    if( m_iAttID == DEVIL_ATTACHMENT_PROJECTILEGUN)
+    if (m_iAttID == DEVIL_ATTACHMENT_PROJECTILEGUN)
     {
       FLOAT3D vShooting = GetPlacement().pl_PositionVector;
       FLOAT3D vTarget = m_penEnemy->GetPlacement().pl_PositionVector;
@@ -1786,7 +1786,7 @@ procedures:
       autowait(m_tmLastPause);
       // fire laser
       FLOAT fPredictionRatio = (FRnd()-0.5f)*0.25f;
-      if(m_iFiredProjectiles&1)
+      if (m_iFiredProjectiles&1)
       {
         fPredictionRatio = 1.0f;
       }
@@ -1930,7 +1930,7 @@ procedures:
       m_tmTemp = _pTimer->CurrentTick();
       m_tmNextFXTime = m_tmTemp-_pTimer->TickQuantum;
       PlayWeaponSound( SOUND_GHOSTBUSTER);
-      while( _pTimer->CurrentTick() < m_tmTemp+0.75f)
+      while (_pTimer->CurrentTick() < m_tmTemp+0.75f)
       {
         wait(_pTimer->TickQuantum) {
           on (EBegin): {
@@ -1940,7 +1940,7 @@ procedures:
             GetEntityInfoPosition(m_penEnemy, peiTarget->vTargetCenter, vNewTarget);
             FLOAT3D vDiff = vNewTarget-m_vElectricityTarget;
             // if we have valid length
-            if( vDiff.Length() > 1.0f)
+            if (vDiff.Length() > 1.0f)
             {
               // calculate adjustment
               m_vElectricityTarget = m_vElectricityTarget+vDiff.Normalize()*10.0f*_pTimer->TickQuantum;
@@ -1953,24 +1953,24 @@ procedures:
             crRay.cr_ttHitModels = CCastRay::TT_COLLISIONBOX;
             GetWorld()->CastRay(crRay);
             // if entity is hit
-            if( crRay.cr_penHit != NULL)
+            if (crRay.cr_penHit != NULL)
             {
               // apply damage
               InflictDirectDamage( crRay.cr_penHit, this, DMT_BULLET, 50.0f*_pTimer->TickQuantum/0.5f,
-                FLOAT3D(0, 0, 0), (m_vElectricitySource-m_vElectricityTarget).Normalize());
+                FLOAT3D(0.0f, 0.0f, 0.0f), (m_vElectricitySource-m_vElectricityTarget).Normalize());
             }
 
-            if( _pTimer->CurrentTick()>m_tmNextFXTime)
+            if (_pTimer->CurrentTick()>m_tmNextFXTime)
             {
               m_tmNextFXTime = _pTimer->CurrentTick()+0.125f+FRnd()*0.125f;
-              CPlacement3D plElectricityTarget =  CPlacement3D( m_vElectricityTarget, ANGLE3D(0,0,0));
+              CPlacement3D plElectricityTarget =  CPlacement3D( m_vElectricityTarget, ANGLE3D(0.0f, 0.0f, 0.0f));
               CEntity *penEffector = CreateEntity( plElectricityTarget, CLASS_EFFECTOR);
               // set spawn parameters
               ESpawnEffector eSpawnEffector;
               eSpawnEffector.tmLifeTime = 6.0f;
               eSpawnEffector.fSize = 0.025f;
               eSpawnEffector.eetType = ET_HIT_GROUND;
-              eSpawnEffector.vDamageDir = FLOAT3D( 0.0f, 2.0f, 0.0f);
+              eSpawnEffector.vDamageDir = FLOAT3D(0.0f, 2.0f, 0.0f);
               // initialize spray
               penEffector->Initialize( eSpawnEffector);
             }
@@ -2028,7 +2028,7 @@ procedures:
       autowait( m_tmLastPause);
       // fire one guided projectile
       ShootProjectile(PRT_DEVIL_GUIDED_PROJECTILE, MAGIC_PROJECTILE_EXIT, 
-        ANGLE3D( AngleDeg(10.0f*Cos(m_iFiredProjectiles*360.0/6.0f)), -AngleDeg(20.0f*Sin(m_iFiredProjectiles*180.0/6.0f)), 0));
+        ANGLE3D(AngleDeg(10.0f*Cos(m_iFiredProjectiles*360.0/6.0f)), -AngleDeg(20.0f*Sin(m_iFiredProjectiles*180.0/6.0f)), 0));
       PlayWeaponSound( SOUND_ATTACK_BREATH_FIRE);
 
       autowait(0.8f-m_tmLastPause);
@@ -2064,7 +2064,7 @@ procedures:
 
     // turn it arround
     m_tmTemp = _pTimer->CurrentTick();
-    while( _pTimer->CurrentTick() < m_tmTemp+0.7f)
+    while (_pTimer->CurrentTick() < m_tmTemp+0.7f)
     {
       wait(_pTimer->TickQuantum) {
         on (EBegin): { resume; };
@@ -2135,7 +2135,7 @@ procedures:
     m_tmRegenerationStop = m_tmRegenerationStart+TM_HEALTH_IMPULSE-1.5f/*Regeneration particle life time*/;
     // apply health impulse
     m_tmTemp = _pTimer->CurrentTick();
-    while( _pTimer->CurrentTick() < m_tmTemp+TM_HEALTH_IMPULSE)
+    while (_pTimer->CurrentTick() < m_tmTemp+TM_HEALTH_IMPULSE)
     {
       wait(_pTimer->TickQuantum) {
         on (EBegin): { resume; };
@@ -2150,7 +2150,7 @@ procedures:
   }
 
   StopAttack(EVoid) : CEnemyBase::StopAttack {
-    if(m_penEnemy==NULL)
+    if (m_penEnemy==NULL)
     {
       autocall Celebrate() EReturn;
     }
@@ -2162,7 +2162,7 @@ procedures:
   {
     SwitchToModel();
     // continue behavior in base class
-    if( !m_bWasOnceInMainLoop)
+    if (!m_bWasOnceInMainLoop)
     {
       m_bWasOnceInMainLoop = TRUE;
       jump CEnemyBase::MainLoop();
@@ -2235,7 +2235,7 @@ procedures:
 
     // this one is boss!
     m_bBoss = TRUE;
-    if( !m_bForMPIntro)
+    if (!m_bForMPIntro)
     {
       SetHealth(BOSS_HEALTH);
     }
@@ -2256,7 +2256,7 @@ procedures:
 
     // setup default speeds and radiuses
     /*
-    if( tmp_af[0]==0)
+    if (tmp_af[0]==0)
     {
       tmp_af[0]=100.0f;
       tmp_af[1]=200.0f;
@@ -2308,7 +2308,7 @@ procedures:
 
     m_iScore = 0;
 
-    if( !m_bForMPIntro)
+    if (!m_bForMPIntro)
     {
       StartModelAnim(DEVIL_ANIM_POSEDOWN, 0);
       wait() {
@@ -2329,13 +2329,13 @@ procedures:
     wait()
     {
       on (EBegin) : {
-        if( cht_bDebugFinalBoss)
+        if (cht_bDebugFinalBoss)
         {
           CPrintF("Main loop, event: Begin\n");
         }
-        if( !m_bForMPIntro)
+        if (!m_bForMPIntro)
         {
-          if(m_dsDevilState == DS_NOT_EXISTING)
+          if (m_dsDevilState == DS_NOT_EXISTING)
           {
             m_dsDevilState = DS_DESTROYING_CITY;
             call DestroyCity();
@@ -2345,7 +2345,7 @@ procedures:
       }
       on (ETrigger) :
       {
-        if( cht_bDebugFinalBoss)
+        if (cht_bDebugFinalBoss)
         {
           CPrintF("Main loop, event: Trigger\n");
         }
@@ -2353,41 +2353,41 @@ procedures:
       }
       on (EDevilCommand eDevilCommand) :
       {
-        if( cht_bDebugFinalBoss)
+        if (cht_bDebugFinalBoss)
         {
           CTString strDevilCommand = DevilCommandType_enum.NameForValue(INDEX(eDevilCommand.dctType));
           CPrintF("Main loop, event: Devil command: %s\n", strDevilCommand);
         }
 
-        if( eDevilCommand.dctType == DC_GRAB_LOWER_WEAPONS)
+        if (eDevilCommand.dctType == DC_GRAB_LOWER_WEAPONS)
         {
           m_dapAttackPower = DAP_LOW_POWER_ATTACK;
           m_dsDevilState = DS_ENEMY;
           call GrabLowerWeapons();
         }
         // force given action marker
-        else if( eDevilCommand.dctType == DC_FORCE_ACTION)
+        else if (eDevilCommand.dctType == DC_FORCE_ACTION)
         {
           m_penAction = eDevilCommand.penForcedAction;
           call DestroyCity();
         }
-        else if( eDevilCommand.dctType == DC_STOP_MOVING)
+        else if (eDevilCommand.dctType == DC_STOP_MOVING)
         {
           m_vStartPosition = GetPlacement().pl_PositionVector;
           m_fAttackRadius = 0.0f;
         }
-        else if( eDevilCommand.dctType == DC_STOP_ATTACK)
+        else if (eDevilCommand.dctType == DC_STOP_ATTACK)
         {
           SetTargetNone();
         }
-        else if( eDevilCommand.dctType == DC_JUMP_INTO_PYRAMID)
+        else if (eDevilCommand.dctType == DC_JUMP_INTO_PYRAMID)
         {
           GetModelObject()->PlayAnim( DEVIL_ANIM_IDLE, 0);
           m_plTeleport = eDevilCommand.penForcedAction->GetPlacement();
           m_dsDevilState = DS_JUMPING_INTO_PYRAMID;
           call JumpIntoPyramid();
         }
-        else if( eDevilCommand.dctType == DC_TELEPORT_INTO_PYRAMID)
+        else if (eDevilCommand.dctType == DC_TELEPORT_INTO_PYRAMID)
         {
           GetModelObject()->PlayAnim( DEVIL_ANIM_IDLE, 0);
           m_plTeleport = eDevilCommand.penForcedAction->GetPlacement();
@@ -2398,7 +2398,7 @@ procedures:
       }
       on (ERegenerationImpuls) :
       {
-        if( cht_bDebugFinalBoss)
+        if (cht_bDebugFinalBoss)
         {
           CPrintF("Main loop, event: Regeneration impulse\n");
         }
@@ -2408,7 +2408,7 @@ procedures:
       }
       on (EHitBySpaceShipBeam) :
       {
-        if( cht_bDebugFinalBoss)
+        if (cht_bDebugFinalBoss)
         {
           CPrintF("Main loop, event: Hit by space ship beam\n");
         }
@@ -2419,12 +2419,12 @@ procedures:
       }
       // if dead
       on (EDeath eDeath) : {
-        if( !(GetFlags()&ENF_ALIVE))
+        if (!(GetFlags()&ENF_ALIVE))
         {
           resume;
         }
 
-        if( cht_bDebugFinalBoss)
+        if (cht_bDebugFinalBoss)
         {
           CPrintF("Main loop, event: Death\n");
         }
@@ -2439,15 +2439,15 @@ procedures:
       }
       on (EReturn) :
       {
-        if( cht_bDebugFinalBoss)
+        if (cht_bDebugFinalBoss)
         {
           CPrintF("Main loop, event: Return\n");
         }
-        if( m_dsDevilState==DS_DESTROYING_CITY)
+        if (m_dsDevilState==DS_DESTROYING_CITY)
         {
           m_soSound.Set3DParameters(1000.0f, 500.0f, 2.0f, 1.0f);
           m_dsDevilState = DS_ENEMY;
-          if( m_dapAttackPower == DAP_NOT_ATTACKING)
+          if (m_dapAttackPower == DAP_NOT_ATTACKING)
           {
             m_dapAttackPower = DAP_PLAYER_HUNT;
           }

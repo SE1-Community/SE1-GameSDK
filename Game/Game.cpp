@@ -492,7 +492,7 @@ static void CalcDemoProfile( INDEX ctFrames, INDEX &ctFramesNoPeaks,
   dTimeSum = 0;
   DOUBLE dWTriSum=0, dMTriSum=0, dPTriSum=0, dTTriSum=0;
   DOUBLE dWTriSumNoPeaks=0, dMTriSumNoPeaks=0, dPTriSumNoPeaks=0, dTTriSumNoPeaks=0;
-  for( i=0; i<ctFrames; i++) {
+  for (i=0; i<ctFrames; i++) {
     dTimeSum += _atmFrameTimes[i];
     dWTriSum += _actTriangles[i*4 +0];  // world
     dMTriSum += _actTriangles[i*4 +1];  // model
@@ -507,7 +507,7 @@ static void CalcDemoProfile( INDEX ctFrames, INDEX &ctFramesNoPeaks,
 
   // calc raw sigma and limits
   DOUBLE dSigmaSum=0;
-  for( i=0; i<ctFrames; i++) {
+  for (i=0; i<ctFrames; i++) {
     tmCurrent = _atmFrameTimes[i];
     TIME tmDelta = tmCurrent-tmAverage;
     dSigmaSum += tmDelta*tmDelta;
@@ -524,9 +524,9 @@ static void CalcDemoProfile( INDEX ctFrames, INDEX &ctFramesNoPeaks,
   dPTriSumNoPeaks = dPTriSum;
   dTTriSumNoPeaks = dTTriSum;
 
-  for( i=0; i<ctFrames; i++) {
+  for (i=0; i<ctFrames; i++) {
     tmCurrent = _atmFrameTimes[i];
-    if( tmHighLimit>tmCurrent || tmLowLimit<tmCurrent) {
+    if (tmHighLimit>tmCurrent || tmLowLimit<tmCurrent) {
       dTimeSumNoPeaks -= tmCurrent;
       dWTriSumNoPeaks -= _actTriangles[i*4 +0];
       dMTriSumNoPeaks -= _actTriangles[i*4 +1];
@@ -545,13 +545,13 @@ static void CalcDemoProfile( INDEX ctFrames, INDEX &ctFramesNoPeaks,
 
   dSigmaSum=0;
   tmHighPeak=99999, tmLowPeak=0;
-  for( i=0; i<ctFrames; i++) {
+  for (i=0; i<ctFrames; i++) {
     tmCurrent = _atmFrameTimes[i];
-    if( tmHighLimit>tmCurrent || tmLowLimit<tmCurrent) continue;
+    if (tmHighLimit>tmCurrent || tmLowLimit<tmCurrent) continue;
     TIME tmDelta = tmCurrent-tmAverageNoPeaks;
     dSigmaSum += tmDelta*tmDelta;
-    if( tmHighPeak > tmCurrent) tmHighPeak = tmCurrent;
-    if( tmLowPeak  < tmCurrent) tmLowPeak  = tmCurrent;
+    if (tmHighPeak > tmCurrent) tmHighPeak = tmCurrent;
+    if (tmLowPeak  < tmCurrent) tmLowPeak  = tmCurrent;
   }
   tmSigma = Sqrt( dSigmaSum/ctFramesNoPeaks);
 }
@@ -565,13 +565,13 @@ CTString CGame::DemoReportFragmentsProfile( INDEX iRate)
   INDEX ctFrames = _atmFrameTimes.Count();
 
   // if report is not required
-  if( dem_iProfileRate==0) {
+  if (dem_iProfileRate==0) {
     strRes.PrintF( TRANS("\nFragments report disabled.\n"));
     return strRes;
   }
 
   // if not enough frames
-  if( ctFrames<20) {
+  if (ctFrames<20) {
     strRes.PrintF( TRANS("\nNot enough recorded frames to make fragments report.\n"));
     return strRes;
   }
@@ -600,17 +600,17 @@ CTString CGame::DemoReportFragmentsProfile( INDEX iRate)
   FLOAT fFrameCounterNoPeaks = 0;
   TIME  tmRate = dem_iProfileRate;
   INDEX iFragment=1;
-  for( INDEX i=0; i<ctFrames; i++)
+  for (INDEX i=0; i<ctFrames; i++)
   { // get current frame time and calc sums
     TIME tmCurrent = _atmFrameTimes[i];
     dTimeSum += tmCurrent;
     fFrameCounter++;
-    if( tmHighLimit<=tmCurrent && tmLowLimit>=tmCurrent) {
+    if (tmHighLimit<=tmCurrent && tmLowLimit>=tmCurrent) {
       dTimeSumNoPeaks += tmCurrent;
       fFrameCounterNoPeaks++;
     }
     // enough data for one time fragment
-    if( dTimeSum>=tmRate) {
+    if (dTimeSum>=tmRate) {
       FLOAT fTimeOver  = dTimeSum - tmRate;
       FLOAT fFrameOver = fTimeOver/tmCurrent;
       FLOAT fFragmentAverage = tmRate / (fFrameCounter-fFrameOver);
@@ -619,7 +619,7 @@ CTString CGame::DemoReportFragmentsProfile( INDEX iRate)
       strRes += strTmp;
       INDEX iFragmentAverage10 = FloatToInt(5.0f/fFragmentAverage);
       INDEX iFragmentNoPeaks10 = FloatToInt(5.0f/fFragmentNoPeaks);
-      if( iFragmentAverage10 != iFragmentNoPeaks10) strTmp.PrintF( "    !\n");
+      if (iFragmentAverage10 != iFragmentNoPeaks10) strTmp.PrintF( "    !\n");
       else strTmp.PrintF( "\n");
       strRes += strTmp;
       // restart time and frames
@@ -642,7 +642,7 @@ CTString CGame::DemoReportAnalyzedProfile(void)
   CTString strRes="";
   INDEX ctFrames = _atmFrameTimes.Count();
   // nothing kept?
-  if( ctFrames<20) {
+  if (ctFrames<20) {
     strRes.PrintF( TRANS("\nNot enough recorded frames to analyze.\n"));
     return strRes;
   }
@@ -663,19 +663,19 @@ CTString CGame::DemoReportAnalyzedProfile(void)
   DOUBLE dCurrentHighSum=0, dCurrentLowSum=0;
   INDEX  ctHighFrames=0, ctLowFrames=0;
   INDEX  ctCurrentHighFrames=0, ctCurrentLowFrames=0;
-  for( INDEX i=0; i<ctFrames; i++)
+  for (INDEX i=0; i<ctFrames; i++)
   { // skip low peaks
     TIME tmCurrent = _atmFrameTimes[i];
-    if( tmHighLimit>tmCurrent || tmLowLimit<tmCurrent)  continue;
+    if (tmHighLimit>tmCurrent || tmLowLimit<tmCurrent)  continue;
 
     // high?
-    if( (tmAverageNoPeaks-tmSigma) > tmCurrent) {
+    if ((tmAverageNoPeaks-tmSigma) > tmCurrent) {
       // keep high sustain
       dCurrentHighSum += tmCurrent;
       ctCurrentHighFrames++;
     } else {
       // new high sustain found?
-      if( ctHighFrames < ctCurrentHighFrames) {
+      if (ctHighFrames < ctCurrentHighFrames) {
         ctHighFrames = ctCurrentHighFrames;
         dHighSum     = dCurrentHighSum;
       }
@@ -684,13 +684,13 @@ CTString CGame::DemoReportAnalyzedProfile(void)
       dCurrentHighSum     = 0;
     } 
     // low?
-    if( (tmAverageNoPeaks+tmSigma) < tmCurrent) {
+    if ((tmAverageNoPeaks+tmSigma) < tmCurrent) {
       // keep low sustain
       dCurrentLowSum += tmCurrent;
       ctCurrentLowFrames++;
     } else {
       // new low sustain found?
-      if( ctLowFrames < ctCurrentLowFrames) {
+      if (ctLowFrames < ctCurrentLowFrames) {
         ctLowFrames = ctCurrentLowFrames;
         dLowSum     = dCurrentLowSum;
       }
@@ -718,20 +718,20 @@ CTString CGame::DemoReportAnalyzedProfile(void)
   strTmp.PrintF( TRANS("        Low peak: %5.1f FPS\n"), 1.0f/tmLowPeak);
   strRes += strTmp;
   // enough values recorder for high sustain?
-  if( ctHighFrames > (ctFrames/1024+5)) {
+  if (ctHighFrames > (ctFrames/1024+5)) {
     strTmp.PrintF( TRANS("  High sustained: %5.1f FPS (%d frames in %.1f seconds)\n"),
                    tmHighSustained, ctHighFrames, dHighSum);
     strRes += strTmp;
   }
   // enough values recorder for low sustain?
-  if( ctLowFrames > (ctFrames/1024+5)) {
+  if (ctLowFrames > (ctFrames/1024+5)) {
     strTmp.PrintF( TRANS("   Low sustained: %5.1f FPS (%d frames in %.1f seconds)\n"),
                    tmLowSustained,  ctLowFrames,  dLowSum);
     strRes += strTmp;
   }
 
   // do triangle profile output (hidden - maybe not so wise idea)
-  if( dem_bProfile==217) {
+  if (dem_bProfile==217) {
     const FLOAT fAvgRTris = fAvgTTris - (fAvgWTris+fAvgMTris+fAvgPTris);
     const FLOAT fAvgRTrisNoPeaks = fAvgTTrisNoPeaks - (fAvgWTrisNoPeaks+fAvgMTrisNoPeaks+fAvgPTrisNoPeaks);
     strTmp.PrintF( TRANS("Triangles per frame (with and without excessive peaks):\n")); strRes += "\n"+strTmp;
@@ -760,13 +760,13 @@ void CGameTimerHandler::HandleTimer(void)
 void CGame::GameHandleTimer(void)
 {
   // if direct input is active
-  if( _pInput->IsInputEnabled() && !gm_bMenuOn)
+  if (_pInput->IsInputEnabled() && !gm_bMenuOn)
   {
 
     // check if any active control uses joystick
     BOOL bAnyJoy = _ctrlCommonControls.UsesJoystick();
-    for( INDEX iPlayer=0; iPlayer<4; iPlayer++) {
-      if( gm_lpLocalPlayers[ iPlayer].lp_pplsPlayerSource != NULL) {
+    for (INDEX iPlayer=0; iPlayer<4; iPlayer++) {
+      if (gm_lpLocalPlayers[ iPlayer].lp_pplsPlayerSource != NULL) {
         INDEX iCurrentPlayer = gm_lpLocalPlayers[ iPlayer].lp_iPlayer;
         CControls &ctrls = gm_actrlControls[ iCurrentPlayer];
         if (ctrls.UsesJoystick()) {
@@ -784,10 +784,10 @@ void CGame::GameHandleTimer(void)
     if (gm_bGameOn && !_pNetwork->IsPaused() && !_pNetwork->GetLocalPause())
     {
       // for all possible local players
-      for( INDEX iPlayer=0; iPlayer<4; iPlayer++)
+      for (INDEX iPlayer=0; iPlayer<4; iPlayer++)
       {
         // if this player exist
-        if( gm_lpLocalPlayers[ iPlayer].lp_pplsPlayerSource != NULL)
+        if (gm_lpLocalPlayers[ iPlayer].lp_pplsPlayerSource != NULL)
         {
           // publish player index to console
           ctl_iCurrentPlayerLocal = iPlayer;
@@ -827,18 +827,18 @@ void CGame::GameHandleTimer(void)
   else if (gm_bGameOn)
   {
     // for all possible local players
-    for( INDEX iPlayer=0; iPlayer<4; iPlayer++)
+    for (INDEX iPlayer=0; iPlayer<4; iPlayer++)
     { // if this player exist
-      if( gm_lpLocalPlayers[iPlayer].lp_pplsPlayerSource != NULL)
+      if (gm_lpLocalPlayers[iPlayer].lp_pplsPlayerSource != NULL)
       { 
         CPlayerSource &pls = *gm_lpLocalPlayers[iPlayer].lp_pplsPlayerSource;
         // create dummy action for the player for this tick
         CPlayerAction paClearAction;
         // clear actions
         paClearAction = pls.pls_paAction;
-        paClearAction.pa_vTranslation  = FLOAT3D(0.0f,0.0f,0.0f);
-//        paClearAction.pa_aRotation     = ANGLE3D(0,0,0);
-//        paClearAction.pa_aViewRotation = ANGLE3D(0,0,0);
+        paClearAction.pa_vTranslation  = FLOAT3D(0.0f, 0.0f, 0.0f);
+//        paClearAction.pa_aRotation     = ANGLE3D(0.0f, 0.0f, 0.0f);
+//        paClearAction.pa_aViewRotation = ANGLE3D(0.0f, 0.0f, 0.0f);
         paClearAction.pa_ulButtons     = 0;
 
         // clear the action in the client source object
@@ -1078,8 +1078,8 @@ void CGame::EndInternal(void)
 
   // stop and delete any playing sound
   #define MAX_SCRIPTSOUNDS 16
-  for( INDEX i=0; i<MAX_SCRIPTSOUNDS; i++) {
-    if( _apsoScriptChannels[i]==NULL) continue;
+  for (INDEX i=0; i<MAX_SCRIPTSOUNDS; i++) {
+    if (_apsoScriptChannels[i]==NULL) continue;
     _apsoScriptChannels[i]->Stop();
     delete _apsoScriptChannels[i];
   }
@@ -1116,7 +1116,7 @@ BOOL CGame::NewGame(const CTString &strSessionName, const CTFileName &fnWorld,
   }
 
   // try to start current network provider
-  if( !StartProviderFromName()) {
+  if (!StartProviderFromName()) {
     return FALSE;
     gm_bFirstLoading = FALSE;
   }
@@ -1128,11 +1128,11 @@ BOOL CGame::NewGame(const CTString &strSessionName, const CTFileName &fnWorld,
 
   // start the new session
   try {
-    if( dem_bPlay) {
+    if (dem_bPlay) {
       gm_aiStartLocalPlayers[0] = -2;
 
       CTFileName fnmDemo = CTString("Temp\\Play.dem");
-      if( dem_bPlayByName) {
+      if (dem_bPlayByName) {
         fnmDemo = fnWorld;
       }
       CAM_Start(fnmDemo);
@@ -1154,7 +1154,7 @@ BOOL CGame::NewGame(const CTString &strSessionName, const CTFileName &fnWorld,
   // setup players from given indices
   SetupLocalPlayers();
 
-  if( !dem_bPlay && !AddPlayers()) {
+  if (!dem_bPlay && !AddPlayers()) {
     _pNetwork->StopGame();
     _pNetwork->StopProvider();
     gm_bFirstLoading = FALSE;
@@ -1180,7 +1180,7 @@ BOOL CGame::JoinGame(CNetworkSession &session)
   StopGame();
 
   // try to start current network provider
-  if( !StartProviderFromName()) return FALSE;
+  if (!StartProviderFromName()) return FALSE;
 
   // start the new session
   try {
@@ -1200,7 +1200,7 @@ BOOL CGame::JoinGame(CNetworkSession &session)
   // setup players from given indices
   SetupLocalPlayers();
 
-  if( !AddPlayers())
+  if (!AddPlayers())
   {
     _pNetwork->StopGame();
     _pNetwork->StopProvider();
@@ -1220,7 +1220,7 @@ BOOL CGame::LoadGame(const CTFileName &fnGame)
   StopGame();
 
   // try to start current network provider
-  if( !StartProviderFromName()) return FALSE;
+  if (!StartProviderFromName()) return FALSE;
 
   // start the new session
   try {
@@ -1237,7 +1237,7 @@ BOOL CGame::LoadGame(const CTFileName &fnGame)
   // setup players from given indices
   SetupLocalPlayers();
 
-  if( !AddPlayers())
+  if (!AddPlayers())
   {
     _pNetwork->StopGame();
     _pNetwork->StopProvider();
@@ -1267,7 +1267,7 @@ BOOL CGame::StartDemoPlay(const CTFileName &fnDemo)
   StopGame();
 
   // try to start current network provider
-  if( !StartProviderFromName()) {
+  if (!StartProviderFromName()) {
     gm_bFirstLoading = FALSE;
     return FALSE;
   }
@@ -1296,7 +1296,7 @@ BOOL CGame::StartDemoPlay(const CTFileName &fnDemo)
   _atmFrameTimes.PopAll();
   _actTriangles.PopAll();
   gm_bProfileDemo = FALSE;
-  if( dem_bProfile) gm_bProfileDemo = TRUE;
+  if (dem_bProfile) gm_bProfileDemo = TRUE;
   _tvDemoStarted = _pTimer->GetHighPrecisionTimer();
   _tvLastFrame   = _tvDemoStarted;
 
@@ -1387,7 +1387,7 @@ void CGame::StopGame(void)
   // stop the provider
   _pNetwork->StopProvider();
   // for all four local players
-  for( INDEX iPlayer=0; iPlayer<4; iPlayer++)
+  for (INDEX iPlayer=0; iPlayer<4; iPlayer++)
   {
     // mark that current player does not exist any more
     gm_lpLocalPlayers[ iPlayer].lp_bActive = FALSE;
@@ -1409,7 +1409,7 @@ BOOL CGame::StartProviderFromName(void)
     // generate provider description
     CTString strProviderName = litProviders->GetDescription();
     // is this the provider we are searching for ?
-    if( strProviderName == gm_strNetworkProvider)
+    if (strProviderName == gm_strNetworkProvider)
     {
       // it is, set it as active network provider
       gm_npNetworkProvider = litProviders.Current();
@@ -1537,7 +1537,7 @@ void CGame::Load_t( void)
   // read file ID
   strmFile.ExpectID_t( CChunkID( "GAME"));  // game
   // check version number
-  if( !( CChunkID(GAME_SHELL_VER) == strmFile.GetID_t()) )
+  if (!( CChunkID(GAME_SHELL_VER) == strmFile.GetID_t()) )
   {
     throw( TRANS("Invalid version of game shell."));
   }
@@ -1678,17 +1678,17 @@ void CGame::SavePlayersAndControls( void)
   }
 
   // skip checking of players if game isn't on
-  if( !gm_bGameOn) return;
+  if (!gm_bGameOn) return;
 
   // for each local player
-  for( INDEX i=0; i<4; i++) {
+  for (INDEX i=0; i<4; i++) {
     CLocalPlayer &lp = gm_lpLocalPlayers[i];
     // if active
-    if( lp.lp_bActive && lp.lp_pplsPlayerSource!=NULL && lp.lp_iPlayer>=0 && lp.lp_iPlayer<8) {
+    if (lp.lp_bActive && lp.lp_pplsPlayerSource!=NULL && lp.lp_iPlayer>=0 && lp.lp_iPlayer<8) {
       // if its character in game is different than the one in config
       CPlayerCharacter &pcInGame = lp.lp_pplsPlayerSource->pls_pcCharacter;
       CPlayerCharacter &pcConfig = gm_apcPlayers[lp.lp_iPlayer];
-      if( pcConfig.pc_strName!=pcInGame.pc_strName
+      if (pcConfig.pc_strName!=pcInGame.pc_strName
        || pcConfig.pc_strTeam!=pcInGame.pc_strTeam
        || memcmp(pcConfig.pc_aubAppearance, pcInGame.pc_aubAppearance, sizeof(pcInGame.pc_aubAppearance))!=0 ) {
         // demand change in game
@@ -1724,7 +1724,7 @@ BOOL CGame::AddPlayers(void)
 {
   // add local player(s) into game
   try {
-    for(INDEX i=0; i<4; i++) {
+    for (INDEX i=0; i<4; i++) {
       CLocalPlayer &lp = gm_lpLocalPlayers[i];
       INDEX iPlayer = lp.lp_iPlayer;
       if (iPlayer>=0) {
@@ -1769,7 +1769,7 @@ static void PrintStats( CDrawPort *pdpDrawPort)
   FLOAT fTextScale = (FLOAT)slDPWidth/640.0f;
   
   // display resolution info (if needed)
-  if( hud_bShowResolution) {
+  if (hud_bShowResolution) {
     CTString strRes;
     strRes.PrintF( "%dx%dx%s", slDPWidth, slDPHeight, _pGfx->gl_dmCurrentDisplayMode.DepthString());
     pdpDrawPort->SetFont( _pfdDisplayFont);
@@ -1779,7 +1779,7 @@ static void PrintStats( CDrawPort *pdpDrawPort)
   }
 
   // if required, print elapsed playing time
-  if( hud_bShowTime) {
+  if (hud_bShowTime) {
     // set font, spacing and scale
     pdpDrawPort->SetFont( _pfdDisplayFont);
     pdpDrawPort->SetTextScaling( fTextScale);
@@ -1789,7 +1789,7 @@ static void PrintStats( CDrawPort *pdpDrawPort)
     ULONG ulTime = (ULONG)tvNow.GetSeconds();
     // printout elapsed time
     CTString strTime;
-    if( ulTime >= (60*60)) {
+    if (ulTime >= (60*60)) {
       // print hours
       strTime.PrintF( "%02d:%02d:%02d", ulTime/(60*60), (ulTime/60)%60, ulTime%60);
     } else {
@@ -1800,7 +1800,7 @@ static void PrintStats( CDrawPort *pdpDrawPort)
   }
 
   // if required, print real time
-  if( hud_bShowClock) {
+  if (hud_bShowClock) {
     // set font, spacing and scale
     pdpDrawPort->SetFont( _pfdConsoleFont);
     pdpDrawPort->SetTextScaling(1.0f);
@@ -1817,7 +1817,7 @@ static void PrintStats( CDrawPort *pdpDrawPort)
   }
 
   // if required, draw netgraph
-  if( hud_bShowNetGraph)
+  if (hud_bShowNetGraph)
   { // determine and clamp size
     INDEX ctLines = _pNetwork->ga_angeNetGraph.Count();
     ctLines = ClampUp( ctLines, (INDEX)(slDPHeight*0.7f));
@@ -1828,16 +1828,16 @@ static void PrintStats( CDrawPort *pdpDrawPort)
     pdpDrawPort->Fill(       slDPWidth-1-fMaxWidth, pixJ-ctLines+1, fMaxWidth,   ctLines,   SE_COL_BLUE_DARK_HV|64);
     pdpDrawPort->DrawBorder( slDPWidth-2-fMaxWidth, pixJ-ctLines,   fMaxWidth+2, ctLines+2, C_WHITE  |192);
     // draw graph
-    for( INDEX i=0; i<ctLines; i++) {
+    for (INDEX i=0; i<ctLines; i++) {
       FLOAT fValue  = _pNetwork->ga_angeNetGraph[i].nge_fLatency;
       enum NetGraphEntryType nge = _pNetwork->ga_angeNetGraph[i].nge_ngetType;
       FLOAT fWidth = Clamp( fValue, 0.0f, 1.0f)*fMaxWidth;
       COLOR colLine = C_GREEN;                 
-           if( nge==NGET_ACTION)            colLine = C_GREEN;  // normal action (default)
-      else if( nge==NGET_MISSING)           colLine = C_RED;    // missing sequence
-      else if( nge==NGET_NONACTION)         colLine = C_WHITE;  // non-action sequence
-      else if( nge==NGET_REPLICATEDACTION)  colLine = C_BLUE;   // duplicated action
-      else if( nge==NGET_SKIPPEDACTION)     colLine = C_YELLOW; // skipped action
+           if (nge==NGET_ACTION)            colLine = C_GREEN;  // normal action (default)
+      else if (nge==NGET_MISSING)           colLine = C_RED;    // missing sequence
+      else if (nge==NGET_NONACTION)         colLine = C_WHITE;  // non-action sequence
+      else if (nge==NGET_REPLICATEDACTION)  colLine = C_BLUE;   // duplicated action
+      else if (nge==NGET_SKIPPEDACTION)     colLine = C_YELLOW; // skipped action
       else                 colLine = C_BLACK;  // unknown ???
       ULONG ulAlpha = FloatToInt( ((FLOAT)ctLines-(i*0.3333f)) *f192oLines);
       pdpDrawPort->DrawLine( slDPWidth-2, pixJ-i, slDPWidth-2-fWidth, pixJ-i, colLine|ulAlpha);
@@ -1846,7 +1846,7 @@ static void PrintStats( CDrawPort *pdpDrawPort)
 
   // if stats aren't required
   hud_iStats = Clamp( hud_iStats, 0L, 2L);
-  if( hud_iStats==0 || (hud_iEnableStats==0 && hud_fEnableFPS==0)) {
+  if (hud_iStats==0 || (hud_iEnableStats==0 && hud_fEnableFPS==0)) {
     // display nothing
     _iCheckNow = 0;
     _iCheckMax = 0;
@@ -1856,8 +1856,8 @@ static void PrintStats( CDrawPort *pdpDrawPort)
   // calculate FPS
   FLOAT fFPS = 0.0f;
   _iCheckMax++;
-  if( _iCheckMax >= FRAMES_AVERAGING_MAX) {
-    for( INDEX i=0; i<FRAMES_AVERAGING_MAX; i++) fFPS += _tvDelta[i].GetSeconds();
+  if (_iCheckMax >= FRAMES_AVERAGING_MAX) {
+    for (INDEX i=0; i<FRAMES_AVERAGING_MAX; i++) fFPS += _tvDelta[i].GetSeconds();
     fFPS = FRAMES_AVERAGING_MAX*FRAMES_AVERAGING_MAX / fFPS;
     _iCheckMax = FRAMES_AVERAGING_MAX;
   }
@@ -1875,19 +1875,19 @@ static void PrintStats( CDrawPort *pdpDrawPort)
 
   // display colored FPS 
   COLOR colFPS = C_RED;
-  if( fFPS >= 20) colFPS = C_GREEN;
-  if( fFPS >= 60) colFPS = C_WHITE;
-  if( fFPS <  10) pdpDrawPort->SetTextScaling( fTextScale*1.5); // enlarge output if FPS is extremely low
+  if (fFPS >= 20) colFPS = C_GREEN;
+  if (fFPS >= 60) colFPS = C_WHITE;
+  if (fFPS <  10) pdpDrawPort->SetTextScaling( fTextScale*1.5); // enlarge output if FPS is extremely low
 
   // prepare FPS string for printing
   CTString strFPS = "?";
-       if( fFPS >= 30)   strFPS.PrintF( "%3.0f", fFPS);
-  else if( fFPS >= 0.1f) strFPS.PrintF( "%3.1f", fFPS);
+       if (fFPS >= 30)   strFPS.PrintF( "%3.0f", fFPS);
+  else if (fFPS >= 0.1f) strFPS.PrintF( "%3.1f", fFPS);
   // printout FPS number (if allowed)
-  if( hud_fEnableFPS) pdpDrawPort->PutTextC( strFPS, slDPWidth*0.75f, slDPHeight*0.005f, colFPS|192);
+  if (hud_fEnableFPS) pdpDrawPort->PutTextC( strFPS, slDPWidth*0.75f, slDPHeight*0.005f, colFPS|192);
 
   // if in extensive stats mode
-  if( hud_iStats==2 && hud_iEnableStats)
+  if (hud_iStats==2 && hud_iEnableStats)
   { // display extensive statistics
     CTString strReport;
     STAT_Report(strReport);
@@ -2092,7 +2092,7 @@ static BOOL _bPlayerViewRendered = FALSE;
 void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
 {
   // if thumbnail saving has been required
-  if( _fnmThumb!="")
+  if (_fnmThumb!="")
   { // reset the need for saving thumbnail
     CTFileName fnm = _fnmThumb;
     _fnmThumb = CTString("");
@@ -2123,14 +2123,14 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
     }
   }
 
-  if( ulFlags) {
+  if (ulFlags) {
     // pretouch memory if required (only if in game mode, not screengrabbing or profiling!)
     SE_PretouchIfNeeded();
   }
 
   // if game is started and computer isn't on
   BOOL bClientJoined = FALSE;
-  if( gm_bGameOn && (_pGame->gm_csComputerState==CS_OFF || pdpDrawPort->IsDualHead()) 
+  if (gm_bGameOn && (_pGame->gm_csComputerState==CS_OFF || pdpDrawPort->IsDualHead()) 
     && gm_CurrentSplitScreenCfg!=SSC_DEDICATED )
   {
 
@@ -2175,10 +2175,10 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
     // timer must not occur during prescanning
     { CTSingleLock csTimer(&_pTimer->tm_csHooks, TRUE);
     // for each local player
-    for( INDEX i=0; i<4; i++) {
+    for (INDEX i=0; i<4; i++) {
       // if local player
       CPlayerSource *ppls = gm_lpLocalPlayers[i].lp_pplsPlayerSource;
-      if( ppls!=NULL) {
+      if (ppls!=NULL) {
         // get local player entity
         apenViewers[ctViewers++] = _pNetwork->GetLocalPlayerEntity(ppls);
         // precreate action for it for this tick
@@ -2319,7 +2319,7 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
       if (_pGame->gm_csConsoleState==CS_OFF) ConsolePrintLastLines( &dpMsg);
 
       // print demo OSD
-      if( dem_bOSD) {
+      if (dem_bOSD) {
         CTString strMessage;
         // print the message
         strMessage.PrintF("%.2fs", _pNetwork->ga_fDemoTimer);
@@ -2331,11 +2331,11 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
     }
 
     // keep frames' time if required
-    if( gm_bProfileDemo)
+    if (gm_bProfileDemo)
     {
       CTimerValue tvThisFrame = _pTimer->GetHighPrecisionTimer();
       // if demo has been finished
-      if( _pNetwork->IsDemoPlayFinished()) {
+      if (_pNetwork->IsDemoPlayFinished()) {
         // end profile
         gm_bProfileDemo = FALSE;
         CPrintF( DemoReportAnalyzedProfile());
@@ -2354,14 +2354,14 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
     }
     
     // execute cvar after demoplay
-    if( _pNetwork->IsDemoPlayFinished() && dem_strPostExec!="") _pShell->Execute(dem_strPostExec);
+    if (_pNetwork->IsDemoPlayFinished() && dem_strPostExec!="") _pShell->Execute(dem_strPostExec);
   }
 
   // if no game is active
   else
   {
     // clear background
-    if( pdpDrawPort->Lock()) {
+    if (pdpDrawPort->Lock()) {
  	    pdpDrawPort->Fill( SE_COL_BLUE_DARK|CT_OPAQUE);
       pdpDrawPort->FillZBuffer( ZBUF_BACK);
       pdpDrawPort->Unlock();
@@ -2380,7 +2380,7 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
   _pSound->UpdateSounds();
   _pGfx->gl_bAllowProbing = FALSE;
 
-  if( bSaveScreenShot || dem_iAnimFrame>=0)
+  if (bSaveScreenShot || dem_iAnimFrame>=0)
   {
     // make the screen shot directory if it doesn't already exist
     bSaveScreenShot = FALSE;
@@ -2390,7 +2390,7 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
 
     // create a name for screenshot
     CTFileName fnmScreenShot;
-    if( dem_iAnimFrame<0) {
+    if (dem_iAnimFrame<0) {
       fnmScreenShot = MakeScreenShotName();
     } else {
       // create number for the file
@@ -2401,7 +2401,7 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
     }
     // grab screen creating image info
     CImageInfo iiImageInfo;
-    if( pdpDrawPort->Lock()) {
+    if (pdpDrawPort->Lock()) {
       pdpDrawPort->GrabScreen( iiImageInfo, 1);
       pdpDrawPort->Unlock();
     }
@@ -2409,7 +2409,7 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
     try {
       // save screen shot as TGA
       iiImageInfo.SaveTGA_t( fnmScreenShot);
-      if( dem_iAnimFrame<0) CPrintF( TRANS("screen shot: %s\n"), (CTString&)fnmScreenShot);
+      if (dem_iAnimFrame<0) CPrintF( TRANS("screen shot: %s\n"), (CTString&)fnmScreenShot);
     }
     // if failed
     catch (char *strError) {
@@ -2440,7 +2440,7 @@ void CGame::RecordHighScore(void)
 
   // find entry with lower score
   INDEX iLess=0;
-  for(; iLess<HIGHSCORE_COUNT; iLess++) {
+  for (; iLess<HIGHSCORE_COUNT; iLess++) {
     if (gm_ahseHighScores[iLess].hse_ctScore<ctScore) {
       break;
     }
@@ -2452,7 +2452,7 @@ void CGame::RecordHighScore(void)
   }
 
   // move all lower entries one place down, dropping the last one
-  for(INDEX i=HIGHSCORE_COUNT-1; i>iLess; i--) {
+  for (INDEX i=HIGHSCORE_COUNT-1; i>iLess; i--) {
     gm_ahseHighScores[i] = gm_ahseHighScores[i-1];
   }
 

@@ -39,7 +39,7 @@ static EntityInfo eiWalker = {
 #define SIZE_SERGEANT  (1.0f)
 #define FIRE_LEFT_ARM   FLOAT3D(-2.5f, 5.0f, 0.0f)
 #define FIRE_RIGHT_ARM  FLOAT3D(+2.5f, 5.0f, 0.0f)
-#define FIRE_DEATH_LEFT   FLOAT3D( 0.0f, 7.0f, -2.0f)
+#define FIRE_DEATH_LEFT   FLOAT3D(0.0f, 7.0f, -2.0f)
 #define FIRE_DEATH_RIGHT  FLOAT3D(3.75f, 4.2f, -2.5f)
 
 #define WALKERSOUND(soundname) ((m_EwcChar==WLC_SOLDIER)? (SOUND_SOLDIER_##soundname) : (SOUND_SERGEANT_##soundname))
@@ -107,7 +107,7 @@ functions:
   virtual const CTFileName &GetComputerMessageName(void) const {
     static DECLARE_CTFILENAME(fnmSoldier,  "Data\\Messages\\Enemies\\WalkerSmall.txt");
     static DECLARE_CTFILENAME(fnmSergeant, "Data\\Messages\\Enemies\\WalkerBig.txt");
-    switch(m_EwcChar) {
+    switch (m_EwcChar) {
     default: ASSERT(FALSE);
     case WLC_SOLDIER:   return fnmSoldier;
     case WLC_SERGEANT: return fnmSergeant;
@@ -184,7 +184,7 @@ functions:
   {
 
     // take less damage from heavy bullets (e.g. sniper)
-    if(dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount*=0.666f;
     }
@@ -334,7 +334,7 @@ procedures:
     // sergeant 4 rockets
     if (m_EwcChar==WLC_SERGEANT) {
       StartModelAnim(WALKER_ANIM_FIRERIGHT, AOF_LOOPING);
-      ShootProjectile(PRT_WALKER_ROCKET, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_WALKER_ROCKET, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soFire1, SOUND_SERGEANT_FIRE_ROCKET, SOF_3D);
       if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
         m_fLockOnEnemyTime = 1.0f;
@@ -343,7 +343,7 @@ procedures:
       }
       autocall CEnemyBase::LockOnEnemy() EReturn;
       StartModelAnim(WALKER_ANIM_FIRELEFT, AOF_LOOPING);
-      ShootProjectile(PRT_WALKER_ROCKET, FIRE_LEFT_ARM*m_fSize, ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_WALKER_ROCKET, FIRE_LEFT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soFire2, SOUND_SERGEANT_FIRE_ROCKET, SOF_3D);
 
 //      m_fLockOnEnemyTime = 0.25f;
@@ -355,13 +355,13 @@ procedures:
       } else {
         m_iLoopCounter = 8;
       }
-      while(m_iLoopCounter>0) {
+      while (m_iLoopCounter>0) {
         if (m_iLoopCounter%2) {
           StartModelAnim(WALKER_ANIM_FIRELEFT, AOF_LOOPING);
-          ShootProjectile(PRT_CYBORG_LASER, FIRE_LEFT_ARM*m_fSize, ANGLE3D(0, 0, 0));
+          ShootProjectile(PRT_CYBORG_LASER, FIRE_LEFT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
         } else {
           StartModelAnim(WALKER_ANIM_FIRERIGHT, AOF_LOOPING);
-          ShootProjectile(PRT_CYBORG_LASER, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(0, 0, 0));
+          ShootProjectile(PRT_CYBORG_LASER, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
         }
         INDEX iChannel = m_iLoopCounter%4;
         if (iChannel==0) {
@@ -450,7 +450,7 @@ procedures:
     ESpawnEffect ese;
     ese.colMuliplier = C_WHITE|CT_OPAQUE;
     ese.vStretch = FLOAT3D(1.5,1,1)*fStretch;
-    ese.vNormal = FLOAT3D(0,1,0);
+    ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
     ese.betType = BET_DUST_FALL;
     CPlacement3D plSmoke=plFX;
     plSmoke.pl_PositionVector+=FLOAT3D(0,0.35f*ese.vStretch(2),0);
@@ -489,7 +489,7 @@ procedures:
       SetModelMainTexture(TEXTURE_WALKER_SERGEANT);
       AddAttachment(WALKER_ATTACHMENT_ROCKETLAUNCHER_LT, MODEL_ROCKETLAUNCHER, TEXTURE_ROCKETLAUNCHER);
       AddAttachment(WALKER_ATTACHMENT_ROCKETLAUNCHER_RT, MODEL_ROCKETLAUNCHER, TEXTURE_ROCKETLAUNCHER);
-      GetModelObject()->StretchModel(FLOAT3D(1,1,1));
+      GetModelObject()->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
       ModelChangeNotify();
       CModelObject *pmoRight = &GetModelObject()->GetAttachmentModel(WALKER_ATTACHMENT_ROCKETLAUNCHER_RT)->amo_moModelObject;
       pmoRight->StretchModel(FLOAT3D(-1,1,1));

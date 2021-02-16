@@ -258,7 +258,7 @@ procedures:
     // if health is received
     if (epass.penOther->ReceiveItem(eArmor)) {
 
-      if(_pNetwork->IsPlayerLocal(epass.penOther))
+      if (_pNetwork->IsPlayerLocal(epass.penOther))
       {
         switch (m_EaitType)
         {

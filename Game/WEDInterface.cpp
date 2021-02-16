@@ -92,7 +92,7 @@ void CGame::QuickTest(const CTFileName &fnMapName,
   SetQuickStartSession(sp);
 
   // start the game
-  if( !NewGame( fnMapName, fnMapName, sp)) {
+  if (!NewGame( fnMapName, fnMapName, sp)) {
     DisableLoadingHook();
     return;
   }
@@ -103,21 +103,21 @@ void CGame::QuickTest(const CTFileName &fnMapName,
   // initialy, game is running
   BOOL bRunning = TRUE;
   // while it is still running
-  while( bRunning)
+  while (bRunning)
   {
     // while there are any messages in the message queue
     MSG msg;
-    while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE)) {
+    while (PeekMessage( &msg, NULL, 0, 0, PM_REMOVE)) {
       // if it is not a mouse message
-      if( !(msg.message>=WM_MOUSEFIRST && msg.message<=WM_MOUSELAST)) {
+      if (!(msg.message>=WM_MOUSEFIRST && msg.message<=WM_MOUSELAST)) {
         // if not system key messages
-        if( !(msg.message==WM_KEYDOWN && msg.wParam==VK_F10
+        if (!(msg.message==WM_KEYDOWN && msg.wParam==VK_F10
             ||msg.message==WM_SYSKEYDOWN)) {
           // dispatch it
           TranslateMessage(&msg);
         }
         // if paint message
-        if( msg.message==WM_PAINT) {
+        if (msg.message==WM_PAINT) {
           // dispatch it
           DispatchMessage(&msg);
         }
@@ -138,20 +138,20 @@ void CGame::QuickTest(const CTFileName &fnMapName,
 
       if (msg.message==uiMessengerMsg)
       {
-        if(!_pNetwork->IsPaused()) 
+        if (!_pNetwork->IsPaused()) 
         {
           // pause it
           _pNetwork->TogglePause();
         }
         char *pachrTemp=getenv("TEMP");
-        if( pachrTemp!=NULL)
+        if (pachrTemp!=NULL)
         {
           FILE *pfileMessage=fopen(CTString(pachrTemp)+"Messenger.msg","r");
-          if( pfileMessage!=NULL)
+          if (pfileMessage!=NULL)
           {
             char achrMessage[1024];
             char *pachrMessage=fgets( achrMessage, 1024-1, pfileMessage);
-            if( pachrMessage!=NULL)
+            if (pachrMessage!=NULL)
             {
               CPrintF("%s",pachrMessage);
             }
@@ -165,7 +165,7 @@ void CGame::QuickTest(const CTFileName &fnMapName,
         // toggle pause
         _pNetwork->TogglePause();
       }
-      if(msg.message==WM_KEYDOWN && 
+      if (msg.message==WM_KEYDOWN && 
         (MapVirtualKey(msg.wParam, 0)==41 // scan code for '~'
         ||msg.wParam==VK_F1)) {
         if (_pGame->gm_csConsoleState==CS_OFF || _pGame->gm_csConsoleState==CS_TURNINGOFF) {
@@ -186,7 +186,7 @@ void CGame::QuickTest(const CTFileName &fnMapName,
         }
       } else if (msg.message==WM_KEYUP) {
         // special handler for talk (not to invoke return key bind)
-        if( msg.wParam==VK_RETURN && _pGame->gm_csConsoleState==CS_TALK) _pGame->gm_csConsoleState = CS_OFF;
+        if (msg.wParam==VK_RETURN && _pGame->gm_csConsoleState==CS_TALK) _pGame->gm_csConsoleState = CS_OFF;
       } else if (msg.message==WM_CHAR) {
         ConsoleChar(msg);
       }
@@ -224,7 +224,7 @@ void CGame::QuickTest(const CTFileName &fnMapName,
     // redraw the view
     if (pdp->Lock()) {
       // if current view preferences will not clear the background, clear it here
-      if( _wrpWorldRenderPrefs.GetPolygonsFillType() == CWorldRenderPrefs::FT_NONE) {
+      if (_wrpWorldRenderPrefs.GetPolygonsFillType() == CWorldRenderPrefs::FT_NONE) {
         // clear background
         pdp->Fill(C_BLACK| CT_OPAQUE);
         pdp->FillZBuffer(ZBUF_BACK);

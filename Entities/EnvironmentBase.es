@@ -35,7 +35,7 @@ properties:
   5 CEntityPointer m_penTarget    "Target" 'T',
   6 CEntityPointer m_penWatcher,
   7 FLOAT m_fWatcherFrequency     "Watcher frequency" = 2.0f,   // watcher will look every x seconds for players
-  8 FLOAT3D m_vDesiredPosition = FLOAT3D(0, 0, 0),              // desired position for moving
+  8 FLOAT3D m_vDesiredPosition = FLOAT3D(0.0f, 0.0f, 0.0f),              // desired position for moving
 
  10 FLOAT m_fMoveSpeed            "Move speed" 'V' = 2.0f,
  11 FLOAT m_fRotateSpeed          "Rotate speed" 'B' = 60.0f,
@@ -87,22 +87,22 @@ functions:
   };
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset) {
-    if(slPropertyOffset==offsetof(CEnvironmentBase, m_iAnim)) {
+    if (slPropertyOffset==offsetof(CEnvironmentBase, m_iAnim)) {
       return GetModelObject()->GetData();
 
-    } else if(slPropertyOffset==offsetof(CEnvironmentBase, m_iAtt1Anim)) {
+    } else if (slPropertyOffset==offsetof(CEnvironmentBase, m_iAtt1Anim)) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt1Position);
-      if( pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
+      if (pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
       return CEntity::GetAnimData(slPropertyOffset);
 
-    } else if(slPropertyOffset==offsetof(CEnvironmentBase, m_iAtt2Anim)) {
+    } else if (slPropertyOffset==offsetof(CEnvironmentBase, m_iAtt2Anim)) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt2Position);
-      if( pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
+      if (pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
       return CEntity::GetAnimData(slPropertyOffset);
 
-    } else if(slPropertyOffset==offsetof(CEnvironmentBase, m_iAtt3Anim)) {
+    } else if (slPropertyOffset==offsetof(CEnvironmentBase, m_iAtt3Anim)) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt3Position);
-      if( pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
+      if (pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
       return CEntity::GetAnimData(slPropertyOffset);
 
     } else {
@@ -164,7 +164,7 @@ functions:
 
   // stop moving
   void StopMoving(void) {
-    SetDesiredRotation(ANGLE3D(0, 0, 0));
+    SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
     SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
   };
 
@@ -226,12 +226,12 @@ functions:
     SetCollisionFlags(ECF_MODEL);
 
     // set model stretch -- MUST BE DONE BEFORE SETTING MODEL!
-    GetModelObject()->mo_Stretch = FLOAT3D( m_fStretch, m_fStretch, m_fStretch);
+    GetModelObject()->mo_Stretch = FLOAT3D(m_fStretch, m_fStretch, m_fStretch);
 
     // set appearance
     SetModel(m_fnMdl);
     GetModelObject()->PlayAnim(m_iAnim, AOF_LOOPING);
-    if( m_fnTex != CTString("")) {
+    if (m_fnTex != CTString("")) {
       GetModelObject()->mo_toTexture.SetData_t(m_fnTex);
     }
 
@@ -239,23 +239,23 @@ functions:
     
     AddAttachment( m_iAtt1Position, m_fnAtt1Mdl, m_fnAtt1Tex);
     CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel( m_iAtt1Position);
-    if( pamo != NULL) {
+    if (pamo != NULL) {
       pamo->amo_moModelObject.StartAnim( m_iAtt1Anim);
     }
 
-    if( (m_iAtt2Position != m_iAtt1Position) && (m_fnAtt1Mdl != m_fnAtt2Mdl) ) {
+    if ((m_iAtt2Position != m_iAtt1Position) && (m_fnAtt1Mdl != m_fnAtt2Mdl) ) {
       AddAttachment( m_iAtt2Position, m_fnAtt2Mdl, m_fnAtt2Tex);
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel( m_iAtt2Position);
-      if( pamo != NULL) {
+      if (pamo != NULL) {
         pamo->amo_moModelObject.StartAnim( m_iAtt2Anim);
       }
     }
 
-    if( (m_iAtt3Position != m_iAtt1Position) && (m_fnAtt1Mdl != m_fnAtt3Mdl) && 
+    if ((m_iAtt3Position != m_iAtt1Position) && (m_fnAtt1Mdl != m_fnAtt3Mdl) && 
         (m_iAtt3Position != m_iAtt2Position) && (m_fnAtt2Mdl != m_fnAtt3Mdl) ) {
       AddAttachment( m_iAtt3Position, m_fnAtt3Mdl, m_fnAtt3Tex);
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel( m_iAtt3Position);
-      if( pamo != NULL) {
+      if (pamo != NULL) {
         pamo->amo_moModelObject.StartAnim( m_iAtt3Anim);
       }
     }

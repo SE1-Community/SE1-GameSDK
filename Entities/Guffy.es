@@ -34,7 +34,7 @@ static EntityInfo eiGuffy = {
 #define FIRE_LEFT_ARM   FLOAT3D(-0.56f, +1.125f, -1.32f)
 #define FIRE_RIGHT_ARM  FLOAT3D(+0.50f, +1.060f, -0.82f)
 
-//#define FIRE_DEATH_LEFT   FLOAT3D( 0.0f, 7.0f, -2.0f)
+//#define FIRE_DEATH_LEFT   FLOAT3D(0.0f, 7.0f, -2.0f)
 //#define FIRE_DEATH_RIGHT  FLOAT3D(3.75f, 4.2f, -2.5f)
 
 %}
@@ -227,11 +227,11 @@ functions:
   // death
   FLOAT WaitForDust(FLOAT3D &vStretch) {
     vStretch=FLOAT3D(1,1,2)*1.5f;
-    if(GetModelObject()->GetAnim()==GUFFY_ANIM_DEATHBACKWARD)
+    if (GetModelObject()->GetAnim()==GUFFY_ANIM_DEATHBACKWARD)
     {
       return 0.48f;
     }
-    else if(GetModelObject()->GetAnim()==GUFFY_ANIM_DEATHFORWARD)
+    else if (GetModelObject()->GetAnim()==GUFFY_ANIM_DEATHFORWARD)
     {
       return 1.0f;
    }
@@ -256,7 +256,7 @@ procedures:
     BOOL bEnemyRight = fLookRight % (m_penEnemy->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector);
 
     if (bEnemyRight>=0) {  // enemy is to the right of guffy
-      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_LEFT_ARM*m_fSize, ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_LEFT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soFire1, SOUND_FIRE, SOF_3D);
       
       ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(-9, 0, 0));
@@ -265,7 +265,7 @@ procedures:
       ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_LEFT_ARM*m_fSize, ANGLE3D(9, 0, 0));
       PlaySound(m_soFire1, SOUND_FIRE, SOF_3D);
       
-      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(0, 0, 0));
+      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soFire2, SOUND_FIRE, SOF_3D);
     }
     

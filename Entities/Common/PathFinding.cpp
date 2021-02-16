@@ -78,7 +78,7 @@ static void SortIntoOpenList(CPathNode *ppnLink)
   // start at head of the open list
   LISTITER(CPathNode, pn_lnInOpen) itpn(_lhOpen);
   // while the given node is further than the one in list
-  while(ppnLink->pn_fF>itpn->pn_fF && !itpn.IsPastEnd()) {
+  while (ppnLink->pn_fF>itpn->pn_fF && !itpn.IsPastEnd()) {
     // move to next node
     itpn.MoveToNext();
   }
@@ -133,7 +133,7 @@ static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst)
 
     // for each link of current node
     CPathNode *ppnLink = NULL;
-    for(INDEX i=0; (ppnLink=ppnNode->GetLink(i))!=NULL; i++) {
+    for (INDEX i=0; (ppnLink=ppnNode->GetLink(i))!=NULL; i++) {
       PRINTOUT(CPrintF(" Link %d: %s\n", i, ppnLink->GetName()));
       // get cost to get to this node if coming from current node
       FLOAT fNewG = ppnLink->pn_fG+NodeDistance(ppnNode, ppnLink);
@@ -206,7 +206,7 @@ static void FindClosestMarker(
       // get distance from source
       FLOAT fDist = (vSrc-nm.GetPlacement().pl_PositionVector).Length();
       // if closer than best found
-      if(fDist<fMinDist) {
+      if (fDist<fMinDist) {
         // remember it
         fMinDist = fDist;
         pnmMin = &nm;

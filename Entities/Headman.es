@@ -123,7 +123,7 @@ functions:
     static DECLARE_CTFILENAME(fnmFirecracker, "Data\\Messages\\Enemies\\Firecracker.txt");
     static DECLARE_CTFILENAME(fnmBomberman,   "Data\\Messages\\Enemies\\Bomberman.txt");
     static DECLARE_CTFILENAME(fnmKamikaze,    "Data\\Messages\\Enemies\\Kamikaze.txt");
-    switch(m_hdtType) {
+    switch (m_hdtType) {
     default: ASSERT(FALSE);
     case HDT_ROCKETMAN:   return fnmRocketman;
     case HDT_FIRECRACKER: return fnmFirecracker;
@@ -139,7 +139,7 @@ functions:
     PrecacheSound(SOUND_WOUND);
     PrecacheSound(SOUND_DEATH);
 
-    switch(m_hdtType) {
+    switch (m_hdtType) {
     case HDT_FIRECRACKER: { 
       PrecacheSound(SOUND_FIREFIRECRACKER);
       PrecacheClass(CLASS_PROJECTILE, PRT_HEADMAN_FIRECRACKER);
@@ -168,7 +168,7 @@ functions:
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
-    switch(m_hdtType) {
+    switch (m_hdtType) {
     case HDT_FIRECRACKER: { pes->es_strName+=" Firecracker"; } break;
     case HDT_ROCKETMAN:   { pes->es_strName+=" Rocketman"; } break;
     case HDT_BOMBERMAN:   { pes->es_strName+=" Bomberman"; } break;
@@ -234,22 +234,22 @@ functions:
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
     vStretch=FLOAT3D(1,1,2);
-    if(GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_EASY_FALL_BACK)
+    if (GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_EASY_FALL_BACK)
     {
       vStretch=vStretch*0.3f;
       return 0.864f;
     }
-    if(GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_FALL_BACK)
+    if (GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_FALL_BACK)
     {
       vStretch=vStretch*0.75f;
       return 0.48f;
     }    
-    if(GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_EASY_FALL_FORWARD)
+    if (GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_EASY_FALL_FORWARD)
     {
       vStretch=vStretch*0.3f;
       return 1.12f;
     }
-    else if(GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_FALL_ON_KNEES)
+    else if (GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_FALL_ON_KNEES)
     {
       vStretch=vStretch*0.75f;
       return 1.035f;
@@ -357,7 +357,7 @@ functions:
   // spawn body parts
   /*void BlowUp(void)
   {
-    if( m_hdtType==HDT_FIRECRACKER || m_hdtType==HDT_ROCKETMAN)
+    if (m_hdtType==HDT_FIRECRACKER || m_hdtType==HDT_ROCKETMAN)
     {
       // get your size
       FLOATaabbox3D box;
@@ -375,7 +375,7 @@ functions:
       Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, fEntitySize, vNormalizedDamage, vBodySpeed, 5.0f, 2.0f);
 
       INDEX iTextureID = TEXTURE_ROCKETMAN;
-      if( m_hdtType==HDT_FIRECRACKER)
+      if (m_hdtType==HDT_FIRECRACKER)
       {
         iTextureID = TEXTURE_FIRECRACKER;
       }
@@ -526,7 +526,7 @@ procedures:
     FLOAT fRelativeHdg;
     CalculateAngularLaunchParams(
       GetPlacement().pl_PositionVector, BOMBERMAN_LAUNCH(2)-1.5f,
-      m_penEnemy->GetPlacement().pl_PositionVector, FLOAT3D(0,0,0),
+      m_penEnemy->GetPlacement().pl_PositionVector, FLOAT3D(0.0f, 0.0f, 0.0f),
       BOMBERMAN_ANGLE,
       fLaunchSpeed,
       fRelativeHdg);
@@ -589,7 +589,7 @@ procedures:
     autowait(0.2f + FRnd()/4);
 
     StartModelAnim(HEADMAN_ANIM_ROCKETMAN_ATTACK, 0);
-    ShootProjectile(PRT_HEADMAN_ROCKETMAN, FLOAT3D(0.0f, 1.0f, 0.0f), ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_HEADMAN_ROCKETMAN, FLOAT3D(0.0f, 1.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soSound, SOUND_FIREROCKETMAN, SOF_3D);
 
     autowait(1.0f + FRnd()/3);

@@ -68,7 +68,7 @@ event EForceExplode {
 #define NUKE_RANGE_FALLOFF 50.0f
 #define SOUND_RANGE 250.0f
 
-#define STRETCH_0  FLOAT3D(0.0f,0.0f,0.0f)
+#define STRETCH_0  FLOAT3D(0.0f, 0.0f, 0.0f)
 #define STRETCH_1  FLOAT3D(1.0f,1.0f,1.0f)
 #define STRETCH_2  FLOAT3D(2.0f,2.0f,2.0f)
 #define STRETCH_3  FLOAT3D(3.0f,3.0f,3.0f)
@@ -225,7 +225,7 @@ functions:
     FLOAT fSpeedRatio = Min( en_vCurrentTranslationAbsolute.Length()/140.0f, 1.0f);
     INDEX ctFireParticles = INDEX( (Max( fSpeedRatio-0.5f, 0.0f)*2.0f)*128);
     //CPrintF("fSpeedRatio=%g, ctFireParticles=%d\n", fSpeedRatio, ctFireParticles);
-    if( _pTimer->GetLerpedCurrentTick()-m_fStartTime>0.075)
+    if (_pTimer->GetLerpedCurrentTick()-m_fStartTime>0.075)
     {
       Particles_BeastBigProjectileTrail( this, 2.0f, 1.0f, 0.75f, ctFireParticles);
     }
@@ -237,7 +237,7 @@ void Initialize(void) {
   SetPhysicsFlags(EPF_MODEL_BOUNCING);
   SetCollisionFlags(ECF_CANNON_BALL);
   SetModel(MODEL_BALL);
-  if( m_cbtType == CBT_IRON)
+  if (m_cbtType == CBT_IRON)
   {
     SetModelMainTexture(TEXTURE_IRON_BALL);
   }
@@ -268,7 +268,7 @@ void Initialize(void) {
 FLOAT CalculateDamageToInflict(void)
 {
   FLOAT fMaxDamage = IRON_DAMAGE_MAX;
-  if(m_cbtType == CBT_NUKE)
+  if (m_cbtType == CBT_NUKE)
   {
     fMaxDamage = IRON_DAMAGE_MAX;
   }
@@ -295,10 +295,10 @@ void Explosion(FLOAT3D vCenter,
   FLOAT fDistanceToEdge;
   
   // explosion
-  if( bHasExplosion)
+  if (bHasExplosion)
   {
     ese.colMuliplier = C_WHITE|CT_OPAQUE;
-    if( bHasLight)
+    if (bHasLight)
     {
       ese.betType = BET_CANNON;
     }
@@ -311,30 +311,30 @@ void Explosion(FLOAT3D vCenter,
     plHandle.pl_PositionVector+=vCenter;
     SpawnEffect(plHandle, ese);
     // spawn sound event in range
-    if( IsDerivedFromClass( m_penLauncher, "Player")) {
+    if (IsDerivedFromClass( m_penLauncher, "Player")) {
       SpawnRangeSound( m_penLauncher, this, SNDT_PLAYER, 100.0f);
     }
   }
   // on plane
   if (GetNearestPolygon(vOnPlane, vPlaneNormal, fDistanceToEdge)) {
     if ((vOnPlane-GetPlacement().pl_PositionVector).Length() < 3.5f) {
-      if( bHasStain)
+      if (bHasStain)
       {
         // wall stain
         ese.colMuliplier = C_WHITE|CT_OPAQUE;
         ese.betType = BET_CANNONEXPLOSIONSTAIN;
         ese.vNormal = FLOAT3D(vPlaneNormal);
         ese.vStretch = vStretchShockwave;
-        SpawnEffect(CPlacement3D(vOnPlane, ANGLE3D(0, 0, 0)), ese);
+        SpawnEffect(CPlacement3D(vOnPlane, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       }
-      if( bHasShockWave)
+      if (bHasShockWave)
       {
         // shock wave horizontal
         ese.colMuliplier = C_WHITE|CT_OPAQUE;
         ese.betType = BET_CANNONSHOCKWAVE;
         ese.vNormal = FLOAT3D(vPlaneNormal);
         ese.vStretch = vStretchShockwave;
-        SpawnEffect(CPlacement3D(vOnPlane, ANGLE3D(0, 0, 0)), ese);
+        SpawnEffect(CPlacement3D(vOnPlane, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       }
       // shock wave vertical
       /*
@@ -350,7 +350,7 @@ void Explosion(FLOAT3D vCenter,
       ese.betType = BET_CANNON_PLANE;
       ese.vNormal = FLOAT3D(vPlaneNormal);
       ese.vStretch = vStretchExplosion;
-      SpawnEffect(CPlacement3D(vOnPlane+ese.vNormal/50.0f, ANGLE3D(0, 0, 0)), ese);
+      SpawnEffect(CPlacement3D(vOnPlane+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
       */
     }
   }
@@ -375,7 +375,7 @@ BOOL BallTouchExplode(CEntityPointer penHit)
 
   if (penHit->GetPhysicsFlags()&EPF_MOVABLE) { 
     fHealth = ((CMovableEntity&)*penHit).GetHealth();
-    if( IsDerivedFromClass(penHit, "Enemy Base"))
+    if (IsDerivedFromClass(penHit, "Enemy Base"))
     {
       bForceCannonballToExplode = ((CEnemyBase&)*penHit).ForcesCannonballToExplode();
     }
@@ -387,7 +387,7 @@ BOOL BallTouchExplode(CEntityPointer penHit)
     }
   }
 
-  if( IsOfClass(penHit, "ModelHolder2"))
+  if (IsOfClass(penHit, "ModelHolder2"))
   {
     bForceCannonballToExplode=TRUE;
   }
@@ -410,7 +410,7 @@ BOOL BallTouchExplode(CEntityPointer penHit)
 void RangeDamage(void)
 {
   const FLOAT fDamageMul = GetSeriousDamageMultiplier(m_penLauncher);
-  if(m_cbtType == CBT_IRON) {
+  if (m_cbtType == CBT_IRON) {
     InflictRangeDamage(m_penLauncher, DMT_CANNONBALL_EXPLOSION, IRON_RANGE_DAMAGE*fDamageMul,
         GetPlacement().pl_PositionVector, IRON_RANGE_HOTSPOT, IRON_RANGE_FALLOFF);
   } else {
@@ -459,7 +459,7 @@ procedures:
 
     FLOAT fWaitTime = IRON_LIFE_TIME;
     // if this is nuke ball
-    if(m_cbtType == CBT_NUKE)
+    if (m_cbtType == CBT_NUKE)
     {
       fWaitTime = NUKE_LIFE_TIME;
     }
@@ -481,14 +481,14 @@ procedures:
       }
       on (ETouch etouch) : {
         // explode if touched another cannon ball
-        if( IsOfClass(etouch.penOther, "Cannon ball"))
+        if (IsOfClass(etouch.penOther, "Cannon ball"))
         {
           stop;
         }
-        if( IsOfClass(etouch.penOther, "Moving Brush"))
+        if (IsOfClass(etouch.penOther, "Moving Brush"))
         {
           CMovingBrush &br = (CMovingBrush &) *etouch.penOther;
-          if( br.m_fHealth>0)
+          if (br.m_fHealth>0)
           {
             FLOAT3D vDirection = en_vCurrentTranslationAbsolute;
             vDirection.Normalize();
@@ -498,10 +498,10 @@ procedures:
             stop;
           }
         }
-        if( IsOfClass(etouch.penOther, "DestroyableArchitecture"))
+        if (IsOfClass(etouch.penOther, "DestroyableArchitecture"))
         {
           CDestroyableArchitecture &br = (CDestroyableArchitecture &) *etouch.penOther;
-          if( br.m_fHealth>0)
+          if (br.m_fHealth>0)
           {
             FLOAT3D vDirection = en_vCurrentTranslationAbsolute;
             vDirection.Normalize();
@@ -584,18 +584,18 @@ procedures:
       SendEventInRange(eSound, FLOATaabbox3D(GetPlacement().pl_PositionVector, SOUND_RANGE));
     }
 
-    if(m_cbtType == CBT_IRON)
+    if (m_cbtType == CBT_IRON)
     {
-   //   Explosion( FLOAT3D(0.0f,0.0f,0.0f),   STRETCH_3, STRETCH_3, STRETCH_3, TRUE, TRUE,  TRUE, TRUE);
+   //   Explosion( FLOAT3D(0.0f, 0.0f, 0.0f),   STRETCH_3, STRETCH_3, STRETCH_3, TRUE, TRUE,  TRUE, TRUE);
    //   autowait(0.15f);
-      Explosion( FLOAT3D(0.0f,0.0f,0.0f),   STRETCH_3, STRETCH_3, STRETCH_4, TRUE, TRUE,  TRUE, TRUE);
+      Explosion( FLOAT3D(0.0f, 0.0f, 0.0f),   STRETCH_3, STRETCH_3, STRETCH_4, TRUE, TRUE,  TRUE, TRUE);
       Explosion( FLOAT3D(1.0f,1.5f,1.5f),   STRETCH_3, STRETCH_3, STRETCH_4, TRUE, FALSE, FALSE, FALSE);
       Explosion( FLOAT3D(-2.0f,1.0f,-1.5f), STRETCH_3, STRETCH_3, STRETCH_4, TRUE, FALSE, FALSE, FALSE);
       Explosion( FLOAT3D(-1.0f,0.5f,1.0f),  STRETCH_4, STRETCH_4, STRETCH_4, TRUE, FALSE, FALSE, FALSE);
     }
-    else if( m_cbtType == CBT_NUKE)
+    else if (m_cbtType == CBT_NUKE)
     {
-      Explosion( FLOAT3D(0.0f,0.0f,0.0f),   STRETCH_6, STRETCH_6, STRETCH_10, TRUE, TRUE,  TRUE, TRUE);
+      Explosion( FLOAT3D(0.0f, 0.0f, 0.0f),   STRETCH_6, STRETCH_6, STRETCH_10, TRUE, TRUE,  TRUE, TRUE);
       autowait(0.15f);
       Explosion( FLOAT3D(4.0f,5.0f,5.0f),   STRETCH_4, STRETCH_6, STRETCH_10, TRUE, FALSE, FALSE, FALSE);
       autowait(0.2f);

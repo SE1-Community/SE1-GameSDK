@@ -116,7 +116,7 @@ procedures:
     if (fFactor<SOUND_MINSIZE) {
       fFactor=SOUND_MINSIZE;
     }
-    GetModelObject()->mo_Stretch = FLOAT3D( fFactor, fFactor, fFactor);
+    GetModelObject()->mo_Stretch = FLOAT3D(fFactor, fFactor, fFactor);
 
     // set appearance
     SetModel(MODEL_MARKER);
@@ -125,7 +125,7 @@ procedures:
     m_strDescription.PrintF("%s", (CTString&)m_fnSound.FileName());
 
     // wait for a while to play sound -> Sound Can Be Spawned 
-    if( _pTimer->CurrentTick()<=0.1f)
+    if (_pTimer->CurrentTick()<=0.1f)
     {
       autowait(0.5f);
     }

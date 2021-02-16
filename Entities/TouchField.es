@@ -129,7 +129,7 @@ procedures:
 
   // waiting for entity to exit
   WaitingExit() {
-    while(TRUE) {
+    while (TRUE) {
       // wait
       wait(m_tmExitCheck) {
         on (EBegin) : { resume; }

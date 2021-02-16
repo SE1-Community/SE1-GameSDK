@@ -245,7 +245,7 @@ procedures:
     // if health is received
     if (epass.penOther->ReceiveItem(eHealth)) {
 
-      if(_pNetwork->IsPlayerLocal(epass.penOther))
+      if (_pNetwork->IsPlayerLocal(epass.penOther))
       {
         switch (m_EhitType)
         {

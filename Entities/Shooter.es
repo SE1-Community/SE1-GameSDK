@@ -87,16 +87,16 @@ functions:
         CModelDestruction *penDestruction = GetDestruction();
         
         // spawn blood spray
-        CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0, 0, 0));
+        CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
         m_penSpray = CreateEntity( plSpray, CLASS_BLOOD_SPRAY);
         m_penSpray->SetParent(this);
         ESpawnSpray eSpawnSpray;
         eSpawnSpray.colBurnColor=C_WHITE|CT_OPAQUE;
         
         // adjust spray power
-        if( fDamageAmmount > 50.0f) {
+        if (fDamageAmmount > 50.0f) {
           eSpawnSpray.fDamagePower = 3.0f;
-        } else if(fDamageAmmount > 25.0f ) {
+        } else if (fDamageAmmount > 25.0f ) {
           eSpawnSpray.fDamagePower = 2.0f;
         } else {
           eSpawnSpray.fDamagePower = 1.0f;
@@ -254,7 +254,7 @@ procedures:
     
     switch (m_sftType) {
       case SFT_WOODEN_DART:
-        ShootProjectile(PRT_SHOOTER_WOODEN_DART, FLOAT3D (0.0f, 0.0f, 0.0f), ANGLE3D (0.0f, 0.0f, 0.0f));
+        ShootProjectile(PRT_SHOOTER_WOODEN_DART, FLOAT3D(0.0f, 0.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
         break;
       case SFT_GAS:
         break;
@@ -262,7 +262,7 @@ procedures:
         ShootCannonball();
         break;
       case SFT_FIREBALL:
-        ShootProjectile(PRT_SHOOTER_FIREBALL, FLOAT3D (0.0f, 0.0f, 0.0f), ANGLE3D (0.0f, 0.0f, 0.0f));
+        ShootProjectile(PRT_SHOOTER_FIREBALL, FLOAT3D(0.0f, 0.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
         break;
     }
     
@@ -282,7 +282,7 @@ procedures:
       autowait(fRndWait);
     }
 
-    while(m_bFiring) {
+    while (m_bFiring) {
       autocall FireOnce() EEnd;
       autowait(m_fShootingPeriod);
     }
@@ -293,7 +293,7 @@ procedures:
     PlayFireSound();
     m_penFlame = NULL;
     m_tmFlameStart = _pTimer->CurrentTick();
-    while(_pTimer->CurrentTick( ) < m_tmFlameStart + m_fFlameBurstDuration)
+    while (_pTimer->CurrentTick( ) < m_tmFlameStart + m_fFlameBurstDuration)
     {
       // wait a bit and fire 
       autowait(0.05f);

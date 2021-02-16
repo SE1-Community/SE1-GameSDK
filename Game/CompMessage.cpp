@@ -113,7 +113,7 @@ void CCompMessage::Format(INDEX ctCharsPerLine)
   cm_ctFormattedLines = 1;
   INDEX ctChars = 0;
   // while not end of text
-  while(*pchSrc!=0) {
+  while (*pchSrc!=0) {
     // copy one char
     char chLast = *pchDst++ = *pchSrc++;
     // if it was line break

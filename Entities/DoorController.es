@@ -165,7 +165,7 @@ procedures:
               
             // this is a very ugly fix for cooperative not finishing in the demo level
             // remove this when not needed any more!!!!
-            if(_SE_DEMO && GetSP()->sp_bCooperative && !GetSP()->sp_bSinglePlayer) {
+            if (_SE_DEMO && GetSP()->sp_bCooperative && !GetSP()->sp_bSinglePlayer) {
               if (m_strName=="Appear gold amon") {
                 CPlayer *penPlayer = (CPlayer*)&*ePass.penOther;
                 penPlayer->SetGameEnd();
@@ -351,7 +351,7 @@ procedures:
     autowait(0.1f);
 
     // dispatch to aproppriate loop
-    switch(m_dtType) {
+    switch (m_dtType) {
     case DT_AUTO: {
       jump DoorAuto();
                   } break;

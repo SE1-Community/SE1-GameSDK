@@ -133,7 +133,7 @@ functions:
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
-    switch(m_smtType) {
+    switch (m_smtType) {
     case SMT_MONSTER: { pes->es_strName+=" Monster"; } break;
     case SMT_GENERAL: { pes->es_strName+=" General"; } break;
     case SMT_SOLDIER: { pes->es_strName+=" Soldier"; } break;
@@ -145,7 +145,7 @@ functions:
     //static DECLARE_CTFILENAME(fnmMonster, "Data\\Messages\\Enemies\\ScorpmanMonster.txt");
     static DECLARE_CTFILENAME(fnmGeneral, "Data\\Messages\\Enemies\\ScorpmanGeneral.txt");
     static DECLARE_CTFILENAME(fnmSoldier, "Data\\Messages\\Enemies\\ScorpmanSoldier.txt");
-    switch(m_smtType) {
+    switch (m_smtType) {
     default: ASSERT(FALSE);
     case SMT_MONSTER: //return fnmMonster;
     case SMT_GENERAL: return fnmGeneral;
@@ -258,9 +258,9 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if(GetModelObject()->GetAnim()==SCORPMAN_ANIM_DEATH)
+    if (GetModelObject()->GetAnim()==SCORPMAN_ANIM_DEATH)
     {
-      vStretch=FLOAT3D(1,1,1)*1.5f;
+      vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*1.5f;
       return 1.3f;
     }
     return -1.0f;
@@ -311,7 +311,7 @@ functions:
 
     // bullet start position
     CPlacement3D plBullet;
-    plBullet.pl_OrientationAngle = ANGLE3D(0,0,0);
+    plBullet.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
     plBullet.pl_PositionVector = FLOAT3D(GUN_X, GUN_Y, 0);
     // offset are changed according to stretch factor
     if (m_smtType == SMT_MONSTER) {
@@ -337,7 +337,7 @@ functions:
   void PrepareBullet(FLOAT fDamage) {
     // bullet start position
     CPlacement3D plBullet;
-    plBullet.pl_OrientationAngle = ANGLE3D(0,0,0);
+    plBullet.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
     plBullet.pl_PositionVector = FLOAT3D(GUN_X, GUN_Y, 0);
     // offset are changed according to stretch factor
     if (m_smtType == SMT_MONSTER) {
@@ -471,11 +471,11 @@ procedures:
       FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
       vDirection.Normalize();
       if (m_smtType == SMT_MONSTER) {
-        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 80.0f, FLOAT3D(0, 0, 0), vDirection);
+        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 80.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       } else if (m_smtType == SMT_GENERAL) {
-        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 40.0f, FLOAT3D(0, 0, 0), vDirection);
+        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 40.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       } else {
-        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 20.0f, FLOAT3D(0, 0, 0), vDirection);
+        InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 20.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       }
     }
     autowait(0.3f);

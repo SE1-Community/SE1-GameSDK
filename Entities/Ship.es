@@ -90,7 +90,7 @@ functions:
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
-    if((slPropertyOffset==offsetof(CShip, m_iSailUpAnim)
+    if ((slPropertyOffset==offsetof(CShip, m_iSailUpAnim)
       ||slPropertyOffset==offsetof(CShip, m_iSailDownAnim)
       ||slPropertyOffset==offsetof(CShip, m_iSailSailAnim)
       ||slPropertyOffset==offsetof(CShip, m_iSailWaveingAnim))
@@ -243,7 +243,7 @@ functions:
   {
     m_bMoving = FALSE;
     SetDesiredRotation(ANGLE3D(0,0,GetDesiredRotation()(3)));
-    SetDesiredTranslation(FLOAT3D(0,0,0));
+    SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
   }
 
   // do moving
@@ -344,7 +344,7 @@ procedures:
       on (EBlock eBlock) : {
         // inflict damage to entity that block brush
         InflictDirectDamage(eBlock.penOther, this, DMT_BRUSH, 10.0f,
-          FLOAT3D(0.0f,0.0f,0.0f), (FLOAT3D &)eBlock.plCollision);
+          FLOAT3D(0.0f, 0.0f, 0.0f), (FLOAT3D &)eBlock.plCollision);
         resume;
       }
     }

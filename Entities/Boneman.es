@@ -30,7 +30,7 @@ static EntityInfo eiBoneman = {
 };
 
 #define BONES_HIT 2.8f
-#define FIRE_RIGHT_HAND     FLOAT3D( 0.25f, 1.5f, 0.0f)
+#define FIRE_RIGHT_HAND     FLOAT3D(0.25f, 1.5f, 0.0f)
 #define FIRE_LEFT_HAND      FLOAT3D(-0.25f, 1.5f, 0.0f)
 %}
 
@@ -152,12 +152,12 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if(GetModelObject()->GetAnim()==BONEMAN_ANIM_DEATHTOBACK)
+    if (GetModelObject()->GetAnim()==BONEMAN_ANIM_DEATHTOBACK)
     {
       vStretch=FLOAT3D(1,1,2)*1.0f;
       return 0.48f;
     }
-    else if(GetModelObject()->GetAnim()==BONEMAN_ANIM_DEATHTOFRONT)
+    else if (GetModelObject()->GetAnim()==BONEMAN_ANIM_DEATHTOFRONT)
     {
       vStretch=FLOAT3D(1,1,2)*0.75f;
       return 0.48f;
@@ -264,10 +264,10 @@ procedures:
     StartModelAnim(BONEMAN_ANIM_ATTACKCLOSELOOP, 0);
     DeactivateRunningSound();
     autowait(0.35f);
-    ShootProjectile(PRT_BONEMAN_FIRE, FIRE_RIGHT_HAND, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_BONEMAN_FIRE, FIRE_RIGHT_HAND, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
     autowait(0.45f);
-    ShootProjectile(PRT_BONEMAN_FIRE, FIRE_LEFT_HAND, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_BONEMAN_FIRE, FIRE_LEFT_HAND, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
     autowait(FRnd()/3+0.6f);
 
@@ -331,7 +331,7 @@ procedures:
       FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
       vDirection.Normalize();
       // damage enemy
-      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 10.0f, FLOAT3D(0, 0, 0), vDirection);
+      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 10.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       // push target left
       FLOAT3D vSpeed;
       GetHeadingDirection(AngleDeg(90.0f), vSpeed);
@@ -350,7 +350,7 @@ procedures:
       // damage enemy
       FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
       vDirection.Normalize();
-      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 10.0f, FLOAT3D(0, 0, 0), vDirection);
+      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 10.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       // push target left
       FLOAT3D vSpeed;
       GetHeadingDirection(AngleDeg(-90.0f), vSpeed);

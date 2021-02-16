@@ -34,7 +34,7 @@ extern BOOL map_bIsFirstEncounter;
 
 void RemapLevelNames(INDEX &iLevel)
 {
-  switch( iLevel) {
+  switch (iLevel) {
   case 10:  iLevel =  1;  break;
   case 11:  iLevel =  2;  break;
   case 12:  iLevel =  3;  break;
@@ -93,7 +93,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
   CDrawPort *pdp = _pdpLoadingHook;                           
   ASSERT(pdp!=NULL);
   CDrawPort dpHook(pdp, TRUE);
-  if( !dpHook.Lock()) return;
+  if (!dpHook.Lock()) return;
 
   // clear screen
   dpHook.Fill(C_BLACK|255);
@@ -119,11 +119,11 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
     RemapLevelNames(iLevelNext);
 
     // first encounter
-    if(iLevel == -1) {
+    if (iLevel == -1) {
       strLevelName.ScanF("%02d_", &iLevel);
       strNextLevelName.ScanF("%02d_", &iLevelNext);
 
-      if(iLevel != -1) {
+      if (iLevel != -1) {
         map_bIsFirstEncounter = TRUE;
       }
     } else {
@@ -236,7 +236,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
   dpBox.PutTextCXY( strRes, pixBarCentI, pixBarCentJ, C_GREEN|255);
   dpBox.Unlock();
 
-  if( Flesh.gm_bFirstLoading) {
+  if (Flesh.gm_bFirstLoading) {
 #if USECUSTOMTEXT
     FLOAT fScaling = (FLOAT)slSizeI/640.0f;
     dpHook.Lock();

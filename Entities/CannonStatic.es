@@ -127,7 +127,7 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
     // take less damage from heavy bullets (e.g. sniper)
-    if(dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount*=0.5f;
     }
@@ -194,7 +194,7 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
 
-    for(INDEX i=0; i<ctMaxPlayers; i++) {
+    for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
       if (penPlayer!=NULL && DistanceTo(this, penPlayer)<m_fFiringRangeFar) {
         // if this player is more or less directly in front of the shooter
@@ -339,7 +339,7 @@ procedures:
       EReceiveScore eScore;
       eScore.iPoints = m_iScore;
       penKiller->SendEvent(eScore);
-      if( CountAsKill())
+      if (CountAsKill())
       {
         penKiller->SendEvent(EKilledEnemy());
       }
@@ -431,7 +431,7 @@ procedures:
     GetEntityInfoPosition(m_penEnemy, peiTarget->vTargetCenter, vShootTarget);
     // launch
     CPlacement3D pl;
-    PrepareFreeFlyingProjectile(pl, vShootTarget, m_vFiringPos, ANGLE3D( fRelativeHdg, m_fDesiredMuzzlePitch, 0));
+    PrepareFreeFlyingProjectile(pl, vShootTarget, m_vFiringPos, ANGLE3D(fRelativeHdg, m_fDesiredMuzzlePitch, 0));
     CEntityPointer penBall = CreateEntity(pl, CLASS_CANNONBALL);
     ELaunchCannonBall eLaunch;
     eLaunch.penLauncher = this;
@@ -448,7 +448,7 @@ procedures:
   {
     // this is a kind of 'sleep' mode - check to see if any player entered
     // the attack radius every once in a while
-    while(TRUE) {
+    while (TRUE) {
       autowait(0.20f);
       CPlayer *pTarget = AcquireTarget();
       if (pTarget) {

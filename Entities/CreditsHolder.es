@@ -87,7 +87,7 @@ functions:
       Credits_Off();
       return FALSE;
     }    
-    if(!LoadFont())
+    if (!LoadFont())
     {
       Credits_Off();
       return FALSE;
@@ -98,7 +98,7 @@ functions:
 
   BOOL LoadOneFile(const CTFileName &fnm)
   {
-    if(fnm=="") { return FALSE; }
+    if (fnm=="") { return FALSE; }
   
     try 
     {
@@ -112,7 +112,7 @@ functions:
       if (strCheck!="CREDITS") { return FALSE; };
       
       m_iTotalEntries = 0;
-      while(!strm.AtEOF())
+      while (!strm.AtEOF())
       {
         CTString strLine;
         CTString strArgs;
@@ -360,7 +360,7 @@ procedures:
 
     autowait(0.05f);
 
-    if( !Credits_On(m_fnmMessage))
+    if (!Credits_On(m_fnmMessage))
     {
       CPrintF("Error loading credits file '%s'!\n", m_fnmMessage);
       Credits_Off();
@@ -372,7 +372,7 @@ procedures:
       on (EStart eStart): 
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if( pwsc!=NULL)
+        if (pwsc!=NULL)
         {
           m_fMyTimer = 0;
           m_fMyTimerLast = 0;
@@ -386,7 +386,7 @@ procedures:
       on (EStop eStop): 
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if( pwsc!=NULL)
+        if (pwsc!=NULL)
         {
           ECredits ecr;
           ecr.bStart=FALSE;

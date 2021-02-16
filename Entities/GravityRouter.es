@@ -47,7 +47,7 @@ functions:
   void GetForce(INDEX i, const FLOAT3D &vPoint, 
     CForceStrength &fsGravity, CForceStrength &fsField)
   {
-    if( (m_penTarget != NULL) && (IsOfClass( m_penTarget, "Gravity Marker")))
+    if ((m_penTarget != NULL) && (IsOfClass( m_penTarget, "Gravity Marker")))
     {
       m_penTarget->GetForce(i, vPoint, fsGravity, fsField);
     }
@@ -61,7 +61,7 @@ functions:
   /* Handle an event, return false if the event is not handled. */
   BOOL HandleEvent(const CEntityEvent &ee)
   {
-    if( ((EChangeGravity &) ee).ee_slEvent==EVENTCODE_EChangeGravity)
+    if (((EChangeGravity &) ee).ee_slEvent==EVENTCODE_EChangeGravity)
     {
       m_penTarget = ((EChangeGravity &) ee).penNewGravity;
       // notify engine that gravity defined by this entity has changed
@@ -87,7 +87,7 @@ procedures:
       m_strName = "Gravity Router";
     }
 
-    if( m_penTarget!=NULL && !IsOfClass( m_penTarget, "Gravity Marker")) {
+    if (m_penTarget!=NULL && !IsOfClass( m_penTarget, "Gravity Marker")) {
       WarningMessage( "Entity '%s' is not of Gravity Marker class!", m_penTarget);
       m_penTarget = NULL;
     }

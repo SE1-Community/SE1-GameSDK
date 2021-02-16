@@ -52,9 +52,9 @@ features "ImplementsOnPrecache";
 properties:
   1 CEntityPointer m_penOwner,        // entity which owns it
   2 FLOAT m_fDamage = 0.0f,                   // damage
-  3 FLOAT3D m_vTarget = FLOAT3D(0,0,0),       // bullet target point in space
-  4 FLOAT3D m_vTargetCopy = FLOAT3D(0,0,0),   // copy of bullet target point in space for jitter
-  6 FLOAT3D m_vHitPoint = FLOAT3D(0,0,0),     // hit point
+  3 FLOAT3D m_vTarget = FLOAT3D(0.0f, 0.0f, 0.0f),       // bullet target point in space
+  4 FLOAT3D m_vTargetCopy = FLOAT3D(0.0f, 0.0f, 0.0f),   // copy of bullet target point in space for jitter
+  6 FLOAT3D m_vHitPoint = FLOAT3D(0.0f, 0.0f, 0.0f),     // hit point
   8 INDEX m_iBullet = 0,                // bullet for lerped launch
   9 enum DamageType m_EdtDamage = DMT_BULLET,   // damage type
   10 FLOAT m_fBulletSize = 0.0f,      // bullet can have radius, for hitting models only
@@ -146,9 +146,9 @@ functions:
     AnglesToDirectionVector(GetPlacement().pl_OrientationAngle, vHitDirection);
 
     INDEX ctCasts = 0;
-    while( ctCasts<10)
+    while (ctCasts<10)
     {
-      if(ctCasts == 0)
+      if (ctCasts == 0)
       {
         // perform first cast
         GetWorld()->CastRay(crRay);       
@@ -186,10 +186,10 @@ functions:
         
         bhtType=(BulletHitType) GetBulletHitTypeForSurface(iSurfaceType);
         // if this is under water polygon
-        if( ct.ct_ulFlags&CTF_BREATHABLE_GILLS)
+        if (ct.ct_ulFlags&CTF_BREATHABLE_GILLS)
         {
           // if we hit water surface
-          if( iSurfaceType==SURFACE_WATER) 
+          if (iSurfaceType==SURFACE_WATER) 
           {
             vHitNormal = -vHitNormal;
 
@@ -206,7 +206,7 @@ functions:
         if (!bPassable || iSurfaceType==SURFACE_WATER) {
           SpawnHitTypeEffect(this, bhtType, bSound, vHitNormal, crRay.cr_vHit, vHitDirection, FLOAT3D(0.0f, 0.0f, 0.0f));
         }
-        if(!bPassable) {
+        if (!bPassable) {
           break;
         }
       // if not brush
@@ -214,7 +214,7 @@ functions:
 
         // if flesh entity
         if (crRay.cr_penHit->GetEntityInfo()!=NULL) {
-          if( ((EntityInfo*)crRay.cr_penHit->GetEntityInfo())->Eeibt == EIBT_FLESH)
+          if (((EntityInfo*)crRay.cr_penHit->GetEntityInfo())->Eeibt == EIBT_FLESH)
           {
             CEntity *penOfFlesh = crRay.cr_penHit;
             FLOAT3D vHitNormal = (GetPlacement().pl_PositionVector-m_vTarget).Normalize();
@@ -223,7 +223,7 @@ functions:
 
             // look behind the entity (for back-stains)
             GetWorld()->ContinueCast(crRay);
-            if( crRay.cr_penHit!=NULL && crRay.cr_pbpoBrushPolygon!=NULL && 
+            if (crRay.cr_penHit!=NULL && crRay.cr_pbpoBrushPolygon!=NULL && 
                 crRay.cr_penHit->GetRenderType()==RT_BRUSH)
             {
               vDistance = crRay.cr_vHit-vOldHitPos;
@@ -232,10 +232,10 @@ functions:
             else
             {
               vDistance = FLOAT3D(0.0f, 0.0f, 0.0f);
-              vHitNormal = FLOAT3D(0,0,0);
+              vHitNormal = FLOAT3D(0.0f, 0.0f, 0.0f);
             }
 
-            if(IsOfClass(penOfFlesh, "Gizmo") ||
+            if (IsOfClass(penOfFlesh, "Gizmo") ||
                IsOfClass(penOfFlesh, "Beast"))
             {
               // spawn green blood hit spill effect
@@ -255,7 +255,7 @@ functions:
       }
     }
 
-    if( bTrail)
+    if (bTrail)
     {
       SpawnTrail();
     }

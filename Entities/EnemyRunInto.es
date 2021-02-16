@@ -195,7 +195,7 @@ procedures:
 
     // run to enemy
     m_bWhileLoop = TRUE;
-    while(m_penEnemy!=NULL && m_bWhileLoop) {
+    while (m_penEnemy!=NULL && m_bWhileLoop) {
       m_fMoveFrequency = 0.1f;
       wait(m_fMoveFrequency) {
         on (EBegin) : {

@@ -38,7 +38,7 @@ properties:
   7 CTString m_strName  "Name" 'N' = "ExotechLarva Wall Battery",
 
  10 BOOL m_bCustomShading "Custom Shading" = FALSE,
- 11 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D( AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
+ 11 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D(AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
  12 COLOR m_colLight "Light Color" = C_WHITE,
  13 COLOR m_colAmbient "Ambient Light Color" = C_BLACK,
  
@@ -99,10 +99,10 @@ functions:
       return;
     }
 
-    if((dmtType!=DMT_BURNING) && (m_tmSpraySpawned<=_pTimer->CurrentTick()-_pTimer->TickQuantum*8))
+    if ((dmtType!=DMT_BURNING) && (m_tmSpraySpawned<=_pTimer->CurrentTick()-_pTimer->TickQuantum*8))
     {
       // spawn blood spray
-      CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0, 0, 0));
+      CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
       m_penSpray = CreateEntity( plSpray, CLASS_BLOOD_SPRAY);
       m_penSpray->SetParent(this);
       ESpawnSpray eSpawnSpray;

@@ -247,13 +247,13 @@ functions:
     FLOAT &fCurrentVolume = (&m_fCurrentVolume0a)[iChannel*2+iSubChannel];
 
     // do nothing, if music is not playing
-    if( !soMusic.IsPlaying()) { return; }
+    if (!soMusic.IsPlaying()) { return; }
 
     // do nothing, if music is already paused
-    if( soMusic.IsPaused()) { return; }
+    if (soMusic.IsPaused()) { return; }
 
     // if minimum volume reached 
-    if( fCurrentVolume<MUSIC_VOLUMEMIN) {
+    if (fCurrentVolume<MUSIC_VOLUMEMIN) {
       // pause music
       soMusic.Pause();
     } else {
@@ -272,14 +272,14 @@ functions:
     FLOAT &fCurrentVolume = (&m_fCurrentVolume0a)[iChannel*2+iSubChannel];
 
     // do nothing, if music is not playing
-    if( !soMusic.IsPlaying()) { return; }
+    if (!soMusic.IsPlaying()) { return; }
 
     // resume music if needed
-    if( soMusic.IsPaused()) {
+    if (soMusic.IsPaused()) {
       soMusic.Resume();
     }
     // fade in music if needed
-    if( fCurrentVolume<MUSIC_VOLUMEMAX) {
+    if (fCurrentVolume<MUSIC_VOLUMEMAX) {
       fCurrentVolume *= FadeInFactor( m_tmFade);
       fCurrentVolume = ClampUp( fCurrentVolume, 1.0f);
     }
@@ -342,7 +342,7 @@ procedures:
     CountEnemies();
 
     // main loop
-    while(TRUE) {
+    while (TRUE) {
       // wait a bit
       wait(0.1f) {
         on (ETimer) : {

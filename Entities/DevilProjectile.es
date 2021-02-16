@@ -46,7 +46,7 @@ properties:
 
  10 FLOAT m_fIgnoreTime = 0.0f,              // time when laucher will be ignored
  11 FLOAT m_fStartTime = 0.0f,               // start time when launched
- 12 FLOAT3D m_vDesiredAngle = FLOAT3D(0,0,0),
+ 12 FLOAT3D m_vDesiredAngle = FLOAT3D(0.0f, 0.0f, 0.0f),
  13 BOOL m_bFly = FALSE,
 
  20 CSoundObject m_soEffect,          // sound channel
@@ -192,7 +192,7 @@ functions:
 
   // stop rotating entity
   void StopRotating() {
-    SetDesiredRotation(ANGLE3D(0, 0, 0));
+    SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   };
 
   // stop translating
@@ -222,7 +222,7 @@ procedures:
   Fly(EVoid) {
     // bounce loop
     m_bFly = TRUE;
-    while(m_bFly && m_fStartTime+FLY_TIME > _pTimer->CurrentTick()) {
+    while (m_bFly && m_fStartTime+FLY_TIME > _pTimer->CurrentTick()) {
       wait(0.1f) {
         on (EBegin) : {
           FlyToPosition();

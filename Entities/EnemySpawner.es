@@ -115,19 +115,19 @@ functions:
 
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if( slPropertyOffset == offsetof(CEnemySpawner, m_penTarget))
+    if (slPropertyOffset == offsetof(CEnemySpawner, m_penTarget))
     {
       return CheckTemplateValid(penTarget);
     }
-    else if( slPropertyOffset == offsetof(CEnemySpawner, m_penPatrol))
+    else if (slPropertyOffset == offsetof(CEnemySpawner, m_penPatrol))
     {
       return (penTarget!=NULL && IsDerivedFromClass(penTarget, "Enemy Marker"));
     }
-    else if( slPropertyOffset == offsetof(CEnemySpawner, m_penSeriousTarget))
+    else if (slPropertyOffset == offsetof(CEnemySpawner, m_penSeriousTarget))
     {
       return CheckTemplateValid(penTarget);
     }   
-    else if( slPropertyOffset == offsetof(CEnemySpawner, m_penTacticsHolder))
+    else if (slPropertyOffset == offsetof(CEnemySpawner, m_penTacticsHolder))
     {
       if (IsOfClass(penTarget, "TacticsHolder")) { return TRUE; }
       else { return FALSE; }
@@ -158,7 +158,7 @@ functions:
       if (bCopy) {
         // copy template entity
         pen = GetWorld()->CopyEntityInWorld( *m_penTarget,
-          CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0, 0, 0)) );
+          CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0.0f, 0.0f, 0.0f)) );
 
         // change needed properties
         pen->End();
@@ -187,7 +187,7 @@ functions:
       // calculate new position
       FLOAT fR = fInnerCircle + FRnd()*(fOuterCircle-fInnerCircle);
       FLOAT fA = FRnd()*360.0f;
-      CPlacement3D pl(FLOAT3D(CosFast(fA)*fR, 0.05f, SinFast(fA)*fR), ANGLE3D(0, 0, 0));
+      CPlacement3D pl(FLOAT3D(CosFast(fA)*fR, 0.05f, SinFast(fA)*fR), ANGLE3D(0.0f, 0.0f, 0.0f));
       pl.RelativeToAbsolute(GetPlacement());
 
       // teleport back
@@ -198,7 +198,7 @@ functions:
         ESpawnEffect ese;
         ese.colMuliplier = C_WHITE|CT_OPAQUE;
         ese.betType = BET_TELEPORT;
-        ese.vNormal = FLOAT3D(0,1,0);
+        ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
         FLOATaabbox3D box;
         pen->GetBoundingBox(box);
         FLOAT fEntitySize = box.Size().MaxNorm()*2;
@@ -228,7 +228,7 @@ functions:
     if (ee.ee_slEvent==EVENTCODE_ETrigger)
     {
       ETrigger eTrigger = ((ETrigger &) ee);
-      if(IsDerivedFromClass(eTrigger.penCaused, "Enemy Base")
+      if (IsDerivedFromClass(eTrigger.penCaused, "Enemy Base")
         && (m_estType==EST_MAINTAINGROUP || m_estType==EST_RESPAWNGROUP)) {
         m_iEnemiesTriggered++;
       }
@@ -257,7 +257,7 @@ procedures:
     // no enemies in group yet
     m_iInGroup = 0;
     // repeat forever
-    while(TRUE) {
+    while (TRUE) {
 
       // spawn one enemy
       SpawnEntity(TRUE);
@@ -316,7 +316,7 @@ procedures:
     }
 
     // repeat
-    while(TRUE) {
+    while (TRUE) {
       // spawn one group
       autocall SpawnGroup() EReturn;
       // delay between groups
@@ -352,7 +352,7 @@ procedures:
   Respawner()
   {
     // repeat
-    while(TRUE) {
+    while (TRUE) {
       // wait to be triggered
       wait() {
         on (EBegin) : { 
@@ -415,7 +415,7 @@ procedures:
   DestroyableActiveSpawning()
   {
     // repeat
-    while(TRUE) {
+    while (TRUE) {
       // spawn one group
       autocall SpawnGroup() EReturn;
       // delay between groups
@@ -499,18 +499,18 @@ procedures:
 
     wait() {
       on(EBegin) : {
-        if(m_estType==EST_SIMPLE) {
+        if (m_estType==EST_SIMPLE) {
           call Simple();
-        } else if(m_estType==EST_TELEPORTER) {
+        } else if (m_estType==EST_TELEPORTER) {
           call Teleporter();
-        } else if(m_estType==EST_RESPAWNER /*|| m_estType==EST_RESPAWNERBYONE*/
+        } else if (m_estType==EST_RESPAWNER /*|| m_estType==EST_RESPAWNERBYONE*/
                || m_estType==EST_TRIGGERED || m_estType==EST_RESPAWNGROUP) {
           call Respawner();
-        } else if(m_estType==EST_MAINTAINGROUP) {
+        } else if (m_estType==EST_MAINTAINGROUP) {
           m_ctGroupSize = 1;
           call Respawner();
         }
-        else if(m_estType==EST_DESTROYABLE) {
+        else if (m_estType==EST_DESTROYABLE) {
           call Destroyable();
         }
       }

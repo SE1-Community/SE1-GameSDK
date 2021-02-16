@@ -316,7 +316,7 @@ CTString GetGameAgentRulesInfo(void)
   if (sp.sp_bMental) {
     strDifficulty = TRANS("Mental");
   } else {
-    switch(sp.sp_gdGameDifficulty) {
+    switch (sp.sp_gdGameDifficulty) {
     case CSessionProperties::GD_TOURIST:
       strDifficulty = TRANS("Tourist");
       break;
@@ -384,7 +384,7 @@ CTString GetGameAgentRulesInfo(void)
 
 ULONG GetSpawnFlagsForGameType(INDEX iGameType)
 {
-  switch(iGameType) {
+  switch (iGameType) {
   default:
     ASSERT(FALSE);
   case CSessionProperties::GM_COOPERATIVE:  return SPF_COOPERATIVE;

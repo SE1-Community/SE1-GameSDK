@@ -46,11 +46,11 @@ components:
 functions:
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if(penTarget==NULL)
+    if (penTarget==NULL)
     {
       return FALSE;
     }
-    if(slPropertyOffset == offsetof(CPyramidSpaceShipMarker, m_penTarget))
+    if (slPropertyOffset == offsetof(CPyramidSpaceShipMarker, m_penTarget))
     {
       return( IsDerivedFromClass(penTarget, "Pyramid Space Ship Marker") ||
               IsDerivedFromClass(penTarget, "PyramidSpaceShip") );
@@ -71,7 +71,7 @@ functions:
   {
     if (ee.ee_slEvent==EVENTCODE_ETrigger)
     {
-      if(m_penSpaceShip!=NULL && m_penTarget!=NULL)
+      if (m_penSpaceShip!=NULL && m_penTarget!=NULL)
       {
         EForcePathMarker eForcePathMarker;
         eForcePathMarker.penForcedPathMarker = m_penTarget;
@@ -103,7 +103,7 @@ procedures:
     GetModelObject()->StretchModel(FLOAT3D(4,4,4));
     ModelChangeNotify();
 
-    if( m_penTarget!=NULL && !IsOfClass( m_penTarget, "Pyramid Space Ship Marker")) {
+    if (m_penTarget!=NULL && !IsOfClass( m_penTarget, "Pyramid Space Ship Marker")) {
       WarningMessage( "Entity '%s' is not of Pyramid Space Ship Marker class!", m_penTarget);
       m_penTarget = NULL;
     }

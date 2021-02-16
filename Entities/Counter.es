@@ -58,10 +58,10 @@ functions:
  
   void DisplayNumber(void)
   {
-    for( INDEX iDigit=0; iDigit<10; iDigit++)
+    for (INDEX iDigit=0; iDigit<10; iDigit++)
     {
       CModelHolder2 *pmh = (CModelHolder2 *)&*(&m_pen0)[iDigit];
-      if( pmh!=NULL && pmh->GetModelObject()!=NULL &&
+      if (pmh!=NULL && pmh->GetModelObject()!=NULL &&
           pmh->GetModelObject()->mo_toTexture.GetData()!=NULL)
       {
         // set texture animation
@@ -72,7 +72,7 @@ functions:
         // play sound
         m_soSound.Set3DParameters(200.0f, 100.0f, 1.0f, 
           Clamp(1.0f+(m_iCountFrom-m_fNumber)/m_iCountFrom*2.0f, 1.0f, 3.0f) );
-        if( iDigit==0 && iOldAnim!=iAnim /*iOldAnim==1 && iAnim==0 */&& !m_soSound.IsPlaying())
+        if (iDigit==0 && iOldAnim!=iAnim /*iOldAnim==1 && iAnim==0 */&& !m_soSound.IsPlaying())
         {
           PlaySound(m_soSound, SOUND_TICK, SOF_3D|SOF_VOLUMETRIC);
         }
@@ -83,7 +83,7 @@ functions:
 procedures:
   CountDown()
   {
-    while( TRUE)
+    while (TRUE)
     {
       autowait(_pTimer->TickQuantum);
       FLOAT tmNow = _pTimer->CurrentTick();
@@ -91,7 +91,7 @@ procedures:
       FLOAT fSub = Clamp( tmDelta/m_fCountdownSpeed, 0.01f, 1.0f);
       m_fNumber = Clamp( m_fNumber-fSub, 0.0f, FLOAT(m_iCountFrom));
       DisplayNumber();
-      if( m_fNumber==0)
+      if (m_fNumber==0)
       {
         return EReturn();
       }
@@ -126,7 +126,7 @@ procedures:
         call CountDown();
       }
       on(EReturn): {
-        if( m_penTarget!= NULL)
+        if (m_penTarget!= NULL)
         {
           SendToTarget(m_penTarget, EET_TRIGGER);
         }

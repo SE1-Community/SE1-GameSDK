@@ -69,17 +69,17 @@ properties:
  24 FLOAT m_tmFirstStart = 0.0f,   // when the burning started
 
  29 INDEX m_ctFlames=0,
- 30 FLOAT3D m_vPos01=FLOAT3D(0,0,0),
- 31 FLOAT3D m_vPos02=FLOAT3D(0,0,0),
- 32 FLOAT3D m_vPos03=FLOAT3D(0,0,0),
- 33 FLOAT3D m_vPos04=FLOAT3D(0,0,0),
- 34 FLOAT3D m_vPos05=FLOAT3D(0,0,0),
- 35 FLOAT3D m_vPos06=FLOAT3D(0,0,0),
- 36 FLOAT3D m_vPos07=FLOAT3D(0,0,0),
- 37 FLOAT3D m_vPos08=FLOAT3D(0,0,0),
- 38 FLOAT3D m_vPos09=FLOAT3D(0,0,0),
- 39 FLOAT3D m_vPos10=FLOAT3D(0,0,0),
- 40 FLOAT3D m_vPlaneNormal=FLOAT3D(0,0,0),
+ 30 FLOAT3D m_vPos01=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 31 FLOAT3D m_vPos02=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 32 FLOAT3D m_vPos03=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 33 FLOAT3D m_vPos04=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 34 FLOAT3D m_vPos05=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 35 FLOAT3D m_vPos06=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 36 FLOAT3D m_vPos07=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 37 FLOAT3D m_vPos08=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 38 FLOAT3D m_vPos09=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 39 FLOAT3D m_vPos10=FLOAT3D(0.0f, 0.0f, 0.0f),
+ 40 FLOAT3D m_vPlaneNormal=FLOAT3D(0.0f, 0.0f, 0.0f),
  51 BOOL m_bBurningBrush=FALSE,
  52 FLOAT m_tmDeathParticlesStart=1e6,
 
@@ -166,15 +166,15 @@ functions:
   {
     FLOAT fTimeFactor=CalculateRatio(_pTimer->CurrentTick(), m_tmFirstStart, m_tmStart+TM_APPLY_WHOLE_DAMAGE, 0.05f, 0.2f);
     FLOAT fDeathFactor=1.0f;
-    if( _pTimer->CurrentTick()>m_tmDeathParticlesStart)
+    if (_pTimer->CurrentTick()>m_tmDeathParticlesStart)
     {
       fDeathFactor=1.0f-Clamp((_pTimer->CurrentTick()-m_tmDeathParticlesStart)/DEATH_BURN_TIME, 0.0f, 1.0f);
     }
     CEntity *penParent= GetParent();
     FLOAT fPower=ClampUp(m_fDamageStep-MIN_DAMAGE_QUANTUM, MAX_DAMAGE_QUANTUM)/MAX_DAMAGE_QUANTUM;
-    if( penParent!= NULL)
+    if (penParent!= NULL)
     {
-      if( (penParent->en_RenderType==CEntity::RT_MODEL || penParent->en_RenderType==CEntity::RT_EDITORMODEL ||
+      if ((penParent->en_RenderType==CEntity::RT_MODEL || penParent->en_RenderType==CEntity::RT_EDITORMODEL ||
            penParent->en_RenderType==CEntity::RT_SKAMODEL || penParent->en_RenderType==CEntity::RT_SKAEDITORMODEL) &&
           (Particle_GetViewer()!=penParent) )
       {
@@ -193,7 +193,7 @@ functions:
     // setup light source
     CLightSource lsNew;
     lsNew.ls_ulFlags = LSF_NONPERSISTENT|LSF_DYNAMIC;
-    if(m_bBurningBrush)
+    if (m_bBurningBrush)
     {
       UBYTE ubRndH = UBYTE( 25+(FLOAT(rand())/RAND_MAX-0.5f)*28);
       UBYTE ubRndS = 166;
@@ -251,7 +251,7 @@ procedures:
 
     m_bBurningBrush=FALSE;
     BOOL bAllowFlame=TRUE;
-    if( !(ef.penAttach->en_RenderType==CEntity::RT_MODEL || ef.penAttach->en_RenderType==CEntity::RT_EDITORMODEL ||
+    if (!(ef.penAttach->en_RenderType==CEntity::RT_MODEL || ef.penAttach->en_RenderType==CEntity::RT_EDITORMODEL ||
           ef.penAttach->en_RenderType==CEntity::RT_SKAMODEL || ef.penAttach->en_RenderType==CEntity::RT_SKAEDITORMODEL ))
     {
       m_bBurningBrush=TRUE;
@@ -263,7 +263,7 @@ procedures:
       pbpo=GetNearestPolygon(vPos, plPlane, fDistanceToEdge);
       FLOAT3D vBrushPos = ef.penAttach->GetPlacement().pl_PositionVector;
       FLOATmatrix3D mBrushRotInv = !ef.penAttach->GetRotationMatrix();
-      if( pbpo!=NULL && pbpo->bpo_pbscSector->bsc_pbmBrushMip->bm_pbrBrush->br_penEntity==ef.penAttach)
+      if (pbpo!=NULL && pbpo->bpo_pbscSector->bsc_pbmBrushMip->bm_pbrBrush->br_penEntity==ef.penAttach)
       {
         plPlane = pbpo->bpo_pbplPlane->bpl_plAbsolute;
         m_vPlaneNormal=(FLOAT3D &)plPlane;
@@ -271,7 +271,7 @@ procedures:
         // ------ Calculate plane-paralel normal vectors
         FLOAT3D vU, vV;
         //CPrintF("plPlane %g\n", plPlane(2));
-        if(plPlane(2)<-0.1f)
+        if (plPlane(2)<-0.1f)
         {
           bAllowFlame=FALSE;
         }
@@ -293,24 +293,24 @@ procedures:
 
         // counter of valid flames
         m_ctFlames=0;
-        for(INDEX iTest=0; iTest<20; iTest++)
+        for (INDEX iTest=0; iTest<20; iTest++)
         {
           FLOAT fA=FRnd()*360.0f;
           FLOAT fR=FRnd()*2.0f;
           FLOAT3D vRndV=vV*fR*SinFast(fA);
           FLOAT3D vRndU=vU*fR*CosFast(fA);
           FLOAT3D vRndPos=vPos;
-          if( iTest!=0)
+          if (iTest!=0)
           {
             vRndPos+=vRndV+vRndU;
           }
           // project point to a plane
           FLOAT3D vProjectedRndPos=plPlane.ProjectPoint(vRndPos);
-          if( IsPointInsidePolygon(vProjectedRndPos, pbpo))
+          if (IsPointInsidePolygon(vProjectedRndPos, pbpo))
           {
             (&m_vPos01)[ m_ctFlames]=(vProjectedRndPos-vBrushPos)*mBrushRotInv;
             m_ctFlames++;
-            if( m_ctFlames==6) { break; };
+            if (m_ctFlames==6) { break; };
           }
         }
       }
@@ -320,13 +320,13 @@ procedures:
       }
     }
     // setup light source
-    if( bAllowFlame)
+    if (bAllowFlame)
     {
       SetupLightSource();
     }
 
     m_bLoop = bAllowFlame;
-    while(m_bLoop) {
+    while (m_bLoop) {
       wait(TM_APPLY_DAMAGE_QUANTUM) {
         // damage to parent
         on (EBegin) : {
@@ -354,7 +354,7 @@ procedures:
           resume;
         };
         on (EStopFlaming esf) : {
-          if( !esf.m_bNow)
+          if (!esf.m_bNow)
           {
             m_tmDeathParticlesStart=_pTimer->CurrentTick();
             resume;
@@ -371,7 +371,7 @@ procedures:
         };
         on (ETimer) : { stop; }
       }
-      if(_pTimer->CurrentTick()>m_tmStart+TM_APPLY_WHOLE_DAMAGE)
+      if (_pTimer->CurrentTick()>m_tmStart+TM_APPLY_WHOLE_DAMAGE)
       {
         m_bLoop = FALSE;
       }

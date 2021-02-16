@@ -135,7 +135,7 @@ functions:
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
-    switch(m_EecChar) {
+    switch (m_EecChar) {
     case EYC_SERGEANT: { pes->es_strName+=" Sergeant"; } break;
     case EYC_SOLDIER : { pes->es_strName+=" Soldier"; } break;
     }
@@ -148,7 +148,7 @@ functions:
   virtual const CTFileName &GetComputerMessageName(void) const {
     static DECLARE_CTFILENAME(fnmSergeant, "Data\\Messages\\Enemies\\EyemanGreen.txt");
     static DECLARE_CTFILENAME(fnmSoldier , "Data\\Messages\\Enemies\\EyemanPurple.txt");
-    switch(m_EecChar) {
+    switch (m_EecChar) {
     default: ASSERT(FALSE);
     case EYC_SERGEANT: return fnmSergeant;
     case EYC_SOLDIER : return fnmSoldier;
@@ -219,19 +219,19 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if(GetModelObject()->GetAnim()==EYEMAN_ANIM_DEATH01)
+    if (GetModelObject()->GetAnim()==EYEMAN_ANIM_DEATH01)
     {
-      vStretch=FLOAT3D(1,1,1)*0.75f;
+      vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*0.75f;
       return 0.5f;
     }
-    else if(GetModelObject()->GetAnim()==EYEMAN_ANIM_DEATH02)
+    else if (GetModelObject()->GetAnim()==EYEMAN_ANIM_DEATH02)
     {
-      vStretch=FLOAT3D(1,1,1)*0.75f;
+      vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*0.75f;
       return 0.5f;
     }
-    else if(GetModelObject()->GetAnim()==EYEMAN_ANIM_MORPHDEATH)
+    else if (GetModelObject()->GetAnim()==EYEMAN_ANIM_MORPHDEATH)
     {
-      vStretch=FLOAT3D(1,1,1)*1.0f;
+      vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*1.0f;
       return 0.5f;
     }
     return -1.0f;
@@ -398,12 +398,12 @@ procedures:
     if (CalcDist(m_penEnemy) < BITE_AIR) {
       FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
       vDirection.SafeNormalize();
-      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 3.5f, FLOAT3D(0, 0, 0), vDirection);
+      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 3.5f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       // spawn blood cloud
       ESpawnEffect eSpawnEffect;
       eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
       eSpawnEffect.betType = BET_BLOODEXPLODE;
-      eSpawnEffect.vStretch = FLOAT3D(1,1,1);
+      eSpawnEffect.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
       CPlacement3D plOne = GetPlacement();
       GetEntityPointRatio(
         FLOAT3D(Lerp(-0.2f, +0.2f, FRnd()), Lerp(-0.2f, +0.2f, FRnd()), -1.0f),
@@ -430,7 +430,7 @@ procedures:
     if (CalcDist(m_penEnemy) < HIT_GROUND) {
       FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
       vDirection.SafeNormalize();
-      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 3.5f, FLOAT3D(0, 0, 0), vDirection);
+      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 3.5f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       PlaySound(m_soSound, SOUND_PUNCH, SOF_3D);
     }
     autowait(0.3f);
@@ -438,7 +438,7 @@ procedures:
     if (CalcDist(m_penEnemy) < HIT_GROUND) {
       FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
       vDirection.SafeNormalize();
-      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 3.5f, FLOAT3D(0, 0, 0), vDirection);
+      InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 3.5f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       PlaySound(m_soSound, SOUND_PUNCH, SOF_3D);
     }
     autowait(0.4f);

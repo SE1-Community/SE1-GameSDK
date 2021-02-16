@@ -112,7 +112,7 @@ procedures:
     // if density is calculated indirectly
     if (!m_bDensityDirect) {
       // calculate density to have given percentage at given distance
-      switch(m_faType) {
+      switch (m_faType) {
       case FA_LINEAR: 
         m_fDensity = m_fDensityPercentage/m_fDensityDistance;
         break;
@@ -128,7 +128,7 @@ procedures:
     // if graduation is calculated indirectly
     if (!m_bGraduationDirect) {
       // calculate graduation to have given percentage at given depth
-      switch(m_fgType) {
+      switch (m_fgType) {
       case FG_LINEAR: 
         m_fGraduation = m_fGraduationPercentage/m_fGraduationDistance;
         break;

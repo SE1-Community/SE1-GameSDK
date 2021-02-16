@@ -52,8 +52,8 @@ functions:
     gpGradient.gp_vGradientDir(3) = m(3,2);
     FLOAT fPos = gpGradient.gp_vGradientDir%GetPlacement().pl_PositionVector;
     gpGradient.gp_bDark = m_bDarkLight;
-    if( m_fHeight>=0 && m_fHeight<+0.001f) { m_fHeight = +0.001f; }
-    if( m_fHeight<=0 && m_fHeight>-0.001f) { m_fHeight = -0.001f; }
+    if (m_fHeight>=0 && m_fHeight<+0.001f) { m_fHeight = +0.001f; }
+    if (m_fHeight<=0 && m_fHeight>-0.001f) { m_fHeight = -0.001f; }
     gpGradient.gp_fH0 = fPos;
     gpGradient.gp_fH1 = fPos+m_fHeight;
     gpGradient.gp_col0 = m_colColor0;
@@ -66,7 +66,7 @@ functions:
     // for all entities in world
     FOREACHINDYNAMICCONTAINER(GetWorld()->wo_cenEntities, CEntity, iten) {
       // if it is world base entity
-      if( IsOfClass(&*iten, "WorldBase")) {
+      if (IsOfClass(&*iten, "WorldBase")) {
         // uncache shadows for gradient
         ((CWorldBase *)&*iten)->UncacheShadowsForGradient(this);
       }
@@ -98,7 +98,7 @@ procedures:
     SetModelMainTexture(TEXTURE_MARKER);
 
     // set name
-    if( m_strName=="Marker") {
+    if (m_strName=="Marker") {
       m_strName = "Gradient marker";
     }
 

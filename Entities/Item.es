@@ -59,7 +59,7 @@ functions:
   {
     // adjust flare glow, to decrease power with how you get closer
     CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(ITEMHOLDER_ATTACHMENT_FLARE);
-    if( pamo != NULL)
+    if (pamo != NULL)
     {
       FLOAT fRatio = (Clamp( fMipFactor, 5.0f, 7.0f)-5.0f)/2.0f;
       UBYTE ubRatio = UBYTE(255*fRatio);
@@ -132,7 +132,7 @@ functions:
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
     // in DM, glares are off, so add some light to items
-    //if( m_bRespawn)
+    //if (m_bRespawn)
     {
       // fixed light and ambient
       colLight   = 0x40404040;
@@ -176,7 +176,7 @@ functions:
 
     // set appearance
     SetModel(MODEL_ITEM);
-    SetDesiredTranslation(FLOAT3D(0,0,0));  // just to add to movers
+    SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));  // just to add to movers
   };
 
 
@@ -217,7 +217,7 @@ functions:
     const FLOAT3D &vPos, const FLOAT3D &vStretch)
   {
     // add flare to items if not respawn
-    if( !m_bRespawn && !m_bDropped)
+    if (!m_bRespawn && !m_bDropped)
     {
       AddAttachmentToModel(this, *GetModelObject(), 
         ITEMHOLDER_ATTACHMENT_FLARE, ulIDModel, ulIDTexture, 0,0,0);

@@ -208,7 +208,7 @@ functions:
     INDEX iBoneID = ska_GetIDFromStringTable("R_Hand");
     FLOAT3D vStartPoint;
     FLOAT3D vEndPoint;
-    if(GetBoneAbsPosition(iBoneID,vStartPoint,vEndPoint)) {
+    if (GetBoneAbsPosition(iBoneID,vStartPoint,vEndPoint)) {
       Particles_OneParticle(vStartPoint);
     }
   };
@@ -218,7 +218,7 @@ functions:
   {
     INDEX iBoneID = ska_GetIDFromStringTable("MidTorso");
     RenBone *rb = RM_FindRenBone(iBoneID);
-    if(rb!=NULL) {
+    if (rb!=NULL) {
       FLOATquat3D quat;
       quat.FromEuler(ANGLE3D(0,0,AngleRad(Sin(m_fMidBoneRot)/3.0f)));
       rb->rb_arRot.ar_qRot = quat;
@@ -232,7 +232,7 @@ functions:
     INDEX ctrb = 0;
     RenBone *pRenBones=RM_GetRenBoneArray(ctrb);
     // for each t ren bones after first dummy one
-    for(INDEX irb=1;irb<ctrb-3;irb+=3) {
+    for (INDEX irb=1;irb<ctrb-3;irb+=3) {
       RenBone &rb = pRenBones[irb];
       FLOATquat3D quat;
       quat.FromEuler(ANGLE3D(0,0,AngleRad(Sin(m_fMidBoneRot)/3.0f)));
@@ -247,11 +247,11 @@ functions:
     INDEX iFlamerMeshID = ska_GetIDFromStringTable("Top");
 
 
-    if(iSurfaceID == iFlamerMeshID) {
-      if(pShader != NULL) {
+    if (iSurfaceID == iFlamerMeshID) {
+      if (pShader != NULL) {
         ShaderDesc sdDesc;
         pShader->GetShaderDesc(sdDesc);
-        if(sdDesc.sd_astrTextureNames.Count() > SHP_BASE_TEXTURE) {
+        if (sdDesc.sd_astrTextureNames.Count() > SHP_BASE_TEXTURE) {
           spParams.sp_aiTextureIDs[SHP_BASE_TEXTURE] = ska_GetIDFromStringTable("Lava04FX");
         }
       }
@@ -288,7 +288,7 @@ functions:
   virtual const CTFileName &GetComputerMessageName(void) const {
     static DECLARE_CTFILENAME(fnmSoldier,     "DataMP\\Messages\\Enemies\\GruntSoldier.txt");
     static DECLARE_CTFILENAME(fnmCommander,   "DataMP\\Messages\\Enemies\\GruntCommander.txt");
-    switch(m_gtType) {
+    switch (m_gtType) {
     default: ASSERT(FALSE);
     case GT_SOLDIER:  return fnmSoldier;
     case GT_COMMANDER: return fnmCommander;
@@ -345,9 +345,9 @@ functions:
   FLOAT WaitForDust(FLOAT3D &vStretch) {
 
     vStretch=FLOAT3D(1,1,2);
-    if(GetModelInstance()->IsAnimationPlaying(idGrunt_DeathBackward)) {
+    if (GetModelInstance()->IsAnimationPlaying(idGrunt_DeathBackward)) {
       return 0.5f;
-    } else if(GetModelInstance()->IsAnimationPlaying(idGrunt_DeathForward)) {
+    } else if (GetModelInstance()->IsAnimationPlaying(idGrunt_DeathForward)) {
       return 1.0f;
     }
     return -1.0f;
@@ -412,7 +412,7 @@ procedures:
     } else if (m_gtType == GT_COMMANDER) {
       autocall CommanderAttack() EEnd;
     // should never get here
-    } else{
+    } else {
       ASSERT(FALSE);
     }
     return EReturn();
@@ -426,12 +426,12 @@ procedures:
 
     GetModelInstance()->AddAnimation(idGrunt_Fire,AN_CLEAR,1.0f,0);
 
-    ShootProjectile(PRT_GRUNT_PROJECTILE_SOL, FIREPOS_SOLDIER, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_GRUNT_PROJECTILE_SOL, FIREPOS_SOLDIER, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soFire1, SOUND_FIRE, SOF_3D);
 
     autowait(0.15f + FRnd()*0.1f);
     GetModelInstance()->AddAnimation(idGrunt_Fire,AN_CLEAR,1.0f,0);
-    ShootProjectile(PRT_GRUNT_PROJECTILE_SOL, FIREPOS_SOLDIER, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_GRUNT_PROJECTILE_SOL, FIREPOS_SOLDIER, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soFire2, SOUND_FIRE, SOF_3D);
     
 
@@ -450,7 +450,7 @@ procedures:
     FLOAT   fLaserSpeed  = 45.0f; // m/s
     FLOAT3D vPredictedEnemyPosition = CalculatePredictedPosition(vGunPosAbs,
       vEnemyPos, fLaserSpeed, vEnemySpeed, GetPlacement().pl_PositionVector(2) );
-    ShootPredictedProjectile(PRT_GRUNT_LASER, vPredictedEnemyPosition, FLOAT3D(0.0f, 1.0f, 0.0f), ANGLE3D(0, 0, 0));*/
+    ShootPredictedProjectile(PRT_GRUNT_LASER, vPredictedEnemyPosition, FLOAT3D(0.0f, 1.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));*/
 
     GetModelInstance()->AddAnimation(idGrunt_Fire,AN_CLEAR,1,0);
     ShootProjectile(PRT_GRUNT_PROJECTILE_COM, FIREPOS_COMMANDER_DN, ANGLE3D(-20, 0, 0));
@@ -463,7 +463,7 @@ procedures:
 
     autowait(0.035f);
     GetModelInstance()->AddAnimation(idGrunt_Fire,AN_CLEAR,1,0);
-    ShootProjectile(PRT_GRUNT_PROJECTILE_COM, FIREPOS_COMMANDER_DN, ANGLE3D(0, 0, 0));
+    ShootProjectile(PRT_GRUNT_PROJECTILE_COM, FIREPOS_COMMANDER_DN, ANGLE3D(0.0f, 0.0f, 0.0f));
     PlaySound(m_soFire1, SOUND_FIRE, SOF_3D);
 
     autowait(0.035f);

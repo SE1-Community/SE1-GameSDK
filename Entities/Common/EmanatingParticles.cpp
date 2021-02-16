@@ -22,8 +22,8 @@ CEmittedParticle::CEmittedParticle(void)
   ep_tmEmitted=-1;
   ep_tmLife=1.0f;
   ep_colColor=C_WHITE|CT_OPAQUE;
-  ep_vSpeed=FLOAT3D(0,0,0);
-  ep_vPos=FLOAT3D(0,0,0);
+  ep_vSpeed=FLOAT3D(0.0f, 0.0f, 0.0f);
+  ep_vPos=FLOAT3D(0.0f, 0.0f, 0.0f);
   ep_fStretch=1;
   ep_fRot=0;
   ep_fRotSpeed=0;
@@ -45,7 +45,7 @@ CEmiter::CEmiter(void)
   em_bInitialized=FALSE;
   em_tmStart=-1;
   em_tmLife=0;
-  em_vG=FLOAT3D(0,1,0);
+  em_vG=FLOAT3D(0.0f, 1.0f, 0.0f);
   em_colGlobal=C_WHITE|CT_OPAQUE;
   em_iGlobal=0;
   em_aepParticles.Clear();
@@ -61,7 +61,7 @@ void CEmiter::Initialize(CEntity *pen)
 
 FLOAT3D CEmiter::GetGravity(CEntity *pen)
 {
-  if(pen->GetPhysicsFlags()&EPF_MOVABLE)
+  if (pen->GetPhysicsFlags()&EPF_MOVABLE)
   {
     return ((CMovableEntity *)pen)->en_vGravityDir*
            ((CMovableEntity *)pen)->en_fGravityA;
@@ -91,16 +91,16 @@ void CEmiter::AnimateParticles(void)
   FLOAT tmNow=_pTimer->CurrentTick();
   INDEX ctCount=em_aepParticles.Count();
   INDEX iCurrent=0;
-  while( iCurrent<ctCount)
+  while (iCurrent<ctCount)
   {
     CEmittedParticle &ep=em_aepParticles[iCurrent];
     // not yet alive
-    if(ep.ep_tmEmitted<0)
+    if (ep.ep_tmEmitted<0)
     {
       iCurrent++;
     }
     // if shouldn't live any more
-    else if( tmNow>ep.ep_tmEmitted+ep.ep_tmLife)
+    else if (tmNow>ep.ep_tmEmitted+ep.ep_tmLife)
     {
       CEmittedParticle &emLast=em_aepParticles[ctCount-1];
       ep=emLast;
@@ -122,11 +122,11 @@ void CEmiter::AnimateParticles(void)
       iCurrent++;
     }
   }
-  if( em_aepParticles.Count()==0)
+  if (em_aepParticles.Count()==0)
   {
     em_aepParticles.PopAll();
   }
-  else if( em_aepParticles.Count()!=ctCount)
+  else if (em_aepParticles.Count()!=ctCount)
   {
     em_aepParticles.PopUntil(ctCount-1);
   }
@@ -134,7 +134,7 @@ void CEmiter::AnimateParticles(void)
 
 void CEmiter::RenderParticles(void)
 {
-  switch(em_etType)
+  switch (em_etType)
   {
   case ET_AIR_ELEMENTAL:
     Particles_AirElementalBlow(*(CEmiter*)this);
@@ -168,10 +168,10 @@ void CEmiter::Read_t( CTStream &strm)
   strm>>em_colGlobal;
   strm>>em_iGlobal;
 
-  if(ctMaxParticles==0) return;
+  if (ctMaxParticles==0) return;
   em_aepParticles.Push(ctMaxParticles);
 
-  for(INDEX i=0; i<em_aepParticles.Count(); i++)
+  for (INDEX i=0; i<em_aepParticles.Count(); i++)
   {
     CEmittedParticle &em=em_aepParticles[i];
     em.Read_t(strm);
@@ -180,7 +180,7 @@ void CEmiter::Read_t( CTStream &strm)
 
 void CEmiter::Write_t( CTStream &strm)
 {
-  if( !em_bInitialized) return;
+  if (!em_bInitialized) return;
   INDEX ctMaxParticles=em_aepParticles.Count();
   strm.WriteID_t(CChunkID(ID_EMITER_VER));
   strm<<ctMaxParticles;
@@ -192,7 +192,7 @@ void CEmiter::Write_t( CTStream &strm)
   strm<<em_colGlobal;
   strm<<em_iGlobal;
 
-  for(INDEX i=0; i<em_aepParticles.Count(); i++)
+  for (INDEX i=0; i<em_aepParticles.Count(); i++)
   {
     CEmittedParticle &em=em_aepParticles[i];
     em.Write_t(strm);
