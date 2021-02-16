@@ -80,14 +80,14 @@ functions:
     return m_strDescription;
   }
 
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\PlayerActionMarker.ecl");
     strTargetProperty = "Target";
     return TRUE;
   }
 
-  /* Handle an event, return false if the event is not handled. */
+  // Handle an event, return false if the event is not handled.
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     // if triggered

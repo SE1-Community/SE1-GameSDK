@@ -48,9 +48,7 @@ functions:
 
     CEnemyBase::AdjustDifficulty();
   }
-/************************************************************
- *                   ATTACK SPECIFIC                        *
- ************************************************************/
+// ATTACK SPECIFIC
   void IncreaseKickedMass(CEntity *pen) {
     EntityInfo *peiTarget = (EntityInfo*) (pen->GetEntityInfo());
     if (peiTarget != NULL) {
@@ -61,9 +59,7 @@ functions:
 
 
 
-/************************************************************
- *      VIRTUAL ATTACK FUNCTIONS THAT NEED OVERRIDE         *
- ************************************************************/
+// VIRTUAL ATTACK FUNCTIONS THAT NEED OVERRIDE
   // touched another live entity
   virtual void LiveEntityTouched(ETouch etouch) {};
   // touched entity with higher mass
@@ -72,9 +68,7 @@ functions:
 
 
 procedures:
-/************************************************************
- *                 ATTACK ENEMY PROCEDURES                  *
- ************************************************************/
+// ATTACK ENEMY PROCEDURES
   // attack range -> fire and move toward enemy
   Fire() : CEnemyBase::Fire {
     m_fMassKicked = 0.0f;

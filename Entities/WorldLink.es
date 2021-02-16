@@ -43,9 +43,7 @@ components:
 
 
 functions:
-/************************************************************
- *                      START EVENT                         *
- ************************************************************/
+// START EVENT
   BOOL HandleEvent(const CEntityEvent &ee) {
     if (ee.ee_slEvent == EVENTCODE_ETrigger) {
       ETrigger &eTrigger = (ETrigger &)ee;
@@ -59,9 +57,7 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);

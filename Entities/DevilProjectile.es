@@ -65,7 +65,7 @@ components:
 
 
 functions:
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   {
     CMovableModelEntity::Read_t(istr);
@@ -73,7 +73,7 @@ functions:
     SetupLightSource();
   };
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void)
   {
     if (!IsPredictor()) {
@@ -102,9 +102,8 @@ functions:
 
 
 
-/************************************************************
- *                     MOVING FUNCTIONS                     *
- ************************************************************/
+// MOVING FUNCTIONS
+
   // calculate rotation
   void CalcHeadingRotation(ANGLE aWantedHeadingRelative, ANGLE &aRotation) {
     // normalize it to [-180,+180] degrees
@@ -202,9 +201,7 @@ functions:
 
 
 
-/************************************************************
- *             C O M M O N   F U N C T I O N S              *
- ************************************************************/
+// COMMON FUNCTIONS
   void ProjectileTouch(CEntityPointer penHit) {
     // direct damage
     FLOAT3D vDirection;
@@ -215,9 +212,7 @@ functions:
 
 
 
-/************************************************************
- *                   P R O C E D U R E S                    *
- ************************************************************/
+// PROCEDURES
 procedures:
   Fly(EVoid) {
     // bounce loop

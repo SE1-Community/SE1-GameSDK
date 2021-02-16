@@ -181,7 +181,7 @@ functions:
     }
   }
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     pes->es_ctCount = 1;

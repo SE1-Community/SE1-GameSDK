@@ -56,7 +56,7 @@ functions:
   void Precache(void) {
     PrecacheSound(SOUND_KEY);
   }
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     pes->es_strName = "Pergament";

@@ -622,7 +622,7 @@ functions:
     }
   };
 
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   {
     CMovableModelEntity::Read_t(istr);
@@ -650,7 +650,7 @@ functions:
     }
   }
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void)
   {
     if (m_bLightSource && !IsPredictor()) {
@@ -958,9 +958,7 @@ functions:
 
 
 
-/************************************************************
- *              PLAYER ROCKET / GRENADE                     *
- ************************************************************/
+// PLAYER ROCKET / GRENADE
 void PlayerRocket(void) {
   // set appearance
   InitAsModel();
@@ -1152,9 +1150,7 @@ void PlayerGrenadeExplosion(void) {
 
 
 
-/************************************************************
- *                    PLAYER FLAME                          *
- ************************************************************/
+// PLAYER FLAME
 void PlayerFlame(void) {
   // set appearance
   InitAsEditorModel();
@@ -1188,9 +1184,7 @@ void PlayerFlame(void) {
 
 
 
-/************************************************************
- *                    PLAYER LASER                          *
- ************************************************************/
+// PLAYER LASER
 void PlayerLaserRay(void) {
   // set appearance
   InitAsModel();
@@ -1241,9 +1235,7 @@ void PlayerLaserWave(void) {
 
 
 
-/************************************************************
- *                   CATMAN PROJECTILE                      *
- ************************************************************/
+// CATMAN PROJECTILE
 void CatmanProjectile(void) {
   // set appearance
   InitAsModel();
@@ -1268,9 +1260,7 @@ void CatmanProjectile(void) {
 
 
 
-/************************************************************
- *                   HEADMAN PROJECTILE                     *
- ************************************************************/
+// HEADMAN PROJECTILE
 void HeadmanFirecracker(void) {
   // set appearance
   InitAsModel();
@@ -1402,9 +1392,7 @@ void CyborgBombExplosion(void)
   }
 };
 
-/************************************************************
- *                  BONEMAN PROJECTILE                      *
- ************************************************************/
+// BONEMAN PROJECTILE
 void BonemanProjectile(void) {
   // set appearance
   InitAsModel();
@@ -1429,9 +1417,7 @@ void BonemanProjectile(void) {
 
 
 
-/************************************************************
- *                   WOMAN PROJECTILE                       *
- ************************************************************/
+// WOMAN PROJECTILE
 void WomanProjectile(void) {
   // set appearance
   InitAsModel();
@@ -1456,9 +1442,7 @@ void WomanProjectile(void) {
 
 
 
-/************************************************************
- *                  DRAGONMAN PROJECTILE                    *
- ************************************************************/
+// DRAGONMAN PROJECTILE
 void DragonmanProjectile(INDEX iType) {
   // set appearance
   InitAsModel();
@@ -1492,9 +1476,7 @@ void DragonmanProjectile(INDEX iType) {
 
 
 
-/************************************************************
- *                  ELEMENTAL PROJECTILE                    *
- ************************************************************/
+// ELEMENTAL PROJECTILE
 void ElementalRock(INDEX iSize, INDEX iType) {
   // set appearance
   InitAsModel();
@@ -1728,9 +1710,7 @@ void LavamanBombDebrisExplosion(void)
   penSpray->Initialize( eSpawnSpray);
 }
 
-/************************************************************
- *                   HUANMAN PROJECTILE                     *
- ************************************************************/
+// HUANMAN PROJECTILE
 void HuanmanProjectile(void) {
   // set appearance
   InitAsModel();
@@ -1757,9 +1737,7 @@ void HuanmanProjectile(void) {
   m_pmtMove = PMT_FLYING;
 };
 
-/************************************************************
- *                   BEAST PROJECTILE                       *
- ************************************************************/
+// BEAST PROJECTILE
 void BeastProjectile(void) {
   // we need target for guied misile
   if (IsDerivedFromClass(m_penLauncher, "Enemy Base")) {
@@ -2048,9 +2026,7 @@ void BeastBigProjectileExplosion(void)
   }
 }
 
-/************************************************************
- *                   FISHMAN PROJECTILE                     *
- ************************************************************/
+// FISHMAN PROJECTILE
 void FishmanProjectile(void) {
   // set appearance
   InitAsModel();
@@ -2075,9 +2051,7 @@ void FishmanProjectile(void) {
 
 
 
-/************************************************************
- *                   MANTAMAN PROJECTILE                    *
- ************************************************************/
+// MANTAMAN PROJECTILE
 void MantamanProjectile(void) {
   // set appearance
   InitAsModel();
@@ -2101,9 +2075,7 @@ void MantamanProjectile(void) {
 };
 
 
-/************************************************************
- *               DEVIL PROJECTILES                          *
- ************************************************************/
+// DEVIL PROJECTILES
 void DevilLaser(void) {
   // set appearance
   InitAsModel();
@@ -2287,9 +2259,7 @@ void DevilGuidedProjectileExplosion(void)
   }
 }
 
-/************************************************************
- *               CYBORG LASER / PROJECTILE                  *
- ************************************************************/
+// CYBORG LASER / PROJECTILE
 void CyborgLaser(void) {
   // set appearance
   InitAsModel();
@@ -2341,9 +2311,7 @@ void CyborgBomb(void)
 
 
 
-/************************************************************
- *                        LAVA BALL                         *
- ************************************************************/
+// LAVA BALL
 void LavaBall(void) {
   // set appearance
   InitAsModel();
@@ -2386,9 +2354,7 @@ void LavaBallExplosion(void) {
   }
 };
 
-/************************************************************
- *                 G R U N T   L A S E R                    *
- ************************************************************/
+// GRUNT LASER
 
 void GruntSoldierLaser(void) {
   // set appearance
@@ -2451,9 +2417,7 @@ void GruntCommanderLaser(void) {
 };
 
 
-/************************************************************
- *                G U F F Y   R O C K E T                   *
- ************************************************************/
+// GUFFY ROCKET
 
 void GuffyProjectile(void) {
   // set appearance
@@ -2498,9 +2462,7 @@ void GuffyProjectileExplosion(void) {
 }
 
 
-/************************************************************
- *                D E M O N   F I R E B A L L               *
- ************************************************************/
+// DEMON FIREBALL
 
 void DemonFireball(void) {
   // we need target for guided misile
@@ -2560,9 +2522,7 @@ void DemonFireballExplosion(void)
   penSpray->Initialize( eSpawnSpray);
 }
 
-/************************************************************
- *              L A R V A   P R O J E C T I L E S           *
- ************************************************************/
+// LARVA PROJECTILES
 
 void LarvaPlasma(void) {
   // set appearance
@@ -2671,9 +2631,7 @@ void LarvaTailExplosion(void) {
 }
 
 
-/*****************************************************************
- *       A I R   E L E M E N T A L   P R O J E C T I L E S       *
- *****************************************************************/
+// AIR ELEMENTAL PROJECTILES
 
 void WindBlast(void) {
   // set appearance
@@ -2699,9 +2657,7 @@ void WindBlast(void) {
   m_pmtMove = PMT_SLIDING;
 }
 
-/************************************************************
- *                    M E T E O R                           *
- ************************************************************/
+// METEOR
 
 void Meteor() {
   // set appearance
@@ -2803,9 +2759,7 @@ void MeteorExplosion() {
 }
 
 
-/************************************************************
- *                    S H O O T E R S                       *
- ************************************************************/
+// SHOOTERS
 
 void ShooterWoodenDart(void) {
   // set appearance
@@ -2949,9 +2903,7 @@ void AfterburnerDebris(void)
 }
 
 
-/************************************************************
- *             C O M M O N   F U N C T I O N S              *
- ************************************************************/
+// COMMON FUNCTIONS
 
 // projectile touch his valid target
 void ProjectileTouch(CEntityPointer penHit)
@@ -3052,9 +3004,7 @@ void SpawnEffect(const CPlacement3D &plEffect, const ESpawnEffect &eSpawnEffect)
 
 
 
-/************************************************************
- *                      S O U N D S                         *
- ************************************************************/
+// SOUNDS
 void BounceSound(void) {
   switch (m_prtType) {
     case PRT_GRENADE:
@@ -3093,7 +3043,7 @@ ANGLE GetRotationSpeed(ANGLE aWantedAngle, ANGLE aRotateSpeed, FLOAT fWaitFreque
 }
 
 
-/* Receive damage */
+// Receive damage
 void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
                    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
 {
@@ -3112,9 +3062,7 @@ void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     dmtType, fDamageAmmount, vHitPoint, vDirection);
 }
 
-/************************************************************
- *                   P R O C E D U R E S                    *
- ************************************************************/
+// PROCEDURES
 procedures:
   // --->>> PROJECTILE FLY IN SPACE
   ProjectileFly(EVoid) {

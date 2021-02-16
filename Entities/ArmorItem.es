@@ -102,7 +102,7 @@ functions:
       case ARIT_HELM:   PrecacheSound(SOUND_HELM  ); break;
     }
   }
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     pes->es_strName = "Armor"; 

@@ -95,7 +95,7 @@ functions:
       case HIT_SUPER:  PrecacheSound(SOUND_SUPER ); break;
     }
   }
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     pes->es_strName = "Health"; 

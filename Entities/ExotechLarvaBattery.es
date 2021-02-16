@@ -77,7 +77,7 @@ functions:
   }
   
 
-  /* Adjust model shading parameters if needed. */
+  // Adjust model shading parameters if needed.
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
     if (m_bCustomShading)

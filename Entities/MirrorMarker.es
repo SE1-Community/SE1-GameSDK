@@ -43,12 +43,12 @@ components:
 
 functions:
 
-  /* Get mirror type name, return empty string if not used. */
+  // Get mirror type name, return empty string if not used.
   const CTString &GetMirrorName(void)
   {
     return m_strName;
   }
-  /* Get mirror. */
+  // Get mirror.
   void GetMirror(class CMirrorParameters &mpMirror)
   {
     mpMirror.mp_ulFlags = MPF_WARP;

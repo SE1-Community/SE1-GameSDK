@@ -159,7 +159,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
   PIX pixCharSizeI = pfd->fd_pixCharWidth  + pfd->fd_pixCharSpacing;
   PIX pixCharSizeJ = pfd->fd_pixCharHeight + pfd->fd_pixLineSpacing;
 
-  PIX pixBarSizeJ = 17;//*pixSizeJ/480;
+  PIX pixBarSizeJ = 17;// *pixSizeJ/480;
 
   COLOR colBcg = LerpColor(C_BLACK, SE_COL_BLUE_LIGHT, 0.30f)|0xff;
   COLOR colBar = LerpColor(C_BLACK, SE_COL_BLUE_LIGHT, 0.45f)|0xff;

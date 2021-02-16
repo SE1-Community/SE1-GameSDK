@@ -67,12 +67,12 @@ components:
   1 class   CLASS_WATCHPLAYERS    "Classes\\WatchPlayers.ecl",
 
 functions:
-  /* Check if entity is moved on a route set up by its targets. */
+  // Check if entity is moved on a route set up by its targets.
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Target";
     return TRUE;
   };
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\EnvironmentMarker.ecl");
     strTargetProperty = "Target";
@@ -85,7 +85,7 @@ functions:
     }
     return m_strDescription;
   };
-  /* Get anim data for given animation property - return NULL for none. */
+  // Get anim data for given animation property - return NULL for none.
   CAnimData *GetAnimData(SLONG slPropertyOffset) {
     if (slPropertyOffset == offsetof(CEnvironmentBase, m_iAnim)) {
       return GetModelObject()->GetData();
@@ -112,9 +112,8 @@ functions:
 
 
 
-/************************************************************
- *                      MOVE FUNCTIONS                      *
- ************************************************************/
+// MOVE FUNCTIONS
+
   // switch to next marker
   BOOL NextMarker(void) {
     if (m_penTarget == NULL) {
@@ -216,9 +215,7 @@ functions:
 
 
 
-/************************************************************
- *                  INITIALIZE FUNCTIONS                    *
- ************************************************************/
+// INITIALIZE FUNCTIONS
   void Initialize(void) {
     // declare yourself as a model
     InitAsModel();
@@ -268,9 +265,7 @@ functions:
 };
 
 
-/************************************************************
- *                    WATCHER FUNCTIONS                     *
- ************************************************************/
+// WATCHER FUNCTIONS
   void InitializeWatcher(FLOAT fWaitTime) {
     // spawn player watcher
     m_penWatcher = CreateEntity(GetPlacement(), CLASS_WATCHPLAYERS);
@@ -288,9 +283,8 @@ functions:
 
 
 
-/************************************************************
- *                    ANIMATION FUCNTIONS                   *
- ************************************************************/
+// ANIMATION FUCNTIONS
+
   // play default anim
   void PlayDefaultAnim(void) {
     GetModelObject()->PlayAnim(m_iAnim, AOF_LOOPING|AOF_NORESTART);
@@ -326,9 +320,8 @@ functions:
 
 
 procedures:
-/************************************************************
- *                    SUPPORT PROCEDURES                    *
- ************************************************************/
+// SUPPORT PROCEDURES
+
   // move to marker
   MoveToMarker(EVoid) {
     // if next marker exist
@@ -353,9 +346,8 @@ procedures:
 
 
 
-/************************************************************
- *                    A C T I O N S                         *
- ************************************************************/
+// ACTIONS
+
   // activate
   Activate(EVoid) {
     wait() {
@@ -394,11 +386,6 @@ procedures:
     }
   };
 
-
-
-/************************************************************
- *                M  A  I  N    L  O  O  P                  *
- ************************************************************/
   // main loop
   MainLoop(EVoid) {
     autocall Stop() EEnd;

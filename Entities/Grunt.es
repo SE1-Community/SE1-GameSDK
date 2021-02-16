@@ -92,7 +92,7 @@ functions:
     return str;
   }
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     if (m_gtType == GT_SOLDIER) {
       return &eiGruntSoldier;
@@ -131,7 +131,7 @@ functions:
     PrecacheSound(SOUND_DEATH);
   };
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -221,9 +221,7 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire {
     // soldier
     if (m_gtType == GT_SOLDIER) {
@@ -298,9 +296,7 @@ procedures:
     return EEnd();
   };
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

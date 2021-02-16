@@ -349,7 +349,7 @@ wpn_fFY[30]=(FLOAT)0;
 
 
 
-/* the following lines have been moved to the upper part */
+// the following lines have been moved to the upper part
 
 /*// tommygun
 wpn_fH[6]=(FLOAT)4;

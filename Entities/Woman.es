@@ -98,7 +98,7 @@ functions:
     PrecacheClass(CLASS_PROJECTILE, PRT_WOMAN_FIRE);
   };
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     if (m_bInAir) {
       return &eiWomanFly;
@@ -107,7 +107,7 @@ functions:
     }
   };
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -287,9 +287,7 @@ functions:
   
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   FlyFire(EVoid) : CEnemyFly::FlyFire {
     if (m_bKamikazeAttached) { return EReturn(); }
 
@@ -326,9 +324,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                    D  E  A  T  H                         *
- ************************************************************/
+// DEATH
   Death(EVoid) : CEnemyFly::Death {
     DropKamikaze();
     jump CEnemyFly::Death();
@@ -403,9 +399,7 @@ procedures:
 
 
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

@@ -64,9 +64,8 @@ components:
 
 functions:
 
-/************************************************************
- *                      BULLET LAUNCH                       *
- ************************************************************/
+// BULLET LAUNCH
+
   // set bullet damage
   void SetDamage(FLOAT fDamage) {
     m_fDamage = fDamage;
@@ -268,9 +267,8 @@ functions:
 
 
 
-/************************************************************
- *                        EFFECTS                           *
- ************************************************************/
+// EFFECTS
+
   // spawn trail of this bullet
   void SpawnTrail(void) 
   {

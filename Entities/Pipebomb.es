@@ -70,14 +70,14 @@ components:
  12 sound   SOUND_LAUNCH        "Sounds\\Weapons\\RocketFired.wav",
 
 functions:
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   {
     CMovableModelEntity::Read_t(istr);
     SetupLightSource();
   }
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void)
   {
     if (!IsPredictor()) {
@@ -109,9 +109,7 @@ functions:
     Particles_GrenadeTrail(this);
   }
 
-/************************************************************
- *                       PIPEBOMB                           *
- ************************************************************/
+// PIPEBOMB
 void Pipebomb(void) {
   // set appearance
   InitAsModel();
@@ -167,12 +165,8 @@ void PipebombExplosion(void) {
   }
 };
 
+// COMMON FUNCTIONS
 
-
-
-/************************************************************
- *             C O M M O N   F U N C T I O N S              *
- ************************************************************/
 // projectile hitted (or time expired or can't move any more)
 void ProjectileHit(void) {
   // explode ...
@@ -195,9 +189,7 @@ void SpawnEffect(const CPlacement3D &plEffect, const ESpawnEffect &eSpawnEffect)
 
 
 
-/************************************************************
- *                   P R O C E D U R E S                    *
- ************************************************************/
+// PROCEDURES
 procedures:
   // --->>> PROJECTILE SLIDE ON BRUSH
   ProjectileSlide(EVoid) {

@@ -475,7 +475,7 @@ functions:
     return crRay.cr_penHit == penEntity;
   };
 
-  /* calculates launch velocity and heading correction for angular launch */
+  // calculates launch velocity and heading correction for angular launch
   void CalculateAngularLaunchParams(
     FLOAT3D vShooting, FLOAT fShootHeight,
     FLOAT3D vTarget, FLOAT3D vSpeedDest,
@@ -518,7 +518,7 @@ functions:
     fRelativeHdg = fHdgTargetMoved-fHdgTargetNow;
   }
 
-  /* calculates predicted position for propelled projectile */
+  // calculates predicted position for propelled projectile
   FLOAT3D CalculatePredictedPosition( FLOAT3D vShootPos, FLOAT3D vTarget, 
     FLOAT fSpeedSrc, FLOAT3D vSpeedDst, FLOAT fClampY)
   {
@@ -543,12 +543,12 @@ functions:
     return vNewTarget;
   }
   
-  /* Check if entity is moved on a route set up by its targets. */
+  // Check if entity is moved on a route set up by its targets.
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Marker";
     return TRUE;
   };
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\EnemyMarker.ecl");
     strTargetProperty = "Marker";
@@ -600,7 +600,7 @@ functions:
 
   }
 
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) {
     CMovableModelEntity::Read_t(istr);
 
@@ -610,7 +610,7 @@ functions:
     }
   };
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     pes->es_strName = GetClass()->ec_pdecDLLClass->dec_strName;
@@ -625,7 +625,7 @@ functions:
     return TRUE;
   }
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -788,10 +788,7 @@ functions:
   };
 
 
-/************************************************************
- *                        FADE OUT                          *
- ************************************************************/
-
+// FADE OUT
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
     colAmbient = AddColors( colAmbient, m_colColor);
@@ -1038,9 +1035,7 @@ functions:
     return penOld != penPlayer;
   }
 
-/************************************************************
- *                     MOVING FUNCTIONS                     *
- ************************************************************/
+// MOVING FUNCTIONS
 
   // get movement frequency for attack
   virtual FLOAT GetAttackMoveFrequency(FLOAT fEnemyDistance)
@@ -1344,9 +1339,7 @@ functions:
     return m_penPathMarker != NULL;
   }
 
-  /************************************************************
- *                   TACTICS FUNCTIONS                      *
- ************************************************************/
+  // TACTICS FUNCTIONS 
 
   void InitializeTactics( void )   {
   
@@ -1547,9 +1540,8 @@ functions:
     m_tmTacticsActivation = -1.0f;    
   }
 
-/************************************************************
- *                   ATTACK SPECIFIC                        *
- ************************************************************/
+// ATTACK SPECIFIC
+
   // can attack (shoot) at entity in plane - ground support
   BOOL CanAttackEnemy(CEntity *penTarget, FLOAT fCosAngle) {
     if (IsInPlaneFrustum(penTarget, fCosAngle)) {
@@ -1723,9 +1715,8 @@ functions:
   };
 
 
-/************************************************************
- *                 BLOW UP FUNCTIONS                        *
- ************************************************************/
+// BLOW UP FUNCTIONS
+
   // should this enemy blow up (spawn debris)
   virtual BOOL ShouldBlowUp(void) 
   {
@@ -1821,9 +1812,7 @@ functions:
   }
 
 
-/************************************************************
- *                CLASS SUPPORT FUNCTIONS                   *
- ************************************************************/
+// CLASS SUPPORT FUNCTIONS
 
   // leave stain
   virtual void LeaveStain( BOOL bGrow)
@@ -1890,9 +1879,7 @@ functions:
   }
 
 
-/************************************************************
- *                SOUND VIRTUAL FUNCTIONS                   *
- ************************************************************/
+// SOUND VIRTUAL FUNCTIONS
 
   // wounded -> yell
   void WoundedNotify(const EDamage &eDamage)
@@ -1930,9 +1917,7 @@ functions:
 
 
 
-/************************************************************
- *          VIRTUAL FUNCTIONS THAT NEED OVERRIDE            *
- ************************************************************/
+// VIRTUAL FUNCTIONS THAT NEED OVERRIDE
   virtual void StandingAnim(void) {};
   virtual void StandingAnimFight(void) { StandingAnim(); };
   virtual void WalkingAnim(void) {};
@@ -1969,7 +1954,7 @@ functions:
   // adjust sound and watcher parameters here if needed
   virtual void EnemyPostInit(void) {};
 
-  /* Handle an event, return false if the event is not handled. */
+  // Handle an event, return false if the event is not handled.
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     if (ee.ee_slEvent == EVENTCODE_ETouch)
@@ -2075,9 +2060,7 @@ functions:
 
 procedures:
 
-//**********************************************************
-//                 MOVEMENT PROCEDURES
-//**********************************************************
+// MOVEMENT PROCEDURES
 
   // move to given destination position
   MoveToDestination(EVoid) 
@@ -2315,9 +2298,7 @@ procedures:
   };
 
 
-//**********************************************************
-//                 ATTACK PROCEDURES
-//**********************************************************
+// ATTACK PROCEDURES
 
   // sequence that is activated when a new player is spotted visually or heard
   NewEnemySpotted()
@@ -2635,9 +2616,7 @@ procedures:
     return EReturn();
   };
 
-//**********************************************************
-//                 COMBAT IMPLEMENTATION
-//**********************************************************
+// COMBAT IMPLEMENTATION
 
   // this is called to hit the player when near
   Hit(EVoid) 
@@ -2651,9 +2630,7 @@ procedures:
     return EReturn(); 
   }
 
-//**********************************************************
-//                 COMBAT HELPERS
-//**********************************************************
+// COMBAT HELPERS
 
   // call this to lock on player for some time - set m_fLockOnEnemyTime before calling
   LockOnEnemy(EVoid) 
@@ -2746,9 +2723,7 @@ procedures:
     return EReturn();
   };
 
-//**********************************************************
-//             WOUNDING AND DYING PROCEDURES
-//**********************************************************
+// WOUNDING AND DYING PROCEDURES
 
   // play wounding animation
   BeWounded(EDamage eDamage)
@@ -2947,9 +2922,8 @@ procedures:
 
     return EEnd();
   }
-//**********************************************************
-//                MAIN LOOP PROCEDURES
-//**********************************************************
+  
+// MAIN LOOP PROCEDURES
 
   // move
   Active(EVoid) 

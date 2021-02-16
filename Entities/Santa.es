@@ -72,7 +72,7 @@ functions:
     return fnm;
   };
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiSanta;
   };
@@ -91,7 +91,7 @@ functions:
     m_bRunSoundPlaying = FALSE;
   }
 
-  /* Handle an event, return false if the event is not handled. */
+  // Handle an event, return false if the event is not handled.
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     // ignore touching, damaging...
@@ -102,7 +102,7 @@ functions:
     return CEnemyBase::HandleEvent(ee);
   }
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -220,9 +220,7 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   // shoot
   Fire(EVoid) : CEnemyBase::Fire{
     return EReturn();
@@ -233,9 +231,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
 
     // declare yourself as a model

@@ -1517,7 +1517,7 @@ functions:
       return "no prediction";
     }
   }
-  /* Write to stream. */
+  // Write to stream.
   void Write_t( CTStream *ostr) // throw char *
   {
     CPlayerEntity::Write_t(ostr);
@@ -1533,7 +1533,7 @@ functions:
     ostr->Write_t(&m_psGameStats , sizeof(m_psGameStats ));
     ostr->Write_t(&m_psGameTotal , sizeof(m_psGameTotal ));
   }
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   { 
     CPlayerEntity::Read_t(istr);
@@ -1572,7 +1572,7 @@ functions:
     SetupLightSource();
   };
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void)
   {
     if (!IsPredictor()) {
@@ -2364,9 +2364,7 @@ functions:
     }
   }
 
-/************************************************************
- *                    RENDER GAME VIEW                      *
- ************************************************************/
+// RENDER GAME VIEW
 
   // setup viewing parameters for viewing from player or camera
   void SetupView(CDrawPort *pdp, CAnyProjection3D &apr, CEntity *&penViewer, 
@@ -2732,9 +2730,7 @@ functions:
 
 
 
-/************************************************************
- *                   PRE/DO/POST MOVING                     *
- ************************************************************/
+// PRE/DO/POST MOVING
 
   // premoving for soft player up-down movement
   void PreMoving(void) {
@@ -2874,10 +2870,7 @@ functions:
     strm.FPrintF_t("m_fArmor: %g(%08x)\n", m_fArmor, (ULONG&)m_fArmor);
   }
 
-/************************************************************
- *         DAMAGE OVERRIDE (PLAYER HAS ARMOR)               *
- ************************************************************/
-
+// DAMAGE OVERRIDE (PLAYER HAS ARMOR)
 
   // leave stain
   virtual void LeaveStain( BOOL bGrow)
@@ -3059,7 +3052,7 @@ functions:
   }
 
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage( CEntity *penInflictor, enum DamageType dmtType,
                       FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection)
   {
@@ -3287,10 +3280,9 @@ functions:
 //    SetCollisionFlags(ECF_IMMATERIAL);
   };
 
-/************************************************************
- *                 OVERRIDEN FUNCTIONS                      *
- ************************************************************/
-  /* Entity info */
+// OVERRIDEN FUNCTIONS
+
+  // Entity info
   void *GetEntityInfo(void)
   {
     switch (m_pstState) {
@@ -3308,7 +3300,7 @@ functions:
   };
 
 
-  /* Receive item */
+  // Receive item
   BOOL ReceiveItem(const CEntityEvent &ee)
   {
     // *********** HEALTH ***********
@@ -3567,9 +3559,7 @@ functions:
   }
 
   
-/************************************************************
- *                      PLAYER ACTIONS                      *
- ************************************************************/
+// PLAYER ACTIONS
   void SetGameEnd(void)
   {
     _pNetwork->SetGameFinished();
@@ -4693,10 +4683,7 @@ functions:
   };
 
 
-/************************************************************
- *                 END OF PLAYER ACTIONS                    *
- ************************************************************/
-
+// END OF PLAYER ACTIONS
 
   // Get current placement that the player views from in absolute space.
   void GetLerpedAbsoluteViewPlacement(CPlacement3D &plView) {
@@ -4943,9 +4930,8 @@ functions:
   }
 
 
-/************************************************************
- *                  SPECIAL FUNCTIONS                       *
- ************************************************************/
+// SPECIAL FUNCTIONS
+
   // try to find start marker for deathmatch (re)spawning
   CEntity *GetDeathmatchStartMarker(void)
   {
@@ -5012,10 +4998,7 @@ functions:
     return amdMarkers[iMarker].md_ppm;
   }
 
-/************************************************************
- *                  INITIALIZE PLAYER                       *
- ************************************************************/
-
+// INITIALIZE PLAYER
   void InitializePlayer()
   {
     // set viewpoint position inside the entity
@@ -5515,17 +5498,13 @@ functions:
   }
 
 procedures:
-/************************************************************
- *                       WOUNDED                            *
- ************************************************************/
+// WOUNDED
   Wounded(EDamage eDamage) {
     return;
   };
 
 
-/************************************************************
- *                     WORLD CHANGE                         *
- ************************************************************/
+// WORLD CHANGE
   WorldChange() {
     // if in single player
     if (GetSP()->sp_bSinglePlayer) {
@@ -5584,9 +5563,7 @@ procedures:
     return;
   }
 
-/************************************************************
- *                       D E A T H                          *
- ************************************************************/
+// DEATH
 
   Death(EDeath eDeath)
   {
@@ -5892,9 +5869,7 @@ procedures:
     }
   };
 
-/************************************************************
- *                      R E B I R T H                       *
- ************************************************************/
+// REBIRTH
   FirstInit() {
     // clear use button and zoom flag
     bUseButtonHeld = FALSE;
@@ -6553,9 +6528,8 @@ procedures:
     // return to main loop
     return EVoid();
   }
-/************************************************************
- *                        M  A  I  N                        *
- ************************************************************/
+  
+// MAIN
   Main(EVoid evoid)
   {
     // remember start time

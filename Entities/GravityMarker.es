@@ -61,12 +61,12 @@ functions:
     return Clamp(fStrength, 0.0f, m_fAcc);
   }
 
-  /* Get force type name, return empty string if not used. */
+  // Get force type name, return empty string if not used.
   const CTString &GetForceName(INDEX i)
   {
     return m_strName;
   }
-  /* Get force in given point. */
+  // Get force in given point.
   void GetForce(INDEX i, const FLOAT3D &vPoint, 
     CForceStrength &fsGravity, CForceStrength &fsField)
   {
@@ -135,7 +135,7 @@ functions:
     fsField.fs_vDirection = m_vForceDir;
   }
 
-  /* Handle an event, return false if the event is not handled. */
+  // Handle an event, return false if the event is not handled.
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     if (ee.ee_slEvent == EVENTCODE_ETrigger)

@@ -98,7 +98,7 @@ functions:
     }
   }
 
-  /* Adjust model mip factor if needed. */
+  // Adjust model mip factor if needed.
   void AdjustMipFactor(FLOAT &fMipFactor)
   {
     fMipFactor = 0;// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -210,9 +210,7 @@ functions:
     m_fASpeed *= 180/PI;
   }
 
-/************************************************************
- *                      S O U N D S                         *
- ************************************************************/
+// SOUNDS
 void BounceSound(FLOAT fSpeed) {
   FLOAT fHitStrength = fSpeed*fSpeed;
 

@@ -81,13 +81,13 @@ functions:
     PrecacheSound(SOUND_ATTACK);
   };
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void)
   {
     return &eiFish;
   };
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -226,9 +226,7 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   DiveHit(EVoid) : CEnemyDive::DiveHit
   {
     if (CalcDist(m_penEnemy) > DISTANCE_ELECTRICITY)
@@ -276,9 +274,7 @@ procedures:
     jump DiveHit();
   }
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

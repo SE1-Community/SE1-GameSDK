@@ -161,7 +161,7 @@ functions:
       SendEvent(EForceExplode());
     }
   }
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   {
     CMovableModelEntity::Read_t(istr);
@@ -169,7 +169,7 @@ functions:
 //    SetupLightSource();
   }
 
-  /* Get static light source information. */
+  // Get static light source information.
 /*
   CLightSource *GetLightSource(void)
   {
@@ -360,9 +360,7 @@ void Explosion(FLOAT3D vCenter,
 
 
 
-/************************************************************
- *             C O M M O N   F U N C T I O N S              *
- ************************************************************/
+// COMMON FUNCTIONS
 
 // ball touch his valid target
 BOOL BallTouchExplode(CEntityPointer penHit)
@@ -429,9 +427,7 @@ void SpawnEffect(const CPlacement3D &plEffect, const ESpawnEffect &eSpawnEffect)
 
 
 
-/************************************************************
- *                      S O U N D S                         *
- ************************************************************/
+// SOUNDS
 void BounceSound(FLOAT fSpeed) {
   FLOAT fVolume = Clamp(fSpeed/6.0f, 0.0f, 1.0f);
   if (fVolume<0.1f) {
@@ -445,9 +441,7 @@ void BounceSound(FLOAT fSpeed) {
 
 
 
-/************************************************************
- *                   P R O C E D U R E S                    *
- ************************************************************/
+// PROCEDURES
 procedures:
   Bounce(EVoid) {
     // if already inside some entity

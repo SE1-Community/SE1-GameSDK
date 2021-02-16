@@ -69,12 +69,12 @@ properties:
   35 FLOAT m_tmRockingChangeStart=-1,   // when changing of rocking parameters has started
 components:
 functions:
-  /* Check if entity is moved on a route set up by its targets. */
+  // Check if entity is moved on a route set up by its targets.
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Target";
     return TRUE;
   };
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\ShipMarker.ecl");
     strTargetProperty = "Target";
@@ -87,7 +87,7 @@ functions:
     }
     return m_strDescription;
   }
-  /* Get anim data for given animation property - return NULL for none. */
+  // Get anim data for given animation property - return NULL for none.
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
     if ((slPropertyOffset == offsetof(CShip, m_iSailUpAnim)

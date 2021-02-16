@@ -47,12 +47,12 @@ functions:
     return m_strDescription;
   }
 
-  /* Check if entity is moved on a route set up by its targets. */
+  // Check if entity is moved on a route set up by its targets.
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Target";
     return TRUE;
   };
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\Marker.ecl");
     strTargetProperty = "Target";

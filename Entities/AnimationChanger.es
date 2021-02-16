@@ -69,7 +69,7 @@ functions:
     return m_strDescription;
   }
 
-  /* Get anim data for given animation property - return NULL for none. */
+  // Get anim data for given animation property - return NULL for none.
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
     CEntity *penTarget = m_penTarget;

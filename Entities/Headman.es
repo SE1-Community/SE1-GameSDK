@@ -113,7 +113,7 @@ functions:
     return str;
   }
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiHeadman;
   };
@@ -164,7 +164,7 @@ functions:
     }
   };
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
@@ -177,7 +177,7 @@ functions:
     return TRUE;
   }
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -344,9 +344,8 @@ functions:
     }
   }
 
-/************************************************************
- *                 BLOW UP FUNCTIONS                        *
- ************************************************************/
+// BLOW UP FUNCTIONS
+
   void BlowUpNotify(void) {
     // kamikaze and bomberman explode if is not already exploded
     if (m_hdtType == HDT_KAMIKAZE || m_hdtType == HDT_BOMBERMAN) {
@@ -471,9 +470,7 @@ functions:
   }
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   InitializeAttack(EVoid) : CEnemyBase::InitializeAttack {
     if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOn();
@@ -598,9 +595,7 @@ procedures:
 
 
 
-/************************************************************
- *                    D  E  A  T  H                         *
- ************************************************************/
+// DEATH
   Death(EVoid) : CEnemyBase::Death {
     // don't check this because summoner can send death event even to kamikaze
     // ASSERT(m_hdtType != HDT_KAMIKAZE);
@@ -619,9 +614,7 @@ procedures:
 
 
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

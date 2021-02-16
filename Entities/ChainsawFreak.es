@@ -89,7 +89,7 @@ functions:
     PrecacheSound(SOUND_SIGHT    );    
   };
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiChainsawFreak;
   };
@@ -110,7 +110,7 @@ functions:
     Particles_RunningDust(this);
   }*/
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -222,9 +222,8 @@ functions:
   }
 
 
-/************************************************************
- *                      ATTACK FUNCTIONS                    *
- ************************************************************/
+// ATTACK FUNCTIONS
+
   // touched another live entity
   void LiveEntityTouched(ETouch etouch) {
     if (m_penLastTouched != etouch.penOther || _pTimer->CurrentTick() >= m_fLastTouchedTime+0.25f) {
@@ -288,9 +287,8 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
+
   // hit enemy
   Hit(EVoid) : CEnemyBase::Hit {
     if (CalcDist(m_penEnemy) < HIT_DISTANCE) {
@@ -357,9 +355,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

@@ -110,7 +110,7 @@ functions:
     PrecacheClass(CLASS_PROJECTILE, PRT_BEAST_PROJECTILE);
   };
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiDemon;
   };
@@ -128,7 +128,7 @@ functions:
     return 0.0f;
   }*/
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -220,9 +220,7 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire
   {
     
@@ -298,9 +296,7 @@ procedures:
   }
 
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

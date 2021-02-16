@@ -106,12 +106,12 @@ components:
 200 sound   SOUND_SPIN            "ModelsMP\\Enemies\\AirElemental\\Sounds\\TwisterSpin.wav",
 
 functions:
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiTwister;
   };
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -139,9 +139,7 @@ functions:
     }
   }
 
-/************************************************************
- *                   FADE OUT & MOVING                      *
- ************************************************************/
+// FADE OUT & MOVING
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
     // fading out
     if (m_bFadeOut) {
@@ -155,9 +153,7 @@ functions:
   };
 
 
-/************************************************************
- *                   ATTACK SPECIFIC                        *
- ************************************************************/
+// ATTACK SPECIFIC
   
   void SpinEntity(CEntity *pen) {
     
@@ -259,9 +255,7 @@ functions:
   };
  
   
-/************************************************************
- *                   P R O C E D U R E S                    *
- ************************************************************/
+// PROCEDURES
 procedures:
   // --->>> MAIN
   Main(ETwister et) {

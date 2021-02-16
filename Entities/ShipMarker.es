@@ -38,7 +38,7 @@ components:
   2 texture TEXTURE_MARKER   "Models\\Editor\\ShipMarker.tex"
 
 functions:
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\ShipMarker.ecl");
     strTargetProperty = "Target";

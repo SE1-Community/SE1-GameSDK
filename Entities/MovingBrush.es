@@ -167,13 +167,13 @@ functions:
     PrecacheModel(MODEL_STONE);
     PrecacheTexture(TEXTURE_STONE);
   }
-  /* Get force in given point. */
+  // Get force in given point.
   void GetForce(INDEX iForce, const FLOAT3D &vPoint, 
     CForceStrength &fsGravity, CForceStrength &fsField)
   {
     GetDefaultForce(iForce, vPoint, fsGravity, fsField);
   }
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -237,12 +237,12 @@ functions:
   };
 
 
-  /* Check if entity is moved on a route set up by its targets. */
+  // Check if entity is moved on a route set up by its targets.
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Target";
     return TRUE;
   };
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\MovingBrushMarker.ecl");
     strTargetProperty = "Target";
@@ -255,7 +255,7 @@ functions:
     }
     return m_strDescription;
   }
-  /* Get mirror type name, return empty string if not used. */
+  // Get mirror type name, return empty string if not used.
   const CTString &GetMirrorName(INDEX iMirror)
   {
     static const CTString strDummyName("");
@@ -289,7 +289,7 @@ functions:
     return strDummyName;
   }
 
-  /* Get mirror, return FALSE for none. */
+  // Get mirror, return FALSE for none.
   BOOL GetMirror(INDEX iMirror, class CMirrorParameters &mpMirror)
   {
     if (iMirror == 0) {

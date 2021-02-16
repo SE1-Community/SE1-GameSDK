@@ -107,7 +107,7 @@ functions:
     PrecacheSound(SOUND_MUMBLE);
   };
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     if (m_EecChar == EYC_SERGEANT) {
       return &eiEyemanBig;
@@ -116,7 +116,7 @@ functions:
     }
   };
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -131,7 +131,7 @@ functions:
     }
   };
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
@@ -154,7 +154,7 @@ functions:
     case EYC_SOLDIER : return fnmSoldier;
     }
   };
-  /* Adjust model shading parameters if needed. */
+  // Adjust model shading parameters if needed.
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
     // no shadows for invisibles
@@ -317,9 +317,8 @@ functions:
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
   };
 
-/************************************************************
- *                 BLOW UP FUNCTIONS                        *
- ************************************************************/
+// BLOW UP FUNCTIONS
+
   // spawn body parts
   /*void BlowUp(void)
   {
@@ -359,9 +358,8 @@ functions:
     SetCollisionFlags(ECF_IMMATERIAL);
   };*/
 
-/************************************************************
- *                     MOVING FUNCTIONS                     *
- ************************************************************/
+// MOVING FUNCTIONS
+
   // check whether may move while attacking
   BOOL MayMoveToAttack(void) 
   {
@@ -380,9 +378,7 @@ functions:
     return FALSE;
   };
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
 
   FlyHit(EVoid) : CEnemyFly::FlyHit {
     if (CalcDist(m_penEnemy) > BITE_AIR) {
@@ -447,9 +443,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

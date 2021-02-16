@@ -90,16 +90,16 @@ functions:
   void Precache(void)
   {
     switch (m_puitType) {
-    case PUIT_INVISIB :  /*PrecacheSound(SOUND_INVISIB );  break;*/
-    case PUIT_INVULNER:  /*PrecacheSound(SOUND_INVULNER);  break; */                                    
-    case PUIT_DAMAGE  :  /*PrecacheSound(SOUND_DAMAGE  );  break;*/
-    case PUIT_SPEED   :  /*PrecacheSound(SOUND_SPEED   );  break;*/
+    case PUIT_INVISIB :  //PrecacheSound(SOUND_INVISIB );  break;
+    case PUIT_INVULNER:  //PrecacheSound(SOUND_INVULNER);  break;
+    case PUIT_DAMAGE  :  //PrecacheSound(SOUND_DAMAGE  );  break;
+    case PUIT_SPEED   :  //PrecacheSound(SOUND_SPEED   );  break;
                          PrecacheSound(SOUND_PICKUP  );  break;
     case PUIT_BOMB    :  PrecacheSound(SOUND_BOMB    );  break;
     }
   }
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     pes->es_strName = "PowerUp"; 

@@ -130,7 +130,7 @@ functions:
 //    PrecacheClass(CLASS_BLOOD_SPRAY, 0);
 //  };
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     //pes->es_strName = m_fnModel.FileName()+", "+m_fnTexture.FileName();
@@ -163,7 +163,7 @@ functions:
   }
 
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -332,7 +332,7 @@ functions:
     return m_bTargetable;
   }
 
-  /* Get anim data for given animation property - return NULL for none. */
+  // Get anim data for given animation property - return NULL for none.
 /*  CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
     if (slPropertyOffset == offsetof(CModelHolder3, m_iModelAnimation)) {
@@ -346,7 +346,7 @@ functions:
     }
   };*/
 
-  /* Adjust model mip factor if needed. */
+  // Adjust model mip factor if needed.
 /*  void AdjustMipFactor(FLOAT &fMipFactor)
   {
     // if should fade last mip
@@ -383,7 +383,7 @@ functions:
     fMipFactor = fMipFactor*m_fMipMul+m_fMipAdd;
   }*/
 
-  /* Adjust model shading parameters if needed. */
+  // Adjust model shading parameters if needed.
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
     switch (m_cstCustomShading)
@@ -509,7 +509,7 @@ functions:
   };
 
 
-  /* Init model holder*/
+  // Init model holder
   void InitModelHolder(void) {
 
     // must not crash when model is removed

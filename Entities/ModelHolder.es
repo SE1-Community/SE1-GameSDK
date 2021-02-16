@@ -53,7 +53,7 @@ properties:
 components:
 
 functions:
-  /* Get anim data for given animation property - return NULL for none. */
+  // Get anim data for given animation property - return NULL for none.
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
     if (slPropertyOffset == offsetof(CModelHolder, m_iModelAnimation)) {
@@ -67,7 +67,7 @@ functions:
     }
   };
 
-  /* Adjust model shading parameters if needed. */
+  // Adjust model shading parameters if needed.
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
     if (m_bCustomShading) {
@@ -106,7 +106,7 @@ functions:
     return TRUE;
   };
 
-  /* Init model holder*/
+  // Init model holder
   void InitModelHolder(void) {
     // stretch factors must not have extreme values
     if (m_fStretchX  < 0.01f) { m_fStretchX   = 0.01f;  }

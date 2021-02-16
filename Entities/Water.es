@@ -71,14 +71,14 @@ components:
 
 
 functions:
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   {
     CRationalEntity::Read_t(istr);
     SetupLightSource();
   };
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void)
   {
     if (!IsPredictor()) {
@@ -126,9 +126,7 @@ functions:
 
 
 
-/************************************************************
- *                   P R O C E D U R E S                    *
- ************************************************************/
+// PROCEDURES
 procedures:
   // --->>> PROJECTILE SLIDE ON BRUSH
   WaterFly(EVoid) {

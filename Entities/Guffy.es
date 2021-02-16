@@ -239,9 +239,7 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire {
     
     StartModelAnim(GUFFY_ANIM_FIRE, AOF_LOOPING);
@@ -283,9 +281,7 @@ procedures:
   };
 
 
-/************************************************************
- *                    D  E  A  T  H                         *
- ************************************************************/
+// DEATH
   /*Death(EVoid) : CEnemyBase::Death {
     // stop moving
     StopMoving();
@@ -305,9 +301,7 @@ procedures:
     return EEnd();
   };*/
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

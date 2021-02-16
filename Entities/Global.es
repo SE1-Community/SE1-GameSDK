@@ -18,11 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 %}
 
-/*
- *
- *  --->>>   DON'T INSTANTIATE THIS CLASS   <<<---
- *
- */
+//  --->>>   DON'T INSTANTIATE THIS CLASS   <<<---
 
 event EStop {         // stop your actions
 };                    

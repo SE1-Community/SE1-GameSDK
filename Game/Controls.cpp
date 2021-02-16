@@ -13,18 +13,14 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-/*
- *  Game library
- *  Copyright (c) 1997-1999, CroTeam. 
- */
+// Game library
+// Copyright (c) 1997-1999, CroTeam.
 
 #include "stdafx.h"
 
 extern CGame *_pGame;
 
-/*
- * Default constructor
- */
+// Default constructor
 CControls::CControls(void)
 {
   // buttons are all none anyway (empty list)
@@ -32,9 +28,7 @@ CControls::CControls(void)
   SwitchAxesToDefaults();
 }
 
-/*
- * Default destructor
- */
+// Default destructor
 CControls::~CControls(void)
 {
   // for each action in the original list
@@ -72,9 +66,7 @@ CControls &CControls::operator=(CControls &ctrlOriginal)
   return *this;
 }
 
-/*
- * Switches button and axis action mounters to defaults
- */
+// Switches button and axis action mounters to defaults
 void CControls::SwitchAxesToDefaults(void)
 {
   // for all axis-type actions
@@ -121,10 +113,8 @@ void CControls::SwitchToDefaults(void)
   }
 }
 
-/*
- * Depending on axis attributes and type (rotation or translation),
- * calculates axis influence factors for all axis actions
- */
+// Depending on axis attributes and type (rotation or translation),
+// calculates axis influence factors for all axis actions
 void CControls::CalculateInfluencesForAllAxis(void)
 {
   FLOAT fSensitivityGlobal = (FLOAT)pow(1.2, (ctrl_fSensitivity-50.0)*1.0/5.0);

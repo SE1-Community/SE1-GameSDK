@@ -105,7 +105,7 @@ components:
     6 texture TEXTURE_SPOT_LIGHT         "Models\\Editor\\SpotLight.tex",
 
 functions:
-  /* Get anim data for given animation property - return NULL for none. */
+  // Get anim data for given animation property - return NULL for none.
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
     if (slPropertyOffset == offsetof(CLight, m_iLightAnimation))
@@ -132,7 +132,7 @@ functions:
     return(m_ltType == LT_DIRECTIONAL);
   }
 
-  /* Handle an event, return false if the event is not handled. */
+  // Handle an event, return false if the event is not handled.
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     // when someone in range is destroyed
@@ -190,7 +190,7 @@ functions:
     //(void)bMirrorX;  // no mirror for lights
   }
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void)
   {
     // if never initialized before (happens after loading)

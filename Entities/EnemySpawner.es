@@ -136,7 +136,7 @@ functions:
   }
 
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     if (m_penTarget == NULL) { return FALSE; }
@@ -164,7 +164,7 @@ functions:
         pen->End();
         CEnemyBase *peb = ((CEnemyBase*)pen);
         peb->m_bTemplate = FALSE;
-        if (m_estType == EST_RESPAWNER /*|| m_estType == EST_RESPAWNERBYONE*/
+        if (m_estType == EST_RESPAWNER //|| m_estType == EST_RESPAWNERBYONE
          || m_estType == EST_MAINTAINGROUP || m_estType == EST_RESPAWNGROUP) {
           peb->m_penSpawnerTarget = this;
         }

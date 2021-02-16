@@ -67,7 +67,7 @@ functions:
     ASSERT(m_ppnNode == NULL);
   }
 
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   {
     CEntity::Read_t(istr);
@@ -76,7 +76,7 @@ functions:
   
   CEntity *GetTarget(void) const { return m_penTarget0; };
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiMarker;
   };
@@ -120,12 +120,12 @@ functions:
     return m_strName;
   }
 
-  /* Check if entity is moved on a route set up by its targets. */
+  // Check if entity is moved on a route set up by its targets.
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Target 0";
     return TRUE;
   };
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\NavigationMarker.ecl");
     strTargetProperty = "Target 0";

@@ -99,7 +99,7 @@ components:
  55 sound   SOUND_DEATH     "Models\\Enemies\\Dragonman\\Sounds\\Death.wav",
 
 functions:
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     if (m_bInAir) {
       switch (m_EdtType) {
@@ -134,7 +134,7 @@ functions:
     }
   };
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
@@ -146,7 +146,7 @@ functions:
     return TRUE;
   }
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -304,9 +304,7 @@ functions:
 
 
 procedures:
-/************************************************************
- *                PROCEDURES WHEN HARMED                    *
- ************************************************************/
+// PROCEDURES WHEN HARMED
   BeWounded(EDamage eDamage) : CEnemyFly::BeWounded { 
     m_penFlame = NULL;
     jump CEnemyFly::BeWounded(eDamage);
@@ -314,9 +312,7 @@ procedures:
 
 
 
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   FlyFire(EVoid) : CEnemyFly::FlyFire {
     // fire projectile
     StartModelAnim(DRAGONMAN_ANIM_AIRATTACK02, 0);
@@ -515,9 +511,7 @@ procedures:
 
 
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

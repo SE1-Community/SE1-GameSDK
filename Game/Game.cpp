@@ -749,7 +749,7 @@ CTString CGame::DemoReportAnalyzedProfile(void)
 
 
 
-/* This is called every TickQuantum seconds. */
+// This is called every TickQuantum seconds.
 void CGameTimerHandler::HandleTimer(void)
 {
   // call game's timer routine
@@ -848,9 +848,7 @@ void CGame::GameHandleTimer(void)
   }
 }
 
-/*
- * Global game object (in our case Flesh) initialization function
- */
+// Global game object (in our case Flesh) initialization function
 void CGame::InitInternal( void)
 {
   gam_strCustomLevel = ""; // filename of custom level chosen
@@ -1525,9 +1523,7 @@ void CGame::UnpackHighScoreTable(SLONG slSize)
   gm_iLastSetHighScore = -1;
 }
 
-/*
- * Loads CGame from file with file name given trough SetGameSettingsSaveFileName() function
- */
+// Loads CGame from file with file name given trough SetGameSettingsSaveFileName() function
 void CGame::Load_t( void)
 {
   ASSERT( gm_fnSaveFileName != "");
@@ -1559,9 +1555,7 @@ void CGame::Load_t( void)
   UnpackHighScoreTable(slHSSize);
 }
 
-/*
- * Saves current state of CGame under file name given trough SetGameSettingsSaveFileName() function
- */
+// Saves current state of CGame under file name given trough SetGameSettingsSaveFileName() function
 void CGame::Save_t( void)
 {
   ASSERT( gm_fnSaveFileName != "");
@@ -1629,9 +1623,7 @@ void LoadPlayer(CPlayerCharacter &pc, INDEX i)
 }
 
 
-/*
- * Loads 8 players and 8 controls
- */
+// Loads 8 players and 8 controls
 void CGame::LoadPlayersAndControls( void)
 {
   for (INDEX iControls=0; iControls<8; iControls++) {
@@ -1645,9 +1637,7 @@ void CGame::LoadPlayersAndControls( void)
   SavePlayersAndControls();
 }
 
-/*
- * Saves 8 players and 8 controls
- */
+// Saves 8 players and 8 controls
 void CGame::SavePlayersAndControls( void)
 {
   try
@@ -2676,37 +2666,37 @@ void CGame::GameMainLoop(void)
       _bProfiling = FALSE;
       _bDumpNextTime = TRUE;
       _strProfile = " == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =\n";
-      /* Render profile */
+      // Render profile
       CTString strRenderReport;
       _pfRenderProfile.Report(strRenderReport);
       _strProfile+=strRenderReport;
       _pfRenderProfile.Reset();
 
-      /* Model profile */
+      // Model profile
       CTString strModelReport;
       _pfModelProfile.Report(strModelReport);
       _strProfile+=strModelReport;
       _pfModelProfile.Reset();
 
-      /* Gfx profile */
+      // Gfx profile
       CTString strGfxReport;
       _pfGfxProfile.Report(strGfxReport);
       _strProfile+=strGfxReport;
       _pfGfxProfile.Reset();
 
-      /* Sound profile */
+      // Sound profile
       CTString strSoundReport;
       _pfSoundProfile.Report(strSoundReport);
       _strProfile+=strSoundReport;
       _pfSoundProfile.Reset();
 
-      /* Network profile */
+      // Network profile
       CTString strNetworkReport;
       _pfNetworkProfile.Report(strNetworkReport);
       _strProfile+=strNetworkReport;
       _pfNetworkProfile.Reset();
 
-      /* Physics profile */
+      // Physics profile
       CTString strPhysicsReport;
       _pfPhysicsProfile.Report(strPhysicsReport);
       _strProfile+=strPhysicsReport;
@@ -2735,10 +2725,7 @@ void CGame::GameMainLoop(void)
   }
 }
 
-/*************************************************************
- *         S E C O N D   E N C O U N T E R   M E N U         *
- *************************************************************/
-
+// SECOND ENCOUNTER MENU
 static CTextureObject _toPointer;
 static CTextureObject _toBcgClouds;
 static CTextureObject _toBcgGrid;

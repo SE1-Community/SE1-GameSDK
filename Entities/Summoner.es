@@ -354,7 +354,7 @@ functions:
     return TRUE;
   };
 
-  /* Shake ground */
+  // Shake ground
   void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, BOOL bFadeIn)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
@@ -962,9 +962,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                    D  E  A  T  H                         *
- ************************************************************/
+// DEATH
   
   Die(EDeath eDeath) : CEnemyBase::Die
   {
@@ -1276,9 +1274,7 @@ procedures:
     }
   }
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     
     // declare yourself as a model

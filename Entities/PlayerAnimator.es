@@ -449,7 +449,7 @@ components:
 
 functions:
   
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   { 
     CRationalEntity::Read_t(istr);
@@ -801,9 +801,7 @@ functions:
   };
 
 
-/************************************************************
- *                      INITIALIZE                          *
- ************************************************************/
+// INITIALIZE
   void Initialize(void) {
     // set internal properties
     m_bReference = TRUE;
@@ -842,9 +840,7 @@ functions:
   };
 
 
-/************************************************************
- *                ANIMATE BANKING AND SOFT EYES             *
- ************************************************************/
+// ANIMATE BANKING AND SOFT EYES
   // store for lerping
   void StoreLast(void) {
     CPlayer &pl = (CPlayer&)*m_penPlayer;
@@ -1018,9 +1014,7 @@ functions:
 
 
 
-/************************************************************
- *                     ANIMATE PLAYER                       *
- ************************************************************/
+// ANIMATE PLAYER
   // body and head animation
   void BodyAndHeadOrientation(CPlacement3D &plView) {
     CPlayer &pl = (CPlayer&)*m_penPlayer;
@@ -1290,9 +1284,7 @@ functions:
 
 
   
-/************************************************************
- *                  CHANGE BODY ANIMATION                   *
- ************************************************************/
+// CHANGE BODY ANIMATION
   // body animation template
   void BodyAnimationTemplate(INDEX iNone, INDEX iColt, INDEX iShotgun, INDEX iMinigun, ULONG ulFlags) {
     INDEX iWeapon = ((CPlayerWeapons&)*(((CPlayer&)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
@@ -1467,9 +1459,7 @@ functions:
   };
 
 
-/************************************************************
- *                      FIRE FLARE                          *
- ************************************************************/
+// FIRE FLARE
   void OnPreRender(void) {
     ControlFlareAttachment();
 
@@ -1586,9 +1576,7 @@ functions:
 
 
 
-/************************************************************
- *                      PROCEDURES                          *
- ************************************************************/
+// PROCEDURES
 procedures:
   ReminderAction(EReminder er) {
     switch (er.iValue) {

@@ -345,7 +345,7 @@ functions:
     strm.FPrintF_t("Type: %d\n", m_betType);
   }
 
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   {
     CRationalEntity::Read_t(istr);
@@ -355,7 +355,7 @@ functions:
     }
   }
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void)
   {
     if (m_bLightSource && !IsPredictor()) {
@@ -430,8 +430,7 @@ functions:
   }
 
 
-/* RENDER PARTICLES */
-
+// RENDER PARTICLES
 
   void RenderParticles(void)
   {
@@ -482,9 +481,7 @@ functions:
 
 
 
-/************************************************************
- *                        FADE OUT                          *
- ************************************************************/
+// FADE OUT
 
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
@@ -513,9 +510,7 @@ functions:
 
 
 
-/************************************************************
- *                GLOBAL SUPPORT FUNCTIONS                  *
- ************************************************************/
+// GLOBAL SUPPORT FUNCTIONS
 
   void SetNonLoopingTexAnims(void)
   {
@@ -667,9 +662,7 @@ functions:
   }
 
 
-/************************************************************
- *         PROJECTILE/GRENADE EXPLOSION,  STAIN             *
- ************************************************************/
+// PROJECTILE/GRENADE EXPLOSION, STAIN
 
   void ProjectileExplosion(void)
   {
@@ -888,9 +881,7 @@ functions:
 
 
 
-/************************************************************
- *                   SHOCK / LASER WAVE                     *
- ************************************************************/
+// SHOCK / LASER WAVE
   void ShockWave(void) {
     SetPredictable(TRUE);
     SetModel(MODEL_SHOCKWAVE);
@@ -933,9 +924,7 @@ functions:
 
 
 
-  /************************************************************
-   *                   TELEPORT                               *
-   ************************************************************/
+  // TELEPORT
   void TeleportEffect(void)
   {
     SetPredictable(TRUE);
@@ -953,9 +942,7 @@ functions:
     m_bLightSource = FALSE;
   };
 
-  /************************************************************
-   *                SUMMONER STAR EXPLOSION                   *
-   ************************************************************/
+  // SUMMONER STAR EXPLOSION
   void SummonerStarExplosion()
   {
     SetPredictable(TRUE);
@@ -968,9 +955,7 @@ functions:
     Stretch();
   };
 
-  /************************************************************
- *                   BULLET HIT / STAIN                     *
- ************************************************************/
+  // BULLET HIT / STAIN
   void BulletStainSand(BOOL bSound)
   {
     if (bSound)
@@ -1160,10 +1145,7 @@ functions:
     m_vStretch = vTemp;
   };
 
-/************************************************************
- *                  BLOOD SPILL / STAIN                     *
- ************************************************************/
-
+// BLOOD SPILL / STAIN
 
   // bullet hitpoint wound
   void BloodExplode(void)
@@ -1352,9 +1334,7 @@ functions:
 procedures:
 
 
-/************************************************************
- *                    M  A  I  N                            *
- ************************************************************/
+// MAIN
 
   Main(ESpawnEffect eSpawn)
   {
@@ -1365,7 +1345,7 @@ procedures:
        eSpawn.betType == BET_COLLECT_ENERGY ||
        eSpawn.betType == BET_GROWING_SWIRL||
        eSpawn.betType == BET_DISAPPEAR_DUST||
-       /*eSpawn.betType == BET_SNIPER_RESIDUE ||*/
+       //eSpawn.betType == BET_SNIPER_RESIDUE ||
        eSpawn.betType == BET_DUST_FALL)
     {
       InitAsEditorModel();

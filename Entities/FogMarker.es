@@ -67,12 +67,12 @@ components:
 
 functions:
 
-  /* Get fog type name, return empty string if not used. */
+  // Get fog type name, return empty string if not used.
   const CTString &GetFogName(void)
   {
     return m_strName;
   }
-  /* Get fog. */
+  // Get fog.
   void GetFog(class CFogParameters &fpFog)
   {
     const FLOATmatrix3D &m = GetRotationMatrix();

@@ -67,7 +67,7 @@ functions:
     static DECLARE_CTFILENAME(fnm, "Data\\Messages\\Enemies\\Gizmo.txt");
     return fnm;
   };
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void)
   {
     return &eiGizmo;
@@ -108,9 +108,7 @@ functions:
     PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
   };
 
-/************************************************************
- *                 BLOW UP FUNCTIONS                        *
- ************************************************************/
+// BLOW UP FUNCTIONS
   void BlowUpNotify(void) {
     Explode();
   };
@@ -184,9 +182,8 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
+
   // close range -> move toward enemy and try to jump onto it
   PerformAttack(EVoid) : CEnemyBase::PerformAttack
   {
@@ -305,9 +302,7 @@ procedures:
     }
   };
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

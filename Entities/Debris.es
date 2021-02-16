@@ -88,12 +88,12 @@ components:
 
 functions:
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return GetStdEntityInfo((EntityInfoBodyType)m_iBodyType);
   };
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -105,9 +105,7 @@ functions:
     CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
   };
 
-/************************************************************
- *                        FADE OUT                          *
- ************************************************************/
+// FADE OUT
 
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
@@ -132,9 +130,7 @@ functions:
 
 
 
-/************************************************************
- *                        EFFECTS                           *
- ************************************************************/
+// EFFECTS
 
   // leave a stain where hit
   void LeaveStain(void)
@@ -225,9 +221,7 @@ functions:
     penExplosion->Initialize(eSpawnEffect);
   }
 
-/************************************************************
- *                          MAIN                            *
- ************************************************************/
+// MAIN
 
 procedures:
 

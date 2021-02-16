@@ -305,7 +305,7 @@ functions:
     }
   };
 
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   {
     CMovableModelEntity::Read_t(istr);
@@ -315,7 +315,7 @@ functions:
     }
   }
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void)
   {
     if (m_bLightSource && !IsPredictor()) {
@@ -375,9 +375,8 @@ functions:
     m_lsLightSource.ls_penEntity = this;
     m_lsLightSource.SetLightSource(lsNew);
   }
-/************************************************************
- *                          MAIN                            *
- ************************************************************/
+  
+// MAIN
 
 procedures:
 

@@ -165,7 +165,7 @@ functions:
       PrecacheClass(CLASS_PROJECTILE, PRT_WALKER_ROCKET);
     }
   };
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiWalker;
   };
@@ -178,7 +178,7 @@ functions:
     return 0.0f;
   }
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -286,9 +286,8 @@ functions:
     m_soFire4.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
   };
 
-/************************************************************
- *                 BLOW UP FUNCTIONS                        *
- ************************************************************/
+// BLOW UP FUNCTIONS
+
   // spawn body parts
 /*  void BlowUp(void)
   {
@@ -321,9 +320,7 @@ functions:
   };*/
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire {
     DeactivateWalkingSound();
     // to fire
@@ -401,9 +398,7 @@ procedures:
 
 
 
-/************************************************************
- *                    D  E  A  T  H                         *
- ************************************************************/
+// DEATH
   Death(EVoid) : CEnemyBase::Death {
     // stop moving
     StopMoving();
@@ -462,9 +457,7 @@ procedures:
     return EEnd();
   };
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

@@ -37,13 +37,13 @@ components:
 
 functions:
 
-  /* Get force type name, return empty string if not used. */
+  // Get force type name, return empty string if not used.
   const CTString &GetForceName(INDEX i)
   {
     return m_strName;
   }
   
-  /* Get force in given point. */
+  // Get force in given point.
   void GetForce(INDEX i, const FLOAT3D &vPoint, 
     CForceStrength &fsGravity, CForceStrength &fsField)
   {
@@ -52,13 +52,13 @@ functions:
       m_penTarget->GetForce(i, vPoint, fsGravity, fsField);
     }
   }
-  /* Get entity that controls the force, used for change notification checking. */
+  // Get entity that controls the force, used for change notification checking.
   CEntity *GetForceController(INDEX iForce)
   {
     return this;
   }
 
-  /* Handle an event, return false if the event is not handled. */
+  // Handle an event, return false if the event is not handled.
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     if (((EChangeGravity &) ee).ee_slEvent == EVENTCODE_EChangeGravity)

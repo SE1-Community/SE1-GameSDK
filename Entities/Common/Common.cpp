@@ -76,9 +76,8 @@ void CCompMessageID::NewMessage(const CTFileName &fnm)
   cmi_bRead = FALSE;
 }
 
-/************************************************************
- *          COMMON FUNCTIONS FOR ENTITY CLASSES             *
- ************************************************************/
+// COMMON FUNCTIONS FOR ENTITY CLASSES
+
 // world change
 struct WorldChange _SwcWorldChange;
 
@@ -464,9 +463,8 @@ void KickEntity(CEntity *penTarget, FLOAT3D vSpeed) {
 
 
 
-/************************************************************
- *                   SET MODEL AND ATTACHMENT               *
- ************************************************************/
+// SET MODEL AND ATTACHMENT
+
   // Set components
   void SetComponents(CEntity *pen, CModelObject &mo, ULONG ulIDModel, ULONG ulIDTexture,
                      ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
@@ -506,11 +504,8 @@ void KickEntity(CEntity *penTarget, FLOAT3D vSpeed) {
     mo.RemoveAttachmentModel(iAttachment);
   };
 
+// FLARES
 
-
-/************************************************************
- *                          FLARES                          *
- ************************************************************/
 // lens flare variables
 CLensFlareType _lftStandard;
 CLensFlareType _lftStandardReflections;
@@ -685,29 +680,27 @@ void CloseLensFlares(void) {
 
 static BOOL _bFatalChecks = FALSE;
 
+// PLAYER APPEARANCE
 
-/************************************************************
- *                      PLAYER APPEARANCE                   *
- ************************************************************/
-/* Set the model data */
+// Set the model data
 void SetModelData_t(CModelObject *pmo, const CTFileName &fnmModel) {
   ASSERT(pmo != NULL);
   pmo->SetData_t(fnmModel);   // load the new model data
 };
 
-/* Set the texture data */
+// Set the texture data
 void SetTextureData_t(CModelObject *pmo, const CTFileName &fnmTexture) {
   ASSERT(pmo != NULL);
   pmo->mo_toTexture.SetData_t(fnmTexture);    // load the texture data
 };
 
-/* Set model */
+// Set model
 void SetModel_t(CModelObject *pmo, const CTFileName &fnmModel, const CTFileName &fnmTexture) {
   SetModelData_t(pmo, fnmModel);
   SetTextureData_t(pmo, fnmTexture);
 };
 
-/* Add attachment to model */
+// Add attachment to model
 void ModelAddAttachment_t(CModelObject *pmo, INDEX iAttachment, 
                         const CTFileName &fnmModel, const CTFileName &fnmTexture) {
   ASSERT(pmo != NULL);
@@ -890,7 +883,7 @@ void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview)
   }
 }
 
-/* Set player appearance */
+// Set player appearance
 BOOL SetPlayerAppearance_internal(CModelObject *pmo, const CTFileName &fnmAMC, CTString &strName, BOOL bPreview)
 {
   // try to
@@ -964,10 +957,6 @@ BOOL SetPlayerAppearance(CModelObject *pmo, CPlayerCharacter *ppc, CTString &str
   }
 }
 
-
-/************************************************************
- *                    DEBUGGING FUNCTIONS                   *
- ************************************************************/
 // debugging functions
 const char *PrintConsole(void)
 {
@@ -980,11 +969,8 @@ const char *PrintStack(CEntity *pen)
   return pen->PrintStackDebug();
 }
 
+// DEBRIS
 
-
-/************************************************************
- *                          DEBRIS                          *
- ************************************************************/
 EntityInfoBodyType _Eeibt;
 enum DebrisParticlesType _dptParticles;
 enum BasicEffectType  _betStain;
@@ -1231,11 +1217,6 @@ EntityInfo *GetStdEntityInfo(EntityInfoBodyType eibt)
   };
 }
 
-
-
-/************************************************************
- *                 DAMAGE CONTROL FUNCTIONS                 *
- ************************************************************/
 // damage control functions
 FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage)
 {

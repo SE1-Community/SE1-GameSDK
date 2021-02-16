@@ -38,12 +38,12 @@ components:
 
 functions:
 
-  /* Get gradient type name, return empty string if not used. */
+  // Get gradient type name, return empty string if not used.
   const CTString &GetGradientName(void)
   {
     return m_strName;
   }
-  /* Get gradient. */
+  // Get gradient.
   BOOL GetGradient(INDEX iGradient, class CGradientParameters &gpGradient)
   {
     const FLOATmatrix3D &m = GetRotationMatrix();

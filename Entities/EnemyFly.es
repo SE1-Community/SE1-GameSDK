@@ -150,9 +150,8 @@ functions:
     }
     return FALSE;
   };
-/************************************************************
- *                     MOVING FUNCTIONS                     *
- ************************************************************/
+  
+// MOVING FUNCTIONS
 
   // set desired rotation and translation to go/orient towards desired position
   // and get the resulting movement type
@@ -183,9 +182,8 @@ functions:
     return ulFlags;
   }
 
-/************************************************************
- *                CLASS SUPPORT FUNCTIONS                   *
- ************************************************************/
+// CLASS SUPPORT FUNCTIONS
+
   // set entity position
   void SetEntityPosition() {
     switch (m_EeftType) {
@@ -227,9 +225,7 @@ functions:
   };
 
 
-/************************************************************
- *          VIRTUAL FUNCTIONS THAT NEED OVERRIDE            *
- ************************************************************/
+// VIRTUAL FUNCTIONS THAT NEED OVERRIDE
   virtual FLOAT AirToGroundAnim(void) { return _pTimer->TickQuantum; }
   virtual FLOAT GroundToAirAnim(void) { return _pTimer->TickQuantum; }
   virtual void ChangeCollisionToAir(void) {}
@@ -238,9 +234,7 @@ functions:
 
 
 procedures:
-/************************************************************
- *      PROCEDURES WHEN NO ANY SPECIAL ACTION               *
- ************************************************************/
+// PROCEDURES WHEN NO ANY SPECIAL ACTION
 /*
 #### !!!!
   MoveToDestinationFlying(EVoid) {
@@ -313,9 +307,8 @@ procedures:
     jump CEnemyBase::BeIdle();*/
   };
 
-/************************************************************
- *                PROCEDURES WHEN HARMED                    *
- ************************************************************/
+// PROCEDURES WHEN HARMED
+
   // Play wound animation and falling body part
   BeWounded(EDamage eDamage) : CEnemyBase::BeWounded {
     // land on ground
@@ -330,9 +323,8 @@ procedures:
 
 
 
-/************************************************************
- *                 AIR - GROUND PROCEDURES                  *
- ************************************************************/
+// AIR - GROUND PROCEDURES
+
   // air to ground
   AirToGround(EVoid) 
   {
@@ -397,9 +389,8 @@ procedures:
 
 
 
-/************************************************************
- *                 ATTACK ENEMY PROCEDURES                  *
- ************************************************************/
+// ATTACK ENEMY PROCEDURES
+
   // initialize attack is overridden to switch fly/walk modes if needed
   AttackEnemy() : CEnemyBase::AttackEnemy
   {
@@ -440,9 +431,7 @@ procedures:
     }
   }
 
-/************************************************************
- *                    D  E  A  T  H                         *
- ************************************************************/
+// DEATH
   Death(EVoid) : CEnemyBase::Death {
     // clear fly flag
     SetPhysicsFlags((GetPhysicsFlags() & ~EPF_MODEL_FLYING) | EPF_MODEL_WALKING);
@@ -450,11 +439,6 @@ procedures:
     jump CEnemyBase::Death();
   };
 
-
-
-/************************************************************
- *                M  A  I  N    L  O  O  P                  *
- ************************************************************/
   // main loop
   MainLoop(EVoid) : CEnemyBase::MainLoop {
     SetEntityPosition();
@@ -466,9 +450,8 @@ procedures:
     return;
   };
 
-/************************************************************
- *          VIRTUAL PROCEDURES THAT NEED OVERRIDE           *
- ************************************************************/
+// VIRTUAL PROCEDURES THAT NEED OVERRIDE
+
   // this is called to hit the player when near and you are on ground
   GroundHit(EVoid) 
   { 

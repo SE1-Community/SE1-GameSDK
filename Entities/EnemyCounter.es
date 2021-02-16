@@ -69,9 +69,7 @@ functions:
   }
 procedures:
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsEditorModel();

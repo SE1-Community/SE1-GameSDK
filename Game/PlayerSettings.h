@@ -18,9 +18,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifdef PRAGMA_ONCE
   #pragma once
 #endif
-/*
- * Class responsible for describing player appearance/settings
- */
+
+// Class responsible for describing player appearance/settings
+
 class CPlayerSettings {
 public:
   char ps_achModelFile[16];     // filename of the player model (zero padded, not zero terminated)

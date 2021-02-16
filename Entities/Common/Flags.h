@@ -32,9 +32,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // standard flag combinations:
 
-/*
- *  COLLISION COMBINATIONS
- */
+// COLLISION COMBINATIONS
+
 #define ECF_IMMATERIAL (0UL)
 
 // brush
@@ -103,9 +102,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   ((ECBI_MODEL) << ECB_IS) |\
   ((ECBI_BRUSH) << ECB_PASS) )
 
-/*
- *  PHYSIC COMBINATIONS
- */
+// PHYSIC COMBINATIONS
+
 // model that walks around on feet (CMovableModelEntity)
 #define EPF_MODEL_WALKING ( \
   EPF_ONBLOCK_CLIMBORSLIDE|EPF_ORIENTEDBYGRAVITY|\

@@ -121,7 +121,7 @@ functions:
     PrecacheSound(SOUND_DEATH);
   };
 
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) { // throw char *
     CEnemyBase::Read_t(istr);
 
@@ -129,7 +129,7 @@ functions:
     SetupLightSource();
   }
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
@@ -153,7 +153,7 @@ functions:
     }
   };
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void) {
     if (!IsPredictor()) {
       return &m_lsLightSource;
@@ -214,7 +214,7 @@ functions:
     pmoGun->PlayAnim(GUN_ANIM_IDLE, AOF_LOOPING);
     pmoGun->RemoveAttachmentModel(GUN_ATTACHMENT_FLAME);
   }
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     if (m_smtType == SMT_MONSTER) {
       return &eiScorpmanMonster;
@@ -225,7 +225,7 @@ functions:
     }
   };
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -300,9 +300,7 @@ functions:
   };
 
 
-/************************************************************
- *                   FIRE BULLET / RAIL                     *
- ************************************************************/
+// FIRE BULLET / RAIL
   BOOL CanFireAtPlayer(void)
   {
     // get ray source and target
@@ -380,9 +378,8 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
+
   // shoot
   Fire(EVoid) : CEnemyBase::Fire{
     if (!CanFireAtPlayer()) {
@@ -544,9 +541,7 @@ procedures:
     return EReturn();
   }
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     if (m_smtType == SMT_MONSTER) {
       m_smtType=SMT_GENERAL;

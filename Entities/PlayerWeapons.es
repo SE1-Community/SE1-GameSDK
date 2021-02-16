@@ -1415,9 +1415,8 @@ functions:
 
 
 
-/************************************************************
- *                      FIRE FLARE                          *
- ************************************************************/
+// FIRE FLARE
+
   // show flare
   void ShowFlare(CModelObject &moWeapon, INDEX iAttachObject, INDEX iAttachFlare, FLOAT fSize) {
     CModelObject *pmo = &(moWeapon.GetAttachmentModel(iAttachObject)->amo_moModelObject);
@@ -1690,9 +1689,7 @@ functions:
 
 
 
-  /*
-   *  >>>---  ROTATE MINIGUN  ---<<<
-   */
+  // ROTATE MINIGUN
   void RotateMinigun(void) {
     ANGLE aAngle = Lerp(m_aMiniGunLast, m_aMiniGun, _pTimer->GetLerpFactor());
     // rotate minigun barrels
@@ -1702,9 +1699,7 @@ functions:
 
 
 
-  /*
-   *  >>>---  SUPPORT (COMMON) FUNCTIONS  ---<<<
-   */
+  // SUPPORT (COMMON) FUNCTIONS
 
   // calc weapon position for 3rd person view
   void CalcWeaponPosition3rdPersonView(FLOAT3D vPos, CPlacement3D &plPos, BOOL bResetZ) {
@@ -1858,9 +1853,7 @@ functions:
   };
 
 
-  /*
-   *  >>>---  FIRE FUNCTIONS  ---<<<
-   */
+  // FIRE FUNCTIONS
 
   // cut in front of you with knife
   BOOL CutWithKnife(FLOAT fX, FLOAT fY, FLOAT fRange, FLOAT fWide, FLOAT fThickness, FLOAT fDamage) 
@@ -2389,9 +2382,8 @@ functions:
   };
 
 
-  /*
-   *  >>>---  WEAPON INTERFACE FUNCTIONS  ---<<<
-   */
+  // WEAPON INTERFACE FUNCTIONS
+  
   // clear weapons
   void ClearWeapons(void) {
     // give/take weapons
@@ -2558,9 +2550,7 @@ functions:
   }
 
 
-  /*
-   *  >>>---  RECEIVE FUNCTIONS  ---<<<
-   */
+  // RECEIVE FUNCTIONS
 
   // clamp ammounts of all ammunition to maximum values
   void ClampAllAmmo(void)
@@ -3017,9 +3007,8 @@ functions:
     return FALSE;
   }
 
-  /*
-   *  >>>---  WEAPON CHANGE FUNCTIONS  ---<<<
-   */
+  // WEAPON CHANGE FUNCTIONS
+  
   // get weapon from selected number
   WeaponType GetStrongerWeapon(INDEX iWeapon) {
     switch (iWeapon) {
@@ -3167,9 +3156,7 @@ functions:
     return FALSE;
   };
 
-  /*
-   *  >>>---   DEFAULT ANIM   ---<<<
-   */
+  // DEFAULT ANIM
   void PlayDefaultAnim(void) {
     switch (m_iCurrentWeapon) {
       case WEAPON_NONE:
@@ -3225,9 +3212,7 @@ functions:
     }
   };
 
-  /*
-   *  >>>---   WEAPON BORING   ---<<<
-   */
+  // WEAPON BORING
   FLOAT KnifeBoring(void) {
     // play boring anim
     INDEX iAnim;
@@ -3476,9 +3461,7 @@ functions:
     }
   }
   
-  /*
-   *  >>>---   WEAPON CHANGE FUNCTIONS   ---<<<
-   */
+  // WEAPON CHANGE FUNCTIONS
 
   // find first possible weapon in given direction
 /*  WeaponType FindWeaponInDirection(INDEX iDir)
@@ -3665,9 +3648,7 @@ functions:
   };
 
 procedures:
-  /*
-   *  >>>---   WEAPON CHANGE PROCEDURE  ---<<<
-   */
+  // WEAPON CHANGE PROCEDURE
   ChangeWeapon() {
     // if really changing weapon, make sure sniping is off and notify owner of the change
     if (m_iCurrentWeapon != m_iWantedWeapon) {
@@ -3964,9 +3945,7 @@ procedures:
   };
 
 
-  /*
-   *  >>>---   FIRE WEAPON   ---<<<
-   */
+  // FIRE WEAPON
   Fire()
   {
     CPlayer &pl = (CPlayer&)*m_penPlayer;
@@ -4328,9 +4307,9 @@ procedures:
       }
 
       autowait(GetSP()->sp_bCooperative ? 0.5f : 0.375);
-      /* drop shell */
+      // drop shell
 
-      /* add one empty bullet shell */
+      // add one empty bullet shell
       CPlacement3D plShell;
       CalcWeaponPosition(FLOAT3D(afSingleShotgunShellPos[0], afSingleShotgunShellPos[1], afSingleShotgunShellPos[2]), plShell, FALSE);
 
@@ -4354,7 +4333,7 @@ procedures:
         penPlayer->m_iFirstEmptySLD = (penPlayer->m_iFirstEmptySLD+1) % MAX_FLYING_SHELLS;
       }
 
-      /* drop shell */
+      // drop shell
         autowait(m_moWeapon.GetAnimLength(
           (GetSP()->sp_bCooperative ? SINGLESHOTGUN_ANIM_FIRE1:SINGLESHOTGUN_ANIM_FIRE1FAST) ) -
           (GetSP()->sp_bCooperative ? 0.5f : 0.375f) );
@@ -4724,7 +4703,7 @@ procedures:
         DecAmmo(m_iBullets, 1);
         SetFlare(0, FLARE_ADD);
 
-        /* add one empty bullet shell */
+        // add one empty bullet shell
         CPlacement3D plShell;
 
         // if 1st person view
@@ -5396,9 +5375,7 @@ procedures:
   };
 
 
-  /*
-   *  >>>---   RELOAD WEAPON   ---<<<
-   */
+  // RELOAD WEAPON
   Reload() {
     m_bReloadWeapon = FALSE;
 
@@ -5415,9 +5392,7 @@ procedures:
   };
 
 
-  /*
-   *  >>>---   KNIFE STAND CHANGE   ---<<<
-   */
+  // KNIFE STAND CHANGE
   ChangeKnifeStand(EVoid) {
 /*    if (m_iKnifeStand == 1) {
       // change from knife stand 1 to stand 3
@@ -5470,9 +5445,7 @@ procedures:
   };
 */
 
-  /*
-   *  >>>---   BORING WEAPON ANIMATION   ---<<<
-   */
+  // BORING WEAPON ANIMATION
   BoringWeaponAnimation() {
     // select new mode change animation
     FLOAT fWait = 0.0f;
@@ -5500,9 +5473,7 @@ procedures:
 
 
 
-  /*
-   *  >>>---   NO WEAPON ACTION   ---<<<
-   */
+  // NO WEAPON ACTION
   Idle() {
 
     wait() {
@@ -5574,9 +5545,7 @@ procedures:
 
 
 
-  /*
-   *  >>>---   M  A  I  N   ---<<<
-   */
+  // MAIN
   Main(EWeaponsInit eInit) {
     // remember the initial parameters
     ASSERT(eInit.penOwner != NULL);

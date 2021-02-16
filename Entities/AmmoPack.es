@@ -93,7 +93,7 @@ functions:
     Particles_Spiral(this, 3.0f*0.5, 2.5f*0.5, PT_STAR04, 10);
   }
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     pes->es_ctCount = 1;
@@ -108,15 +108,15 @@ functions:
 
     // calculate value
     pes->es_fValue = 
-      m_iShells*AV_SHELLS + 
-      m_iBullets*AV_BULLETS + 
-      m_iRockets*AV_ROCKETS + 
-      m_iGrenades*AV_GRENADES + 
-      m_iNapalm*AV_NAPALM + 
-      m_iElectricity*AV_ELECTRICITY + 
-      m_iIronBalls*AV_IRONBALLS +
-      m_iSniperBullets*AV_SNIPERBULLETS/*+ 
-      m_iNukeBalls*AV_NUKEBALLS*/;
+      m_iShells*AV_SHELLS
+    + m_iBullets*AV_BULLETS
+    + m_iRockets*AV_ROCKETS
+    + m_iGrenades*AV_GRENADES
+    + m_iNapalm*AV_NAPALM
+    + m_iElectricity*AV_ELECTRICITY
+    + m_iIronBalls*AV_IRONBALLS
+    + m_iSniperBullets*AV_SNIPERBULLETS;
+    //+ m_iNukeBalls*AV_NUKEBALLS;
 
     pes->es_iScore = 0;
     return TRUE;

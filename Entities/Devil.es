@@ -324,7 +324,7 @@ functions:
     return (IsDerivedFromClass(penTarget, "Devil Marker"));
   }
 
-  /* Read from stream. */
+  // Read from stream.
   void Read_t( CTStream *istr) { // throw char *
     CEnemyBase::Read_t(istr);
 
@@ -332,7 +332,7 @@ functions:
     SetupLightSource();
   }
 
-  /* Get static light source information. */
+  // Get static light source information.
   CLightSource *GetLightSource(void) {
     if (!IsPredictor()) {
       return &m_lsLightSource;
@@ -364,7 +364,7 @@ functions:
   };
 
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiDevil;
   };
@@ -716,7 +716,7 @@ functions:
     SetHealth(GetHealth()+fRegeneration);
   };
 
-  /* Post moving */
+  // Post moving
   void PostMoving(void)
   {
     ApplyFootQuake();
@@ -726,7 +726,7 @@ functions:
     ApplyTickRegeneration();
   }
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -1102,9 +1102,7 @@ functions:
     return penAction;
   };
 
-/************************************************************
- *                PREDICTED PROJECTILE                      *
- ************************************************************/
+// PREDICTED PROJECTILE
   void F_FirePredictedProjectile(void)
   {
     PlayWeaponSound( SOUND_LAVABOMB);
@@ -1138,7 +1136,7 @@ functions:
     penProjectile->Initialize(eLaunch);
   }
   
-  /* Handle an event, return false if the event is not handled. */
+  // Handle an event, return false if the event is not handled.
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     if (ee.ee_slEvent == EVENTCODE_EDevilCommand)
@@ -1162,9 +1160,8 @@ functions:
   }
 
 procedures:
-/************************************************************
- *                TRY TO REACH DESTINATION                  *
- ************************************************************/
+// TRY TO REACH DESTINATION
+
   // move to given destination position
   WalkTo(EVoid) 
   {
@@ -1196,9 +1193,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                CITY DESTROYING                           *
- ************************************************************/
+// CITY DESTROYING
   DestroyCity()
   {
     m_soSound.Set3DParameters(1000.0f, 500.0f, 3.0f, 1.0f);
@@ -1539,9 +1534,8 @@ procedures:
     return EReturn();
   }
 
-/************************************************************
- *                PROCEDURES WHEN HARMED                    *
- ************************************************************/
+// PROCEDURES WHEN HARMED
+
   // Play wound animation
   BeWounded(EDamage eDamage) : CEnemyBase::BeWounded 
   {
@@ -1551,9 +1545,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                C L O S E   A T T A C K                   *
- ************************************************************/
+// CLOSE ATTACK
   Hit(EVoid) : CEnemyBase::Hit {
     autocall WaitCurrentAnimEnd() EReturn;
     StartModelAnim(DEVIL_ANIM_ATTACKCLOSE, AOF_SMOOTHCHANGE);
@@ -1572,9 +1564,8 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
+
   // initial preparation
   InitializeAttack(EVoid) : CEnemyBase::InitializeAttack {
     jump CEnemyBase::InitializeAttack();
@@ -2132,7 +2123,7 @@ procedures:
 
     StopFireBreathParticles();
     m_tmRegenerationStart = _pTimer->CurrentTick();
-    m_tmRegenerationStop = m_tmRegenerationStart+TM_HEALTH_IMPULSE-1.5f/*Regeneration particle life time*/;
+    m_tmRegenerationStop = m_tmRegenerationStart+TM_HEALTH_IMPULSE-1.5f; // Regeneration particle life time
     // apply health impulse
     m_tmTemp = _pTimer->CurrentTick();
     while (_pTimer->CurrentTick() < m_tmTemp+TM_HEALTH_IMPULSE)
@@ -2185,9 +2176,7 @@ procedures:
     jump ContinueInMainLoop();
   }
 
-/************************************************************
- *                    D  E  A  T  H                         *
- ************************************************************/
+// DEATH
   Death(EVoid) : CEnemyBase::Death {
     SetFlags(GetFlags()&~ENF_ALIVE);
     StopFireBreathParticles();
@@ -2222,9 +2211,7 @@ procedures:
     return EEnd();
   };
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     m_sptType = SPT_NONE;
     // declare yourself as a model

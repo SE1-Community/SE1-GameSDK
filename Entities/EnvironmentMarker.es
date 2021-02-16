@@ -43,18 +43,18 @@ components:
   2 texture TEXTURE_MARKER   "Models\\Editor\\EnvironmentMarker.tex"
 
 functions:
-  /* Check if entity is moved on a route set up by its targets. */
+  // Check if entity is moved on a route set up by its targets.
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Target";
     return TRUE;
   };
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\EnvironmentMarker.ecl");
     strTargetProperty = "Target";
     return TRUE;
   };
-  /* Get anim data for given animation property - return NULL for none. */
+  // Get anim data for given animation property - return NULL for none.
   CAnimData *GetAnimData(SLONG slPropertyOffset) {
     if (slPropertyOffset == offsetof(CEnvironmentMarker, m_iAnim)) {
       return m_moAnimData.GetData();

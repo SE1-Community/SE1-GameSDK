@@ -97,7 +97,7 @@ functions:
     return CEnemyBase::HandleEvent(ee);
   }
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void)
   {
     return &eiMental;
@@ -292,9 +292,7 @@ procedures:
     return EReturn();
   }
 
-  /************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+  // MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

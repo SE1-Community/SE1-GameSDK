@@ -1207,7 +1207,7 @@ void CGame::ComputerRender(CDrawPort *pdp)
   FLOAT fLerpOld = _pTimer->GetLerpFactor();
 
   FLOAT fSec = tvNow.GetSeconds();
-  TICK llTick = CTimer::InTicks(fSec); //*_pTimer->TickQuantum;
+  TICK llTick = CTimer::InTicks(fSec); // *_pTimer->TickQuantum;
   FLOAT fLerp = (fSec - CTimer::InSeconds(llTick)) / _pTimer->TickQuantum;
   _pTimer->SetGameTick(llTick);
   _pTimer->SetLerp(fLerp);

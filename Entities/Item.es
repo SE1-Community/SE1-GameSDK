@@ -54,7 +54,7 @@ functions:
   {
   }
 
-  /* Adjust model mip factor if needed. */
+  // Adjust model mip factor if needed.
   void AdjustMipFactor(FLOAT &fMipFactor)
   {
     // adjust flare glow, to decrease power with how you get closer
@@ -128,7 +128,7 @@ functions:
     return cli_fPredictItemsRange;
   }
 
-  /* Adjust model shading parameters if needed. */
+  // Adjust model shading parameters if needed.
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
     // in DM, glares are off, so add some light to items
@@ -156,9 +156,7 @@ functions:
     return FALSE;
   };
 
-/************************************************************
- *                      INITALIZATION                       *
- ************************************************************/
+// INITALIZATION
   void Initialize(void) {
     InitAsModel();
     SetFlags(GetFlags()|ENF_SEETHROUGH);
@@ -181,9 +179,8 @@ functions:
 
 
 
-/************************************************************
- *                   SET MODEL AND ATTACHMENT               *
- ************************************************************/
+// SET MODEL AND ATTACHMENT
+
   // Add item
   void AddItem(ULONG ulIDModel, ULONG ulIDTexture,
                ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
@@ -252,16 +249,12 @@ functions:
 
 procedures:
 
-/************************************************************
- *          VIRTUAL PROCEDURES THAT NEED OVERRIDE           *
- ************************************************************/
+// VIRTUAL PROCEDURES THAT NEED OVERRIDE
   ItemCollected(EPass epass) { return; };
 
 
 
-/************************************************************
- *                I  T  E  M    L  O  O  P                  *
- ************************************************************/
+// ITEM LOOP
 
   ItemLoop(EVoid)
   {

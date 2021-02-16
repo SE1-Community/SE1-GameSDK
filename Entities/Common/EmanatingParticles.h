@@ -34,7 +34,7 @@ public:
   FLOAT ep_tmLife;
   FLOAT ep_fStretch;
 
-  /* Default constructor. */
+  // Default constructor.
   CEmittedParticle(void);
   void Read_t( CTStream &strm);
   void Write_t( CTStream &strm);
@@ -51,7 +51,7 @@ public:
   INDEX em_iGlobal;
   CStaticStackArray<CEmittedParticle> em_aepParticles;
 
-  /* Default constructor. */
+  // Default constructor.
   CEmiter(void);
   void Initialize(CEntity *pen);
   FLOAT3D GetGravity(CEntity *pen);

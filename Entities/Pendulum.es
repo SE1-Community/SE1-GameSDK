@@ -36,7 +36,7 @@ properties:
 
 components:
 functions:
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -56,7 +56,7 @@ functions:
     SetDesiredRotation( ANGLE3D(0, 0, m_fSpeed));
   }
 
-  /* Post moving */
+  // Post moving
   void PostMoving()
   {
     CMovableBrushEntity::PostMoving();

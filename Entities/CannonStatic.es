@@ -98,7 +98,7 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
     return str;
   }
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiCannonStatic;
   };

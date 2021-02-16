@@ -104,9 +104,7 @@ procedures:
     return EReturn();
   }
 
- /************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+  // MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

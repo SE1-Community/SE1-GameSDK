@@ -70,7 +70,7 @@ functions:
     PrecacheSound(SOUND_THUNDER3);
   }
 
-  /* Get anim data for given animation property - return NULL for none. */
+  // Get anim data for given animation property - return NULL for none.
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
     if (m_penLight == NULL) {

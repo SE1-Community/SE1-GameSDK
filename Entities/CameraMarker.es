@@ -52,7 +52,7 @@ components:
 
 functions:
 
-  /* Check if entity can drop marker for making linked route. */
+  // Check if entity can drop marker for making linked route.
   BOOL DropsMarker( CTFileName &fnmMarkerClass, CTString &strTargetProperty) const
   {
     fnmMarkerClass = CTFILENAME("Classes\\CameraMarker.ecl");

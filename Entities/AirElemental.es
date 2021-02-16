@@ -353,9 +353,8 @@ functions:
   };
   
 
-/************************************************************
- *                 BLOW UP FUNCTIONS                        *
- ************************************************************/
+// BLOW UP FUNCTIONS
+
   // spawn body parts
   void BlowUp(void) {
     // get your size
@@ -509,9 +508,7 @@ procedures:
     jump CEnemyBase::Die(eDeath);
   }
 
-/************************************************************
- *                      FIRE PROCEDURES                     *
- ************************************************************/
+// FIRE PROCEDURES
 
   Fire(EVoid) : CEnemyBase::Fire {
     
@@ -595,9 +592,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                    D  E  A  T  H                         *
- ************************************************************/
+// DEATH
   Death(EVoid) : CEnemyBase::Death
   {
     m_fFadeStartTime = _pTimer->CurrentTick();
@@ -609,9 +604,7 @@ procedures:
     return EEnd();
   };
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
 
   Grow() {
     // we can only grow, never shrink

@@ -349,7 +349,7 @@ functions:
     }
   };
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     switch (m_EetType) {
       case ELT_AIR:
@@ -390,7 +390,7 @@ functions:
     }
   };
 
-  /* Fill in entity statistics - for AI purposes only */
+  // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes)
   {
     CEnemyBase::FillEntityStatistics(pes);
@@ -409,7 +409,7 @@ functions:
     return TRUE;
   }
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -690,7 +690,7 @@ functions:
     penProjectile->Initialize(eLaunch);
   }
 
-  /* Shake ground */
+  // Shake ground
   void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
@@ -861,9 +861,8 @@ functions:
     }
   };
 
-/************************************************************
- *                 BLOW UP FUNCTIONS                        *
- ************************************************************/
+// BLOW UP FUNCTIONS
+
   // spawn body parts
   void BlowUp(void) {
     // get your size
@@ -947,9 +946,7 @@ functions:
   };
 
 procedures:
-/************************************************************
- *                    CLASS INTERNAL                        *
- ************************************************************/
+// CLASS INTERNAL
   FallOnFloor(EVoid) {
     // drop to floor
     SetPhysicsFlags(EPF_MODEL_WALKING);
@@ -974,9 +971,8 @@ procedures:
 
 
 
-/************************************************************
- *                      FIRE PROCEDURES                     *
- ************************************************************/
+// FIRE PROCEDURES
+
   //
   // STONEMAN
   //
@@ -1215,9 +1211,8 @@ procedures:
   */
 
 
-/************************************************************
- *                PROCEDURES WHEN HARMED                    *
- ************************************************************/
+// PROCEDURES WHEN HARMED
+
   // Play wound animation and falling body part
   BeWounded(EDamage eDamage) : CEnemyBase::BeWounded {
     // spawn additional elemental
@@ -1228,9 +1223,8 @@ procedures:
     jump CEnemyBase::BeWounded(eDamage);
   };
 
-/************************************************************
- *                 CHANGE STATE PROCEDURES                  *
- ************************************************************/
+// CHANGE STATE PROCEDURES
+
    // box to normal
   BoxToNormal(EVoid) {
     m_EesCurrentState = ELS_NORMAL;
@@ -1273,9 +1267,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   InitializeAttack(EVoid) : CEnemyBase::InitializeAttack {
     // change state from box to normal
     if (m_EesCurrentState == ELS_BOX)
@@ -1314,9 +1306,7 @@ procedures:
     return EReturn();
   };
 
-/************************************************************
- *                    D  E  A  T  H                         *
- ************************************************************/
+// DEATH
   Death(EVoid) : CEnemyBase::Death
   {
     if (m_bSpawnOnBlowUp && (m_EecChar == ELC_LARGE || m_EecChar == ELC_BIG)) {
@@ -1382,9 +1372,7 @@ procedures:
     return EReturn();
   }
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     if (m_EetType != ELT_LAVA) {
       m_EetType=ELT_LAVA;

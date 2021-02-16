@@ -58,7 +58,7 @@ functions:
     PrecacheClass(CLASS_PROJECTILE, m_ptType);
   }
 
-  /* calculates launch velocity and heading correction for angular launch */
+  // calculates launch velocity and heading correction for angular launch
   void CalculateAngularLaunchParams(
     CMovableEntity *penTarget,
     FLOAT3D vShooting,
@@ -194,9 +194,8 @@ functions:
     }
   }
 procedures:
-/************************************************************
- *                    A C T I O N S                         *
- ************************************************************/
+// ACTIONS
+
   // active state
   Active(EVoid)
   {
@@ -232,9 +231,7 @@ procedures:
 
 
 
-/************************************************************
- *                M  A  I  N    L  O  O  P                  *
- ************************************************************/
+// MAIN LOOP
   // main loop
   MainLoop(EVoid) {
     wait() {

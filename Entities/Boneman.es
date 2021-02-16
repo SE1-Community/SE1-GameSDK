@@ -102,12 +102,12 @@ functions:
     return fnm;
   };
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiBoneman;
   };
 
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
@@ -216,9 +216,7 @@ functions:
     m_bRunSoundPlaying = FALSE;
   }
 
-/************************************************************
- *                 BLOW UP FUNCTIONS                        *
- ************************************************************/
+// BLOW UP FUNCTIONS
   // spawn body parts
   void BlowUp(void) {
     // get your size
@@ -256,9 +254,7 @@ functions:
 
 
 procedures:
-/************************************************************
- *                A T T A C K   E N E M Y                   *
- ************************************************************/
+// ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire {
     // fire projectile
     StartModelAnim(BONEMAN_ANIM_ATTACKCLOSELOOP, 0);
@@ -362,9 +358,7 @@ procedures:
 
 
 
-/************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+// MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();

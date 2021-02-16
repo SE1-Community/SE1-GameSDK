@@ -167,7 +167,7 @@ functions:
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }
 
-  /* Get gradient type name, return empty string if not used. */
+  // Get gradient type name, return empty string if not used.
   const CTString &GetGradientName(INDEX iGradient)
   {
     static const CTString strDummyName("");
@@ -183,7 +183,7 @@ functions:
     }
     return strDummyName;
   }
-  /* Uncache shadows for given gradient */
+  // Uncache shadows for given gradient
   void UncacheShadowsForGradient(class CGradientMarker *penDiscard)
   {
     CGradientMarker *pgm = (CGradientMarker *)&*m_penGradient;
@@ -193,7 +193,7 @@ functions:
     }
   }
 
-  /* Get gradient, return FALSE for none. */
+  // Get gradient, return FALSE for none.
   BOOL GetGradient(INDEX iGradient, class CGradientParameters &fpGradient)
   {
     if (iGradient == 1)
@@ -206,7 +206,7 @@ functions:
     return FALSE;
   }
   
-  /* Receive damage */
+  // Receive damage
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {

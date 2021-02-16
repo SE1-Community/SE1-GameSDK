@@ -47,7 +47,7 @@ enum ConsoleState {
 class CGameTimerHandler : public CTimerHandler
 {
 public:
-  /* This is called every TickQuantum seconds. */
+  // This is called every TickQuantum seconds.
   virtual void HandleTimer(void);
 };
 
@@ -87,9 +87,7 @@ public:
   virtual void Write_t( CTStream &ostrm);    // throw char*
 };
 
-/*
- * Class containing information concerning controls system
- */
+// Class containing information concerning controls system
 class CControls {
 public:
   // list of mounted button actions
@@ -155,9 +153,7 @@ public:
   CHighScoreEntry(void);
 };
 
-/*
- * Class responsible for handling game interface
- */
+// Class responsible for handling game interface
 class CGame {
 public:
   enum ConsoleState gm_csConsoleState;

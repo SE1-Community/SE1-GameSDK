@@ -49,13 +49,13 @@ components:
 
 functions:
 
-  /* Get haze type name, return empty string if not used. */
+  // Get haze type name, return empty string if not used.
   const CTString &GetHazeName(void)
   {
     return m_strName;
   }
 
-  /* Get haze. */
+  // Get haze.
   void GetHaze(class CHazeParameters &hpHaze, FLOAT3D &vViewDir)
   {
     // calculate directional haze color

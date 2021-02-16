@@ -166,9 +166,7 @@ void LarvaTailExplosion(void) {
 }
 
 
-/************************************************************
- *             C O M M O N   F U N C T I O N S              *
- ************************************************************/
+// COMMON FUNCTIONS
 
 void ProjectileTouch(CEntityPointer penHit)
 {
@@ -244,9 +242,7 @@ ANGLE GetRotationSpeed(ANGLE aWantedAngle, ANGLE aRotateSpeed, FLOAT fWaitFreque
   return aResult;
 }
 
-/************************************************************
- *                   P R O C E D U R E S                    *
- ************************************************************/
+// PROCEDURES
 procedures:
    
   LarvaOffspringGuidedSlide(EVoid) {

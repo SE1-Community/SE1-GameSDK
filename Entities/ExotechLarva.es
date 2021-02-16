@@ -298,7 +298,7 @@ functions:
     return pwsc;
   }
 
-  /* Shake ground */
+  // Shake ground
   void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, BOOL bFadeIn)
   {
     CWorldSettingsController *pwsc = GetWSC();
@@ -516,7 +516,7 @@ functions:
     return str;
   }
 
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void) {
     return &eiExotechLarva;
   };
@@ -931,9 +931,7 @@ functions:
   }
   
 
-/****************************************/
-/*         P R O C E D U R E S          */
-/****************************************/
+// PROCEDURES
 
 procedures:
   

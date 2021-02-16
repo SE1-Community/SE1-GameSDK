@@ -67,7 +67,7 @@ components:
  15 texture TEXTURE_BUMP           "Models\\CutSequences\\Bridge\\BridgeBump.tex",
 
 functions:
-  /* Entity info */
+  // Entity info
   void *GetEntityInfo(void)
   {
     return &eiCrate;
@@ -173,9 +173,7 @@ functions:
 
 procedures:
 
- /************************************************************
- *                       M  A  I  N                         *
- ************************************************************/
+ // MAIN
   Main(EVoid) {
     // declare yourself as a model
     InitAsModel();
