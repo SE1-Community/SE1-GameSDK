@@ -37,7 +37,7 @@ EntityStats *FindStats(const CTString &strName)
 {
   {FOREACHINDYNAMICARRAY(_aes, EntityStats, ites) {
     EntityStats &es = *ites;
-    if (es.es_strName==strName) {
+    if (es.es_strName == strName) {
       return &es;
     }
   }}
@@ -49,7 +49,7 @@ static void MakeWorldStatistics(void)
   // get the world pointer
   CWorld *pwo = (CWorld *)_pShell->GetINDEX("pwoCurrentWorld");
   // if there is no current world
-  if (pwo==NULL) {
+  if (pwo == NULL) {
     CPrintF("No current world.\n");
     return;
   }
@@ -68,7 +68,7 @@ static void MakeWorldStatistics(void)
     // find existing stats with same name
     EntityStats *pesOld = FindStats(esCurrent.es_strName);
     // if such stats exists
-    if (pesOld!=NULL) {
+    if (pesOld != NULL) {
       // update the existing stats
       pesOld->es_ctCount    += esCurrent.es_ctCount;
       pesOld->es_ctAmmount  += esCurrent.es_ctAmmount*esCurrent.es_ctCount;
@@ -115,7 +115,7 @@ static void ReoptimizeAllBrushes(void)
   // get the world pointer
   CWorld *pwo = (CWorld *)_pShell->GetINDEX("pwoCurrentWorld");
   // if there is no current world
-  if (pwo==NULL) {
+  if (pwo == NULL) {
     CPrintF("No current world.\n");
     return;
   }
@@ -142,7 +142,7 @@ static void DoLevelSafetyChecks()
   // get the world pointer
   CWorld *pwo = (CWorld *)_pShell->GetINDEX("pwoCurrentWorld");
   // if there is no current world
-  if (pwo==NULL) {
+  if (pwo == NULL) {
     CPrintF("Error - no current world.\n");
     return;
   }
@@ -180,7 +180,7 @@ static void DoLevelSafetyChecks()
     pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
   }
   
-  if (pwsc!=NULL) {
+  if (pwsc != NULL) {
     CPrintF("\n  OK! World settings controller exists!\n");
   } else {
     CPrintF("\n  ERROR! World settings controller does not exist (or isn't connected to the background viewer)!\n");
@@ -254,10 +254,10 @@ void SetPyramidMorphRoomAlpha(CWorld *pwo, INDEX iBlending, TIME tmActivated)
   FLOAT fRatio;
   FLOAT tmAppear=10.0f;
 
-  if (tmNow<=tmActivated) { return;}
+  if (tmNow <= tmActivated) { return;}
   
   // get alpha
-  if (tmNow>=tmActivated+tmAppear)
+  if (tmNow >= tmActivated+tmAppear)
   {
     fRatio = 1;
   }
@@ -469,7 +469,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   pwo->wo_astSurfaceTypes[8].st_fWalkDamageAmount = 2.0f;
   pwo->wo_astSurfaceTypes[8].st_llWalkDamageFrequency = CTimer::InTicks(0.5f);
   
-  ASSERT(9==SURFACE_SAND);
+  ASSERT(9 == SURFACE_SAND);
   pwo->wo_astSurfaceTypes[9].st_strName = "Sand";
   pwo->wo_astSurfaceTypes[9].st_fFriction = 1.0f;
   pwo->wo_astSurfaceTypes[9].st_fStairsHeight = 1.0f;
@@ -489,14 +489,14 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   pwo->wo_astSurfaceTypes[11].st_fClimbSlopeCos = Cos(45.0f);
   pwo->wo_astSurfaceTypes[11].st_ulFlags = STF_NOIMPACT;
 
-  ASSERT(12==SURFACE_WATER);
+  ASSERT(12 == SURFACE_WATER);
   pwo->wo_astSurfaceTypes[12].st_strName = "Water";
   pwo->wo_astSurfaceTypes[12].st_fFriction = 1.0f;
   pwo->wo_astSurfaceTypes[12].st_fStairsHeight = 1.0f;
   pwo->wo_astSurfaceTypes[12].st_fJumpSlopeCos = Cos(45.0f);
   pwo->wo_astSurfaceTypes[12].st_fClimbSlopeCos = Cos(45.0f);
 
-  ASSERT(13==SURFACE_RED_SAND);
+  ASSERT(13 == SURFACE_RED_SAND);
   pwo->wo_astSurfaceTypes[13].st_strName = "Red sand";
   pwo->wo_astSurfaceTypes[13].st_fFriction = 1.0f;
   pwo->wo_astSurfaceTypes[13].st_fStairsHeight = 1.0f;
@@ -524,21 +524,21 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   pwo->wo_astSurfaceTypes[16].st_fClimbSlopeCos = Cos(45.0f);
   pwo->wo_astSurfaceTypes[16].st_ulFlags = STF_NOIMPACT;
 
-  ASSERT(17==SURFACE_GRASS);
+  ASSERT(17 == SURFACE_GRASS);
   pwo->wo_astSurfaceTypes[17].st_strName = "Grass";
   pwo->wo_astSurfaceTypes[17].st_fFriction = 1.0f;
   pwo->wo_astSurfaceTypes[17].st_fStairsHeight = 1.0f;
   pwo->wo_astSurfaceTypes[17].st_fJumpSlopeCos = Cos(45.0f);
   pwo->wo_astSurfaceTypes[17].st_fClimbSlopeCos = Cos(45.0f);
 
-  ASSERT(18==SURFACE_WOOD);
+  ASSERT(18 == SURFACE_WOOD);
   pwo->wo_astSurfaceTypes[18].st_strName = "Wood";
   pwo->wo_astSurfaceTypes[18].st_fFriction = 1.0f;
   pwo->wo_astSurfaceTypes[18].st_fStairsHeight = 1.0f;
   pwo->wo_astSurfaceTypes[18].st_fJumpSlopeCos = Cos(45.0f);
   pwo->wo_astSurfaceTypes[18].st_fClimbSlopeCos = Cos(45.0f);
 
-  ASSERT(19==SURFACE_GRASS_SLIDING);
+  ASSERT(19 == SURFACE_GRASS_SLIDING);
   pwo->wo_astSurfaceTypes[19].st_strName = "Grass sliding";
   pwo->wo_astSurfaceTypes[19].st_fFriction = 0.1f;
   pwo->wo_astSurfaceTypes[19].st_fStairsHeight = 0.0f;
@@ -546,7 +546,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   pwo->wo_astSurfaceTypes[19].st_fClimbSlopeCos = Cos(45.0f);
   pwo->wo_astSurfaceTypes[19].st_ulFlags = STF_SLIDEDOWNSLOPE;
 
-  ASSERT(20==SURFACE_GRASS_NOIMPACT);
+  ASSERT(20 == SURFACE_GRASS_NOIMPACT);
   pwo->wo_astSurfaceTypes[20].st_strName = "Grass no impact";
   pwo->wo_astSurfaceTypes[20].st_fFriction = 1.0f;
   pwo->wo_astSurfaceTypes[20].st_fStairsHeight = 1.0f;
@@ -554,7 +554,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   pwo->wo_astSurfaceTypes[20].st_fClimbSlopeCos = Cos(45.0f);
   pwo->wo_astSurfaceTypes[20].st_ulFlags = STF_NOIMPACT;
 
-  ASSERT(21==SURFACE_SNOW);
+  ASSERT(21 == SURFACE_SNOW);
   pwo->wo_astSurfaceTypes[21].st_strName = "Snow";
   pwo->wo_astSurfaceTypes[21].st_fFriction = 1.0f;
   pwo->wo_astSurfaceTypes[21].st_fStairsHeight = 1.0f;
@@ -1021,7 +1021,7 @@ functions:
   // Validate offered target for one property
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if (penTarget==NULL)
+    if (penTarget == NULL)
     {
       return FALSE;
     }
@@ -1033,14 +1033,14 @@ functions:
     ulFirst = offsetof(CWorldBase, m_penGradient0);
     ulLast  = offsetof(CWorldBase, m_penGradient19);
     strClass = "Gradient Marker";
-    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
     // if gravity marker
     ulFirst = offsetof(CWorldBase, m_penGravity0);
     ulLast  = offsetof(CWorldBase, m_penGravity9);
-    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
       return 
         IsDerivedFromClass(penTarget, "Gravity Marker")||
         IsDerivedFromClass(penTarget, "Gravity Router");
@@ -1050,7 +1050,7 @@ functions:
     ulFirst = offsetof(CWorldBase, m_penMirror0);
     ulLast  = offsetof(CWorldBase, m_penMirror4);
     strClass = "Mirror Marker";
-    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
@@ -1058,7 +1058,7 @@ functions:
     ulFirst = offsetof(CWorldBase, m_penFog0);
     ulLast  = offsetof(CWorldBase, m_penFog9);
     strClass = "Fog Marker";
-    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
@@ -1066,7 +1066,7 @@ functions:
     ulFirst = offsetof(CWorldBase, m_penHaze0);
     ulLast  = offsetof(CWorldBase, m_penHaze4);
     strClass = "Haze Marker";
-    if ((slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
@@ -1083,7 +1083,7 @@ functions:
     if (iForce<ctFixedForces) {
       return affFixedForces[iForce].ff_strName;
     } else {
-      if (iForce-ctFixedForces<=ctGravityMarkers) {
+      if (iForce-ctFixedForces <= ctGravityMarkers) {
         CEntity *pen = &*(&m_penGravity0)[iForce-ctFixedForces];
         if (pen != NULL) {
           return pen->GetForceName(0);
@@ -1200,7 +1200,7 @@ functions:
   {
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    if (iMirror==0) {
+    if (iMirror == 0) {
       return strDummyName;
     }
 
@@ -1232,10 +1232,10 @@ functions:
   /* Get mirror, return FALSE for none. */
   BOOL GetMirror(INDEX iMirror, class CMirrorParameters &mpMirror)
   {
-    if (iMirror==0) {
+    if (iMirror == 0) {
       return FALSE;
     }
-    if (iMirror>=1 && iMirror<=8) {
+    if (iMirror >= 1 && iMirror <= 8) {
       mpMirror.mp_ulFlags = 0;
       return TRUE;
     }
@@ -1285,7 +1285,7 @@ functions:
   BOOL GetGradient(INDEX iGradient, class CGradientParameters &fpGradient)
   {
     INDEX ctGradientMarkers = &m_penGradient19-&m_penGradient0+1;
-    if ( (iGradient<ctGradientMarkers) && (iGradient>0) ) {
+    if ((iGradient<ctGradientMarkers) && (iGradient>0) ) {
       CGradientMarker *pgm = (CGradientMarker *)&*(&m_penGradient0)[iGradient-1];
       if (pgm != NULL) {
         return pgm->GetGradient(0, fpGradient);
@@ -1298,7 +1298,7 @@ functions:
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     // when someone in range is destroyed
-    if (ee.ee_slEvent==EVENTCODE_EFirstWorldBase) {
+    if (ee.ee_slEvent == EVENTCODE_EFirstWorldBase) {
       SetFlags(GetFlags()|ENF_ZONING);
       m_bZoning = TRUE;
       SetFlags(GetFlags()|ENF_ANCHORED);

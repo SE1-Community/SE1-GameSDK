@@ -56,14 +56,14 @@ void CCompMessage::Load_t(void)
   strm.ExpectKeyword_t("IMAGE\r\n");
   CTString strImage;
   strm.GetLine_t(strImage);
-  if (strImage=="none") {
+  if (strImage == "none") {
     cm_itImage = IT_NONE;
-  } else if (strImage=="statistics") {
+  } else if (strImage == "statistics") {
     cm_itImage = IT_STATISTICS;
-  } else if (strImage=="picture") {
+  } else if (strImage == "picture") {
     cm_itImage = IT_PICTURE;
     cm_fnmPicture.ReadFromText_t(strm);
-  } else if (strImage=="model") {
+  } else if (strImage == "model") {
     cm_itImage = IT_MODEL;
     cm_strModel.ReadFromText_t(strm, "");
   } else {
@@ -91,12 +91,12 @@ void CCompMessage::Format(INDEX ctCharsPerLine)
 
   // get text
   const char *strText = cm_strText;
-  if (strncmp(strText, "$STAT", 5)==0) {
+  if (strncmp(strText, "$STAT", 5) == 0) {
     strText = _strStatsDetails;
     cm_strFormattedText = strText;
     cm_ctFormattedLines = 1;
     for (INDEX i=0; i<cm_strFormattedText.Length(); i++) {
-      if (cm_strFormattedText[i]=='\n') {
+      if (cm_strFormattedText[i] == '\n') {
         cm_ctFormattedLines++;
       }
     }
@@ -113,11 +113,11 @@ void CCompMessage::Format(INDEX ctCharsPerLine)
   cm_ctFormattedLines = 1;
   INDEX ctChars = 0;
   // while not end of text
-  while (*pchSrc!=0) {
+  while (*pchSrc != 0) {
     // copy one char
     char chLast = *pchDst++ = *pchSrc++;
     // if it was line break
-    if (chLast=='\n') {
+    if (chLast == '\n') {
       // new line
       ctChars=0;
       cm_ctFormattedLines++;
@@ -130,7 +130,7 @@ void CCompMessage::Format(INDEX ctCharsPerLine)
       const char *pchSrcBck = pchSrc-1;
             char *pchDstBck = pchDst-1;
       // while not start of row and not space
-      while (pchSrcBck>pchSrc-ctChars && *pchSrcBck!=' ') {
+      while (pchSrcBck>pchSrc-ctChars && *pchSrcBck != ' ') {
         // go one char back
         pchSrcBck--;
         pchDstBck--;
@@ -212,7 +212,7 @@ CTString CCompMessage::GetLine(INDEX iLine)
   INDEX i = 0; 
   while (i<iLine) {
     strText = strchr(strText, '\n');
-    if (strText==NULL) {
+    if (strText == NULL) {
       return "";
     } else {
       i++;
@@ -223,7 +223,7 @@ CTString CCompMessage::GetLine(INDEX iLine)
   CTString strLine = strText;
   char *pchEndOfLine = (char*)strchr(strLine, '\n');
   // if found
-  if (pchEndOfLine!=NULL) {
+  if (pchEndOfLine != NULL) {
     // cut there
     *pchEndOfLine = 0;
   }

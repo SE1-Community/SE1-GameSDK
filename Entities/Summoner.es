@@ -207,7 +207,7 @@ functions:
  
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if ( slPropertyOffset >= offsetof(CSummoner, m_penGroup01Template01) &&
+    if (slPropertyOffset >= offsetof(CSummoner, m_penGroup01Template01) &&
       slPropertyOffset <= offsetof(CSummoner, m_penGroup03Template06))
     {
       if (IsDerivedFromClass(penTarget, "Enemy Base")) {
@@ -251,19 +251,19 @@ functions:
   
   BOOL DoSafetyChecks(void) {
     
-    if (m_penSpawnMarker==NULL) {
+    if (m_penSpawnMarker == NULL) {
       WarningMessage( "No valid Spawn Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
-    if (m_penTeleportMarker==NULL) {
+    if (m_penTeleportMarker == NULL) {
       WarningMessage( "No valid Teleport Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
-    if (m_penDeathMarker==NULL) {
+    if (m_penDeathMarker == NULL) {
       WarningMessage( "No valid Death Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
-    if (m_penControlArea==NULL) {
+    if (m_penControlArea == NULL) {
       WarningMessage( "No valid Area Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
@@ -318,7 +318,7 @@ functions:
     PrecacheSound(SOUND_MATERIALIZE );
     PrecacheSound(SOUND_TELEPORT    );
   
-    for (INDEX i=SOUND_TAUNT01; i<=SOUND_TAUNTLAST; i++) { 
+    for (INDEX i=SOUND_TAUNT01; i <= SOUND_TAUNTLAST; i++) { 
       PrecacheSound(i); 
     }
   
@@ -358,7 +358,7 @@ functions:
   void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, BOOL bFadeIn)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL) {
+    if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
       pwsc->m_vShakePos = GetPlacement().pl_PositionVector;
       pwsc->m_fShakeFalloff = 450.0f;
@@ -407,13 +407,13 @@ functions:
     }
 
     // boss cannot be telefragged
-    if (dmtType==DMT_TELEPORT)
+    if (dmtType == DMT_TELEPORT)
     {
       return;
     }
 
     // cannonballs inflict less damage then the default
-    if (dmtType==DMT_CANNONBALL)
+    if (dmtType == DMT_CANNONBALL)
     {
       fDamageAmmount *= 0.5f;
     }
@@ -428,7 +428,7 @@ functions:
     // see if we have to change the spawning scheme
     for (INDEX i=0; i<SUMMONER_MAX_SS; i++) {
       FLOAT fHealth = (FLOAT)aiSpawnScheme[i][0]*m_fMaxHealth/100.0f;
-      if (fHealth<=fOldHealth && fHealth>fNewHealth)
+      if (fHealth <= fOldHealth && fHealth>fNewHealth)
       {
         m_iSpawnScheme = i;
       }
@@ -505,7 +505,7 @@ functions:
 
   void LaunchMonster(FLOAT3D vTarget, CEntity *penTemplate)
   {
-    ASSERT(penTemplate!=NULL);
+    ASSERT(penTemplate != NULL);
     // calculate parameters for predicted angular launch curve
     FLOAT3D vFirePos = FIREPOS_ARMS*m_fStretch;
     FLOAT3D vShooting = GetPlacement().pl_PositionVector + vFirePos*GetRotationMatrix();
@@ -626,12 +626,12 @@ functions:
     while (iCount>0)
     {
       i++;
-      while (&*pen[i]==NULL) {
+      while (&*pen[i] == NULL) {
         i++;
       } 
       iCount--;        
     }
-    ASSERT (&(CEnemyBase &)*pen[i]!=NULL);
+    ASSERT (&(CEnemyBase &)*pen[i] != NULL);
     return &(CEnemyBase &)*pen[i];
   }
 
@@ -746,7 +746,7 @@ functions:
         penExplosion->Initialize(eSpawnEffect);
         apenNearEntities[i]->Destroy();
         // decrease the number of spawned enemies for those that haven't been born
-        if (penMusicHolder!=NULL) {          
+        if (penMusicHolder != NULL) {          
           penMusicHolder->m_ctEnemiesInWorld--;
         }          
         ChangeEnemyNumberForAllPlayers(-1);
@@ -855,7 +855,7 @@ procedures:
         for (i=0; i<3; i++) {
           INDEX iMin = aiSpawnScheme[m_iSpawnScheme][i*2+1];
           INDEX iMax = aiSpawnScheme[m_iSpawnScheme][i*2+2];
-          ASSERT(iMin<=iMax);
+          ASSERT(iMin <= iMax);
           INDEX iToSpawn;
           iToSpawn = iMin + IRnd()%(iMax - iMin + 1);
           for (j=0; j<iToSpawn; j++) {
@@ -865,7 +865,7 @@ procedures:
             fTotalSpawnedScore+= penTemplate->m_iScore;
             iTotalSpawnedCount++;
             // increase the number of spawned enemies in music holder
-            if (penMusicHolder!=NULL) {
+            if (penMusicHolder != NULL) {
               penMusicHolder->m_ctEnemiesInWorld++;
             }
             ChangeEnemyNumberForAllPlayers(+1);
@@ -936,7 +936,7 @@ procedures:
           FLOAT3D vTarget = AcquireTarget();
           LaunchMonster(vTarget, penTemplate);
           // increase the number of spawned enemies in music holder
-          if (penMusicHolder!=NULL) {
+          if (penMusicHolder != NULL) {
             penMusicHolder->m_ctEnemiesInWorld++;
           }
           ChangeEnemyNumberForAllPlayers(+1);
@@ -975,11 +975,11 @@ procedures:
 
     // find the one who killed, or other best suitable player
     m_penKiller = m_penDeathInflictor;
-    if (m_penKiller ==NULL || !IsOfClass(m_penKiller, "Player")) {
+    if (m_penKiller == NULL || !IsOfClass(m_penKiller, "Player")) {
       m_penKiller = m_penEnemy;
     }
 
-    if (m_penKiller==NULL || !IsOfClass(m_penKiller, "Player")) {
+    if (m_penKiller == NULL || !IsOfClass(m_penKiller, "Player")) {
       m_penKiller = FixupCausedToPlayer(this, m_penKiller, /*bWarning=*/FALSE);
     }
 
@@ -1006,7 +1006,7 @@ procedures:
     m_vDeathPosition = GetPlacement().pl_PositionVector;
 
     // notify possible targets of beginning of the death sequence
-    if (m_penBeginDeathTarget!=NULL) {
+    if (m_penBeginDeathTarget != NULL) {
       SendToTarget(m_penBeginDeathTarget, EET_TRIGGER, m_penKiller);
     }
     
@@ -1070,7 +1070,7 @@ procedures:
     }
  
     // notify possible targets of end of the death sequence
-    if (m_penExplodeDeathTarget!=NULL) {
+    if (m_penExplodeDeathTarget != NULL) {
       SendToTarget(m_penExplodeDeathTarget, EET_TRIGGER, m_penKiller);
     }
 
@@ -1102,7 +1102,7 @@ procedures:
     autowait(m_fDeathDuration);
 
     // notify possible targets of end of the death sequence
-    if (m_penEndDeathTarget!=NULL) {
+    if (m_penEndDeathTarget != NULL) {
       SendToTarget(m_penEndDeathTarget, EET_TRIGGER, m_penKiller);
     }
 
@@ -1126,7 +1126,7 @@ procedures:
     
     // destroy possible flames
     CEntityPointer penFlame = GetChildOfClass("Flame");
-    if (penFlame!=NULL) {
+    if (penFlame != NULL) {
       penFlame->Destroy();
     }
 
@@ -1136,7 +1136,7 @@ procedures:
     CPlacement3D pl;
     pl.pl_PositionVector = m_penDeathMarker->GetPlacement().pl_PositionVector;
     FLOAT3D vToPlayer;
-    if (m_penEnemy!=NULL) {
+    if (m_penEnemy != NULL) {
       vToPlayer = m_penEnemy->GetPlacement().pl_PositionVector - pl.pl_PositionVector;
     } else {
       vToPlayer = m_vPlayerSpotted - pl.pl_PositionVector;
@@ -1181,7 +1181,7 @@ procedures:
     
     // destroy possible flames
     CEntityPointer penFlame = GetChildOfClass("Flame");
-    if (penFlame!=NULL) {
+    if (penFlame != NULL) {
       penFlame->Destroy();
     }
 
@@ -1207,7 +1207,7 @@ procedures:
     CPlacement3D pl;
     pl.pl_PositionVector = vTarget;
     FLOAT3D vToPlayer;
-    if (m_penEnemy!=NULL) {
+    if (m_penEnemy != NULL) {
       vToPlayer = m_penEnemy->GetPlacement().pl_PositionVector - vTarget;
     } else {
       vToPlayer = m_vPlayerSpotted - vTarget;
@@ -1248,7 +1248,7 @@ procedures:
       on (EReminder er) :
       {
         // pass all reminders but the 128 one
-        if (er.iValue==128) {
+        if (er.iValue == 128) {
           RecalculateFuss();
           // see if we have to teleport
           if (_pTimer->CurrentTick()>m_tmMaterializationTime+m_fCorporealDuration) {
@@ -1256,7 +1256,7 @@ procedures:
           }
           // spawn the reminder again so that we return here
           SpawnReminder(this, 1.0f, 128);
-        } else if (er.iValue==129 && !m_bDying) {
+        } else if (er.iValue == 129 && !m_bDying) {
           call InitiateTeleport();
         } else if (TRUE) {
           pass;
@@ -1336,17 +1336,17 @@ procedures:
     m_iGroup01Count = 0;
     pen = &m_penGroup01Template01;
     for (i=0; i<SUMMONER_TEMP_PER_GROUP; i++) {
-      if (&*pen[i]!=NULL) { m_iGroup01Count++; }
+      if (&*pen[i] != NULL) { m_iGroup01Count++; }
     }
     m_iGroup02Count = 0;
     pen = &m_penGroup02Template01;
     for (i=0; i<SUMMONER_TEMP_PER_GROUP; i++) {
-      if (&*pen[i]!=NULL) { m_iGroup02Count++; }
+      if (&*pen[i] != NULL) { m_iGroup02Count++; }
     }
     m_iGroup03Count = 0;
     pen = &m_penGroup03Template01;
     for (i=0; i<SUMMONER_TEMP_PER_GROUP; i++) {
-      if (&*pen[i]!=NULL) { m_iGroup03Count++; }
+      if (&*pen[i] != NULL) { m_iGroup03Count++; }
     }
 
     if (!DoSafetyChecks()) {
@@ -1358,7 +1358,7 @@ procedures:
     CEnemyMarker *it;
     m_iSpawnMarkers = 1;
     it = &((CEnemyMarker &)*m_penSpawnMarker);
-    while (it->m_penTarget!=NULL)
+    while (it->m_penTarget != NULL)
     {
       it = &((CEnemyMarker &)*it->m_penTarget);
       m_iSpawnMarkers ++;
@@ -1367,7 +1367,7 @@ procedures:
     // count teleport markers
     m_iTeleportMarkers = 1;
     it = &((CEnemyMarker &)*m_penTeleportMarker);
-    while (it->m_penTarget!=NULL)
+    while (it->m_penTarget != NULL)
     {
       it = &((CEnemyMarker &)*it->m_penTarget);
       m_iTeleportMarkers ++;

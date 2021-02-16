@@ -291,7 +291,7 @@ functions:
     // create flame
     CEntityPointer penFlame = ShootProjectile(PRT_FLAME, vFlamePos, ANGLE3D(0.0f, 0.0f, 0.0f));
     // link last flame with this one (if not NULL or deleted)
-    if (m_penFlame!=NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
+    if (m_penFlame != NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
       ((CProjectile&)*m_penFlame).m_penParticles = penFlame;
     }
     // link to player weapons
@@ -424,7 +424,7 @@ procedures:
     m_soSound.Stop();
 
     // link last flame with nothing (if not NULL or deleted)
-    if (m_penFlame!=NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
+    if (m_penFlame != NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
       ((CProjectile&)*m_penFlame).m_penParticles = NULL;
       m_penFlame = NULL;
     }
@@ -503,7 +503,7 @@ procedures:
     m_soSound.Stop();
 
     // link last flame with nothing (if not NULL or deleted)
-    if (m_penFlame!=NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
+    if (m_penFlame != NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
       ((CProjectile&)*m_penFlame).m_penParticles = NULL;
       m_penFlame = NULL;
     }

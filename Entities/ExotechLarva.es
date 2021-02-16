@@ -57,7 +57,7 @@ static EntityInfo eiExotechLarva = {
   0.0f, -1.5f, 0.0f,     // target (body)
   };
 
-#define MF_MOVEZ    (1L<<0)
+#define MF_MOVEZ    (1L << 0)
 
 #define LARVA_HANDLE_TRANSLATE 4.4f
 #define FIREPOS_PLASMA_RIGHT  FLOAT3D(+3.08f, -1.20f+LARVA_HANDLE_TRANSLATE, -0.16f)
@@ -73,8 +73,8 @@ static EntityInfo eiExotechLarva = {
 #define PERCENT_RIGHTBLOW   0.6666f
 #define PERCENT_LEFTBLOW    0.3333f
 
-#define ARM_LEFT    (1L<<0)
-#define ARM_RIGHT   (1L<<1)
+#define ARM_LEFT    (1L << 0)
+#define ARM_RIGHT   (1L << 1)
 
 %}
 
@@ -218,11 +218,11 @@ functions:
   }
   
   BOOL DoSafetyChecks(void) {
-    if (m_penMarkerNew==NULL) {
+    if (m_penMarkerNew == NULL) {
       WarningMessage("First ExotechLarva marker not set! Destroying Larva...\n");
       return FALSE;
     }
-    if (m_penRecharger==NULL) {
+    if (m_penRecharger == NULL) {
       WarningMessage("ExotechLarva Recharger target not set! Destroying Larva...\n");
       return FALSE;
     }
@@ -232,7 +232,7 @@ functions:
   void FindNewTarget() {
     
     // if we have a valid enemy, return
-    if (m_penEnemy!=NULL) {
+    if (m_penEnemy != NULL) {
       if (m_penEnemy->GetFlags()&ENF_ALIVE && !(m_penEnemy->GetFlags()&ENF_DELETED)) {
         return;  
       }
@@ -244,9 +244,9 @@ functions:
     
     for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
-      if (penPlayer!=NULL && DistanceTo(this, penPlayer)<200.0f) {
+      if (penPlayer != NULL && DistanceTo(this, penPlayer)<200.0f) {
         // if there is no valid enemy
-        if (penPlayer!=NULL && (penPlayer->GetFlags()&ENF_ALIVE) && 
+        if (penPlayer != NULL && (penPlayer->GetFlags()&ENF_ALIVE) && 
           !(penPlayer->GetFlags()&ENF_DELETED)) {
           m_penEnemy = penPlayer;
         }      
@@ -264,7 +264,7 @@ functions:
     
     for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
-      if (penPlayer!=NULL) {
+      if (penPlayer != NULL) {
         if ((penPlayer->GetFlags()&ENF_ALIVE) && 
             !(penPlayer->GetFlags()&ENF_DELETED) &&
             DistanceTo(this, penPlayer)<fDistance)
@@ -302,7 +302,7 @@ functions:
   void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, BOOL bFadeIn)
   {
     CWorldSettingsController *pwsc = GetWSC();
-    if (pwsc!=NULL) {
+    if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
       pwsc->m_vShakePos = GetPlacement().pl_PositionVector;
       pwsc->m_fShakeFalloff = 450.0f;
@@ -320,7 +320,7 @@ functions:
   }
 
   void ShootTailProjectile(void) {
-	//ShootProjectile(PRT_LARVA_TAIL_PROJECTILE, m_vFirePosTailRel, ANGLE3D(0, -10, 0));
+  //ShootProjectile(PRT_LARVA_TAIL_PROJECTILE, m_vFirePosTailRel, ANGLE3D(0, -10, 0));
     if (m_penEnemy == NULL) { return; }
 
     // target enemy body
@@ -339,7 +339,7 @@ functions:
 
   BOOL IsOnMarker(CEntity *penMarker)  {
     
-    if (penMarker==NULL) { return FALSE; }
+    if (penMarker == NULL) { return FALSE; }
     if (DistanceTo(this, penMarker)<0.1f) { return TRUE; }
     // else
     return FALSE;
@@ -382,12 +382,12 @@ functions:
 
     // preliminary adjustment of damage
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount *= 0.66f;
     }
     // cannonballs inflict less damage then the default
-    if (dmtType==DMT_CANNONBALL)
+    if (dmtType == DMT_CANNONBALL)
     {
       fDamageAmmount *= 0.5f;
     }
@@ -420,7 +420,7 @@ functions:
     }
         
     // if no damage
-    if (fDamageAmmount ==0) {
+    if (fDamageAmmount == 0) {
       // do nothing
       return;
     }
@@ -482,7 +482,7 @@ functions:
     // reduce your health
     en_fHealth-=fDamageAmmount;
     // if health reached zero
-    if (en_fHealth<=0) {
+    if (en_fHealth <= 0) {
       // throw an event that you have died
       EDeath eDeath;
       SendEvent(eDeath);
@@ -603,12 +603,12 @@ functions:
         if (!((*penModel[i]).en_ulFlags&ENF_DELETED)) { 
           // at least one exists
           m_bRechargerExists = TRUE;
-        } else if (m_penRechargerTarget==&*penMarker[i]) {
+        } else if (m_penRechargerTarget == &*penMarker[i]) {
           m_penRechargerTarget=NULL;
           penMarker[i] = NULL;  
         }
       // otherwise make sure it is not the current recharging target
-      } else if (m_penRechargerTarget==&*penMarker[i]) {
+      } else if (m_penRechargerTarget == &*penMarker[i]) {
         m_penRechargerTarget=NULL;
         penMarker[i] = NULL;  
       }
@@ -648,16 +648,16 @@ functions:
         m_penRechargerTarget = m_penRCMarker04;
       }
     }
-    return (m_penRechargerTarget==NULL ? FALSE : TRUE);
+    return (m_penRechargerTarget == NULL ? FALSE : TRUE);
   }*/
 
   void RemoveWing(INDEX iArm) {
     // right arm
-    if (iArm==ARM_RIGHT) {
+    if (iArm == ARM_RIGHT) {
       RemoveAttachmentFromModel(*GetModelObject(), BODY_ATTACHMENT_ARM_RIGHT);
     }
     // left arm
-    if (iArm==ARM_LEFT) {
+    if (iArm == ARM_LEFT) {
       RemoveAttachmentFromModel(*GetModelObject(), BODY_ATTACHMENT_ARM_LEFT);
     }
   }
@@ -677,8 +677,8 @@ functions:
     CEntity *penMarker = m_penMarkerNew;
     CEntity *penTarget;
 
-    if (m_ltTarget==LT_ENEMY && m_penEnemy) { penTarget = m_penEnemy; }
-    else if (m_ltTarget==LT_RECHARGER) { penTarget = m_penRecharger; }
+    if (m_ltTarget == LT_ENEMY && m_penEnemy) { penTarget = m_penEnemy; }
+    else if (m_ltTarget == LT_RECHARGER) { penTarget = m_penRecharger; }
     else { return ulFlags; }
 
     // CPrintF("target = %s at %f\n", penTarget->GetName(), _pTimer->CurrentTick());
@@ -686,7 +686,7 @@ functions:
     if (IsOnMarker(m_penMarkerNew)) {
       PATH_FindNextMarker(penTarget, GetPlacement().pl_PositionVector,
         penTarget->GetPlacement().pl_PositionVector, penMarker, vPos);
-      if (penMarker!=NULL) {
+      if (penMarker != NULL) {
         // remember the old marker
         m_penMarkerOld = m_penMarkerNew;
         // and set the new target
@@ -699,7 +699,7 @@ functions:
       ulFlags |= MF_MOVEZ;
     }
    
-    if (m_ltTarget==LT_ENEMY && DistanceTo(this, penTarget)<m_fStopRadius) {
+    if (m_ltTarget == LT_ENEMY && DistanceTo(this, penTarget)<m_fStopRadius) {
       ForceFullStop();
     }
     
@@ -707,7 +707,7 @@ functions:
   };
 
   void MoveToMarker(CEntity *penMarker) {
-    if (penMarker==NULL) { return; }
+    if (penMarker == NULL) { return; }
     FLOAT3D vDesiredDir = penMarker->GetPlacement().pl_PositionVector -
                    GetPlacement().pl_PositionVector;
     if (vDesiredDir.Length()>0.0f) {
@@ -723,7 +723,7 @@ functions:
     if (m_bActive && !m_bRenderLeftLaser && !m_bRenderRightLaser) {
       
       // rotate to enemy
-      if (m_penEnemy!=NULL) {
+      if (m_penEnemy != NULL) {
         
         FLOAT3D vToEnemy;
         vToEnemy = (m_penEnemy->GetPlacement().pl_PositionVector - 
@@ -837,7 +837,7 @@ functions:
       InflictDirectDamage( crRay1.cr_penHit, this, DMT_BURNING, 25.0f,
           FLOAT3D(0.0f, 0.0f, 0.0f), (m_vFirePosLeftLaserAbs-m_vLeftLaserTarget).Normalize());
       
-      if (crRay1.cr_penHit->GetRenderType()!=RT_BRUSH) {
+      if (crRay1.cr_penHit->GetRenderType() != RT_BRUSH) {
         crRay1.cr_ttHitModels = CCastRay::TT_NONE;
         GetWorld()->ContinueCast(crRay1);
         if (crRay1.cr_penHit != NULL) {
@@ -865,7 +865,7 @@ functions:
       InflictDirectDamage( crRay2.cr_penHit, this, DMT_BURNING, 25.0f,
           FLOAT3D(0.0f, 0.0f, 0.0f), (m_vFirePosRightLaserAbs-m_vRightLaserTarget).Normalize());
 
-      if (crRay2.cr_penHit->GetRenderType()!=RT_BRUSH) {
+      if (crRay2.cr_penHit->GetRenderType() != RT_BRUSH) {
         crRay2.cr_ttHitModels = CCastRay::TT_NONE;
         GetWorld()->ContinueCast(crRay2);
         if (crRay2.cr_penHit != NULL) {
@@ -950,7 +950,7 @@ procedures:
     m_bActive = FALSE;
 
     // right arm
-    if (m_iExplodingArm==ARM_RIGHT) {
+    if (m_iExplodingArm == ARM_RIGHT) {
       MakeRotationMatrixFast(mRot, ANGLE3D(0.0f, 0.0f, 0.0f));
       vPos = FLOAT3D(0.0f, 0.0f, 0.0f);
       GetModelForRendering()->GetAttachmentTransformations(BODY_ATTACHMENT_ARM_RIGHT, mRot, vPos, FALSE);
@@ -968,7 +968,7 @@ procedures:
     }
     
     // left arm
-    if (m_iExplodingArm==ARM_LEFT) {
+    if (m_iExplodingArm == ARM_LEFT) {
       MakeRotationMatrixFast(mRot, ANGLE3D(0.0f, 0.0f, 0.0f));
       vPos = FLOAT3D(0.0f, 0.0f, 0.0f);
       GetModelForRendering()->GetAttachmentTransformations(BODY_ATTACHMENT_ARM_LEFT, mRot, vPos, FALSE);
@@ -989,8 +989,8 @@ procedures:
     m_aExpGunRot = ANGLE3D(FRnd()*360.0f-180.0f, FRnd()*360.0f-180.0f, FRnd()*360.0f-180.0f);
     m_vExpDamage = m_vExpDamage*GetRotationMatrix();
     
-    if (m_iExplodingArm==ARM_RIGHT) { m_bRightArmActive = FALSE; }
-    if (m_iExplodingArm==ARM_LEFT)  { m_bLeftArmActive = FALSE; }
+    if (m_iExplodingArm == ARM_RIGHT) { m_bRightArmActive = FALSE; }
+    if (m_iExplodingArm == ARM_LEFT)  { m_bLeftArmActive = FALSE; }
 
     PlaySound(m_soVoice, SOUND_ARMDESTROY, SOF_3D);
     // spawn explosion #1
@@ -1251,11 +1251,11 @@ procedures:
 
       on (ELarvaRechargePose elrp) :
       {
-        if (elrp.bStart==TRUE && m_bRechargePose!=TRUE) {
+        if (elrp.bStart == TRUE && m_bRechargePose != TRUE) {
           StartModelAnim(BODY_ANIM_TORECHARGING, AOF_SMOOTHCHANGE|AOF_NORESTART);
           SpawnReminder(this, GetModelObject()->GetAnimLength(BODY_ANIM_TORECHARGING), 156);
         }
-        if (elrp.bStart==FALSE && m_bRechargePose!=FALSE) {
+        if (elrp.bStart == FALSE && m_bRechargePose != FALSE) {
           StartModelAnim(BODY_ANIM_FROMRECHARGING, AOF_SMOOTHCHANGE|AOF_NORESTART);
           SpawnReminder(this, GetModelObject()->GetAnimLength(BODY_ANIM_FROMRECHARGING), 157);
         }
@@ -1265,7 +1265,7 @@ procedures:
       on (EReminder er) :
       {
         // if this is not our reminder, pass (although there are no states below this?)
-        if (er.iValue==128) {
+        if (er.iValue == 128) {
           // while recharger is active keep respawning the reminder to return here
           if (RechargerActive()) { 
             SpawnReminder(this, 1.0f, 128);
@@ -1325,12 +1325,12 @@ procedures:
           }
           resume;
         // check to see if guided missile firing is needed
-        } else if (er.iValue==145) {
+        } else if (er.iValue == 145) {
           FindNewTarget();        
           if (AnyPlayerCloserThen(9.0f) && GetHealth()>0.1f*m_fMaxHealth) {
             UpdateFiringPos();
             PlaySound(m_soFire3, SOUND_FIRE_TAIL, SOF_3D);
-				    ShootTailProjectile();
+            ShootTailProjectile();
           }
           else if (m_penEnemy && GetHealth()>0.1f*m_fMaxHealth) {
             if (!IsVisible(m_penEnemy)) {
@@ -1338,38 +1338,38 @@ procedures:
               if (iRnd>4) {
                 UpdateFiringPos();
                 PlaySound(m_soFire3, SOUND_FIRE_TAIL, SOF_3D);
-				        ShootTailProjectile();
+                ShootTailProjectile();
               }
             }
           }
           SpawnReminder(this, 0.5f, 145);
           resume;
         // begin rendering laser
-        } else if (er.iValue==129) {
+        } else if (er.iValue == 129) {
           if (m_bActive && m_bLaserActive) { FireLaser(); }
           SpawnReminder(this, 0.35f, 130);
           resume;
         // explode the laser without turning it off
-        } else if (er.iValue==130) {
+        } else if (er.iValue == 130) {
           if (m_bActive) { ExplodeLaser(); }
           SpawnReminder(this, 0.75f, 131);
           resume;
         // finally stop rendering the laser
-        } else if (er.iValue==131) {
+        } else if (er.iValue == 131) {
           m_bRenderLeftLaser  = FALSE;
           m_bRenderRightLaser = FALSE;
           resume;
         // start charging anim
-        } else if (er.iValue==156) {
+        } else if (er.iValue == 156) {
           m_bRechargePose = TRUE;
           StartModelAnim(BODY_ANIM_RECHARGING, AOF_SMOOTHCHANGE|AOF_LOOPING);
           resume;
         // return to idle anim
-        } else if (er.iValue==157) {
+        } else if (er.iValue == 157) {
           m_bRechargePose = FALSE;
           StartModelAnim(BODY_ANIM_IDLE, AOF_SMOOTHCHANGE|AOF_LOOPING);
         // stop charging anim
-        } else if (er.iValue==160) {
+        } else if (er.iValue == 160) {
           CModelObject &amo = GetModelObject()->GetAttachmentModel(BODY_ATTACHMENT_BACKARMS)->amo_moModelObject;
           amo.PlayAnim(BACKARMS_ANIM_ACTIVE, AOF_SMOOTHCHANGE|AOF_LOOPING);  
           m_bLaserActive = TRUE;

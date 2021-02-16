@@ -71,7 +71,7 @@ components:
 functions:
   const CTString &GetDescription(void) const {
     CTString strAction = PlayerAutoAction_enum.NameForValue(INDEX(m_paaAction));
-    if (m_penTarget==NULL) {
+    if (m_penTarget == NULL) {
       ((CTString&)m_strDescription).PrintF("%s (%s)-><none>", m_strName, strAction);
     } else {
       ((CTString&)m_strDescription).PrintF("%s (%s)->%s", m_strName, strAction, 
@@ -91,7 +91,7 @@ functions:
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     // if triggered
-    if (ee.ee_slEvent==EVENTCODE_ETrigger) {
+    if (ee.ee_slEvent == EVENTCODE_ETrigger) {
       ETrigger &eTrigger = (ETrigger &)ee;
       // if triggered by a player
       if (IsDerivedFromClass(eTrigger.penCaused, "Player")) {

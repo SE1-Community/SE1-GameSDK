@@ -290,7 +290,7 @@ procedures:
             return EReturn();
           }
           // we touched player, explode
-          else if ( IsDerivedFromClass( etouch.penOther, "Player"))
+          else if (IsDerivedFromClass( etouch.penOther, "Player"))
           {            
             InflictDirectDamage(etouch.penOther, this, DMT_IMPACT, 10.0f,
               GetPlacement().pl_PositionVector, -en_vGravityDir);

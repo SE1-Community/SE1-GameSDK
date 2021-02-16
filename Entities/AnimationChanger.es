@@ -63,7 +63,7 @@ components:
 functions:
   const CTString &GetDescription(void) const {
     ((CTString&)m_strDescription).PrintF("-><none>");
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
     }
     return m_strDescription;
@@ -74,7 +74,7 @@ functions:
   {
     CEntity *penTarget = m_penTarget;
 
-    if (penTarget==NULL) {
+    if (penTarget == NULL) {
       return NULL;
     }
 
@@ -82,18 +82,18 @@ functions:
       penTarget = ((CAnimationHub*)penTarget)->m_penTarget0;
     }
 
-    if (penTarget==NULL) {
+    if (penTarget == NULL) {
       return NULL;
     }
 
     // if modelholder
     if (IsOfClass(penTarget, "ModelHolder2")) {
       CModelHolder2 *penModel = (CModelHolder2*)&*penTarget;
-      if (slPropertyOffset==offsetof(CAnimationChanger, m_iModelAnim)) {
+      if (slPropertyOffset == offsetof(CAnimationChanger, m_iModelAnim)) {
         return penModel->GetModelObject()->GetData();
-      } else if (slPropertyOffset==offsetof(CAnimationChanger, m_iTextureAnim)) {
+      } else if (slPropertyOffset == offsetof(CAnimationChanger, m_iTextureAnim)) {
         return penModel->GetModelObject()->mo_toTexture.GetData();
-      } else if (slPropertyOffset==offsetof(CAnimationChanger, m_iLightAnim)) {
+      } else if (slPropertyOffset == offsetof(CAnimationChanger, m_iLightAnim)) {
         return penModel->m_aoLightAnimation.GetData();
       }
 
@@ -101,11 +101,11 @@ functions:
     } else if (IsOfClass(penTarget, "Light")) {
       CLight *penLight = (CLight*)&*penTarget;
 
-      if (slPropertyOffset==offsetof(CAnimationChanger, m_iLightAnim))
+      if (slPropertyOffset == offsetof(CAnimationChanger, m_iLightAnim))
       {
         return penLight->m_aoLightAnimation.GetData();
       }
-      else if (slPropertyOffset==offsetof(CAnimationChanger, m_iAmbientLightAnim))
+      else if (slPropertyOffset == offsetof(CAnimationChanger, m_iAmbientLightAnim))
       {
         return penLight->m_aoAmbientLightAnimation.GetData();
       }
@@ -126,14 +126,14 @@ procedures:
     SetModelMainTexture(TEXTURE_CHANGER);
 
     // check target type
-    if (m_penTarget!=NULL && 
+    if (m_penTarget != NULL && 
       !IsOfClass(m_penTarget, "AnimationHub") &&
       !IsOfClass(m_penTarget, "ModelHolder2") &&
       !IsOfClass(m_penTarget, "Light")) {
       WarningMessage("Target must be AnimationHub ModelHolder2 or Light!");
       m_penTarget=NULL;
     }
-    if (m_penTarget==NULL) {
+    if (m_penTarget == NULL) {
       return;
     }
     

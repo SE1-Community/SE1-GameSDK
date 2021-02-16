@@ -123,7 +123,7 @@ procedures:
     SendToTarget(m_penTarget10, m_eetEvent10, m_penCaused);
 
     // if there is event to send in range
-    if (m_eetRange!=EET_IGNORE) {
+    if (m_eetRange != EET_IGNORE) {
       // send in range also
       SendInRange(this, m_eetRange, FLOATaabbox3D(GetPlacement().pl_PositionVector, m_fSendRange));
     }
@@ -133,7 +133,7 @@ procedures:
       CEntity *penCaused = FixupCausedToPlayer(this, m_penCaused);
 
       // if we have causer
-      if (penCaused!=NULL) {
+      if (penCaused != NULL) {
         // send the score
         EReceiveScore eScore;
         eScore.iPoints = m_fScore;
@@ -144,7 +144,7 @@ procedures:
       // kill score to never be reported again
       m_fScore = 0;
     }
-    if (m_strMessage!="") {
+    if (m_strMessage != "") {
       PrintCenterMessage(this, m_penCaused, 
         TranslateConst(m_strMessage), 
         m_fMessageTime, m_mssMessageSound);

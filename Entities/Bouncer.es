@@ -25,10 +25,10 @@ extern DECL_DLL void JumpFromBouncer(CEntity *penToBounce, CEntity *penBouncer)
   CEntity *pen = penToBounce;
   CBouncer *pbo = (CBouncer *)penBouncer;
   // if it is a movable model and some time has passed from the last jump
-  if ( (pen->GetRenderType()==CEntity::RT_MODEL) &&
+  if ((pen->GetRenderType() == CEntity::RT_MODEL) &&
        (pen->GetPhysicsFlags()&EPF_MOVABLE) ) {
     CMovableEntity *pmen = (CMovableEntity *)pen;
-    if (pmen->en_penReference==NULL) {
+    if (pmen->en_penReference == NULL) {
       return;
     }
     // give it speed

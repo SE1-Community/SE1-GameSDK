@@ -48,7 +48,7 @@ void RemapLevelNames(INDEX &iLevel)
   case 31:  iLevel = 11;  break;
   case 32:  iLevel = 12;  break;
   case 33:  iLevel = 13;  break;
-  default:  iLevel = -1;	break;
+  default:  iLevel = -1;  break;
   }
 }
 
@@ -67,7 +67,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
 
 #if USECUSTOMTEXT
   // if no custom loading text
-  if (_strCustomText=="") {
+  if (_strCustomText == "") {
     // load it
     try {
       _strCustomText.Load_t(CTFILENAME("Data\\LoadingText.txt"));
@@ -82,7 +82,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
   CTimerValue tvNow = _pTimer->GetHighPrecisionTimer();
 
   // if not first or final update, and not enough time passed
-  if (pphi->phi_fCompleted!=0 && pphi->phi_fCompleted!=1 &&
+  if (pphi->phi_fCompleted != 0 && pphi->phi_fCompleted != 1 &&
      (tvNow-tvLast).GetSeconds() < REFRESHTIME) {
     // do nothing
     return;
@@ -91,7 +91,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
 
   // skip if cannot lock drawport
   CDrawPort *pdp = _pdpLoadingHook;                           
-  ASSERT(pdp!=NULL);
+  ASSERT(pdp != NULL);
   CDrawPort dpHook(pdp, TRUE);
   if (!dpHook.Lock()) return;
 
@@ -131,14 +131,14 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
     }
    
     if (iLevel>0) {
-      ulLevelMask|=1<<(iLevel-1);
+      ulLevelMask|=1 << (iLevel-1);
     }
     if (iLevelNext>0) {
-      ulLevelMask|=1<<(iLevelNext-1);
+      ulLevelMask|=1 << (iLevelNext-1);
     }
   }
 
-  if (ulLevelMask!=0 && !_pNetwork->IsPlayingDemo()) {
+  if (ulLevelMask != 0 && !_pNetwork->IsPlayingDemo()) {
     // map hook
     extern void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi);
     RenderMap(&dpHook, ulLevelMask, pphi);

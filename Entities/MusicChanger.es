@@ -69,7 +69,7 @@ procedures:
         // find music holder for this level
         CEntity *penMusicHolder = _pNetwork->GetEntityWithName("MusicHolder", 0);
         // if not existing
-        if (penMusicHolder==NULL) {
+        if (penMusicHolder == NULL) {
           // error
           CPrintF("No MusicHolder on this level, cannot change music!\n");
         // if existing

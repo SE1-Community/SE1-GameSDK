@@ -76,7 +76,7 @@ functions:
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
   {
     CTString str;
-    if (eDeath.eLastDamage.dmtType==DMT_CLOSERANGE) {
+    if (eDeath.eLastDamage.dmtType == DMT_CLOSERANGE) {
       str.PrintF(TRANS("%s was beaten by a Scythian Harpy"), strPlayerName);
     } else {
       str.PrintF(TRANS("A Scythian Harpy got %s spellbound"), strPlayerName);
@@ -143,12 +143,12 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim()==WOMAN_ANIM_AIRDEATH)
+    if (GetModelObject()->GetAnim() == WOMAN_ANIM_AIRDEATH)
     {
       vStretch=FLOAT3D(1,1,2)*1.0f;
       return 0.6f;
     }
-    else if (GetModelObject()->GetAnim()==WOMAN_ANIM_GROUNDDEATH01)
+    else if (GetModelObject()->GetAnim() == WOMAN_ANIM_GROUNDDEATH01)
     {
       vStretch=FLOAT3D(1,1,2)*0.75f;
       return 0.525f;
@@ -269,7 +269,7 @@ functions:
       CEntity *penPlayer;
       for (INDEX i=0; i<ctMaxPlayers; i++) {
         penPlayer=GetPlayerEntity(i);
-        if (penPlayer!=NULL) {
+        if (penPlayer != NULL) {
           if (DistanceTo(this, penPlayer)<m_rKamikazeDropDistance && IsVisible(penPlayer)) {
             DropKamikaze();
           }        

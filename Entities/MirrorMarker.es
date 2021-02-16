@@ -53,7 +53,7 @@ functions:
   {
     mpMirror.mp_ulFlags = MPF_WARP;
     mpMirror.mp_plWarpIn = GetLerpedPlacement();
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       mpMirror.mp_penWarpViewer = m_penTarget;
       mpMirror.mp_plWarpOut = m_penTarget->GetLerpedPlacement();
     } else {
@@ -62,9 +62,9 @@ functions:
     }
     FLOAT tmNow = _pTimer->GetLerpedCurrentTick();
     mpMirror.mp_fWarpFOV = -1.0f;
-    if (m_wrRotation==WR_BANKING) {
+    if (m_wrRotation == WR_BANKING) {
       mpMirror.mp_plWarpOut.Rotate_Airplane(ANGLE3D(0,0,m_fRotationSpeed*tmNow));
-    } else if (m_wrRotation==WR_TWIRLING) {
+    } else if (m_wrRotation == WR_TWIRLING) {
       ANGLE3D a;
       a(1) = sin(tmNow*3.9)*5.0f;
       a(2) = sin(tmNow*2.7)*5.0f;
@@ -81,7 +81,7 @@ procedures:
     SetCollisionFlags(ECF_IMMATERIAL);
 
     // set appearance
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       SetModel(MODEL_IN);
       SetModelMainTexture(TEXTURE_IN);
     } else {
@@ -90,7 +90,7 @@ procedures:
     }
 
     // set name
-    if (m_strName=="Marker") {
+    if (m_strName == "Marker") {
       m_strName = "Mirror marker";
     }
     return;

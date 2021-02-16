@@ -52,7 +52,7 @@ functions:
 
   class CEnemyBase *GetOwner(void)
   {
-    ASSERT(m_penOwner!=NULL);
+    ASSERT(m_penOwner != NULL);
     return (CEnemyBase*)&*m_penOwner;
   }
 
@@ -65,13 +65,13 @@ functions:
     // find actual number of players
     INDEX ctActivePlayers = 0;
     {for (INDEX i=0; i<ctMaxPlayers; i++) {
-      if (GetPlayerEntity(i)!=NULL) {
+      if (GetPlayerEntity(i) != NULL) {
         ctActivePlayers++;
       }
     }}
 //    CPrintF("active players %d, ", ctActivePlayers);
     // if none
-    if (ctActivePlayers==0) {
+    if (ctActivePlayers == 0) {
       // return first index anyway
       return 0;
     }
@@ -84,8 +84,8 @@ functions:
     // find its physical index
     INDEX iActivePlayer = 0;
     {for (INDEX i=0; i<ctMaxPlayers; i++) {
-      if (GetPlayerEntity(i)!=NULL) {
-        if (iActivePlayer==iChosenActivePlayer) {
+      if (GetPlayerEntity(i) != NULL) {
+        if (iActivePlayer == iChosenActivePlayer) {
 //          CPrintF("actual index %d\n", iActivePlayer);
           return i;
         }
@@ -105,7 +105,7 @@ functions:
     for (INDEX iPlayer=0; iPlayer<GetMaxPlayers(); iPlayer++) {
       CEntity *penPlayer = GetPlayerEntity(iPlayer);
       // if player is alive and visible
-      if (penPlayer!=NULL && penPlayer->GetFlags()&ENF_ALIVE && !(penPlayer->GetFlags()&ENF_INVISIBLE)) {
+      if (penPlayer != NULL && penPlayer->GetFlags()&ENF_ALIVE && !(penPlayer->GetFlags()&ENF_INVISIBLE)) {
         // calculate distance to player
         FLOAT fDistance = 
           (penPlayer->GetPlacement().pl_PositionVector-m_penOwner->GetPlacement().pl_PositionVector).Length();
@@ -117,7 +117,7 @@ functions:
       }
     }
     // if no players found
-    if (penClosestPlayer==NULL) {
+    if (penClosestPlayer == NULL) {
       // behave as if very close - must check for new ones
       fClosestPlayer = 10.0f;
     }
@@ -149,12 +149,12 @@ functions:
     INDEX iFirstChecked = m_iPlayerToCheck;
     FOREVER {
       penPlayer = GetPlayerEntity(m_iPlayerToCheck);
-      if (penPlayer!=NULL) {
+      if (penPlayer != NULL) {
         break;
       }
       m_iPlayerToCheck++;
       m_iPlayerToCheck%=ctPlayers;
-      if (m_iPlayerToCheck==iFirstChecked) {
+      if (m_iPlayerToCheck == iFirstChecked) {
         return; // we get here if there are no players at all
       }
     }
@@ -182,7 +182,7 @@ functions:
     FLOAT fNearDistance = Min(GetOwner()->m_fStopDistance, GetOwner()->m_fCloseDistance);
 
     // if closer than near distance
-    if (m_fClosestPlayer<=fNearDistance) {
+    if (m_fClosestPlayer <= fNearDistance) {
       // always use minimum delay
       m_tmDelay = tmMinDelay;
     // if further than near distance
@@ -208,11 +208,11 @@ functions:
     FLOAT fStopDistance  = Max(fSeeDistance*1.5f, GetOwner()->m_fActivityRange);
 
     // if players exited enemy's scope
-    if (fOrgDistance<fStopDistance && m_fClosestPlayer>=fStopDistance) {
+    if (fOrgDistance<fStopDistance && m_fClosestPlayer >= fStopDistance) {
       // stop owner
       m_penOwner->SendEvent(EStop());
     // if players entered enemy's scope
-    } else if (fOrgDistance>=fStopDistance && m_fClosestPlayer<fStopDistance) {
+    } else if (fOrgDistance >= fStopDistance && m_fClosestPlayer<fStopDistance) {
       // start owner
       m_penOwner->SendEvent(EStart());
     }
@@ -225,7 +225,7 @@ functions:
 
     // if the closest player is inside sense range
     FLOAT fSenseRange = GetOwner()->m_fSenseRange;
-    if (penClosest!=NULL && fSenseRange>0 && m_fClosestPlayer<fSenseRange) {
+    if (penClosest != NULL && fSenseRange>0 && m_fClosestPlayer<fSenseRange) {
       // detect it immediately
       SendWatchEvent(penClosest);
     }
@@ -251,7 +251,7 @@ functions:
     // for all other players
     for (INDEX iPlayer=0; iPlayer<GetMaxPlayers(); iPlayer++) {
       CEntity *penPlayer = GetPlayerEntity(iPlayer);
-      if (penPlayer==NULL || penPlayer==penCurrentTarget) {
+      if (penPlayer == NULL || penPlayer == penCurrentTarget) {
         continue;
       }
       // if player is alive and visible
@@ -276,7 +276,7 @@ functions:
   CEntity *CheckAnotherPlayer(CEntity *penCurrentTarget)
   {
     // if the owner is blind, or no current target
-    if (GetOwner()->m_bBlind || penCurrentTarget==NULL) {
+    if (GetOwner()->m_bBlind || penCurrentTarget == NULL) {
       // don't even check
       return NULL;
     }
@@ -294,7 +294,7 @@ functions:
     INDEX ctPlayers = GetMaxPlayers();
     for (INDEX iPlayer=0; iPlayer<ctPlayers; iPlayer++) {
       CEntity *penPlayer = GetPlayerEntity((iPlayer+iOffset)%ctPlayers);
-      if (penPlayer==NULL || penPlayer==penCurrentTarget) {
+      if (penPlayer == NULL || penPlayer == penCurrentTarget) {
         continue;
       }
       // if player is alive and visible
@@ -365,7 +365,7 @@ procedures:
 
   Main(EWatcherInit eInit) {
     // remember the initial parameters
-    ASSERT(eInit.penOwner!=NULL);
+    ASSERT(eInit.penOwner != NULL);
     m_penOwner = eInit.penOwner;
 
     // init as nothing

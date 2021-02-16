@@ -143,7 +143,7 @@ procedures:
     m_colCentralColor = eSpawn.colCentralColor;
 
     // if owner doesn't exist (could be destroyed in initialization)
-    if (eSpawn.penOwner==NULL || eSpawn.penOwner->en_pmoModelObject == NULL)
+    if (eSpawn.penOwner == NULL || eSpawn.penOwner->en_pmoModelObject == NULL)
     {
       // don't do anything
       Destroy();
@@ -169,7 +169,7 @@ procedures:
     }
 
     FLOAT fWaitTime = 4.0f;
-    if (m_sptType==SPT_ELECTRICITY_SPARKS || m_sptType==SPT_ELECTRICITY_SPARKS_NO_BLOOD)
+    if (m_sptType == SPT_ELECTRICITY_SPARKS || m_sptType == SPT_ELECTRICITY_SPARKS_NO_BLOOD)
     {
       fWaitTime = 4.0f;
     }

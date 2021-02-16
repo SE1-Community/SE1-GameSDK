@@ -37,12 +37,12 @@ functions:
   // Validate offered target for one property
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if (penTarget==NULL)
+    if (penTarget == NULL)
     {
       return FALSE;
     }
     // if gradient marker
-    if (slPropertyOffset==offsetof(CBackgroundViewer, m_penWorldSettingsController))
+    if (slPropertyOffset == offsetof(CBackgroundViewer, m_penWorldSettingsController))
     {
       return IsOfClass(penTarget, "WorldSettingsController");
     }
@@ -70,7 +70,7 @@ procedures:
     SetModelMainTexture(TEXTURE_MARKER);
 
     // set name
-    if (m_strName=="Marker") {
+    if (m_strName == "Marker") {
       m_strName = "Background Viewer";
     }
 

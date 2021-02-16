@@ -67,14 +67,14 @@ procedures:
           }
 
           CEntity *penVictim = NULL;
-          if (m_penToDamage!=NULL) {
+          if (m_penToDamage != NULL) {
             penVictim = m_penToDamage;
-          } else if (eTrigger.penCaused!=NULL) {
+          } else if (eTrigger.penCaused != NULL) {
             penVictim = eTrigger.penCaused;
           }
  
-          if (penVictim!=NULL) {
-            if (!(penVictim==m_penLastDamaged && _pTimer->CurrentTick()<m_tmLastDamage+0.1f))
+          if (penVictim != NULL) {
+            if (!(penVictim == m_penLastDamaged && _pTimer->CurrentTick()<m_tmLastDamage+0.1f))
             {
             InflictDirectDamage(penVictim, penInflictor,  m_dmtType, m_fAmmount, 
               penVictim->GetPlacement().pl_PositionVector, FLOAT3D(0.0f, 1.0f, 0.0f));

@@ -60,7 +60,7 @@ functions:
     }
     FLOAT tmNow = _pTimer->CurrentTick();
 
-    if (ee.ee_slEvent==EVENTCODE_EActivate)
+    if (ee.ee_slEvent == EVENTCODE_EActivate)
     {
       switch (m_bctType)
       {
@@ -88,7 +88,7 @@ functions:
           break;
       }
     }
-    else if (ee.ee_slEvent==EVENTCODE_EDeactivate)
+    else if (ee.ee_slEvent == EVENTCODE_EDeactivate)
     {
       switch (m_bctType)
       {

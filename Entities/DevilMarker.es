@@ -70,7 +70,7 @@ functions:
 
   const CTString &GetDescription(void) const {
     CTString strAction = DevilActionType_enum.NameForValue(INDEX(m_datType));
-    if (m_penTarget==NULL) {
+    if (m_penTarget == NULL) {
       ((CTString&)m_strDescription).PrintF("%s (%s)-><none>", m_strName, strAction);
     } else {
       ((CTString&)m_strDescription).PrintF("%s (%s)->%s", m_strName, strAction, 
@@ -94,9 +94,9 @@ functions:
   /* Handle an event, return false if the event is not handled. */
   BOOL HandleEvent(const CEntityEvent &ee)
   {
-    if (ee.ee_slEvent==EVENTCODE_ETrigger)
+    if (ee.ee_slEvent == EVENTCODE_ETrigger)
     {
-      if (m_datType==DAT_NEXT_ACTION && m_penDevil!=NULL && m_penTarget!=NULL)
+      if (m_datType == DAT_NEXT_ACTION && m_penDevil != NULL && m_penTarget != NULL)
       {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_FORCE_ACTION;
@@ -104,21 +104,21 @@ functions:
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
       }
-      else if (m_datType==DAT_GRAB_LOWER_WEAPONS && m_penDevil!=NULL)
+      else if (m_datType == DAT_GRAB_LOWER_WEAPONS && m_penDevil != NULL)
       {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_GRAB_LOWER_WEAPONS;
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
       }
-      else if (m_datType==DAT_STOP_MOVING && m_penDevil!=NULL)
+      else if (m_datType == DAT_STOP_MOVING && m_penDevil != NULL)
       {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_STOP_MOVING;
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
       }
-      else if (m_datType==DAT_JUMP_INTO_PYRAMID && m_penDevil!=NULL)
+      else if (m_datType == DAT_JUMP_INTO_PYRAMID && m_penDevil != NULL)
       {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_JUMP_INTO_PYRAMID;
@@ -126,7 +126,7 @@ functions:
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
       }
-      else if (m_datType==DAT_TELEPORT_INTO_PYRAMID && m_penDevil!=NULL)
+      else if (m_datType == DAT_TELEPORT_INTO_PYRAMID && m_penDevil != NULL)
       {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_TELEPORT_INTO_PYRAMID;
@@ -134,7 +134,7 @@ functions:
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
       }
-      else if (m_datType==DAT_FORCE_ATTACK_RADIUS && m_penDevil!=NULL)
+      else if (m_datType == DAT_FORCE_ATTACK_RADIUS && m_penDevil != NULL)
       {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_FORCE_ATTACK_RADIUS;
@@ -143,7 +143,7 @@ functions:
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
       }
-      else if (m_datType==DAT_DECREASE_ATTACK_RADIUS && m_penDevil!=NULL)
+      else if (m_datType == DAT_DECREASE_ATTACK_RADIUS && m_penDevil != NULL)
       {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_DECREASE_ATTACK_RADIUS;

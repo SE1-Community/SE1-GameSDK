@@ -69,7 +69,7 @@ procedures:
 
   ResetTimeStretch(EVoid)
   {
-    if (_pNetwork->GetRealTimeFactor()==1) {return EReturn(); };
+    if (_pNetwork->GetRealTimeFactor() == 1) {return EReturn(); };
     m_fOldTimeStretch=_pNetwork->GetRealTimeFactor();
     m_fNewTimeStretch=1.0f;
     autocall ChangeTimeStretch(EVoid()) EReturn;

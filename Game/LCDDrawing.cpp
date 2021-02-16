@@ -129,10 +129,10 @@ extern void LCDRenderClouds1(void)
   MEXaabbox2D boxBcgClouds1;
   TiledTexture(_boxScreen, 1.3f*_pdp->GetWidth()/640.0f, 
     MEX2D(sin(_tmNow*0.75f)*50,sin(_tmNow*0.9f)*40),   boxBcgClouds1);
-  _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds1, C_dGREEN|_ulA>>1);
+  _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds1, C_dGREEN|_ulA >> 1);
   TiledTexture(_boxScreen, 0.8f*_pdp->GetWidth()/640.0f, 
     MEX2D(sin(_tmNow*0.95f)*50,sin(_tmNow*0.8f)*40),   boxBcgClouds1);
-  _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds1, C_dGREEN|_ulA>>1);
+  _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds1, C_dGREEN|_ulA >> 1);
 }
 
 extern void LCDRenderClouds2(void)
@@ -140,7 +140,7 @@ extern void LCDRenderClouds2(void)
   MEXaabbox2D boxBcgClouds2;
   TiledTexture(_boxScreen, 0.5f*_pdp->GetWidth()/640.0f,
     MEX2D(2,10), boxBcgClouds2);
-  _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds2, C_BLACK|(_ulA>>1));
+  _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds2, C_BLACK|(_ulA >> 1));
 }
 
 extern void LCDRenderClouds2Light(void)
@@ -148,7 +148,7 @@ extern void LCDRenderClouds2Light(void)
   MEXaabbox2D boxBcgClouds2;
   TiledTexture(_boxScreen, 1.7f*_pdp->GetWidth()/640.0f,
     MEX2D(2,10), boxBcgClouds2);
-  _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds2, C_BLACK|(_ulA>>1));
+  _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds2, C_BLACK|(_ulA >> 1));
 }
 
 extern void LCDRenderGrid(void)
@@ -165,22 +165,22 @@ extern void LCDRenderClouds1(void)
   MEXaabbox2D boxBcgClouds2 = MEXaabbox2D(MEX2D(0,0), MEX2D(512,256));
   boxBcgClouds1 += MEX2D( sin(_tmNow*0.45f)*50, sin(_tmNow*0.65f)*40);
   boxBcgClouds2 += MEX2D( sin(_tmNow*0.55f)*50, sin(_tmNow*0.35f)*40);
-  _pdp->PutTexture( &_toBcgClouds, _boxScreen, boxBcgClouds1, C_dGREEN|(_ulA>>1));
-  _pdp->PutTexture( &_toBcgClouds, _boxScreen, boxBcgClouds2, C_dGREEN|(_ulA>>1));
+  _pdp->PutTexture( &_toBcgClouds, _boxScreen, boxBcgClouds1, C_dGREEN|(_ulA >> 1));
+  _pdp->PutTexture( &_toBcgClouds, _boxScreen, boxBcgClouds2, C_dGREEN|(_ulA >> 1));
 }
 
 extern void LCDRenderClouds2(void)
 {
   MEXaabbox2D boxBcgClouds = MEXaabbox2D(MEX2D(0,0), MEX2D(512,512));
   boxBcgClouds += MEX2D(2,10);
-  _pdp->PutTexture( &_toBcgClouds, _boxScreen, boxBcgClouds, C_BLACK|(_ulA>>1));
+  _pdp->PutTexture( &_toBcgClouds, _boxScreen, boxBcgClouds, C_BLACK|(_ulA >> 1));
 }
 
 extern void LCDRenderClouds2Light(void)
 {
   MEXaabbox2D boxBcgClouds2;
   TiledTexture( _boxScreen, 1.3f, MEX2D(2,10), boxBcgClouds2);
-  _pdp->PutTexture( &_toBcgClouds, _boxScreen, boxBcgClouds2, C_BLACK|(_ulA>>1));
+  _pdp->PutTexture( &_toBcgClouds, _boxScreen, boxBcgClouds2, C_BLACK|(_ulA >> 1));
 }
 
 extern void LCDRenderGrid(void)
@@ -193,7 +193,7 @@ extern void LCDRenderGrid(void)
 
 extern COLOR LCDGetColor(COLOR colDefault, const char *strName)
 {
-  return colDefault;//||((colDefault&0xFF0000)<<8);
+  return colDefault;//||((colDefault&0xFF0000) << 8);
 }
 
 extern COLOR LCDFadedColor(COLOR col)

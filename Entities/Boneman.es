@@ -89,7 +89,7 @@ functions:
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
   {
     CTString str;
-    if (eDeath.eLastDamage.dmtType==DMT_CLOSERANGE) {
+    if (eDeath.eLastDamage.dmtType == DMT_CLOSERANGE) {
       str.PrintF(TRANS("%s was ripped apart by a Kleer"), strPlayerName);
     } else {
       str.PrintF(TRANS("%s was killed by a Kleer"), strPlayerName);
@@ -152,12 +152,12 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim()==BONEMAN_ANIM_DEATHTOBACK)
+    if (GetModelObject()->GetAnim() == BONEMAN_ANIM_DEATHTOBACK)
     {
       vStretch=FLOAT3D(1,1,2)*1.0f;
       return 0.48f;
     }
-    else if (GetModelObject()->GetAnim()==BONEMAN_ANIM_DEATHTOFRONT)
+    else if (GetModelObject()->GetAnim() == BONEMAN_ANIM_DEATHTOFRONT)
     {
       vStretch=FLOAT3D(1,1,2)*0.75f;
       return 0.48f;
@@ -399,7 +399,7 @@ procedures:
     m_fBodyParts = 4;
     m_fDamageWounded = 80.0f;
     m_iScore = 1000;
-    if (m_fStepHeight==-1) {
+    if (m_fStepHeight == -1) {
       m_fStepHeight = 4.0f;
     }
 

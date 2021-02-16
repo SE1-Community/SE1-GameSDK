@@ -68,7 +68,7 @@ functions:
     }
 
     // if never picked
-    if (m_ulPickedMask==0) {
+    if (m_ulPickedMask == 0) {
       // don't bother testing
       return;
     }
@@ -116,8 +116,8 @@ functions:
       return FALSE;
     }
     INDEX iPlayer = ((CPlayerEntity*)pen)->GetMyPlayerIndex();
-    BOOL bPickedAlready = (1<<iPlayer)&m_ulPickedMask;
-    m_ulPickedMask |= (1<<iPlayer);
+    BOOL bPickedAlready = (1 << iPlayer)&m_ulPickedMask;
+    m_ulPickedMask |= (1 << iPlayer);
     return bPickedAlready;
   }
 

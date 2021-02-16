@@ -125,7 +125,7 @@ procedures:
     m_strDescription.PrintF("%s", (CTString&)m_fnSound.FileName());
 
     // wait for a while to play sound -> Sound Can Be Spawned 
-    if (_pTimer->CurrentTick()<=0.1f)
+    if (_pTimer->CurrentTick() <= 0.1f)
     {
       autowait(0.5f);
     }

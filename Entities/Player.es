@@ -58,7 +58,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern void JumpFromBouncer(CEntity *penToBounce, CEntity *penBouncer);
 // from game
-#define GRV_SHOWEXTRAS  (1L<<0)   // add extra stuff like console, weapon, pause
+#define GRV_SHOWEXTRAS  (1L << 0)   // add extra stuff like console, weapon, pause
 
 #define GENDER_MALE     0
 #define GENDER_FEMALE   1
@@ -123,8 +123,8 @@ BOOL _bDiscard3rdView=FALSE;
 const FLOAT _fBlowUpAmmount = 70.0f;
 
 // computer message adding flags
-#define CMF_READ       (1L<<0)
-#define CMF_ANALYZE    (1L<<1)
+#define CMF_READ       (1L << 0)
+#define CMF_ANALYZE    (1L << 1)
 
 struct MarkerDistance {
 public:
@@ -141,9 +141,9 @@ int qsort_CompareMarkerDistance(const void *pv0, const void *pv1)
 {
   MarkerDistance &md0 = *(MarkerDistance*)pv0;
   MarkerDistance &md1 = *(MarkerDistance*)pv1;
-  if (     md0.md_fMinD<md1.md_fMinD) return +1;
+  if (md0.md_fMinD<md1.md_fMinD) return +1;
   else if (md0.md_fMinD>md1.md_fMinD) return -1;
-  else                                return  0;
+  else                                return 0;
 }
 
 static inline FLOAT IntensityAtDistance( FLOAT fFallOff, FLOAT fHotSpot, FLOAT fDistance)
@@ -227,7 +227,7 @@ static void KillAllEnemies(CEntity *penKiller)
     CEntity *pen = iten;
     if (IsDerivedFromClass(pen, "Enemy Base") && !IsOfClass(pen, "Devil")) {
       CEnemyBase *penEnemy = (CEnemyBase *)pen;
-      if (penEnemy->m_penEnemy==NULL) {
+      if (penEnemy->m_penEnemy == NULL) {
         continue;
       }
       penKiller->InflictDirectDamage(pen, penKiller, DMT_BULLET, 
@@ -242,36 +242,36 @@ static void KillAllEnemies(CEntity *penKiller)
 #define BANKING_MAX      45.0f
 
 // player flags
-#define PLF_INITIALIZED           (1UL<<0)   // set when player entity is ready to function
-#define PLF_VIEWROTATIONCHANGED   (1UL<<1)   // for adjusting view rotation separately from legs
-#define PLF_JUMPALLOWED           (1UL<<2)   // if jumping is allowed
-#define PLF_SYNCWEAPON            (1UL<<3)   // weapon model needs to be synchronized before rendering
-#define PLF_AUTOMOVEMENTS         (1UL<<4)   // complete automatic control of movements
-#define PLF_DONTRENDER            (1UL<<5)   // don't render view (used at end of level)
-#define PLF_CHANGINGLEVEL         (1UL<<6)   // mark that we next are to appear at start of new level
-#define PLF_APPLIEDACTION         (1UL<<7)   // used to detect when player is not connected
-#define PLF_NOTCONNECTED          (1UL<<8)   // set if the player is not connected
-#define PLF_LEVELSTARTED          (1UL<<9)   // marks that level start time was recorded
-#define PLF_ISZOOMING             (1UL<<10)  // marks that player is zoomed in with the sniper
-#define PLF_RESPAWNINPLACE        (1UL<<11)  // don't move to marker when respawning (for current death only)
+#define PLF_INITIALIZED           (1UL << 0)   // set when player entity is ready to function
+#define PLF_VIEWROTATIONCHANGED   (1UL << 1)   // for adjusting view rotation separately from legs
+#define PLF_JUMPALLOWED           (1UL << 2)   // if jumping is allowed
+#define PLF_SYNCWEAPON            (1UL << 3)   // weapon model needs to be synchronized before rendering
+#define PLF_AUTOMOVEMENTS         (1UL << 4)   // complete automatic control of movements
+#define PLF_DONTRENDER            (1UL << 5)   // don't render view (used at end of level)
+#define PLF_CHANGINGLEVEL         (1UL << 6)   // mark that we next are to appear at start of new level
+#define PLF_APPLIEDACTION         (1UL << 7)   // used to detect when player is not connected
+#define PLF_NOTCONNECTED          (1UL << 8)   // set if the player is not connected
+#define PLF_LEVELSTARTED          (1UL << 9)   // marks that level start time was recorded
+#define PLF_ISZOOMING             (1UL << 10)  // marks that player is zoomed in with the sniper
+#define PLF_RESPAWNINPLACE        (1UL << 11)  // don't move to marker when respawning (for current death only)
 
 // defines representing flags used to fill player buttoned actions
-#define PLACT_FIRE                (1L<<0)
-#define PLACT_RELOAD              (1L<<1)
-#define PLACT_WEAPON_NEXT         (1L<<2)
-#define PLACT_WEAPON_PREV         (1L<<3)
-#define PLACT_WEAPON_FLIP         (1L<<4)
-#define PLACT_USE                 (1L<<5)
-#define PLACT_COMPUTER            (1L<<6)
-#define PLACT_3RD_PERSON_VIEW     (1L<<7)
-#define PLACT_CENTER_VIEW         (1L<<8)
-#define PLACT_USE_HELD            (1L<<9)
-#define PLACT_SNIPER_ZOOMIN       (1L<<10)
-#define PLACT_SNIPER_ZOOMOUT      (1L<<11)
-#define PLACT_SNIPER_USE          (1L<<12)
-#define PLACT_FIREBOMB            (1L<<13)
+#define PLACT_FIRE                (1L << 0)
+#define PLACT_RELOAD              (1L << 1)
+#define PLACT_WEAPON_NEXT         (1L << 2)
+#define PLACT_WEAPON_PREV         (1L << 3)
+#define PLACT_WEAPON_FLIP         (1L << 4)
+#define PLACT_USE                 (1L << 5)
+#define PLACT_COMPUTER            (1L << 6)
+#define PLACT_3RD_PERSON_VIEW     (1L << 7)
+#define PLACT_CENTER_VIEW         (1L << 8)
+#define PLACT_USE_HELD            (1L << 9)
+#define PLACT_SNIPER_ZOOMIN       (1L << 10)
+#define PLACT_SNIPER_ZOOMOUT      (1L << 11)
+#define PLACT_SNIPER_USE          (1L << 12)
+#define PLACT_FIREBOMB            (1L << 13)
 #define PLACT_SELECT_WEAPON_SHIFT (14)
-#define PLACT_SELECT_WEAPON_MASK  (0x1FL<<PLACT_SELECT_WEAPON_SHIFT)
+#define PLACT_SELECT_WEAPON_MASK  (0x1FL << PLACT_SELECT_WEAPON_SHIFT)
                                      
 #define MAX_WEAPONS 30
 
@@ -346,7 +346,7 @@ extern FLOAT cht_fTranslationMultiplier = 1.0f;
 extern INDEX cht_bEnable     = 0;   
 
 // interface control
-static INDEX hud_bShowAll	    = TRUE; // used internaly in menu/console
+static INDEX hud_bShowAll      = TRUE; // used internaly in menu/console
 extern INDEX hud_bShowWeapon  = TRUE;
 extern INDEX hud_bShowMessages = TRUE;
 extern INDEX hud_bShowInfo    = TRUE;
@@ -426,9 +426,9 @@ static FLOAT ctl_fButtonRotationSpeedB = 150.0f;
 // modifier for axis strafing
 static FLOAT ctl_fAxisStrafingModifier = 1.0f;
 
-// !=NULL if some player wants to call computer
+// != NULL if some player wants to call computer
 DECL_DLL extern class CPlayer *cmp_ppenPlayer = NULL;
-// !=NULL for rendering computer on secondary display in dualhead
+// != NULL for rendering computer on secondary display in dualhead
 DECL_DLL extern class CPlayer *cmp_ppenDHPlayer = NULL;
 // set to update current message in background mode (for dualhead)
 DECL_DLL extern BOOL cmp_bUpdateInBackground = FALSE;
@@ -476,13 +476,13 @@ DECL_DLL void ctl_ComposeActionPacket(const CPlayerCharacter &pc, CPlayerAction 
   INDEX ctPlayers = CEntity::GetMaxPlayers();
   for (INDEX iPlayer = 0; iPlayer<ctPlayers; iPlayer++) {
     CPlayer *pen=(CPlayer *)CEntity::GetPlayerEntity(iPlayer);
-    if (pen!=NULL && pen->en_pcCharacter==pc) {
+    if (pen != NULL && pen->en_pcCharacter == pc) {
       penThis = pen;
       break;
     }
   }
   // if not found
-  if (penThis==NULL) {
+  if (penThis == NULL) {
     // do nothing
     return;
   }
@@ -539,7 +539,7 @@ DECL_DLL void ctl_ComposeActionPacket(const CPlayerCharacter &pc, CPlayerAction 
   // set weapon selection bits
   for (INDEX i=1; i<MAX_WEAPONS; i++) {
     if (pctlCurrent.bSelectWeapon[i]) {
-      paAction.pa_ulButtons = i<<PLACT_SELECT_WEAPON_SHIFT;
+      paAction.pa_ulButtons = i << PLACT_SELECT_WEAPON_SHIFT;
       break;
     }
   }
@@ -562,7 +562,7 @@ DECL_DLL void ctl_ComposeActionPacket(const CPlayerCharacter &pc, CPlayerAction 
   // if userorcomp just pressed
   if (pctlCurrent.bUseOrComputer && !pctlCurrent.bUseOrComputerLast) {
     // if double-click is off
-    if (ctl_tmComputerDoubleClick==0 || (pps->ps_ulFlags&PSF_COMPSINGLECLICK)) {
+    if (ctl_tmComputerDoubleClick == 0 || (pps->ps_ulFlags&PSF_COMPSINGLECLICK)) {
       // press both
       paAction.pa_ulButtons |= PLACT_USE|PLACT_COMPUTER;
     // if double-click is on
@@ -857,7 +857,7 @@ CTString GetDifficultyString(void)
 
 FLOAT MaxArmor(void)
 {
-  if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+  if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
     return 300;
   } else {
     return 200;
@@ -865,7 +865,7 @@ FLOAT MaxArmor(void)
 }
 FLOAT TopArmor(void)
 {
-  if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+  if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
     return 200;
   } else {
     return 100;
@@ -873,7 +873,7 @@ FLOAT TopArmor(void)
 }
 FLOAT MaxHealth(void)
 {
-  if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+  if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
     return 300;
   } else {
     return 200;
@@ -881,7 +881,7 @@ FLOAT MaxHealth(void)
 }
 FLOAT TopHealth(void)
 {
-  if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+  if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
     return 200;
   } else {
     return 100;
@@ -931,26 +931,26 @@ void PrintPlayerDeathMessage(CPlayer *ppl, const EDeath &eDeath)
   CTString strMyName = ppl->GetPlayerName();
   CEntity *penKiller = eDeath.eLastDamage.penInflictor;
   // if killed by a valid entity
-  if (penKiller!=NULL) {
+  if (penKiller != NULL) {
     // if killed by a player
     if (IsOfClass(penKiller, "Player")) {
       // if not self
-      if (penKiller!=ppl) {
+      if (penKiller != ppl) {
         CTString strKillerName = ((CPlayer*)penKiller)->GetPlayerName();
 
-        if (eDeath.eLastDamage.dmtType==DMT_TELEPORT) {
+        if (eDeath.eLastDamage.dmtType == DMT_TELEPORT) {
           CPrintF(TRANS("%s telefragged %s\n"), strKillerName, strMyName);
-        } else if (eDeath.eLastDamage.dmtType==DMT_CLOSERANGE) {
+        } else if (eDeath.eLastDamage.dmtType == DMT_CLOSERANGE) {
           CPrintF(TRANS("%s cut %s into pieces\n"), strKillerName, strMyName);
-        } else if (eDeath.eLastDamage.dmtType==DMT_CHAINSAW) {
+        } else if (eDeath.eLastDamage.dmtType == DMT_CHAINSAW) {
           CPrintF(TRANS("%s cut %s into pieces\n"), strKillerName, strMyName);
-        } else if (eDeath.eLastDamage.dmtType==DMT_BULLET) {
+        } else if (eDeath.eLastDamage.dmtType == DMT_BULLET) {
           CPrintF(TRANS("%s poured lead into %s\n"), strKillerName, strMyName);
-        } else if (eDeath.eLastDamage.dmtType==DMT_PROJECTILE || eDeath.eLastDamage.dmtType==DMT_EXPLOSION) {
+        } else if (eDeath.eLastDamage.dmtType == DMT_PROJECTILE || eDeath.eLastDamage.dmtType == DMT_EXPLOSION) {
           CPrintF(TRANS("%s blew %s away\n"), strKillerName, strMyName);
-        } else if (eDeath.eLastDamage.dmtType==DMT_CANNONBALL) {
+        } else if (eDeath.eLastDamage.dmtType == DMT_CANNONBALL) {
           CPrintF(TRANS("%s smashed %s with a cannon\n"), strKillerName, strMyName);
-        } else if (eDeath.eLastDamage.dmtType==DMT_CANNONBALL_EXPLOSION) {
+        } else if (eDeath.eLastDamage.dmtType == DMT_CANNONBALL_EXPLOSION) {
           CPrintF(TRANS("%s nuked %s\n"), strKillerName, strMyName);
         } else {
           CPrintF(TRANS("%s killed %s\n"), strKillerName, strMyName);
@@ -972,7 +972,7 @@ void PrintPlayerDeathMessage(CPlayer *ppl, const EDeath &eDeath)
     // if killed by an enemy
     } else if (IsDerivedFromClass(penKiller, "Enemy Base")) {
       // check for telefrag first
-      if (eDeath.eLastDamage.dmtType==DMT_TELEPORT) {
+      if (eDeath.eLastDamage.dmtType == DMT_TELEPORT) {
         CPrintF(TRANS("%s was telefragged\n"), strMyName);
         return;
       }
@@ -1389,12 +1389,12 @@ functions:
 
   class CPlayerWeapons *GetPlayerWeapons(void)
   {
-    ASSERT(m_penWeapons!=NULL);
+    ASSERT(m_penWeapons != NULL);
     return (CPlayerWeapons *)&*m_penWeapons;
   }
   class CPlayerAnimator *GetPlayerAnimator(void)
   {
-    ASSERT(m_penAnimator!=NULL);
+    ASSERT(m_penAnimator != NULL);
     return (CPlayerAnimator *)&*m_penAnimator;
   }
 
@@ -1524,7 +1524,7 @@ functions:
     // save array of messages
     ostr->WriteID_t("MSGS");
     INDEX ctMsg = m_acmiMessages.Count();
-    (*ostr)<<ctMsg;
+    (*ostr) << ctMsg;
     for (INDEX iMsg=0; iMsg<ctMsg; iMsg++) {
       m_acmiMessages[iMsg].Write_t(*ostr);
     }
@@ -1657,10 +1657,10 @@ functions:
   {
 
     // get proper type of stats
-    if (csType==CST_SHORT) {
+    if (csType == CST_SHORT) {
       GetShortStats(strStats);
     } else {
-      ASSERT(csType==CST_DETAIL);
+      ASSERT(csType == CST_DETAIL);
 
       strStats = "\n";
       _ctAlignWidth = Min(ctCharsPerRow, INDEX(60));
@@ -1779,7 +1779,7 @@ functions:
     {for (INDEX iPlayer=0; iPlayer<ctPlayers; iPlayer++) {
       CPlayer *penPlayer = _apenPlayers[iPlayer];
       // add values to squad stats
-      ASSERT( penPlayer!=NULL);
+      ASSERT( penPlayer != NULL);
       PlayerStats psLevel = penPlayer->m_psLevelStats;
       PlayerStats psGame  = penPlayer->m_psGameStats ;
       psSquadLevel.ps_iScore   += psLevel.ps_iScore   ;
@@ -1827,7 +1827,7 @@ functions:
     {for (INDEX iPlayer=0; iPlayer<ctPlayers; iPlayer++) {
       CPlayer *penPlayer = _apenPlayers[iPlayer];
       // if this one
-      if (penPlayer==this) {
+      if (penPlayer == this) {
         // skip it
         continue;
       }
@@ -1841,9 +1841,9 @@ functions:
   // get singleplayer statistics
   void GetDetailStatsSP(CTString &strStats, INDEX iCoopType)
   {
-    if (iCoopType<=1) {
+    if (iCoopType <= 1) {
       if (m_bEndOfGame) {
-        if (GetSP()->sp_gdGameDifficulty==CSessionProperties::GD_EXTREME) {
+        if (GetSP()->sp_gdGameDifficulty == CSessionProperties::GD_EXTREME) {
           strStats+=TRANS("^f4SERIOUS GAME FINISHED,\nMENTAL MODE IS NOW ENABLED!^F\n\n");
         } else if (GetSP()->sp_bMental) {
           strStats+=TRANS("^f4YOU HAVE MASTERED THE GAME!^F\n\n");
@@ -1851,7 +1851,7 @@ functions:
       }
     }
 
-    if (iCoopType<=1) {
+    if (iCoopType <= 1) {
       // report total score info
       strStats+=AlignString(CTString(0, "^cFFFFFF%s:^r\n%d", TRANS("TOTAL SCORE"), m_psGameStats.ps_iScore));
       strStats+="\n";
@@ -1861,7 +1861,7 @@ functions:
       strStats+="\n";
       strStats+=AlignString(CTString(0, "^cFFFFFF%s:^r\n%s", TRANS("PLAYING TIME"), TimeToString(GetStatsRealWorldTime())));
       strStats+="\n";
-      if (m_psGameStats.ps_iScore<=plr_iHiScore) {
+      if (m_psGameStats.ps_iScore <= plr_iHiScore) {
         strStats+=AlignString(CTString(0, "^cFFFFFF%s:^r\n%d", TRANS("HI-SCORE"), plr_iHiScore));
       } else {
         strStats+=TRANS("YOU BEAT THE HI-SCORE!");
@@ -1872,7 +1872,7 @@ functions:
     // report this level statistics
     strStats+=CTString(0, "^cFFFFFF%s^r", TranslateConst(en_pwoWorld->GetName(), 0));
     strStats+="\n";
-    if (iCoopType<=1) {
+    if (iCoopType <= 1) {
       if (m_bEndOfLevel) {
         strStats+=AlignString(CTString(0, "  %s:\n%s", TRANS("ESTIMATED TIME"), TimeToString(m_tmEstTime)));
         strStats+="\n";
@@ -1887,13 +1887,13 @@ functions:
     strStats+="\n";
     strStats+=AlignString(CTString(0, "  %s:\n%d/%d", TRANS("KILLS"), m_psLevelStats.ps_iKills, m_psLevelTotal.ps_iKills));
     strStats+="\n";
-    if (iCoopType>=1) {
+    if (iCoopType >= 1) {
       strStats+=AlignString(CTString(0, "  %s:\n%d", TRANS("DEATHS"), m_psLevelStats.ps_iDeaths, m_psLevelTotal.ps_iDeaths));
       strStats+="\n";
     }
     strStats+=AlignString(CTString(0, "  %s:\n%d/%d", TRANS("SECRETS"), m_psLevelStats.ps_iSecrets, m_psLevelTotal.ps_iSecrets));
     strStats+="\n";
-    if (iCoopType<=1) {
+    if (iCoopType <= 1) {
       strStats+=AlignString(CTString(0, "  %s:\n%s", TRANS("TIME"), TimeToString(GetStatsInGameTimeLevel())));
       strStats+="\n";
     }
@@ -1906,13 +1906,13 @@ functions:
     strStats+="\n";
     strStats+=AlignString(CTString(0, "  %s:\n%d/%d", TRANS("KILLS"), m_psGameStats.ps_iKills, m_psGameTotal.ps_iKills));
     strStats+="\n";
-    if (iCoopType>=1) {
+    if (iCoopType >= 1) {
       strStats+=AlignString(CTString(0, "  %s:\n%d", TRANS("DEATHS"), m_psGameStats.ps_iDeaths, m_psGameTotal.ps_iDeaths));
       strStats+="\n";
     }
     strStats+=AlignString(CTString(0, "  %s:\n%d/%d", TRANS("SECRETS"), m_psGameStats.ps_iSecrets, m_psGameTotal.ps_iSecrets));
     strStats+="\n";
-    if (iCoopType<=1) {
+    if (iCoopType <= 1) {
       strStats+=AlignString(CTString(0, "  %s:\n%s", TRANS("GAME TIME"), TimeToString(GetStatsInGameTimeGame())));
       strStats+="\n";
     }
@@ -1920,7 +1920,7 @@ functions:
     
     // set per level outputs
     if (iCoopType<1) {
-      if (m_strLevelStats!="") {
+      if (m_strLevelStats != "") {
         strStats += CTString("^cFFFFFF")+TRANS("Per level statistics") +"^r\n\n" + m_strLevelStats;
       }
     }
@@ -1962,13 +1962,13 @@ functions:
   {
     CTString strKey;
     strKey.PrintF("\\player_%d\\%s", iPlayer, (const char*)GetPlayerName());
-	  strOut+=strKey;
+    strOut+=strKey;
     if (GetSP()->sp_bUseFrags) {
       strKey.PrintF("\\frags_%d\\%d", iPlayer, m_psLevelStats.ps_iKills);
-	    strOut+=strKey;
+      strOut+=strKey;
     } else {
       strKey.PrintF("\\frags_%d\\%d", iPlayer, m_psLevelStats.ps_iScore);
-	    strOut+=strKey;
+      strOut+=strKey;
     }
     strKey.PrintF("\\ping_%d\\%d", iPlayer, INDEX(ceil(en_tmPing*1000.0f)));
     strOut+=strKey;
@@ -2061,7 +2061,7 @@ functions:
       m_fPickedMana = 0;
     }
     // if different than last picked
-    if (m_strPickedName!=strName) {
+    if (m_strPickedName != strName) {
       // remember name
       m_strPickedName = strName;
       // reset picked ammount
@@ -2091,7 +2091,7 @@ functions:
 
   // play light animation
   void PlayLightAnim(INDEX iAnim, ULONG ulFlags) {
-    if (m_aoLightAnimation.GetData()!=NULL) {
+    if (m_aoLightAnimation.GetData() != NULL) {
       m_aoLightAnimation.PlayAnim(iAnim, ulFlags);
     }
   };
@@ -2150,7 +2150,7 @@ functions:
     FTICK ftNow = _pTimer->LerpedGameTick();
 
     FLOAT fFading = 1.0f;
-    if (m_tmFadeStart!=0) {
+    if (m_tmFadeStart != 0) {
       FLOAT fFactor = (tmNow-m_tmFadeStart)/5.0f;
       fFactor = Clamp(fFactor, 0.0f, 1.0f);
       fFading*=fFactor;
@@ -2179,7 +2179,7 @@ functions:
         fIntensity = 0.5f-0.5f*cos((CTimer::InSeconds(m_llInvisibility) - tmNow)*(6.0f*3.1415927f/3.0f));
       }
 
-      if (_ulPlayerRenderingMask == 1<<GetMyPlayerIndex()) {
+      if (_ulPlayerRenderingMask == 1 << GetMyPlayerIndex()) {
         colAlpha = (colAlpha&0xffffff00)|(INDEX)(INVISIBILITY_ALPHA_LOCAL+(FLOAT)(254-INVISIBILITY_ALPHA_LOCAL)*fIntensity);
 
       } else {
@@ -2204,7 +2204,7 @@ functions:
   // find main music holder if not remembered
   void FindMusicHolder(void)
   {
-    if (m_penMainMusicHolder==NULL) {
+    if (m_penMainMusicHolder == NULL) {
       m_penMainMusicHolder = _pNetwork->GetEntityWithName("MusicHolder", 0);
     }
   }
@@ -2216,13 +2216,13 @@ functions:
     m_psLevelStats = PlayerStats();
 
     // get music holder
-    if (m_penMainMusicHolder==NULL) {
+    if (m_penMainMusicHolder == NULL) {
       return;
     }
     CMusicHolder &mh = (CMusicHolder&)*m_penMainMusicHolder;
 
     // assure proper count enemies in current world
-    if (mh.m_ctEnemiesInWorld==0) {
+    if (mh.m_ctEnemiesInWorld == 0) {
       mh.CountEnemies();
     }
     // set totals for level and increment for game
@@ -2236,7 +2236,7 @@ functions:
   BOOL IsFuss(void)
   {
     // if no music holder
-    if (m_penMainMusicHolder==NULL) {
+    if (m_penMainMusicHolder == NULL) {
       // no fuss
       return FALSE;
     }
@@ -2272,7 +2272,7 @@ functions:
     }
 
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc==NULL || pwsc->m_tmShakeStarted<0) {
+    if (pwsc == NULL || pwsc->m_tmShakeStarted<0) {
       return;
     }
 
@@ -2314,7 +2314,7 @@ functions:
   COLOR GetWorldGlaring(void)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc==NULL || pwsc->m_tmGlaringStarted<0) {
+    if (pwsc == NULL || pwsc->m_tmGlaringStarted<0) {
       return 0;
     }
     TIME tm = _pTimer->GetLerpedCurrentTick();
@@ -2327,7 +2327,7 @@ functions:
   void RenderScroll(CDrawPort *pdp)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL && pwsc->m_penScrollHolder!=NULL)
+    if (pwsc != NULL && pwsc->m_penScrollHolder != NULL)
     {
       CScrollHolder &sch = (CScrollHolder &) *pwsc->m_penScrollHolder;
       sch.Credits_Render(&sch, pdp);
@@ -2337,7 +2337,7 @@ functions:
   void RenderCredits(CDrawPort *pdp)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL && pwsc->m_penCreditsHolder!=NULL)
+    if (pwsc != NULL && pwsc->m_penCreditsHolder != NULL)
     {
       CCreditsHolder &cch = (CCreditsHolder &) *pwsc->m_penCreditsHolder;
       cch.Credits_Render(&cch, pdp);
@@ -2347,7 +2347,7 @@ functions:
   void RenderTextFX(CDrawPort *pdp)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL && pwsc->m_penTextFXHolder!=NULL)
+    if (pwsc != NULL && pwsc->m_penTextFXHolder != NULL)
     {
       CTextFXHolder &tfx = (CTextFXHolder &) *pwsc->m_penTextFXHolder;
       tfx.TextFX_Render(&tfx, pdp);
@@ -2357,7 +2357,7 @@ functions:
   void RenderHudPicFX(CDrawPort *pdp)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL && pwsc->m_penHudPicFXHolder!=NULL)
+    if (pwsc != NULL && pwsc->m_penHudPicFXHolder != NULL)
     {
       CHudPicHolder &hpfx = (CHudPicHolder &) *pwsc->m_penHudPicFXHolder;
       hpfx.HudPic_Render(&hpfx, pdp);
@@ -2380,7 +2380,7 @@ functions:
 
     INDEX iViewState = m_iViewState;
     
-    if (m_penCamera!=NULL && bCamera) {
+    if (m_penCamera != NULL && bCamera) {
       iViewState = PVT_SCENECAMERA;
       plViewer = m_penCamera->GetLerpedPlacement();
       penViewer = m_penCamera;
@@ -2395,14 +2395,14 @@ functions:
       aFOV = 90.0f;
     }
     // if sniper active
-    if (((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon==WEAPON_SNIPER)
+    if (((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon == WEAPON_SNIPER)
     {
       aFOV = Lerp(((CPlayerWeapons&)*m_penWeapons).m_fSniperFOVlast,
                   ((CPlayerWeapons&)*m_penWeapons).m_fSniperFOV,
                   _pTimer->GetLerpFactor());
     }
 
-    if (m_pstState==PST_DIVE && iViewState == PVT_PLAYEREYES) {
+    if (m_pstState == PST_DIVE && iViewState == PVT_PLAYEREYES) {
       TIME tmNow = _pTimer->GetLerpedCurrentTick();
       aFOV+=sin(tmNow*0.79f)*2.0f;
     }
@@ -2431,7 +2431,7 @@ functions:
     plr_fFrontClipDistance = Clamp( plr_fFrontClipDistance, 0.05f, 0.50f);
     FLOAT fFCD = plr_fFrontClipDistance;
     // adjust front clip plane if swimming
-    if (m_pstState==PST_SWIM && iViewState==PVT_PLAYEREYES) { fFCD *= 0.6666f; }
+    if (m_pstState == PST_SWIM && iViewState == PVT_PLAYEREYES) { fFCD *= 0.6666f; }
     prPerspectiveProjection.FrontClipDistanceL() = fFCD;
     prPerspectiveProjection.AspectRatioL() = 1.0f;
     // set up viewer position
@@ -2462,7 +2462,7 @@ functions:
     CBrushSector *pbsc = penListener->GetSectorFromPoint(plSound.pl_PositionVector);
 
     // for each sector around listener
-    if (pbsc!=NULL) {
+    if (pbsc != NULL) {
       iEnv = pbsc->GetEnvironmentType();
     }
 
@@ -2504,7 +2504,7 @@ functions:
     COLOR colBlend;
 
     // for each eye
-    for (INDEX iEye=STEREO_LEFT; iEye<=(Stereo_IsEnabled()?STEREO_RIGHT:STEREO_LEFT); iEye++) {
+    for (INDEX iEye=STEREO_LEFT; iEye <= (Stereo_IsEnabled()?STEREO_RIGHT:STEREO_LEFT); iEye++) {
 
       // setup view settings
       SetupView(pdp, apr, penViewer, plViewer, colBlend, FALSE);
@@ -2515,11 +2515,11 @@ functions:
 
       // render the view
       ASSERT(IsValidFloat(plViewer.pl_OrientationAngle(1))&&IsValidFloat(plViewer.pl_OrientationAngle(2))&&IsValidFloat(plViewer.pl_OrientationAngle(3)));
-      _ulPlayerRenderingMask = 1<<GetMyPlayerIndex();
+      _ulPlayerRenderingMask = 1 << GetMyPlayerIndex();
       RenderView(*en_pwoWorld, *penViewer, apr, *pdp);
       _ulPlayerRenderingMask = 0;
 
-      if (iEye==STEREO_LEFT) {
+      if (iEye == STEREO_LEFT) {
         // listen from here
         ListenFromEntity(this, plViewer);
       }
@@ -2535,7 +2535,7 @@ functions:
         plLight.AbsoluteToRelative(plViewer);
         RenderHUD( *(CPerspectiveProjection3D *)(CProjection3D *)apr, pdp, 
           plLight.pl_PositionVector, _colViewerLight, _colViewerAmbient, 
-          penViewer==this && (GetFlags()&ENF_ALIVE), iEye);
+          penViewer == this && (GetFlags()&ENF_ALIVE), iEye);
       }
     }
     Stereo_SetBuffer(STEREO_BOTH);
@@ -2557,13 +2557,13 @@ functions:
       pdp->SetTextScaling( fScale);
       pdp->SetTextAspect( 1.0f);
       CTString strPicked;
-      if (m_fPickedAmmount==0) {
+      if (m_fPickedAmmount == 0) {
         strPicked = m_strPickedName;
       } else {
         strPicked.PrintF("%s +%d", m_strPickedName, int(m_fPickedAmmount));
       }
       pdp->PutTextCXY( strPicked, pixDPWidth*0.5f, pixDPHeight*0.82f, C_WHITE|0xDD);
-      if (!GetSP()->sp_bCooperative && !GetSP()->sp_bUseFrags && m_fPickedMana>=1) {
+      if (!GetSP()->sp_bCooperative && !GetSP()->sp_bUseFrags && m_fPickedMana >= 1) {
         CTString strValue;
         strValue.PrintF("%s +%d", TRANS("Value"), INDEX(m_fPickedMana));
         pdp->PutTextCXY( strValue, pixDPWidth*0.5f, pixDPHeight*0.85f, C_WHITE|0xDD);
@@ -2584,7 +2584,7 @@ functions:
   {
     CDrawPort dpCamera;
     CDrawPort *pdpCamera = pdp;
-    if (m_penCamera!=NULL && ((CCamera&)*m_penCamera).m_bWideScreen) {
+    if (m_penCamera != NULL && ((CCamera&)*m_penCamera).m_bWideScreen) {
       pdp->MakeWideScreen(&dpCamera);
       pdpCamera = &dpCamera;
     }
@@ -2598,7 +2598,7 @@ functions:
     COLOR colBlend;
 
     // for each eye
-    for (INDEX iEye=STEREO_LEFT; iEye<=(Stereo_IsEnabled()?STEREO_RIGHT:STEREO_LEFT); iEye++) {
+    for (INDEX iEye=STEREO_LEFT; iEye <= (Stereo_IsEnabled()?STEREO_RIGHT:STEREO_LEFT); iEye++) {
 
       // setup view settings
       SetupView(pdpCamera, apr, penViewer, plViewer, colBlend, TRUE);
@@ -2609,12 +2609,12 @@ functions:
 
       // render the view
       ASSERT(IsValidFloat(plViewer.pl_OrientationAngle(1))&&IsValidFloat(plViewer.pl_OrientationAngle(2))&&IsValidFloat(plViewer.pl_OrientationAngle(3)));
-      _ulPlayerRenderingMask = 1<<GetMyPlayerIndex();
+      _ulPlayerRenderingMask = 1 << GetMyPlayerIndex();
       RenderView(*en_pwoWorld, *penViewer, apr, *pdpCamera);
       _ulPlayerRenderingMask = 0;
 
       // listen from there if needed
-      if (bListen && iEye==STEREO_LEFT) {
+      if (bListen && iEye == STEREO_LEFT) {
         ListenFromEntity(penViewer, plViewer);
       }
     }
@@ -2630,7 +2630,7 @@ functions:
       COLOR colGlare = GetWorldGlaring();
       UBYTE ubR, ubG, ubB, ubA;
       ColorToRGBA(colGlare, ubR, ubG, ubB, ubA);
-      if (ubA!=0) {
+      if (ubA != 0) {
         pdpCamera->dp_ulBlendingRA += ULONG(ubR)*ULONG(ubA);
         pdpCamera->dp_ulBlendingGA += ULONG(ubG)*ULONG(ubA);
         pdpCamera->dp_ulBlendingBA += ULONG(ubB)*ULONG(ubA);
@@ -2644,7 +2644,7 @@ functions:
     pdp->Lock();
 
     // camera fading
-    if ((colBlend&CT_AMASK)!=0) {
+    if ((colBlend&CT_AMASK) != 0) {
       pdp->Fill(colBlend);
     }
 
@@ -2679,7 +2679,7 @@ functions:
     }
 
     // if rendering real game view (not thumbnail, or similar)
-    if (pvUserData!=0) {
+    if (pvUserData != 0) {
       // if rendered a game view recently
       CTimerValue tvNow = _pTimer->GetHighPrecisionTimer();
       if ((tvNow-_tvProbingLast).GetSeconds()<0.1) {
@@ -2694,11 +2694,11 @@ functions:
     // check for dualhead
     BOOL bDualHead = 
       pdp->IsDualHead() && 
-      GetSP()->sp_gmGameMode!=CSessionProperties::GM_FLYOVER &&
-      m_penActionMarker==NULL;
+      GetSP()->sp_gmGameMode != CSessionProperties::GM_FLYOVER &&
+      m_penActionMarker == NULL;
 
     // if dualhead, or no camera active
-    if (bDualHead||m_penCamera==NULL) {
+    if (bDualHead||m_penCamera == NULL) {
       // make left player view
       CDrawPort dpView(pdp, TRUE);
       if (dpView.Lock()) {
@@ -2709,9 +2709,9 @@ functions:
     }
 
     // if camera active
-    if (m_penCamera!=NULL) {
+    if (m_penCamera != NULL) {
       // make left or right camera view
-      CDrawPort dpView(pdp, m_penActionMarker!=NULL);
+      CDrawPort dpView(pdp, m_penActionMarker != NULL);
       if (dpView.Lock()) {
         // draw it, listen if not dualhead
         RenderCameraView(&dpView, !bDualHead);
@@ -2753,10 +2753,10 @@ functions:
     CPlayerEntity::DoMoving();
     ((CPlayerAnimator&)*m_penAnimator).AnimateBanking();
 
-    if (m_penView!=NULL) {
+    if (m_penView != NULL) {
       ((CPlayerView&)*m_penView).DoMoving();
     }
-    if (m_pen3rdPersonView!=NULL) {
+    if (m_pen3rdPersonView != NULL) {
       ((CPlayerView&)*m_pen3rdPersonView).DoMoving();
     }
   };
@@ -2784,7 +2784,7 @@ functions:
     }
 
     // if in tourist mode
-    if (GetSP()->sp_gdGameDifficulty==CSessionProperties::GD_TOURIST && GetFlags()&ENF_ALIVE) {
+    if (GetSP()->sp_gdGameDifficulty == CSessionProperties::GD_TOURIST && GetFlags()&ENF_ALIVE) {
       // slowly increase health with time
       FLOAT fHealth = GetHealth();
       FLOAT fTopHealth = TopHealth();
@@ -2796,10 +2796,10 @@ functions:
     // update ray hit for weapon target
     GetPlayerWeapons()->UpdateTargetingInfo();
 
-    if (m_pen3rdPersonView!=NULL) {
+    if (m_pen3rdPersonView != NULL) {
       ((CPlayerView&)*m_pen3rdPersonView).PostMoving();
     }
-    if (m_penView!=NULL) {
+    if (m_penView != NULL) {
       ((CPlayerView&)*m_penView).PostMoving();
     }
 
@@ -2824,7 +2824,7 @@ functions:
     // reset to a dummy state
     ForceFullStop();
     SetPhysicsFlags(GetPhysicsFlags() & ~(EPF_TRANSLATEDBYGRAVITY|EPF_ORIENTEDBYGRAVITY));
-    SetCollisionFlags(GetCollisionFlags() & ~((ECBI_BRUSH|ECBI_MODEL)<<ECB_TEST));
+    SetCollisionFlags(GetCollisionFlags() & ~((ECBI_BRUSH|ECBI_MODEL) << ECB_TEST));
     en_plLastViewpoint.pl_OrientationAngle = en_plViewpoint.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
 
     StartModelAnim(PLAYER_ANIM_STAND, 0);
@@ -2842,7 +2842,7 @@ functions:
     m_ulFlags &= ~PLF_NOTCONNECTED;
 
     SetPhysicsFlags(GetPhysicsFlags() | (EPF_TRANSLATEDBYGRAVITY|EPF_ORIENTEDBYGRAVITY));
-    SetCollisionFlags(GetCollisionFlags() | ((ECBI_BRUSH|ECBI_MODEL)<<ECB_TEST));
+    SetCollisionFlags(GetCollisionFlags() | ((ECBI_BRUSH|ECBI_MODEL) << ECB_TEST));
   }
 
   // check if player is connected or not
@@ -2920,7 +2920,7 @@ functions:
                   FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection)
   {
     // if exploded
-    if (GetRenderType()!=RT_MODEL) {
+    if (GetRenderType() != RT_MODEL) {
       // do nothing
       return;
     }
@@ -2936,10 +2936,10 @@ functions:
     {
       fKickDamage*=1.5;
     }
-    if (dmtType==DMT_DROWNING || dmtType==DMT_CLOSERANGE) {
+    if (dmtType == DMT_DROWNING || dmtType == DMT_CLOSERANGE) {
       fKickDamage /= 10;
     }
-    if (dmtType==DMT_CHAINSAW)
+    if (dmtType == DMT_CHAINSAW)
     {
       fKickDamage /= 10;
     }
@@ -3064,9 +3064,9 @@ functions:
                       FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection)
   {
     // don't harm yourself with knife or with rocket in easy/tourist mode
-    if (penInflictor==this && (dmtType==DMT_CLOSERANGE || dmtType==DMT_CHAINSAW ||
-        ((dmtType==DMT_EXPLOSION||dmtType==DMT_CANNONBALL_EXPLOSION||dmtType==DMT_PROJECTILE) &&
-          GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY)) ) {
+    if (penInflictor == this && (dmtType == DMT_CLOSERANGE || dmtType == DMT_CHAINSAW ||
+        ((dmtType == DMT_EXPLOSION||dmtType == DMT_CANNONBALL_EXPLOSION||dmtType == DMT_PROJECTILE) &&
+          GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY)) ) {
       return;
     }
 
@@ -3092,24 +3092,24 @@ functions:
 
     // check for friendly fire
     if (!GetSP()->sp_bFriendlyFire && GetSP()->sp_bCooperative) {
-      if (IsOfClass(penInflictor, "Player") && penInflictor!=this) {
+      if (IsOfClass(penInflictor, "Player") && penInflictor != this) {
         return;
       }
     }
 
     // ignore heat damage if dead
-    if (dmtType==DMT_HEAT && !(GetFlags()&ENF_ALIVE)) {
+    if (dmtType == DMT_HEAT && !(GetFlags()&ENF_ALIVE)) {
       return;
     }
 
     // adjust for difficulty
     FLOAT fDifficultyDamage = GetSP()->sp_fDamageStrength;
-    if (fDifficultyDamage<=1.0f || penInflictor!=this) {
+    if (fDifficultyDamage <= 1.0f || penInflictor != this) {
       fDamageAmmount *= fDifficultyDamage;
     }
 
     // ignore zero damages
-    if (fDamageAmmount<=0) {
+    if (fDamageAmmount <= 0) {
       return;
     }
 
@@ -3132,10 +3132,10 @@ functions:
     // if any damage
     if (fSubHealth>0) { 
       // if camera is active
-      if (m_penCamera!=NULL) {
+      if (m_penCamera != NULL) {
         // if the camera has onbreak
         CEntity *penOnBreak = ((CCamera&)*m_penCamera).m_penOnBreak;
-        if (penOnBreak!=NULL) {
+        if (penOnBreak != NULL) {
           // trigger it
           SendToTarget(penOnBreak, EET_TRIGGER, this);
         // if it doesn't
@@ -3148,7 +3148,7 @@ functions:
     }
 
     // if the player is doing autoactions
-    if (m_penActionMarker!=NULL) {
+    if (m_penActionMarker != NULL) {
       // ignore all damage
       return;
     }
@@ -3161,8 +3161,8 @@ functions:
     // red screen and hit translation
     if (fDamageAmmount>1.0f) {
 // !!!! this is obsolete, DamageImpact is used instead!
-      if (dmtType==DMT_EXPLOSION || dmtType==DMT_PROJECTILE || dmtType==DMT_BULLET
-       || dmtType==DMT_IMPACT    || dmtType==DMT_CANNONBALL || dmtType==DMT_CANNONBALL_EXPLOSION) {
+      if (dmtType == DMT_EXPLOSION || dmtType == DMT_PROJECTILE || dmtType == DMT_BULLET
+       || dmtType == DMT_IMPACT    || dmtType == DMT_CANNONBALL || dmtType == DMT_CANNONBALL_EXPLOSION) {
 //        GiveImpulseTranslationAbsolute( vDirection*(fDamageAmmount/7.5f)
 //                                        -en_vGravityDir*(fDamageAmmount/15.0f));
       }
@@ -3179,7 +3179,7 @@ functions:
     SendEventInRange( eSound, FLOATaabbox3D( GetPlacement().pl_PositionVector, 10.0f));
 
     // play hurting sound
-    if (dmtType==DMT_DROWNING) {
+    if (dmtType == DMT_DROWNING) {
       SetRandomMouthPitch( 0.9f, 1.1f);
       PlaySound( m_soMouth, GenderSound(SOUND_DROWN), SOF_3D);
       if (_pNetwork->IsPlayerLocal(this)) {IFeel_PlayEffect("WoundWater");}
@@ -3205,7 +3205,7 @@ functions:
           iSound = GenderSound(SOUND_WOUNDSTRONG);
           strIFeel = "WoundStrong";
         }
-        if (m_pstState==PST_DIVE) {
+        if (m_pstState == PST_DIVE) {
           iSound = GenderSound(SOUND_WOUNDWATER);
           strIFeel = "WoundWater";
         } // override for diving
@@ -3229,11 +3229,11 @@ functions:
       // allowed
       GetSP()->sp_bGibs && 
       // dead and
-      (GetHealth()<=0) && 
+      (GetHealth() <= 0) && 
       // has received large enough damage lately and
       (m_vDamage.Length() > _fBlowUpAmmount) &&
       // is not blown up already
-      GetRenderType()==RT_MODEL;
+      GetRenderType() == RT_MODEL;
   };
 
   // spawn body parts
@@ -3251,12 +3251,12 @@ functions:
     // determine debris texture (color)
     ULONG ulFleshTexture = TEXTURE_FLESH_GREEN;
     ULONG ulFleshModel   = MODEL_FLESH;
-    if (iBloodType==2) { ulFleshTexture = TEXTURE_FLESH_RED; }
+    if (iBloodType == 2) { ulFleshTexture = TEXTURE_FLESH_RED; }
     // spawn debris
     Debris_Begin( EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
     for (INDEX iDebris=0; iDebris<4; iDebris++) {
       // flowerpower mode?
-      if (iBloodType==3) {
+      if (iBloodType == 3) {
         switch (IRnd()%5) {
         case 1:  { ulFleshModel = MODEL_FLESH_APPLE;   ulFleshTexture = TEXTURE_FLESH_APPLE;   break; }
         case 2:  { ulFleshModel = MODEL_FLESH_BANANA;  ulFleshTexture = TEXTURE_FLESH_BANANA;  break; }
@@ -3381,14 +3381,14 @@ functions:
     // *********** KEYS ***********
     else if (ee.ee_slEvent == EVENTCODE_EKey) {
       // don't pick up key if in auto action mode
-      if (m_penActionMarker!=NULL) {
+      if (m_penActionMarker != NULL) {
         return FALSE;
       }
       // make key mask
-      ULONG ulKey = 1<<INDEX(((EKey&)ee).kitType);
+      ULONG ulKey = 1 << INDEX(((EKey&)ee).kitType);
       EKey &eKey = (EKey&)ee;
       if (eKey.kitType == KIT_HAWKWINGS01DUMMY || eKey.kitType == KIT_HAWKWINGS02DUMMY
-        || eKey.kitType == KIT_TABLESDUMMY || eKey.kitType ==KIT_JAGUARGOLDDUMMY)
+        || eKey.kitType == KIT_TABLESDUMMY || eKey.kitType == KIT_JAGUARGOLDDUMMY)
       {
         ulKey = 0;
       }
@@ -3481,8 +3481,8 @@ functions:
   void ComputerPressed(void)
   {
     // call computer if not holding sniper
-//    if (GetPlayerWeapons()->m_iCurrentWeapon!=WEAPON_SNIPER) {
-      if (cmp_ppenPlayer==NULL && _pNetwork->IsPlayerLocal(this)) {
+//    if (GetPlayerWeapons()->m_iCurrentWeapon != WEAPON_SNIPER) {
+      if (cmp_ppenPlayer == NULL && _pNetwork->IsPlayerLocal(this)) {
         cmp_ppenPlayer = this;
       }
       m_bComputerInvoked = TRUE;
@@ -3503,10 +3503,10 @@ functions:
     BOOL bSomethingToUse = FALSE;
 
     // if hit
-    if (pen!=NULL) {
+    if (pen != NULL) {
       // check switch/messageholder relaying by moving brush
       if (IsOfClass( pen, "Moving Brush")) {
-        if (((CMovingBrush&)*pen).m_penSwitch!=NULL) {
+        if (((CMovingBrush&)*pen).m_penSwitch != NULL) {
           pen = ((CMovingBrush&)*pen).m_penSwitch;
         }
       }
@@ -3544,10 +3544,10 @@ functions:
     {
       CPlayerWeapons *penWeapon = GetPlayerWeapons();
      
-      // penWeapon->m_iWantedWeapon==WEAPON_SNIPER) =>
+      // penWeapon->m_iWantedWeapon == WEAPON_SNIPER) =>
       // make sure that weapon transition is not in progress
-      if (penWeapon->m_iCurrentWeapon==WEAPON_SNIPER && 
-          penWeapon->m_iWantedWeapon==WEAPON_SNIPER) {
+      if (penWeapon->m_iCurrentWeapon == WEAPON_SNIPER && 
+          penWeapon->m_iWantedWeapon == WEAPON_SNIPER) {
         if (m_ulFlags&PLF_ISZOOMING) {
           m_ulFlags&=~PLF_ISZOOMING;
           penWeapon->m_bSniping = FALSE;
@@ -3576,8 +3576,8 @@ functions:
     // start console for first player possible
     for (INDEX iPlayer=0; iPlayer<GetMaxPlayers(); iPlayer++) {
       CEntity *pen = GetPlayerEntity(iPlayer);
-      if (pen!=NULL) {
-        if (cmp_ppenPlayer==NULL && _pNetwork->IsPlayerLocal(pen)) {
+      if (pen != NULL) {
+        if (cmp_ppenPlayer == NULL && _pNetwork->IsPlayerLocal(pen)) {
           cmp_ppenPlayer = (CPlayer*)pen;
         }
       }
@@ -3589,17 +3589,17 @@ functions:
     BOOL bFinished = FALSE;
     // if time limit is out
     INDEX iTimeLimit = GetSP()->sp_iTimeLimit;
-    if (iTimeLimit>0 && _pTimer->CurrentTick()>=iTimeLimit*60.0f) {
+    if (iTimeLimit>0 && _pTimer->CurrentTick() >= iTimeLimit*60.0f) {
       bFinished = TRUE;
     }
     // if frag limit is out
     INDEX iFragLimit = GetSP()->sp_iFragLimit;
-    if (iFragLimit>0 && m_psLevelStats.ps_iKills>=iFragLimit) {
+    if (iFragLimit>0 && m_psLevelStats.ps_iKills >= iFragLimit) {
       bFinished = TRUE;
     }
     // if score limit is out
     INDEX iScoreLimit = GetSP()->sp_iScoreLimit;
-    if (iScoreLimit>0 && m_psLevelStats.ps_iScore>=iScoreLimit) {
+    if (iScoreLimit>0 && m_psLevelStats.ps_iScore >= iScoreLimit) {
       bFinished = TRUE;
     }
 
@@ -3726,7 +3726,7 @@ functions:
     // if alive
     if (GetFlags() & ENF_ALIVE) {
       // if not in auto-action mode
-      if (m_penActionMarker==NULL) {
+      if (m_penActionMarker == NULL) {
         // apply actions
         AliveActions(paAction);
       // if in auto-action mode
@@ -3803,14 +3803,14 @@ functions:
     ValidateCharacter();
 
     // if the name has changed
-    if (pcOrg.GetName()!=pcNew.GetName()) {
+    if (pcOrg.GetName() != pcNew.GetName()) {
       // report that
       CPrintF(TRANS("%s is now known as %s\n"), 
         pcOrg.GetNameForPrinting(), pcNew.GetNameForPrinting());
     }
 
     // if the team has changed
-    if (pcOrg.GetTeam()!=pcNew.GetTeam()) {
+    if (pcOrg.GetTeam() != pcNew.GetTeam()) {
       // report that
       CPrintF(TRANS("%s switched to team %s\n"), 
         pcNew.GetNameForPrinting(), pcNew.GetTeamForPrinting());
@@ -3819,7 +3819,7 @@ functions:
     // if appearance changed
     CPlayerSettings *ppsOrg = (CPlayerSettings *)pcOrg.pc_aubAppearance;
     CPlayerSettings *ppsNew = (CPlayerSettings *)pcNew.pc_aubAppearance;
-    if (memcmp(ppsOrg->ps_achModelFile, ppsNew->ps_achModelFile, sizeof(ppsOrg->ps_achModelFile))!=0) {
+    if (memcmp(ppsOrg->ps_achModelFile, ppsNew->ps_achModelFile, sizeof(ppsOrg->ps_achModelFile)) != 0) {
       // update your real appearance if possible
       CTString strNewLook;
       BOOL bSuccess = SetPlayerAppearance(&m_moRender, &en_pcCharacter, strNewLook, /*bPreview=*/FALSE);
@@ -3841,8 +3841,8 @@ functions:
 
     BOOL b3RDPersonOld = ppsOrg->ps_ulFlags&PSF_PREFER3RDPERSON;
     BOOL b3RDPersonNew = ppsNew->ps_ulFlags&PSF_PREFER3RDPERSON;
-    if ((b3RDPersonOld && !b3RDPersonNew && m_iViewState==PVT_3RDPERSONVIEW)
-      ||(b3RDPersonNew && !b3RDPersonOld && m_iViewState==PVT_PLAYEREYES) ) {
+    if ((b3RDPersonOld && !b3RDPersonNew && m_iViewState == PVT_3RDPERSONVIEW)
+      ||(b3RDPersonNew && !b3RDPersonOld && m_iViewState == PVT_PLAYEREYES) ) {
       ChangePlayerView();
     }
   };
@@ -3854,7 +3854,7 @@ functions:
     CPlayerAction paAction = pa;
 
     // if camera is active
-    if (m_penCamera!=NULL) {
+    if (m_penCamera != NULL) {
       // ignore keyboard/mouse/joystick commands
       paAction.pa_vTranslation  = FLOAT3D(0.0f, 0.0f, 0.0f);
       paAction.pa_aRotation     = ANGLE3D(0.0f, 0.0f, 0.0f);
@@ -3887,9 +3887,9 @@ functions:
   {
     // if fire, use or computer is pressed
     if (ulNewButtons&(PLACT_FIRE|PLACT_USE|PLACT_COMPUTER)) {
-      if (m_penCamera!=NULL) {
+      if (m_penCamera != NULL) {
         CEntity *penOnBreak = ((CCamera&)*m_penCamera).m_penOnBreak;
-        if (penOnBreak!=NULL) {
+        if (penOnBreak != NULL) {
           SendToTarget(penOnBreak, EET_TRIGGER, this);
         }
       }
@@ -3913,7 +3913,7 @@ functions:
 
         // if should hit the marker exactly
         FLOAT fSpeed = m_fAutoSpeed;
-        if (GetActionMarker()->m_paaAction==PAA_RUNANDSTOP) {
+        if (GetActionMarker()->m_paaAction == PAA_RUNANDSTOP) {
           // adjust speed
           fSpeed = Min(fSpeed, fDistance/_pTimer->TickQuantum);
         }
@@ -3940,11 +3940,11 @@ functions:
         FLOAT tmDelta = _pTimer->CurrentTick()-m_tmMinigunAutoFireStart;
         FLOAT aDH=0.0f;
         FLOAT aDP=0.0f;
-        if (tmDelta>=0.0f && tmDelta<=0.75f)
+        if (tmDelta >= 0.0f && tmDelta <= 0.75f)
         {
           aDH = 0.0f;
         }
-        else if (tmDelta>=0.75f)
+        else if (tmDelta >= 0.75f)
         {
           FLOAT fDT = tmDelta-0.75f;
           aDH = 1.0f*cos(fDT+PI/2.0f);
@@ -3973,7 +3973,7 @@ functions:
   {
     pl = CPlacement3D( vRel, ANGLE3D(0.0f, 0.0f, 0.0f));
     CPlacement3D plView;
-    _bDiscard3rdView=GetViewEntity()!=this;
+    _bDiscard3rdView=GetViewEntity() != this;
     GetLerpedAbsoluteViewPlacement(plView);
     pl.RelativeToAbsolute( plView);
   }
@@ -4008,7 +4008,7 @@ functions:
     }
 
     // enable faster moving if holding knife in DM
-    if (((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon==WEAPON_KNIFE &&
+    if (((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon == WEAPON_KNIFE &&
          !GetSP()->sp_bCooperative) {
       vTranslation *= 1.3f;
     }
@@ -4032,8 +4032,8 @@ functions:
     CContentType &ctUp = GetWorld()->wo_actContentTypes[en_iUpContent];
     CContentType &ctDn = GetWorld()->wo_actContentTypes[en_iDnContent];
     PlayerState pstWanted = PST_STAND;
-    BOOL bUpSwimable = (ctUp.ct_ulFlags&CTF_SWIMABLE) && en_fImmersionFactor<=0.99f;
-    BOOL bDnSwimable = (ctDn.ct_ulFlags&CTF_SWIMABLE) && en_fImmersionFactor>=0.5f;
+    BOOL bUpSwimable = (ctUp.ct_ulFlags&CTF_SWIMABLE) && en_fImmersionFactor <= 0.99f;
+    BOOL bDnSwimable = (ctDn.ct_ulFlags&CTF_SWIMABLE) && en_fImmersionFactor >= 0.5f;
 
     // if considerably inside swimable content
     if (bUpSwimable || bDnSwimable) {
@@ -4041,7 +4041,7 @@ functions:
       m_ulFlags|=PLF_JUMPALLOWED;
       //CPrintF("swimable %f", en_fImmersionFactor);
       // if totaly inside
-      if (en_fImmersionFactor>=0.99f || bUpSwimable) {
+      if (en_fImmersionFactor >= 0.99f || bUpSwimable) {
         // want to dive
         pstWanted = PST_DIVE;
       // if only partially inside
@@ -4052,7 +4052,7 @@ functions:
     // if not in swimable content
     } else {
       // if has reference
-      if (en_penReference!=NULL) {
+      if (en_penReference != NULL) {
         // reset fall timer
         m_llFallTime = 0;
 
@@ -4096,7 +4096,7 @@ functions:
       PlayerState pstOld = m_pstState; 
 
       // if different state needed
-      if (pstWanted!=m_pstState) {
+      if (pstWanted != m_pstState) {
         // check state wanted
         switch (pstWanted) {
         // if wanting to stand
@@ -4104,7 +4104,7 @@ functions:
           // if can stand here
           if (ChangeCollisionBoxIndexNow(PLAYER_COLLISION_BOX_STAND)) {
             en_plViewpoint.pl_PositionVector(2) = plr_fViewHeightStand;
-            if (m_pstState==PST_CROUCH) {
+            if (m_pstState == PST_CROUCH) {
               ((CPlayerAnimator&)*m_penAnimator).Rise();
             } else {
               ((CPlayerAnimator&)*m_penAnimator).Stand();
@@ -4155,10 +4155,10 @@ functions:
       }
 
       // if state changed
-      if (m_pstState!=pstOld) {
+      if (m_pstState != pstOld) {
         // check water entering/leaving
-        BOOL bWasInWater = (pstOld==PST_SWIM||pstOld==PST_DIVE);
-        BOOL bIsInWater = (m_pstState==PST_SWIM||m_pstState==PST_DIVE);
+        BOOL bWasInWater = (pstOld == PST_SWIM||pstOld == PST_DIVE);
+        BOOL bIsInWater = (m_pstState == PST_SWIM||m_pstState == PST_DIVE);
         // if entered water
         if (bIsInWater && !bWasInWater) {
           PlaySound(m_soBody, GenderSound(SOUND_WATER_ENTER), SOF_3D);
@@ -4170,29 +4170,29 @@ functions:
         // if in water
         } else if (bIsInWater) {
           // if dived in
-          if (pstOld==PST_SWIM && m_pstState == PST_DIVE) {
+          if (pstOld == PST_SWIM && m_pstState == PST_DIVE) {
             PlaySound(m_soFootL, GenderSound(SOUND_DIVEIN), SOF_3D);
             if (_pNetwork->IsPlayerLocal(this)) {IFeel_PlayEffect("DiveIn");}
             m_bMoveSoundLeft = TRUE;
             m_llMoveSound = _pTimer->GetGameTick();
           // if dived out
-          } else if (m_pstState==PST_SWIM && pstOld==PST_DIVE) {
+          } else if (m_pstState == PST_SWIM && pstOld == PST_DIVE) {
             PlaySound(m_soFootL, GenderSound(SOUND_DIVEOUT), SOF_3D);
             m_bMoveSoundLeft = TRUE;
             m_llMoveSound = _pTimer->GetGameTick();
           }
         }
         // if just fell to ground
-        if (pstOld==PST_FALL && (m_pstState==PST_STAND||m_pstState==PST_CROUCH)) {
+        if (pstOld == PST_FALL && (m_pstState == PST_STAND||m_pstState == PST_CROUCH)) {
           PlaySound(m_soFootL, GenderSound(SOUND_LAND), SOF_3D);
           if (_pNetwork->IsPlayerLocal(this)) {IFeel_PlayEffect("Land");}
         }
         // change ambience sounds
-        if (m_pstState==PST_DIVE) {
+        if (m_pstState == PST_DIVE) {
           m_soLocalAmbientLoop.Set3DParameters(50.0f, 10.0f, 0.25f, 1.0f);
           PlaySound(m_soLocalAmbientLoop, SOUND_WATERAMBIENT, 
             SOF_LOOP|SOF_3D|SOF_VOLUMETRIC|SOF_LOCAL);
-        } else if (pstOld==PST_DIVE) {
+        } else if (pstOld == PST_DIVE) {
           m_soLocalAmbientLoop.Stop();
         }
       }
@@ -4332,29 +4332,29 @@ functions:
       INDEX iSoundWalkL = SOUND_WALK_L;
       INDEX iSoundWalkR = SOUND_WALK_R;
 
-      if ((ctDn.ct_ulFlags&CTF_SWIMABLE) && en_fImmersionFactor>=0.1f) {
+      if ((ctDn.ct_ulFlags&CTF_SWIMABLE) && en_fImmersionFactor >= 0.1f) {
         iSoundWalkL = SOUND_WATERWALK_L;
         iSoundWalkR = SOUND_WATERWALK_R;
-      } else if (en_pbpoStandOn!=NULL && 
-        en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType==SURFACE_SAND) {
+      } else if (en_pbpoStandOn != NULL && 
+        en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType == SURFACE_SAND) {
         iSoundWalkL = SOUND_WALK_SAND_L;
         iSoundWalkR = SOUND_WALK_SAND_R;
-      } else if (en_pbpoStandOn!=NULL && 
-        en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType==SURFACE_RED_SAND) {
+      } else if (en_pbpoStandOn != NULL && 
+        en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType == SURFACE_RED_SAND) {
         iSoundWalkL = SOUND_WALK_SAND_L;
         iSoundWalkR = SOUND_WALK_SAND_R;
-      } else if (en_pbpoStandOn!=NULL && 
-        (en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType==SURFACE_GRASS ||
-         en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType==SURFACE_GRASS_SLIDING ||
-         en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType==SURFACE_GRASS_NOIMPACT )) {
+      } else if (en_pbpoStandOn != NULL && 
+        (en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType == SURFACE_GRASS ||
+         en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType == SURFACE_GRASS_SLIDING ||
+         en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType == SURFACE_GRASS_NOIMPACT )) {
         iSoundWalkL = SOUND_WALK_GRASS_L;
         iSoundWalkR = SOUND_WALK_GRASS_R;
-      } else if (en_pbpoStandOn!=NULL && 
-        en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType==SURFACE_WOOD) {
+      } else if (en_pbpoStandOn != NULL && 
+        en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType == SURFACE_WOOD) {
         iSoundWalkL = SOUND_WALK_WOOD_L;
         iSoundWalkR = SOUND_WALK_WOOD_R;
-      } else if (en_pbpoStandOn!=NULL && 
-        en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType==SURFACE_SNOW) {
+      } else if (en_pbpoStandOn != NULL && 
+        en_pbpoStandOn->bpo_bppProperties.bpp_ubSurfaceType == SURFACE_SNOW) {
         iSoundWalkL = SOUND_WALK_SNOW_L;
         iSoundWalkR = SOUND_WALK_SNOW_R;
       }
@@ -4433,7 +4433,7 @@ functions:
   // Death actions
   void DeathActions(const CPlayerAction &paAction) {
     // set heading, pitch and banking from the normal rotation into the camera view rotation
-    if (m_penView!=NULL) {
+    if (m_penView != NULL) {
       ASSERT(IsPredicted()&&m_penView->IsPredicted()||IsPredictor()&&m_penView->IsPredictor()||!IsPredicted()&&!m_penView->IsPredicted()&&!IsPredictor()&&!m_penView->IsPredictor());
       en_plViewpoint.pl_PositionVector = FLOAT3D(0, 1, 0);
       en_plViewpoint.pl_OrientationAngle += (ANGLE3D(
@@ -4443,7 +4443,7 @@ functions:
     }
 
     // if death is finished and fire just released again and this is not a predictor
-    if (m_iMayRespawn==2 && (ulReleasedButtons&PLACT_FIRE) && !IsPredictor()) {
+    if (m_iMayRespawn == 2 && (ulReleasedButtons&PLACT_FIRE) && !IsPredictor()) {
       // if singleplayer
       if (GetSP()->sp_bSinglePlayer) {
         // load quick savegame
@@ -4460,11 +4460,11 @@ functions:
           m_ulFlags &= ~PLF_RESPAWNINPLACE;
         }
         // if playing on credits
-        if (GetSP()->sp_ctCredits!=0) {
+        if (GetSP()->sp_ctCredits != 0) {
           // if playing on infinite credits or some credits left
-          if (GetSP()->sp_ctCredits==-1 || GetSP()->sp_ctCreditsLeft!=0) {
+          if (GetSP()->sp_ctCredits == -1 || GetSP()->sp_ctCreditsLeft != 0) {
             // decrement credits
-            if (GetSP()->sp_ctCredits!=-1) {
+            if (GetSP()->sp_ctCredits != -1) {
               ((CSessionProperties*)GetSP())->sp_ctCreditsLeft--;
             }
 
@@ -4474,7 +4474,7 @@ functions:
 
             // report number of credits left
             if (GetSP()->sp_ctCredits>0) {
-              if (GetSP()->sp_ctCreditsLeft==0) {
+              if (GetSP()->sp_ctCreditsLeft == 0) {
                 CPrintF(TRANS("  no more credits left!\n"));
               } else {
                 CPrintF(TRANS("  %d credits left\n"), GetSP()->sp_ctCreditsLeft);
@@ -4489,7 +4489,7 @@ functions:
       }
     }
     // check fire released once after death
-    if (m_iMayRespawn==1 && !(ulButtonsNow&PLACT_FIRE)) {
+    if (m_iMayRespawn == 1 && !(ulButtonsNow&PLACT_FIRE)) {
       m_iMayRespawn=2;
     }
   };
@@ -4499,9 +4499,9 @@ functions:
   void ButtonsActions( CPlayerAction &paAction)
   {
     // if selecting a new weapon select it
-    if ((ulNewButtons&PLACT_SELECT_WEAPON_MASK)!=0) {
+    if ((ulNewButtons&PLACT_SELECT_WEAPON_MASK) != 0) {
       ESelectWeapon eSelect;
-      eSelect.iWeapon = (ulNewButtons&PLACT_SELECT_WEAPON_MASK)>>PLACT_SELECT_WEAPON_SHIFT;
+      eSelect.iWeapon = (ulNewButtons&PLACT_SELECT_WEAPON_MASK) >> PLACT_SELECT_WEAPON_SHIFT;
       ((CPlayerWeapons&)*m_penWeapons).SendEvent(eSelect);
     }
 
@@ -4562,13 +4562,13 @@ functions:
 
     // if use is pressed
     if (ulNewButtons&PLACT_USE) {
-      if (((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon==WEAPON_SNIPER) {
+      if (((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon == WEAPON_SNIPER) {
         UsePressed(FALSE);
       } else {
         UsePressed(ulNewButtons&PLACT_COMPUTER);
       }
     // if USE is not detected due to doubleclick and player is holding sniper
-    } else if (ulNewButtons&PLACT_SNIPER_USE && ((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon==WEAPON_SNIPER) {
+    } else if (ulNewButtons&PLACT_SNIPER_USE && ((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon == WEAPON_SNIPER) {
       UsePressed(FALSE);
     // if computer is pressed
     } else if (ulNewButtons&PLACT_COMPUTER) {
@@ -4610,8 +4610,8 @@ functions:
   void ApplySniperZoom( BOOL bZoomIn )
   {
     // do nothing if not holding sniper and if not in sniping mode
-    if (((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon!=WEAPON_SNIPER ||
-      ((CPlayerWeapons&)*m_penWeapons).m_bSniping==FALSE) {
+    if (((CPlayerWeapons&)*m_penWeapons).m_iCurrentWeapon != WEAPON_SNIPER ||
+      ((CPlayerWeapons&)*m_penWeapons).m_bSniping == FALSE) {
       return;
     }
     BOOL bZoomChanged;
@@ -4632,7 +4632,7 @@ functions:
   // check if cheats can be active
   BOOL CheatsEnabled(void)
   {
-    return (GetSP()->sp_ctMaxPlayers==1||GetSP()->sp_bQuickTest) && m_penActionMarker==NULL && !_SE_DEMO;
+    return (GetSP()->sp_ctMaxPlayers == 1||GetSP()->sp_bQuickTest) && m_penActionMarker == NULL && !_SE_DEMO;
   }
 
   // Cheats
@@ -4650,11 +4650,11 @@ functions:
     }
 
     // ghost mode
-    BOOL bIsGhost = !(GetCollisionFlags() & ((ECBI_BRUSH|ECBI_MODEL)<<ECB_TEST));
+    BOOL bIsGhost = !(GetCollisionFlags() & ((ECBI_BRUSH|ECBI_MODEL) << ECB_TEST));
     if (cht_bGhost && !bIsGhost) {
-      SetCollisionFlags(GetCollisionFlags() & ~((ECBI_BRUSH|ECBI_MODEL)<<ECB_TEST));
+      SetCollisionFlags(GetCollisionFlags() & ~((ECBI_BRUSH|ECBI_MODEL) << ECB_TEST));
     } else if (!cht_bGhost && bIsGhost) {
-      SetCollisionFlags(GetCollisionFlags() | ((ECBI_BRUSH|ECBI_MODEL)<<ECB_TEST));
+      SetCollisionFlags(GetCollisionFlags() | ((ECBI_BRUSH|ECBI_MODEL) << ECB_TEST));
     }
 
     // invisible mode
@@ -4908,7 +4908,7 @@ functions:
       COLOR colGlare = GetWorldGlaring();
       UBYTE ubR, ubG, ubB, ubA;
       ColorToRGBA(colGlare, ubR, ubG, ubB, ubA);
-      if (ubA!=0) {
+      if (ubA != 0) {
         pdp->dp_ulBlendingRA += ULONG(ubR)*ULONG(ubA);
         pdp->dp_ulBlendingGA += ULONG(ubG)*ULONG(ubA);
         pdp->dp_ulBlendingBA += ULONG(ubB)*ULONG(ubA);
@@ -4934,7 +4934,7 @@ functions:
       CPlayerWeapons *pen = (CPlayerWeapons*)&*penHUDPlayer->m_penWeapons;
       TIME tmDelta = _pTimer->CurrentTick() - pen->m_tmSnoopingStarted;
       if (tmDelta<plr_tmSnoopingTime) {
-        ASSERT( pen->m_penTargeting!=NULL);
+        ASSERT( pen->m_penTargeting != NULL);
         penHUDPlayer = (CPlayer*)&*pen->m_penTargeting;
         bSnooping = TRUE;
       }
@@ -4953,12 +4953,12 @@ functions:
     CTString strPlayerStart = "Player Start - ";
     INDEX ctMarkers = _pNetwork->GetNumberOfEntitiesWithName(strPlayerStart);
     // if none
-    if (ctMarkers==0) {
+    if (ctMarkers == 0) {
       // fail
       return NULL;
     }
     // if only one
-    if (ctMarkers==1) {
+    if (ctMarkers == 1) {
       // get that one
       return _pNetwork->GetEntityWithName(strPlayerStart, 0);
     }
@@ -4970,14 +4970,14 @@ functions:
     // for each marker
     {for (INDEX iMarker=0; iMarker<ctMarkers; iMarker++) {
       amdMarkers[iMarker].md_ppm = (CPlayerMarker*)_pNetwork->GetEntityWithName(strPlayerStart, iMarker);
-      if (amdMarkers[iMarker].md_ppm==NULL) {
+      if (amdMarkers[iMarker].md_ppm == NULL) {
         return NULL;  // (if there is any invalidity, fail completely)
       }
       // get min distance from any player
       FLOAT fMinD = UpperLimit(0.0f);
       for (INDEX iPlayer=0; iPlayer<GetMaxPlayers(); iPlayer++) {
         CPlayer *ppl = (CPlayer *)&*GetPlayerEntity(iPlayer);
-        if (ppl==NULL) { 
+        if (ppl == NULL) { 
           continue;
         }
         FLOAT fD = 
@@ -4992,7 +4992,7 @@ functions:
 
     // now sort the list
     qsort(&amdMarkers[0], ctMarkers, sizeof(amdMarkers[0]), &qsort_CompareMarkerDistance);
-    ASSERT(amdMarkers[0].md_fMinD>=amdMarkers[ctMarkers-1].md_fMinD);
+    ASSERT(amdMarkers[0].md_fMinD >= amdMarkers[ctMarkers-1].md_fMinD);
     // choose marker among one of the 50% farthest
     INDEX ctFarMarkers = ctMarkers/2;
     ASSERT(ctFarMarkers>0);
@@ -5004,7 +5004,7 @@ functions:
         break;
       }
       iMarker = (iMarker+1)%ctMarkers;
-      if (iMarker==iStartMarker) {
+      if (iMarker == iStartMarker) {
         break;
       }
     }
@@ -5044,7 +5044,7 @@ functions:
 
     // set flags
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);
-    SetCollisionFlags(ECF_MODEL|((ECBI_PLAYER)<<ECB_IS));
+    SetCollisionFlags(ECF_MODEL|((ECBI_PLAYER) << ECB_IS));
     SetFlags(GetFlags()|ENF_ALIVE);
     // animation
     StartModelAnim(PLAYER_ANIM_STAND, AOF_LOOPING);
@@ -5072,50 +5072,50 @@ functions:
 
   void RemapLevelNames(INDEX &iLevel)
   {
-	  switch (iLevel) {
+    switch (iLevel) {
     case 10:
       iLevel = 1;
       break;
     case 11:
-		  iLevel = 2;
-		  break;
-	  case 12:
-		  iLevel = 3;
-		  break;
-	  case 13:
-		  iLevel = 4;
-		  break;
-	  case 14:
-		  iLevel = 5;
-		  break;
-	  case 15:
-		  iLevel = 6;
-		  break;
-	  case 21:
-		  iLevel = 7;
-		  break;
-	  case 22:
-		  iLevel = 8;
-		  break;
-	  case 23:
-		  iLevel = 9;
-		  break;
-	  case 24:
-		  iLevel = 10;
-		  break;
-	  case 31:
-		  iLevel = 11;
-		  break;
-	  case 32:
-		  iLevel = 12;
-		  break;
-	  case 33:
-		  iLevel = 13;
-		  break;
-	  default:
-		  iLevel = -1;
-		  break;
-	  }
+      iLevel = 2;
+      break;
+    case 12:
+      iLevel = 3;
+      break;
+    case 13:
+      iLevel = 4;
+      break;
+    case 14:
+      iLevel = 5;
+      break;
+    case 15:
+      iLevel = 6;
+      break;
+    case 21:
+      iLevel = 7;
+      break;
+    case 22:
+      iLevel = 8;
+      break;
+    case 23:
+      iLevel = 9;
+      break;
+    case 24:
+      iLevel = 10;
+      break;
+    case 31:
+      iLevel = 11;
+      break;
+    case 32:
+      iLevel = 12;
+      break;
+    case 33:
+      iLevel = 13;
+      break;
+    default:
+      iLevel = -1;
+      break;
+    }
   }
   
   
@@ -5130,10 +5130,10 @@ functions:
     strLevelName.ScanF("%01d_%01d_", &u, &v);
     iLevel = u*10+v;
     
-	  RemapLevelNames(iLevel);
+    RemapLevelNames(iLevel);
             
     if (iLevel>0) {
-      ((CSessionProperties*)GetSP())->sp_ulLevelsMask|=1<<(iLevel-1);
+      ((CSessionProperties*)GetSP())->sp_ulLevelsMask|=1 << (iLevel-1);
     }
 
     // find player index
@@ -5157,7 +5157,7 @@ functions:
     BOOL bAdjustHealth = FALSE;   // for getting adjusting health to 50-100 interval
     CEntity *pen = NULL;
     if (GetSP()->sp_bCooperative) {
-      if (cht_iGoToMarker>=0) {
+      if (cht_iGoToMarker >= 0) {
         // try to find fast go marker
         CTString strPlayerStart;
         strPlayerStart.PrintF("Player Start - %d", (INDEX)cht_iGoToMarker);
@@ -5167,9 +5167,9 @@ functions:
         bSetHealth = TRUE;
         bAdjustHealth = FALSE;
       // if there is coop respawn marker
-      } else if (m_penMainMusicHolder!=NULL && !(m_ulFlags&PLF_CHANGINGLEVEL)) {
+      } else if (m_penMainMusicHolder != NULL && !(m_ulFlags&PLF_CHANGINGLEVEL)) {
         CMusicHolder *pmh = (CMusicHolder *)&*m_penMainMusicHolder;
-        if (pmh->m_penRespawnMarker!=NULL) {
+        if (pmh->m_penRespawnMarker != NULL) {
           // get it
           pen = pmh->m_penRespawnMarker;
           bSetHealth = TRUE;
@@ -5178,7 +5178,7 @@ functions:
       }
 
       // if quick start is enabled (in wed)
-      if (pen==NULL && GetSP()->sp_bQuickTest && m_strGroup=="") {
+      if (pen == NULL && GetSP()->sp_bQuickTest && m_strGroup == "") {
         // try to find quick start marker
         CTString strPlayerStart;
         strPlayerStart.PrintF("Player Quick Start");
@@ -5187,16 +5187,16 @@ functions:
         bAdjustHealth = FALSE;
       }
       // if no start position yet
-      if (pen==NULL) {
+      if (pen == NULL) {
         // try to find normal start marker
         CTString strPlayerStart;
         strPlayerStart.PrintF("Player Start - %s", m_strGroup);
         pen = _pNetwork->GetEntityWithName(strPlayerStart, 0);
-        if (m_strGroup=="") {
+        if (m_strGroup == "") {
           bSetHealth = TRUE;
           bAdjustHealth = FALSE;
         } else {
-          if (EwltType==WLT_FIXED) {
+          if (EwltType == WLT_FIXED) {
             bSetHealth = FALSE;
             bAdjustHealth = TRUE;
           } else {
@@ -5206,7 +5206,7 @@ functions:
         }
       }
       // if no start position yet
-      if (pen==NULL) {
+      if (pen == NULL) {
         // try to find normal start marker without group anyway
         CTString strPlayerStart;
         strPlayerStart.PrintF("Player Start - ");
@@ -5219,13 +5219,13 @@ functions:
       bAdjustHealth = FALSE;
       // try to find start marker by random
       pen = GetDeathmatchStartMarker();
-      if (pen!=NULL) {
+      if (pen != NULL) {
         ((CPlayerMarker&)*pen).m_tmLastSpawned = _pTimer->CurrentTick();
       }
     }
 
     // if respawning in place
-    if ((m_ulFlags&PLF_RESPAWNINPLACE) && pen!=NULL && !((CPlayerMarker*)&*pen)->m_bNoRespawnInPlace) {
+    if ((m_ulFlags&PLF_RESPAWNINPLACE) && pen != NULL && !((CPlayerMarker*)&*pen)->m_bNoRespawnInPlace) {
       m_ulFlags &= ~PLF_RESPAWNINPLACE;
       // set default params
       SetHealth(TopHealth());
@@ -5235,11 +5235,11 @@ functions:
       Teleport(CPlacement3D(m_vDied, m_aDied));
 
     // if start marker is found
-    } else if (pen!=NULL) {
+    } else if (pen != NULL) {
       // if there is no respawn marker yet
-      if (m_penMainMusicHolder!=NULL) {
+      if (m_penMainMusicHolder != NULL) {
         CMusicHolder *pmh = (CMusicHolder *)&*m_penMainMusicHolder;
-        if (pmh->m_penRespawnMarker==NULL) {
+        if (pmh->m_penRespawnMarker == NULL) {
           // set it
           pmh->m_penRespawnMarker = pen;
         }
@@ -5271,7 +5271,7 @@ functions:
       // start with first message linked to the marker
       CMessageHolder *penMessage = (CMessageHolder *)&*CpmStart.m_penMessage;
       // while there are some messages to add
-      while (penMessage!=NULL && IsOfClass(penMessage, "MessageHolder")) {
+      while (penMessage != NULL && IsOfClass(penMessage, "MessageHolder")) {
         const CTFileName &fnmMessage = penMessage->m_fnmMessage;
         // if player doesn't have that message in database
         if (!HasMessage(fnmMessage)) {
@@ -5307,7 +5307,7 @@ functions:
         Teleport(CPlacement3D(FLOAT3D(0.0f, 0.0f, 0.0f)+vOffsetRel, ANGLE3D(0.0f, 0.0f, 0.0f)));
       }
       // if there is a start trigger target
-      if (CpmStart.m_penTarget!=NULL) {
+      if (CpmStart.m_penTarget != NULL) {
         SendToTarget(CpmStart.m_penTarget, EET_TRIGGER, this);
       }
 
@@ -5331,9 +5331,9 @@ functions:
     m_fMaxHealth = TopHealth();
 
     // if in singleplayer mode
-    if (GetSP()->sp_bSinglePlayer && GetSP()->sp_gmGameMode!=CSessionProperties::GM_FLYOVER) {
+    if (GetSP()->sp_bSinglePlayer && GetSP()->sp_gmGameMode != CSessionProperties::GM_FLYOVER) {
       CWorldSettingsController *pwsc = GetWSC(this);
-      if (pwsc!=NULL && pwsc->m_bNoSaveGame) {
+      if (pwsc != NULL && pwsc->m_bNoSaveGame) {
         NOTHING;
       } else {
         // save quick savegame
@@ -5427,7 +5427,7 @@ functions:
     // render empty shells
     Particles_EmptyShells( this, m_asldData);
 
-    if (Particle_GetViewer()==this) {
+    if (Particle_GetViewer() == this) {
       Particles_ViewerLocal(this);
     }
     else
@@ -5474,7 +5474,7 @@ functions:
       // for each player
       for (INDEX iPlayer=0; iPlayer<GetMaxPlayers(); iPlayer++) {
         CPlayer *ppl = (CPlayer*)GetPlayerEntity(iPlayer);
-        if (ppl!=NULL) {
+        if (ppl != NULL) {
           // put it at marker
           CPlacement3D pl = ppam->GetPlacement();
           FLOAT3D vOffsetRel = ppl->GetTeleportingOffset();
@@ -5547,9 +5547,9 @@ procedures:
     penWeapon->m_bSniping=FALSE;
     m_ulFlags&=~PLF_ISZOOMING;
 
-	// turn off possible chainsaw engine sound
-	PlaySound(m_soWeaponAmbient, SOUND_SILENCE, SOF_3D);
-	
+  // turn off possible chainsaw engine sound
+  PlaySound(m_soWeaponAmbient, SOUND_SILENCE, SOF_3D);
+  
     // update per-level stats
     UpdateLevelStats();
     m_ulFlags |= PLF_INITIALIZED;
@@ -5612,8 +5612,8 @@ procedures:
     PlaySound(m_soSniperZoom, SOUND_SILENCE, SOF_3D);
     PlaySound(m_soWeaponAmbient, SOUND_SILENCE, SOF_3D);
 
-	// stop rotating minigun
-	penWeapon->m_aMiniGunLast = penWeapon->m_aMiniGun;
+  // stop rotating minigun
+  penWeapon->m_aMiniGunLast = penWeapon->m_aMiniGun;
     
     // if in single player, or if this is a predictor entity
     if (GetSP()->sp_bSinglePlayer || IsPredictor()) {
@@ -5638,11 +5638,11 @@ procedures:
       CPlayer *pplKillerPlayer = NULL;
 
       // if killed by some entity
-      if (penKiller!=NULL) {
+      if (penKiller != NULL) {
         // if killed by player
         if (IsOfClass(penKiller, "Player")) {
           // if someone other then you
-          if (penKiller!=this) {
+          if (penKiller != this) {
             pplKillerPlayer = (CPlayer*)penKiller;
             EReceiveScore eScore;
             eScore.iPoints = m_iMana;
@@ -5673,7 +5673,7 @@ procedures:
       // if playing scorematch
       if (!GetSP()->sp_bUseFrags) {
         // if killed by a player
-        if (pplKillerPlayer!=NULL) {
+        if (pplKillerPlayer != NULL) {
           // print how much that player gained
           CPrintF(TRANS("  %s: +%d points\n"), pplKillerPlayer->GetPlayerName(), m_iMana);
         // if it was a suicide, or an accident
@@ -5715,10 +5715,10 @@ procedures:
     if (m_pstState == PST_SWIM || m_pstState == PST_DIVE) {
       iAnim1 = PLAYER_ANIM_DEATH_UNDERWATER;
       iAnim2 = BODY_ANIM_DEATH_UNDERWATER;
-    } else if (eDeath.eLastDamage.dmtType==DMT_SPIKESTAB) {
+    } else if (eDeath.eLastDamage.dmtType == DMT_SPIKESTAB) {
       iAnim1 = PLAYER_ANIM_DEATH_SPIKES;
       iAnim2 = BODY_ANIM_DEATH_SPIKES;
-    } else if (eDeath.eLastDamage.dmtType==DMT_ABYSS) {
+    } else if (eDeath.eLastDamage.dmtType == DMT_ABYSS) {
       iAnim1 = PLAYER_ANIM_ABYSSFALL;
       iAnim2 = BODY_ANIM_ABYSSFALL;
     } else {
@@ -5756,7 +5756,7 @@ procedures:
     en_fDensity = 400.0f;
 
     // play sound
-    if (m_pstState==PST_DIVE) {
+    if (m_pstState == PST_DIVE) {
       SetDefaultMouthPitch();
       PlaySound(m_soMouth, GenderSound(SOUND_DEATHWATER), SOF_3D);
       if (_pNetwork->IsPlayerLocal(this)) {IFeel_PlayEffect("DeathWater");}
@@ -5774,7 +5774,7 @@ procedures:
       eInit.penOwner = this;
       eInit.penCamera = NULL;
       eInit.vtView = VT_PLAYERDEATH;
-      eInit.bDeathFixed = eDeath.eLastDamage.dmtType==DMT_ABYSS;
+      eInit.bDeathFixed = eDeath.eLastDamage.dmtType == DMT_ABYSS;
       m_penView->Initialize(eInit);
     }
                      
@@ -5801,8 +5801,8 @@ procedures:
       }
       // when damaged
       on (EDamage eDamage) : { 
-        if (eDamage.dmtType==DMT_ABYSS) {
-          if (m_penView!=NULL) {
+        if (eDamage.dmtType == DMT_ABYSS) {
+          if (m_penView != NULL) {
             ((CPlayerView*)&*m_penView)->m_bFixed = TRUE;
           }
         }
@@ -5828,7 +5828,7 @@ procedures:
         // if we are in coop
         if (GetSP()->sp_bCooperative && !GetSP()->sp_bSinglePlayer) {
           // if the marker is teleport marker
-          if (eAutoAction.penFirstMarker!=NULL && 
+          if (eAutoAction.penFirstMarker != NULL && 
             ((CPlayerActionMarker*)&*eAutoAction.penFirstMarker)->m_paaAction == PAA_TELEPORT) {
             // teleport there
             TeleportToAutoMarker((CPlayerActionMarker*)&*eAutoAction.penFirstMarker);
@@ -5857,7 +5857,7 @@ procedures:
       }
     }
     // if current difficulty is serious
-    if (GetSP()->sp_gdGameDifficulty==CSessionProperties::GD_EXTREME) {
+    if (GetSP()->sp_gdGameDifficulty == CSessionProperties::GD_EXTREME) {
       // activate the mental mode
       _pShell->Execute("sam_bMentalActivated=1;");
     }
@@ -5945,7 +5945,7 @@ procedures:
 
     // stop and kill flame
     CEntityPointer penFlame = GetChildOfClass("Flame");
-    if (penFlame!=NULL)
+    if (penFlame != NULL)
     {
       // send the event to stop burning
       EStopFlaming esf;
@@ -5973,7 +5973,7 @@ procedures:
     ULONG ulFlags = AOF_LOOPING|AOF_NORESTART;
 
     INDEX iAnim = GetModelObject()->GetAnim();
-    if (iAnim!=PLAYER_ANIM_STAND)
+    if (iAnim != PLAYER_ANIM_STAND)
     {
       ulFlags |= AOF_SMOOTHCHANGE;
     }
@@ -6005,7 +6005,7 @@ procedures:
     ULONG ulFlags = AOF_LOOPING|AOF_NORESTART;
 
     INDEX iAnim = GetModelObject()->GetAnim();
-    if (iAnim!=PLAYER_ANIM_STAND)
+    if (iAnim != PLAYER_ANIM_STAND)
     {
       ulFlags |= AOF_SMOOTHCHANGE;
     }
@@ -6063,13 +6063,13 @@ procedures:
     CPlayerAnimator &plan = (CPlayerAnimator&)*m_penAnimator;
     plan.BodyRemoveItem();
     // if marker points to a trigger
-    if (GetActionMarker()->m_penTrigger!=NULL) {
+    if (GetActionMarker()->m_penTrigger != NULL) {
       // trigger it
       SendToTarget(GetActionMarker()->m_penTrigger, EET_TRIGGER, this);
     }
 
     // fake that player has passed through the door controller
-    if (GetActionMarker()->m_penDoorController!=NULL) {
+    if (GetActionMarker()->m_penDoorController != NULL) {
       EPass ePass;
       ePass.penOther = this;
       GetActionMarker()->m_penDoorController->SendEvent(ePass);
@@ -6096,7 +6096,7 @@ procedures:
     autowait(1.2f);
 
     // if marker points to a trigger
-    if (GetActionMarker()->m_penTrigger!=NULL) {
+    if (GetActionMarker()->m_penTrigger != NULL) {
       // trigger it
       SendToTarget(GetActionMarker()->m_penTrigger, EET_TRIGGER, this);
     }
@@ -6354,16 +6354,16 @@ procedures:
     plan.m_bDisableAnimating = TRUE;
 
     // while there is some marker
-    while (m_penActionMarker!=NULL && IsOfClass(m_penActionMarker, "PlayerActionMarker")) {
+    while (m_penActionMarker != NULL && IsOfClass(m_penActionMarker, "PlayerActionMarker")) {
 
       // if should wait
-      if (GetActionMarker()->m_paaAction==PAA_WAIT) {
+      if (GetActionMarker()->m_paaAction == PAA_WAIT) {
         // play still anim
         CModelObject &moBody = GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject;
         moBody.PlayAnim(BODY_ANIM_WAIT, AOF_NORESTART|AOF_LOOPING);
         // wait given time
         autowait(GetActionMarker()->m_tmWait);
-      } else if (GetActionMarker()->m_paaAction==PAA_STOPANDWAIT) {
+      } else if (GetActionMarker()->m_paaAction == PAA_STOPANDWAIT) {
         // play still anim
         StartModelAnim(PLAYER_ANIM_STAND, 0);
         CModelObject &moBody = GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject;
@@ -6372,63 +6372,63 @@ procedures:
         autowait(GetActionMarker()->m_tmWait);
 
       // if should teleport here
-      } else if (GetActionMarker()->m_paaAction==PAA_APPEARING) {
+      } else if (GetActionMarker()->m_paaAction == PAA_APPEARING) {
         autocall AutoAppear() EReturn;
-      } else if (GetActionMarker()->m_paaAction==PAA_TRAVELING_IN_BEAM) {
+      } else if (GetActionMarker()->m_paaAction == PAA_TRAVELING_IN_BEAM) {
         autocall TravellingInBeam() EReturn;
-      } else if (GetActionMarker()->m_paaAction==PAA_INTROSE_SELECT_WEAPON) {
+      } else if (GetActionMarker()->m_paaAction == PAA_INTROSE_SELECT_WEAPON) {
         // order playerweapons to select weapon
         ESelectWeapon eSelect;
         eSelect.iWeapon = 1;
         ((CPlayerWeapons&)*m_penWeapons).SendEvent(eSelect);
-      } else if (GetActionMarker()->m_paaAction==PAA_LOGO_FIRE_INTROSE) {
+      } else if (GetActionMarker()->m_paaAction == PAA_LOGO_FIRE_INTROSE) {
         autocall LogoFireMinigun() EReturn;
-      } else if (GetActionMarker()->m_paaAction==PAA_LOGO_FIRE_MINIGUN) {
+      } else if (GetActionMarker()->m_paaAction == PAA_LOGO_FIRE_MINIGUN) {
         autocall LogoFireMinigun() EReturn;
       // if should appear here
-      } else if (GetActionMarker()->m_paaAction==PAA_TELEPORT) {
+      } else if (GetActionMarker()->m_paaAction == PAA_TELEPORT) {
         autocall AutoTeleport() EReturn;
 
       // if should wait for trigger
-      } else if (GetActionMarker()->m_paaAction==PAA_WAITFOREVER) {
+      } else if (GetActionMarker()->m_paaAction == PAA_WAITFOREVER) {
         // wait forever
         wait() {
           on (EBegin) : { resume; }
           otherwise() : { pass; }
         }
       // if should store weapon
-      } else if (GetActionMarker()->m_paaAction==PAA_STOREWEAPON) {
+      } else if (GetActionMarker()->m_paaAction == PAA_STOREWEAPON) {
         autocall AutoStoreWeapon() EReturn;
       
       // if should draw weapon
-      } else if (GetActionMarker()->m_paaAction==PAA_DRAWWEAPON) {
+      } else if (GetActionMarker()->m_paaAction == PAA_DRAWWEAPON) {
         // order playerweapons to select best weapon
         ESelectWeapon eSelect;
         eSelect.iWeapon = -4;
         ((CPlayerWeapons&)*m_penWeapons).SendEvent(eSelect);
 
       // if should wait
-      } else if (GetActionMarker()->m_paaAction==PAA_LOOKAROUND) {
+      } else if (GetActionMarker()->m_paaAction == PAA_LOOKAROUND) {
         autocall AutoLookAround() EReturn;
 
       // if should use item
-      } else if (GetActionMarker()->m_paaAction==PAA_USEITEM) {
+      } else if (GetActionMarker()->m_paaAction == PAA_USEITEM) {
         // use it
         autocall AutoUseItem() EReturn;
 
       // if should pick item
-      } else if (GetActionMarker()->m_paaAction==PAA_PICKITEM) {
+      } else if (GetActionMarker()->m_paaAction == PAA_PICKITEM) {
         // pick it
         autocall AutoPickItem() EReturn;
 
       // if falling from bridge
-      } else if (GetActionMarker()->m_paaAction==PAA_FALLDOWN) {
+      } else if (GetActionMarker()->m_paaAction == PAA_FALLDOWN) {
         // fall
         autocall AutoFallDown() EReturn;
 
       // if releasing player
-      } else if (GetActionMarker()->m_paaAction==PAA_RELEASEPLAYER) {
-        if (m_penCamera!=NULL) {
+      } else if (GetActionMarker()->m_paaAction == PAA_RELEASEPLAYER) {
+        if (m_penCamera != NULL) {
           ((CCamera*)&*m_penCamera)->m_bStopMoving=TRUE;
         }
         m_penCamera = NULL;
@@ -6444,7 +6444,7 @@ procedures:
         m_tmSpiritStart = 0;
 
       // if start computer
-      } else if (GetActionMarker()->m_paaAction==PAA_STARTCOMPUTER) {
+      } else if (GetActionMarker()->m_paaAction == PAA_STARTCOMPUTER) {
         // mark that
         if (_pNetwork->IsPlayerLocal(this) && GetSP()->sp_bSinglePlayer) {
           cmp_ppenPlayer = this;
@@ -6452,31 +6452,31 @@ procedures:
         }
 
       // if start introscroll
-      } else if (GetActionMarker()->m_paaAction==PAA_STARTINTROSCROLL) {
+      } else if (GetActionMarker()->m_paaAction == PAA_STARTINTROSCROLL) {
         _pShell->Execute("sam_iStartCredits=1;");
 
       // if start credits
-      } else if (GetActionMarker()->m_paaAction==PAA_STARTCREDITS) {
+      } else if (GetActionMarker()->m_paaAction == PAA_STARTCREDITS) {
         _pShell->Execute("sam_iStartCredits=2;");
 
       // if stop scroller
-      } else if (GetActionMarker()->m_paaAction==PAA_STOPSCROLLER) {
+      } else if (GetActionMarker()->m_paaAction == PAA_STOPSCROLLER) {
         _pShell->Execute("sam_iStartCredits=-1;");
 
       // if should run to the marker
-      } else if (GetActionMarker()->m_paaAction==PAA_RUN) {
+      } else if (GetActionMarker()->m_paaAction == PAA_RUN) {
         // go to it
         m_fAutoSpeed = plr_fSpeedForward*GetActionMarker()->m_fSpeed;                                             
         autocall AutoGoToMarker() EReturn;
 
       // if should run to the marker and stop exactly there
-      } else if (GetActionMarker()->m_paaAction==PAA_RUNANDSTOP) {
+      } else if (GetActionMarker()->m_paaAction == PAA_RUNANDSTOP) {
         // go to it
         m_fAutoSpeed = plr_fSpeedForward*GetActionMarker()->m_fSpeed;                                             
         autocall AutoGoToMarkerAndStop() EReturn;
 
       // if should record end-of-level stats
-      } else if (GetActionMarker()->m_paaAction==PAA_RECORDSTATS) {
+      } else if (GetActionMarker()->m_paaAction == PAA_RECORDSTATS) {
 
         if (GetSP()->sp_bSinglePlayer || GetSP()->sp_bPlayEntireGame) {
           // remeber estimated time
@@ -6488,9 +6488,9 @@ procedures:
         }
 
       // if should show statistics to the player
-      } else if (GetActionMarker()->m_paaAction==PAA_SHOWSTATS) {
+      } else if (GetActionMarker()->m_paaAction == PAA_SHOWSTATS) {
         // call computer
-        if (cmp_ppenPlayer==NULL && _pNetwork->IsPlayerLocal(this) && GetSP()->sp_bSinglePlayer) {
+        if (cmp_ppenPlayer == NULL && _pNetwork->IsPlayerLocal(this) && GetSP()->sp_bSinglePlayer) {
           m_bEndOfLevel = TRUE;
           cmp_ppenPlayer = this;
           m_ulFlags|=PLF_DONTRENDER;
@@ -6511,17 +6511,17 @@ procedures:
           m_ulFlags&=!PLF_DONTRENDER;
         }
       // if end of entire game
-      } else if (GetActionMarker()->m_paaAction==PAA_ENDOFGAME) {
+      } else if (GetActionMarker()->m_paaAction == PAA_ENDOFGAME) {
 
         // record stats
         jump TheEnd();
-      } else if (GetActionMarker()->m_paaAction==PAA_NOGRAVITY) {
+      } else if (GetActionMarker()->m_paaAction == PAA_NOGRAVITY) {
         SetPhysicsFlags(GetPhysicsFlags() & ~(EPF_TRANSLATEDBYGRAVITY|EPF_ORIENTEDBYGRAVITY));
         if (GetActionMarker()->GetParent() != NULL)
         {
           SetParent(GetActionMarker()->GetParent());
         }
-      } else if (GetActionMarker()->m_paaAction==PAA_TURNONGRAVITY) {
+      } else if (GetActionMarker()->m_paaAction == PAA_TURNONGRAVITY) {
         SetPhysicsFlags(GetPhysicsFlags()|EPF_TRANSLATEDBYGRAVITY|EPF_ORIENTEDBYGRAVITY);
         SetParent(NULL);
       }
@@ -6530,8 +6530,8 @@ procedures:
       }
 
       // if marker points to a trigger
-      if (GetActionMarker()->m_penTrigger!=NULL &&
-          GetActionMarker()->m_paaAction!=PAA_PICKITEM) {
+      if (GetActionMarker()->m_penTrigger != NULL &&
+          GetActionMarker()->m_paaAction != PAA_PICKITEM) {
         // trigger it
         SendToTarget(GetActionMarker()->m_penTrigger, EET_TRIGGER, this);
       }
@@ -6574,7 +6574,7 @@ procedures:
     ParseGender(strDummy);
 
     // if unsuccessful
-    if (GetModelObject()->GetData()==NULL) {
+    if (GetModelObject()->GetData() == NULL) {
       // never proceed with initialization - player cannot work
       return;
     }
@@ -6672,7 +6672,7 @@ procedures:
       on (ECameraStart eStart) : {
         m_penCamera = eStart.penCamera;
         // stop player
-        if (m_penActionMarker==NULL) {
+        if (m_penActionMarker == NULL) {
           SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
           SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
         }
@@ -6681,7 +6681,7 @@ procedures:
         resume;
       }
       on (ECameraStop eCameraStop) : {
-        if (m_penCamera==eCameraStop.penCamera) {
+        if (m_penCamera == eCameraStop.penCamera) {
           m_penCamera = NULL;
         }
         resume;
@@ -6689,7 +6689,7 @@ procedures:
       on (ECenterMessage eMsg) : {
         m_strCenterMessage = eMsg.strMessage;
         m_llCenterMessageEnd = _pTimer->GetGameTick() + CTimer::InTicks(eMsg.tmLength);
-        if (eMsg.mssSound==MSS_INFO) {
+        if (eMsg.mssSound == MSS_INFO) {
           m_soMessage.Set3DParameters(25.0f, 5.0f, 1.0f, 1.0f);
           PlaySound(m_soMessage, SOUND_INFO, SOF_3D|SOF_VOLUMETRIC|SOF_LOCAL);
         }
@@ -6760,18 +6760,18 @@ procedures:
     // we get here if the player is disconnected from the server
 
     // if we have some keys
-    if (!IsPredictor() && m_ulKeys!=0) {
+    if (!IsPredictor() && m_ulKeys != 0) {
       // find first live player
       CPlayer *penNextPlayer = NULL;
       for (INDEX iPlayer=0; iPlayer<GetMaxPlayers(); iPlayer++) {
         CPlayer *pen = (CPlayer*)&*GetPlayerEntity(iPlayer);
-        if (pen!=NULL && pen!=this && (pen->GetFlags()&ENF_ALIVE) && !(pen->GetFlags()&ENF_DELETED) ) {
+        if (pen != NULL && pen != this && (pen->GetFlags()&ENF_ALIVE) && !(pen->GetFlags()&ENF_DELETED) ) {
           penNextPlayer = pen;
         }
       }
 
       // if any found
-      if (penNextPlayer!=NULL) {
+      if (penNextPlayer != NULL) {
         // transfer keys to that player
         CPrintF(TRANS("%s leaving, all keys transfered to %s\n"), 
           (const char*)m_strName, (const char*)penNextPlayer->GetPlayerName());
@@ -6785,10 +6785,10 @@ procedures:
     // cease to exist
     m_penWeapons->Destroy();
     m_penAnimator->Destroy();
-    if (m_penView!=NULL) {
+    if (m_penView != NULL) {
       m_penView->Destroy();
     }
-    if (m_pen3rdPersonView!=NULL) {
+    if (m_pen3rdPersonView != NULL) {
       m_pen3rdPersonView->Destroy();
     }
     Destroy();

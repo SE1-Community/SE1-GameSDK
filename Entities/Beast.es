@@ -137,7 +137,7 @@ functions:
   void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL) {
+    if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
       pwsc->m_vShakePos = GetPlacement().pl_PositionVector;
       pwsc->m_fShakeFalloff = 400.0f;
@@ -175,13 +175,13 @@ functions:
   {
     
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount*=0.5f;
     }
 
     // cannonballs inflict less damage then the default
-    if (m_bcType==BT_BIG && dmtType==DMT_CANNONBALL)
+    if (m_bcType == BT_BIG && dmtType == DMT_CANNONBALL)
     {
       fDamageAmmount *= 0.3333f;
     }
@@ -196,7 +196,7 @@ functions:
   // damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
     INDEX iAnim;
-    if ((m_bcType==BT_BIG || m_bcType==BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
+    if ((m_bcType == BT_BIG || m_bcType == BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
       iAnim = BEAST_ANIM_ANGER;
     } else {
       iAnim = BEAST_ANIM_WOUND;
@@ -208,7 +208,7 @@ functions:
   // death
   INDEX AnimForDeath(void) {
     INDEX iAnim;
-    if (m_bcType==BT_BIG || m_bcType==BT_HUGE) {
+    if (m_bcType == BT_BIG || m_bcType == BT_HUGE) {
       iAnim = BEAST_ANIM_DEATHBIG;
     } else {
       iAnim = BEAST_ANIM_DEATH;
@@ -219,7 +219,7 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim()==BEAST_ANIM_DEATH)
+    if (GetModelObject()->GetAnim() == BEAST_ANIM_DEATH)
     {
       vStretch=FLOAT3D(1,1,2)*2.0f;
       return 0.3f;
@@ -239,13 +239,13 @@ functions:
   };
 
   void WalkingAnim(void) {
-    if (_pTimer->CurrentTick()>=_tmLastStandingAnim-_pTimer->TickQuantum &&
-       _pTimer->CurrentTick()<=_tmLastStandingAnim+_pTimer->TickQuantum)
+    if (_pTimer->CurrentTick() >= _tmLastStandingAnim-_pTimer->TickQuantum &&
+       _pTimer->CurrentTick() <= _tmLastStandingAnim+_pTimer->TickQuantum)
     {
       //BREAKPOINT;
     }
 
-    if (m_bcType==BT_BIG || m_bcType==BT_HUGE) {
+    if (m_bcType == BT_BIG || m_bcType == BT_HUGE) {
       StartModelAnim(BEAST_ANIM_WALKBIG, AOF_LOOPING|AOF_NORESTART);
     } else {
       StartModelAnim(BEAST_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
@@ -267,7 +267,7 @@ functions:
     PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
   };
   void WoundSound(void) {
-    if ((m_bcType==BT_BIG || m_bcType==BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
+    if ((m_bcType == BT_BIG || m_bcType == BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
       PlaySound(m_soSound, SOUND_ANGER, SOF_3D);
     } else {
       PlaySound(m_soSound, SOUND_WOUND, SOF_3D);
@@ -366,7 +366,7 @@ procedures:
       if (GetHealth() <= m_fMaxHealth/2)
       {
         m_iCounter = 0;
-        while ( m_iCounter<6)
+        while (m_iCounter<6)
         {
           StartModelAnim(BEAST_ANIM_ATTACKFAST, AOF_SMOOTHCHANGE);
           autocall CMovableModelEntity::WaitUntilScheduledAnimStarts() EReturn;    
@@ -385,7 +385,7 @@ procedures:
       if (GetHealth() > m_fMaxHealth/2)
       {
         m_iCounter = 0;
-        while ( m_iCounter<3)
+        while (m_iCounter<3)
         {
           StartModelAnim(BEAST_ANIM_ATTACK, AOF_SMOOTHCHANGE);
           autocall CMovableModelEntity::WaitUntilScheduledAnimStarts() EReturn;    
@@ -407,7 +407,7 @@ procedures:
       if (GetHealth() <= m_fMaxHealth/2)
       {
         m_iCounter = 0;
-        while ( m_iCounter<6)
+        while (m_iCounter<6)
         {
           StartModelAnim(BEAST_ANIM_ATTACKFAST, AOF_SMOOTHCHANGE);
           autocall CMovableModelEntity::WaitUntilScheduledAnimStarts() EReturn;    
@@ -426,7 +426,7 @@ procedures:
       if (GetHealth() > m_fMaxHealth/2)
       {
         m_iCounter = 0;
-        while ( m_iCounter<3)
+        while (m_iCounter<3)
         {
           StartModelAnim(BEAST_ANIM_ATTACK, AOF_SMOOTHCHANGE);
           autocall CMovableModelEntity::WaitUntilScheduledAnimStarts() EReturn;    
@@ -479,7 +479,7 @@ procedures:
         InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 80.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       } else if (m_bcType == BT_HUGE) {
         InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 120.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
-      } else  {
+      } else {
         InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 40.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
       }
     }

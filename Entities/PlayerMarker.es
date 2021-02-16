@@ -57,17 +57,17 @@ functions:
   BOOL HandleEvent(const CEntityEvent &ee) {
     if (ee.ee_slEvent == EVENTCODE_ETrigger) {
       CEntity *penMainMusicHolder = _pNetwork->GetEntityWithName("MusicHolder", 0);
-      if (penMainMusicHolder==NULL || !IsOfClass(penMainMusicHolder, "MusicHolder")) {
+      if (penMainMusicHolder == NULL || !IsOfClass(penMainMusicHolder, "MusicHolder")) {
         return TRUE;
       }
       CMusicHolder *pmh = (CMusicHolder *)penMainMusicHolder;
-      BOOL bNew = (pmh->m_penRespawnMarker!=this);
+      BOOL bNew = (pmh->m_penRespawnMarker != this);
       pmh->m_penRespawnMarker = this;
 
       // if this is a new marker and we are in single player and the trigger originator is valid
       CEntity *penCaused = ((ETrigger&)ee).penCaused;
       if (bNew &&
-        (GetSP()->sp_bSinglePlayer && GetSP()->sp_gmGameMode!=CSessionProperties::GM_FLYOVER)
+        (GetSP()->sp_bSinglePlayer && GetSP()->sp_gmGameMode != CSessionProperties::GM_FLYOVER)
         && IsOfClass(penCaused, "Player")) {
         // if the player wants auto-save
         CPlayerSettings *pps = (CPlayerSettings *) (((CPlayerEntity*)penCaused)->en_pcCharacter.pc_aubAppearance);

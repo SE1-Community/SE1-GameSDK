@@ -33,13 +33,13 @@ public:
 
   SBYTE ps_iCrossHairType;      // type of crosshair used
 
-#define PSF_HIDEWEAPON      (1L<<0)   // don't render weapon in 1st person
-#define PSF_PREFER3RDPERSON (1L<<1)   // auto switch to 3rd person 
-#define PSF_NOQUOTES        (1L<<2)   // don't tell quotes
-#define PSF_AUTOSAVE        (1L<<3)   // auto save at specific locations
-#define PSF_COMPSINGLECLICK (1L<<4)   // invoke computer with single click, not double clicks
-#define PSF_SHARPTURNING    (1L<<5)   // use prescanning to eliminate mouse lag
-#define PSF_NOBOBBING       (1L<<6)   // view bobbing on/off (for people with motion sickness problems)
+#define PSF_HIDEWEAPON      (1L << 0)   // don't render weapon in 1st person
+#define PSF_PREFER3RDPERSON (1L << 1)   // auto switch to 3rd person 
+#define PSF_NOQUOTES        (1L << 2)   // don't tell quotes
+#define PSF_AUTOSAVE        (1L << 3)   // auto save at specific locations
+#define PSF_COMPSINGLECLICK (1L << 4)   // invoke computer with single click, not double clicks
+#define PSF_SHARPTURNING    (1L << 5)   // use prescanning to eliminate mouse lag
+#define PSF_NOBOBBING       (1L << 6)   // view bobbing on/off (for people with motion sickness problems)
   ULONG ps_ulFlags;   // various flags
 
   // get filename for model
@@ -67,8 +67,8 @@ public:
 
   // must have exact the size as allocated block in engine
   CUniversalPlayerSettings() { 
-    ASSERT(sizeof(CPlayerSettings)<=MAX_PLAYERAPPEARANCE); 
-    ASSERT(sizeof(CUniversalPlayerSettings)==MAX_PLAYERAPPEARANCE); 
+    ASSERT(sizeof(CPlayerSettings) <= MAX_PLAYERAPPEARANCE); 
+    ASSERT(sizeof(CUniversalPlayerSettings) == MAX_PLAYERAPPEARANCE); 
   }
   operator CPlayerSettings&(void) { return ups_ps; }
 };

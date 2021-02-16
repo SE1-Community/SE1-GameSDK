@@ -69,7 +69,7 @@ functions:
   // render particles
   void RenderParticles(void) {
     // no particles when not existing
-    if (GetRenderType()!=CEntity::RT_MODEL) {
+    if (GetRenderType() != CEntity::RT_MODEL) {
       return;
     }
     Particles_Stardust(this, 0.9f, 0.70f, PT_STAR08, 32);
@@ -92,7 +92,7 @@ functions:
 
 procedures:
   ItemCollected(EPass epass) : CItem::ItemCollected {
-    ASSERT(epass.penOther!=NULL);
+    ASSERT(epass.penOther != NULL);
 
     // send key to entity
     EMessageItem eMessage;

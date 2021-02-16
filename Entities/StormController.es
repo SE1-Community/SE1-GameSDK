@@ -73,7 +73,7 @@ functions:
   // check if one lightning target is valid 
   void CheckOneLightningTarget(CEntityPointer &pen)
   {
-    if (pen!=NULL && !IsOfClass(pen, "Lightning"))
+    if (pen != NULL && !IsOfClass(pen, "Lightning"))
     {
       WarningMessage("Target '%s' is not of class Lightning!", pen->GetName());
       pen=NULL;
@@ -84,25 +84,25 @@ functions:
   INDEX GetLightningsCount(void) const
   {
     // note: only first N that are no NULL are used
-    if (m_penLightning00==NULL) { return 0; };
-    if (m_penLightning01==NULL) { return 1; };
-    if (m_penLightning02==NULL) { return 2; };
-    if (m_penLightning03==NULL) { return 3; };
-    if (m_penLightning04==NULL) { return 4; };
-    if (m_penLightning05==NULL) { return 5; };
-    if (m_penLightning06==NULL) { return 6; };
-    if (m_penLightning07==NULL) { return 7; };
-    if (m_penLightning08==NULL) { return 8; };
-    if (m_penLightning09==NULL) { return 9; };
-    if (m_penLightning10==NULL) { return 10; };
-    if (m_penLightning11==NULL) { return 11; };
-    if (m_penLightning12==NULL) { return 12; };
-    if (m_penLightning13==NULL) { return 13; };
-    if (m_penLightning14==NULL) { return 14; };
-    if (m_penLightning15==NULL) { return 15; };
-    if (m_penLightning16==NULL) { return 16; };
-    if (m_penLightning17==NULL) { return 17; };
-    if (m_penLightning18==NULL) { return 18; };
+    if (m_penLightning00 == NULL) { return 0; };
+    if (m_penLightning01 == NULL) { return 1; };
+    if (m_penLightning02 == NULL) { return 2; };
+    if (m_penLightning03 == NULL) { return 3; };
+    if (m_penLightning04 == NULL) { return 4; };
+    if (m_penLightning05 == NULL) { return 5; };
+    if (m_penLightning06 == NULL) { return 6; };
+    if (m_penLightning07 == NULL) { return 7; };
+    if (m_penLightning08 == NULL) { return 8; };
+    if (m_penLightning09 == NULL) { return 9; };
+    if (m_penLightning10 == NULL) { return 10; };
+    if (m_penLightning11 == NULL) { return 11; };
+    if (m_penLightning12 == NULL) { return 12; };
+    if (m_penLightning13 == NULL) { return 13; };
+    if (m_penLightning14 == NULL) { return 14; };
+    if (m_penLightning15 == NULL) { return 15; };
+    if (m_penLightning16 == NULL) { return 16; };
+    if (m_penLightning17 == NULL) { return 17; };
+    if (m_penLightning18 == NULL) { return 18; };
     return 20;
   }
 
@@ -169,7 +169,7 @@ procedures:
         // choose random lightning
         INDEX ctLightnings = GetLightningsCount();
         // if there are some lightnings
-        if (ctLightnings!=0)
+        if (ctLightnings != 0)
         {
           // choose by random
           CLightning *penLightning = (CLightning *) &*(&m_penLightning00)[IRnd()%ctLightnings];

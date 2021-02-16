@@ -67,10 +67,10 @@ functions:
 
   const CTString &GetDescription(void) const
   {
-    if (m_penTarget1!=NULL && m_penTarget2!=NULL) {
+    if (m_penTarget1 != NULL && m_penTarget2 != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s,%s", 
         m_penTarget1->GetName(), m_penTarget2->GetName());
-    } else if (m_penTarget1!=NULL) {
+    } else if (m_penTarget1 != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", 
         m_penTarget1->GetName());
     } else {
@@ -82,7 +82,7 @@ functions:
   // test if this door reacts on this entity
   BOOL CanReactOnEntity(CEntity *pen)
   {
-    if (pen==NULL) {
+    if (pen == NULL) {
       return FALSE;
     }
     // never react on non-live or dead entities
@@ -105,10 +105,10 @@ functions:
 
   void TriggerDoor(void)
   {
-    if (m_penTarget1!=NULL) {
+    if (m_penTarget1 != NULL) {
       SendToTarget(m_penTarget1, EET_TRIGGER, m_penCaused);
     }
-    if (m_penTarget2!=NULL) {
+    if (m_penTarget2 != NULL) {
       SendToTarget(m_penTarget2, EET_TRIGGER, m_penCaused);
     }
   }
@@ -166,7 +166,7 @@ procedures:
             // this is a very ugly fix for cooperative not finishing in the demo level
             // remove this when not needed any more!!!!
             if (_SE_DEMO && GetSP()->sp_bCooperative && !GetSP()->sp_bSinglePlayer) {
-              if (m_strName=="Appear gold amon") {
+              if (m_strName == "Appear gold amon") {
                 CPlayer *penPlayer = (CPlayer*)&*ePass.penOther;
                 penPlayer->SetGameEnd();
               }
@@ -236,10 +236,10 @@ procedures:
       wait() {
         on (EPass ePass) : {
           if (CanReactOnEntity(ePass.penOther)) {
-            if (m_strLockedMessage!="") {
+            if (m_strLockedMessage != "") {
               PrintCenterMessage(this, ePass.penOther, TranslateConst(m_strLockedMessage), 3.0f, MSS_INFO);
             }
-            if (m_penLockedTarget!=NULL) {
+            if (m_penLockedTarget != NULL) {
               SendToTarget(m_penLockedTarget, EET_TRIGGER, ePass.penOther);
             }
             resume;
@@ -270,7 +270,7 @@ procedures:
           if (IsDerivedFromClass(ePass.penOther, "Player")) {
             CPlayer *penPlayer = (CPlayer*)&*ePass.penOther;
             // if he has the key
-            ULONG ulKey = (1<<INDEX(m_kitKey));
+            ULONG ulKey = (1 << INDEX(m_kitKey));
             if (penPlayer->m_ulKeys&ulKey) {
               // use the key
               penPlayer->m_ulKeys&=~ulKey;
@@ -287,7 +287,7 @@ procedures:
               jump DoorAuto();
             // if he has no key
             } else {
-              if (m_penLockedTarget!=NULL) {
+              if (m_penLockedTarget != NULL) {
                 SendToTarget(m_penLockedTarget, EET_TRIGGER, ePass.penOther);
               }
             }
@@ -316,10 +316,10 @@ procedures:
         }
         on (EPass ePass) : {
           if (CanReactOnEntity(ePass.penOther)) {
-            if (m_strLockedMessage!="") {
+            if (m_strLockedMessage != "") {
               PrintCenterMessage(this, ePass.penOther, TranslateConst(m_strLockedMessage), 3.0f, MSS_INFO);
             }
-            if (m_penLockedTarget!=NULL) {
+            if (m_penLockedTarget != NULL) {
               SendToTarget(m_penLockedTarget, EET_TRIGGER, ePass.penOther);
             }
           }

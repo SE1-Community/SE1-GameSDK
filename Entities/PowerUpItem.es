@@ -122,7 +122,7 @@ functions:
   void RenderParticles(void)
   {
     // no particles when not existing or in DM modes
-    if (GetRenderType()!=CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
+    if (GetRenderType() != CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
       || !ShowItemParticles()) {
       return;
     }
@@ -203,12 +203,12 @@ procedures:
 
   ItemCollected( EPass epass) : CItem::ItemCollected
   {
-    ASSERT( epass.penOther!=NULL);
+    ASSERT( epass.penOther != NULL);
  
     // don't pick up more bombs then you can carry
     if (m_puitType == PUIT_BOMB) {
       if (IsOfClass(epass.penOther, "Player")) {
-        if (((CPlayer &)*epass.penOther).m_iSeriousBombCount>=3) {
+        if (((CPlayer &)*epass.penOther).m_iSeriousBombCount >= 3) {
           return;
         }
       }

@@ -126,7 +126,7 @@ functions:
   /* Handle an event, return false if the event is not handled. */
   BOOL HandleEvent(const CEntityEvent &ee)
   {
-    if (ee.ee_slEvent==EVENTCODE_EScroll)
+    if (ee.ee_slEvent == EVENTCODE_EScroll)
     {
       EScroll escr = ((EScroll &) ee);
       if (escr.bStart)
@@ -135,14 +135,14 @@ functions:
       }
       else
       {
-        if (m_penScrollHolder==escr.penSender)
+        if (m_penScrollHolder == escr.penSender)
         {
           m_penScrollHolder=NULL;
         }
       }
       return TRUE;
     }
-    if (ee.ee_slEvent==EVENTCODE_ETextFX)
+    if (ee.ee_slEvent == EVENTCODE_ETextFX)
     {
       ETextFX etfx = ((ETextFX &) ee);
       if (etfx.bStart)
@@ -151,14 +151,14 @@ functions:
       }
       else
       {
-        if (m_penTextFXHolder==etfx.penSender)
+        if (m_penTextFXHolder == etfx.penSender)
         {
           m_penTextFXHolder=NULL;
         }
       }
       return TRUE;
     }
-    if (ee.ee_slEvent==EVENTCODE_EHudPicFX)
+    if (ee.ee_slEvent == EVENTCODE_EHudPicFX)
     {
       EHudPicFX ehpfx = ((EHudPicFX &) ee);
       if (ehpfx.bStart)
@@ -167,14 +167,14 @@ functions:
       }
       else
       {
-        if (m_penHudPicFXHolder==ehpfx.penSender)
+        if (m_penHudPicFXHolder == ehpfx.penSender)
         {
           m_penHudPicFXHolder=NULL;
         }
       }
       return TRUE;
     }
-    if (ee.ee_slEvent==EVENTCODE_ECredits)
+    if (ee.ee_slEvent == EVENTCODE_ECredits)
     {
       ECredits ecr = ((ECredits &) ee);
       if (ecr.bStart)
@@ -183,7 +183,7 @@ functions:
       }
       else
       {
-        if (m_penCreditsHolder==ecr.penSender)
+        if (m_penCreditsHolder == ecr.penSender)
         {
           m_penCreditsHolder=NULL;
         }

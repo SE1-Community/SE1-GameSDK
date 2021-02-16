@@ -454,7 +454,7 @@ void SetupParticleTextureWithAddAlpha(enum ParticleTexture ptTexture)
 
 void Particles_ViewerLocal(CEntity *penView)
 {
-  ASSERT(penView!=NULL);
+  ASSERT(penView != NULL);
 
   // obtain world settings controller
   CWorldSettingsController *pwsc = NULL;
@@ -532,11 +532,11 @@ void Particles_ViewerLocal(CEntity *penView)
       }
     // for those EPHs that are not rendered, clear possible
     // growth caches
-    } else if (eph->m_eptType==EPTH_GROWTH) {
+    } else if (eph->m_eptType == EPTH_GROWTH) {
       // delete the cache for this EPH and this DrawPort
       INDEX iDrawPort = Particle_GetDrawPortID();
       {FORDELETELIST(CGrowthCache, cgc_Node, eph->lhCache, itCache)
-        if (itCache->ulID==iDrawPort) {
+        if (itCache->ulID == iDrawPort) {
           itCache->acgParticles.Clear();
           itCache->cgc_Node.Remove();
           delete &itCache.Current();
@@ -550,7 +550,7 @@ void Particles_ViewerLocal(CEntity *penView)
     if (!(IsOfClass(eph, "EnvironmentParticlesHolder"))) break;
   }
 
-  if (_ctFlameThrowerParticles!=0)
+  if (_ctFlameThrowerParticles != 0)
   {
     Particle_PrepareTexture( &_toFlamethrowerTrail02, PBT_ADDALPHA);
     INDEX flt_iFramesInRaw=4;
@@ -566,7 +566,7 @@ void Particles_ViewerLocal(CEntity *penView)
   }
 
   /*
-  if (_ctFlameThrowerPipeParticles!=0)
+  if (_ctFlameThrowerPipeParticles != 0)
   {
     Particle_PrepareTexture( &_toLavaTrailSmoke, PBT_ADDALPHA);
     Particle_SetTexturePart( 512, 512, 0, 0);
@@ -620,7 +620,7 @@ void Particles_BombTrail(CEntity *pen)
 
   const FLOAT3D *pvPos1;
   const FLOAT3D *pvPos2 = &plp->GetPosition(plp->lp_ctUsed-1);
-  for (INDEX iPos = plp->lp_ctUsed-1; iPos>=1; iPos--)
+  for (INDEX iPos = plp->lp_ctUsed-1; iPos >= 1; iPos--)
   {
     pvPos1 = pvPos2;
     pvPos2 = &plp->GetPosition(iPos);
@@ -654,7 +654,7 @@ void Particles_FirecrackerTrail(CEntity *pen)
   const FLOAT3D *pvPos1;
   const FLOAT3D *pvPos2 = &plp->GetPosition(plp->lp_ctUsed-1);
   INDEX iParticle = plp->lp_ctUsed*FIRECRACKER_TRAIL_INTERPOSITIONS;
-  for (INDEX iPos = plp->lp_ctUsed-2; iPos>=0; iPos--)
+  for (INDEX iPos = plp->lp_ctUsed-2; iPos >= 0; iPos--)
   {
     pvPos1 = pvPos2;
     pvPos2 = &plp->GetPosition(iPos);
@@ -782,7 +782,7 @@ void Particles_Fireball01Trail(CEntity *pen)
   const FLOAT3D *pvPos2 = &plp->GetPosition(plp->lp_ctUsed-1);
   INDEX iParticle = 0;
   INDEX iParticlesLiving = plp->lp_ctUsed*FIREBALL01_TRAIL_INTERPOSITIONS;
-  for (INDEX iPos = plp->lp_ctUsed-2; iPos>=0; iPos--) {
+  for (INDEX iPos = plp->lp_ctUsed-2; iPos >= 0; iPos--) {
     pvPos1 = pvPos2;
     pvPos2 = &plp->GetPosition(iPos);
     COLOR colColor;
@@ -1012,7 +1012,7 @@ void Particles_BeastProjectileTrail_Prepare(CEntity *pen)
 #define BEAST_PROJECTILE_TOTAL_TIME 0.6f
 void Particles_BeastProjectileTrail( CEntity *pen, FLOAT fSize, FLOAT fHeight, INDEX ctParticles)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
 
   Particle_PrepareTexture(&_toBeastProjectileTrailTexture, PBT_BLEND);
@@ -1074,7 +1074,7 @@ void Particles_BeastBigProjectileTrail_Prepare(CEntity *pen)
 #define BIG_BEAST_PROJECTILE_TOTAL_TIME 0.6f
 void Particles_BeastBigProjectileTrail( CEntity *pen, FLOAT fSize, FLOAT fZOffset, FLOAT fYOffset, INDEX ctParticles)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
 
   Particle_PrepareTexture(&_toBeastBigProjectileTrailTexture, PBT_BLEND);
@@ -1464,7 +1464,7 @@ void DECL_DLL Particles_Waterfall(CEntity *pen, INDEX ctCount, FLOAT fStretchAll
     FLOAT3D vPos=vCenter+vSpeed*fSpeed*fT-vG*fGA/2.0f*(fT*fParam1)*(fT*fParam1);
     FLOAT fFinalSize=(3.5f+(afStarsPositions[iRnd][1]+1.0f)*2.0f*fT)*fSize;
     FLOAT fAngle=afStarsPositions[iRnd][0]*360+afStarsPositions[iRnd][1]*360.0f*fT*fParam1/2.0f;
-    if (iFrame>=2)
+    if (iFrame >= 2)
     {
       fAngle=0.0f;
     }
@@ -1486,7 +1486,7 @@ void Particles_BloodTrail(CEntity *pen)
   const INDEX iBloodType = GetSP()->sp_iBlood;
   if (iBloodType<1) return;
   COLOR col;
-  if (iBloodType==3) Particle_PrepareTexture( &_toFlowerSprayTexture, PBT_BLEND);
+  if (iBloodType == 3) Particle_PrepareTexture( &_toFlowerSprayTexture, PBT_BLEND);
   else               Particle_PrepareTexture( &_toBloodSprayTexture,  PBT_BLEND);
 
   CLastPositions *plp = pen->GetLastPositions(BLOOD01_TRAIL_POSITIONS);
@@ -1504,8 +1504,8 @@ void Particles_BloodTrail(CEntity *pen)
     vPos += vGDir*fGA*fT*fT/8.0f;
     FLOAT fSize = 0.2f-iPos*0.15f/BLOOD01_TRAIL_POSITIONS;
     UBYTE ub = 255-iPos*255/BLOOD01_TRAIL_POSITIONS;
-         if (iBloodType==3) col = C_WHITE|ub;
-    else if (iBloodType==2) col = RGBAToColor(ub,20,20,ub);
+         if (iBloodType == 3) col = C_WHITE|ub;
+    else if (iBloodType == 2) col = RGBAToColor(ub,20,20,ub);
     else                    col = RGBAToColor(0,ub,0,ub);
     Particle_RenderSquare( vPos, fSize, fAngle, col);
   }
@@ -1659,7 +1659,7 @@ void Particles_FlameThrower(const CPlacement3D &plLeader, const CPlacement3D &pl
 
   INDEX iParticle=0;
   FLOAT fLiving=fLeaderLiving;
-  while (fLiving>=fFollowerLiving)
+  while (fLiving >= fFollowerLiving)
   {
     FLOAT fOlderThanLeaderTime=fLeaderLiving-fLiving;
 
@@ -1733,7 +1733,7 @@ void Particles_FlameThrowerStart(const CPlacement3D &plPipe, FLOAT fStartTime, F
   FLOAT fPowerFactor = Clamp((fNow - fStartTime)/2.0f,0.0f,1.0f);
   fPowerFactor *= Clamp(1+(fStopTime-fNow)/2.0f,0.0f,1.0f);
   INDEX ctParticles = FLOAT(CT_FTSPARKS) * fPowerFactor;
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   FLOAT fHeight = 1.0f*fPowerFactor;
   INDEX iParticle=0;
   for (INDEX iSpark=0; iSpark<ctParticles; iSpark++)
@@ -1827,7 +1827,7 @@ void Particles_Stardust( CEntity *pen, FLOAT fSize, FLOAT fHeight,
 {
   INDEX ctOffsetSpace = 128;
 
-  ASSERT( (ctParticles+ctOffsetSpace)<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( (ctParticles+ctOffsetSpace) <= CT_MAX_PARTICLES_TABLE);
   if (Particle_GetMipFactor()>7.0f) return;
 
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
@@ -1871,7 +1871,7 @@ void Particles_Rising(CEntity *pen, FLOAT fStartTime, FLOAT fStopTime, FLOAT fSt
                       FLOAT fStretchX, FLOAT fStretchY, FLOAT fStretchZ, FLOAT fSize,
                       enum ParticleTexture ptTexture, INDEX ctParticles)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   if (Particle_GetMipFactor()>7.0f) return;
 
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
@@ -1906,7 +1906,7 @@ void Particles_Rising(CEntity *pen, FLOAT fStartTime, FLOAT fStopTime, FLOAT fSt
     vPos(3)+=cos(fF*4.0f)*0.05f*fStretchAll;
     
     UBYTE ub = NormFloatToByte( fFade);
-    COLOR colStar = RGBToColor( ub, ub, ub>>1);
+    COLOR colStar = RGBToColor( ub, ub, ub >> 1);
     Particle_RenderSquare( vPos, fSize*fPowerFactor, 0, colStar|(UBYTE(0xFF*fPowerFactor)));
   }
   // all done
@@ -1918,14 +1918,14 @@ void Particles_Rising(CEntity *pen, FLOAT fStartTime, FLOAT fStopTime, FLOAT fSt
 void Particles_Spiral( CEntity *pen, FLOAT fSize, FLOAT fHeight,
                       enum ParticleTexture ptTexture, INDEX ctParticles)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
 
   FLOAT fMipFactor = Particle_GetMipFactor();
   if (fMipFactor>7.0f) return;
   fMipFactor = 2.5f-fMipFactor*0.3f;
   fMipFactor = Clamp( fMipFactor, 0.0f, 1.0f);
   INDEX ctSpiralTrail = fMipFactor*CT_SPIRAL_TRAIL;
-  if (ctSpiralTrail<=0) return;
+  if (ctSpiralTrail <= 0) return;
   FLOAT fTrailDelta = 0.1f/fMipFactor;
 
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
@@ -1944,7 +1944,7 @@ void Particles_Spiral( CEntity *pen, FLOAT fSize, FLOAT fHeight,
       vPos(2)+=sin((fT-iTrail*fTrailDelta)*4.0f*(afStarsPositions[iStar][1]*3.0f)+0.9f)*0.5f*fSize;
       vPos(3)+=sin((fT-iTrail*fTrailDelta)*4.0f*(afStarsPositions[iStar][2]*3.0f)+0.1f)*0.5f*fSize;
       UBYTE ub = NormFloatToByte( (FLOAT)(ctSpiralTrail-iTrail) / (FLOAT)(ctSpiralTrail));
-      COLOR colStar = RGBToColor( ub, ub, ub>>1);
+      COLOR colStar = RGBToColor( ub, ub, ub >> 1);
       Particle_RenderSquare( vPos, 0.2f, 0, colStar|0xFF);
     }
   }
@@ -1959,7 +1959,7 @@ void Particles_Spiral( CEntity *pen, FLOAT fSize, FLOAT fHeight,
 void Particles_Emanate( CEntity *pen, FLOAT fSize, FLOAT fHeight,
                        enum ParticleTexture ptTexture, INDEX ctParticles, FLOAT fMipFactorDisappear)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   if (Particle_GetMipFactor()>fMipFactorDisappear) return;
   FLOAT fDisappearRatio=CalculateRatio(Particle_GetMipFactor(), 0, fMipFactorDisappear, 0, 0.1f);
 
@@ -1989,7 +1989,7 @@ void Particles_Emanate( CEntity *pen, FLOAT fSize, FLOAT fHeight,
       afStarsPositions[iStar][2])*fSize*(fF+0.4f);
     
     UBYTE ub = NormFloatToByte( fFade*fDisappearRatio);
-    COLOR colStar = RGBToColor( ub, ub, ub>>1);
+    COLOR colStar = RGBToColor( ub, ub, ub >> 1);
     Particle_RenderSquare( vPos, 0.1f, 0, colStar|0xFF);
   }
   // all done
@@ -2001,7 +2001,7 @@ void Particles_Emanate( CEntity *pen, FLOAT fSize, FLOAT fHeight,
 void Particles_WaterfallFoam(CEntity *pen, FLOAT fSizeX, FLOAT fSizeY, FLOAT fSizeZ, 
                              FLOAT fParticleSize, FLOAT fSpeed, FLOAT fSpeedY, FLOAT fLife, INDEX ctParticles)
 {
-  if (fLife<=0) return;
+  if (fLife <= 0) return;
 
   Particle_PrepareTexture( &_toWaterfallFoam, PBT_ADD);
   Particle_SetTexturePart( 512, 512, 0, 0);
@@ -2039,7 +2039,7 @@ void Particles_EmanatePlane(CEntity *pen, FLOAT fSizeX, FLOAT fSizeY, FLOAT fSiz
                             FLOAT fParticleSize, FLOAT fAway, FLOAT fSpeed, 
                             enum ParticleTexture ptTexture, INDEX ctParticles, FLOAT fMipFactorDisappear)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   if (Particle_GetMipFactor()>fMipFactorDisappear) return;
   FLOAT fDisappearRatio=CalculateRatio(Particle_GetMipFactor(), 0, fMipFactorDisappear, 0, 0.1f);
 
@@ -2085,7 +2085,7 @@ void Particles_EmanatePlane(CEntity *pen, FLOAT fSizeX, FLOAT fSizeY, FLOAT fSiz
 void Particles_Fountain( CEntity *pen, FLOAT fSize, FLOAT fHeight,
                         enum ParticleTexture ptTexture, INDEX ctParticles)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
 
   SetupParticleTexture( ptTexture);
@@ -2116,8 +2116,8 @@ void Particles_Fountain( CEntity *pen, FLOAT fSize, FLOAT fHeight,
         vZ*(afStarsPositions[iStar][2]*fT*fSize);
     
       COLOR colStar = pTD->GetTexel( FloatToInt(fFade*2048), 0);
-      ULONG ulA = FloatToInt( ((colStar&CT_AMASK)>>CT_ASHIFT) * fFade);
-      colStar = (colStar&~CT_AMASK) | (ulA<<CT_ASHIFT);
+      ULONG ulA = FloatToInt( ((colStar&CT_AMASK) >> CT_ASHIFT) * fFade);
+      colStar = (colStar&~CT_AMASK) | (ulA << CT_ASHIFT);
       Particle_RenderSquare( vPos, 0.05f, 0, colStar);
     }
   }
@@ -2300,7 +2300,7 @@ void Particles_MetalParts( CEntity *pen, FLOAT tmStarted, FLOATaabbox3D boxOwner
 #define ELECTRICITY_SPARKS_TOTAL_TIME 1.0f
 void Particles_ElectricitySparks( CEntity *pen, FLOAT fTimeAppear, FLOAT fSize, FLOAT fHeight, INDEX ctParticles)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE/2);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE/2);
   FLOAT fT = _pTimer->GetLerpedCurrentTick()-fTimeAppear;
 
   Particle_PrepareTexture( &_toElectricitySparks, PBT_BLEND);
@@ -2384,13 +2384,13 @@ void Particles_LavaErupting(CEntity *pen, FLOAT fStretchAll, FLOAT fSize,
 void Particles_Atomic( CEntity *pen, FLOAT fSize, FLOAT fHeight,
                       enum ParticleTexture ptTexture, INDEX ctEllipses)
 {
-  ASSERT( ctEllipses<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctEllipses <= CT_MAX_PARTICLES_TABLE);
   FLOAT fMipFactor = Particle_GetMipFactor();
   if (fMipFactor>7.0f) return;
   fMipFactor = 2.5f-fMipFactor*0.3f;
   fMipFactor = Clamp(fMipFactor, 0.0f ,1.0f);
   INDEX ctAtomicTrail = fMipFactor*CT_ATOMIC_TRAIL;
-  if (ctAtomicTrail<=0) return;
+  if (ctAtomicTrail <= 0) return;
   FLOAT fTrailDelta = 0.075f/fMipFactor;
 
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
@@ -2419,7 +2419,7 @@ void Particles_Atomic( CEntity *pen, FLOAT fSize, FLOAT fHeight,
       vPos+=vA*(cos((fT-iTrail*fTrailDelta)/*+afStarsPositions[iEllipse][0]*/)*1.0f*fSize);
       vPos+=vB*(sin((fT-iTrail*fTrailDelta)/*+afStarsPositions[iEllipse][0]*/)*1.0f*fSize);
       UBYTE ub = NormFloatToByte( (FLOAT)(ctAtomicTrail-iTrail) / (FLOAT)(ctAtomicTrail));
-      COLOR colStar = RGBToColor( ub>>3, ub>>3, ub>>2);
+      COLOR colStar = RGBToColor( ub >> 3, ub >> 3, ub >> 2);
       Particle_RenderSquare( vPos, 0.2f, 0, colStar|0xFF);
     }
   }
@@ -2430,13 +2430,13 @@ void Particles_Atomic( CEntity *pen, FLOAT fSize, FLOAT fHeight,
 void Particles_PowerUpIndicator( CEntity *pen, enum ParticleTexture ptTexture, FLOAT fSize,
               FLOAT fScale, FLOAT fHeight, INDEX ctEllipses, INDEX iTrailCount)
 {
-  ASSERT( ctEllipses<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctEllipses <= CT_MAX_PARTICLES_TABLE);
   FLOAT fMipFactor = Particle_GetMipFactor();
   if (fMipFactor>7.0f) return;
   fMipFactor = 2.5f-fMipFactor*0.3f;
   fMipFactor = Clamp(fMipFactor, 0.0f ,1.0f);
   INDEX ctAtomicTrail = fMipFactor*iTrailCount;
-  if (ctAtomicTrail<=0) return;
+  if (ctAtomicTrail <= 0) return;
   FLOAT fTrailDelta = 0.075f/fMipFactor;
 
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
@@ -2504,7 +2504,7 @@ void Particles_Ghostbuster(const FLOAT3D &vSrc, const FLOAT3D &vDst, INDEX ctRay
     FLOAT fDT = fT-INDEX(fT);
     FLOAT fFade = 1-fDT*4.0f;
 
-    if (fFade>1 || fFade<=0) continue;
+    if (fFade>1 || fFade <= 0) continue;
     UBYTE ubFade = NormFloatToByte(fFade*fPower);
     COLOR colFade = RGBToColor( ubFade, ubFade, ubFade);
     for (FLOAT fPos=fStep; fPos<fLen+fStep/2; fPos+=fStep)
@@ -2539,7 +2539,7 @@ BOOL UpdateGrowthCache(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &
   }
 
   // don't ever render in editor
-  if (_pTimer->CurrentTick()==0.0f)
+  if (_pTimer->CurrentTick() == 0.0f)
   {
     return FALSE;
   }
@@ -2548,7 +2548,7 @@ BOOL UpdateGrowthCache(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &
   extern FLOAT gfx_fEnvParticlesDensity;
   gfx_fEnvParticlesDensity = Clamp(gfx_fEnvParticlesDensity, 0.0f, 1.0f);
   FLOAT fStep = 1.0f;
-  if (gfx_fEnvParticlesDensity<=0) {
+  if (gfx_fEnvParticlesDensity <= 0) {
     fStep = 0;
   } else {
     fStep = 1/gfx_fEnvParticlesDensity;
@@ -2585,7 +2585,7 @@ BOOL UpdateGrowthCache(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &
   FLOAT GROWTH_RENDERING_RADIUS_FADE = eph->m_fGrowthRenderingRadius*fRangeMod;
   BOOL  GROWTH_HIGHRES_MAP = eph->m_bGrowthHighresMap;
   
-  ASSERT(GROWTH_RENDERING_RADIUS_FADE>=GROWTH_RENDERING_RADIUS_OPAQUE);
+  ASSERT(GROWTH_RENDERING_RADIUS_FADE >= GROWTH_RENDERING_RADIUS_OPAQUE);
   
   FLOAT fGridStep;
   ULONG fXSpan;
@@ -2602,10 +2602,10 @@ BOOL UpdateGrowthCache(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &
   // find growth cache and check if it is initialised
   CGrowthCache *cgc = NULL;
   {FOREACHINLIST(CGrowthCache, cgc_Node, eph->lhCache, itCache)
-    if (itCache->ulID==iDrawPort) cgc = itCache;
+    if (itCache->ulID == iDrawPort) cgc = itCache;
   }
   // if no cache found, create one
-  if (cgc==NULL)
+  if (cgc == NULL)
   {
     cgc = new(CGrowthCache);
     cgc->ulID = iDrawPort;
@@ -2614,7 +2614,7 @@ BOOL UpdateGrowthCache(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &
     eph->lhCache.AddTail(cgc->cgc_Node);
     //CPrintF("added ph %s \n", eph->GetName());
   } else {
-    if (cgc->vLastPos==vSnapped && cgc->fStep==fStep) {
+    if (cgc->vLastPos == vSnapped && cgc->fStep == fStep) {
       cgc->vLastPos = vSnapped;
       return TRUE;
     }
@@ -2640,13 +2640,13 @@ BOOL UpdateGrowthCache(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &
   FLOAT f1oGridStepZ = 1.0f/(boxGrowthMap.Size()(3)/pixGrowthMapH);
 
   // loop through the whole particle grid
-  for ( INDEX iC=iGridY0; iC<iGridY1+1; iC++ )
+  for (INDEX iC=iGridY0; iC<iGridY1+1; iC++ )
   {
-    for ( INDEX jC=iGridX0; jC<iGridX1+1; jC++ )
+    for (INDEX jC=iGridX0; jC<iGridX1+1; jC++ )
     {
       double fmodi = fabs(fmod(iC+iOffI, fStepSqrt));
       double fmodj = fabs(fmod(jC+iOffJ, fStepSqrt));
-      if ( fmodi>=1 || fmodj>=1) {
+      if (fmodi >= 1 || fmodj >= 1) {
         continue;
       }
 
@@ -2676,33 +2676,33 @@ BOOL UpdateGrowthCache(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &
         texX -= 0.5f;
         texY -= 0.5f;
         ULONG ulX1 = FloatToInt(floorf(texX));
-        ULONG ulX2 = FloatToInt(ceilf(texX));  // if (ulX2>=pixGrowthMapW) ulX2=pixGrowthMapW-1;
+        ULONG ulX2 = FloatToInt(ceilf(texX));  // if (ulX2 >= pixGrowthMapW) ulX2=pixGrowthMapW-1;
         ULONG ulY1 = FloatToInt(floorf(texY));
-        ULONG ulY2 = FloatToInt(ceilf(texY));  // if (ulY2>=pixGrowthMapH) ulY2=pixGrowthMapH-1;
+        ULONG ulY2 = FloatToInt(ceilf(texY));  // if (ulY2 >= pixGrowthMapH) ulY2=pixGrowthMapH-1;
         
         SLONG ulUL, ulUR, ulBL, ulBR;
         if (GROWTH_HIGHRES_MAP)
         {
-          ulUL = (ptdGrowthMap->GetTexel(ulX1, ulY1)>>8)&0xFFFF; 
-          ulUR = (ptdGrowthMap->GetTexel(ulX2, ulY1)>>8)&0xFFFF; 
-          ulBL = (ptdGrowthMap->GetTexel(ulX1, ulY2)>>8)&0xFFFF; 
-          ulBR = (ptdGrowthMap->GetTexel(ulX2, ulY2)>>8)&0xFFFF; 
+          ulUL = (ptdGrowthMap->GetTexel(ulX1, ulY1) >> 8)&0xFFFF; 
+          ulUR = (ptdGrowthMap->GetTexel(ulX2, ulY1) >> 8)&0xFFFF; 
+          ulBL = (ptdGrowthMap->GetTexel(ulX1, ulY2) >> 8)&0xFFFF; 
+          ulBR = (ptdGrowthMap->GetTexel(ulX2, ulY2) >> 8)&0xFFFF; 
         }
         else
         {
-          ulUL = (ptdGrowthMap->GetTexel(ulX1, ulY1)>>8)&0xFF; 
-          ulUR = (ptdGrowthMap->GetTexel(ulX2, ulY1)>>8)&0xFF; 
-          ulBL = (ptdGrowthMap->GetTexel(ulX1, ulY2)>>8)&0xFF; 
-          ulBR = (ptdGrowthMap->GetTexel(ulX2, ulY2)>>8)&0xFF; 
+          ulUL = (ptdGrowthMap->GetTexel(ulX1, ulY1) >> 8)&0xFF; 
+          ulUR = (ptdGrowthMap->GetTexel(ulX2, ulY1) >> 8)&0xFF; 
+          ulBL = (ptdGrowthMap->GetTexel(ulX1, ulY2) >> 8)&0xFF; 
+          ulBR = (ptdGrowthMap->GetTexel(ulX2, ulY2) >> 8)&0xFF; 
         }
         
         // bilinear formula
         FLOAT fDX = texX - ulX1;
         FLOAT fDY = texY - ulY1;
         fRawHeight = ulUL*(1-fDX)*(1-fDY) +
-						         ulUR*(fDX - fDX*fDY) +
-						         ulBL*(fDY - fDX*fDY) +
-						         ulBR*(fDX*fDY);
+                     ulUR*(fDX - fDX*fDY) +
+                     ulBL*(fDY - fDX*fDY) +
+                     ulBR*(fDX*fDY);
 
         // calculate maximum slope per meter on each axis
         FLOAT fSlopeMul = 1.0f;
@@ -2739,7 +2739,7 @@ BOOL UpdateGrowthCache(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &
         cgParticle.vRender = FLOAT3D(iR, fHeight, jR);
         
         ULONG ulTmp = ptdGrowthMap->GetTexel(ulX1, ulY1); 
-        ULONG ulType = (((ulTmp>>24)&0xFF)*(eph->m_iGrowthMapX*eph->m_iGrowthMapY))>>8;
+        ULONG ulType = (((ulTmp >> 24)&0xFF)*(eph->m_iGrowthMapX*eph->m_iGrowthMapY)) >> 8;
         cgParticle.iShapeX = ulType % eph->m_iGrowthMapX;
         cgParticle.iShapeY = ulType / eph->m_iGrowthMapX;
 
@@ -2779,13 +2779,13 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
   // fill structures from cache
   CGrowthCache *cgc = NULL;
   {FOREACHINLIST(CGrowthCache, cgc_Node, eph->lhCache, itCache)
-    if (itCache->ulID==iDrawPort) cgc = itCache;
+    if (itCache->ulID == iDrawPort) cgc = itCache;
   }
-  ASSERT(cgc!=NULL);
+  ASSERT(cgc != NULL);
   static CStaticStackArray<CGrowth> acgDraw;
-  for ( INDEX i=0; i<cgc->acgParticles.Count(); i++ )
+  for (INDEX i=0; i<cgc->acgParticles.Count(); i++ )
   {
-    if (cgc->acgParticles[i].ubShade!=0)
+    if (cgc->acgParticles[i].ubShade != 0)
     {
       CGrowth *cgParticle = &cgc->acgParticles[i];
 
@@ -2798,11 +2798,11 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
         FLOAT fFadeOutStrip = GROWTH_RENDERING_RADIUS_FADE - GROWTH_RENDERING_RADIUS_OPAQUE;
         
         UBYTE ubFade = (UBYTE)(((GROWTH_RENDERING_RADIUS_FADE - cgParticle->fDistanceToViewer) / fFadeOutStrip)*255.0f);
-        if ( cgParticle->fDistanceToViewer < GROWTH_RENDERING_RADIUS_OPAQUE) {
+        if (cgParticle->fDistanceToViewer < GROWTH_RENDERING_RADIUS_OPAQUE) {
           cgParticle->ubFade = 255;
           acgDraw.Push() = *cgParticle;
         }
-        else if ( cgParticle->fDistanceToViewer < GROWTH_RENDERING_RADIUS_FADE) {
+        else if (cgParticle->fDistanceToViewer < GROWTH_RENDERING_RADIUS_FADE) {
           cgParticle->ubFade = (UBYTE)(((GROWTH_RENDERING_RADIUS_FADE - cgParticle->fDistanceToViewer) / fFadeOutStrip)*255.0f); 
           acgDraw.Push() = *cgParticle;          
         }
@@ -2810,7 +2810,7 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
     }
   }
   
-  if (acgDraw.Count()<=0)
+  if (acgDraw.Count() <= 0)
   {
     return;
   }
@@ -2894,7 +2894,7 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
   FLOAT GROWTH_RENDERING_RADIUS_FADE = eph->m_fGrowthRenderingRadius;
   BOOL  GROWTH_HIGHRES_MAP = eph->m_bGrowthHighresMap;
   
-  ASSERT(GROWTH_RENDERING_RADIUS_FADE>=GROWTH_RENDERING_RADIUS_OPAQUE);
+  ASSERT(GROWTH_RENDERING_RADIUS_FADE >= GROWTH_RENDERING_RADIUS_OPAQUE);
   
   FLOAT fGridStep;
   ULONG fXSpan;
@@ -2917,9 +2917,9 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
   SnapFloat(vSnapped(3), GROWTH_RENDERING_STEP);
 
   // loop through the whole particle grid
-  for ( INDEX iC=iGridY0; iC<iGridY1; iC++ )
+  for (INDEX iC=iGridY0; iC<iGridY1; iC++ )
   {
-    for ( INDEX jC=iGridX0; jC<iGridX1; jC++ )
+    for (INDEX jC=iGridX0; jC<iGridX1; jC++ )
     {
       // absolute positions :
       INDEX i = iC*GROWTH_RENDERING_STEP + vSnapped(1);
@@ -2946,33 +2946,33 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
         texX -= 0.5f;
         texY -= 0.5f;
         ULONG ulX1 = (ULONG) texX;          if (ulX1<0) ulX1=0;
-        ULONG ulX2 = (ULONG) ceilf(texX);   if (ulX2>=pixGrowthMapW) ulX2=pixGrowthMapW-1;
+        ULONG ulX2 = (ULONG) ceilf(texX);   if (ulX2 >= pixGrowthMapW) ulX2=pixGrowthMapW-1;
         ULONG ulY1 = (ULONG) texY;          if (ulY1<0) ulY1=0;
-        ULONG ulY2 = (ULONG) ceilf(texY);   if (ulY2>=pixGrowthMapH) ulY2=pixGrowthMapH-1;
+        ULONG ulY2 = (ULONG) ceilf(texY);   if (ulY2 >= pixGrowthMapH) ulY2=pixGrowthMapH-1;
         
         ULONG ulUL, ulUR, ulBL, ulBR;
         if (GROWTH_HIGHRES_MAP)
         {
-          ulUL = (ptdGrowthMap->GetTexel(ulX1, ulY1)>>8)&0xFFFF; 
-          ulUR = (ptdGrowthMap->GetTexel(ulX2, ulY1)>>8)&0xFFFF; 
-          ulBL = (ptdGrowthMap->GetTexel(ulX1, ulY2)>>8)&0xFFFF; 
-          ulBR = (ptdGrowthMap->GetTexel(ulX2, ulY2)>>8)&0xFFFF; 
+          ulUL = (ptdGrowthMap->GetTexel(ulX1, ulY1) >> 8)&0xFFFF; 
+          ulUR = (ptdGrowthMap->GetTexel(ulX2, ulY1) >> 8)&0xFFFF; 
+          ulBL = (ptdGrowthMap->GetTexel(ulX1, ulY2) >> 8)&0xFFFF; 
+          ulBR = (ptdGrowthMap->GetTexel(ulX2, ulY2) >> 8)&0xFFFF; 
         }
         else
         {
-          ulUL = (ptdGrowthMap->GetTexel(ulX1, ulY1)>>8)&0xFF; 
-          ulUR = (ptdGrowthMap->GetTexel(ulX2, ulY1)>>8)&0xFF; 
-          ulBL = (ptdGrowthMap->GetTexel(ulX1, ulY2)>>8)&0xFF; 
-          ulBR = (ptdGrowthMap->GetTexel(ulX2, ulY2)>>8)&0xFF; 
+          ulUL = (ptdGrowthMap->GetTexel(ulX1, ulY1) >> 8)&0xFF; 
+          ulUR = (ptdGrowthMap->GetTexel(ulX2, ulY1) >> 8)&0xFF; 
+          ulBL = (ptdGrowthMap->GetTexel(ulX1, ulY2) >> 8)&0xFF; 
+          ulBR = (ptdGrowthMap->GetTexel(ulX2, ulY2) >> 8)&0xFF; 
         }
         
         // bilinear formula
         FLOAT fDX = texX - ulX1;
         FLOAT fDY = texY - ulY1;
         fRawHeight = ulUL*(1-fDX)*(1-fDY) +
-						         ulUR*(fDX - fDX*fDY) +
-						         ulBL*(fDY - fDX*fDY) +
-						         ulBR*(fDX*fDY);
+                     ulUR*(fDX - fDX*fDY) +
+                     ulBL*(fDY - fDX*fDY) +
+                     ulBR*(fDX*fDY);
                 
         // clamp to terrain height  
         FLOAT fHeight;
@@ -2990,7 +2990,7 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
         cgParticle.vRender = FLOAT3D(iR, fHeight, jR);
         
         ULONG ulTmp = ptdGrowthMap->GetTexel(ulX1, ulY1); 
-        ULONG ulType = (((ulTmp>>24)&0xFF)*(eph->m_iGrowthMapX*eph->m_iGrowthMapY))/255;
+        ULONG ulType = (((ulTmp >> 24)&0xFF)*(eph->m_iGrowthMapX*eph->m_iGrowthMapY))/255;
         
         cgParticle.iShapeX = ulType % eph->m_iGrowthMapX;
         cgParticle.iShapeY = ulType / eph->m_iGrowthMapY;
@@ -2999,7 +2999,7 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
        
         // skip particles that are totaly black - used to make areas with
         // no particles on the height map
-        if (cgParticle.ubShade==0) {
+        if (cgParticle.ubShade == 0) {
           continue;
         }
 
@@ -3012,12 +3012,12 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
           FLOAT fFadeOutStrip = GROWTH_RENDERING_RADIUS_FADE - GROWTH_RENDERING_RADIUS_OPAQUE;
           
           cgParticle.ubFade = (UBYTE)(((GROWTH_RENDERING_RADIUS_FADE - cgParticle.fDistanceToViewer) / fFadeOutStrip)*255.0f);
-          if ( cgParticle.fDistanceToViewer < GROWTH_RENDERING_RADIUS_OPAQUE) {
+          if (cgParticle.fDistanceToViewer < GROWTH_RENDERING_RADIUS_OPAQUE) {
             cgParticle.ubFade = 255;
             acgParticles.Push() = cgParticle;
             //acgParticlesSolid.Push() = cgParticle;
           }
-          else if ( cgParticle.fDistanceToViewer < GROWTH_RENDERING_RADIUS_FADE) {
+          else if (cgParticle.fDistanceToViewer < GROWTH_RENDERING_RADIUS_FADE) {
             cgParticle.ubFade = (UBYTE)(((GROWTH_RENDERING_RADIUS_FADE - cgParticle.fDistanceToViewer) / fFadeOutStrip)*255.0f); 
             acgParticles.Push() = cgParticle;
             //acgParticlesFading.Push() = cgParticle;
@@ -3028,8 +3028,8 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
   }
   
   // if no particles to render (at the edge of the visible box?)
-  //if (acgParticlesFading.sa_UsedCount<=0 && acgParticlesSolid.sa_UsedCount<=0) return;
-  if (acgParticles.sa_UsedCount<=0) return;
+  //if (acgParticlesFading.sa_UsedCount <= 0 && acgParticlesSolid.sa_UsedCount <= 0) return;
+  if (acgParticles.sa_UsedCount <= 0) return;
   
   // sort fading particles
   //qsort(&acgParticlesFading[0], acgParticlesFading.sa_UsedCount, sizeof(CGrowth), qsort_CompareGrowth);
@@ -3117,14 +3117,14 @@ void Particles_Rain(CEntity *pen, FLOAT fGridSize, INDEX ctGrids, FLOAT fFactor,
         PIX pixX = PIX((vRender(1)-fMinX)/fSizeX*pixRainMapW);
         PIX pixZ = PIX((vRender(3)-fMinZ)/fSizeZ*pixRainMapH);
 
-        if (pixX>=0 && pixX<pixRainMapW 
-          &&pixZ>=0 && pixZ<pixRainMapH) {
+        if (pixX >= 0 && pixX<pixRainMapW 
+          &&pixZ >= 0 && pixZ<pixRainMapH) {
           COLOR col = ptdRainMap->GetTexel( pixX, pixZ);
-          FLOAT fRainMapY = fMinY+((col>>8)&0xFF)/255.0f*fSizeY;
+          FLOAT fRainMapY = fMinY+((col >> 8)&0xFF)/255.0f*fSizeY;
 
           FLOAT fRainY = vRender(2);
           // if tested raindrop is below ceiling
-          if (fRainY<=fRainMapY)
+          if (fRainY <= fRainMapY)
           {
             // don't render it
             continue;
@@ -3222,14 +3222,14 @@ void Particles_Snow(CEntity *pen, FLOAT fGridSize, INDEX ctGrids, FLOAT fFactor,
           PIX pixX = PIX((vRender(1)-fMinX)/fSizeX*pixSnowMapW);
           PIX pixZ = PIX((vRender(3)-fMinZ)/fSizeZ*pixSnowMapH);
 
-          if (pixX>=0 && pixX<pixSnowMapW 
-            &&pixZ>=0 && pixZ<pixSnowMapH) {
+          if (pixX >= 0 && pixX<pixSnowMapW 
+            &&pixZ >= 0 && pixZ<pixSnowMapH) {
             COLOR col = ptdSnowMap->GetTexel( pixX, pixZ);
-            FLOAT fRawHeight=(col>>8)&0xFFFF; 
+            FLOAT fRawHeight=(col >> 8)&0xFFFF; 
             FLOAT fSnowMapY = fMinY+fRawHeight*fSizeY/65535.0f;
             FLOAT fSnowY = vRender(2);
             // if tested raindrop is below ceiling
-            if (fSnowY<=fSnowMapY)
+            if (fSnowY <= fSnowMapY)
             {
               // don't render it
               continue;
@@ -3353,7 +3353,7 @@ void Particles_Lightning( FLOAT3D vSrc, FLOAT3D vDst, FLOAT fTimeStart)
 void Particles_SandFlow( CEntity *pen, FLOAT fStretchAll, FLOAT fSize, FLOAT fHeight, FLOAT fStartTime, FLOAT fStopTime,
                         INDEX ctParticles)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
 
   SetupParticleTexture( PT_SANDFLOW);
@@ -3390,8 +3390,8 @@ void Particles_SandFlow( CEntity *pen, FLOAT fStretchAll, FLOAT fSize, FLOAT fHe
         vZ*(afStarsPositions[iStar][2]*fPowerFactor*fT*fStretchAll);
     
       COLOR colSand = pTD->GetTexel( FloatToInt(fT*2048), 0);
-      ULONG ulA = FloatToInt( ((colSand&CT_AMASK)>>CT_ASHIFT) * fFade);
-      colSand = (colSand&~CT_AMASK) | (ulA<<CT_ASHIFT);
+      ULONG ulA = FloatToInt( ((colSand&CT_AMASK) >> CT_ASHIFT) * fFade);
+      colSand = (colSand&~CT_AMASK) | (ulA << CT_ASHIFT);
       Particle_RenderSquare( vPos, fSize, 0, colSand);
     }
   }
@@ -3405,7 +3405,7 @@ void Particles_SandFlow( CEntity *pen, FLOAT fStretchAll, FLOAT fSize, FLOAT fHe
 void Particles_WaterFlow( CEntity *pen, FLOAT fStretchAll, FLOAT fSize, FLOAT fHeight, FLOAT fStartTime, FLOAT fStopTime,
                      INDEX ctParticles)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
 
   SetupParticleTexture( PT_WATERFLOW);
@@ -3442,8 +3442,8 @@ void Particles_WaterFlow( CEntity *pen, FLOAT fStretchAll, FLOAT fSize, FLOAT fH
         vZ*(afStarsPositions[iStar][2]*fPowerFactor*fT*fStretchAll);
     
       COLOR colWater = pTD->GetTexel( FloatToInt(fT*2048), 0);
-      ULONG ulA = FloatToInt( ((colWater&CT_AMASK)>>CT_ASHIFT) * fFade);
-      colWater = (colWater&~CT_AMASK) | (ulA<<CT_ASHIFT);
+      ULONG ulA = FloatToInt( ((colWater&CT_AMASK) >> CT_ASHIFT) * fFade);
+      colWater = (colWater&~CT_AMASK) | (ulA << CT_ASHIFT);
       Particle_RenderSquare( vPos, fSize, 0, colWater);
     }
   }
@@ -3457,7 +3457,7 @@ void Particles_WaterFlow( CEntity *pen, FLOAT fStretchAll, FLOAT fSize, FLOAT fH
 void Particles_LavaFlow( CEntity *pen, FLOAT fStretchAll, FLOAT fSize, FLOAT fHeight, FLOAT fStartTime, FLOAT fStopTime,
                      INDEX ctParticles)
 {
-  ASSERT( ctParticles<=CT_MAX_PARTICLES_TABLE);
+  ASSERT( ctParticles <= CT_MAX_PARTICLES_TABLE);
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
 
   SetupParticleTexture( PT_LAVAFLOW);
@@ -3494,8 +3494,8 @@ void Particles_LavaFlow( CEntity *pen, FLOAT fStretchAll, FLOAT fSize, FLOAT fHe
         vZ*(afStarsPositions[iStar][2]*fPowerFactor*fT*fStretchAll);
     
       COLOR colLava = pTD->GetTexel( ClampUp(FloatToInt(fT*2048),2047L), 0);
-      ULONG ulA = FloatToInt( ((colLava&CT_AMASK)>>CT_ASHIFT) * fFade);
-      colLava = (colLava&~CT_AMASK) | (ulA<<CT_ASHIFT);
+      ULONG ulA = FloatToInt( ((colLava&CT_AMASK) >> CT_ASHIFT) * fFade);
+      colLava = (colLava&~CT_AMASK) | (ulA << CT_ASHIFT);
       Particle_RenderSquare( vPos, fSize, 0, colLava);
     }
   }
@@ -3629,7 +3629,7 @@ void Particles_BulletSpray(INDEX iRndBase, FLOAT3D vSource, FLOAT3D vGDir, enum 
     FLOAT fSize = (fSizeStart + afStarsPositions[ iSpray*2+iRnd*3][0]/20.0f)*fStretch;
     FLOAT fRotation = fT*500.0f;
     FLOAT fColorFactor = 1.0f;
-    if (fT>=fFadeStart)
+    if (fT >= fFadeStart)
     {
       fColorFactor = 1-fFadeLen*(fT-fFadeStart);
     }
@@ -3653,7 +3653,7 @@ void Particles_BulletSpray(INDEX iRndBase, FLOAT3D vSource, FLOAT3D vGDir, enum 
       FLOAT3D vPos0 = vSource + (vDirection+vRandomAngle)*(fT+0.00f)*12.0f;
       FLOAT3D vPos1 = vSource + (vDirection+vRandomAngle)*(fT+0.05f)*12.0f;
       FLOAT fColorFactor = 1.0f;
-      if (fT>=BULLET_SPARK_FADEOUT_START)
+      if (fT >= BULLET_SPARK_FADEOUT_START)
       {
         fColorFactor = 1-BULLET_SPARK_FADEOUT_LEN*(fT-BULLET_SPARK_FADEOUT_START);
       }
@@ -3902,11 +3902,11 @@ void Particles_Death(CEntity *pen, TIME tmStart)
 
   // calculate color factor (for fade in/out)
   FLOAT fColorFactor = 1.0f;
-  if ((fTime>=FADE_IN_START) && (fTime<=FADE_IN_END))
+  if ((fTime >= FADE_IN_START) && (fTime <= FADE_IN_END))
   {
     fColorFactor = 1/FADE_IN_LENGHT*(fTime-FADE_IN_START);
   }
-  else if ((fTime>=FADE_OUT_START) && (fTime<=FADE_OUT_END))
+  else if ((fTime >= FADE_OUT_START) && (fTime <= FADE_OUT_END))
   {
     fColorFactor = -1/FADE_OUT_LENGHT*(fTime-FADE_OUT_END);
   }
@@ -4077,7 +4077,7 @@ void Particles_BrushBurning(CEntity *pen, FLOAT3D vPos[], INDEX ctCount, FLOAT3D
                             FLOAT fPower, FLOAT fTimeRatio)
 {
   CEntity *penBrush = pen->GetParent();
-  if (penBrush==NULL) return;
+  if (penBrush == NULL) return;
 
   INDEX iFramesInRaw=8;
   INDEX iFramesInColumn=4;
@@ -4166,11 +4166,11 @@ void Particles_Appearing(CEntity *pen, TIME tmStart)
 
   // calculate color factor (for fade in/out)
   FLOAT fColorFactor = 1.0f;
-  if ((fTime>=APPEAR_IN_START) && (fTime<=APPEAR_IN_END))
+  if ((fTime >= APPEAR_IN_START) && (fTime <= APPEAR_IN_END))
   {
     fColorFactor = 1/APPEAR_IN_LENGHT*(fTime-APPEAR_IN_START);
   }
-  else if ((fTime>=APPEAR_OUT_START) && (fTime<=APPEAR_OUT_END))
+  else if ((fTime >= APPEAR_OUT_START) && (fTime <= APPEAR_OUT_END))
   {
     fColorFactor = -1/APPEAR_OUT_LENGHT*(fTime-APPEAR_OUT_END);
   }
@@ -4251,7 +4251,7 @@ void Particles_BloodSpray(enum SprayParticlesType sptType, FLOAT3D vSource, FLOA
     case SPT_GOO:
     {
       if (iBloodType<1) return;
-      if (iBloodType==3) Particle_PrepareTexture( &_toFlowerSprayTexture, PBT_BLEND);
+      if (iBloodType == 3) Particle_PrepareTexture( &_toFlowerSprayTexture, PBT_BLEND);
       else               Particle_PrepareTexture( &_toBloodSprayTexture,  PBT_BLEND);
       break;
     }
@@ -4340,10 +4340,10 @@ void Particles_BloodSpray(enum SprayParticlesType sptType, FLOAT3D vSource, FLOA
 
   for (INDEX iSpray=0; iSpray<ctSprays; iSpray++)
   {
-    if ((sptType==SPT_FEATHER) && (iSpray==ctSprays/2) )
+    if ((sptType == SPT_FEATHER) && (iSpray == ctSprays/2) )
     {
       Particle_Flush();
-      if (iBloodType==3) Particle_PrepareTexture( &_toFlowerSprayTexture, PBT_BLEND);
+      if (iBloodType == 3) Particle_PrepareTexture( &_toFlowerSprayTexture, PBT_BLEND);
       else               Particle_PrepareTexture( &_toBloodSprayTexture,  PBT_BLEND);
       fDamagePower/=2.0f;
     }
@@ -4398,20 +4398,20 @@ void Particles_BloodSpray(enum SprayParticlesType sptType, FLOAT3D vSource, FLOA
     case SPT_BLOOD:
     {
       UBYTE ubRndCol = UBYTE( 128+afStarsPositions[ int(iSpray+tmStarted*10)%CT_MAX_PARTICLES_TABLE][0]*64);
-      if (iBloodType==2) col = RGBAToColor( ubRndCol, 0, 0, ubAlpha);
-      if (iBloodType==1) col = RGBAToColor( 0, ubRndCol, 0, ubAlpha);
+      if (iBloodType == 2) col = RGBAToColor( ubRndCol, 0, 0, ubAlpha);
+      if (iBloodType == 1) col = RGBAToColor( 0, ubRndCol, 0, ubAlpha);
       break;
     }
     case SPT_SLIME:
     {
       UBYTE ubRndCol = UBYTE( 128+afStarsPositions[ int(iSpray+tmStarted*10)%CT_MAX_PARTICLES_TABLE][0]*64);
-      if (iBloodType!=3) col = RGBAToColor(0, ubRndCol, 0, ubAlpha);
+      if (iBloodType != 3) col = RGBAToColor(0, ubRndCol, 0, ubAlpha);
       break;
     }
     case SPT_GOO:
     {
       UBYTE ubRndCol = UBYTE( 128+afStarsPositions[ int(iSpray+tmStarted*10)%CT_MAX_PARTICLES_TABLE][0]*64);
-      if (iBloodType!=3) col = RGBAToColor(ubRndCol, 128, 12, ubAlpha);
+      if (iBloodType != 3) col = RGBAToColor(ubRndCol, 128, 12, ubAlpha);
       break;
     }
     case SPT_BONES:
@@ -4425,11 +4425,11 @@ void Particles_BloodSpray(enum SprayParticlesType sptType, FLOAT3D vSource, FLOA
     }
     case SPT_FEATHER:
     {
-      if (iSpray>=ctSprays/2)
+      if (iSpray >= ctSprays/2)
       {
         UBYTE ubRndCol = UBYTE( 128+afStarsPositions[ int(iSpray+tmStarted*10)%CT_MAX_PARTICLES_TABLE][0]*64);
-        if (iBloodType==2) col = RGBAToColor( ubRndCol, 0, 0, ubAlpha);
-        if (iBloodType==1) col = RGBAToColor( 0, ubRndCol, 0, ubAlpha);
+        if (iBloodType == 2) col = RGBAToColor( ubRndCol, 0, 0, ubAlpha);
+        if (iBloodType == 1) col = RGBAToColor( 0, ubRndCol, 0, ubAlpha);
       }
       else
       {
@@ -4512,7 +4512,7 @@ void Particles_BloodSpray(enum SprayParticlesType sptType, FLOAT3D vSource, FLOA
     }
     case SPT_AIRSPOUTS:
     {
-      col = C_WHITE|(ubAlpha>>1);
+      col = C_WHITE|(ubAlpha >> 1);
       break;
     }
     }
@@ -4767,11 +4767,11 @@ void Particles_AfterBurner(CEntity *pen, FLOAT tmSpawn, FLOAT fStretch, INDEX iG
   pTD->FetchRow(14, aSmoke_rol);
 
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();  
-  for (INDEX iPos = plp->lp_ctUsed-1; iPos>=1; iPos--)
+  for (INDEX iPos = plp->lp_ctUsed-1; iPos >= 1; iPos--)
   {
     pvPos1 = pvPos2;
     pvPos2 = &plp->GetPosition(iPos);
-    if (*pvPos1==*pvPos2) continue;
+    if (*pvPos1 == *pvPos2) continue;
 
     FLOAT fT=(iPos+_pTimer->GetLerpFactor())*_pTimer->TickQuantum;
     FLOAT fRatio=fT/(CT_AFTERBURNER_SMOKES*_pTimer->TickQuantum);
@@ -4817,13 +4817,13 @@ void Particles_AfterBurner(CEntity *pen, FLOAT tmSpawn, FLOAT fStretch, INDEX iG
 
   INDEX ctParticles=CT_AFTERBURNER_HEAD_POSITIONS;//Min(CT_AFTERBURNER_HEAD_POSITIONS,plp->lp_ctUsed-1);
   pvPos1 = &plp->GetPosition(ctParticles-1);
-  for (INDEX iFlare=ctParticles-2; iFlare>=0; iFlare--)
+  for (INDEX iFlare=ctParticles-2; iFlare >= 0; iFlare--)
   {
     pvPos2 = pvPos1;
     pvPos1 = &plp->GetPosition(iFlare);
-    if (*pvPos1==*pvPos2) continue;
+    if (*pvPos1 == *pvPos2) continue;
 
-    for (INDEX iInter=CT_AFTERBURNER_HEAD_INTERPOSITIONS-1; iInter>=0; iInter--)
+    for (INDEX iInter=CT_AFTERBURNER_HEAD_INTERPOSITIONS-1; iInter >= 0; iInter--)
     {
       FLOAT fT=(iFlare+_pTimer->GetLerpFactor()+iInter*1.0f/CT_AFTERBURNER_HEAD_INTERPOSITIONS)*_pTimer->TickQuantum;
       FLOAT fRatio=fT/(ctParticles*_pTimer->TickQuantum);
@@ -5458,7 +5458,7 @@ void Particles_GrowingSwirl( CEntity *pen, FLOAT fStretch, FLOAT fStartTime)
     FLOAT fBirth = fStartTime+i*TM_SWIRL_SPARK_LAUNCH-2.0f;//+afTimeOffsets[i]*TM_SWIRL_SPARK_LAUNCH/0.25f;
     FLOAT fT = tmNow-fBirth;
     FLOAT fFade=CalculateRatio(fT, 0, TM_GROWING_SWIRL_TOTAL_LIFE, 0.1f, 0.2f);
-    if (fFade==0.0f) continue;
+    if (fFade == 0.0f) continue;
     // apply time strech
     fT *= 1/TM_GROWING_SWIRL_TOTAL_LIFE;
     // get fraction part
@@ -5963,11 +5963,11 @@ void Particles_RunAfterBurner(CEntity *pen, FLOAT tmEnd, FLOAT fStretch, INDEX i
   //COLOR colMul=RGBAToColor(ubColMul,ubColMul,ubColMul,ubColMul);
   COLOR col;
 
-  for (INDEX iPos = plp->lp_ctUsed-1; iPos>=1; iPos--)
+  for (INDEX iPos = plp->lp_ctUsed-1; iPos >= 1; iPos--)
   {
     pvPos1 = pvPos2;
     pvPos2 = &plp->GetPosition(iPos);
-    if (*pvPos1==*pvPos2) continue;
+    if (*pvPos1 == *pvPos2) continue;
 
     FLOAT fT=(iPos+_pTimer->GetLerpFactor())*_pTimer->TickQuantum;
     FLOAT fRatio=fT/(CT_AFTERBURNER_SMOKES*_pTimer->TickQuantum);
@@ -6010,13 +6010,13 @@ void Particles_RunAfterBurner(CEntity *pen, FLOAT tmEnd, FLOAT fStretch, INDEX i
   
   INDEX ctParticles=CT_AFTERBURNER_HEAD_POSITIONS;//Min(CT_AFTERBURNER_HEAD_POSITIONS,plp->lp_ctUsed-1);
   pvPos1 = &plp->GetPosition(ctParticles-1);
-  for (INDEX iFlare=ctParticles-2; iFlare>=0; iFlare--)
+  for (INDEX iFlare=ctParticles-2; iFlare >= 0; iFlare--)
   {
     pvPos2 = pvPos1;
     pvPos1 = &plp->GetPosition(iFlare);
-    if (*pvPos1==*pvPos2) continue;
+    if (*pvPos1 == *pvPos2) continue;
 
-    for (INDEX iInter=CT_AFTERBURNER_HEAD_INTERPOSITIONS-1; iInter>=0; iInter--)
+    for (INDEX iInter=CT_AFTERBURNER_HEAD_INTERPOSITIONS-1; iInter >= 0; iInter--)
     {
       FLOAT fT=(iFlare+_pTimer->GetLerpFactor()+iInter*1.0f/CT_AFTERBURNER_HEAD_INTERPOSITIONS)*_pTimer->TickQuantum;
       FLOAT fRatio=fT/(ctParticles*_pTimer->TickQuantum);

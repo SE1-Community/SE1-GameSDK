@@ -218,7 +218,7 @@ functions:
   {
     INDEX iBoneID = ska_GetIDFromStringTable("MidTorso");
     RenBone *rb = RM_FindRenBone(iBoneID);
-    if (rb!=NULL) {
+    if (rb != NULL) {
       FLOATquat3D quat;
       quat.FromEuler(ANGLE3D(0,0,AngleRad(Sin(m_fMidBoneRot)/3.0f)));
       rb->rb_arRot.ar_qRot = quat;
@@ -275,9 +275,9 @@ functions:
 
   /* Entity info */
   void *GetEntityInfo(void) {
-    if (m_gtType==GT_SOLDIER) {
+    if (m_gtType == GT_SOLDIER) {
       return &eiGruntSoldier;
-    } else if (m_gtType==GT_COMMANDER) {
+    } else if (m_gtType == GT_COMMANDER) {
       return &eiGruntSoldier;
     } else {
       ASSERT("Unknown grunt type!");
@@ -298,10 +298,10 @@ functions:
   void Precache(void) {
     CEnemyBase::Precache();
     
-   if (m_gtType==GT_SOLDIER) {
+   if (m_gtType == GT_SOLDIER) {
       PrecacheClass(CLASS_PROJECTILE, PRT_GRUNT_PROJECTILE_SOL);
     }
-    if (m_gtType==GT_COMMANDER) {
+    if (m_gtType == GT_COMMANDER) {
       PrecacheClass(CLASS_PROJECTILE, PRT_GRUNT_PROJECTILE_COM);
     }
 
@@ -355,7 +355,7 @@ functions:
 
   void DeathNotify(void) {
     INDEX iBoxIndex = GetModelInstance()->GetColisionBoxIndex(idGrund_DeathBox);
-    ASSERT(iBoxIndex>=0);
+    ASSERT(iBoxIndex >= 0);
     ChangeCollisionBoxIndexWhenPossible(iBoxIndex);
     en_fDensity = 500.0f;
   };

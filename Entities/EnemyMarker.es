@@ -72,7 +72,7 @@ procedures:
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
     
-    if (m_strName=="Marker") {
+    if (m_strName == "Marker") {
       m_strName="Enemy Marker";
     }
 

@@ -87,7 +87,7 @@ functions:
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     if (m_bIgnorePlayer) {
-      if (ee.ee_slEvent==EVENTCODE_ETouch) {
+      if (ee.ee_slEvent == EVENTCODE_ETouch) {
         ETouch &et = (ETouch &)ee;
         if (IsOfClass(et.penOther, "Player")) {
           return TRUE;
@@ -118,9 +118,9 @@ functions:
 
   INDEX GetWalkAnim(void)
   {
-    if (m_bhtType==BHT_ZOMBIE) {
+    if (m_bhtType == BHT_ZOMBIE) {
       return MENTAL_ANIM_WALKZOMBIE;
-    } else if (m_bhtType==BHT_SAINT) {
+    } else if (m_bhtType == BHT_SAINT) {
       return MENTAL_ANIM_WALKANGEL;
     } else {
       return MENTAL_ANIM_RUN;
@@ -173,9 +173,9 @@ functions:
   void PlayWalkSound(void)
   {
     INDEX iSound = SOUND_WALKZOMBIE;
-    if (m_bhtType==BHT_ZOMBIE) {
+    if (m_bhtType == BHT_ZOMBIE) {
       iSound = SOUND_WALKZOMBIE;
-    } else if (m_bhtType==BHT_SAINT) {
+    } else if (m_bhtType == BHT_SAINT) {
       iSound = SOUND_WALKSAINT;
     } else {
       return;
@@ -213,7 +213,7 @@ procedures:
   Fire(EVoid) : CEnemyBase::Fire {
     // hit
     if (CalcDist(m_penEnemy) <= m_fStopDistance*1.1f) {
-      if (m_fnmNameSnd!="") {
+      if (m_fnmNameSnd != "") {
         PlaySound(m_soSound, m_fnmNameSnd, SOF_3D);
         m_bPlayingWalkSound = FALSE;
       }
@@ -311,11 +311,11 @@ procedures:
     SetModel(MODEL_MENTAL);
     SetModelMainTexture(TEXTURE_MENTAL);
     AddAttachment(0, MODEL_HEAD, TEXTURE_MENTAL);
-    if (m_fnmHeadTex!="") {
+    if (m_fnmHeadTex != "") {
       // try to
       try {
         CAttachmentModelObject *pamoHead = GetModelObject()->GetAttachmentModel(0);
-        if (pamoHead!=NULL) {
+        if (pamoHead != NULL) {
           pamoHead->amo_moModelObject.mo_toTexture.SetData_t(m_fnmHeadTex);
         }
       // if anything failed
@@ -325,9 +325,9 @@ procedures:
         AddAttachment(0, MODEL_HEAD, TEXTURE_MENTAL);
       }
     }
-    if (m_bhtType==BHT_ZOMBIE) {
+    if (m_bhtType == BHT_ZOMBIE) {
       AddAttachment(MENTAL_ATTACHMENT_HORNS, MODEL_HORNS, TEXTURE_HORNS);
-    } else if (m_bhtType==BHT_SAINT) {
+    } else if (m_bhtType == BHT_SAINT) {
       AddAttachment(MENTAL_ATTACHMENT_AURA, MODEL_AURA, TEXTURE_AURA);
     }
 

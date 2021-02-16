@@ -91,7 +91,7 @@ functions:
   void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
-    if (dmtType==DMT_DROWNING) {
+    if (dmtType == DMT_DROWNING) {
       //en_tmMaxHoldBreath = -5.0f;
       fDamageAmmount/=2.0f;
     }
@@ -135,7 +135,7 @@ functions:
 
   void RenderParticles(void)
   {
-    if (m_bAttackingByElectricity && m_penEnemy!=NULL)
+    if (m_bAttackingByElectricity && m_penEnemy != NULL)
     {
       // render one lightning toward enemy
       FLOAT3D vSource = GetPlacement().pl_PositionVector;

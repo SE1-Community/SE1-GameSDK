@@ -66,9 +66,9 @@ public:
   void NewMessage(const CTFileName &fnm);
 };
 
-// !=NULL if some player wants to call computer
+// != NULL if some player wants to call computer
 DECL_DLL extern class CPlayer *cmp_ppenPlayer;
-// !=NULL for rendering computer on secondary display in dualhead
+// != NULL for rendering computer on secondary display in dualhead
 DECL_DLL extern class CPlayer *cmp_ppenDHPlayer;
 // set to update current message in background mode (for dualhead)
 DECL_DLL extern BOOL cmp_bUpdateInBackground;

@@ -104,7 +104,7 @@ functions:
   void SpawnShoot(CEntity *penTarget)
   {
     // if not movable entity
-    if (penTarget==NULL || !(penTarget->GetPhysicsFlags()&EPF_MOVABLE)) {
+    if (penTarget == NULL || !(penTarget->GetPhysicsFlags()&EPF_MOVABLE)) {
       // do nothing
       return;
     }

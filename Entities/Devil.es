@@ -317,7 +317,7 @@ functions:
   // Validate offered target for one property
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if (penTarget==NULL)
+    if (penTarget == NULL)
     {
       return FALSE;
     }
@@ -358,7 +358,7 @@ functions:
   }
   // play light animation
   void PlayLightAnim(INDEX iAnim, ULONG ulFlags) {
-    if (m_aoLightAnimation.GetData()!=NULL) {
+    if (m_aoLightAnimation.GetData() != NULL) {
       m_aoLightAnimation.PlayAnim(iAnim, ulFlags);
     }
   };
@@ -376,7 +376,7 @@ functions:
 
   void SetSpeedsToDesiredPosition(const FLOAT3D &vPosDelta, FLOAT fPosDist, BOOL bGoingToPlayer)
   {
-    if (m_penEnemy!=NULL)
+    if (m_penEnemy != NULL)
     {
       FLOAT fEnemyDistance = CalcDist(m_penEnemy);
       FLOAT fRadius1 = 75.0f;
@@ -385,7 +385,7 @@ functions:
       FLOAT fSpeedRadius2 = 14.0f;
 
       FLOAT fDistanceRatio = CalculateRatio( fEnemyDistance, fRadius1, fRadius2, 1, 0);
-      if (fEnemyDistance>=fRadius2)
+      if (fEnemyDistance >= fRadius2)
       {
         fDistanceRatio = 1.0f;
       }
@@ -423,7 +423,7 @@ functions:
   void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL) {
+    if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
       pwsc->m_vShakePos = GetPlacement().pl_PositionVector;
       pwsc->m_fShakeFalloff = 400.0f;
@@ -443,7 +443,7 @@ functions:
   void ShakeItFarBaby(FLOAT tmShaketime, FLOAT fPower)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL) {
+    if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
       pwsc->m_vShakePos = GetPlacement().pl_PositionVector;
       pwsc->m_fShakeFalloff = 2048.0f;
@@ -481,24 +481,24 @@ functions:
     const TIME tmAnimStart = CTimer::InSeconds(mo.ao_llAnimStart);
     
     // if we are now playing walk anim, but another anim is scheduled to happen after walk
-    if (mo.ao_iLastAnim==DEVIL_ANIM_WALK && tmAnimStart > tmNow)
+    if (mo.ao_iLastAnim == DEVIL_ANIM_WALK && tmAnimStart > tmNow)
     {
       // we started one anim time back from anim start time
       tmAnim = tmAnimStart - tmWalkLen;
     }
-    else if (mo.ao_iCurrentAnim==DEVIL_ANIM_WALK && tmAnimStart <= tmNow)
+    else if (mo.ao_iCurrentAnim == DEVIL_ANIM_WALK && tmAnimStart <= tmNow)
     {
       tmAnim = tmAnimStart;
     }
     // if we are now playing walk wo idle anim, but another anim is scheduled to happen after walk to idle
-    else if (mo.ao_iLastAnim==DEVIL_ANIM_FROMWALKTOIDLE && tmAnimStart > tmNow)
+    else if (mo.ao_iLastAnim == DEVIL_ANIM_FROMWALKTOIDLE && tmAnimStart > tmNow)
     {
       // we started one anim time back from anim start time
       tmAnim = tmAnimStart - tmWalkLen;
       tmLeftFootOffset = 0.6f;
       tmRightFootOffset = 1.7f;
     }
-    else if (mo.ao_iCurrentAnim==DEVIL_ANIM_FROMWALKTOIDLE && tmAnimStart <= tmNow)
+    else if (mo.ao_iCurrentAnim == DEVIL_ANIM_FROMWALKTOIDLE && tmAnimStart <= tmNow)
     {
       tmAnim = tmAnimStart;
       tmLeftFootOffset = 0.6f;
@@ -506,15 +506,15 @@ functions:
     }
 
     // WARNING !!! foot variable names are switched
-    if (tmAnim!=-1)
+    if (tmAnim != -1)
     {
       FLOAT tmAnimLast = tmAnim+INDEX((tmNow-tmAnim)/tmWalkLen)*tmWalkLen;
       FLOAT tmLeftFootDown  = tmAnimLast+tmLeftFootOffset;
       FLOAT tmRightFootDown = tmAnimLast+tmRightFootOffset;
       CWorldSettingsController *pwsc = GetWSC(this);
-      if (pwsc!=NULL)
+      if (pwsc != NULL)
       {
-        if (tmNow>=tmRightFootDown && pwsc->m_tmShakeStarted<tmRightFootDown-0.1f)
+        if (tmNow >= tmRightFootDown && pwsc->m_tmShakeStarted<tmRightFootDown-0.1f)
         {
           // apply range damage for right foot
           InflictHoofDamage( DEVIL_WALK_HOOF_LEFT_OFFSET);
@@ -522,7 +522,7 @@ functions:
           ShakeItBaby(tmRightFootDown, 1.0f);
           PlaySound(m_soRight, SOUND_WALK_RIGHT, SOF_3D);
         }
-        else if (tmNow>=tmLeftFootDown && pwsc->m_tmShakeStarted<tmLeftFootDown-0.1f)
+        else if (tmNow >= tmLeftFootDown && pwsc->m_tmShakeStarted<tmLeftFootDown-0.1f)
         {
           // apply range damage for left foot
           InflictHoofDamage( DEVIL_WALK_HOOF_RIGHT_OFFSET);
@@ -553,7 +553,7 @@ functions:
   void TurnOffPhysics(void)
   {
     SetPhysicsFlags(EPF_MODEL_WALKING&~EPF_TRANSLATEDBYGRAVITY);
-    SetCollisionFlags(((ECBI_MODEL)<<ECB_TEST) | ((ECBI_MODEL)<<ECB_PASS) | ((ECBI_ITEM)<<ECB_IS));
+    SetCollisionFlags(((ECBI_MODEL) << ECB_TEST) | ((ECBI_MODEL) << ECB_PASS) | ((ECBI_ITEM) << ECB_IS));
   }
 
   // render particles
@@ -572,7 +572,7 @@ functions:
       INDEX ctRendered = Particles_FireBreath(this, m_vFireBreathSource, m_vFireBreathTarget,
         m_tmFireBreathStart, m_tmFireBreathStop);
       // if should stop rendering fire breath particles
-      if (_pTimer->CurrentTick()>m_tmFireBreathStop && ctRendered==0)
+      if (_pTimer->CurrentTick()>m_tmFireBreathStop && ctRendered == 0)
       {
         m_tmFireBreathStart = UpperLimit(0.0f);
       }
@@ -584,7 +584,7 @@ functions:
       // render fire breath particles
       INDEX ctRendered = Particles_Regeneration(this, m_tmRegenerationStart, m_tmRegenerationStop, 1.0f, FALSE);
       // if should stop rendering regeneration particles
-      if (_pTimer->CurrentTick()>m_tmRegenerationStop && ctRendered==0)
+      if (_pTimer->CurrentTick()>m_tmRegenerationStop && ctRendered == 0)
       {
         m_tmRegenerationStart = UpperLimit(0.0f);
       }
@@ -686,7 +686,7 @@ functions:
     }
     // if currently regenerating or died or out of healing range or recently hit by space ship beam
     if (m_dsDevilState == DS_REGENERATION_IMPULSE ||
-       GetHealth()<=0 || GetHealth()>=HEALTH_CLASS_4 || 
+       GetHealth() <= 0 || GetHealth() >= HEALTH_CLASS_4 || 
        _pTimer->CurrentTick()<m_tmHitBySpaceShipBeam+0.5f)
     {
       return;
@@ -736,12 +736,12 @@ functions:
        return;
     }
 
-    if (!(m_dsDevilState==DS_ENEMY || m_dsDevilState==DS_PYRAMID_FIGHT) || penInflictor==this)
+    if (!(m_dsDevilState == DS_ENEMY || m_dsDevilState == DS_PYRAMID_FIGHT) || penInflictor == this)
     {
       return;
     }
     
-    if (m_dsDevilState!=DS_PYRAMID_FIGHT)
+    if (m_dsDevilState != DS_PYRAMID_FIGHT)
     {
       if (GetHealth()<1000.0f)
       {
@@ -758,7 +758,7 @@ functions:
     if (cht_bDebugFinalBoss)
     {
       // print state change
-      if (m_dsDevilState!=m_dsLastDevilState)
+      if (m_dsDevilState != m_dsLastDevilState)
       {
         m_dsLastDevilState = m_dsDevilState;
         CTString strDevilState = DevilState_enum.NameForValue(INDEX(m_dsDevilState));
@@ -766,7 +766,7 @@ functions:
       }
 
       // print fire power state change
-      if (m_dapAttackPower!=m_dapLastAttackPower)
+      if (m_dapAttackPower != m_dapLastAttackPower)
       {
         m_dapLastAttackPower = m_dapAttackPower;
         CTString strAttackPower = DevilAttackPower_enum.NameForValue(INDEX(m_dapAttackPower));
@@ -801,7 +801,7 @@ functions:
         iScheduledAnim = -1;
       }
 
-      if (iCurrentAnim!=m_iLastCurrentAnim || iScheduledAnim!=m_iLastScheduledAnim)
+      if (iCurrentAnim != m_iLastCurrentAnim || iScheduledAnim != m_iLastScheduledAnim)
       {
         CAnimData *pad = mo.GetData();
         CAnimInfo aiCurrent;
@@ -966,10 +966,10 @@ functions:
     {
       CModelObject &mo = *GetModelObject();
       INDEX iAnim = mo.GetAnim();
-      if (iAnim==DEVIL_ANIM_WALK)
+      if (iAnim == DEVIL_ANIM_WALK)
       {
         // do nothing
-      } else if (iAnim==DEVIL_ANIM_FROMIDLETOWALK) {
+      } else if (iAnim == DEVIL_ANIM_FROMIDLETOWALK) {
         StartModelAnim(DEVIL_ANIM_WALK, AOF_LOOPING|AOF_SMOOTHCHANGE);
       } else {
         StartModelAnim(DEVIL_ANIM_FROMIDLETOWALK, AOF_SMOOTHCHANGE);
@@ -1141,7 +1141,7 @@ functions:
   /* Handle an event, return false if the event is not handled. */
   BOOL HandleEvent(const CEntityEvent &ee)
   {
-    if (ee.ee_slEvent==EVENTCODE_EDevilCommand)
+    if (ee.ee_slEvent == EVENTCODE_EDevilCommand)
     {
       EDevilCommand eDevilCommand = ((EDevilCommand &) ee);
       if (eDevilCommand.dctType == DC_FORCE_ATTACK_RADIUS)
@@ -1266,7 +1266,7 @@ procedures:
     if (tmWait > _pTimer->TickQuantum)
     {
       FLOAT fTimeToWait = tmWait-_pTimer->TickQuantum*2;
-      if (fTimeToWait>=_pTimer->TickQuantum)
+      if (fTimeToWait >= _pTimer->TickQuantum)
       {
         autowait(fTimeToWait);
       }
@@ -1276,7 +1276,7 @@ procedures:
 
   WaitWalkToEnd()
   {
-    if (GetModelObject()->GetAnim()==DEVIL_ANIM_WALK) 
+    if (GetModelObject()->GetAnim() == DEVIL_ANIM_WALK) 
     {
       autocall WaitCurrentAnimEnd() EReturn;
       StartModelAnim(DEVIL_ANIM_FROMWALKTOIDLE, AOF_SMOOTHCHANGE);
@@ -1288,19 +1288,19 @@ procedures:
 
   WaitWalkOrIdleToEnd()
   {
-    if (GetModelObject()->GetAnim()==DEVIL_ANIM_WALK) 
+    if (GetModelObject()->GetAnim() == DEVIL_ANIM_WALK) 
     {
       autocall WaitCurrentAnimEnd() EReturn;
       StartModelAnim(DEVIL_ANIM_FROMWALKTOIDLE, AOF_SMOOTHCHANGE);
       autowait( GetModelObject()->GetAnimLength(DEVIL_ANIM_FROMWALKTOIDLE)-0.1f);
     }
-    else if (GetModelObject()->GetAnim()==DEVIL_ANIM_FROMIDLETOWALK) 
+    else if (GetModelObject()->GetAnim() == DEVIL_ANIM_FROMIDLETOWALK) 
     {
       autocall WaitCurrentAnimEnd() EReturn;
       StartModelAnim(DEVIL_ANIM_FROMWALKTOIDLE, AOF_SMOOTHCHANGE);
       autowait( GetModelObject()->GetAnimLength(DEVIL_ANIM_FROMWALKTOIDLE)-0.1f);
     }
-    else if (GetModelObject()->GetAnim()==DEVIL_ANIM_IDLE) 
+    else if (GetModelObject()->GetAnim() == DEVIL_ANIM_IDLE) 
     {
       autocall WaitCurrentAnimEnd() EReturn;
     }
@@ -1527,11 +1527,11 @@ procedures:
 
     TurnOnPhysics();
 
-    if (m_penEnemy==NULL)
+    if (m_penEnemy == NULL)
     {
       // get some player for trigger source if any is existing
       CEntity *penEnemy = FixupCausedToPlayer(this, m_penEnemy, /*bWarning=*/FALSE);
-      if (penEnemy!=m_penEnemy) {
+      if (penEnemy != m_penEnemy) {
         SetTargetSoft(penEnemy);
       }
     }
@@ -1586,7 +1586,7 @@ procedures:
     m_fAttackFireTime = 10.0f;
     m_fPauseStretcher = 1.0f;
 
-    if (m_dapAttackPower==DAP_MEDIUM_POWER_ATTACK &&
+    if (m_dapAttackPower == DAP_MEDIUM_POWER_ATTACK &&
         (_pTimer->CurrentTick()-m_fLastWalkTime) > 6.0f)
     {
       m_fAttackFireTime = 6.0f;
@@ -2150,7 +2150,7 @@ procedures:
   }
 
   StopAttack(EVoid) : CEnemyBase::StopAttack {
-    if (m_penEnemy==NULL)
+    if (m_penEnemy == NULL)
     {
       autocall Celebrate() EReturn;
     }
@@ -2171,7 +2171,7 @@ procedures:
     {
       // get some player for trigger source if any is existing
       CEntity *penEnemy = FixupCausedToPlayer(this, m_penEnemy, /*bWarning=*/FALSE);
-      if (penEnemy!=m_penEnemy) {
+      if (penEnemy != m_penEnemy) {
         SetTargetSoft(penEnemy);
       }
 
@@ -2205,7 +2205,7 @@ procedures:
     m_tmDeathTime = _pTimer->CurrentTick();
     
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL)
+    if (pwsc != NULL)
     {
       pwsc->m_colGlade=C_WHITE;
       pwsc->m_tmGlaringStarted = _pTimer->CurrentTick()+1.5f;
@@ -2230,7 +2230,7 @@ procedures:
     // declare yourself as a model
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_WALKING&~EPF_TRANSLATEDBYGRAVITY);
-    SetCollisionFlags(((ECBI_MODEL)<<ECB_TEST) | ((ECBI_MODEL)<<ECB_PASS) | ((ECBI_ITEM)<<ECB_IS));
+    SetCollisionFlags(((ECBI_MODEL) << ECB_TEST) | ((ECBI_MODEL) << ECB_PASS) | ((ECBI_ITEM) << ECB_IS));
     SetFlags(GetFlags()|ENF_ALIVE);
 
     // this one is boss!
@@ -2256,7 +2256,7 @@ procedures:
 
     // setup default speeds and radiuses
     /*
-    if (tmp_af[0]==0)
+    if (tmp_af[0] == 0)
     {
       tmp_af[0]=100.0f;
       tmp_af[1]=200.0f;
@@ -2443,7 +2443,7 @@ procedures:
         {
           CPrintF("Main loop, event: Return\n");
         }
-        if (m_dsDevilState==DS_DESTROYING_CITY)
+        if (m_dsDevilState == DS_DESTROYING_CITY)
         {
           m_soSound.Set3DParameters(1000.0f, 500.0f, 2.0f, 1.0f);
           m_dsDevilState = DS_ENEMY;

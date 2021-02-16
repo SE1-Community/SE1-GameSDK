@@ -161,7 +161,7 @@ functions:
       ctCasts++;
 
       // stop casting if nothing hit
-      if (crRay.cr_penHit==NULL)
+      if (crRay.cr_penHit == NULL)
       {
         break;
       }
@@ -173,7 +173,7 @@ functions:
       m_vHitPoint = crRay.cr_vHit;
 
       // if brush hitted
-      if (crRay.cr_penHit->GetRenderType()==RT_BRUSH && crRay.cr_pbpoBrushPolygon!=NULL)
+      if (crRay.cr_penHit->GetRenderType() == RT_BRUSH && crRay.cr_pbpoBrushPolygon != NULL)
       {
         CBrushPolygon *pbpo = crRay.cr_pbpoBrushPolygon;
         FLOAT3D vHitNormal = FLOAT3D(pbpo->bpo_pbplPlane->bpl_plAbsolute);
@@ -189,7 +189,7 @@ functions:
         if (ct.ct_ulFlags&CTF_BREATHABLE_GILLS)
         {
           // if we hit water surface
-          if (iSurfaceType==SURFACE_WATER) 
+          if (iSurfaceType == SURFACE_WATER) 
           {
             vHitNormal = -vHitNormal;
 
@@ -203,7 +203,7 @@ functions:
         }
         // spawn hit effect
         BOOL bPassable = pbpo->bpo_ulFlags & (BPOF_PASSABLE|BPOF_SHOOTTHRU);
-        if (!bPassable || iSurfaceType==SURFACE_WATER) {
+        if (!bPassable || iSurfaceType == SURFACE_WATER) {
           SpawnHitTypeEffect(this, bhtType, bSound, vHitNormal, crRay.cr_vHit, vHitDirection, FLOAT3D(0.0f, 0.0f, 0.0f));
         }
         if (!bPassable) {
@@ -213,7 +213,7 @@ functions:
       } else {
 
         // if flesh entity
-        if (crRay.cr_penHit->GetEntityInfo()!=NULL) {
+        if (crRay.cr_penHit->GetEntityInfo() != NULL) {
           if (((EntityInfo*)crRay.cr_penHit->GetEntityInfo())->Eeibt == EIBT_FLESH)
           {
             CEntity *penOfFlesh = crRay.cr_penHit;
@@ -223,8 +223,8 @@ functions:
 
             // look behind the entity (for back-stains)
             GetWorld()->ContinueCast(crRay);
-            if (crRay.cr_penHit!=NULL && crRay.cr_pbpoBrushPolygon!=NULL && 
-                crRay.cr_penHit->GetRenderType()==RT_BRUSH)
+            if (crRay.cr_penHit != NULL && crRay.cr_pbpoBrushPolygon != NULL && 
+                crRay.cr_penHit->GetRenderType() == RT_BRUSH)
             {
               vDistance = crRay.cr_vHit-vOldHitPos;
               vHitNormal = FLOAT3D(crRay.cr_pbpoBrushPolygon->bpo_pbplPlane->bpl_plAbsolute);
@@ -319,7 +319,7 @@ procedures:
   Main(EBulletInit eInit)
   {
     // remember the initial parameters
-    ASSERT(eInit.penOwner!=NULL);
+    ASSERT(eInit.penOwner != NULL);
     m_penOwner = eInit.penOwner;
     m_fDamage = eInit.fDamage;
 

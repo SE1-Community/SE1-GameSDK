@@ -240,7 +240,7 @@ public:
   virtual void SetMultiPlayerSession(CSessionProperties &sp);
 
   // game loop functions
-#define GRV_SHOWEXTRAS  (1L<<0)   // add extra stuff like console, weapon, pause
+#define GRV_SHOWEXTRAS  (1L << 0)   // add extra stuff like console, weapon, pause
   virtual void GameRedrawView(CDrawPort *pdpDrawport, ULONG ulFlags);
   virtual void GameMainLoop(void);
 

@@ -99,15 +99,15 @@ functions:
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
   {
     CTString str;
-    if (eDeath.eLastDamage.dmtType==DMT_EXPLOSION) {
-      if (m_hdtType==HDT_BOMBERMAN) {
+    if (eDeath.eLastDamage.dmtType == DMT_EXPLOSION) {
+      if (m_hdtType == HDT_BOMBERMAN) {
         str.PrintF(TRANS("%s was bombed by a Bomberman"), strPlayerName);
       } else {
         str.PrintF(TRANS("%s fell victim of a Kamikaze"), strPlayerName);
       }
-    } else if (m_hdtType==HDT_ROCKETMAN) {
+    } else if (m_hdtType == HDT_ROCKETMAN) {
       str.PrintF(TRANS("A Rocketeer tickled %s to death"), strPlayerName);
-    } else if (m_hdtType==HDT_FIRECRACKER) {
+    } else if (m_hdtType == HDT_FIRECRACKER) {
       str.PrintF(TRANS("A Firecracker tickled %s to death"), strPlayerName);
     }
     return str;
@@ -183,12 +183,12 @@ functions:
   {
     // firecracker and rocketman can't harm headman
     if (!IsOfClass(penInflictor, "Headman") || 
-        !(((CHeadman*)penInflictor)->m_hdtType==HDT_FIRECRACKER || 
-          ((CHeadman*)penInflictor)->m_hdtType==HDT_ROCKETMAN)) {
+        !(((CHeadman*)penInflictor)->m_hdtType == HDT_FIRECRACKER || 
+          ((CHeadman*)penInflictor)->m_hdtType == HDT_ROCKETMAN)) {
       CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
 
       // if died of chainsaw
-      if (dmtType==DMT_CHAINSAW && GetHealth()<=0) {
+      if (dmtType == DMT_CHAINSAW && GetHealth() <= 0) {
         // must always blowup
         m_fBlowUpAmount = 0;
       }
@@ -234,22 +234,22 @@ functions:
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
     vStretch=FLOAT3D(1,1,2);
-    if (GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_EASY_FALL_BACK)
+    if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_EASY_FALL_BACK)
     {
       vStretch=vStretch*0.3f;
       return 0.864f;
     }
-    if (GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_FALL_BACK)
+    if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_FALL_BACK)
     {
       vStretch=vStretch*0.75f;
       return 0.48f;
     }    
-    if (GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_EASY_FALL_FORWARD)
+    if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_EASY_FALL_FORWARD)
     {
       vStretch=vStretch*0.3f;
       return 1.12f;
     }
-    else if (GetModelObject()->GetAnim()==HEADMAN_ANIM_DEATH_FALL_ON_KNEES)
+    else if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_FALL_ON_KNEES)
     {
       vStretch=vStretch*0.75f;
       return 1.035f;
@@ -260,7 +260,7 @@ functions:
   // should this enemy blow up (spawn debris)
   BOOL ShouldBlowUp(void) 
   {
-    if (m_hdtType==HDT_KAMIKAZE && GetHealth()<=0) {
+    if (m_hdtType == HDT_KAMIKAZE && GetHealth() <= 0) {
       return TRUE;
     } else {
       return CEnemyBase::ShouldBlowUp();
@@ -275,14 +275,14 @@ functions:
   // virtual anim functions
   void StandingAnim(void) {
     StartModelAnim(HEADMAN_ANIM_IDLE_PATROL, AOF_LOOPING|AOF_NORESTART);
-    if (m_hdtType==HDT_KAMIKAZE) {
+    if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOff();
     }
   };
   void StandingAnimFight(void)
   {
     StartModelAnim(HEADMAN_ANIM_IDLE_FIGHT, AOF_LOOPING|AOF_NORESTART);
-    if (m_hdtType==HDT_KAMIKAZE) {
+    if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOff();
     }
   }
@@ -290,7 +290,7 @@ functions:
     StartModelAnim(HEADMAN_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
   };
   void RunningAnim(void) {
-    if (m_hdtType==HDT_KAMIKAZE) {
+    if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOn();
       StartModelAnim(HEADMAN_ANIM_KAMIKAZE_ATTACK, AOF_LOOPING|AOF_NORESTART);
     } else {
@@ -306,7 +306,7 @@ functions:
     if (m_bAttackSound) {
       return;
     }
-    if (m_hdtType==HDT_KAMIKAZE) {
+    if (m_hdtType == HDT_KAMIKAZE) {
       PlaySound(m_soSound, SOUND_IDLEKAMIKAZE, SOF_3D);
     } else {
       PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
@@ -349,7 +349,7 @@ functions:
  ************************************************************/
   void BlowUpNotify(void) {
     // kamikaze and bomberman explode if is not already exploded
-    if (m_hdtType==HDT_KAMIKAZE || m_hdtType==HDT_BOMBERMAN) {
+    if (m_hdtType == HDT_KAMIKAZE || m_hdtType == HDT_BOMBERMAN) {
       Explode();
     }
   };
@@ -357,7 +357,7 @@ functions:
   // spawn body parts
   /*void BlowUp(void)
   {
-    if (m_hdtType==HDT_FIRECRACKER || m_hdtType==HDT_ROCKETMAN)
+    if (m_hdtType == HDT_FIRECRACKER || m_hdtType == HDT_ROCKETMAN)
     {
       // get your size
       FLOATaabbox3D box;
@@ -375,7 +375,7 @@ functions:
       Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, fEntitySize, vNormalizedDamage, vBodySpeed, 5.0f, 2.0f);
 
       INDEX iTextureID = TEXTURE_ROCKETMAN;
-      if (m_hdtType==HDT_FIRECRACKER)
+      if (m_hdtType == HDT_FIRECRACKER)
       {
         iTextureID = TEXTURE_FIRECRACKER;
       }
@@ -408,7 +408,7 @@ functions:
       // inflict damage
       FLOAT3D vSource;
       GetEntityInfoPosition(this, eiHeadman.vTargetCenter, vSource);
-      if (m_hdtType==HDT_BOMBERMAN) {
+      if (m_hdtType == HDT_BOMBERMAN) {
         InflictDirectDamage(this, this, DMT_EXPLOSION, 100.0f, vSource, 
           -en_vGravityDir);
         InflictRangeDamage(this, DMT_EXPLOSION, 15.0f, vSource, 1.0f, 6.0f);
@@ -446,7 +446,7 @@ functions:
   void SetSpeedsToDesiredPosition(const FLOAT3D &vPosDelta, FLOAT fPosDistance, BOOL bGoingToPlayer)
   {
     // if very close to player
-    if (m_hdtType==HDT_KAMIKAZE && CalcDist(m_penEnemy) < EXPLODE_KAMIKAZE) {
+    if (m_hdtType == HDT_KAMIKAZE && CalcDist(m_penEnemy) < EXPLODE_KAMIKAZE) {
       // explode
       SetHealth(-10000.0f);
       m_vDamage = FLOAT3D(0,10000,0);
@@ -463,7 +463,7 @@ functions:
   virtual FLOAT GetAttackMoveFrequency(FLOAT fEnemyDistance)
   {
     // kamikaze must have sharp reflexes when close
-    if (m_hdtType==HDT_KAMIKAZE && fEnemyDistance < m_fCloseDistance) {
+    if (m_hdtType == HDT_KAMIKAZE && fEnemyDistance < m_fCloseDistance) {
       return 0.1f;
     } else {
       return CEnemyBase::GetAttackMoveFrequency(fEnemyDistance);
@@ -475,7 +475,7 @@ procedures:
  *                A T T A C K   E N E M Y                   *
  ************************************************************/
   InitializeAttack(EVoid) : CEnemyBase::InitializeAttack {
-    if (m_hdtType==HDT_KAMIKAZE) {
+    if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOn();
     }
     jump CEnemyBase::InitializeAttack();
@@ -506,7 +506,7 @@ procedures:
   // Bomberman attack
   BombermanAttack(EVoid) {
     // don't shoot if enemy above or below you too much
-    if ( !IsInFrustum(m_penEnemy, CosFast(80.0f)) ) {
+    if (!IsInFrustum(m_penEnemy, CosFast(80.0f)) ) {
       return EEnd();
     }
 
@@ -603,15 +603,15 @@ procedures:
  ************************************************************/
   Death(EVoid) : CEnemyBase::Death {
     // don't check this because summoner can send death event even to kamikaze
-    // ASSERT(m_hdtType!=HDT_KAMIKAZE);
+    // ASSERT(m_hdtType != HDT_KAMIKAZE);
     // instead, stop playing the yelling sound
-    if (m_hdtType==HDT_KAMIKAZE) {
+    if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOff();
     }
     // death
     autocall CEnemyBase::Death() EEnd;
     // bomberman explode
-    if (m_hdtType==HDT_BOMBERMAN) {
+    if (m_hdtType == HDT_BOMBERMAN) {
       Explode();
     }
     return EEnd();

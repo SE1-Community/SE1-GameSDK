@@ -65,32 +65,32 @@ functions:
 
     if (vViewDir(1) < 0.0f) {
       colMul = (COLOR)(-vViewDir(1)*fSum);
-      colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
+      colMul = (colMul << CT_RSHIFT) | (colMul << CT_GSHIFT) | (colMul << CT_BSHIFT) | (colMul << CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colWest, colMul));
     }
     if (vViewDir(1) > 0.0f) {
       colMul = (COLOR)(+vViewDir(1)*fSum);
-      colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
+      colMul = (colMul << CT_RSHIFT) | (colMul << CT_GSHIFT) | (colMul << CT_BSHIFT) | (colMul << CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colEast, colMul));
     }
     if (vViewDir(2) < 0.0f) {
       colMul = (COLOR)(-vViewDir(2)*fSum);
-      colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
+      colMul = (colMul << CT_RSHIFT) | (colMul << CT_GSHIFT) | (colMul << CT_BSHIFT) | (colMul << CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colDown, colMul));
     }
     if (vViewDir(2) > 0.0f) {
       colMul = (COLOR)(+vViewDir(2)*fSum);
-      colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
+      colMul = (colMul << CT_RSHIFT) | (colMul << CT_GSHIFT) | (colMul << CT_BSHIFT) | (colMul << CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colUp, colMul));
     }
     if (vViewDir(3) < 0.0f) {
       colMul = (COLOR)(-vViewDir(3)*fSum);
-      colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
+      colMul = (colMul << CT_RSHIFT) | (colMul << CT_GSHIFT) | (colMul << CT_BSHIFT) | (colMul << CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colNorth, colMul));
     }
     if (vViewDir(3) > 0.0f) {
       colMul = (COLOR)(+vViewDir(3)*fSum);
-      colMul = (colMul<<CT_RSHIFT) | (colMul<<CT_GSHIFT) | (colMul<<CT_BSHIFT) | (colMul<<CT_ASHIFT);
+      colMul = (colMul << CT_RSHIFT) | (colMul << CT_GSHIFT) | (colMul << CT_BSHIFT) | (colMul << CT_ASHIFT);
       colDir = AddColors( colDir, MulColors( m_colSouth, colMul));
     }
 
@@ -123,7 +123,7 @@ procedures:
     SetModelMainTexture(TEXTURE_MARKER);
 
     // set name
-    if (m_strName=="Marker") {
+    if (m_strName == "Marker") {
       m_strName = "Haze marker";
     }
 
@@ -131,9 +131,9 @@ procedures:
     m_fDensity = ClampDn(m_fDensity, 1E-6f);
     m_fFar = ClampDn(m_fFar, 0.001f);
     m_fNear = Clamp(m_fNear, 0.0f, m_fFar-0.0005f);
-    ASSERT(m_fNear>=0 && m_fNear<m_fFar);
+    ASSERT(m_fNear >= 0 && m_fNear<m_fFar);
 
-    m_iSize = 1<<INDEX(Log2(m_iSize));
+    m_iSize = 1 << INDEX(Log2(m_iSize));
     m_iSize= Clamp(m_iSize, INDEX(2), INDEX(256));
 
     return;

@@ -99,7 +99,7 @@ functions:
       return;
     }
 
-    if ((dmtType!=DMT_BURNING) && (m_tmSpraySpawned<=_pTimer->CurrentTick()-_pTimer->TickQuantum*8))
+    if ((dmtType != DMT_BURNING) && (m_tmSpraySpawned <= _pTimer->CurrentTick()-_pTimer->TickQuantum*8))
     {
       // spawn blood spray
       CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
@@ -121,11 +121,11 @@ functions:
     CRationalEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount,
                               vHitPoint, vDirection);    
     FLOAT fNewHealth = GetHealth();
-    if (fNewHealth<=0.66f*m_fMaxHealth && fLastHealth>0.66f*m_fMaxHealth) {
+    if (fNewHealth <= 0.66f*m_fMaxHealth && fLastHealth>0.66f*m_fMaxHealth) {
       RemoveAttachment(WALLCHARGER_ATTACHMENT_LIGHT);
       GetModelObject()->PlayAnim(WALLCHARGER_ANIM_DAMAGE01, AOF_SMOOTHCHANGE|AOF_NORESTART);
       SpawnExplosions();
-    } else if (fNewHealth<=0.33*m_fMaxHealth && fLastHealth>0.33*m_fMaxHealth) {
+    } else if (fNewHealth <= 0.33*m_fMaxHealth && fLastHealth>0.33*m_fMaxHealth) {
       RemoveAttachment(WALLCHARGER_ATTACHMENT_PLASMA);
       GetModelObject()->PlayAnim(WALLCHARGER_ANIM_DAMAGE02, AOF_SMOOTHCHANGE|AOF_NORESTART);
       SpawnExplosions();

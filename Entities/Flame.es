@@ -172,11 +172,11 @@ functions:
     }
     CEntity *penParent= GetParent();
     FLOAT fPower=ClampUp(m_fDamageStep-MIN_DAMAGE_QUANTUM, MAX_DAMAGE_QUANTUM)/MAX_DAMAGE_QUANTUM;
-    if (penParent!= NULL)
+    if (penParent != NULL)
     {
-      if ((penParent->en_RenderType==CEntity::RT_MODEL || penParent->en_RenderType==CEntity::RT_EDITORMODEL ||
-           penParent->en_RenderType==CEntity::RT_SKAMODEL || penParent->en_RenderType==CEntity::RT_SKAEDITORMODEL) &&
-          (Particle_GetViewer()!=penParent) )
+      if ((penParent->en_RenderType == CEntity::RT_MODEL || penParent->en_RenderType == CEntity::RT_EDITORMODEL ||
+           penParent->en_RenderType == CEntity::RT_SKAMODEL || penParent->en_RenderType == CEntity::RT_SKAEDITORMODEL) &&
+          (Particle_GetViewer() != penParent) )
       {
         Particles_Burning(penParent, fPower, fTimeFactor*fDeathFactor);
       }
@@ -224,8 +224,8 @@ procedures:
   // --->>> MAIN
   Main(EFlame ef) {
     // attach to parent (another entity)
-    ASSERT(ef.penOwner!=NULL);
-    ASSERT(ef.penAttach!=NULL);
+    ASSERT(ef.penOwner != NULL);
+    ASSERT(ef.penAttach != NULL);
     m_penOwner = ef.penOwner;
     m_penAttach = ef.penAttach;
 
@@ -251,8 +251,8 @@ procedures:
 
     m_bBurningBrush=FALSE;
     BOOL bAllowFlame=TRUE;
-    if (!(ef.penAttach->en_RenderType==CEntity::RT_MODEL || ef.penAttach->en_RenderType==CEntity::RT_EDITORMODEL ||
-          ef.penAttach->en_RenderType==CEntity::RT_SKAMODEL || ef.penAttach->en_RenderType==CEntity::RT_SKAEDITORMODEL ))
+    if (!(ef.penAttach->en_RenderType == CEntity::RT_MODEL || ef.penAttach->en_RenderType == CEntity::RT_EDITORMODEL ||
+          ef.penAttach->en_RenderType == CEntity::RT_SKAMODEL || ef.penAttach->en_RenderType == CEntity::RT_SKAEDITORMODEL ))
     {
       m_bBurningBrush=TRUE;
       FLOAT3D vPos=GetPlacement().pl_PositionVector;
@@ -263,7 +263,7 @@ procedures:
       pbpo=GetNearestPolygon(vPos, plPlane, fDistanceToEdge);
       FLOAT3D vBrushPos = ef.penAttach->GetPlacement().pl_PositionVector;
       FLOATmatrix3D mBrushRotInv = !ef.penAttach->GetRotationMatrix();
-      if (pbpo!=NULL && pbpo->bpo_pbscSector->bsc_pbmBrushMip->bm_pbrBrush->br_penEntity==ef.penAttach)
+      if (pbpo != NULL && pbpo->bpo_pbscSector->bsc_pbmBrushMip->bm_pbrBrush->br_penEntity == ef.penAttach)
       {
         plPlane = pbpo->bpo_pbplPlane->bpl_plAbsolute;
         m_vPlaneNormal=(FLOAT3D &)plPlane;
@@ -300,7 +300,7 @@ procedures:
           FLOAT3D vRndV=vV*fR*SinFast(fA);
           FLOAT3D vRndU=vU*fR*CosFast(fA);
           FLOAT3D vRndPos=vPos;
-          if (iTest!=0)
+          if (iTest != 0)
           {
             vRndPos+=vRndV+vRndU;
           }
@@ -310,7 +310,7 @@ procedures:
           {
             (&m_vPos01)[ m_ctFlames]=(vProjectedRndPos-vBrushPos)*mBrushRotInv;
             m_ctFlames++;
-            if (m_ctFlames==6) { break; };
+            if (m_ctFlames == 6) { break; };
           }
         }
       }
@@ -331,7 +331,7 @@ procedures:
         // damage to parent
         on (EBegin) : {
           // if parent does not exist anymore
-          if (m_penAttach==NULL || (m_penAttach->GetFlags()&ENF_DELETED)) {
+          if (m_penAttach == NULL || (m_penAttach->GetFlags()&ENF_DELETED)) {
             // stop existing
             m_bLoop = FALSE;
             stop;

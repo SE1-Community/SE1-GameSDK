@@ -87,9 +87,9 @@ functions:
   const CTString &GetDescription(void) const
   {
     ((CTString&)m_strDescription).PrintF("-><none>");
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
-      if (m_penSeriousTarget!=NULL) {
+      if (m_penSeriousTarget != NULL) {
         ((CTString&)m_strDescription).PrintF("->%s, %s", 
           m_penTarget->GetName(), m_penSeriousTarget->GetName());
       }
@@ -103,10 +103,10 @@ functions:
   // check if one template is valid for this spawner
   BOOL CheckTemplateValid(CEntity *pen)
   {
-    if (pen==NULL || !IsDerivedFromClass(pen, "Enemy Base")) {
+    if (pen == NULL || !IsDerivedFromClass(pen, "Enemy Base")) {
       return FALSE;
     }
-    if (m_estType==EST_TELEPORTER) {
+    if (m_estType == EST_TELEPORTER) {
       return !(((CEnemyBase&)*pen).m_bTemplate);
     } else {
       return ((CEnemyBase&)*pen).m_bTemplate;
@@ -121,7 +121,7 @@ functions:
     }
     else if (slPropertyOffset == offsetof(CEnemySpawner, m_penPatrol))
     {
-      return (penTarget!=NULL && IsDerivedFromClass(penTarget, "Enemy Marker"));
+      return (penTarget != NULL && IsDerivedFromClass(penTarget, "Enemy Marker"));
     }
     else if (slPropertyOffset == offsetof(CEnemySpawner, m_penSeriousTarget))
     {
@@ -139,11 +139,11 @@ functions:
   /* Fill in entity statistics - for AI purposes only */
   BOOL FillEntityStatistics(EntityStats *pes)
   {
-    if (m_penTarget==NULL) { return FALSE; }
+    if (m_penTarget == NULL) { return FALSE; }
     m_penTarget->FillEntityStatistics(pes);
     pes->es_ctCount = m_ctTotal;
     pes->es_strName += " (spawned)";
-    if (m_penSeriousTarget!=NULL) {
+    if (m_penSeriousTarget != NULL) {
       pes->es_strName += " (has serious)";
     }
     return TRUE;
@@ -164,11 +164,11 @@ functions:
         pen->End();
         CEnemyBase *peb = ((CEnemyBase*)pen);
         peb->m_bTemplate = FALSE;
-        if (m_estType==EST_RESPAWNER /*|| m_estType==EST_RESPAWNERBYONE*/
-         || m_estType==EST_MAINTAINGROUP || m_estType==EST_RESPAWNGROUP) {
+        if (m_estType == EST_RESPAWNER /*|| m_estType == EST_RESPAWNERBYONE*/
+         || m_estType == EST_MAINTAINGROUP || m_estType == EST_RESPAWNGROUP) {
           peb->m_penSpawnerTarget = this;
         }
-        if (m_penPatrol!=NULL) {
+        if (m_penPatrol != NULL) {
           peb->m_penMarker = m_penPatrol;
         }
         pen->Initialize();
@@ -179,7 +179,7 @@ functions:
       
       // adjust circle radii to account for enemy size
       FLOAT fEntityR = 0;
-      if (pen->en_pciCollisionInfo!=NULL) {
+      if (pen->en_pciCollisionInfo != NULL) {
         fEntityR = pen->en_pciCollisionInfo->GetMaxFloorRadius();
       }
       FLOAT fOuterCircle = ClampDn(m_fOuterCircle-fEntityR, 0.0f);
@@ -208,7 +208,7 @@ functions:
       }
 
       // initialize tactics
-      if (m_penTacticsHolder!=NULL) {
+      if (m_penTacticsHolder != NULL) {
         if (IsOfClass(m_penTacticsHolder, "TacticsHolder")) {
           CEnemyBase *peb = ((CEnemyBase*)pen);
           peb->m_penTacticsHolder = m_penTacticsHolder;
@@ -225,11 +225,11 @@ functions:
   // Handle an event, return false if the event is not handled
   BOOL HandleEvent(const CEntityEvent &ee)
   {
-    if (ee.ee_slEvent==EVENTCODE_ETrigger)
+    if (ee.ee_slEvent == EVENTCODE_ETrigger)
     {
       ETrigger eTrigger = ((ETrigger &) ee);
       if (IsDerivedFromClass(eTrigger.penCaused, "Enemy Base")
-        && (m_estType==EST_MAINTAINGROUP || m_estType==EST_RESPAWNGROUP)) {
+        && (m_estType == EST_MAINTAINGROUP || m_estType == EST_RESPAWNGROUP)) {
         m_iEnemiesTriggered++;
       }
     }
@@ -265,7 +265,7 @@ procedures:
       // count total enemies spawned
       m_ctTotal--;
       // if no more left
-      if (m_ctTotal<=0) {
+      if (m_ctTotal <= 0) {
         // finish entire spawner
         return EEnd();
       }
@@ -273,7 +273,7 @@ procedures:
       // count enemies in group
       m_iInGroup++;
       // decrease the needed count
-      if (m_iEnemiesTriggered>0 && m_estType==EST_RESPAWNGROUP) {
+      if (m_iEnemiesTriggered>0 && m_estType == EST_RESPAWNGROUP) {
         if (!m_bFirstPass) {
           m_iEnemiesTriggered--;
         }
@@ -282,8 +282,8 @@ procedures:
       }
 
       // if entire group spawned
-      if (m_iInGroup>=m_ctGroupSize) {
-        if (!(m_estType==EST_MAINTAINGROUP && m_iEnemiesTriggered>0)) {
+      if (m_iInGroup >= m_ctGroupSize) {
+        if (!(m_estType == EST_MAINTAINGROUP && m_iEnemiesTriggered>0)) {
           // finish
           return EReturn();
         }
@@ -372,10 +372,10 @@ procedures:
         autowait(m_tmDelay);
       }
 
-      if (m_estType==EST_RESPAWNGROUP) {
+      if (m_estType == EST_RESPAWNGROUP) {
         if (m_bFirstPass) {
           autocall SpawnGroup() EReturn;
-        } else if (m_iEnemiesTriggered>=m_ctGroupSize) {
+        } else if (m_iEnemiesTriggered >= m_ctGroupSize) {
           if (m_tmGroupWait>0) { autowait(m_tmGroupWait); }
           autocall SpawnGroup() EReturn;
         }
@@ -386,14 +386,14 @@ procedures:
       }
 
       // if should continue respawning by one
-      /*if (m_estType==EST_RESPAWNERBYONE) {
+      /*if (m_estType == EST_RESPAWNERBYONE) {
         // set group size to 1
         if (m_tmGroupWait>0 && !m_bFirstPass) { autowait(m_tmGroupWait); }
         m_ctGroupSize = 1;
       }*/
 
       // if should continue maintaining group
-      if (m_estType==EST_MAINTAINGROUP) {
+      if (m_estType == EST_MAINTAINGROUP) {
         // set group size to 1
         m_ctGroupSize = 1;
       }
@@ -447,26 +447,26 @@ procedures:
     SetModel(MODEL_ENEMYSPAWNER);
     SetModelMainTexture(TEXTURE_ENEMYSPAWNER);
 
-    if (m_tmSingleWait<=0.0f) { m_tmSingleWait=0.05f; }
-    if (m_tmGroupWait<=0.0f) { m_tmGroupWait=0.05f; }
+    if (m_tmSingleWait <= 0.0f) { m_tmSingleWait=0.05f; }
+    if (m_tmGroupWait <= 0.0f) { m_tmGroupWait=0.05f; }
     
     // set range
     if (m_fInnerCircle > m_fOuterCircle) {
       m_fInnerCircle = m_fOuterCircle;
     }
 
-    if (m_estType==EST_RESPAWNERBYONE) {
+    if (m_estType == EST_RESPAWNERBYONE) {
       m_estType=EST_MAINTAINGROUP;
     }
 
     // check target
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       if (!IsDerivedFromClass(m_penTarget, "Enemy Base")) {
         WarningMessage("Target '%s' is of wrong class!", m_penTarget->GetName());
         m_penTarget = NULL;
       }
     }
-    if (m_penSeriousTarget!=NULL) {
+    if (m_penSeriousTarget != NULL) {
       if (!IsDerivedFromClass(m_penSeriousTarget, "Enemy Base")) {
         WarningMessage("Target '%s' is of wrong class!", m_penSeriousTarget->GetName());
         m_penSeriousTarget = NULL;
@@ -477,21 +477,21 @@ procedures:
     autowait(_pTimer->TickQuantum);
 
     // destroy self if this is a multiplayer-only spawner, and flags indicate no extra enemies
-    if ( !GetSP()->sp_bUseExtraEnemies && !GetSP()->sp_bSinglePlayer 
+    if (!GetSP()->sp_bUseExtraEnemies && !GetSP()->sp_bSinglePlayer 
       && !(GetSpawnFlags()&SPF_SINGLEPLAYER)) {
       Destroy();
       return;
     }
 
-    if (m_bDoubleInSerious && GetSP()->sp_gdGameDifficulty==CSessionProperties::GD_EXTREME) {
+    if (m_bDoubleInSerious && GetSP()->sp_gdGameDifficulty == CSessionProperties::GD_EXTREME) {
       m_ctGroupSize*=2;
       m_ctTotal*=2;
     }
-    if (m_penSeriousTarget!=NULL && GetSP()->sp_gdGameDifficulty==CSessionProperties::GD_EXTREME) {
+    if (m_penSeriousTarget != NULL && GetSP()->sp_gdGameDifficulty == CSessionProperties::GD_EXTREME) {
       m_penTarget = m_penSeriousTarget;
     }
 
-    if (m_estType==EST_MAINTAINGROUP) {
+    if (m_estType == EST_MAINTAINGROUP) {
       m_iEnemiesTriggered = m_ctGroupSize;
     }
 
@@ -499,18 +499,18 @@ procedures:
 
     wait() {
       on(EBegin) : {
-        if (m_estType==EST_SIMPLE) {
+        if (m_estType == EST_SIMPLE) {
           call Simple();
-        } else if (m_estType==EST_TELEPORTER) {
+        } else if (m_estType == EST_TELEPORTER) {
           call Teleporter();
-        } else if (m_estType==EST_RESPAWNER /*|| m_estType==EST_RESPAWNERBYONE*/
-               || m_estType==EST_TRIGGERED || m_estType==EST_RESPAWNGROUP) {
+        } else if (m_estType == EST_RESPAWNER /*|| m_estType == EST_RESPAWNERBYONE*/
+               || m_estType == EST_TRIGGERED || m_estType == EST_RESPAWNGROUP) {
           call Respawner();
-        } else if (m_estType==EST_MAINTAINGROUP) {
+        } else if (m_estType == EST_MAINTAINGROUP) {
           m_ctGroupSize = 1;
           call Respawner();
         }
-        else if (m_estType==EST_DESTROYABLE) {
+        else if (m_estType == EST_DESTROYABLE) {
           call Destroyable();
         }
       }

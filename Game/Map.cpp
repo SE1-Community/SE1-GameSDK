@@ -41,13 +41,13 @@ PIX aIconCoordsSE[][2] =
   {41, 263},   // 03: Teotihuacan 01      
   {113, 300},  // 04: Teotihuacan 02      
   {334, 328},  // 05: Teotihuacan 03      
-  {371, 187},  // 06: Ziggurat	 
-  {265, 111},  // 07: Atrium		 
-  {119, 172},  // 08: Gilgamesh	 
-  {0, 145},    // 09: Babel		   
-  {90, 30},    // 10: Citadel		 
-  {171, 11},   // 11: Land of Damned		     
-  {376, 0},    // 12: Cathedral	 
+  {371, 187},  // 06: Ziggurat   
+  {265, 111},  // 07: Atrium     
+  {119, 172},  // 08: Gilgamesh   
+  {0, 145},    // 09: Babel       
+  {90, 30},    // 10: Citadel     
+  {171, 11},   // 11: Land of Damned         
+  {376, 0},    // 12: Cathedral   
 };
 
 PIX aIconCoordsFE[][2] =
@@ -589,11 +589,11 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
   FLOAT fStretch = 0.25f;
 
   // determine max available picture stretch
-  if (pixdpw>=imgw*2 && pixdph>=imgh*2) {
+  if (pixdpw >= imgw*2 && pixdph >= imgh*2) {
     fStretch = 2.0f;
-  } else if (pixdpw>=imgw && pixdph>=imgh) {
+  } else if (pixdpw >= imgw && pixdph >= imgh) {
     fStretch = 1.0f;
-  } else if (pixdpw>=imgw/2 && pixdph>=imgh/2) {
+  } else if (pixdpw >= imgw/2 && pixdph >= imgh/2) {
     fStretch = 0.5f;
   }
 
@@ -630,7 +630,7 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
     for (INDEX iIcon=(!map_bIsFirstEncounter); iIcon<ctLevels; iIcon++)
     {
       // if level's icon should be rendered
-      if (ulLevelMask & (1UL<<iIcon))
+      if (ulLevelMask & (1UL << iIcon))
       {
         PIX pixX = aIconCoords[iIcon][0]*fStretch+pixC1S;
         PIX pixY = aIconCoords[iIcon][1]*fStretch+pixR1S;
@@ -650,15 +650,15 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
 
     // if path dots should be rendered:
     // if path src and dst levels were discovered and secret level isn't inbetween or hasn't been discovered
-    if (ulLevelMask&(1UL<<iPrevLevelBit) &&
-        ulLevelMask&(1UL<<iNextLevelBit) &&
-        ((iNextLevelBit-iPrevLevelBit)==1 || !(ulLevelMask&(1UL<<(iNextLevelBit-1)))))
+    if (ulLevelMask&(1UL << iPrevLevelBit) &&
+        ulLevelMask&(1UL << iNextLevelBit) &&
+        ((iNextLevelBit-iPrevLevelBit) == 1 || !(ulLevelMask&(1UL << (iNextLevelBit-1)))))
     {
       for (INDEX iDot=0; iDot<10; iDot++)
       {
         PIX pixDotX=pixC1S+aPathDots[iPath][iDot][0]*fStretch;
         PIX pixDotY=pixR1S+aPathDots[iPath][iDot][1]*fStretch;
-        if (aPathDots[iPath][iDot][0]==-1) break;
+        if (aPathDots[iPath][iDot][0] == -1) break;
         pdp->PutTexture( &_toPathDot, PIXaabbox2D( PIX2D(pixDotX, pixDotY), PIX2D(pixDotX+8*fStretch, pixDotY+8*fStretch)),
           (map_bIsFirstEncounter ? C_WHITE : C_BLACK)|255);
       }

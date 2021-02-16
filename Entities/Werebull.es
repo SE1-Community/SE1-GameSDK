@@ -135,12 +135,12 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim()==WEREBULL_ANIM_DEATHRUN)
+    if (GetModelObject()->GetAnim() == WEREBULL_ANIM_DEATHRUN)
     {
       vStretch=FLOAT3D(1,1,2)*2.0f;
       return 0.6f;
     }
-    else if (GetModelObject()->GetAnim()==WEREBULL_ANIM_DEATH)
+    else if (GetModelObject()->GetAnim() == WEREBULL_ANIM_DEATH)
     {
       vStretch=FLOAT3D(1,1,2)*2.0f;
       return 0.7f;
@@ -206,7 +206,7 @@ functions:
  ************************************************************/
   // touched another live entity
   void LiveEntityTouched(ETouch etouch) {
-    if (m_penLastTouched!=etouch.penOther || _pTimer->CurrentTick()>=m_fLastTouchedTime+0.25f) {
+    if (m_penLastTouched != etouch.penOther || _pTimer->CurrentTick() >= m_fLastTouchedTime+0.25f) {
       // hit angle
       FLOAT3D vDirection = en_vCurrentTranslationAbsolute;
       vDirection.Normalize();
@@ -309,7 +309,7 @@ procedures:
 
     // set your appearance
     SetModel(MODEL_WEREBULL);
-//    if (m_bcChar==BUC_SUMMER) {
+//    if (m_bcChar == BUC_SUMMER) {
       SetModelMainTexture(TEXTURE_WEREBULL_SUMMER);
 //    } else {
 //      SetModelMainTexture(TEXTURE_WEREBULL_WINTER);
@@ -335,7 +335,7 @@ procedures:
     m_fBodyParts = 12;
     m_fDamageWounded = 100000.0f;
     m_iScore = 2000;
-    if (m_fStepHeight==-1) {
+    if (m_fStepHeight == -1) {
       m_fStepHeight = 4.0f;
     }
 

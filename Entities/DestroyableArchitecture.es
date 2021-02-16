@@ -34,26 +34,26 @@ static struct DebrisInfo _ObeliskDebrisInfo[] =
 {
   { MODEL_OBELISK01, TEXTURE_OBELISK, 0.0f, 114.4989f, 0.0f},
   { MODEL_OBELISK02, TEXTURE_OBELISK, 0.035f, 106.8628f, 0.0f},
-	{ MODEL_OBELISK03, TEXTURE_OBELISK, 0.0f, 98.628f, 0.0f},
-	{ MODEL_OBELISK04, TEXTURE_OBELISK, 0.0f, 90.4996f, 0.0f},
-	{ MODEL_OBELISK05, TEXTURE_OBELISK, 0.0f, 82.174f, 0.0f},
-	{ MODEL_OBELISK06, TEXTURE_OBELISK, 0.0f, 71.0425f, 0.0f},
-	{ MODEL_OBELISK07, TEXTURE_OBELISK, 0.0f, 59.2f, 0.0f},
-	{ MODEL_OBELISK08, TEXTURE_OBELISK, 0.0f, 46.65f, 0.0f},
-	{ MODEL_OBELISK09, TEXTURE_OBELISK, 0.0f, 36.6f, 0.0f},
+  { MODEL_OBELISK03, TEXTURE_OBELISK, 0.0f, 98.628f, 0.0f},
+  { MODEL_OBELISK04, TEXTURE_OBELISK, 0.0f, 90.4996f, 0.0f},
+  { MODEL_OBELISK05, TEXTURE_OBELISK, 0.0f, 82.174f, 0.0f},
+  { MODEL_OBELISK06, TEXTURE_OBELISK, 0.0f, 71.0425f, 0.0f},
+  { MODEL_OBELISK07, TEXTURE_OBELISK, 0.0f, 59.2f, 0.0f},
+  { MODEL_OBELISK08, TEXTURE_OBELISK, 0.0f, 46.65f, 0.0f},
+  { MODEL_OBELISK09, TEXTURE_OBELISK, 0.0f, 36.6f, 0.0f},
 };
 
 static struct DebrisInfo _PylonDebrisInfo[] =
 {
   { MODEL_PYLON01, TEXTURE_PYLON, -17.3379f, 55.92f, 0},
-	{ MODEL_PYLON02, TEXTURE_PYLON, -10.525f, 58.045f, 0},
-	{ MODEL_PYLON03, TEXTURE_PYLON, -17.66f, 42.32f, 0},
-	{ MODEL_PYLON04, TEXTURE_PYLON, -0.815000f, 54.69f, 0	},
-	{ MODEL_PYLON05, TEXTURE_PYLON, 14.795f, 51.65f, 0},
-	{ MODEL_PYLON06, TEXTURE_PYLON, 0.02f, 36.18f, 0},
-	{ MODEL_PYLON07, TEXTURE_PYLON, -10.289f, 33.982f, 0},
-	{ MODEL_PYLON08, TEXTURE_PYLON, -22.9152f, 28.6205f, 0},
-	{ MODEL_PYLON09, TEXTURE_PYLON, 21.932f, 47.2453f, 0},
+  { MODEL_PYLON02, TEXTURE_PYLON, -10.525f, 58.045f, 0},
+  { MODEL_PYLON03, TEXTURE_PYLON, -17.66f, 42.32f, 0},
+  { MODEL_PYLON04, TEXTURE_PYLON, -0.815000f, 54.69f, 0  },
+  { MODEL_PYLON05, TEXTURE_PYLON, 14.795f, 51.65f, 0},
+  { MODEL_PYLON06, TEXTURE_PYLON, 0.02f, 36.18f, 0},
+  { MODEL_PYLON07, TEXTURE_PYLON, -10.289f, 33.982f, 0},
+  { MODEL_PYLON08, TEXTURE_PYLON, -22.9152f, 28.6205f, 0},
+  { MODEL_PYLON09, TEXTURE_PYLON, 21.932f, 47.2453f, 0},
 };
 %}
 
@@ -154,13 +154,13 @@ functions:
   // Validate offered target for one property
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if (penTarget==NULL)
+    if (penTarget == NULL)
     {
       return FALSE;
     }
     
     // if gradient marker
-    if (slPropertyOffset==offsetof(CDestroyableArchitecture, m_penGradient) )
+    if (slPropertyOffset == offsetof(CDestroyableArchitecture, m_penGradient) )
     {
       return (IsDerivedFromClass(penTarget, "Gradient Marker"));
     }
@@ -172,7 +172,7 @@ functions:
   {
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    if (iGradient==1)
+    if (iGradient == 1)
     {
       CGradientMarker *pgm = (CGradientMarker *)&*m_penGradient;
       if (pgm != NULL) {
@@ -196,7 +196,7 @@ functions:
   /* Get gradient, return FALSE for none. */
   BOOL GetGradient(INDEX iGradient, class CGradientParameters &fpGradient)
   {
-    if ( iGradient==1)
+    if (iGradient == 1)
     {
       CGradientMarker *pgm = (CGradientMarker *)&*m_penGradient;
       if (pgm != NULL) {
@@ -413,7 +413,7 @@ procedures:
         // get your size
         FLOATaabbox3D box;
         GetSize(box);
-        if (m_ctDebrises<=0)
+        if (m_ctDebrises <= 0)
         {
           m_ctDebrises=1;
         }

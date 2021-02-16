@@ -94,7 +94,7 @@ functions:
 
   /*BOOL ForcesCannonballToExplode(void)
   {
-    if (m_EwcChar==WLC_SERGEANT) {
+    if (m_EwcChar == WLC_SERGEANT) {
       return TRUE;
     }
     return CEnemyBase::ForcesCannonballToExplode();
@@ -129,7 +129,7 @@ functions:
 
   /*FLOAT GetCrushHealth(void)
   {
-    if (m_EwcChar==WLC_SERGEANT) {
+    if (m_EwcChar == WLC_SERGEANT) {
       return 100.0f;
     }
     return 0.0f;
@@ -227,11 +227,11 @@ functions:
   // death
   FLOAT WaitForDust(FLOAT3D &vStretch) {
     vStretch=FLOAT3D(1,1,2)*1.5f;
-    if (GetModelObject()->GetAnim()==GUFFY_ANIM_DEATHBACKWARD)
+    if (GetModelObject()->GetAnim() == GUFFY_ANIM_DEATHBACKWARD)
     {
       return 0.48f;
     }
-    else if (GetModelObject()->GetAnim()==GUFFY_ANIM_DEATHFORWARD)
+    else if (GetModelObject()->GetAnim() == GUFFY_ANIM_DEATHFORWARD)
     {
       return 1.0f;
    }
@@ -255,7 +255,7 @@ procedures:
     fLookRight = fLookRight * m;
     BOOL bEnemyRight = fLookRight % (m_penEnemy->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector);
 
-    if (bEnemyRight>=0) {  // enemy is to the right of guffy
+    if (bEnemyRight >= 0) {  // enemy is to the right of guffy
       ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_LEFT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soFire1, SOUND_FIRE, SOF_3D);
       
@@ -332,7 +332,7 @@ procedures:
     m_iScore = 3000;
     //m_fThreatDistance = 15;
     
-    if (m_fStepHeight==-1) {
+    if (m_fStepHeight == -1) {
       m_fStepHeight = 4.0f;
     }
 

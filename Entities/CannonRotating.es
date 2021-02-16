@@ -135,7 +135,7 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount*=0.5f;
     }
@@ -157,7 +157,7 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
   // cast a ray to entity checking only for brushes
   BOOL IsVisible(CEntity *penEntity) 
   {
-    ASSERT(penEntity!=NULL);
+    ASSERT(penEntity != NULL);
     // get ray source and target
     FLOAT3D vSource, vTarget;
     GetPositionCastRay(this, penEntity, vSource, vTarget);
@@ -169,12 +169,12 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
     en_pwoWorld->CastRay(crRay);
 
     // if hit nothing (no brush) the entity can be seen
-    return (crRay.cr_penHit==NULL);     
+    return (crRay.cr_penHit == NULL);     
   };
 
   BOOL IsInTheLineOfFire(CEntity *penEntity, FLOAT fAngle)
   {
-    ASSERT(penEntity!=NULL);
+    ASSERT(penEntity != NULL);
 
     FLOAT fCosAngle;
     FLOAT3D vHeading;
@@ -209,7 +209,7 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
 
     for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
-      if (penPlayer!=NULL && DistanceTo(this, penPlayer)<m_fFiringRangeFar) {
+      if (penPlayer != NULL && DistanceTo(this, penPlayer)<m_fFiringRangeFar) {
         // if this player is more or less directly in front of the shooter
         if (IsInTheLineOfFire(penPlayer, m_fViewAngle)) {
           // see if something blocks the path to the player
@@ -354,15 +354,15 @@ procedures:
       // adjust rotations
       
       BOOL bPause = FALSE;
-      if ( m_aBeginRotatorRotation(1)>(m_fScanAngle/2.0f) ) {
+      if (m_aBeginRotatorRotation(1)>(m_fScanAngle/2.0f) ) {
         m_fRotSpeedRotator = FLOAT3D(-m_fRotationSpeed, 0.0f, 0.0f);  
-        if (m_iMuzzleDir!=-1.0f) {
+        if (m_iMuzzleDir != -1.0f) {
           m_iMuzzleDir= -1.0f;
           bPause = TRUE;
         }
-      } else if ( m_aBeginRotatorRotation(1)<(-m_fScanAngle/2.0f) ) {
+      } else if (m_aBeginRotatorRotation(1)<(-m_fScanAngle/2.0f) ) {
         m_fRotSpeedRotator = FLOAT3D(m_fRotationSpeed, 0.0f, 0.0f);  
-        if (m_iMuzzleDir!=1.0f) {
+        if (m_iMuzzleDir != 1.0f) {
           m_iMuzzleDir= 1.0f;
           bPause = TRUE;
         }
@@ -399,16 +399,16 @@ procedures:
 
     // find the one who killed, or other best suitable player
     CEntityPointer penKiller = eDeath.eLastDamage.penInflictor;
-    if (penKiller==NULL || !IsOfClass(penKiller, "Player")) {
+    if (penKiller == NULL || !IsOfClass(penKiller, "Player")) {
       penKiller = m_penEnemy;
     }
 
-    if (penKiller==NULL || !IsOfClass(penKiller, "Player")) {
+    if (penKiller == NULL || !IsOfClass(penKiller, "Player")) {
       penKiller = FixupCausedToPlayer(this, penKiller, /*bWarning=*/FALSE);
     }
 
     // if killed by someone
-    if (penKiller!=NULL) {
+    if (penKiller != NULL) {
       // give him score
       EReceiveScore eScore;
       eScore.iPoints = m_iScore;
@@ -420,7 +420,7 @@ procedures:
       // send computer message
       EComputerMessage eMsg;
       eMsg.fnmMessage = GetComputerMessageName();
-      if (eMsg.fnmMessage!="") {
+      if (eMsg.fnmMessage != "") {
         penKiller->SendEvent(eMsg);
       }
     }
@@ -570,7 +570,7 @@ procedures:
     m_sptType = SPT_WOOD;
     
      // properties that modify EnemyBase properties
-    if (m_fHealth<=0.0f) { m_fHealth=1.0f; }
+    if (m_fHealth <= 0.0f) { m_fHealth=1.0f; }
     m_fCloseFireTime = m_fAttackFireTime = m_fWaitAfterFire;
     SetHealth(m_fHealth); m_fMaxHealth = m_fHealth;
     if (m_fFiringRangeFar<m_fFiringRangeClose) { m_fFiringRangeFar=m_fFiringRangeClose+1.0f; }

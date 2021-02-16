@@ -108,11 +108,11 @@ functions:
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
-    if (slPropertyOffset==offsetof(CLight, m_iLightAnimation))
+    if (slPropertyOffset == offsetof(CLight, m_iLightAnimation))
     {
       return m_aoLightAnimation.GetData();
     }
-    else if (slPropertyOffset==offsetof(CLight, m_iAmbientLightAnimation)) 
+    else if (slPropertyOffset == offsetof(CLight, m_iAmbientLightAnimation)) 
     {
       return m_aoAmbientLightAnimation.GetData();
     }
@@ -129,14 +129,14 @@ functions:
 
   BOOL IsImportant(void) const
   {
-    return(m_ltType==LT_DIRECTIONAL);
+    return(m_ltType == LT_DIRECTIONAL);
   }
 
   /* Handle an event, return false if the event is not handled. */
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     // when someone in range is destroyed
-    if (ee.ee_slEvent==EVENTCODE_ERangeModelDestruction)
+    if (ee.ee_slEvent == EVENTCODE_ERangeModelDestruction)
     {
       // fade out completely
       m_colColor = C_BLACK;
@@ -147,26 +147,26 @@ functions:
       return TRUE;
     // when animation should be changed
     }
-    else if (ee.ee_slEvent==EVENTCODE_EChangeAnim)
+    else if (ee.ee_slEvent == EVENTCODE_EChangeAnim)
     {
       EChangeAnim &eChange = (EChangeAnim &)ee;
 
       // for diffuse component of light
       m_iLightAnimation = eChange.iLightAnim;
-      if (m_aoLightAnimation.GetData()!=NULL)
+      if (m_aoLightAnimation.GetData() != NULL)
       {
         m_aoLightAnimation.PlayAnim(m_iLightAnimation, eChange.bLightLoop?AOF_LOOPING:0);
       }
       
       // for ambient component of light
       m_iAmbientLightAnimation = eChange.iAmbientLightAnim;
-      if (m_aoAmbientLightAnimation.GetData()!=NULL)
+      if (m_aoAmbientLightAnimation.GetData() != NULL)
       {
         m_aoAmbientLightAnimation.PlayAnim(m_iAmbientLightAnimation, eChange.bAmbientLightLoop?AOF_LOOPING:0);
       }
 
       // if neither ambient nor difuse animation is set, apply direct color change
-      if ((m_aoLightAnimation.GetData()==NULL) && (m_aoAmbientLightAnimation.GetData()==NULL) )
+      if ((m_aoLightAnimation.GetData() == NULL) && (m_aoAmbientLightAnimation.GetData() == NULL) )
       {
         m_colColor = eChange.colDiffuse;
         m_colAmbient = eChange.colAmbient;
@@ -229,7 +229,7 @@ functions:
     if (m_bDynamic)                { lsNew.ls_ulFlags |= LSF_DYNAMIC; }
     // directional light cannot be dark
     if (m_bDarkLight) {
-      if (m_ltType==LT_DIRECTIONAL) {
+      if (m_ltType == LT_DIRECTIONAL) {
         lsNew.ls_ulFlags &= ~LSF_DARKLIGHT;
         m_bDarkLight = FALSE;
       } else {
@@ -238,7 +238,7 @@ functions:
     }
     // ambient and directional lights doesn't support diffusion
     if (m_bDiffusion) { 
-      if (m_bDynamic || m_ltType==LT_AMBIENT || m_ltType==LT_STRONG_AMBIENT) {
+      if (m_bDynamic || m_ltType == LT_AMBIENT || m_ltType == LT_STRONG_AMBIENT) {
         lsNew.ls_ulFlags &= ~LSF_DIFFUSION;
         m_bDiffusion = FALSE;
       } else {
@@ -306,13 +306,13 @@ functions:
     // --------- Setup light animations
     // diffuse
     lsNew.ls_paoLightAnimation = NULL;
-    if (m_aoLightAnimation.GetData()!=NULL) {
+    if (m_aoLightAnimation.GetData() != NULL) {
       lsNew.ls_paoLightAnimation = &m_aoLightAnimation;
     }
 
     // ambient
     lsNew.ls_paoAmbientLightAnimation = NULL;
-    if (m_aoAmbientLightAnimation.GetData()!=NULL) {
+    if (m_aoAmbientLightAnimation.GetData() != NULL) {
       lsNew.ls_paoAmbientLightAnimation = &m_aoAmbientLightAnimation;
     }
   }
@@ -355,16 +355,16 @@ procedures:
     //}
 
     // near clip must not be too small
-    if (m_fNearClip<=0.01f) {
+    if (m_fNearClip <= 0.01f) {
       m_fNearClip = 0.01f;
     }
     // far clip distance must be positive values
-    if (m_fFarClip<=0) {
+    if (m_fFarClip <= 0) {
       m_fFarClip = 0.0f;//0.01f;
     }
 
     // only directional lights are allowed to have ambient component
-    if (m_ltType!=LT_DIRECTIONAL) {
+    if (m_ltType != LT_DIRECTIONAL) {
       m_colAmbient = C_BLACK;
     }
 
@@ -380,7 +380,7 @@ procedures:
     else
     {
       // set stretch factor of the light (directional lights don't have stretch)
-      if ( m_ltType != LT_DIRECTIONAL) {
+      if (m_ltType != LT_DIRECTIONAL) {
         const float LIGHT_MINSIZE=0.5f;
         FLOAT fFactor = Log2(m_rFallOffRange)*LIGHT_MINSIZE;
         if (fFactor<LIGHT_MINSIZE) {
@@ -439,7 +439,7 @@ procedures:
       WarningMessage(TRANS("Cannot load '%s': %s"), (CTString&)m_fnmLightAnimation, strError);
       m_fnmLightAnimation = "";
     }
-    if (m_aoLightAnimation.GetData()!=NULL) {
+    if (m_aoLightAnimation.GetData() != NULL) {
       m_aoLightAnimation.PlayAnim(m_iLightAnimation, AOF_LOOPING);
       m_aoLightAnimation.OffsetPhase(m_tmOffsetPhase*m_aoLightAnimation.GetCurrentAnimLength());
     }
@@ -451,7 +451,7 @@ procedures:
       WarningMessage(TRANS("Cannot load '%s': %s"), (CTString&)m_fnmAmbientLightAnimation, strError);
       m_fnmAmbientLightAnimation = "";
     }
-    if (m_aoAmbientLightAnimation.GetData()!=NULL) {
+    if (m_aoAmbientLightAnimation.GetData() != NULL) {
       m_aoAmbientLightAnimation.PlayAnim(m_iAmbientLightAnimation, AOF_LOOPING);
       m_aoAmbientLightAnimation.OffsetPhase(m_tmOffsetPhase*m_aoAmbientLightAnimation.GetCurrentAnimLength());
     }

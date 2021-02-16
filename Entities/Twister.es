@@ -19,9 +19,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "ModelsMP/Enemies/AirElemental/Twister.h"
 
 #define ECF_TWISTER ( \
-  ((ECBI_BRUSH|ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID)<<ECB_TEST) |\
-  ((ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID)<<ECB_PASS) |\
-  ((ECBI_MODEL)<<ECB_IS))
+  ((ECBI_BRUSH|ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID) << ECB_TEST) |\
+  ((ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID) << ECB_PASS) |\
+  ((ECBI_MODEL) << ECB_IS))
 #define EPF_TWISTER ( \
   EPF_ONBLOCK_CLIMBORSLIDE|EPF_ORIENTEDBYGRAVITY|\
   EPF_TRANSLATEDBYGRAVITY|EPF_MOVABLE|EPF_ABSOLUTETRANSLATE)
@@ -129,7 +129,7 @@ functions:
     {
       CEntity *penParent=GetParent();
       FLOAT fStretch=1.0f;
-      if (penParent!=NULL)
+      if (penParent != NULL)
       {
         CAirElemental *penAir=(CAirElemental *)penParent;
         FLOAT fStretchRatio=penAir->GetCurrentStretchRatio();
@@ -168,7 +168,7 @@ functions:
     }
     // don't spin air elementals wind blast
     if (IsOfClass(pen, "Projectile")) {
-      if (((CProjectile *)&*pen)->m_prtType==PRT_AIRELEMENTAL_WIND)
+      if (((CProjectile *)&*pen)->m_prtType == PRT_AIRELEMENTAL_WIND)
       {
         return; 
       }
@@ -266,10 +266,10 @@ procedures:
   // --->>> MAIN
   Main(ETwister et) {
     // remember the initial parameters
-    ASSERT(et.penOwner!=NULL);
+    ASSERT(et.penOwner != NULL);
     m_penOwner = et.penOwner;
     m_sgnSpinDir = et.sgnSpinDir;
-    if (m_sgnSpinDir==0) { m_sgnSpinDir=1; };
+    if (m_sgnSpinDir == 0) { m_sgnSpinDir=1; };
     m_fSize = et.fSize;
     m_fStopTime = _pTimer->CurrentTick() + et.fDuration;
     m_bGrow = et.bGrow;

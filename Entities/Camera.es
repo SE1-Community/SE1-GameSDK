@@ -92,7 +92,7 @@ functions:
   // render particles
   void RenderParticles(void)
   {
-    if (Particle_GetViewer()==this) {
+    if (Particle_GetViewer() == this) {
       Particles_ViewerLocal(this);
     }
   }
@@ -115,7 +115,7 @@ functions:
   // returns camera description
   const CTString &GetDescription(void) const
   {
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
     } else {
       ((CTString&)m_strDescription).PrintF("-><none>");
@@ -160,10 +160,10 @@ functions:
       CPlacement3D plNew;
       // get target placement
       FLOAT3D vTarget=FLOAT3D(0.0f, 0.0f, 0.0f);
-      if (m_penTarget!=NULL)
+      if (m_penTarget != NULL)
       {
         CCameraMarker *pcm = &(CCameraMarker&)*m_penTarget;
-        if (pcm->m_penViewTarget!=NULL)
+        if (pcm->m_penViewTarget != NULL)
         {
           vTarget=pcm->m_penViewTarget->GetLerpedPlacement().pl_PositionVector+m_vRelTargetOffset;
         }
@@ -172,7 +172,7 @@ functions:
       GetAutoRotatePlacement( fTime, vPos, mRot, plNew, vTarget);
       return plNew;
     }
-    else if (m_penViewTarget0!=NULL)
+    else if (m_penViewTarget0 != NULL)
     {
       CPlacement3D plNew=LerpPlacementsPrecise(en_plLastPlacement, en_plPlacement, fLerpFactor);
       FLOATmatrix3D mRot;
@@ -238,10 +238,10 @@ functions:
       CPlacement3D plNew;
       // get target placement
       FLOAT3D vTarget=FLOAT3D(0.0f, 0.0f, 0.0f);
-      if (m_penTarget!=NULL)
+      if (m_penTarget != NULL)
       {
         CCameraMarker *pcm = &(CCameraMarker&)*m_penTarget;
-        if (pcm->m_penViewTarget!=NULL)
+        if (pcm->m_penViewTarget != NULL)
         {
           vTarget=pcm->m_penViewTarget->GetPlacement().pl_PositionVector+m_vRelTargetOffset;
         }
@@ -269,7 +269,7 @@ functions:
       // repeat
       FOREVER {
         // if there is a trigger at the hit marker
-        if (pcmNp0->m_penTrigger!=NULL) {
+        if (pcmNp0->m_penTrigger != NULL) {
           // trigger it
           SendToTarget(pcmNp0->m_penTrigger, EET_TRIGGER, m_penPlayer);
         }
@@ -319,11 +319,11 @@ functions:
       m_penViewTarget1 = cmNp1.m_penViewTarget;
       m_vPosRatio0=FLOAT3D(0.0f, 0.0f, 0.0f);
       m_vPosRatio1=FLOAT3D(0.0f, 0.0f, 0.0f);
-      if (m_penViewTarget0!=NULL)
+      if (m_penViewTarget0 != NULL)
       {
         m_vPosRatio0=cmNp0.m_vPosRatio;
       }
-      if (m_penViewTarget1!=NULL)
+      if (m_penViewTarget1 != NULL)
       {
         m_vPosRatio1=cmNp1.m_vPosRatio;
       }
@@ -416,11 +416,11 @@ functions:
     FLOATmatrix3D mRotTarget0 = mRot;
     FLOATmatrix3D mRotTarget1 = mRot;
     BOOL bDoTargeting = FALSE;
-    if (m_penViewTarget0!=NULL) {
+    if (m_penViewTarget0 != NULL) {
       CalcTargetedRotation(vPos, m_penViewTarget0, m_vPosRatio0, mRotTarget0, FALSE);
       bDoTargeting = TRUE;
     }
-    if (m_penViewTarget1!=NULL) {
+    if (m_penViewTarget1 != NULL) {
       CalcTargetedRotation(vPos, m_penViewTarget1, m_vPosRatio1, mRotTarget1, FALSE);
       bDoTargeting = TRUE;
     }
@@ -501,7 +501,7 @@ procedures:
         ECameraStop eStop;
         eStop.penCamera=this;
         m_penPlayer->SendEvent(eStop);
-        if (m_penAutoCameraEndTarget!=NULL)
+        if (m_penAutoCameraEndTarget != NULL)
         {
           SendToTarget(m_penAutoCameraEndTarget, m_eetAutoCameraEndEvent, m_penPlayer);
         }
@@ -528,10 +528,10 @@ procedures:
     CCameraMarker *pcm0 = (CCameraMarker*)&*m_penTarget;
     CCameraMarker *pcm  = (CCameraMarker*)&*pcm0->m_penTarget;
     // loop thru markers
-    while (pcm!=NULL && pcm->m_penTarget!=pcm0)
+    while (pcm != NULL && pcm->m_penTarget != pcm0)
     {
       pcm = (CCameraMarker*)&*pcm->m_penTarget;
-      if (pcm==NULL) {
+      if (pcm == NULL) {
         WarningMessage( "Movable camera - broken link!");
         return;
       }
@@ -607,7 +607,7 @@ procedures:
       jump PlayAutoRotatingCamera();
     }
     // if there is at least one marker
-    else if (&cm!=NULL)
+    else if (&cm != NULL)
     {
       // treat camera as movable
       jump PlayMovingCamera();
@@ -633,21 +633,21 @@ procedures:
     SetModelMainTexture(TEXTURE_CAMERA);
     m_fLastFOV = m_fFOV;
 
-    if (m_penTarget!=NULL && !IsOfClass( m_penTarget, "Camera Marker")) {
+    if (m_penTarget != NULL && !IsOfClass( m_penTarget, "Camera Marker")) {
       WarningMessage( "Entity '%s' is not of Camera Marker class!", m_penTarget);
       m_penTarget = NULL;
     }
 
-    if (m_bAutoRotation || m_penTarget!=NULL)
+    if (m_bAutoRotation || m_penTarget != NULL)
     {
       autowait(0.1f);
     }
 
     m_vRelTargetOffset=FLOAT3D(0.0f, 0.0f, 0.0f);
-    if (m_penTarget!=NULL)
+    if (m_penTarget != NULL)
     {
       CCameraMarker *pcm = &(CCameraMarker&)*m_penTarget;
-      if (pcm->m_penViewTarget!=NULL)
+      if (pcm->m_penViewTarget != NULL)
       {
         FLOAT3D vAbsTarget=FLOAT3D(0.0f, 0.0f, 0.0f);
         pcm->m_penViewTarget->GetEntityPointRatio(pcm->m_vPosRatio, vAbsTarget, FALSE);

@@ -39,7 +39,7 @@ functions:
 procedures:
   Main(EReminderInit eri) {
     // remember the initial parameters
-    ASSERT(eri.penOwner!=NULL);
+    ASSERT(eri.penOwner != NULL);
     m_penOwner = eri.penOwner;
     m_fWaitTime = eri.fWaitTime;
     m_iValue = eri.iValue;
@@ -54,7 +54,7 @@ procedures:
       autowait(m_fWaitTime);
       EReminder er;
       er.iValue = m_iValue;
-      if (m_penOwner!=NULL) {
+      if (m_penOwner != NULL) {
         m_penOwner->SendEvent(er);
       }
     }

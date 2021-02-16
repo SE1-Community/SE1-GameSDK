@@ -98,7 +98,7 @@ functions:
 
   BOOL LoadOneFile(const CTFileName &fnm)
   {
-    if (fnm=="") { return FALSE; }
+    if (fnm == "") { return FALSE; }
   
     try 
     {
@@ -109,7 +109,7 @@ functions:
       CTString strCheck;
       strm.GetLine_t(strCheck);
       strCheck.TrimSpacesRight();
-      if (strCheck!="CREDITS") { return FALSE; };
+      if (strCheck != "CREDITS") { return FALSE; };
       
       m_iTotalEntries = 0;
       while (!strm.AtEOF())
@@ -122,10 +122,10 @@ functions:
         strm.GetLine_t(strLine);
         strm.GetLine_t(strLine);
         strLine.TrimSpacesRight();
-        if (strLine=="END") {
+        if (strLine == "END") {
           strm.Close();
           return TRUE;
-        } else if (strLine!="ENTRY") {
+        } else if (strLine != "ENTRY") {
           _acceEntries.PopAll();
           return FALSE;
         }
@@ -135,8 +135,8 @@ functions:
         strArgs.ScanF("%f", &cceEntry.fRelSize);
         strm.GetLine_t(strArgs);
         strArgs.TrimSpacesRight();
-        if (strArgs=="CENTER") { cceEntry.iAlign = CTA_CENTER; }
-        else if (strArgs=="RIGHT") { cceEntry.iAlign = CTA_RIGHT; }
+        if (strArgs == "CENTER") { cceEntry.iAlign = CTA_CENTER; }
+        else if (strArgs == "RIGHT") { cceEntry.iAlign = CTA_RIGHT; }
         else if (TRUE) { cceEntry.iAlign = CTA_LEFT; }
         strm.GetLine_t(cceEntry.strTitle);
         strm.GetLine_t(cceEntry.strName);
@@ -224,14 +224,14 @@ functions:
     INDEX iNextItem = 0;
     // go to active items
     for (INDEX i = 0; i<_acceEntries.Count(); i++) {
-      if (_acceEntries[i].fWait!=0.0f) {
+      if (_acceEntries[i].fWait != 0.0f) {
         fPassed += _acceEntries[i].fWait;
         if (fPassed>fTime) {
           break;
         } else {
           iNextItem = i+1;
           fStart = fPassed;
-          if (iNextItem>=_acceEntries.Count())
+          if (iNextItem >= _acceEntries.Count())
           {
             bOver = TRUE;    
           }
@@ -242,7 +242,7 @@ functions:
     if (!bOver) {
       while (TRUE) {
         BOOL bLast = FALSE;
-        if (_acceEntries[iNextItem].fWait!=0.0f) { bLast = TRUE; };
+        if (_acceEntries[iNextItem].fWait != 0.0f) { bLast = TRUE; };
         FLOAT fFade = CalculateRatio(fTime, fStart, fPassed-BLANK_TIME, 0.2f, 0.2f);
         pdp->SetFont( _pfdDisplayFont);
         pdp->SetTextAspect( 1.0f);
@@ -318,7 +318,7 @@ functions:
         }
         
         iNextItem++;
-        if (iNextItem>=_acceEntries.Count() || bLast) { 
+        if (iNextItem >= _acceEntries.Count() || bLast) { 
           bOver = TRUE;
           break;
         }
@@ -372,7 +372,7 @@ procedures:
       on (EStart eStart): 
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc!=NULL)
+        if (pwsc != NULL)
         {
           m_fMyTimer = 0;
           m_fMyTimerLast = 0;
@@ -386,7 +386,7 @@ procedures:
       on (EStop eStop): 
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc!=NULL)
+        if (pwsc != NULL)
         {
           ECredits ecr;
           ecr.bStart=FALSE;

@@ -46,7 +46,7 @@ functions:
   const CTString &GetDescription(void) const
   {
     ((CTString&)m_strDescription).PrintF("-><none>");
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
     }
     return m_strDescription;
@@ -55,7 +55,7 @@ functions:
   void TeleportEntity()
   {
     // if the target doesn't exist, or is destroyed
-    if (m_penTarget==NULL || (m_penTarget->GetFlags()&ENF_DELETED)) {
+    if (m_penTarget == NULL || (m_penTarget->GetFlags()&ENF_DELETED)) {
       // do nothing
       return;
     }
@@ -114,7 +114,7 @@ procedures:
       // wait to someone enter and teleport it
       wait() {
         on (ETrigger eTrigger) : {
-          if (m_penTarget!=NULL) {
+          if (m_penTarget != NULL) {
             TeleportEntity();
           }
           stop;

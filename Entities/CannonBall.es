@@ -45,9 +45,9 @@ event EForceExplode {
 
 // projectile solid
 #define ECF_CANNON_BALL ( \
-  ((ECBI_MODEL|ECBI_BRUSH|ECBI_PROJECTILE_SOLID|ECBI_CORPSE|ECBI_MODEL_HOLDER|ECBI_MODEL_HOLDER)<<ECB_TEST) |\
-  ((ECBI_PROJECTILE_SOLID)<<ECB_IS) |\
-  ((ECBI_MODEL|ECBI_MODEL_HOLDER|ECBI_CORPSE)<<ECB_PASS) )
+  ((ECBI_MODEL|ECBI_BRUSH|ECBI_PROJECTILE_SOLID|ECBI_CORPSE|ECBI_MODEL_HOLDER|ECBI_MODEL_HOLDER) << ECB_TEST) |\
+  ((ECBI_PROJECTILE_SOLID) << ECB_IS) |\
+  ((ECBI_MODEL|ECBI_MODEL_HOLDER|ECBI_CORPSE) << ECB_PASS) )
 
 #define IRON_LIFE_TIME  10.0f
 #define NUKE_LIFE_TIME  5.0f
@@ -154,8 +154,8 @@ functions:
   {
     CMovableModelEntity::PostMoving();
     if (en_vCurrentTranslationAbsolute.Length()<1.0f ||         // if very slow, allmost standing
-        _pTimer->CurrentTick()>=m_tmForceExplode ||             // if forced explosion
-        (GetCollisionBoxIndex()==0 &&                           // if unable to change collision box for some time
+        _pTimer->CurrentTick() >= m_tmForceExplode ||             // if forced explosion
+        (GetCollisionBoxIndex() == 0 &&                           // if unable to change collision box for some time
         (_pTimer->CurrentTick()>m_fStartTime+m_tmExpandBox+0.5f)))
     {
       SendEvent(EForceExplode());
@@ -184,7 +184,7 @@ functions:
   {
     // if time now is inside invisibility time, don't render model
     CModelObject *pmo = GetModelObject();
-    if ( (pmo != NULL) && (_pTimer->GetLerpedCurrentTick() < (m_fStartTime+m_tmInvisibility) ) )
+    if ((pmo != NULL) && (_pTimer->GetLerpedCurrentTick() < (m_fStartTime+m_tmInvisibility) ) )
     {
       // make it invisible
       pmo->mo_colBlendColor = 0;
@@ -218,7 +218,7 @@ functions:
   // render particles
   void RenderParticles(void) {
     // no particles when not existing
-    if (GetRenderType()!=CEntity::RT_MODEL) {
+    if (GetRenderType() != CEntity::RT_MODEL) {
       return;
     }
 
@@ -469,7 +469,7 @@ procedures:
       on (EPass epass) : {
         BOOL bHit;
         // ignore launcher within 1 second
-        bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+        bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
         // ignore twister
         bHit &= !IsOfClass(epass.penOther, "Twister");
 
@@ -527,7 +527,7 @@ procedures:
   // --->>> MAIN
   Main(ELaunchCannonBall eLaunch) {
     // remember the initial parameters
-    ASSERT(eLaunch.penLauncher!=NULL);
+    ASSERT(eLaunch.penLauncher != NULL);
     m_penLauncher = eLaunch.penLauncher;
     m_fLaunchPower = eLaunch.fLaunchPower;
     m_cbtType = eLaunch.cbtType;
@@ -561,7 +561,7 @@ procedures:
     // bounce
     m_fStartTime = _pTimer->CurrentTick();
 
-    if (crRay.cr_penHit!=NULL && crRay.cr_penHit->GetRenderType()==RT_MODEL)
+    if (crRay.cr_penHit != NULL && crRay.cr_penHit->GetRenderType() == RT_MODEL)
     {
       if (BallTouchExplode(crRay.cr_penHit))
       {

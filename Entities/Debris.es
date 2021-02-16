@@ -99,7 +99,7 @@ functions:
   {
     // cannot be damaged immediately after spawning
     if ((_pTimer->CurrentTick()-m_tmStarted<1.0f)
-      ||(dmtType==DMT_CANNONBALL_EXPLOSION) && (_pTimer->CurrentTick()-m_tmStarted<5.0f)) {
+      ||(dmtType == DMT_CANNONBALL_EXPLOSION) && (_pTimer->CurrentTick()-m_tmStarted<5.0f)) {
       return;
     }
     CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
@@ -140,7 +140,7 @@ functions:
   void LeaveStain(void)
   {
     // if no stains
-    if (m_betStain==BET_NONE) {
+    if (m_betStain == BET_NONE) {
       // do nothing
       return;
     }
@@ -243,11 +243,11 @@ procedures:
     en_fJumpControlMultiplier = 0.0f;
 
     // set density
-    if (eSpawn.Eeibt==EIBT_ICE) {
+    if (eSpawn.Eeibt == EIBT_ICE) {
       en_fDensity = 500.0f;
-    } else if (eSpawn.Eeibt==EIBT_WOOD) {
+    } else if (eSpawn.Eeibt == EIBT_WOOD) {
       en_fDensity = 500.0f;
-    } else if (eSpawn.Eeibt==EIBT_FLESH) {
+    } else if (eSpawn.Eeibt == EIBT_FLESH) {
       en_fDensity = 5000.0f;
       en_fBounceDampNormal   = 0.25f;
       en_fBounceDampParallel = 0.75f;
@@ -257,7 +257,7 @@ procedures:
 
     // set appearance
     m_dptParticles = eSpawn.dptParticles;
-    if (m_dptParticles==DPT_AFTERBURNER)
+    if (m_dptParticles == DPT_AFTERBURNER)
     {
       Particles_AfterBurner_Prepare(this);
     }
@@ -310,10 +310,10 @@ procedures:
       // if touched something
       on (ETouch etouch) : {
         // if it is brush
-        if (etouch.penOther->GetRenderType()==RT_BRUSH)
+        if (etouch.penOther->GetRenderType() == RT_BRUSH)
         {
           // shake or some other effect
-          if (m_penFallFXPapa!=NULL && !m_bTouchedGround)
+          if (m_penFallFXPapa != NULL && !m_bTouchedGround)
           {
             // loop all children of FX papa
             FOREACHINLIST( CEntity, en_lnInParent, m_penFallFXPapa->en_lhChildren, iten)
@@ -351,7 +351,7 @@ procedures:
           // maybe leave stain
           LeaveStain();
           // if robot
-          if (m_iBodyType==EIBT_ROBOT)
+          if (m_iBodyType == EIBT_ROBOT)
           {
             // explode
             Explode();

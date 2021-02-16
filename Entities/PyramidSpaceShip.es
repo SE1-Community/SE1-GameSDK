@@ -158,12 +158,12 @@ functions:
 
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if (penTarget==NULL)
+    if (penTarget == NULL)
     {
       return FALSE;
     }
-    if (slPropertyOffset==offsetof(CPyramidSpaceShip, m_penTarget) ||
-        slPropertyOffset==offsetof(CPyramidSpaceShip, m_penFlyAwayTarget))
+    if (slPropertyOffset == offsetof(CPyramidSpaceShip, m_penTarget) ||
+        slPropertyOffset == offsetof(CPyramidSpaceShip, m_penFlyAwayTarget))
     {
       return( IsDerivedFromClass(penTarget, "Pyramid Space Ship Marker"));
     }
@@ -188,7 +188,7 @@ functions:
   // returns description
   const CTString &GetDescription(void) const
   {
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
     } else {
       ((CTString&)m_strDescription).PrintF("-><none>");
@@ -243,10 +243,10 @@ functions:
     }
     CPyramidSpaceShipMarker *pcm  = (CPyramidSpaceShipMarker*)&*pcm0->m_penTarget;
     // loop thru markers
-    while (pcm!=NULL && pcm->m_penTarget!=pcm0)
+    while (pcm != NULL && pcm->m_penTarget != pcm0)
     {
       pcm = (CPyramidSpaceShipMarker*)&*pcm->m_penTarget;
-      if (pcm==NULL) {
+      if (pcm == NULL) {
         WarningMessage( "Space ship path - broken link!");
         return;
       }
@@ -293,7 +293,7 @@ functions:
       CPyramidSpaceShipMarker *pcmNp2 = &(CPyramidSpaceShipMarker&)*pcmNp1->m_penTarget;
 
       // if there is a trigger at the hit marker
-      if (pcmNp0->m_penTrigger!=NULL) {
+      if (pcmNp0->m_penTrigger != NULL) {
         // trigger it
         SendToTarget(pcmNp0->m_penTrigger, EET_TRIGGER, NULL);
       }
@@ -387,7 +387,7 @@ functions:
       m_qANp1 = qPNp1*Exp( (Log(qPNp0.Inv()*qPNp1) - qTNp1)/2 );
 
       // check for stop moving
-      if (cmNp0.m_bStopMoving && m_fRotSpeed==0.0f) {
+      if (cmNp0.m_bStopMoving && m_fRotSpeed == 0.0f) {
         m_bStopMoving = TRUE;
       }
     }
@@ -438,7 +438,7 @@ functions:
     }
 
     // remember new position for particles
-    if (en_plpLastPositions!=NULL) {
+    if (en_plpLastPositions != NULL) {
       en_plpLastPositions->AddPosition(en_vNextPosition);
     }
 
@@ -499,7 +499,7 @@ functions:
 
   void ShowBeamMachineHitFlare(void)
   {
-    if (m_penHitPlaceFlare!=NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
+    if (m_penHitPlaceFlare != NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
     {
       CModelObject *pmo = m_penHitPlaceFlare->GetModelObject();
       if (pmo != NULL) 
@@ -512,7 +512,7 @@ functions:
   void HideBeamMachineHitFlare(void)
   {
     m_tmHitFlareTime = -1;
-    if (m_penHitPlaceFlare!=NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
+    if (m_penHitPlaceFlare != NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
     {
       CModelObject *pmo = m_penHitPlaceFlare->GetModelObject();
       if (pmo != NULL) 
@@ -597,7 +597,7 @@ functions:
 
   void TurnOnLightBeam(void)
   {
-    if (m_penLightBeam!=NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
+    if (m_penLightBeam != NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
     {
       CModelObject *pmo = m_penLightBeam->GetModelObject();
       m_penLightBeam->SwitchToModel();
@@ -609,7 +609,7 @@ functions:
   {
     m_tmBeamTime=-1.0f;
 
-    if (m_penLightBeam!=NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
+    if (m_penLightBeam != NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
     {
       m_penLightBeam->SwitchToEditorModel();
       CModelObject *pmo = m_penLightBeam->GetModelObject();
@@ -621,7 +621,7 @@ functions:
     FLOAT fBeamRatio = 1.0f;
     
     // light beam
-    if (m_penLightBeam!=NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
+    if (m_penLightBeam != NULL && IsOfClass(m_penLightBeam, "ModelHolder2") )
     {
       CModelObject *pmo = m_penLightBeam->GetModelObject();
       if (pmo != NULL) 
@@ -638,7 +638,7 @@ functions:
     }
 
     // hit flare
-    if (m_penHitPlaceFlare!=NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
+    if (m_penHitPlaceFlare != NULL && IsOfClass(m_penHitPlaceFlare, "ModelHolder2") )
     {
       CModelObject *pmo = m_penHitPlaceFlare->GetModelObject();
       if (pmo != NULL) 
@@ -774,12 +774,12 @@ procedures:
 
   FireLightBeam()
   {
-    if (m_epssState==PSSS_DOORS_CLOSED)
+    if (m_epssState == PSSS_DOORS_CLOSED)
     {
       return;
     }
 
-    if (m_epssState==PSSS_BEAM_DEACTIVATED)
+    if (m_epssState == PSSS_BEAM_DEACTIVATED)
     {
       m_bFireingDeactivatedBeam=TRUE;
     }
@@ -959,11 +959,11 @@ procedures:
         {
           // ignore all triggs
         }
-        else if (m_epssState==PSSS_KILLING_BEAM_FIREING)
+        else if (m_epssState == PSSS_KILLING_BEAM_FIREING)
         {
           call FireLightBeam();
         }
-        else if (m_epssState==PSSS_BEAM_DEACTIVATED)
+        else if (m_epssState == PSSS_BEAM_DEACTIVATED)
         {
           call FireLightBeam();
         }

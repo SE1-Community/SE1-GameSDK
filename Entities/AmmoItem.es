@@ -139,7 +139,7 @@ functions:
   // render particles
   void RenderParticles(void) {
     // no particles when not existing or in DM modes
-    if (GetRenderType()!=CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
+    if (GetRenderType() != CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
       || !ShowItemParticles())
     {
       return;
@@ -365,14 +365,14 @@ functions:
   {
     m_fValue = ceil(m_fValue*GetSP()->sp_fAmmoQuantity);
 
-    if (GetSP()->sp_bInfiniteAmmo && m_penTarget==NULL) {
+    if (GetSP()->sp_bInfiniteAmmo && m_penTarget == NULL) {
       Destroy();
     }
   }
 
 procedures:
   ItemCollected(EPass epass) : CItem::ItemCollected {
-    ASSERT(epass.penOther!=NULL);
+    ASSERT(epass.penOther != NULL);
 
     // if ammo stays
     if (GetSP()->sp_bAmmoStays && !(m_bPickupOnce||m_bRespawn)) {
@@ -411,7 +411,7 @@ procedures:
   };
 
   Main() {
-    if (m_EaitType==AIT_NUKEBALL /*|| m_EaitType==AIT_NAPALM*/) {
+    if (m_EaitType == AIT_NUKEBALL /*|| m_EaitType == AIT_NAPALM*/) {
       m_EaitType=AIT_SHELLS;
     }
     Initialize();     // initialize base class

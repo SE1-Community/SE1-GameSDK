@@ -122,7 +122,7 @@ functions:
   };
   void RunningAnim(void)
   {
-    if (m_fnmDriveSnd!="") {
+    if (m_fnmDriveSnd != "") {
       PlaySound(m_soSound, m_fnmDriveSnd, SOF_3D);
     }
     CModelObject *pmo0 = &(GetModelObject()->GetAttachmentModel(0)->amo_moModelObject);
@@ -155,11 +155,11 @@ functions:
   {
     AddAttachment(i, MODEL_MENTAL, TEXTURE_MENTAL);
     CModelObject *pmoMain = &(GetModelObject()->GetAttachmentModel(i)->amo_moModelObject);
-//    pmoMain->PlayAnim(i==0 ? MENTAL_ANIM_CRATEANIMLEFTSEATING : MENTAL_ANIM_CRATEANIMRIGHTSEATING, AOF_LOOPING);
-    pmoMain->PlayAnim(i==0 ? MENTAL_ANIM_CRATEANIMLEFT: MENTAL_ANIM_CRATEANIMRIGHT, AOF_LOOPING);
+//    pmoMain->PlayAnim(i == 0 ? MENTAL_ANIM_CRATEANIMLEFTSEATING : MENTAL_ANIM_CRATEANIMRIGHTSEATING, AOF_LOOPING);
+    pmoMain->PlayAnim(i == 0 ? MENTAL_ANIM_CRATEANIMLEFT: MENTAL_ANIM_CRATEANIMRIGHT, AOF_LOOPING);
     AddAttachmentToModel(this, *pmoMain, 0, MODEL_HEAD, TEXTURE_MENTAL, 0, 0, 0);
     CModelObject *pmoHead = &(pmoMain->GetAttachmentModel(0)->amo_moModelObject);
-    if (fnmHead!="") {
+    if (fnmHead != "") {
       // try to
       try {
         pmoHead->mo_toTexture.SetData_t(fnmHead);

@@ -76,7 +76,7 @@ enum BasicEffectType {
  48 BET_SUMMONERSTAREXPLOSION   "Summoner star explosion",     // magic explosion of starts for summoner
  49 BET_COLLECT_ENERGY          "Collect energy",
  50 BET_GROWING_SWIRL           "Growing swirl",
-// 51 BET_SNIPER_RESIDUE          "Sniper Residue",		// smoke left after firing sniper
+// 51 BET_SNIPER_RESIDUE          "Sniper Residue",    // smoke left after firing sniper
  52 BET_DISAPPEAR_DUST          "Disappear dust",
  53 BET_DUST_FALL               "Dust fall",
  54 BET_BULLETSTAINSNOW         "Bullet stain snow", 
@@ -368,7 +368,7 @@ functions:
   // Setup light source
   void SetupLightSource(void)
   {
-    if (m_iLightAnimation>=0)
+    if (m_iLightAnimation >= 0)
     { // set light animation if available
       try {
         m_aoLightAnimation.SetData_t(CTFILENAME("Animations\\BasicEffects.ani"));
@@ -376,7 +376,7 @@ functions:
         WarningMessage(TRANS("Cannot load Animations\\BasicEffects.ani: %s"), strError);
       }
       // play light animation
-      if (m_aoLightAnimation.GetData()!=NULL) {
+      if (m_aoLightAnimation.GetData() != NULL) {
         m_aoLightAnimation.PlayAnim(m_iLightAnimation, 0);
       }
     }
@@ -421,7 +421,7 @@ functions:
 
     // setup light animation
     lsNew.ls_paoLightAnimation = NULL;
-    if (m_aoLightAnimation.GetData()!=NULL) {
+    if (m_aoLightAnimation.GetData() != NULL) {
       lsNew.ls_paoLightAnimation = &m_aoLightAnimation;
     }
 
@@ -441,40 +441,40 @@ functions:
       Particles_BulletSpray(en_ulID, GetLerpedPlacement().pl_PositionVector, m_vGravity, 
         m_eptType, m_tmSpawn, m_vStretch, fStretch);
     }
-    if (m_betType==BET_EXPLOSION_DEBRIS)
+    if (m_betType == BET_EXPLOSION_DEBRIS)
     {
       Particles_ExplosionDebris1(this, m_tmSpawn, m_vStretch, m_colMultiplyColor);
       Particles_ExplosionDebris2(this, m_tmSpawn, m_vStretch, m_colMultiplyColor);
       Particles_ExplosionDebris3(this, m_tmSpawn, m_vStretch, m_colMultiplyColor);
     }
-    if (m_betType==BET_COLLECT_ENERGY)
+    if (m_betType == BET_COLLECT_ENERGY)
     {
       Particles_CollectEnergy(this, m_tmSpawn);
     }
-    /*if (m_betType==BET_SNIPER_RESIDUE)
+    /*if (m_betType == BET_SNIPER_RESIDUE)
     {
       Particles_SniperResidue(this, m_tmSpawn, m_tmSpawn+m_fWaitTime, m_vNormal, m_vDirection);
     }*/
-	  if (m_betType==BET_EXPLOSION_SMOKE && _pTimer->GetLerpedCurrentTick()>(m_tmSpawn+m_fWaitTime) )
+    if (m_betType == BET_EXPLOSION_SMOKE && _pTimer->GetLerpedCurrentTick()>(m_tmSpawn+m_fWaitTime) )
     {
       Particles_ExplosionSmoke(this, m_tmSpawn+m_fWaitTime, m_vStretch, m_colMultiplyColor);
     }
-    if (m_betType==BET_SUMMONERSTAREXPLOSION)
+    if (m_betType == BET_SUMMONERSTAREXPLOSION)
     {
       Particles_SummonerExplode(this, GetPlacement().pl_PositionVector,
                                 60.0f, 1.0f, m_tmSpawn, m_fWaitTime);
     }
-    if (m_betType==BET_GROWING_SWIRL)
+    if (m_betType == BET_GROWING_SWIRL)
     {
       FLOAT fStretch=(m_vStretch(1)+m_vStretch(2)+m_vStretch(3))/3.0f;
       Particles_GrowingSwirl(this, fStretch, m_tmSpawn);
     }
-    if (m_betType==BET_DISAPPEAR_DUST)
+    if (m_betType == BET_DISAPPEAR_DUST)
     {
       FLOAT fStretch=(m_vStretch(1)+m_vStretch(2)+m_vStretch(3))/3.0f;
       Particles_DisappearDust(this, fStretch, m_tmSpawn);
     }
-    if (m_betType==BET_DUST_FALL)
+    if (m_betType == BET_DUST_FALL)
     {
       Particles_DustFall(this, m_tmSpawn, m_vStretch);
     }    
@@ -618,9 +618,9 @@ functions:
     FLOAT fDistanceToEdge;
     CBrushPolygon *pbpoNearBrush = GetNearestPolygon( vPoint, plPlaneNormal, fDistanceToEdge);
 
-    if ((m_betType>=BET_BULLETSTAINSTONE && m_betType<=BET_BULLETSTAINREDSANDNOSOUND) ||
-        (m_betType>=BET_BULLETSTAINGRASS && m_betType<=BET_BULLETSTAINWOODNOSOUND) ||
-        (m_betType>=BET_BULLETSTAINSNOW  && m_betType<=BET_BULLETSTAINSNOWNOSOUND))
+    if ((m_betType >= BET_BULLETSTAINSTONE && m_betType <= BET_BULLETSTAINREDSANDNOSOUND) ||
+        (m_betType >= BET_BULLETSTAINGRASS && m_betType <= BET_BULLETSTAINWOODNOSOUND) ||
+        (m_betType >= BET_BULLETSTAINSNOW  && m_betType <= BET_BULLETSTAINSNOWNOSOUND))
     {
       if (pbpoNearBrush != NULL)
       {
@@ -636,7 +636,7 @@ functions:
     }
 
     // if there is none, or if it is portal, or it is not near enough
-    if (pbpoNearBrush==NULL || (pbpoNearBrush->bpo_ulFlags&BPOF_PORTAL) 
+    if (pbpoNearBrush == NULL || (pbpoNearBrush->bpo_ulFlags&BPOF_PORTAL) 
       || (vPoint-GetPlacement().pl_PositionVector).ManhattanNorm()>0.1f*3) {
       // dissapear
       SwitchToEditorModel();
@@ -774,8 +774,8 @@ functions:
 
   void SniperResidue(void)
   {
-	// NOTE: m_vNormal and m_vDirection here represent the starting and the
-	// ending point of this effect!!!
+  // NOTE: m_vNormal and m_vDirection here represent the starting and the
+  // ending point of this effect!!!
     SetPredictable(TRUE);
     SetModel(MODEL_BULLET_HIT);
     SetModelMainTexture(TEXTURE_BULLET_HIT);
@@ -1175,7 +1175,7 @@ functions:
     SetPredictable(TRUE);
     Stretch();
     SetModel(MODEL_BLOOD_EXPLODE);
-    if (iBloodType==3) {
+    if (iBloodType == 3) {
       // flower mode! :)
       SetModelColor( RGBAToColor( 255,255,255,255));
       switch (IRnd()&3) {
@@ -1186,7 +1186,7 @@ functions:
       }
     } else {
       SetModelMainTexture(TEXTURE_BLOOD_EXPLODE);
-      if (iBloodType==2) { SetModelColor( RGBAToColor( 250,20,20,255)); }
+      if (iBloodType == 2) { SetModelColor( RGBAToColor( 250,20,20,255)); }
       else               { SetModelColor( RGBAToColor( 0,250,0,255)); }
     }
     //RandomBanking();
@@ -1208,7 +1208,7 @@ functions:
 
     Stretch();
     SetModel(MODEL_BLOOD_STAIN);
-    if (iBloodType==3) {
+    if (iBloodType == 3) {
       // flower mode! :)
       SetModelColor( RGBAToColor( 255,255,255,255));
       switch (IRnd()&3) {
@@ -1224,7 +1224,7 @@ functions:
       case 3:  { SetModelMainTexture(TEXTURE_BLOOD_STAIN3);   break; }
       default: { SetModelMainTexture(TEXTURE_BLOOD_STAIN4);   break; }
       }
-      if (iBloodType==2) { SetModelColor( RGBAToColor( 250,20,20,255)); }
+      if (iBloodType == 2) { SetModelColor( RGBAToColor( 250,20,20,255)); }
       else               { SetModelColor( RGBAToColor( 0,250,0,255)); }
     }
 
@@ -1247,7 +1247,7 @@ functions:
     SetPredictable(TRUE);
     Stretch();
     SetModel(MODEL_BLOOD_STAIN);
-    if (iBloodType==3) {
+    if (iBloodType == 3) {
       // flower mode! :)
       SetModelColor( RGBAToColor( 255,255,255,255));
       switch (IRnd()&3) {
@@ -1258,7 +1258,7 @@ functions:
       }
     } else {
       SetModelMainTexture(TEXTURE_BLOOD_STAIN4);
-      if (iBloodType==2) { SetModelColor( RGBAToColor( 250,20,20,255)); }
+      if (iBloodType == 2) { SetModelColor( RGBAToColor( 250,20,20,255)); }
       else               { SetModelColor( RGBAToColor( 0,250,0,255)); }
     }
     SetNormalAndDirection();
@@ -1283,7 +1283,7 @@ functions:
 
     Stretch();
     SetModel(MODEL_BLOOD_STAIN);
-    if (iBloodType==3) {
+    if (iBloodType == 3) {
       // flower mode! :)
       SetModelColor( RGBAToColor( 255,255,255,255));
       switch (IRnd()&3) {
@@ -1319,7 +1319,7 @@ functions:
 
     Stretch();
     SetModel(MODEL_BLOOD_STAIN);
-    if (iBloodType==3) {
+    if (iBloodType == 3) {
       // flower mode! :)
       SetModelColor( RGBAToColor( 255,255,255,255));
       switch (IRnd()&3) {
@@ -1336,7 +1336,7 @@ functions:
       case 4:  { SetModelMainTexture(TEXTURE_BLOOD_SPILL2); break; }
       default: { SetModelMainTexture(TEXTURE_BLOOD_SPILL3); break; }
       }
-      if (iBloodType==2)
+      if (iBloodType == 2)
       {
         SetModelColor( colBloodSpillColor);
       }
@@ -1358,15 +1358,15 @@ procedures:
 
   Main(ESpawnEffect eSpawn)
   {
-    if (eSpawn.betType==BET_GIZMO_SPLASH_FX ||
-       eSpawn.betType==BET_EXPLOSION_DEBRIS ||
-       eSpawn.betType==BET_EXPLOSION_SMOKE ||
-       eSpawn.betType==BET_SUMMONERSTAREXPLOSION  ||
-       eSpawn.betType==BET_COLLECT_ENERGY ||
-       eSpawn.betType==BET_GROWING_SWIRL||
-       eSpawn.betType==BET_DISAPPEAR_DUST||
-	     /*eSpawn.betType==BET_SNIPER_RESIDUE ||*/
-       eSpawn.betType==BET_DUST_FALL)
+    if (eSpawn.betType == BET_GIZMO_SPLASH_FX ||
+       eSpawn.betType == BET_EXPLOSION_DEBRIS ||
+       eSpawn.betType == BET_EXPLOSION_SMOKE ||
+       eSpawn.betType == BET_SUMMONERSTAREXPLOSION  ||
+       eSpawn.betType == BET_COLLECT_ENERGY ||
+       eSpawn.betType == BET_GROWING_SWIRL||
+       eSpawn.betType == BET_DISAPPEAR_DUST||
+       /*eSpawn.betType == BET_SNIPER_RESIDUE ||*/
+       eSpawn.betType == BET_DUST_FALL)
     {
       InitAsEditorModel();
     }
@@ -1463,7 +1463,7 @@ procedures:
     // fading
     if (m_fFadeTime>0.0f) {
       m_fFadeStartTime  = _pTimer->CurrentTick();
-      m_fFadeStartAlpha = ((GetModelColor()&CT_AMASK)>>CT_ASHIFT) / 255.0f;
+      m_fFadeStartAlpha = ((GetModelColor()&CT_AMASK) >> CT_ASHIFT) / 255.0f;
       m_bFade = TRUE;
       autowait(m_fFadeTime);
       m_bFade = FALSE;

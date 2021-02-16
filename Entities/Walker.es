@@ -42,7 +42,7 @@ static EntityInfo eiWalker = {
 #define FIRE_DEATH_LEFT   FLOAT3D(0.0f, 7.0f, -2.0f)
 #define FIRE_DEATH_RIGHT  FLOAT3D(3.75f, 4.2f, -2.5f)
 
-#define WALKERSOUND(soundname) ((m_EwcChar==WLC_SOLDIER)? (SOUND_SOLDIER_##soundname) : (SOUND_SERGEANT_##soundname))
+#define WALKERSOUND(soundname) ((m_EwcChar == WLC_SOLDIER)? (SOUND_SOLDIER_##soundname) : (SOUND_SERGEANT_##soundname))
 %}
 
 
@@ -121,7 +121,7 @@ functions:
 
   BOOL ForcesCannonballToExplode(void)
   {
-    if (m_EwcChar==WLC_SERGEANT) {
+    if (m_EwcChar == WLC_SERGEANT) {
       return TRUE;
     }
     return CEnemyBase::ForcesCannonballToExplode();
@@ -132,7 +132,7 @@ functions:
 
     PrecacheModel(MODEL_WALKER);
 
-    if (m_EwcChar==WLC_SOLDIER)
+    if (m_EwcChar == WLC_SOLDIER)
     {
       // sounds
       PrecacheSound(SOUND_SOLDIER_IDLE );
@@ -172,7 +172,7 @@ functions:
 
   FLOAT GetCrushHealth(void)
   {
-    if (m_EwcChar==WLC_SERGEANT) {
+    if (m_EwcChar == WLC_SERGEANT) {
       return 100.0f;
     }
     return 0.0f;
@@ -184,14 +184,14 @@ functions:
   {
 
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount*=0.666f;
     }
 
     // walker can't harm walker
     if (!IsOfClass(penInflictor, "Walker") ||
-      ((CWalker*)penInflictor)->m_EwcChar!=m_EwcChar) {
+      ((CWalker*)penInflictor)->m_EwcChar != m_EwcChar) {
       CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
@@ -209,7 +209,7 @@ functions:
   }
   void WalkingAnim(void) {
     ActivateWalkingSound();
-    if (m_EwcChar==WLC_SERGEANT) {
+    if (m_EwcChar == WLC_SERGEANT) {
       StartModelAnim(WALKER_ANIM_WALKBIG, AOF_LOOPING|AOF_NORESTART);
     } else {
       StartModelAnim(WALKER_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
@@ -332,11 +332,11 @@ procedures:
     autocall CEnemyBase::LockOnEnemy() EReturn;
 
     // sergeant 4 rockets
-    if (m_EwcChar==WLC_SERGEANT) {
+    if (m_EwcChar == WLC_SERGEANT) {
       StartModelAnim(WALKER_ANIM_FIRERIGHT, AOF_LOOPING);
       ShootProjectile(PRT_WALKER_ROCKET, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soFire1, SOUND_SERGEANT_FIRE_ROCKET, SOF_3D);
-      if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+      if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
         m_fLockOnEnemyTime = 1.0f;
       } else {
         m_fLockOnEnemyTime = 0.5f;
@@ -349,8 +349,8 @@ procedures:
 //      m_fLockOnEnemyTime = 0.25f;
 //      autocall CEnemyBase::LockOnEnemy() EReturn;
     } 
-    if (m_EwcChar==WLC_SOLDIER) {
-      if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+    if (m_EwcChar == WLC_SOLDIER) {
+      if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
         m_iLoopCounter = 4;
       } else {
         m_iLoopCounter = 8;
@@ -364,17 +364,17 @@ procedures:
           ShootProjectile(PRT_CYBORG_LASER, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
         }
         INDEX iChannel = m_iLoopCounter%4;
-        if (iChannel==0) {
+        if (iChannel == 0) {
           PlaySound(m_soFire1, SOUND_SOLDIER_FIRE_LASER, SOF_3D);
-        } else if (iChannel==1) {
+        } else if (iChannel == 1) {
           PlaySound(m_soFire2, SOUND_SOLDIER_FIRE_LASER, SOF_3D);
-        } else if (iChannel==2) {
+        } else if (iChannel == 2) {
           PlaySound(m_soFire3, SOUND_SOLDIER_FIRE_LASER, SOF_3D);
-        } else if (iChannel==3) {
+        } else if (iChannel == 3) {
           PlaySound(m_soFire4, SOUND_SOLDIER_FIRE_LASER, SOF_3D);
         }
         if (m_iLoopCounter>1) {
-          if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+          if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
             m_fLockOnEnemyTime = 0.4f;
           } else {
             m_fLockOnEnemyTime = 0.1f;
@@ -422,7 +422,7 @@ procedures:
     autowait(0.9f);
 
     // one rocket/laser from left or right arm
-    if (m_EwcChar==WLC_SERGEANT) {
+    if (m_EwcChar == WLC_SERGEANT) {
       if (IRnd()&1) {
         FireDeathRocket(FIRE_DEATH_RIGHT*m_fSize);
       } else {
@@ -430,7 +430,7 @@ procedures:
       }
       PlaySound(m_soSound, SOUND_SERGEANT_FIRE_ROCKET, SOF_3D);
     }
-    if (m_EwcChar==WLC_SOLDIER) {
+    if (m_EwcChar == WLC_SOLDIER) {
       if (IRnd()&1) {
         FireDeathLaser(FIRE_DEATH_RIGHT*m_fSize);
       } else {
@@ -441,7 +441,7 @@ procedures:
     autowait(0.25f);
 
     FLOAT fStretch=2.0f;
-    if (m_EwcChar==WLC_SERGEANT)
+    if (m_EwcChar == WLC_SERGEANT)
     {
       fStretch=4.0f;
     }
@@ -471,7 +471,7 @@ procedures:
     SetPhysicsFlags(EPF_MODEL_WALKING);
     SetCollisionFlags(ECF_MODEL);
     SetFlags(GetFlags()|ENF_ALIVE);
-    if (m_EwcChar==WLC_SERGEANT) {
+    if (m_EwcChar == WLC_SERGEANT) {
       SetHealth(750.0f);
       m_fMaxHealth = 750.0f;
     } else {
@@ -484,7 +484,7 @@ procedures:
 
     // set your appearance
     SetModel(MODEL_WALKER);
-    if (m_EwcChar==WLC_SERGEANT) {
+    if (m_EwcChar == WLC_SERGEANT) {
       m_fSize = 1.0f;
       SetModelMainTexture(TEXTURE_WALKER_SERGEANT);
       AddAttachment(WALKER_ATTACHMENT_ROCKETLAUNCHER_LT, MODEL_ROCKETLAUNCHER, TEXTURE_ROCKETLAUNCHER);
@@ -511,7 +511,7 @@ procedures:
       m_iScore = 2000;
       m_fThreatDistance = 5;
     }
-    if (m_fStepHeight==-1) {
+    if (m_fStepHeight == -1) {
       m_fStepHeight = 4.0f;
     }
 

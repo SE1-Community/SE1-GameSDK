@@ -30,9 +30,9 @@ event EElementalGrow {
 
 %{
 #define ECF_AIR ( \
-  ((ECBI_BRUSH|ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID)<<ECB_TEST) |\
-  ((ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID)<<ECB_PASS) |\
-  ((ECBI_MODEL)<<ECB_IS))
+  ((ECBI_BRUSH|ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID) << ECB_TEST) |\
+  ((ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID) << ECB_PASS) |\
+  ((ECBI_MODEL) << ECB_IS))
 
 #define AIRBOSS_EYES_HEIGHT 1.7f
 #define AIRBOSS_BODY_HEIGHT 1.0f
@@ -226,7 +226,7 @@ functions:
         SetHealth(fHealth);
         return; 
       }
-    } else if (m_bAttGrow && m_iSize==2) {
+    } else if (m_bAttGrow && m_iSize == 2) {
       if (fHealth-fFullDamage<1.0f) {
         CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
         SetHealth(fHealth);
@@ -241,22 +241,22 @@ functions:
     }
 
     // boss cannot be telefragged
-    if (dmtType==DMT_TELEPORT)
+    if (dmtType == DMT_TELEPORT)
     {
       return;
     }
     
     // air elemental cannot be harmed by following kinds of damage:
-    if (dmtType==DMT_CLOSERANGE ||
-       dmtType==DMT_BULLET ||
-       dmtType==DMT_IMPACT ||
-       dmtType==DMT_CHAINSAW)
+    if (dmtType == DMT_CLOSERANGE ||
+       dmtType == DMT_BULLET ||
+       dmtType == DMT_IMPACT ||
+       dmtType == DMT_CHAINSAW)
     {
       return;
     }
     
     // cannonballs inflict less damage then the default
-    if (dmtType==DMT_CANNONBALL)
+    if (dmtType == DMT_CANNONBALL)
     {
       fDamageAmmount *= 0.6f;
     }
@@ -271,7 +271,7 @@ functions:
     for (i=0; i<AIRBOSS_MAX_TA; i++) {
       FLOAT fHealth = afTriggerArray[i]*m_fMaxHealth;
       // triggers
-      if (fHealth<=fOldHealth && fHealth>fNewHealth)
+      if (fHealth <= fOldHealth && fHealth>fNewHealth)
       {
         if (&*penTrigger[i]) {
           SendToTarget(&*penTrigger[i], EET_TRIGGER, FixupCausedToPlayer(this, m_penEnemy));
@@ -282,7 +282,7 @@ functions:
     for (i=0; i<AIRBOSS_MAX_GA; i++) {
       FLOAT fHealth = afGrowArray[i][0]*m_fMaxHealth;
       // growing
-      if (fHealth<=fOldHealth && fHealth>fNewHealth)
+      if (fHealth <= fOldHealth && fHealth>fNewHealth)
       {
         m_fAttSizeRequested = afGrowArray[i][1];
         m_iSize = i;
@@ -428,7 +428,7 @@ functions:
         
     for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
-      if (penPlayer!=NULL) {
+      if (penPlayer != NULL) {
         if (DistanceTo(this, penPlayer)<m_fShockwaveTreshold &&
           _pTimer->CurrentTick()>(m_tmLastShockwave+m_fShockwavePeriod)) {
           EAirShockwave eas;
@@ -550,7 +550,7 @@ procedures:
     
     FLOAT3D vOffset;
     // static enemy
-    if (((CMovableEntity &)*m_penEnemy).en_vCurrentTranslationAbsolute.Length()==0.0f) {
+    if (((CMovableEntity &)*m_penEnemy).en_vCurrentTranslationAbsolute.Length() == 0.0f) {
       // almost directly at the enemy
       FLOAT3D vPlayerToThis = GetPlacement().pl_PositionVector - m_penEnemy->GetPlacement().pl_PositionVector;
       vPlayerToThis.Normalize();
@@ -647,7 +647,7 @@ procedures:
       // the initial one, then the boxes from 1-3 represent
       // the scaled versions of the original, in order
       FLOAT fMiddleSize = Lerp(m_fAttSizeCurrent, m_fAttSizeRequested, 0.33f);
-      if (m_fLastSize<=fMiddleSize && fMiddleSize<m_fTargetSize) {
+      if (m_fLastSize <= fMiddleSize && fMiddleSize<m_fTargetSize) {
         if (m_iSize<2) {
           ChangeCollisionBoxIndexWhenPossible(m_iSize+1);
         } else if (TRUE) {
@@ -662,7 +662,7 @@ procedures:
     m_fAttSizeCurrent = afGrowArray[m_iSize][1];
     
     m_fGrowSpeed *= 2.0f;
-    if (m_iSize==1) {
+    if (m_iSize == 1) {
       GetModelObject()->PlayAnim(AIRELEMENTAL_ANIM_SIZE50, AOF_LOOPING);
     }
 

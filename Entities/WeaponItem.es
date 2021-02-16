@@ -193,18 +193,18 @@ functions:
   void Precache(void) {
     PrecacheSound(SOUND_PICK);
     switch (m_EwitType) {
-      case WIT_COLT:            CPlayerWeapons_Precache(1<<(INDEX(WEAPON_COLT           )-1)); break;
-      case WIT_SINGLESHOTGUN:   CPlayerWeapons_Precache(1<<(INDEX(WEAPON_SINGLESHOTGUN  )-1)); break;
-      case WIT_DOUBLESHOTGUN:   CPlayerWeapons_Precache(1<<(INDEX(WEAPON_DOUBLESHOTGUN  )-1)); break;
-      case WIT_TOMMYGUN:        CPlayerWeapons_Precache(1<<(INDEX(WEAPON_TOMMYGUN       )-1)); break;
-      case WIT_MINIGUN:         CPlayerWeapons_Precache(1<<(INDEX(WEAPON_MINIGUN        )-1)); break;
-      case WIT_ROCKETLAUNCHER:  CPlayerWeapons_Precache(1<<(INDEX(WEAPON_ROCKETLAUNCHER )-1)); break;
-      case WIT_GRENADELAUNCHER: CPlayerWeapons_Precache(1<<(INDEX(WEAPON_GRENADELAUNCHER)-1)); break;
-      case WIT_SNIPER:          CPlayerWeapons_Precache(1<<(INDEX(WEAPON_SNIPER         )-1)); break;
-      case WIT_FLAMER:          CPlayerWeapons_Precache(1<<(INDEX(WEAPON_FLAMER         )-1)); break;
-      case WIT_CHAINSAW:        CPlayerWeapons_Precache(1<<(INDEX(WEAPON_CHAINSAW       )-1)); break;
-      case WIT_LASER:           CPlayerWeapons_Precache(1<<(INDEX(WEAPON_LASER          )-1)); break;
-      case WIT_CANNON:          CPlayerWeapons_Precache(1<<(INDEX(WEAPON_IRONCANNON     )-1)); break;
+      case WIT_COLT:            CPlayerWeapons_Precache(1 << (INDEX(WEAPON_COLT           )-1)); break;
+      case WIT_SINGLESHOTGUN:   CPlayerWeapons_Precache(1 << (INDEX(WEAPON_SINGLESHOTGUN  )-1)); break;
+      case WIT_DOUBLESHOTGUN:   CPlayerWeapons_Precache(1 << (INDEX(WEAPON_DOUBLESHOTGUN  )-1)); break;
+      case WIT_TOMMYGUN:        CPlayerWeapons_Precache(1 << (INDEX(WEAPON_TOMMYGUN       )-1)); break;
+      case WIT_MINIGUN:         CPlayerWeapons_Precache(1 << (INDEX(WEAPON_MINIGUN        )-1)); break;
+      case WIT_ROCKETLAUNCHER:  CPlayerWeapons_Precache(1 << (INDEX(WEAPON_ROCKETLAUNCHER )-1)); break;
+      case WIT_GRENADELAUNCHER: CPlayerWeapons_Precache(1 << (INDEX(WEAPON_GRENADELAUNCHER)-1)); break;
+      case WIT_SNIPER:          CPlayerWeapons_Precache(1 << (INDEX(WEAPON_SNIPER         )-1)); break;
+      case WIT_FLAMER:          CPlayerWeapons_Precache(1 << (INDEX(WEAPON_FLAMER         )-1)); break;
+      case WIT_CHAINSAW:        CPlayerWeapons_Precache(1 << (INDEX(WEAPON_CHAINSAW       )-1)); break;
+      case WIT_LASER:           CPlayerWeapons_Precache(1 << (INDEX(WEAPON_LASER          )-1)); break;
+      case WIT_CANNON:          CPlayerWeapons_Precache(1 << (INDEX(WEAPON_IRONCANNON     )-1)); break;
     }
   }
   /* Fill in entity statistics - for AI purposes only */
@@ -221,7 +221,7 @@ functions:
   // render particles
   void RenderParticles(void) {
     // no particles when not existing or in DM modes
-    if (GetRenderType()!=CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
+    if (GetRenderType() != CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
       || !ShowItemParticles())
     {
       return;
@@ -400,7 +400,7 @@ functions:
 
 procedures:
   ItemCollected(EPass epass) : CItem::ItemCollected {
-    ASSERT(epass.penOther!=NULL);
+    ASSERT(epass.penOther != NULL);
 
     // if weapons stays
     if (GetSP()->sp_bWeaponsStay && !(m_bPickupOnce||m_bRespawn)) {
@@ -433,7 +433,7 @@ procedures:
 
   Main()
   {
-    if ( m_EwitType==WIT_GHOSTBUSTER) {
+    if (m_EwitType == WIT_GHOSTBUSTER) {
       m_EwitType=WIT_LASER;
     }
 

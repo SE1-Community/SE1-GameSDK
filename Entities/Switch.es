@@ -61,11 +61,11 @@ functions:
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
-    if (slPropertyOffset==offsetof(CSwitch, m_iModelONAnimation) ||
-        slPropertyOffset==offsetof(CSwitch, m_iModelOFFAnimation)) {
+    if (slPropertyOffset == offsetof(CSwitch, m_iModelONAnimation) ||
+        slPropertyOffset == offsetof(CSwitch, m_iModelOFFAnimation)) {
       return GetModelObject()->GetData();
-    } else if (slPropertyOffset==offsetof(CSwitch, m_iTextureONAnimation) ||
-               slPropertyOffset==offsetof(CSwitch, m_iTextureOFFAnimation)) {
+    } else if (slPropertyOffset == offsetof(CSwitch, m_iTextureONAnimation) ||
+               slPropertyOffset == offsetof(CSwitch, m_iTextureOFFAnimation)) {
       return GetModelObject()->mo_toTexture.GetData();
     } else {
       return CModelHolder2::GetAnimData(slPropertyOffset);
@@ -75,7 +75,7 @@ functions:
   // test if this door reacts on this entity
   BOOL CanReactOnEntity(CEntity *pen)
   {
-    if (pen==NULL) {
+    if (pen == NULL) {
       return FALSE;
     }
     // never react on non-live or dead entities
@@ -135,7 +135,7 @@ procedures:
     GetModelObject()->mo_toTexture.PlayAnim(m_iTextureOFFAnimation, 0);
     m_bSwitchON = FALSE;
     // if exists off target
-    if (m_penOffTarget!=NULL)
+    if (m_penOffTarget != NULL)
     {
       SendToTarget(m_penOffTarget, m_eetOffEvent, m_penCaused);
     }
@@ -213,7 +213,7 @@ procedures:
       }
       // when dead
       on(EDeath): {
-        if (m_penDestruction!=NULL) {
+        if (m_penDestruction != NULL) {
           jump CModelHolder2::Die();
         }
         resume;
@@ -233,7 +233,7 @@ procedures:
       SwitchToEditorModel();
     }
 
-    if (m_swtType==SWT_ONCE) {
+    if (m_swtType == SWT_ONCE) {
       jump MainLoop_Once();
     } else {
       jump MainLoop_OnOff();

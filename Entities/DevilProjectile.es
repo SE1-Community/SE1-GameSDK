@@ -231,7 +231,7 @@ procedures:
         on (EPass epass) : {
           BOOL bHit;
           // ignore launcher within 1 second
-          bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+          bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
           // ignore twister
           bHit &= !IsOfClass(epass.penOther, "Twister");
           if (bHit) {
@@ -255,8 +255,8 @@ procedures:
   // --->>> MAIN
   Main(EDevilProjectile eLaunch) {
     // remember the initial parameters
-    ASSERT(eLaunch.penLauncher!=NULL);
-    ASSERT(eLaunch.penTarget!=NULL);
+    ASSERT(eLaunch.penLauncher != NULL);
+    ASSERT(eLaunch.penTarget != NULL);
     m_penLauncher = eLaunch.penLauncher;
     m_penTarget = eLaunch.penTarget;
 

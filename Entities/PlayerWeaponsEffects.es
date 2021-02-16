@@ -18,8 +18,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #define EPF_MODEL_SHELL (EPF_ONBLOCK_BOUNCE|EPF_TRANSLATEDBYGRAVITY|EPF_MOVABLE)
 #define ECF_MODEL_SHELL ( \
-  ((ECBI_BRUSH|ECBI_MODEL_HOLDER)<<ECB_TEST) |\
-  ((ECBI_CORPSE)<<ECB_IS))
+  ((ECBI_BRUSH|ECBI_MODEL_HOLDER) << ECB_TEST) |\
+  ((ECBI_CORPSE) << ECB_IS))
 %}
 
 uses "Entities/Player";
@@ -100,15 +100,15 @@ procedures:
 
   Main(EWeaponEffectInit eInit) {
     // remember the initial parameters
-    ASSERT(eInit.penOwner!=NULL);
+    ASSERT(eInit.penOwner != NULL);
     m_penOwner = eInit.penOwner;
     m_EwetEffect = eInit.EwetEffect;
     SetFlags(GetFlags()|ENF_SEETHROUGH);
     SetPredictable(TRUE);
 
-    if (m_EwetEffect==WET_SHOTGUNSHELL) {
+    if (m_EwetEffect == WET_SHOTGUNSHELL) {
       autocall ShotgunShell() EEnd;
-    } else if (m_EwetEffect==WET_MACHINEGUNSHELL) {
+    } else if (m_EwetEffect == WET_MACHINEGUNSHELL) {
       autocall MachinegunShell() EEnd;
     } else {
       ASSERTALWAYS("Uknown weapon effect type");

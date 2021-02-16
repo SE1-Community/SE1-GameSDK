@@ -105,7 +105,7 @@ procedures:
     SetModelMainTexture(TEXTURE_MARKER);
 
     // set name
-    if (m_strName=="Marker") {
+    if (m_strName == "Marker") {
       m_strName = "Fog marker";
     }
 
@@ -147,8 +147,8 @@ procedures:
     m_fBelow = ClampDn(m_fBelow , 0.001f);
     m_fFar   = ClampDn(m_fFar,    0.001f);
 
-    m_iSizeL = 1<<INDEX(Log2(m_iSizeL));
-    m_iSizeH = 1<<INDEX(Log2(m_iSizeH));
+    m_iSizeL = 1 << INDEX(Log2(m_iSizeL));
+    m_iSizeH = 1 << INDEX(Log2(m_iSizeH));
     m_iSizeL= Clamp(m_iSizeL, INDEX(2), INDEX(256));
     m_iSizeH= Clamp(m_iSizeH, INDEX(2), INDEX(256));
 

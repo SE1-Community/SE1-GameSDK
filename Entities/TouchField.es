@@ -68,7 +68,7 @@ functions:
   }
 
   CFieldSettings *GetFieldSettings(void) {
-    if (m_fsField.fs_toTexture.GetData()==NULL) {
+    if (m_fsField.fs_toTexture.GetData() == NULL) {
       SetupFieldSettings();      
     }
     return &m_fsField;
@@ -143,7 +143,7 @@ procedures:
             penNewIn = TouchingEntity(ConsiderAll, m_penLastIn);
           }
           // if there are no entities in anymore
-          if (penNewIn==NULL) {
+          if (penNewIn == NULL) {
             // send event
             SendToTarget(m_penExit, m_eetExit, m_penLastIn);
             // wait new entry
@@ -169,11 +169,11 @@ procedures:
   Main(EVoid) {
     InitAsFieldBrush();
     SetPhysicsFlags(EPF_BRUSH_FIXED);
-    if ( !m_bBlockNonPlayers ) {
-      SetCollisionFlags( ((ECBI_MODEL)<<ECB_TEST) | ((ECBI_BRUSH)<<ECB_IS) | ((ECBI_MODEL)<<ECB_PASS) );
+    if (!m_bBlockNonPlayers ) {
+      SetCollisionFlags( ((ECBI_MODEL) << ECB_TEST) | ((ECBI_BRUSH) << ECB_IS) | ((ECBI_MODEL) << ECB_PASS) );
     } else {
-      SetCollisionFlags( ((ECBI_MODEL|ECBI_PLAYER|ECBI_PROJECTILE_SOLID|ECBI_PROJECTILE_MAGIC)<<ECB_TEST) 
-        | ((ECBI_BRUSH)<<ECB_IS) | ((ECBI_PLAYER|ECBI_PROJECTILE_SOLID|ECBI_PROJECTILE_MAGIC)<<ECB_PASS) );
+      SetCollisionFlags( ((ECBI_MODEL|ECBI_PLAYER|ECBI_PROJECTILE_SOLID|ECBI_PROJECTILE_MAGIC) << ECB_TEST) 
+        | ((ECBI_BRUSH) << ECB_IS) | ((ECBI_PLAYER|ECBI_PROJECTILE_SOLID|ECBI_PROJECTILE_MAGIC) << ECB_PASS) );
     }
 
     if (m_bActive) {

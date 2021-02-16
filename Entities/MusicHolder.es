@@ -141,16 +141,16 @@ functions:
         if (!penEnemy->m_bTemplate) {
           // count one
           m_ctEnemiesInWorld++;
-		      // if this is a woman kamikaze carrier, add another one to count
-		      if (IsOfClass(pen, "Woman")) {
-			      if (((CWoman *)&*pen)->m_bKamikazeCarrier) { m_ctEnemiesInWorld++; }
-		      }
+          // if this is a woman kamikaze carrier, add another one to count
+          if (IsOfClass(pen, "Woman")) {
+            if (((CWoman *)&*pen)->m_bKamikazeCarrier) { m_ctEnemiesInWorld++; }
+          }
         }
       // if spawner
       } else if (IsDerivedFromClass(pen, "Enemy Spawner")) {
         CEnemySpawner *penSpawner = (CEnemySpawner *)pen;
         // if not teleporting
-        if (penSpawner->m_estType!=EST_TELEPORTER) {
+        if (penSpawner->m_estType != EST_TELEPORTER) {
           // add total count
           m_ctEnemiesInWorld+=penSpawner->m_ctTotal;
           // if this spawner points to a woman kamikaze carrier template, increase count once more
@@ -210,7 +210,7 @@ functions:
   {
     INDEX &iSubChannel = (&m_iSubChannel0)[mtType];
     // take next sub-channel if needed
-    if (fnNewMusic!="") {
+    if (fnNewMusic != "") {
       iSubChannel = (iSubChannel+1)%2;
     }
     // find channel's variables
@@ -220,7 +220,7 @@ functions:
 
     // setup looping/non looping flags
     ULONG ulFlags;
-    if (mtType==MT_EVENT) {
+    if (mtType == MT_EVENT) {
       ulFlags = SOF_MUSIC;
     } else {
       ulFlags = SOF_MUSIC|SOF_LOOP|SOF_NONGAME;
@@ -229,7 +229,7 @@ functions:
     // remember volumes
     fVolume = fNewVolume;
     // start new music file if needed
-    if (fnNewMusic!="") {
+    if (fnNewMusic != "") {
       PlaySound( soMusic, fnNewMusic, ulFlags);
       // initially, not playing
       fCurrentVolume = MUSIC_VOLUMEMIN;
@@ -292,7 +292,7 @@ functions:
     INDEX iSubChannelActive = (&m_iSubChannel0)[mtType];
     INDEX iSubChannelInactive = (iSubChannelActive+1)%2;
     // if it is current channel
-    if (mtType==m_mtCurrentMusic) {
+    if (mtType == m_mtCurrentMusic) {
       // fade in active subchannel
       FadeInChannel(mtType, iSubChannelActive);
       // fade out inactive subchannel
@@ -366,7 +366,7 @@ procedures:
       // get total score of all active fuss makers
       FLOAT fFussScore = GetFussMakersScore();
       // if event is on
-      if (m_mtCurrentMusic==MT_EVENT) {
+      if (m_mtCurrentMusic == MT_EVENT) {
         // if event has ceased playing
         if (!m_soMusic3a.IsPlaying() && !m_soMusic3b.IsPlaying()) {
           // switch to light music
@@ -374,44 +374,44 @@ procedures:
         }
       }
       // if heavy fight is on
-      if (m_mtCurrentMusic==MT_HEAVY) {
+      if (m_mtCurrentMusic == MT_HEAVY) {
         // if no more fuss
-        if (fFussScore<=0.0f) {
+        if (fFussScore <= 0.0f) {
           // switch to no fight
           m_mtCurrentMusic=MT_LIGHT;
         }
       // if medium fight is on
-      } else if (m_mtCurrentMusic==MT_MEDIUM) {
+      } else if (m_mtCurrentMusic == MT_MEDIUM) {
         // if no more fuss
-        if (fFussScore<=0.0f) {
+        if (fFussScore <= 0.0f) {
           // switch to no fight
           m_mtCurrentMusic=MT_LIGHT;
         // if larger fuss
-        } else if (fFussScore>=m_fScoreHeavy) {
+        } else if (fFussScore >= m_fScoreHeavy) {
           // switch to heavy fight
           m_mtCurrentMusic=MT_HEAVY;
         }
       // if no fight is on
-      } else if (m_mtCurrentMusic==MT_LIGHT) {
+      } else if (m_mtCurrentMusic == MT_LIGHT) {
         // if heavy fuss
-        if (fFussScore>=m_fScoreHeavy) {
+        if (fFussScore >= m_fScoreHeavy) {
           // switch to heavy fight
           m_mtCurrentMusic=MT_HEAVY;
         // if medium fuss
-        } else if (fFussScore>=m_fScoreMedium) {
+        } else if (fFussScore >= m_fScoreMedium) {
           // switch to medium fight
           m_mtCurrentMusic=MT_MEDIUM;
         }
       }
 
       // setup fade speed depending on music type
-      if (m_mtCurrentMusic==MT_LIGHT) {
+      if (m_mtCurrentMusic == MT_LIGHT) {
         m_tmFade = 2.0f;
-      } else if (m_mtCurrentMusic==MT_MEDIUM) {
+      } else if (m_mtCurrentMusic == MT_MEDIUM) {
         m_tmFade = 1.0f;
-      } else if (m_mtCurrentMusic==MT_HEAVY) {
+      } else if (m_mtCurrentMusic == MT_HEAVY) {
         m_tmFade = 1.0f;
-      } else if (m_mtCurrentMusic==MT_EVENT || m_mtCurrentMusic==MT_CONTINUOUS) {
+      } else if (m_mtCurrentMusic == MT_EVENT || m_mtCurrentMusic == MT_CONTINUOUS) {
         m_tmFade = 0.5f;
       }
 

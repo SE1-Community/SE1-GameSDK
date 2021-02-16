@@ -141,12 +141,12 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim()==FREAK_ANIM_DEATHRUN)
+    if (GetModelObject()->GetAnim() == FREAK_ANIM_DEATHRUN)
     {
       vStretch=FLOAT3D(1,1,2)*1.0f;
       return 0.65f;
     }
-    else if (GetModelObject()->GetAnim()==FREAK_ANIM_DEATHSTAND)
+    else if (GetModelObject()->GetAnim() == FREAK_ANIM_DEATHSTAND)
     {
       vStretch=FLOAT3D(1,1,2)*1.5f;
       return 0.72f;
@@ -227,7 +227,7 @@ functions:
  ************************************************************/
   // touched another live entity
   void LiveEntityTouched(ETouch etouch) {
-    if (m_penLastTouched!=etouch.penOther || _pTimer->CurrentTick()>=m_fLastTouchedTime+0.25f) {
+    if (m_penLastTouched != etouch.penOther || _pTimer->CurrentTick() >= m_fLastTouchedTime+0.25f) {
       // hit angle
       FLOAT3D vDirection = en_vCurrentTranslationAbsolute;
       vDirection.Normalize();
@@ -394,7 +394,7 @@ procedures:
     m_fBodyParts = 6;
     m_fDamageWounded = 100000.0f;
     m_iScore = 1500;
-    if (m_fStepHeight==-1) {
+    if (m_fStepHeight == -1) {
       m_fStepHeight = 4.0f;
     }
     m_fStopApproachDistance = 0.0f;

@@ -94,8 +94,8 @@ public:
 
   // must have exact the size as allocated block in engine
   CUniversalSessionProperties() { 
-    ASSERT(sizeof(CSessionProperties)<=NET_MAXSESSIONPROPERTIES); 
-    ASSERT(sizeof(CUniversalSessionProperties)==NET_MAXSESSIONPROPERTIES); 
+    ASSERT(sizeof(CSessionProperties) <= NET_MAXSESSIONPROPERTIES); 
+    ASSERT(sizeof(CUniversalSessionProperties) == NET_MAXSESSIONPROPERTIES); 
   }
   operator CSessionProperties&(void) { return usp_sp; }
 };

@@ -74,7 +74,7 @@ functions:
 
   BOOL LoadOneFile(const CTFileName &fnm)
   {
-    if (fnm=="") { return FALSE; }
+    if (fnm == "") { return FALSE; }
     try 
     {
       // open the file
@@ -200,7 +200,7 @@ procedures:
   {
     m_tmFadeOutStart = _pTimer->CurrentTick();
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL)
+    if (pwsc != NULL)
     {
       autowait(m_tmFadeOutLen);
       CWorldSettingsController *pwsc = GetWSC(this);
@@ -239,14 +239,14 @@ procedures:
       on (EStart eStart): 
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc!=NULL)
+        if (pwsc != NULL)
         {
           m_tmFadeInStart = _pTimer->CurrentTick();
           ETextFX etfx;
           etfx.bStart=TRUE;
           etfx.penSender=this;
           pwsc->SendEvent(etfx);
-          if (m_tmAutoFadeOut!=-1)
+          if (m_tmAutoFadeOut != -1)
           {
             call WaitAndFadeOut();
           }

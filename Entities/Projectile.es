@@ -611,7 +611,7 @@ functions:
   void PostMoving(void) {
     CMovableModelEntity::PostMoving();
     // if flamer flame
-    if (m_prtType==PRT_FLAME || m_prtType==PRT_SHOOTER_FLAME) {
+    if (m_prtType == PRT_FLAME || m_prtType == PRT_SHOOTER_FLAME) {
       // if came to water
       CContentType &ctDn = GetWorld()->wo_actContentTypes[en_iDnContent];
       // stop existing
@@ -638,7 +638,7 @@ functions:
     CMovableModelEntity ::DumpSync_t(strm, iExtensiveSyncCheck);
     strm.FPrintF_t("projectile type: %d\n", m_prtType);
     strm.FPrintF_t("launcher:");
-    if (m_penLauncher!=NULL) {
+    if (m_penLauncher != NULL) {
       strm.FPrintF_t("id:%05d '%s'(%s) (%g, %g, %g)\n", 
         m_penLauncher->en_ulID,
         m_penLauncher->GetName(), m_penLauncher->GetClass()->ec_pdecDLLClass->dec_strName,
@@ -675,7 +675,7 @@ functions:
   {
     // if time now is inside invisibility time, don't render model
     CModelObject *pmo = GetModelObject();
-    if ( (pmo != NULL) && (_pTimer->GetLerpedCurrentTick() < (m_fStartTime+m_tmInvisibility) ) )
+    if ((pmo != NULL) && (_pTimer->GetLerpedCurrentTick() < (m_fStartTime+m_tmInvisibility) ) )
     {
       // make it invisible
       pmo->mo_colBlendColor = 0;
@@ -839,7 +839,7 @@ functions:
         fInFrontLiving=0.05f;
         fLeaderLiving = _pTimer->GetLerpedCurrentTick() - m_fStartTime;
         // not NULL or deleted
-        if (m_penParticles!=NULL && !(m_penParticles->GetFlags()&ENF_DELETED)) {
+        if (m_penParticles != NULL && !(m_penParticles->GetFlags()&ENF_DELETED)) {
           FLOAT3D vDirLeader=en_vCurrentTranslationAbsolute;
           vDirLeader.Normalize();
           // if last is not flame thrower pipe
@@ -928,7 +928,7 @@ functions:
         FLOAT fTimeElapsed, fParticlesTimeElapsed;
         fTimeElapsed = _pTimer->GetLerpedCurrentTick() - m_fStartTime;
         // not NULL or deleted
-        if (m_penParticles!=NULL && !(m_penParticles->GetFlags()&ENF_DELETED)) {
+        if (m_penParticles != NULL && !(m_penParticles->GetFlags()&ENF_DELETED)) {
           // draw particles with another projectile
           if (IsOfClass(m_penParticles, "Projectile")) {
             fParticlesTimeElapsed = _pTimer->GetLerpedCurrentTick() - ((CProjectile&)*m_penParticles).m_fStartTime;
@@ -1013,7 +1013,7 @@ void WalkerRocket(void) {
   m_soEffect.Set3DParameters(20.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);
   m_fFlyTime = 30.0f;
-  if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+  if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
     m_fDamageAmount = 40.0f;
     m_fRangeDamageAmount = 20.0f;
   } else {
@@ -1466,13 +1466,13 @@ void DragonmanProjectile(INDEX iType) {
   SetCollisionFlags(ECF_PROJECTILE_MAGIC);
   SetFlags(GetFlags() | ENF_SEETHROUGH);
   SetModel(MODEL_DRAGONMAN_FIRE);
-  if (iType==DRAGONMAN_STRONG) {
+  if (iType == DRAGONMAN_STRONG) {
     SetModelMainTexture(TEXTURE_DRAGONMAN_FIRE2);
   } else {
     SetModelMainTexture(TEXTURE_DRAGONMAN_FIRE1);
   }
   // start moving
-  if (iType==DRAGONMAN_STRONG) {
+  if (iType == DRAGONMAN_STRONG) {
     LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -40.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
     m_fDamageAmount = 14.0f;
   } else {
@@ -1518,20 +1518,20 @@ void ElementalRock(INDEX iSize, INDEX iType) {
       //  MODEL_ELEM_ICE_FLARE, TEXTURE_ELEM_ICE_FLARE, 0, 0, 0);
       break;
   }
-  if (iSize==ELEMENTAL_LARGE) {
+  if (iSize == ELEMENTAL_LARGE) {
     GetModelObject()->StretchModel(FLOAT3D(2.25f, 2.25f, 2.25f));
-  } else if (iSize==ELEMENTAL_BIG) {
+  } else if (iSize == ELEMENTAL_BIG) {
     GetModelObject()->StretchModel(FLOAT3D(0.75f, 0.75f, 0.75f));
   } else {
     GetModelObject()->StretchModel(FLOAT3D(0.4f, 0.4f, 0.4f));
   }
   ModelChangeNotify();
   // start moving
-  if (iSize==ELEMENTAL_LARGE) {
+  if (iSize == ELEMENTAL_LARGE) {
     LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -80.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
     m_fDamageAmount = 20.0f;
     SetHealth(40.0f);
-  } else if (iSize==ELEMENTAL_BIG) {
+  } else if (iSize == ELEMENTAL_BIG) {
     LaunchAsPropelledProjectile(FLOAT3D(0.0f, 0.0f, -50.0f), (CMovableEntity*)(CEntity*)m_penLauncher);
     m_fDamageAmount = 12.5f;
     SetHealth(20.0f);
@@ -2822,7 +2822,7 @@ void ShooterWoodenDart(void) {
   m_soEffect.Set3DParameters(20.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);*/
   m_fFlyTime = 10.0f;
-  if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+  if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
     m_fDamageAmount = 5.0f;
   } else {
     m_fDamageAmount = 10.0f;
@@ -2870,7 +2870,7 @@ void ShooterFireball(void) {
   m_soEffect.Set3DParameters(20.0f, 2.0f, 1.0f, 1.0f);
   PlaySound(m_soEffect, SOUND_FLYING, SOF_3D|SOF_LOOP);*/
   m_fFlyTime = 10.0f;
-  if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+  if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
     m_fDamageAmount = 7.5f;
   } else {
     m_fDamageAmount = 15.0f;
@@ -2973,9 +2973,9 @@ void ProjectileTouch(CEntityPointer penHit)
 
   // spawn flame
   const FLOAT fDamageMul = GetSeriousDamageMultiplier(m_penLauncher);
-  if ((m_prtType==PRT_FLAME||m_prtType==PRT_SHOOTER_FLAME) && m_fWaitAfterDeath>0.0f) {
+  if ((m_prtType == PRT_FLAME||m_prtType == PRT_SHOOTER_FLAME) && m_fWaitAfterDeath>0.0f) {
     // don't burn the same entity twice while passing through it
-    if (m_penLastDamaged==penHit) {
+    if (m_penLastDamaged == penHit) {
       return;
     } else {
       m_penLastDamaged=penHit;
@@ -2990,7 +2990,7 @@ void ProjectileTouch(CEntityPointer penHit)
     }
 
     EntityInfo *pei=(EntityInfo *)penHit->GetEntityInfo();
-    if (pei!=NULL && pei->Eeibt==EIBT_ICE)
+    if (pei != NULL && pei->Eeibt == EIBT_ICE)
     {
       bSpawnFlame=FALSE;
       bInflictDamage=FALSE;
@@ -3007,10 +3007,10 @@ void ProjectileTouch(CEntityPointer penHit)
     }
   
   // don't damage the same entity twice (wind blast)
-  } else if (m_prtType==PRT_AIRELEMENTAL_WIND) {
-    if (penHit==m_penLastDamaged) {
+  } else if (m_prtType == PRT_AIRELEMENTAL_WIND) {
+    if (penHit == m_penLastDamaged) {
       return;   
-    } else  {
+    } else {
       m_penLastDamaged=penHit;
     }
     InflictDirectDamage(penHit, m_penLauncher, DMT_PROJECTILE, m_fDamageAmount*fDamageMul,
@@ -3073,7 +3073,7 @@ ANGLE GetRotationSpeed(ANGLE aWantedAngle, ANGLE aRotateSpeed, FLOAT fWaitFreque
 {
   ANGLE aResult;
   // if desired position is smaller
-  if ( aWantedAngle<-aRotateSpeed*fWaitFrequency)
+  if (aWantedAngle<-aRotateSpeed*fWaitFrequency)
   {
     // start decreasing
     aResult = -aRotateSpeed;
@@ -3099,11 +3099,11 @@ void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
 {
  
   // cannonball immediately destroys demons fireball
-  if (m_prtType==PRT_DEMON_FIREBALL && dmtType==DMT_CANNONBALL)
+  if (m_prtType == PRT_DEMON_FIREBALL && dmtType == DMT_CANNONBALL)
   {
     fDamageAmmount*=10001.0f;
   }
-  if (m_prtType==PRT_FLAME && IsOfClass(penInflictor, "Moving Brush"))
+  if (m_prtType == PRT_FLAME && IsOfClass(penInflictor, "Moving Brush"))
   {
     Destroy();    
   }
@@ -3124,7 +3124,7 @@ procedures:
       // explode now
       ProjectileTouch(penObstacle);
       // if flame, continue existing
-      /*if (m_prtType==PRT_FLAME && ((CEntity &)*&penObstacle).en_RenderType==RT_MODEL) {
+      /*if (m_prtType == PRT_FLAME && ((CEntity &)*&penObstacle).en_RenderType == RT_MODEL) {
         resume;
       }*/
       return EEnd();
@@ -3135,16 +3135,16 @@ procedures:
       on (EPass epass) : {
         BOOL bHit;
         // ignore launcher within 1 second
-        bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+        bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
         // ignore another projectile of same type
         bHit &= !((!m_bCanHitHimself && IsOfClass(epass.penOther, "Projectile") &&
-                ((CProjectile*)&*epass.penOther)->m_prtType==m_prtType));
+                ((CProjectile*)&*epass.penOther)->m_prtType == m_prtType));
         // ignore twister
         bHit &= !IsOfClass(epass.penOther, "Twister");
         if (bHit) {
           ProjectileTouch(epass.penOther);
           // player flame passes through enemies
-          //if (m_prtType==PRT_FLAME && IsDerivedFromClass((CEntity *)&*(epass.penOther), "Enemy Base")) { resume; }
+          //if (m_prtType == PRT_FLAME && IsDerivedFromClass((CEntity *)&*(epass.penOther), "Enemy Base")) { resume; }
           stop;
         }
         resume;
@@ -3155,7 +3155,7 @@ procedures:
         // ignore another projectile of same type
         BOOL bHit;
         bHit = !((!m_bCanHitHimself && IsOfClass(etouch.penOther, "Projectile") &&
-                 ((CProjectile*)&*etouch.penOther)->m_prtType==m_prtType));     
+                 ((CProjectile*)&*etouch.penOther)->m_prtType == m_prtType));     
         
         if (bHit) {
           ProjectileTouch(etouch.penOther);
@@ -3192,13 +3192,13 @@ procedures:
     {
       FLOAT fWaitFrequency = 0.1f;
       // beast big projectile destroys soon after passing near the player
-      /*if (m_prtType==PRT_BEAST_BIG_PROJECTILE &&
+      /*if (m_prtType == PRT_BEAST_BIG_PROJECTILE &&
           DistanceTo(this, m_penTarget)<20.0f &&
           (m_fStartTime+m_fFlyTime-_pTimer->CurrentTick())>1.5f)
       { 
         m_fFlyTime = _pTimer->CurrentTick() - m_fStartTime + 1.5f;
       }*/
-      if (m_penTarget!=NULL) {
+      if (m_penTarget != NULL) {
         // calculate desired position and angle
         EntityInfo *pei= (EntityInfo*) (m_penTarget->GetEntityInfo());
         FLOAT3D vDesiredPosition;
@@ -3206,7 +3206,7 @@ procedures:
         FLOAT3D vDesiredDirection = (vDesiredPosition-GetPlacement().pl_PositionVector).Normalize();
         // for heading
         ANGLE aWantedHeading = GetRelativeHeading( vDesiredDirection);
-        /*if (m_prtType==PRT_BEAST_BIG_PROJECTILE && m_fStartTime+m_fFlyTime-_pTimer->CurrentTick()<1.5f)
+        /*if (m_prtType == PRT_BEAST_BIG_PROJECTILE && m_fStartTime+m_fFlyTime-_pTimer->CurrentTick()<1.5f)
         {
           m_aRotateSpeed = 10.0f;
         }*/
@@ -3255,10 +3255,10 @@ procedures:
         on (EPass epass) : {
           BOOL bHit;
           // ignore launcher within 1 second
-          bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+          bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
           // ignore another projectile of same type
           bHit &= !((!m_bCanHitHimself && IsOfClass(epass.penOther, "Projectile") &&
-                  ((CProjectile*)&*epass.penOther)->m_prtType==m_prtType));
+                  ((CProjectile*)&*epass.penOther)->m_prtType == m_prtType));
           // ignore twister
           bHit &= !IsOfClass(epass.penOther, "Twister");
           if (bHit) {
@@ -3298,13 +3298,13 @@ procedures:
     {
       FLOAT fWaitFrequency = 0.1f;
       // beast big projectile destroys soon after passing near the player
-      if (m_prtType==PRT_BEAST_BIG_PROJECTILE &&
+      if (m_prtType == PRT_BEAST_BIG_PROJECTILE &&
           DistanceTo(this, m_penTarget)<20.0f &&
           (m_fStartTime+m_fFlyTime-_pTimer->CurrentTick())>1.5f)
       { 
         m_fFlyTime = _pTimer->CurrentTick() - m_fStartTime + 1.5f;
       }
-      if (m_penTarget!=NULL) {
+      if (m_penTarget != NULL) {
         // calculate desired position and angle
         EntityInfo *pei= (EntityInfo*) (m_penTarget->GetEntityInfo());
         FLOAT3D vDesiredPosition;
@@ -3368,7 +3368,7 @@ procedures:
           // ignore itself and the demon
           BOOL bHit;
           bHit = !((!m_bCanHitHimself && IsOfClass(etouch.penOther, "Projectile") &&
-            ((CProjectile*)&*etouch.penOther)->m_prtType==m_prtType));     
+            ((CProjectile*)&*etouch.penOther)->m_prtType == m_prtType));     
           bHit &= !IsOfClass(etouch.penOther, "Demon");
           FLOAT3D vTrans = en_vCurrentTranslationAbsolute;
           bHit &= Abs(vTrans.Normalize() % FLOAT3D(etouch.plCollision)) > 0.35;
@@ -3383,15 +3383,15 @@ procedures:
         on (EPass epass) : {
           BOOL bHit;
           // ignore launcher within 1 second
-          bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+          bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
           // ignore another projectile of same type
           bHit &= !((!m_bCanHitHimself && IsOfClass(epass.penOther, "Projectile") &&
-                  ((CProjectile*)&*epass.penOther)->m_prtType==m_prtType));
+                  ((CProjectile*)&*epass.penOther)->m_prtType == m_prtType));
           // ignore twister
           bHit &= !IsOfClass(epass.penOther, "Twister");
           // if demons projectile, ignore all other projectiles
-          bHit &= !(m_prtType==PRT_DEMON_FIREBALL && IsOfClass(epass.penOther, "Projectile"));
-          bHit &= !(m_prtType==PRT_BEAST_BIG_PROJECTILE && IsOfClass(epass.penOther, "Projectile"));
+          bHit &= !(m_prtType == PRT_DEMON_FIREBALL && IsOfClass(epass.penOther, "Projectile"));
+          bHit &= !(m_prtType == PRT_BEAST_BIG_PROJECTILE && IsOfClass(epass.penOther, "Projectile"));
 
           if (bHit) {
             ProjectileTouch(epass.penOther);
@@ -3430,7 +3430,7 @@ procedures:
     while (_pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
     {
       FLOAT fWaitFrequency = 0.1f;
-      if (m_penTarget!=NULL) {
+      if (m_penTarget != NULL) {
         // calculate desired position and angle
         EntityInfo *pei= (EntityInfo*) (m_penTarget->GetEntityInfo());
         FLOAT3D vDesiredPosition;
@@ -3479,10 +3479,10 @@ procedures:
         on (EPass epass) : {
           BOOL bHit;
           // ignore launcher within 1 second
-          bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+          bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
           // ignore another projectile of same type
           bHit &= !((!m_bCanHitHimself && IsOfClass(epass.penOther, "Projectile") &&
-                  ((CProjectile*)&*epass.penOther)->m_prtType==m_prtType));
+                  ((CProjectile*)&*epass.penOther)->m_prtType == m_prtType));
           // ignore twister
           bHit &= !IsOfClass(epass.penOther, "Twister");
           if (bHit) {
@@ -3524,23 +3524,23 @@ procedures:
       on (EPass epass) : {
         BOOL bHit;
         // ignore launcher within 1 second
-        bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+        bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
         // ignore another projectile of same type
         bHit &= !((!m_bCanHitHimself && IsOfClass(epass.penOther, "Projectile") &&
-                ((CProjectile*)&*epass.penOther)->m_prtType==m_prtType));
+                ((CProjectile*)&*epass.penOther)->m_prtType == m_prtType));
         // ignore twister
         bHit &= !IsOfClass(epass.penOther, "Twister");
-        if (epass.penOther!=m_penLauncher) {
+        if (epass.penOther != m_penLauncher) {
    bHit = bHit ;
         }
         if (bHit) {
           ProjectileTouch(epass.penOther);
           // player flame passes through enemies
-          if (m_prtType==PRT_FLAME && IsDerivedFromClass((CEntity *)&*(epass.penOther), "Enemy Base")) {
+          if (m_prtType == PRT_FLAME && IsDerivedFromClass((CEntity *)&*(epass.penOther), "Enemy Base")) {
             resume;
           }
           // wind blast passes through movable entities
-          if (m_prtType==PRT_AIRELEMENTAL_WIND && IsDerivedFromClass((CEntity *)&*(epass.penOther), "MovableEntity")) {
+          if (m_prtType == PRT_AIRELEMENTAL_WIND && IsDerivedFromClass((CEntity *)&*(epass.penOther), "MovableEntity")) {
             resume;
           }
           
@@ -3554,7 +3554,7 @@ procedures:
         // ignore brushes
         BOOL bHit;
         bHit = !(etouch.penOther->GetRenderType() & RT_BRUSH);
-        if (m_prtType==PRT_FLAME && !bHit && !m_bLeftFlame)
+        if (m_prtType == PRT_FLAME && !bHit && !m_bLeftFlame)
         {
           SpawnFlame(m_penLauncher, etouch.penOther, GetPlacement().pl_PositionVector);
           m_bLeftFlame=TRUE;
@@ -3562,7 +3562,7 @@ procedures:
         if (!bHit) { BounceSound(); }
         // ignore another projectile of same type
         bHit &= !((!m_bCanHitHimself && IsOfClass(etouch.penOther, "Projectile") &&
-                  ((CProjectile*)&*etouch.penOther)->m_prtType==m_prtType));
+                  ((CProjectile*)&*etouch.penOther)->m_prtType == m_prtType));
         if (bHit) {
           ProjectileTouch(etouch.penOther);
           stop;
@@ -3604,10 +3604,10 @@ procedures:
       on (EPass epass) : {
         BOOL bHit;
         // ignore launcher within 1 second
-        bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+        bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
         // ignore another projectile of same type
         bHit &= !((!m_bCanHitHimself && IsOfClass(epass.penOther, "Projectile") &&
-                ((CProjectile*)&*epass.penOther)->m_prtType==m_prtType));
+                ((CProjectile*)&*epass.penOther)->m_prtType == m_prtType));
         // ignore twister
         bHit &= !IsOfClass(epass.penOther, "Twister");
         if (bHit) {
@@ -3633,7 +3633,7 @@ procedures:
         } else {
           // ignore another projectile of same type
           bHit = !((!m_bCanHitHimself && IsOfClass(etouch.penOther, "Projectile") &&
-                   ((CProjectile*)&*etouch.penOther)->m_prtType==m_prtType));     
+                   ((CProjectile*)&*etouch.penOther)->m_prtType == m_prtType));     
         
           if (bHit) {
             ProjectileTouch(etouch.penOther);
@@ -3660,7 +3660,7 @@ procedures:
   // --->>> MAIN
   Main(ELaunchProjectile eLaunch) {
     // remember the initial parameters
-    ASSERT(eLaunch.penLauncher!=NULL);
+    ASSERT(eLaunch.penLauncher != NULL);
     m_penLauncher = eLaunch.penLauncher;
     m_prtType = eLaunch.prtType;
     m_fSpeed = eLaunch.fSpeed;
@@ -3758,15 +3758,15 @@ procedures:
     // if guided projectile
     if (m_pmtMove == PMT_GUIDED) {
       autocall ProjectileGuidedFly() EEnd;
-    } else if (m_pmtMove==PMT_GUIDED_FAST) {
+    } else if (m_pmtMove == PMT_GUIDED_FAST) {
       autocall ProjectileGuidedFastFly() EEnd;
-    } else if (m_pmtMove==PMT_FLYING) {
+    } else if (m_pmtMove == PMT_FLYING) {
       autocall ProjectileFly() EEnd;
-    } else if (m_pmtMove==PMT_SLIDING) {
+    } else if (m_pmtMove == PMT_SLIDING) {
       autocall ProjectileSlide() EEnd;
-    } else if (m_pmtMove==PMT_FLYING_REBOUNDING) {
+    } else if (m_pmtMove == PMT_FLYING_REBOUNDING) {
       autocall ProjectileFlyRebounding() EEnd;
-    } else if (m_pmtMove==PMT_GUIDED_SLIDING) {
+    } else if (m_pmtMove == PMT_GUIDED_SLIDING) {
       autocall ProjectileGuidedSlide() EEnd;
     }
 

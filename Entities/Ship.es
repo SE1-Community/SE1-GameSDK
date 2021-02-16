@@ -82,7 +82,7 @@ functions:
   }
   const CTString &GetDescription(void) const {
     ((CTString&)m_strDescription).PrintF("-><none>");
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
     }
     return m_strDescription;
@@ -90,11 +90,11 @@ functions:
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
-    if ((slPropertyOffset==offsetof(CShip, m_iSailUpAnim)
-      ||slPropertyOffset==offsetof(CShip, m_iSailDownAnim)
-      ||slPropertyOffset==offsetof(CShip, m_iSailSailAnim)
-      ||slPropertyOffset==offsetof(CShip, m_iSailWaveingAnim))
-      &&m_penSail!=NULL) {
+    if ((slPropertyOffset == offsetof(CShip, m_iSailUpAnim)
+      ||slPropertyOffset == offsetof(CShip, m_iSailDownAnim)
+      ||slPropertyOffset == offsetof(CShip, m_iSailSailAnim)
+      ||slPropertyOffset == offsetof(CShip, m_iSailWaveingAnim))
+      &&m_penSail != NULL) {
       return m_penSail->GetModelObject()->GetData();
     } else {
       return CEntity::GetAnimData(slPropertyOffset);
@@ -105,7 +105,7 @@ functions:
   void SetMovingSpeeds(void)
   {
     // if the brush should not be moving, or there is no target
-    if (!m_bMoving || m_penTarget==NULL) {
+    if (!m_bMoving || m_penTarget == NULL) {
       // just rock
       SetDesiredRotation(ANGLE3D(0,0,GetRockingSpeed()));
       return;
@@ -155,7 +155,7 @@ functions:
       m_fRockingA = Lerp(m_fOriginalRockingA, m_fNextRockingA, fFactor);
     }
 
-    if (m_fRockingV==0) {
+    if (m_fRockingV == 0) {
       return 0;
     }
 
@@ -189,7 +189,7 @@ functions:
     }
 
     // if got to end
-    if (penNextTarget==NULL) {
+    if (penNextTarget == NULL) {
       // stop
       StopSailing();
       return;
@@ -197,15 +197,15 @@ functions:
 
     // get properties from marker
     FLOAT fSpeed = penTarget->m_fSpeed;
-    if (fSpeed>=0) {
+    if (fSpeed >= 0) {
       m_fSpeed = fSpeed;
     }
     FLOAT fRotation = penTarget->m_fRotation;
-    if (fRotation>=0) {
+    if (fRotation >= 0) {
       m_fRotation = fRotation;
     }
     FLOAT fAcceleration = penTarget->m_fAcceleration;
-    if (fAcceleration>=0) {
+    if (fAcceleration >= 0) {
       m_fAcceleration = fAcceleration;
     }
 
@@ -213,13 +213,13 @@ functions:
     m_fOriginalRockingA = m_fRockingA;
 
     FLOAT fRockingV = penTarget->m_fRockingV;
-    if (fRockingV>=0) {
+    if (fRockingV >= 0) {
       m_fNextRockingV = fRockingV;
     } else {
       m_fNextRockingV = m_fRockingV;
     }
     FLOAT fRockingA = penTarget->m_fRockingA;
-    if (fRockingA>=0) {
+    if (fRockingA >= 0) {
       m_fNextRockingA = fRockingA;
     } else {
       m_fNextRockingA = m_fRockingA;
@@ -312,12 +312,12 @@ procedures:
     ForceFullStop();
 
     // assure valid target
-    if (m_penTarget!=NULL && !IsOfClass(m_penTarget, "Ship Marker")) {
+    if (m_penTarget != NULL && !IsOfClass(m_penTarget, "Ship Marker")) {
       WarningMessage("Target '%s' is not of ShipMarker class!", m_penTarget->GetName());
       m_penTarget = NULL;
     }
     // assure valid sail
-    if (m_penSail!=NULL && m_penSail->GetRenderType()!=RT_MODEL) {
+    if (m_penSail != NULL && m_penSail->GetRenderType() != RT_MODEL) {
       WarningMessage("Sail '%s' is not a model!", m_penSail->GetName());
       m_penSail = NULL;
     }
@@ -326,7 +326,7 @@ procedures:
     autowait(0.1f);
 
     // if sail is not valid
-    if (m_penSail==NULL) {
+    if (m_penSail == NULL) {
       // don't continue
       WarningMessage("Ship will not work without a valid sail!");
       return;

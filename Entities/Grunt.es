@@ -94,9 +94,9 @@ functions:
 
   /* Entity info */
   void *GetEntityInfo(void) {
-    if (m_gtType==GT_SOLDIER) {
+    if (m_gtType == GT_SOLDIER) {
       return &eiGruntSoldier;
-    } else if (m_gtType==GT_COMMANDER) {
+    } else if (m_gtType == GT_COMMANDER) {
       return &eiGruntSoldier;
     } else {
       ASSERT("Unknown grunt type!");
@@ -117,10 +117,10 @@ functions:
   void Precache(void) {
     CEnemyBase::Precache();
     
-   if (m_gtType==GT_SOLDIER) {
+   if (m_gtType == GT_SOLDIER) {
       PrecacheClass(CLASS_PROJECTILE, PRT_GRUNT_PROJECTILE_SOL);
     }
-    if (m_gtType==GT_COMMANDER) {
+    if (m_gtType == GT_COMMANDER) {
       PrecacheClass(CLASS_PROJECTILE, PRT_GRUNT_PROJECTILE_COM);
     }
 
@@ -164,11 +164,11 @@ functions:
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
     vStretch=FLOAT3D(1,1,2);
-    if (GetModelObject()->GetAnim()==GRUNT_ANIM_DEATHBACKWARD)
+    if (GetModelObject()->GetAnim() == GRUNT_ANIM_DEATHBACKWARD)
     {
       return 0.5f;
     }
-    else if (GetModelObject()->GetAnim()==GRUNT_ANIM_DEATHFORWARD)
+    else if (GetModelObject()->GetAnim() == GRUNT_ANIM_DEATHFORWARD)
     {
       return 1.0f;
     }

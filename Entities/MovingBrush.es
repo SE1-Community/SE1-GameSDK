@@ -185,7 +185,7 @@ functions:
     }
 
     // send event on damage
-    if (m_tdeSendEventOnDamage!=TDE_TOUCHONLY && CanReactOnEntity(penInflictor)) {
+    if (m_tdeSendEventOnDamage != TDE_TOUCHONLY && CanReactOnEntity(penInflictor)) {
       SendToTarget(m_penTouchEvent, m_eetTouchEvent, penInflictor);
     }
 
@@ -250,7 +250,7 @@ functions:
   }
   const CTString &GetDescription(void) const {
     ((CTString&)m_strDescription).PrintF("-><none>");
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
     }
     return m_strDescription;
@@ -260,7 +260,7 @@ functions:
   {
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    if (iMirror==0) {
+    if (iMirror == 0) {
       return strDummyName;
     }
 
@@ -292,10 +292,10 @@ functions:
   /* Get mirror, return FALSE for none. */
   BOOL GetMirror(INDEX iMirror, class CMirrorParameters &mpMirror)
   {
-    if (iMirror==0) {
+    if (iMirror == 0) {
       return FALSE;
     }
-    if (iMirror>=1 && iMirror<=8) {
+    if (iMirror >= 1 && iMirror <= 8) {
       mpMirror.mp_ulFlags = 0;
       return TRUE;
     }
@@ -374,8 +374,8 @@ functions:
       }
 
       // stop moving ?
-      if (vSpeed(1)==0.0f && vSpeed(2)==0.0f && vSpeed(3)==0.0f
-       && ((m_tmBankingRotation!=0 || m_bNoRotation)||(aSpeed(1)==0.0f && aSpeed(2)==0.0f && aSpeed(3)==0.0f)) ) 
+      if (vSpeed(1) == 0.0f && vSpeed(2) == 0.0f && vSpeed(3) == 0.0f
+       && ((m_tmBankingRotation != 0 || m_bNoRotation)||(aSpeed(1) == 0.0f && aSpeed(2) == 0.0f && aSpeed(3) == 0.0f)) ) 
       {
         // stop brush
         ForceFullStop();
@@ -403,7 +403,7 @@ functions:
 
   // load marker parameters
   BOOL LoadMarkerParameters() {
-    if (m_penTarget==NULL) {
+    if (m_penTarget == NULL) {
       return FALSE;
     }
 
@@ -413,7 +413,7 @@ functions:
     }
 
     CMovingBrushMarker &mbm = (CMovingBrushMarker&) *m_penTarget;
-    if (mbm.m_penTarget==NULL) {
+    if (mbm.m_penTarget == NULL) {
       return FALSE;
     }
 
@@ -447,19 +447,19 @@ functions:
     SendToTarget(mbm.m_penMarkerEvent, mbm.m_eetMarkerEvent);
 
     // sound entity
-    if (mbm.m_penSoundStart!=NULL) {
+    if (mbm.m_penSoundStart != NULL) {
       m_penSoundStart = mbm.m_penSoundStart;
     }
-    if (mbm.m_penSoundStop!=NULL) {
+    if (mbm.m_penSoundStop != NULL) {
       m_penSoundStop = mbm.m_penSoundStop;
     }
-    if (mbm.m_penSoundFollow!=NULL) {
+    if (mbm.m_penSoundFollow != NULL) {
       m_penSoundFollow = mbm.m_penSoundFollow;
     }
 
     m_bNoRotation = mbm.m_bNoRotation;
 
-    if (mbm.m_tmBankingRotation>=0.0f) {
+    if (mbm.m_tmBankingRotation >= 0.0f) {
       m_tmBankingRotation = mbm.m_tmBankingRotation;
       if (!mbm.m_bBankingClockwise) {
         m_tmBankingRotation *= -1;
@@ -473,7 +473,7 @@ functions:
   // test if this door reacts on this entity
   BOOL CanReactOnEntity(CEntity *pen)
   {
-    if (pen==NULL) {
+    if (pen == NULL) {
       return FALSE;
     }
     // never react on non-live or dead entities
@@ -491,7 +491,7 @@ functions:
   // play start sound
   void PlayStartSound(void) {
     // if sound entity exists
-    if (m_penSoundStart!=NULL) {
+    if (m_penSoundStart != NULL) {
       CSoundHolder &sh = (CSoundHolder&)*m_penSoundStart;
       m_soStart.Set3DParameters(FLOAT(sh.m_rFallOffRange), FLOAT(sh.m_rHotSpotRange), sh.m_fVolume, 1.0f);
       PlaySound(m_soStart, sh.m_fnSound, sh.m_iPlayType);
@@ -501,7 +501,7 @@ functions:
   // play stop sound
   void PlayStopSound(void) {
     // if sound entity exists
-    if (m_penSoundStop!=NULL) {
+    if (m_penSoundStop != NULL) {
       CSoundHolder &sh = (CSoundHolder&)*m_penSoundStop;
       m_soStop.Set3DParameters(FLOAT(sh.m_rFallOffRange), FLOAT(sh.m_rHotSpotRange), sh.m_fVolume, 1.0f);
       PlaySound(m_soStop, sh.m_fnSound, sh.m_iPlayType);
@@ -511,7 +511,7 @@ functions:
   // play follow sound
   void PlayFollowSound(void) {
     // if sound entity exists
-    if (m_penSoundFollow!=NULL) {
+    if (m_penSoundFollow != NULL) {
       CSoundHolder &sh = (CSoundHolder&)*m_penSoundFollow;
       m_soFollow.Set3DParameters(FLOAT(sh.m_rFallOffRange), FLOAT(sh.m_rHotSpotRange), sh.m_fVolume, 1.0f);
       PlaySound(m_soFollow, sh.m_fnSound, sh.m_iPlayType);
@@ -547,7 +547,7 @@ functions:
 
   void MaybeActivateRotation(void)
   {
-    if (m_tmBankingRotation!=0) {
+    if (m_tmBankingRotation != 0) {
       m_bRotating = TRUE;
       SetDesiredRotation(ANGLE3D(0.0f,0.0f,360.0f/m_tmBankingRotation));  
     }
@@ -632,7 +632,7 @@ procedures:
       on (EStop) : {
         //SetCollisionFlags(ECF_IMMATERIAL);
         SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
-        if (m_tmBankingRotation==0) {
+        if (m_tmBankingRotation == 0) {
           SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
         }
         m_bForceStop = TRUE;
@@ -722,7 +722,7 @@ procedures:
   // move brush
   MoveBrush() 
   {
-    if (m_penTarget==NULL) {
+    if (m_penTarget == NULL) {
       MovingOff();
       return;
     }
@@ -732,7 +732,7 @@ procedures:
     // move through markers
     do {
       
-      if (m_bForceStop==FALSE)
+      if (m_bForceStop == FALSE)
       {
         // new moving target
         m_penTarget = m_penTarget->GetTarget();
@@ -741,7 +741,7 @@ procedures:
         m_bForceStop=FALSE;
       }
 
-      if (m_penTarget==NULL) {
+      if (m_penTarget == NULL) {
         MovingOff();
         return EVoid();
       }
@@ -757,7 +757,7 @@ procedures:
           on (EStop) : {
             //SetCollisionFlags(ECF_IMMATERIAL);
             SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
-            if (m_tmBankingRotation==0) {
+            if (m_tmBankingRotation == 0) {
               SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
             }
             m_bForceStop = TRUE;
@@ -801,13 +801,13 @@ procedures:
     INDEX ctMarkers=0;
     // new moving target
     CMovingBrushMarker *pmbm = (CMovingBrushMarker *) &*m_penTarget;
-    while (pmbm!=NULL && IsOfClass(pmbm->m_penTarget, "Moving Brush Marker") && !pmbm->m_bStopMoving && ctMarkers<50)
+    while (pmbm != NULL && IsOfClass(pmbm->m_penTarget, "Moving Brush Marker") && !pmbm->m_bStopMoving && ctMarkers<50)
     {      
       pmbm = (CMovingBrushMarker *) &*pmbm->m_penTarget;
       ctMarkers++;
     }
 
-    if (pmbm!=NULL && IsOfClass(pmbm, "Moving Brush Marker") && ctMarkers<50)
+    if (pmbm != NULL && IsOfClass(pmbm, "Moving Brush Marker") && ctMarkers<50)
     {
       SetPlacement(pmbm->GetPlacement());
       en_plLastPlacement=pmbm->GetPlacement();
@@ -853,7 +853,7 @@ procedures:
     // load marker parameters
     m_bValidMarker = LoadMarkerParameters();
 
-    /*if (m_tmBankingRotation!=0) {
+    /*if (m_tmBankingRotation != 0) {
       jump Rotating();
     }*/
 
@@ -885,7 +885,7 @@ procedures:
                      eTouch.penOther->GetPlacement().pl_PositionVector, eTouch.plCollision);
         }
         // send event on touch
-        if (m_tdeSendEventOnDamage!=TDE_DAMAGEONLY && CanReactOnEntity(eTouch.penOther)) {
+        if (m_tdeSendEventOnDamage != TDE_DAMAGEONLY && CanReactOnEntity(eTouch.penOther)) {
           SendToTarget(m_penTouchEvent, m_eetTouchEvent);
         }
         // if not already moving

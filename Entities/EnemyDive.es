@@ -104,15 +104,15 @@ functions:
   void PostMoving(void) {
     CEnemyBase::PostMoving();
     // change to liquid
-    if (m_EedtType!=EDT_GROUND_ONLY && !m_bInLiquid && en_fImmersionFactor>0.9f &&
+    if (m_EedtType != EDT_GROUND_ONLY && !m_bInLiquid && en_fImmersionFactor>0.9f &&
         (GetWorld()->wo_actContentTypes[en_iDnContent].ct_ulFlags&CTF_SWIMABLE)) {
       m_bInLiquid = TRUE;
       ChangeCollisionToLiquid();
       SendEvent(ERestartAttack());
     }
     // change to ground
-    if (m_EedtType!=EDT_DIVE_ONLY && m_bInLiquid && (en_fImmersionFactor<0.5f || en_fImmersionFactor==1.0f) &&
-        en_penReference!=NULL && !(GetWorld()->wo_actContentTypes[en_iUpContent].ct_ulFlags&CTF_SWIMABLE)) {
+    if (m_EedtType != EDT_DIVE_ONLY && m_bInLiquid && (en_fImmersionFactor<0.5f || en_fImmersionFactor == 1.0f) &&
+        en_penReference != NULL && !(GetWorld()->wo_actContentTypes[en_iUpContent].ct_ulFlags&CTF_SWIMABLE)) {
       m_bInLiquid = FALSE;
       ChangeCollisionToGround();
       SendEvent(ERestartAttack());

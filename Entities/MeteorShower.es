@@ -73,7 +73,7 @@ functions:
   {
     INDEX iShoot = IRnd()%100;
   
-    if (iShoot<=m_iPerTickLaunchChance)
+    if (iShoot <= m_iPerTickLaunchChance)
     {
       CPlacement3D plFall;
     

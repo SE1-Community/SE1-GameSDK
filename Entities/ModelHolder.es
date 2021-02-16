@@ -56,11 +56,11 @@ functions:
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
-    if (slPropertyOffset==offsetof(CModelHolder, m_iModelAnimation)) {
+    if (slPropertyOffset == offsetof(CModelHolder, m_iModelAnimation)) {
       return GetModelObject()->GetData();
-    } else if (slPropertyOffset==offsetof(CModelHolder, m_iTextureAnimation)) {
+    } else if (slPropertyOffset == offsetof(CModelHolder, m_iTextureAnimation)) {
       return GetModelObject()->mo_toTexture.GetData();
-    } else if (slPropertyOffset==offsetof(CModelHolder, m_iLightAnimation)) {
+    } else if (slPropertyOffset == offsetof(CModelHolder, m_iLightAnimation)) {
       return m_aoLightAnimation.GetData();
     } else {
       return CEntity::GetAnimData(slPropertyOffset);
@@ -72,7 +72,7 @@ functions:
   {
     if (m_bCustomShading) {
       // if there is color animation
-      if (m_aoLightAnimation.GetData()!=NULL) {
+      if (m_aoLightAnimation.GetData() != NULL) {
         // get lerping info
         SLONG colFrame0, colFrame1; FLOAT fRatio;
         m_aoLightAnimation.GetFrame( colFrame0, colFrame1, fRatio);
@@ -119,7 +119,7 @@ functions:
     if (m_fStretchAll>100.0f) { m_fStretchAll = 100.0f; }
 
     // if initialized for the first time
-    if (m_fnOldModel=="") {
+    if (m_fnOldModel == "") {
       // just remember the model filename
       m_fnOldModel = m_fnModel;
     // if re-initialized
@@ -173,7 +173,7 @@ functions:
       WarningMessage(TRANS("Cannot load '%s': %s"), (CTString&)m_fnmLightAnimation, strError);
       m_fnmLightAnimation = "";
     }
-    if (m_aoLightAnimation.GetData()!=NULL) {
+    if (m_aoLightAnimation.GetData() != NULL) {
       m_aoLightAnimation.PlayAnim(m_iLightAnimation, AOF_LOOPING);
     }
 

@@ -65,7 +65,7 @@ procedures:
       wait()
       {
         on (ETrigger) : {
-          if (m_penTacticsHolder!=NULL) {
+          if (m_penTacticsHolder != NULL) {
             CTacticsHolder *penTactics = &(CTacticsHolder &)*m_penTacticsHolder;
             penTactics->m_tctType = m_tctType;
             penTactics->m_fParam1 = m_fParam1;

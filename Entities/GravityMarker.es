@@ -138,7 +138,7 @@ functions:
   /* Handle an event, return false if the event is not handled. */
   BOOL HandleEvent(const CEntityEvent &ee)
   {
-    if (ee.ee_slEvent==EVENTCODE_ETrigger)
+    if (ee.ee_slEvent == EVENTCODE_ETrigger)
     {
       EChangeGravity eChangeGravity;
       eChangeGravity.penNewGravity = this;
@@ -160,7 +160,7 @@ procedures:
     SetModelMainTexture(TEXTURE_MARKER);
 
     // set name
-    if (m_strName=="Marker") {
+    if (m_strName == "Marker") {
       m_strName = "Gravity Marker";
     }
     

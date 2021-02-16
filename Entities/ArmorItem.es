@@ -124,7 +124,7 @@ functions:
   // render particles
   void RenderParticles(void) {
     // no particles when not existing or in DM modes
-    if (GetRenderType()!=CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
+    if (GetRenderType() != CEntity::RT_MODEL || GetSP()->sp_gmGameMode>CSessionProperties::GM_COOPERATIVE
       || !ShowItemParticles())
     {
       return;
@@ -232,14 +232,14 @@ functions:
 
   void AdjustDifficulty(void)
   {
-    if (!GetSP()->sp_bAllowArmor && m_penTarget==NULL) {
+    if (!GetSP()->sp_bAllowArmor && m_penTarget == NULL) {
       Destroy();
     }
   }
 
 procedures:
   ItemCollected(EPass epass) : CItem::ItemCollected {
-    ASSERT(epass.penOther!=NULL);
+    ASSERT(epass.penOther != NULL);
 
     // if armor stays
     if (GetSP()->sp_bHealthArmorStays && !(m_bPickupOnce||m_bRespawn)) {

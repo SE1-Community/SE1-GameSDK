@@ -125,7 +125,7 @@ functions:
 
   void AdjustMipFactor(FLOAT &fMipFactor)
   {
-    if (m_eetType==ET_DISAPPEAR_MODEL || m_eetType==ET_DISAPPEAR_MODEL_NOW && m_penModel!=NULL)
+    if (m_eetType == ET_DISAPPEAR_MODEL || m_eetType == ET_DISAPPEAR_MODEL_NOW && m_penModel != NULL)
     {
       CModelObject *pmo = m_penModel->GetModelObject();
       TIME tmDelta = _pTimer->GetLerpedCurrentTick()-m_tmStarted;
@@ -134,7 +134,7 @@ functions:
       {
         fLifeRatio = 1.0f;
       }
-      else if (tmDelta>=m_tmLifeTime)
+      else if (tmDelta >= m_tmLifeTime)
       {
         fLifeRatio = 0.0f;
       }
@@ -146,7 +146,7 @@ functions:
       COLOR col = C_WHITE|ubAlpha;
       pmo->mo_colBlendColor = col;
     }
-    if (m_eetType==ET_APPEAR_MODEL || m_eetType==ET_APPEAR_MODEL_NOW && m_penModel!=NULL)
+    if (m_eetType == ET_APPEAR_MODEL || m_eetType == ET_APPEAR_MODEL_NOW && m_penModel != NULL)
     {
       CModelObject *pmo = m_penModel->GetModelObject();
       TIME tmDelta = _pTimer->GetLerpedCurrentTick()-m_tmStarted;
@@ -155,7 +155,7 @@ functions:
       {
         fLifeRatio = 0.0f;
       }
-      else if (tmDelta>=m_tmLifeTime)
+      else if (tmDelta >= m_tmLifeTime)
       {
         fLifeRatio = 1.0f;
       }
@@ -167,7 +167,7 @@ functions:
       COLOR col = C_WHITE|ubAlpha;
       pmo->mo_colBlendColor = col;
     }
-    if (m_eetType==ET_MORPH_MODELS && m_penModel!=NULL && m_penModel2!=NULL)
+    if (m_eetType == ET_MORPH_MODELS && m_penModel != NULL && m_penModel2 != NULL)
     {
       CModelObject *pmo1 = m_penModel->GetModelObject();
       CModelObject *pmo2 = m_penModel2->GetModelObject();
@@ -177,7 +177,7 @@ functions:
       {
         fLifeRatio = 0.0f;
       }
-      else if (tmDelta>=m_tmLifeTime)
+      else if (tmDelta >= m_tmLifeTime)
       {
         fLifeRatio = 1.0f;
       }
@@ -196,7 +196,7 @@ functions:
 
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
   {
-    if (m_eetType==ET_MOVING_RING)
+    if (m_eetType == ET_MOVING_RING)
     {
       FLOAT fLifeRatio = CalculateLifeRatio(0.2f, 0.1f);
       FLOAT fT = _pTimer->CurrentTick()-m_tmStarted;
@@ -245,14 +245,14 @@ functions:
           iLower = iVtx;
           fMinY = v(2);
         }
-        if (v(2)<=fY && v(2)>fMinY2 && v(1)<0)
+        if (v(2) <= fY && v(2)>fMinY2 && v(1)<0)
         {
           iUpper = iVtx;
           fMinY2 = v(2);
         }
       }
       // if we found valid vertex
-      if (iLower!=-1 && iUpper!=-1)
+      if (iLower != -1 && iUpper != -1)
       {
         FLOAT3D vRelHi = (avModelFXVertices[iUpper]-vOrigin)*!m;
         FLOAT3D vRelLow = (avModelFXVertices[iLower]-vOrigin)*!m;
@@ -328,7 +328,7 @@ functions:
   // Setup light source
   void SetupLightSource(void)
   {
-    if (m_iLightAnimation>=0)
+    if (m_iLightAnimation >= 0)
     { // set light animation if available
       try {
         m_aoLightAnimation.SetData_t(CTFILENAME("Animations\\Effector.ani"));
@@ -336,7 +336,7 @@ functions:
         WarningMessage(TRANS("Cannot load Animations\\Effector.ani: %s"), strError);
       }
       // play light animation
-      if (m_aoLightAnimation.GetData()!=NULL) {
+      if (m_aoLightAnimation.GetData() != NULL) {
         m_aoLightAnimation.PlayAnim(m_iLightAnimation, 0);
       }
     }
@@ -368,7 +368,7 @@ functions:
 
     // setup light animation
     lsNew.ls_paoLightAnimation = NULL;
-    if (m_aoLightAnimation.GetData()!=NULL) {
+    if (m_aoLightAnimation.GetData() != NULL) {
       lsNew.ls_paoLightAnimation = &m_aoLightAnimation;
     }
 
@@ -408,7 +408,7 @@ procedures:
 
     autowait(0.1f);
 
-    if (m_eetType==ET_MOVING_RING)
+    if (m_eetType == ET_MOVING_RING)
     {
       SetModel(MODEL_POWER_RING);
       SetModelMainTexture(TEXTURE_POWER_RING);
@@ -425,22 +425,22 @@ procedures:
       ModelChangeNotify();
     }
     // spetial initializations
-    if (m_eetType==ET_SIZING_RING_FLARE)
+    if (m_eetType == ET_SIZING_RING_FLARE)
     {
       m_bLightSource = TRUE;
       m_iLightAnimation = 0;
     }
-    if (m_eetType==ET_SIZING_BIG_BLUE_FLARE)
+    if (m_eetType == ET_SIZING_BIG_BLUE_FLARE)
     {
       m_bLightSource = TRUE;
       m_iLightAnimation = 1;
     }
-    if (m_eetType==ET_MORPH_MODELS || m_eetType==ET_DISAPPEAR_MODEL || m_eetType==ET_APPEAR_MODEL)
+    if (m_eetType == ET_MORPH_MODELS || m_eetType == ET_DISAPPEAR_MODEL || m_eetType == ET_APPEAR_MODEL)
     {
       m_bWaitTrigger = TRUE;
       m_tmStarted = -1;
     }
-    if (m_eetType==ET_DISAPPEAR_MODEL_NOW || m_eetType==ET_APPEAR_MODEL_NOW)
+    if (m_eetType == ET_DISAPPEAR_MODEL_NOW || m_eetType == ET_APPEAR_MODEL_NOW)
     {
       m_bWaitTrigger = FALSE;
       m_tmStarted = _pTimer->CurrentTick();
@@ -456,7 +456,7 @@ procedures:
         on( EBegin):{ resume;}
         on( ETrigger):
         {
-          if (m_eetType==ET_MORPH_MODELS || m_eetType==ET_DISAPPEAR_MODEL || m_eetType==ET_APPEAR_MODEL)
+          if (m_eetType == ET_MORPH_MODELS || m_eetType == ET_DISAPPEAR_MODEL || m_eetType == ET_APPEAR_MODEL)
           {
             m_tmStarted = _pTimer->CurrentTick();
             m_bWaitTrigger = FALSE;
@@ -468,7 +468,7 @@ procedures:
         on( ETimer):{ stop;}
       }
       // check if moving ring reached target position
-      if (m_eetType==ET_MOVING_RING)
+      if (m_eetType == ET_MOVING_RING)
       {
         if (GetPlacement().pl_PositionVector(2) < m_vFXDestination(2))
         {

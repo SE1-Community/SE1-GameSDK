@@ -135,7 +135,7 @@ void CControls::CalculateInfluencesForAllAxis(void)
     fBaseDelta = 1.0f;
     // apply invert factor
     if (ctrl_aaAxisActions[ iAxisAction].aa_bInvert || 
-      ( (iAxisAction==AXIS_TURN_UD||iAxisAction==AXIS_LOOK_UD) && ctrl_bInvertLook) ) {
+      ( (iAxisAction == AXIS_TURN_UD||iAxisAction == AXIS_LOOK_UD) && ctrl_bInvertLook) ) {
       // negative factor
       fBaseDelta = -fBaseDelta;
     }
@@ -184,14 +184,14 @@ void CControls::Load_t( CTFileName fnFile)
   
   // open script file for reading
   CTFileStream strmFile;
-  strmFile.Open_t( fnFile);				
+  strmFile.Open_t( fnFile);        
 
   // if file can be opened for reading remove old button actions
   {FORDELETELIST(CButtonAction, ba_lnNode, ctrl_lhButtonActions, itButtonAction) {
     delete &*itButtonAction;
   }}
 
-	do
+  do
   {
     achrLine[0] = 0;
     achrID[0] = 0;
@@ -248,7 +248,7 @@ void CControls::Load_t( CTFileName fnFile)
         }
       }}
       // if valid axis found
-      if (iActionAxisNo!=-1 && iCtrlAxisNo!=-1) {
+      if (iActionAxisNo != -1 && iCtrlAxisNo != -1) {
         // set it
         ctrl_aaAxisActions[ iActionAxisNo].aa_iAxisAction = iCtrlAxisNo;
         ctrl_aaAxisActions[ iActionAxisNo].aa_fSensitivity = fSensitivity;
@@ -270,7 +270,7 @@ void CControls::Load_t( CTFileName fnFile)
       sscanf( achrLine, "GlobalSensitivity %g", &ctrl_fSensitivity);
     }
   }
-	while (!strmFile.AtEOF());
+  while (!strmFile.AtEOF());
 
 /*
   // search for talk button
@@ -278,13 +278,13 @@ void CControls::Load_t( CTFileName fnFile)
   BOOL bHasT = FALSE;
   FOREACHINLIST( CButtonAction, ba_lnNode, ctrl_lhButtonActions, itba) {
     CButtonAction &ba = *itba;
-    if (ba.ba_strName=="Talk") {
+    if (ba.ba_strName == "Talk") {
       bHasTalk = TRUE;
     }
-    if (ba.ba_iFirstKey==KID_T) {
+    if (ba.ba_iFirstKey == KID_T) {
       bHasT = TRUE;
     }
-    if (ba.ba_iSecondKey==KID_T) {
+    if (ba.ba_iSecondKey == KID_T) {
       bHasT = TRUE;
     }
   }
@@ -408,7 +408,7 @@ BOOL CControls::UsesJoystick(void)
   // for each button
   FOREACHINLIST( CButtonAction, ba_lnNode, ctrl_lhButtonActions, itba) {
     CButtonAction &ba = *itba;
-    if (ba.ba_iFirstKey>=FIRST_JOYBUTTON || ba.ba_iSecondKey>=FIRST_JOYBUTTON) {
+    if (ba.ba_iFirstKey >= FIRST_JOYBUTTON || ba.ba_iSecondKey >= FIRST_JOYBUTTON) {
       return TRUE;
     }
   }
@@ -416,7 +416,7 @@ BOOL CControls::UsesJoystick(void)
     // write axis actions
   for (INDEX iAxis=0; iAxis<AXIS_ACTIONS_CT; iAxis++)
   {
-    if (ctrl_aaAxisActions[iAxis].aa_iAxisAction>=FIRST_JOYAXIS) {
+    if (ctrl_aaAxisActions[iAxis].aa_iAxisAction >= FIRST_JOYAXIS) {
       return TRUE;
     }
   }

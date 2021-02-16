@@ -55,13 +55,13 @@ procedures:
     
     // check some parameters
     if ((!(esi.penParent->GetPhysicsFlags()&EPF_MOVABLE)) ||
-      (esi.penParent==NULL) || (esi.penParent==NULL))
+      (esi.penParent == NULL) || (esi.penParent == NULL))
     {
       Destroy();
       return;
     }
-    ASSERT(esi.penParent!=NULL);
-    ASSERT(esi.penTwister!=NULL);
+    ASSERT(esi.penParent != NULL);
+    ASSERT(esi.penTwister != NULL);
     
     // remember the initial parameters
     CTwister &penTwister = (CTwister &)*esi.penTwister;
@@ -71,7 +71,7 @@ procedures:
     m_bImpulse = esi.bImpulse;
     if (m_bImpulse) {
       m_tmWaitAfterImpulse = esi.tmSpinTime - esi.tmImpulseDuration;
-      if (m_tmWaitAfterImpulse<=0.0f) { m_tmWaitAfterImpulse = 0.01f; }
+      if (m_tmWaitAfterImpulse <= 0.0f) { m_tmWaitAfterImpulse = 0.01f; }
     }
     
     m_vSpinSpeed = ((CMovableEntity&)*m_penParent).en_vCurrentTranslationAbsolute;
@@ -108,8 +108,8 @@ procedures:
         return;      
       }
       
-      if (((CMovableEntity&)*m_penParent).en_vCurrentTranslationAbsolute!=m_vLastSpeed ||
-          ((CMovableEntity&)*m_penParent).en_vCurrentTranslationAbsolute==FLOAT3D(0.0f, 0.0f, 0.0f)) {
+      if (((CMovableEntity&)*m_penParent).en_vCurrentTranslationAbsolute != m_vLastSpeed ||
+          ((CMovableEntity&)*m_penParent).en_vCurrentTranslationAbsolute == FLOAT3D(0.0f, 0.0f, 0.0f)) {
         // give absolute speed
         ((CMovableEntity&)*m_penParent).en_vCurrentTranslationAbsolute += m_vSpeed;
         m_vLastSpeed = ((CMovableEntity&)*m_penParent).en_vCurrentTranslationAbsolute;

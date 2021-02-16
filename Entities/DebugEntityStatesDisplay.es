@@ -59,7 +59,7 @@ procedures:
       wait(0.1f)
       {
         on (EBegin) : {
-          if (m_penTarget!=NULL) {
+          if (m_penTarget != NULL) {
             HUD_SetEntityForStackDisplay((CRationalEntity *)&*m_penTarget);
           } else {
             HUD_SetEntityForStackDisplay(NULL);

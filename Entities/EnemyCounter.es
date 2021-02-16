@@ -38,7 +38,7 @@ components:
 functions:
   class CMusicHolder *GetMusicHolder()
   {
-    if (m_penMainMusicHolder==NULL) {
+    if (m_penMainMusicHolder == NULL) {
       m_penMainMusicHolder = _pNetwork->GetEntityWithName("MusicHolder", 0);
     }
     return (CMusicHolder *)&*m_penMainMusicHolder;
@@ -46,7 +46,7 @@ functions:
   void StartCounting(void)
   {
     CMusicHolder *pmh = GetMusicHolder();
-    if (pmh==NULL) {
+    if (pmh == NULL) {
       return;
     }
     pmh->m_penCounter = this;
@@ -61,7 +61,7 @@ functions:
   void StopCounting(void)
   {
     CMusicHolder *pmh = GetMusicHolder();
-    if (pmh==NULL) {
+    if (pmh == NULL) {
       return;
     }
     m_iCount = 0;
@@ -101,13 +101,13 @@ procedures:
       // when triggered 
       on (ETrigger): {
         // if not started yet
-        if (m_iCount==-1) {
+        if (m_iCount == -1) {
           // start
           StartCounting();
         }
         CountOne();
         // if finished
-        if (m_iCount==0) {
+        if (m_iCount == 0) {
           // stop
           StopCounting();
         }

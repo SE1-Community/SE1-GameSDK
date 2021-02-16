@@ -117,13 +117,13 @@ functions:
     {
       AddAttachment(CRATEBUS_ATTACHMENT_1+i, MODEL_MENTAL, TEXTURE_MENTAL);
       CAttachmentModelObject *pamoMental = GetModelObject()->GetAttachmentModel(CRATEBUS_ATTACHMENT_1+i);
-      if (pamoMental==NULL) { continue; }
+      if (pamoMental == NULL) { continue; }
       CModelObject &moMental=pamoMental->amo_moModelObject;
       AddAttachmentToModel(this, moMental, MENTAL_ATTACHMENT_HEAD, MODEL_HEAD, TEXTURE_HEAD, 0, 0, 0);
       CAttachmentModelObject *pamoHead = moMental.GetAttachmentModel(MENTAL_ATTACHMENT_HEAD);
-      if (pamoHead==NULL) { continue; }
+      if (pamoHead == NULL) { continue; }
       CTFileName fnm=(&m_fnmHeadTex01)[i];
-      if (fnm!="")
+      if (fnm != "")
       {
         // try to
         try
@@ -156,7 +156,7 @@ functions:
   void RenderParticles(void)
   {
     CEntity *penParent=GetParent();
-    if (m_bShowTrail && penParent!=NULL)
+    if (m_bShowTrail && penParent != NULL)
     {
       Particles_AfterBurner( penParent, 0.0f, 0.5f);
       //Particles_RocketTrail(penParent, 25.0f);
@@ -167,10 +167,10 @@ functions:
   {
     FLOAT3D vOffset=FLOAT3D(0.0f, 0.0f, 0.0f);
     // spawn explosion
-    if (iCharacter>=0)
+    if (iCharacter >= 0)
     {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(iCharacter);
-      if (pamo==NULL && fAddY>=0) {return;}
+      if (pamo == NULL && fAddY >= 0) {return;}
       GetModelObject()->RemoveAttachmentModel(iCharacter);
       m_ctMentals--;
       // character pos
@@ -312,7 +312,7 @@ procedures:
     autowait(0.1f);
 
     CEntity *penParent=GetParent();
-    if (penParent!=NULL)
+    if (penParent != NULL)
     {
       //Particles_RocketTrail_Prepare(penParent);
       Particles_AfterBurner_Prepare(penParent);

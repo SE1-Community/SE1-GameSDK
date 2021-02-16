@@ -96,7 +96,7 @@ functions:
     // determine height above from the distance
     FLOAT fHeight;
     // if in close attack range
-    if (fDist<=m_fFlyCloseDistance) {
+    if (fDist <= m_fFlyCloseDistance) {
       // go to fixed height above player
       fHeight = m_fFlyHeight;
     // if in further
@@ -283,7 +283,7 @@ procedures:
   {
     jump CEnemyBase::BeIdle();
 /*    // if on ground, but can fly
-    if (!m_bInAir && m_EeftType!=EFT_GROUND_ONLY) {
+    if (!m_bInAir && m_EeftType != EFT_GROUND_ONLY) {
       // fly up
       autocall GroundToAir() EReturn;
     }
@@ -319,7 +319,7 @@ procedures:
   // Play wound animation and falling body part
   BeWounded(EDamage eDamage) : CEnemyBase::BeWounded {
     // land on ground
-    if (!(m_EeftType!=EFT_FLY_ONLY && m_bInAir && ((IRnd()&3)==0))) {
+    if (!(m_EeftType != EFT_FLY_ONLY && m_bInAir && ((IRnd()&3) == 0))) {
       jump CEnemyBase::BeWounded(eDamage);
     } else if (TRUE) {
       m_bAirAttack = FALSE;

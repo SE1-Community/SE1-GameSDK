@@ -18,9 +18,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
   
 #define ECF_SPAWNERPROJECTILE ( \
-  ((ECBI_BRUSH)<<ECB_TEST) |\
-  ((ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID)<<ECB_PASS) |\
-  ((ECBI_MODEL)<<ECB_IS))
+  ((ECBI_BRUSH) << ECB_TEST) |\
+  ((ECBI_MODEL|ECBI_CORPSE|ECBI_ITEM|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID) << ECB_PASS) |\
+  ((ECBI_MODEL) << ECB_IS))
 #define EPF_SPAWNERPROJECTILE  ( \
   EPF_ONBLOCK_STOP|EPF_ORIENTEDBYGRAVITY|\
   EPF_TRANSLATEDBYGRAVITY|EPF_MOVABLE)
@@ -84,7 +84,7 @@ functions:
     
     // adjust circle radii to account for enemy size
     FLOAT fEntityR = 0;
-    if (pen->en_pciCollisionInfo!=NULL) {
+    if (pen->en_pciCollisionInfo != NULL) {
       fEntityR = pen->en_pciCollisionInfo->GetMaxFloorRadius();
     }
     
@@ -150,8 +150,8 @@ procedures:
   // --->>> MAIN
   Main(ESpawnerProjectile esp) {
     // remember the initial parameters
-    ASSERT(esp.penOwner!=NULL);
-    ASSERT(esp.penTemplate!=NULL);
+    ASSERT(esp.penOwner != NULL);
+    ASSERT(esp.penTemplate != NULL);
     ASSERT(IsDerivedFromClass(esp.penTemplate, "Enemy Base"));
     m_penOwner = esp.penOwner;
     m_penTemplate = esp.penTemplate;

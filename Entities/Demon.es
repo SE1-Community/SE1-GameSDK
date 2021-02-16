@@ -71,10 +71,10 @@ functions:
     // when the shooting of projectile is over, this event comes
     // to make sure we deattach the projectile attachment (in case
     // the shooting was interrupted
-    if (ee.ee_slEvent==EVENTCODE_EReminder)
+    if (ee.ee_slEvent == EVENTCODE_EReminder)
     {
       EReminder eReminder = ((EReminder &) ee);
-      if (eReminder.iValue==REMINDER_DEATTACH_FIREBALL)
+      if (eReminder.iValue == REMINDER_DEATTACH_FIREBALL)
       {
         RemoveAttachment(DEMON_ATTACHMENT_FIREBALL);
       }
@@ -133,7 +133,7 @@ functions:
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
   {
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType==DMT_BULLET && fDamageAmmount>100.0f)
+    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
     {
       fDamageAmmount*=0.5f;
     }
@@ -183,8 +183,8 @@ functions:
   };
 
   void WalkingAnim(void) {
-    /*if (_pTimer->CurrentTick()>=_tmLastStandingAnim-_pTimer->TickQuantum &&
-       _pTimer->CurrentTick()<=_tmLastStandingAnim+_pTimer->TickQuantum)
+    /*if (_pTimer->CurrentTick() >= _tmLastStandingAnim-_pTimer->TickQuantum &&
+       _pTimer->CurrentTick() <= _tmLastStandingAnim+_pTimer->TickQuantum)
     {
       BREAKPOINT;
     }*/

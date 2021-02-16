@@ -54,14 +54,14 @@ functions:
     for (INDEX iPlayer=0; iPlayer<GetMaxPlayers(); iPlayer++) {
       CEntity *penPlayer = GetPlayerEntity(iPlayer);
       // if player is alive and visible
-      if (penPlayer!=NULL && penPlayer->GetFlags()&ENF_ALIVE && !(penPlayer->GetFlags()&ENF_INVISIBLE)) {
+      if (penPlayer != NULL && penPlayer->GetFlags()&ENF_ALIVE && !(penPlayer->GetFlags()&ENF_INVISIBLE)) {
         fDistance = 100000.0f;
         if (m_bRangeWatcher) {
           // calculate distance to player from wathcer
           fDistance = (penPlayer->GetPlacement().pl_PositionVector-
                        GetPlacement().pl_PositionVector).Length();
         } else {
-          if (m_penOwner!=NULL) {
+          if (m_penOwner != NULL) {
             // calculate distance to player from owner
             fDistance = (penPlayer->GetPlacement().pl_PositionVector-
                          m_penOwner->GetPlacement().pl_PositionVector).Length();
@@ -80,7 +80,7 @@ functions:
   // send close event
   void SendCloseEvent(void) {
     // send range event
-    if (m_bRangeWatcher && m_penOwner==NULL) {
+    if (m_bRangeWatcher && m_penOwner == NULL) {
 //      SendInRange(this, m_eetEventClose, FLOATaabbox3D(GetPlacement().pl_PositionVector, m_fDistance));
     // send to owner
     } else {
@@ -91,11 +91,11 @@ functions:
   // send far event
   void SendFarEvent(void) {
     // send range event
-    if (m_bRangeWatcher && m_penOwner==NULL) {
+    if (m_bRangeWatcher && m_penOwner == NULL) {
 //      SendInRange(this, m_eetEventFar, FLOATaabbox3D(GetPlacement().pl_PositionVector, m_fDistance));
     // send to owner
     } else {
-      if (m_penFar!=NULL) {
+      if (m_penFar != NULL) {
         SendToTarget(m_penFar, m_eetEventFar);
       } else {
         SendToTarget(m_penOwner, m_eetEventFar);

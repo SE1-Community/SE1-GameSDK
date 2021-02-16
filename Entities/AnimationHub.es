@@ -71,7 +71,7 @@ components:
 functions:
   const CTString &GetDescription(void) const {
     ((CTString&)m_strDescription).PrintF("-><none>");
-    if (m_penTarget0!=NULL) {
+    if (m_penTarget0 != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s...", m_penTarget0->GetName());
     }
     return m_strDescription;
@@ -94,7 +94,7 @@ procedures:
       // get the target
       CEntity *penTarget = (&m_penTarget0)[m_iCounter];
       // if no more targets
-      if (penTarget==NULL) {
+      if (penTarget == NULL) {
         // stop
         jump WaitChange();
       }
@@ -149,7 +149,7 @@ procedures:
     // check target types
     for (INDEX i=0; i<10; i++) {
       CEntityPointer &penTarget = (&m_penTarget0)[i];
-      if (penTarget!=NULL && 
+      if (penTarget != NULL && 
         !IsOfClass(penTarget, "ModelHolder2") &&
         !IsOfClass(penTarget, "Light")) {
         WarningMessage("All targets must be ModelHolder2 or Light!");

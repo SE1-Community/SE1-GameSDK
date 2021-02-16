@@ -138,7 +138,7 @@ procedures:
       on (EPass epass) : {
         BOOL bHit;
         // ignore launcher within 1 second
-        bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+        bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
         // ignore water
         bHit &= !(IsOfClass(epass.penOther, "Water"));
         if (bHit) {
@@ -175,7 +175,7 @@ procedures:
   // --->>> MAIN
   Main(EWater ew) {
     // remember the initial parameters
-    ASSERT(ew.penLauncher!=NULL);
+    ASSERT(ew.penLauncher != NULL);
     m_penLauncher = ew.penLauncher;
     m_EwsSize = ew.EwsSize;
 

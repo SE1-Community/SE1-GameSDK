@@ -103,7 +103,7 @@ functions:
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
   {
     CTString str;
-    if (eDeath.eLastDamage.dmtType==DMT_CLOSERANGE) {
+    if (eDeath.eLastDamage.dmtType == DMT_CLOSERANGE) {
       str.PrintF(TRANS("%s was stabbed by an Arachnoid"), strPlayerName);
     } else {
       str.PrintF(TRANS("An Arachnoid poured lead into %s"), strPlayerName);
@@ -164,7 +164,7 @@ functions:
 
   BOOL ForcesCannonballToExplode(void)
   {
-    if (m_smtType!=SMT_SOLDIER) {
+    if (m_smtType != SMT_SOLDIER) {
       return TRUE;
     }
     return CEnemyBase::ForcesCannonballToExplode();
@@ -187,7 +187,7 @@ functions:
   }
   // play light animation
   void PlayLightAnim(INDEX iAnim, ULONG ulFlags) {
-    if (m_aoLightAnimation.GetData()!=NULL) {
+    if (m_aoLightAnimation.GetData() != NULL) {
       m_aoLightAnimation.PlayAnim(iAnim, ulFlags);
     }
   };
@@ -258,7 +258,7 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim()==SCORPMAN_ANIM_DEATH)
+    if (GetModelObject()->GetAnim() == SCORPMAN_ANIM_DEATH)
     {
       vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*1.5f;
       return 1.3f;
@@ -331,7 +331,7 @@ functions:
     en_pwoWorld->CastRay(crRay);
 
     // if hit nothing (no brush) the entity can be seen
-    return (crRay.cr_penHit==NULL);     
+    return (crRay.cr_penHit == NULL);     
   }
 
   void PrepareBullet(FLOAT fDamage) {
@@ -362,7 +362,7 @@ functions:
     // binary divide counter
     m_bFireBulletCount++;
     if (m_bFireBulletCount>1) { m_bFireBulletCount = 0; }
-    if (m_bFireBulletCount==1) { return; }
+    if (m_bFireBulletCount == 1) { return; }
     // bullet
     PrepareBullet(3.0f);
     ((CBullet&)*penBullet).CalcTarget(m_penEnemy, 250);
@@ -404,7 +404,7 @@ procedures:
         m_fFireTime = 2.0f;
         break;
     }
-    if (GetSP()->sp_gdGameDifficulty<=CSessionProperties::GD_EASY) {
+    if (GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY) {
       m_fFireTime *= 0.5f;
     }
     // to fire
@@ -548,7 +548,7 @@ procedures:
  *                       M  A  I  N                         *
  ************************************************************/
   Main(EVoid) {
-    if (m_smtType==SMT_MONSTER) {
+    if (m_smtType == SMT_MONSTER) {
       m_smtType=SMT_GENERAL;
     }
 

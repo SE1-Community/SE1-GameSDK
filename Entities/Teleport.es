@@ -49,7 +49,7 @@ functions:
 
   const CTString &GetDescription(void) const {
     ((CTString&)m_strDescription).PrintF("-><none>");
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
     }
     return m_strDescription;
@@ -111,7 +111,7 @@ procedures:
       // wait to someone enter and teleport it
       wait() {
         on (EPass ePass) : {
-          if (m_penTarget!=NULL && m_bActive) {
+          if (m_penTarget != NULL && m_bActive) {
             if (m_bPlayersOnly && !IsOfClass(ePass.penOther, "Player")) {
             resume;
             }

@@ -93,13 +93,13 @@ functions:
   // Validate offered target for one property
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if (penTarget==NULL)
+    if (penTarget == NULL)
     {
       return FALSE;
     }
     // if should be modelobject
-    if (slPropertyOffset==offsetof(CEffectMarker, m_penModel) ||
-        slPropertyOffset==offsetof(CEffectMarker, m_penModel2) )
+    if (slPropertyOffset == offsetof(CEffectMarker, m_penModel) ||
+        slPropertyOffset == offsetof(CEffectMarker, m_penModel2) )
     {
       return IsOfClass(penTarget, "ModelHolder2");
     }
@@ -109,13 +109,13 @@ functions:
   /* Handle an event, return false if the event is not handled. */
   BOOL HandleEvent(const CEntityEvent &ee)
   {
-    if (ee.ee_slEvent==EVENTCODE_ETrigger)
+    if (ee.ee_slEvent == EVENTCODE_ETrigger)
     {
       switch (m_emtType)
       {
         case EMT_SET_PLACEMENT:
         {
-          if (m_penModel!=NULL && m_penModel2!=NULL)
+          if (m_penModel != NULL && m_penModel2 != NULL)
           {
             m_penModel->Teleport(m_penModel2->GetPlacement(), FALSE);
           }
@@ -123,7 +123,7 @@ functions:
         }
         case EMT_SET_PARENT:
         {
-          if (m_penModel!=NULL && m_penModel2!=NULL)
+          if (m_penModel != NULL && m_penModel2 != NULL)
           {
             m_penModel->SetParent(m_penModel2);
           }
@@ -131,7 +131,7 @@ functions:
         }
         case EMT_CLEAR_PARENT:
         {
-          if (m_penModel!=NULL)
+          if (m_penModel != NULL)
           {
             m_penModel->SetParent(NULL);
           }
@@ -143,7 +143,7 @@ functions:
           CWorldSettingsController *pwsc = NULL;
           // obtain bcg viewer
           CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) GetWorld()->GetBackgroundViewer();
-          if (penBcgViewer!=NULL && penBcgViewer->m_penWorldSettingsController!=NULL)
+          if (penBcgViewer != NULL && penBcgViewer->m_penWorldSettingsController != NULL)
           {
             pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
             pwsc->m_tmShakeStarted = _pTimer->CurrentTick();
@@ -162,7 +162,7 @@ functions:
         }
         case EMT_HIDE_ENTITY:
         {
-          if (m_penTarget!=NULL)
+          if (m_penTarget != NULL)
           {
             m_penTarget->SetFlags(m_penTarget->GetFlags()|ENF_HIDDEN);
           }
@@ -170,14 +170,14 @@ functions:
         }
         case EMT_SHOW_ENTITY:
         {
-          if (m_penTarget!=NULL)
+          if (m_penTarget != NULL)
           {
             m_penTarget->SetFlags(m_penTarget->GetFlags()&~ENF_HIDDEN);
           }
           break;
         }
         case EMT_PLAYER_APPEAR:
-          if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2") )
+          if (m_penModel != NULL && IsOfClass(m_penModel, "ModelHolder2") )
           {
             CModelObject *pmo = m_penModel->GetModelObject();
             if (pmo != NULL) 
@@ -206,8 +206,8 @@ functions:
             break;
           }
         case EMT_BLEND_MODELS:
-        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2") &&
-           m_penModel2!=NULL && IsOfClass(m_penModel2, "ModelHolder2") )
+        if (m_penModel != NULL && IsOfClass(m_penModel, "ModelHolder2") &&
+           m_penModel2 != NULL && IsOfClass(m_penModel2, "ModelHolder2") )
         {
           if (m_penEffector == NULL)
           {
@@ -234,7 +234,7 @@ functions:
         }
         break;
         case EMT_DISAPPEAR_MODEL:
-        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
+        if (m_penModel != NULL && IsOfClass(m_penModel, "ModelHolder2"))
         {
           if (m_penEffector == NULL)
           {
@@ -259,7 +259,7 @@ functions:
         }
         break;
         case EMT_APPEAR_MODEL:
-        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
+        if (m_penModel != NULL && IsOfClass(m_penModel, "ModelHolder2"))
         {
           if (m_penEffector == NULL)
           {
@@ -297,7 +297,7 @@ functions:
         break;
         case EMT_GLARE:
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc!=NULL)
+        if (pwsc != NULL)
         {
           pwsc->m_colGlade=m_colColor;
           pwsc->m_tmGlaringStarted = _pTimer->CurrentTick();
@@ -308,12 +308,12 @@ functions:
         break;
       }
     }
-    else if (ee.ee_slEvent==EVENTCODE_EActivate)
+    else if (ee.ee_slEvent == EVENTCODE_EActivate)
     {
       switch (m_emtType)
       {
         case EMT_APPEAR_DISAPPEAR:
-        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
+        if (m_penModel != NULL && IsOfClass(m_penModel, "ModelHolder2"))
         {
           CModelObject *pmo = m_penModel->GetModelObject();
           if (pmo != NULL)
@@ -332,12 +332,12 @@ functions:
         break;
       }
     }
-    else if (ee.ee_slEvent==EVENTCODE_EDeactivate)
+    else if (ee.ee_slEvent == EVENTCODE_EDeactivate)
     {
       switch (m_emtType)
       {
         case EMT_APPEAR_DISAPPEAR:
-        if (m_penModel!=NULL && IsOfClass(m_penModel, "ModelHolder2"))
+        if (m_penModel != NULL && IsOfClass(m_penModel, "ModelHolder2"))
         {
           CModelObject *pmo = m_penModel->GetModelObject();
           if (pmo != NULL)

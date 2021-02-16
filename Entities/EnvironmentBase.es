@@ -80,27 +80,27 @@ functions:
   };
   const CTString &GetDescription(void) const {
     ((CTString&)m_strDescription).PrintF("-><none>");
-    if (m_penTarget!=NULL) {
+    if (m_penTarget != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
     }
     return m_strDescription;
   };
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset) {
-    if (slPropertyOffset==offsetof(CEnvironmentBase, m_iAnim)) {
+    if (slPropertyOffset == offsetof(CEnvironmentBase, m_iAnim)) {
       return GetModelObject()->GetData();
 
-    } else if (slPropertyOffset==offsetof(CEnvironmentBase, m_iAtt1Anim)) {
+    } else if (slPropertyOffset == offsetof(CEnvironmentBase, m_iAtt1Anim)) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt1Position);
       if (pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
       return CEntity::GetAnimData(slPropertyOffset);
 
-    } else if (slPropertyOffset==offsetof(CEnvironmentBase, m_iAtt2Anim)) {
+    } else if (slPropertyOffset == offsetof(CEnvironmentBase, m_iAtt2Anim)) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt2Position);
       if (pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
       return CEntity::GetAnimData(slPropertyOffset);
 
-    } else if (slPropertyOffset==offsetof(CEnvironmentBase, m_iAtt3Anim)) {
+    } else if (slPropertyOffset == offsetof(CEnvironmentBase, m_iAtt3Anim)) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt3Position);
       if (pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
       return CEntity::GetAnimData(slPropertyOffset);
@@ -117,12 +117,12 @@ functions:
  ************************************************************/
   // switch to next marker
   BOOL NextMarker(void) {
-    if (m_penTarget==NULL) {
+    if (m_penTarget == NULL) {
       return FALSE;
     }
 
     // assure valid target
-    if (m_penTarget!=NULL && !IsOfClass(m_penTarget, "Environment Marker")) {
+    if (m_penTarget != NULL && !IsOfClass(m_penTarget, "Environment Marker")) {
       WarningMessage("Target '%s' is not of Environment Marker class!", m_penTarget->GetName());
       m_penTarget = NULL;
       return FALSE;
@@ -133,7 +133,7 @@ functions:
     CMarker *penNextTarget = (CMarker *)(CEntity*)penTarget->m_penTarget;
 
     // if got to end
-    if (penNextTarget==NULL) {
+    if (penNextTarget == NULL) {
       return FALSE;
     }
 
@@ -261,7 +261,7 @@ functions:
     }
 
     // assure valid target
-    if (m_penTarget!=NULL && !IsOfClass(m_penTarget, "Environment Marker")) {
+    if (m_penTarget != NULL && !IsOfClass(m_penTarget, "Environment Marker")) {
       WarningMessage("Target '%s' is not of Environment Marker class!", m_penTarget->GetName());
       m_penTarget = NULL;
     }
@@ -388,7 +388,7 @@ procedures:
       autocall MoveToMarker() EEnd;
 
       // if no more targets wait forever in last anim (if marker anim exist otherwise in default anim)
-      if (m_penTarget==NULL || ((CEnvironmentMarker&)*m_penTarget).m_penTarget==NULL) {
+      if (m_penTarget == NULL || ((CEnvironmentMarker&)*m_penTarget).m_penTarget == NULL) {
         autowait();
       }
     }

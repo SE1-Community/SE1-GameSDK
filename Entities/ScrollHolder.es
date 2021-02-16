@@ -75,7 +75,7 @@ functions:
 
   BOOL LoadOneFile(const CTFileName &fnm)
   {
-    if (fnm=="") { return FALSE; }
+    if (fnm == "") { return FALSE; }
     try 
     {
       // open the file
@@ -171,7 +171,7 @@ functions:
     for (INDEX i = iLine1; i<iLine1+ctLinesOnScreen+1; i++) {
       CTString *pstr = &strEmpty;
       INDEX iLine = i;
-      if (iLine>=0 && iLine<ctLines) {
+      if (iLine >= 0 && iLine<ctLines) {
         pstr = &_astrCredits[iLine];
         bOver = FALSE;
       }
@@ -230,7 +230,7 @@ procedures:
       on (EStart eStart):
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc!=NULL)
+        if (pwsc != NULL)
         {
           m_fMyTimer = 0;
           m_fMyTimerLast = 0;
@@ -244,7 +244,7 @@ procedures:
       on (EStop eStop): 
       {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc!=NULL)
+        if (pwsc != NULL)
         {
           EScroll escr;
           escr.bStart=FALSE;

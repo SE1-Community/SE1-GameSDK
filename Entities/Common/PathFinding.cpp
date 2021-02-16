@@ -43,7 +43,7 @@ CPathNode::CPathNode(class CNavigationMarker *penMarker)
 CPathNode::~CPathNode(void)
 {
   // detach from marker when deleting
-  ASSERT(pn_pnmMarker!=NULL);
+  ASSERT(pn_pnmMarker != NULL);
   pn_pnmMarker->m_ppnNode = NULL;
 }
 
@@ -51,7 +51,7 @@ CPathNode::~CPathNode(void)
 const CTString &CPathNode::GetName(void)
 {
   static CTString strNone="<none>";
-  if (this==NULL || pn_pnmMarker==NULL) {
+  if (this == NULL || pn_pnmMarker == NULL) {
     return strNone;
   } else {
     return pn_pnmMarker->GetName();
@@ -61,12 +61,12 @@ const CTString &CPathNode::GetName(void)
 // get link with given index or null if no more (for iteration along the graph)
 CPathNode *CPathNode::GetLink(INDEX i)
 {
-  if (this==NULL || pn_pnmMarker==NULL) {
+  if (this == NULL || pn_pnmMarker == NULL) {
     ASSERT(FALSE);
     return NULL;
   }
   CNavigationMarker *pnm = pn_pnmMarker->GetLink(i);
-  if (pnm==NULL) {
+  if (pnm == NULL) {
     return NULL;
   }
   return pnm->GetPathNode();
@@ -98,7 +98,7 @@ static void SortIntoOpenList(CPathNode *ppnLink)
 static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst)
 {
 
-  ASSERT(pnmSrc!=pnmDst);
+  ASSERT(pnmSrc != pnmDst);
   CPathNode *ppnSrc = pnmSrc->GetPathNode();
   CPathNode *ppnDst = pnmDst->GetPathNode();
 
@@ -125,7 +125,7 @@ static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst)
     PRINTOUT(CPrintF("Node: %s - moved from OPEN to CLOSED\n", ppnNode->GetName()));
 
     // if this is the goal
-    if (ppnNode==ppnDst) {
+    if (ppnNode == ppnDst) {
       PRINTOUT(CPrintF("PATH FOUND!\n"));
       // the path is found
       return TRUE;
@@ -133,12 +133,12 @@ static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst)
 
     // for each link of current node
     CPathNode *ppnLink = NULL;
-    for (INDEX i=0; (ppnLink=ppnNode->GetLink(i))!=NULL; i++) {
+    for (INDEX i=0; (ppnLink=ppnNode->GetLink(i)) != NULL; i++) {
       PRINTOUT(CPrintF(" Link %d: %s\n", i, ppnLink->GetName()));
       // get cost to get to this node if coming from current node
       FLOAT fNewG = ppnLink->pn_fG+NodeDistance(ppnNode, ppnLink);
       // if a shorter path already exists
-      if ((ppnLink->pn_lnInOpen.IsLinked() || ppnLink->pn_lnInClosed.IsLinked()) && fNewG>=ppnLink->pn_fG) {
+      if ((ppnLink->pn_lnInOpen.IsLinked() || ppnLink->pn_lnInClosed.IsLinked()) && fNewG >= ppnLink->pn_fG) {
         PRINTOUT(CPrintF("  shorter path exists through: %s\n", ppnLink->pn_ppnParent->GetName()));
         // skip this link
         continue;
@@ -183,7 +183,7 @@ static void ClearPath(CEntity *penThis)
       continue;
     }
     CNavigationMarker &nm = (CNavigationMarker&)*iten;
-    ASSERT(nm.m_ppnNode==NULL);
+    ASSERT(nm.m_ppnNode == NULL);
   }}
 #endif
 }
@@ -215,7 +215,7 @@ static void FindClosestMarker(
   ENDFOR}
 
   // if none found
-  if (pnmMin==NULL) {
+  if (pnmMin == NULL) {
     // fail
     vPath = vSrc;
     penMarker = NULL;
@@ -239,7 +239,7 @@ void PATH_FindFirstMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &
   FindClosestMarker(penThis, vDst, (CEntity*&)pnmDst, vDstPath);
 
   // if at least one is not found, or if they are same
-  if (pnmSrc==NULL || pnmDst==NULL || pnmSrc==pnmDst) {
+  if (pnmSrc == NULL || pnmDst == NULL || pnmSrc == pnmDst) {
     // fail
     penMarker = NULL;
     vPath = vSrc;
@@ -260,7 +260,7 @@ void PATH_FindNextMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &v
   FindClosestMarker(penThis, vDst, (CEntity*&)pnmDst, vDstPath);
 
   // if at not found, or if same as current
-  if (pnmDst==NULL || penMarker==pnmDst) {
+  if (pnmDst == NULL || penMarker == pnmDst) {
     // fail
     penMarker = NULL;
     vPath = vSrc;
@@ -282,7 +282,7 @@ void PATH_FindNextMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &v
 
   // find the first marker position after current
   CPathNode *ppn = pnmDst->GetPathNode();
-  while (ppn->pn_ppnParent!=NULL && ppn->pn_ppnParent->pn_pnmMarker!=penMarker) {
+  while (ppn->pn_ppnParent != NULL && ppn->pn_ppnParent->pn_pnmMarker != penMarker) {
     ppn = ppn->pn_ppnParent;
   }
   penMarker = ppn->pn_pnmMarker;

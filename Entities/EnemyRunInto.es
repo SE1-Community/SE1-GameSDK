@@ -53,7 +53,7 @@ functions:
  ************************************************************/
   void IncreaseKickedMass(CEntity *pen) {
     EntityInfo *peiTarget = (EntityInfo*) (pen->GetEntityInfo());
-    if (peiTarget!=NULL) {
+    if (peiTarget != NULL) {
       m_fMassKicked += peiTarget->fMass;
     }
   };
@@ -93,7 +93,7 @@ procedures:
 
     // rotate to enemy
     m_bWhileLoop = TRUE;
-    while (m_penEnemy!=NULL && m_bWhileLoop) {
+    while (m_penEnemy != NULL && m_bWhileLoop) {
       m_fMoveFrequency = 0.1f;
       wait(m_fMoveFrequency) {
         // attack target
@@ -195,7 +195,7 @@ procedures:
 
     // run to enemy
     m_bWhileLoop = TRUE;
-    while (m_penEnemy!=NULL && m_bWhileLoop) {
+    while (m_penEnemy != NULL && m_bWhileLoop) {
       m_fMoveFrequency = 0.1f;
       wait(m_fMoveFrequency) {
         on (EBegin) : {
@@ -232,7 +232,7 @@ procedures:
               return EReturn();
             }
             // if hit the enemy
-            if (etouch.penOther==m_penEnemy) {
+            if (etouch.penOther == m_penEnemy) {
               // continue past it
               m_bWhileLoop = FALSE;
               stop;

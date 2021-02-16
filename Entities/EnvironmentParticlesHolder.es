@@ -83,7 +83,7 @@ functions:
   void Precache(void)
   {
     CTextureData *ptdHeightMap = (CTextureData *) m_moHeightMapHolder.mo_toTexture.GetData();
-    if (ptdHeightMap!=NULL) {
+    if (ptdHeightMap != NULL) {
       ptdHeightMap->Force(TEX_CONSTANT|TEX_STATIC|TEX_KEEPCOLOR);
     }
   }
@@ -157,7 +157,7 @@ functions:
   void GetHeightMapData(CTextureData *&ptdHeightMap, FLOATaabbox3D &boxHeightMap)
   {
     ptdHeightMap = (CTextureData *) m_moHeightMapHolder.mo_toTexture.GetData();
-    if (ptdHeightMap!=NULL) {
+    if (ptdHeightMap != NULL) {
       ptdHeightMap->Force(TEX_CONSTANT|TEX_STATIC|TEX_KEEPCOLOR);
     }
     boxHeightMap = m_boxHeightMap;

@@ -30,8 +30,8 @@ event EDropPipebomb {
 
 %{
 #define ECF_PIPEBOMB ( \
-  ((ECBI_MODEL|ECBI_BRUSH|ECBI_PROJECTILE_SOLID|ECBI_MODEL_HOLDER)<<ECB_TEST) |\
-  ((ECBI_PROJECTILE_SOLID)<<ECB_IS) )
+  ((ECBI_MODEL|ECBI_BRUSH|ECBI_PROJECTILE_SOLID|ECBI_MODEL_HOLDER) << ECB_TEST) |\
+  ((ECBI_PROJECTILE_SOLID) << ECB_IS) )
 
 void CPipebomb_OnPrecache(CDLLEntityClass *pdec, INDEX iUser) 
 {
@@ -215,7 +215,7 @@ procedures:
 
         BOOL bCollect;
         // ignore launcher within 0.5 second
-        bCollect = etouch.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+        bCollect = etouch.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
         // speed must be almost zero
         bCollect &= (en_vCurrentTranslationAbsolute.Length() < 0.25f);
         // only if can be collected
@@ -245,7 +245,7 @@ procedures:
   // --->>> MAIN
   Main(EDropPipebomb edrop) {
     // remember the initial parameters
-    ASSERT(edrop.penLauncher!=NULL);
+    ASSERT(edrop.penLauncher != NULL);
     m_penLauncher = edrop.penLauncher;
     m_fSpeed = edrop.fSpeed;
 

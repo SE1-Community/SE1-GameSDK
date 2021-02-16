@@ -35,9 +35,9 @@ event ELaunchLarvaOffspring {
 
 %{
 #define ECF_OFFSPRING ( \
-  ((ECBI_MODEL|ECBI_BRUSH|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID|ECBI_ITEM|ECBI_MODEL_HOLDER|ECBI_CORPSE_SOLID)<<ECB_TEST) |\
-  ((ECBI_MODEL)<<ECB_IS) |\
-  ((ECBI_MODEL)<<ECB_PASS) )
+  ((ECBI_MODEL|ECBI_BRUSH|ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID|ECBI_ITEM|ECBI_MODEL_HOLDER|ECBI_CORPSE_SOLID) << ECB_TEST) |\
+  ((ECBI_MODEL) << ECB_IS) |\
+  ((ECBI_MODEL) << ECB_PASS) )
 %}
 
 class export CLarvaOffspring : CMovableModelEntity {
@@ -87,11 +87,11 @@ functions:
 
   void Precache() 
   {
-	PrecacheSound(SOUND_LARVETTE);
+  PrecacheSound(SOUND_LARVETTE);
     PrecacheModel(MODEL_LARVA_TAIL);
     PrecacheTexture(TEXTURE_LARVA_TAIL);
     PrecacheClass(CLASS_BASIC_EFFECT, BET_ROCKET);    
-	PrecacheClass(CLASS_BASIC_EFFECT, BET_SHOCKWAVE);    
+  PrecacheClass(CLASS_BASIC_EFFECT, BET_SHOCKWAVE);    
   }
 
 void InitializeProjectile(void) {
@@ -225,7 +225,7 @@ ANGLE GetRotationSpeed(ANGLE aWantedAngle, ANGLE aRotateSpeed, FLOAT fWaitFreque
 {
   ANGLE aResult;
   // if desired position is smaller
-  if ( aWantedAngle<-aRotateSpeed*fWaitFrequency)
+  if (aWantedAngle<-aRotateSpeed*fWaitFrequency)
   {
     // start decreasing
     aResult = -aRotateSpeed;
@@ -261,7 +261,7 @@ procedures:
     while (_pTimer->CurrentTick()<(m_fStartTime+m_fFlyTime))
     {
       FLOAT fWaitFrequency = 0.1f;
-      if (m_penTarget!=NULL) {
+      if (m_penTarget != NULL) {
         // calculate desired position and angle
         EntityInfo *pei= (EntityInfo*) (m_penTarget->GetEntityInfo());
         FLOAT3D vDesiredPosition;
@@ -310,7 +310,7 @@ procedures:
         on (EPass epass) : {
           BOOL bHit;
           // ignore launcher within 1 second
-          bHit = epass.penOther!=m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
+          bHit = epass.penOther != m_penLauncher || _pTimer->CurrentTick()>m_fIgnoreTime;
           // ignore another LarvaOffspring
           bHit &= !IsOfClass(epass.penOther, "LarvaOffspring");
           // ignore twister
@@ -338,7 +338,7 @@ procedures:
  
   Main(ELaunchLarvaOffspring eLaunch) {
     // remember the initial parameters
-    ASSERT(eLaunch.penLauncher!=NULL);
+    ASSERT(eLaunch.penLauncher != NULL);
     m_penLauncher = eLaunch.penLauncher;
     SetPredictable(TRUE);
     // remember lauching time
@@ -350,7 +350,7 @@ procedures:
     m_fStartTime = _pTimer->CurrentTick();
     autocall LarvaOffspringGuidedSlide() EEnd;
   
-	LarvaTailExplosion();
+  LarvaTailExplosion();
         
     Destroy();
 

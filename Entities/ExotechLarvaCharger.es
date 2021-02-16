@@ -240,9 +240,9 @@ procedures:
           stop;
         }
         on (EActivateBeam eab) : {
-          if (eab.bTurnOn==TRUE && m_bBeamActive!=TRUE) {
+          if (eab.bTurnOn == TRUE && m_bBeamActive != TRUE) {
             call ActivateBeam();
-          } else if (eab.bTurnOn==FALSE && m_bBeamActive!=FALSE) {
+          } else if (eab.bTurnOn == FALSE && m_bBeamActive != FALSE) {
             call DeactivateBeam();
           }
           resume;

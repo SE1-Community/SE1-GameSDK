@@ -73,7 +73,7 @@ functions:
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
-    if (m_penLight==NULL) {
+    if (m_penLight == NULL) {
       return NULL;
     }
 
@@ -82,7 +82,7 @@ functions:
     {
       CLight *penLight = (CLight*)&*m_penLight;
 
-      if (slPropertyOffset==offsetof(CLightning, m_iLightAnim))
+      if (slPropertyOffset == offsetof(CLightning, m_iLightAnim))
       {
         return penLight->m_aoLightAnimation.GetData();
       }
@@ -96,7 +96,7 @@ functions:
 
   void RenderParticles(void)
   {
-    if (m_penTarget==NULL || m_tmLightningStart == -1) {return;};
+    if (m_penTarget == NULL || m_tmLightningStart == -1) {return;};
 
     TIME tmNow = _pTimer->GetLerpedCurrentTick();
     // if lightning is traveling

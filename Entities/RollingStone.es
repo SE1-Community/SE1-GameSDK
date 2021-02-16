@@ -77,7 +77,7 @@ functions:
     CMovableModelEntity::PostMoving();
 
     // if touching floor
-    if (en_penReference!=NULL) {
+    if (en_penReference != NULL) {
       // adjust rotation and translation speeds
       AdjustSpeeds(en_vReferencePlane);
       //CPrintF("adjusting\n");

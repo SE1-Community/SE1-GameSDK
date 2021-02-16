@@ -36,17 +36,17 @@ void CCompMessageID::Clear(void)
 
 void CCompMessageID::Read_t(CTStream &strm)    // throw char *
 {
-  strm>>cmi_fnmFileName;
-  strm>>(INDEX&)cmi_cmtType;
-  strm>>(INDEX&)cmi_bRead;
+  strm >> cmi_fnmFileName;
+  strm >> (INDEX&)cmi_cmtType;
+  strm >> (INDEX&)cmi_bRead;
   cmi_ulHash = cmi_fnmFileName.GetHash();
 }
 
 void CCompMessageID::Write_t(CTStream &strm)   // throw char *
 {
-  strm<<cmi_fnmFileName;
-  strm<<(INDEX&)cmi_cmtType;
-  strm<<(INDEX&)cmi_bRead;
+  strm << cmi_fnmFileName;
+  strm << (INDEX&)cmi_cmtType;
+  strm << (INDEX&)cmi_bRead;
 }
 
 void CCompMessageID::NewMessage(const CTFileName &fnm)
@@ -84,7 +84,7 @@ struct WorldChange _SwcWorldChange;
 
 // get info position for entity
 void GetEntityInfoPosition(CEntity *pen, FLOAT *pf, FLOAT3D &vPos) {
-  ASSERT(pen!=NULL);
+  ASSERT(pen != NULL);
 
   vPos = pen->GetPlacement().pl_PositionVector;
   if (pf != NULL) {
@@ -99,16 +99,16 @@ void GetPositionCastRay(CEntity *penSource, CEntity *penTarget, FLOAT3D &vSource
   EntityInfo *peiSource = (EntityInfo*) (penSource->GetEntityInfo());
   EntityInfo *peiTarget = (EntityInfo*) (penTarget->GetEntityInfo());
 
-  ASSERT(peiSource!=NULL && peiTarget!=NULL);
+  ASSERT(peiSource != NULL && peiTarget != NULL);
 
   // source
-  if (peiSource!=NULL) {
+  if (peiSource != NULL) {
     GetEntityInfoPosition(penSource, peiSource->vSourceCenter, vSource);
   } else {
     vSource = penSource->GetPlacement().pl_PositionVector;
   }
   // target
-  if (peiTarget!=NULL) {
+  if (peiTarget != NULL) {
     GetEntityInfoPosition(penTarget, peiTarget->vTargetCenter, vTarget);
   } else {
     vTarget = penTarget->GetPlacement().pl_PositionVector;
@@ -411,7 +411,7 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
 CEntityPointer SpawnFlame(CEntity *penOwner, CEntity *penAttach, const FLOAT3D &vSource)
 {
   // owner can't flame himself
-  if (penOwner==penAttach) return NULL;
+  if (penOwner == penAttach) return NULL;
   FLOAT3D vPos = vSource;
   // prepare flame event
   EFlame ef;
@@ -421,13 +421,13 @@ CEntityPointer SpawnFlame(CEntity *penOwner, CEntity *penAttach, const FLOAT3D &
   CEntityPointer penFlame;
 
   // if the target entity is model
-  if (penAttach->GetRenderType()==CEntity::RT_MODEL || 
-      penAttach->GetRenderType()==CEntity::RT_SKAMODEL) {
+  if (penAttach->GetRenderType() == CEntity::RT_MODEL || 
+      penAttach->GetRenderType() == CEntity::RT_SKAMODEL) {
 
     vPos = penAttach->GetPlacement().pl_PositionVector;
     // if the entity already has a flame attached
     penFlame = penAttach->GetChildOfClass("Flame");
-    if (penFlame!=NULL) {
+    if (penFlame != NULL) {
       // just send it the event
       penFlame->SendEvent(ef);
       return penFlame;
@@ -454,7 +454,7 @@ void KickEntity(CEntity *penTarget, FLOAT3D vSpeed) {
     return;
   }
   EntityInfo *peiTarget = (EntityInfo*) (penTarget->GetEntityInfo());
-  if (penTarget->GetPhysicsFlags()&EPF_MOVABLE && peiTarget!=NULL) {
+  if (penTarget->GetPhysicsFlags()&EPF_MOVABLE && peiTarget != NULL) {
     // calc new speed acording to target mass
     vSpeed *= 100.0f/peiTarget->fMass;
     ((CMovableEntity&)*penTarget).en_vCurrentTranslationAbsolute = vSpeed;
@@ -711,8 +711,8 @@ void SetModel_t(CModelObject *pmo, const CTFileName &fnmModel, const CTFileName 
 void ModelAddAttachment_t(CModelObject *pmo, INDEX iAttachment, 
                         const CTFileName &fnmModel, const CTFileName &fnmTexture) {
   ASSERT(pmo != NULL);
-  if (fnmModel==CTString("")) return;
-  if (pmo==NULL) return;
+  if (fnmModel == CTString("")) return;
+  if (pmo == NULL) return;
   
   CAttachmentModelObject *pamo = pmo->AddAttachmentModel(iAttachment);
   SetModel_t(&(pamo->amo_moModelObject), fnmModel, fnmTexture);
@@ -734,7 +734,7 @@ CTString GetNonEmptyLine_t(CTStream &strm)
    if (str.RemovePrefix("//")) {  // skip comments
      continue;
    }
-   if (str!="") {
+   if (str != "") {
      str.TrimSpacesRight();
      return str;
    }
@@ -755,7 +755,7 @@ void SkipBlock_t(CTStream &strm)
   CTString strLine;
   // expect to begin with an open bracket
   strLine = GetNonEmptyLine_t(strm);
-  if (strLine!="{") {
+  if (strLine != "{") {
     ThrowF_t(TRANS("Expected '{'"));
   }
   // start at level one
@@ -764,9 +764,9 @@ void SkipBlock_t(CTStream &strm)
   do {
     strLine = GetNonEmptyLine_t(strm);
     // count brackets
-    if (strLine=="{") {
+    if (strLine == "{") {
       ctLevel++;
-    } else if (strLine=="}") {
+    } else if (strLine == "}") {
       ctLevel--;
     }
   // until we close down all brackets
@@ -778,7 +778,7 @@ void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview)
   CTString strLine;
   // expect to begin with an open bracket
   strLine = GetNonEmptyLine_t(strm);
-  if (strLine!="{") {
+  if (strLine != "{") {
     ThrowF_t(TRANS("Expected '{'"));
   }
 
@@ -837,7 +837,7 @@ void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview)
         ThrowF_t(TRANS("Invalid animation number"));
       }
       // check it
-      if (iAnim>=pmo->GetAnimsCt()) {
+      if (iAnim >= pmo->GetAnimsCt()) {
         ThrowF_t(TRANS("Animation %d does not exist in that model"), iAnim);
       };
       // set it
@@ -877,7 +877,7 @@ void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview)
       }
       // create attachment
       CModelData *pmd = (CModelData*)pmo->GetData();
-      if (iAtt>=pmd->md_aampAttachedPosition.Count()) {
+      if (iAtt >= pmd->md_aampAttachedPosition.Count()) {
         ThrowF_t(TRANS("Attachment %d does not exist in that model"), iAtt);
       };
       CAttachmentModelObject *pamo = pmo->AddAttachmentModel(iAtt);
@@ -936,7 +936,7 @@ BOOL SetPlayerAppearance(CModelObject *pmo, CPlayerCharacter *ppc, CTString &str
   DECLARE_CTFILENAME(fnmDefault, "ModelsMP\\Player\\SeriousSam.amc");
 
   // if no character, or player models are disabled
-  if (ppc==NULL) {
+  if (ppc == NULL) {
     // set default appearance
     BOOL bSucceeded = SetPlayerAppearance_internal(pmo, fnmDefault, strName, bPreview);
     if (!bSucceeded) {
@@ -949,7 +949,7 @@ BOOL SetPlayerAppearance(CModelObject *pmo, CPlayerCharacter *ppc, CTString &str
   CPlayerSettings *pps = (CPlayerSettings *)ppc->pc_aubAppearance;
   CTFileName fnmModelFile = pps->GetModelFilename();
   // if dummy (empty settings)
-  if (fnmModelFile.FileName()=="") {
+  if (fnmModelFile.FileName() == "") {
     // use default
     fnmModelFile = fnmDefault;
   }
@@ -1034,9 +1034,9 @@ CEntityPointer Debris_Spawn(
   // create debris at same world as spawner
   FLOAT3D vPos;
   FLOAT3D vStretch=FLOAT3D(1.0f, 1.0f, 1.0f);
-  if ((penSpawner->en_RenderType==CEntity::RT_MODEL ||
-       penSpawner->en_RenderType==CEntity::RT_EDITORMODEL) &&
-       penSpawner->GetModelObject()!=NULL)
+  if ((penSpawner->en_RenderType == CEntity::RT_MODEL ||
+       penSpawner->en_RenderType == CEntity::RT_EDITORMODEL) &&
+       penSpawner->GetModelObject() != NULL)
   {
     vStretch=penSpawner->GetModelObject()->mo_Stretch;
   }
@@ -1058,7 +1058,7 @@ CEntityPointer Debris_Spawn(
   eSpawn.iModelAnim = iModelAnim;
   eSpawn.colDebris = _colDebris;
   eSpawn.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
-  if (fSize==0) {
+  if (fSize == 0) {
     eSpawn.fSize = 1.0f;
   } else {
     eSpawn.fSize = _fEntitySize*fSize;
@@ -1067,7 +1067,7 @@ CEntityPointer Debris_Spawn(
   penDebris->Initialize(eSpawn);
 
   FLOAT fCone = _fEntitySize*1.0f;
-  if (_vSpeed.Length()==0) {
+  if (_vSpeed.Length() == 0) {
     fCone = 0;
   }
   FLOAT fRndX = (penSpawner->FRnd()*2-1)*fCone*_fConeSize;
@@ -1156,7 +1156,7 @@ CEntityPointer Debris_Spawn_Template(
   FLOAT fDustStretch,
   COLOR colBurning)
 {
-  if (penmhTemplate==NULL || penmhTemplate->GetModelObject()==NULL)
+  if (penmhTemplate == NULL || penmhTemplate->GetModelObject() == NULL)
   {
     return NULL;
   }
@@ -1182,7 +1182,7 @@ CEntityPointer Debris_Spawn_Template(
   eSpawn.vStretch = vStretch;
   eSpawn.bCustomShading=FALSE;
   eSpawn.penFallFXPapa=penmhTemplate;
-  if (penmhDestroyed->m_cstCustomShading==CST_FULL_CUSTOMIZED)
+  if (penmhDestroyed->m_cstCustomShading == CST_FULL_CUSTOMIZED)
   {
     eSpawn.bCustomShading=TRUE;
     eSpawn.aShadingDirection=penmhDestroyed->m_aShadingDirection;
@@ -1337,7 +1337,7 @@ void SpawnRangeSound( CEntity *penPlayer, CEntity *penPos, enum SoundType st, FL
 // get some player for trigger source if any is existing
 CEntity *FixupCausedToPlayer(CEntity *penThis, CEntity *penCaused, BOOL bWarning/*=TRUE*/)
 {
-  if (penCaused!=NULL && IsOfClass(penCaused, "Player")) {
+  if (penCaused != NULL && IsOfClass(penCaused, "Player")) {
     return penCaused;
   }
 
@@ -1349,7 +1349,7 @@ CEntity *FixupCausedToPlayer(CEntity *penThis, CEntity *penCaused, BOOL bWarning
   }
 
   INDEX ctPlayers = penThis->GetMaxPlayers();
-  if (ctPlayers==0) {
+  if (ctPlayers == 0) {
     return NULL;
   }
 
@@ -1360,7 +1360,7 @@ CEntity *FixupCausedToPlayer(CEntity *penThis, CEntity *penCaused, BOOL bWarning
   for (INDEX iPlayer=0; iPlayer<penThis->GetMaxPlayers(); iPlayer++) {
     CEntity *penPlayer = penThis->GetPlayerEntity(iPlayer);
     // if player exists
-    if (penPlayer!=NULL) {
+    if (penPlayer != NULL) {
       // calculate distance to player
       FLOAT fDistance = 
         (penPlayer->GetPlacement().pl_PositionVector-penThis->GetPlacement().pl_PositionVector).Length();
@@ -1408,7 +1408,7 @@ FLOAT GetGameDamageMultiplier(void)
     INDEX ctPlayers = _pNetwork->ga_sesSessionState.GetPlayersCount();
     fGameDamageMultiplier*=1.0f/(1+fExtraStrengthPerPlayer*ClampDn(ctPlayers-1.0f, 0.0f));
   }
-  if (GetSP()->sp_gdGameDifficulty==CSessionProperties::GD_TOURIST) {
+  if (GetSP()->sp_gdGameDifficulty == CSessionProperties::GD_TOURIST) {
     fGameDamageMultiplier *= 2.0f;
   }
   return fGameDamageMultiplier;

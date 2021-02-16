@@ -93,7 +93,7 @@ functions:
   // render particles
   void RenderParticles(void)
   {
-    if (Particle_GetViewer()==this) {
+    if (Particle_GetViewer() == this) {
       Particles_ViewerLocal(this);
     }
   }
@@ -150,11 +150,11 @@ functions:
       GetWorld()->CastRay(crRay);
 
       // if hit something
-      if (crRay.cr_penHit!=NULL) {
+      if (crRay.cr_penHit != NULL) {
         // clamp distance
         fDistance = Min(fDistance, crRay.cr_fHitDistance-0.5f);
         // if hit polygon
-        if (crRay.cr_pbpoBrushPolygon!=NULL) {
+        if (crRay.cr_pbpoBrushPolygon != NULL) {
           // back off
           FLOAT3D vDir = (vDest[i]-vBase).Normalize();
           FLOAT fD = Abs(FLOAT3D(crRay.cr_pbpoBrushPolygon->bpo_pbplPlane->bpl_plAbsolute)%vDir)*0.25f;
@@ -243,7 +243,7 @@ functions:
     GetWorld()->CastRay(crRay);
     
     // if hit something
-    if (crRay.cr_penHit!=NULL) {
+    if (crRay.cr_penHit != NULL) {
       // clamp distance
       fDistance = Min(fDistance, crRay.cr_fHitDistance-0.5f);      
     }
@@ -261,7 +261,7 @@ procedures:
 
   Main(EViewInit eInit) {
     // remember the initial parameters
-    ASSERT(eInit.penOwner!=NULL);
+    ASSERT(eInit.penOwner != NULL);
     m_penOwner = eInit.penOwner;
     m_iViewType = eInit.vtView;
     m_bFixed = eInit.bDeathFixed;

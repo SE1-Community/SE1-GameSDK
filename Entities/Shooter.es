@@ -81,8 +81,8 @@ functions:
   {
     // receive damage if not indestructable, and shooter can't hurt another shooter
     if (!m_bIndestructable && !IsOfClass(penInflictor, "Shooter")) {
-      if (m_tmSpraySpawned<=_pTimer->CurrentTick()-_pTimer->TickQuantum*8 
-          && m_penDestruction!=NULL) {
+      if (m_tmSpraySpawned <= _pTimer->CurrentTick()-_pTimer->TickQuantum*8 
+          && m_penDestruction != NULL) {
         
         CModelDestruction *penDestruction = GetDestruction();
         
@@ -136,7 +136,7 @@ functions:
   void RenderParticles(void)
   {
     // fire particles
-    if (m_sftType==SFT_FIRE) {
+    if (m_sftType == SFT_FIRE) {
     }
     CModelHolder2::RenderParticles();
   }
@@ -144,11 +144,11 @@ functions:
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset) 
   {
-    if (slPropertyOffset==offsetof(CShooter, m_iModelPreFireAnimation) ||
-        slPropertyOffset==offsetof(CShooter, m_iModelPostFireAnimation)) {
+    if (slPropertyOffset == offsetof(CShooter, m_iModelPreFireAnimation) ||
+        slPropertyOffset == offsetof(CShooter, m_iModelPostFireAnimation)) {
       return GetModelObject()->GetData();
-    } else if (slPropertyOffset==offsetof(CShooter, m_iTexturePreFireAnimation) ||
-               slPropertyOffset==offsetof(CShooter, m_iTexturePostFireAnimation)) {
+    } else if (slPropertyOffset == offsetof(CShooter, m_iTexturePreFireAnimation) ||
+               slPropertyOffset == offsetof(CShooter, m_iTexturePostFireAnimation)) {
       return GetModelObject()->mo_toTexture.GetData();
     } else {
       return CModelHolder2::GetAnimData(slPropertyOffset);
@@ -187,7 +187,7 @@ functions:
     eLaunch.prtType = PRT_SHOOTER_FLAME;
     penFlame->Initialize(eLaunch);
     // link last flame with this one (if not NULL or deleted)
-    if (m_penFlame!=NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
+    if (m_penFlame != NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
       ((CProjectile&)*m_penFlame).m_penParticles = penFlame;
     }
     // link to this
@@ -203,7 +203,7 @@ functions:
 
   void PlayFireSound(void) {
     // if sound entity exists
-    if (m_penSoundLaunch!=NULL) {
+    if (m_penSoundLaunch != NULL) {
       CSoundHolder &sh = (CSoundHolder&)*m_penSoundLaunch;
       m_soLaunch.Set3DParameters(FLOAT(sh.m_rFallOffRange), FLOAT(sh.m_rHotSpotRange), sh.m_fVolume, 1.0f);
       PlaySound(m_soLaunch, sh.m_fnSound, sh.m_iPlayType);
@@ -244,7 +244,7 @@ procedures:
   
   FireOnce()
   {
-    if (m_sftType==SFT_FIRE) { jump FlameBurst(); }
+    if (m_sftType == SFT_FIRE) { jump FlameBurst(); }
     
     PlayFireSound();
 
@@ -325,7 +325,7 @@ procedures:
         resume;
       }
       on (EDeath) : {
-        if (m_penDestruction!=NULL) {
+        if (m_penDestruction != NULL) {
           jump CModelHolder2::Die();
         } else {
           Destroy();
@@ -355,11 +355,11 @@ procedures:
     ClampUp(m_fCannonBallPower, 100.0f);
     ClampDn(m_fCannonBallPower, 0.0f);
     
-    if (m_penSoundLaunch!=NULL && !IsOfClass(m_penSoundLaunch, "SoundHolder")) {
+    if (m_penSoundLaunch != NULL && !IsOfClass(m_penSoundLaunch, "SoundHolder")) {
       WarningMessage( "Entity '%s' is not of class SoundHolder!", m_penSoundLaunch);
       m_penSoundLaunch=NULL;
     }
-    if (m_penDestruction!=NULL && !IsOfClass(m_penDestruction, "ModelDestruction")) {
+    if (m_penDestruction != NULL && !IsOfClass(m_penDestruction, "ModelDestruction")) {
       WarningMessage( "Entity '%s' is not of class ModelDestruction!", m_penDestruction);
       m_penDestruction=NULL;
     }

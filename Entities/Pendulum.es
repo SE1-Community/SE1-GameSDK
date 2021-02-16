@@ -64,7 +64,7 @@ functions:
     FLOAT fNewSpeed = m_fSpeed*m_fDampFactor-m_fPendulumFactor*fCurrentBanking;
     
     // if maximum angle achieved, stop in place and turn back
-    if (Abs( fCurrentBanking) > m_fMaxAngle && Sgn(fNewSpeed)==Sgn(fCurrentBanking))
+    if (Abs( fCurrentBanking) > m_fMaxAngle && Sgn(fNewSpeed) == Sgn(fCurrentBanking))
     {
       fNewSpeed = 0.0f;
     }

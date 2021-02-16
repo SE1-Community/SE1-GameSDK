@@ -95,7 +95,7 @@ functions:
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     // ignore touching, damaging...
-    if (ee.ee_slEvent==EVENTCODE_ETouch || ee.ee_slEvent==EVENTCODE_EDamage) {
+    if (ee.ee_slEvent == EVENTCODE_ETouch || ee.ee_slEvent == EVENTCODE_EDamage) {
       return TRUE;
     }
 
@@ -122,19 +122,19 @@ functions:
     m_tmLastSpawnTime = _pTimer->CurrentTick();
     // choose an item to spawn
     INDEX ctTemplates = 0;
-    if (m_penTemplate0!=NULL) { ctTemplates++; }
-    if (m_penTemplate1!=NULL) { ctTemplates++; }
-    if (m_penTemplate2!=NULL) { ctTemplates++; }
-    if (m_penTemplate3!=NULL) { ctTemplates++; }
-    if (m_penTemplate4!=NULL) { ctTemplates++; }
-    if (ctTemplates==0) {
+    if (m_penTemplate0 != NULL) { ctTemplates++; }
+    if (m_penTemplate1 != NULL) { ctTemplates++; }
+    if (m_penTemplate2 != NULL) { ctTemplates++; }
+    if (m_penTemplate3 != NULL) { ctTemplates++; }
+    if (m_penTemplate4 != NULL) { ctTemplates++; }
+    if (ctTemplates == 0) {
       return;
     }
     INDEX iTemplate = IRnd()%ctTemplates;
     CEntity *penItem = (&m_penTemplate0)[iTemplate];
 
     // if the target doesn't exist, or is destroyed
-    if (penItem==NULL || (penItem->GetFlags()&ENF_DELETED)) {
+    if (penItem == NULL || (penItem->GetFlags()&ENF_DELETED)) {
       // do nothing
       return;
     }

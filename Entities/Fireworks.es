@@ -78,7 +78,7 @@ functions:
         FLOAT fLiving=tmNow-ep.ep_tmEmitted;
         FLOAT fSpeed=0.0f;
 
-        if (fLiving>=6.0f)
+        if (fLiving >= 6.0f)
         {
           fSpeed=0.0f;
         }

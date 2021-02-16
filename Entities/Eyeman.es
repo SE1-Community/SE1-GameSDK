@@ -109,7 +109,7 @@ functions:
 
   /* Entity info */
   void *GetEntityInfo(void) {
-    if (m_EecChar==EYC_SERGEANT) {
+    if (m_EecChar == EYC_SERGEANT) {
       return &eiEyemanBig;
     } else {
       return &eiEyemanSmall;
@@ -124,7 +124,7 @@ functions:
     if (!IsOfClass(penInflictor, "Eyeman")) {
       CEnemyFly::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
       // if died of chainsaw
-      if (dmtType==DMT_CHAINSAW && GetHealth()<=0) {
+      if (dmtType == DMT_CHAINSAW && GetHealth() <= 0) {
         // must always blowup
         m_fBlowUpAmount = 0;
       }
@@ -180,7 +180,7 @@ functions:
       FLOAT3D vFront;
       GetHeadingDirection(0, vFront);
       FLOAT fDamageDir = m_vDamage%vFront;
-      if (Abs(fDamageDir)<=10) {
+      if (Abs(fDamageDir) <= 10) {
         switch (IRnd()%3) {
           case 0: iAnim = EYEMAN_ANIM_WOUND03; break;
           case 1: iAnim = EYEMAN_ANIM_WOUND06; break;
@@ -219,17 +219,17 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim()==EYEMAN_ANIM_DEATH01)
+    if (GetModelObject()->GetAnim() == EYEMAN_ANIM_DEATH01)
     {
       vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*0.75f;
       return 0.5f;
     }
-    else if (GetModelObject()->GetAnim()==EYEMAN_ANIM_DEATH02)
+    else if (GetModelObject()->GetAnim() == EYEMAN_ANIM_DEATH02)
     {
       vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*0.75f;
       return 0.5f;
     }
-    else if (GetModelObject()->GetAnim()==EYEMAN_ANIM_MORPHDEATH)
+    else if (GetModelObject()->GetAnim() == EYEMAN_ANIM_MORPHDEATH)
     {
       vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*1.0f;
       return 0.5f;
@@ -339,7 +339,7 @@ functions:
     Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, fEntitySize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
 
     INDEX iTextureID = TEXTURE_EYEMAN_SOLDIER;
-    if (m_EecChar==EYC_SERGEANT)
+    if (m_EecChar == EYC_SERGEANT)
     {
       iTextureID = TEXTURE_EYEMAN_SERGEANT;
     }
@@ -456,7 +456,7 @@ procedures:
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);
     SetCollisionFlags(ECF_MODEL);
     SetFlags(GetFlags()|ENF_ALIVE);
-    if (m_EecChar==EYC_SERGEANT) {
+    if (m_EecChar == EYC_SERGEANT) {
       SetHealth(90.0f);
       m_fMaxHealth = 90.0f;
       // damage/explode properties
@@ -482,7 +482,7 @@ procedures:
 
     // set your appearance
     SetModel(MODEL_EYEMAN);
-    if (m_EecChar==EYC_SERGEANT) {
+    if (m_EecChar == EYC_SERGEANT) {
       SetModelMainTexture(TEXTURE_EYEMAN_SERGEANT);
       GetModelObject()->StretchModel(FLOAT3D(1.3f, 1.3f, 1.3f));
       ModelChangeNotify();
@@ -504,7 +504,7 @@ procedures:
     // setup moving speed
     m_fWalkSpeed = FRnd() + 1.5f;
     m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
-    if (m_EecChar==EYC_SERGEANT) {
+    if (m_EecChar == EYC_SERGEANT) {
       m_fAttackRunSpeed = FRnd()*2.0f + 10.0f;
       m_aAttackRotateSpeed = AngleDeg(FRnd()*100 + 600.0f);
       m_fCloseRunSpeed = FRnd()*2.0f + 10.0f;
@@ -525,7 +525,7 @@ procedures:
     // fly moving properties
     m_fFlyWalkSpeed = FRnd()*2.0f + 3.0f;
     m_aFlyWalkRotateSpeed = FRnd()*20.0f + 600.0f;
-    if (m_EecChar==EYC_SERGEANT) {
+    if (m_EecChar == EYC_SERGEANT) {
       m_fFlyAttackRunSpeed = FRnd()*2.0f + 9.5f;
       m_aFlyAttackRotateSpeed = FRnd()*25 + 350.0f;
       m_fFlyCloseRunSpeed = FRnd()*2.0f + 9.5f;

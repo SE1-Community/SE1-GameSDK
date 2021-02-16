@@ -84,7 +84,7 @@ functions:
   // get node used for pathfinding algorithm
   CPathNode *GetPathNode(void)
   {
-    if (m_ppnNode==NULL) {
+    if (m_ppnNode == NULL) {
       m_ppnNode = new CPathNode(this);
     }
 
@@ -93,7 +93,7 @@ functions:
 
   CEntityPointer &TargetPointer(INDEX i)
   {
-    ASSERT(i>=0 && i<MAX_TARGETS);
+    ASSERT(i >= 0 && i<MAX_TARGETS);
     return (&m_penTarget0)[i];
   }
   CNavigationMarker &Target(INDEX i)
@@ -106,10 +106,10 @@ functions:
   {
     for (INDEX iTarget=0; iTarget<MAX_TARGETS; iTarget++) {
       CNavigationMarker *penLink = &Target(iTarget);
-      if (penLink==NULL) {
+      if (penLink == NULL) {
         continue;
       }
-      if (iTarget==i) {
+      if (iTarget == i) {
         return penLink;
       }
     }
@@ -152,7 +152,7 @@ procedures:
     // for each non-empty target
     for (INDEX iTarget=0; iTarget<MAX_TARGETS; iTarget++) {
       CEntityPointer &penTarget = TargetPointer(iTarget);
-      if (penTarget==NULL) {
+      if (penTarget == NULL) {
         continue;
       }
 
@@ -169,7 +169,7 @@ procedures:
       BOOL bFound = FALSE;
       for (INDEX iTarget2=0; iTarget2<MAX_TARGETS; iTarget2++) {
         CEntityPointer &penTarget2 = nmOther.TargetPointer(iTarget2);
-        if (penTarget2==this) {
+        if (penTarget2 == this) {
           bFound = TRUE;
           break;
         }
@@ -179,7 +179,7 @@ procedures:
         // auto-set an empty one if possible
         for (INDEX iTarget2=0; iTarget2<MAX_TARGETS; iTarget2++) {
           CEntityPointer &penTarget2 = nmOther.TargetPointer(iTarget2);
-          if (penTarget2==NULL) {
+          if (penTarget2 == NULL) {
             penTarget2 = this;
             break;
           }

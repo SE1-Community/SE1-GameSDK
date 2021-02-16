@@ -57,7 +57,7 @@ functions:
   void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, FLOAT fFade, BOOL bFadeIn)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL) {
+    if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
       pwsc->m_vShakePos = GetPlacement().pl_PositionVector;
       pwsc->m_fShakeFalloff = 450.0f;
@@ -77,7 +77,7 @@ functions:
   void Glare(FLOAT fStart, FLOAT fEnd, FLOAT fFinR, FLOAT fFoutR)
   {
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc!=NULL)
+    if (pwsc != NULL)
     {
       pwsc->m_colGlade=C_WHITE;
       pwsc->m_tmGlaringStarted = _pTimer->CurrentTick()+fStart;
@@ -95,7 +95,7 @@ functions:
       CEntity *pen = iten;
       if (IsDerivedFromClass(pen, "Enemy Base")) {
         CEnemyBase *penEnemy = (CEnemyBase *)pen;
-        if (penEnemy->m_bBoss==TRUE || DistanceTo(this, penEnemy)>250.0f) {
+        if (penEnemy->m_bBoss == TRUE || DistanceTo(this, penEnemy)>250.0f) {
           continue;
         }
         this->InflictDirectDamage(pen, this, DMT_EXPLOSION, penEnemy->GetHealth()+100.0f, pen->GetPlacement().pl_PositionVector, FLOAT3D(0.0f, 1.0f, 0.0f));

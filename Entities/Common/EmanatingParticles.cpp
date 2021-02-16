@@ -122,11 +122,11 @@ void CEmiter::AnimateParticles(void)
       iCurrent++;
     }
   }
-  if (em_aepParticles.Count()==0)
+  if (em_aepParticles.Count() == 0)
   {
     em_aepParticles.PopAll();
   }
-  else if (em_aepParticles.Count()!=ctCount)
+  else if (em_aepParticles.Count() != ctCount)
   {
     em_aepParticles.PopUntil(ctCount-1);
   }
@@ -153,22 +153,22 @@ void CEmiter::RenderParticles(void)
 
 void CEmiter::Read_t( CTStream &strm)
 {
-  if (strm.PeekID_t()!=CChunkID(ID_EMITER_VER)) return;
+  if (strm.PeekID_t() != CChunkID(ID_EMITER_VER)) return;
   strm.GetID_t();
   INDEX ctMaxParticles;
-  strm>>ctMaxParticles;
+  strm >> ctMaxParticles;
   
   em_bInitialized=TRUE;
   INDEX ietType;
-  strm>>ietType;
+  strm >> ietType;
   em_etType=(CEmiterType) ietType;
-  strm>>em_tmStart;
-  strm>>em_tmLife;
-  strm>>em_vG;
-  strm>>em_colGlobal;
-  strm>>em_iGlobal;
+  strm >> em_tmStart;
+  strm >> em_tmLife;
+  strm >> em_vG;
+  strm >> em_colGlobal;
+  strm >> em_iGlobal;
 
-  if (ctMaxParticles==0) return;
+  if (ctMaxParticles == 0) return;
   em_aepParticles.Push(ctMaxParticles);
 
   for (INDEX i=0; i<em_aepParticles.Count(); i++)
@@ -183,14 +183,14 @@ void CEmiter::Write_t( CTStream &strm)
   if (!em_bInitialized) return;
   INDEX ctMaxParticles=em_aepParticles.Count();
   strm.WriteID_t(CChunkID(ID_EMITER_VER));
-  strm<<ctMaxParticles;
+  strm << ctMaxParticles;
 
-  strm<<INDEX(em_etType);
-  strm<<em_tmStart;
-  strm<<em_tmLife;
-  strm<<em_vG;
-  strm<<em_colGlobal;
-  strm<<em_iGlobal;
+  strm << INDEX(em_etType);
+  strm << em_tmStart;
+  strm << em_tmLife;
+  strm << em_vG;
+  strm << em_colGlobal;
+  strm << em_iGlobal;
 
   for (INDEX i=0; i<em_aepParticles.Count(); i++)
   {

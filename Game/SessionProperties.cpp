@@ -73,7 +73,7 @@ static void SetGameModeParameters(CSessionProperties &sp)
 static void SetDifficultyParameters(CSessionProperties &sp)
 {
   INDEX iDifficulty = gam_iStartDifficulty;
-  if (iDifficulty==4) {
+  if (iDifficulty == 4) {
     sp.sp_bMental = TRUE;
     iDifficulty=2;
   } else {
@@ -197,10 +197,10 @@ void CGame::SetMultiPlayerSession(CSessionProperties &sp)
   sp.sp_bEndOfGame = FALSE;
 
   sp.sp_bQuickTest = FALSE;
-  sp.sp_bCooperative = sp.sp_gmGameMode==CSessionProperties::GM_COOPERATIVE;
+  sp.sp_bCooperative = sp.sp_gmGameMode == CSessionProperties::GM_COOPERATIVE;
   sp.sp_bSinglePlayer = FALSE;
   sp.sp_bPlayEntireGame = gam_bPlayEntireGame;
-  sp.sp_bUseFrags = sp.sp_gmGameMode==CSessionProperties::GM_FRAGMATCH;
+  sp.sp_bUseFrags = sp.sp_gmGameMode == CSessionProperties::GM_FRAGMATCH;
   sp.sp_bWeaponsStay = gam_bWeaponsStay;
   sp.sp_bFriendlyFire = gam_bFriendlyFire;
   sp.sp_ctMaxPlayers = gam_ctMaxPlayers;
@@ -253,17 +253,17 @@ void CGame::SetMultiPlayerSession(CSessionProperties &sp)
 
 BOOL IsMenuEnabled(const CTString &strMenuName)
 {
-  if (strMenuName=="Single Player") {
+  if (strMenuName == "Single Player") {
     return TRUE;
-  } else if (strMenuName=="Network"      ) {
+  } else if (strMenuName == "Network"      ) {
     return TRUE;
-  } else if (strMenuName=="Split Screen" ) {
+  } else if (strMenuName == "Split Screen" ) {
     return TRUE;
-  } else if (strMenuName=="High Score"   ) {
+  } else if (strMenuName == "High Score"   ) {
     return TRUE;
-  } else if (strMenuName=="Training"   ) {
+  } else if (strMenuName == "Training"   ) {
     return FALSE;
-  } else if (strMenuName=="Technology Test") {
+  } else if (strMenuName == "Technology Test") {
     return TRUE;
   } else {
     return TRUE;
@@ -346,12 +346,12 @@ CTString GetGameAgentRulesInfo(void)
   strKey.PrintF(";weaponsstay;%d", sp.sp_bWeaponsStay?0:1);
   strOut+=strKey;
 
-  strKey.PrintF(";ammostays;%d", sp.sp_bAmmoStays                   ?0:1);	strOut+=strKey;
-  strKey.PrintF(";healthandarmorstays;%d", sp.sp_bHealthArmorStays  ?0:1);	strOut+=strKey;
-  strKey.PrintF(";allowhealth;%d", sp.sp_bAllowHealth               ?0:1);	strOut+=strKey;
-  strKey.PrintF(";allowarmor;%d", sp.sp_bAllowArmor                 ?0:1);	strOut+=strKey;
-  strKey.PrintF(";infiniteammo;%d", sp.sp_bInfiniteAmmo             ?0:1);	strOut+=strKey;
-  strKey.PrintF(";respawninplace;%d", sp.sp_bRespawnInPlace         ?0:1);	strOut+=strKey;
+  strKey.PrintF(";ammostays;%d", sp.sp_bAmmoStays                   ?0:1);  strOut+=strKey;
+  strKey.PrintF(";healthandarmorstays;%d", sp.sp_bHealthArmorStays  ?0:1);  strOut+=strKey;
+  strKey.PrintF(";allowhealth;%d", sp.sp_bAllowHealth               ?0:1);  strOut+=strKey;
+  strKey.PrintF(";allowarmor;%d", sp.sp_bAllowArmor                 ?0:1);  strOut+=strKey;
+  strKey.PrintF(";infiniteammo;%d", sp.sp_bInfiniteAmmo             ?0:1);  strOut+=strKey;
+  strKey.PrintF(";respawninplace;%d", sp.sp_bRespawnInPlace         ?0:1);  strOut+=strKey;
 
   if (sp.sp_bCooperative) {
     if (sp.sp_ctCredits<0) {

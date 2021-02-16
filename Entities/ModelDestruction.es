@@ -118,10 +118,10 @@ functions:
   /* Get anim data for given animation property - return NULL for none. */
   CAnimData *GetAnimData(SLONG slPropertyOffset)
   {
-    if (slPropertyOffset==offsetof(CModelDestruction, m_iStartAnim)) 
+    if (slPropertyOffset == offsetof(CModelDestruction, m_iStartAnim)) 
     {
       CModelHolder2 *pmh=GetModel(0);
-      if (pmh!=NULL)
+      if (pmh != NULL)
       {
         return pmh->GetModelObject()->GetData();
       }
@@ -131,9 +131,9 @@ functions:
 
   const CTString &GetDescription(void) const {
     INDEX ct = GetModelsCount();
-    if (ct==0) {
+    if (ct == 0) {
       ((CTString&)m_strDescription).PrintF("(%g): no more", m_fHealth);
-    } else if (ct==1) {
+    } else if (ct == 1) {
       ((CTString&)m_strDescription).PrintF("(%g): %s", m_fHealth, m_penModel0->GetName());
     } else if (TRUE) {
       ((CTString&)m_strDescription).PrintF("(%g): %s,...(%d)", m_fHealth, m_penModel0->GetName(), ct);
@@ -144,7 +144,7 @@ functions:
   // check if one model target is valid 
   void CheckOneModelTarget(CEntityPointer &pen)
   {
-    if (pen!=NULL && !IsOfClass(pen, "ModelHolder2")) {
+    if (pen != NULL && !IsOfClass(pen, "ModelHolder2")) {
       WarningMessage("Model '%s' is not ModelHolder2!", pen->GetName());
       pen=NULL;
     }
@@ -155,7 +155,7 @@ functions:
   {
     INDEX ct = GetModelsCount();
     // if not more models
-    if (ct==0) {
+    if (ct == 0) {
       // return none
       return NULL;
     // if there are some
@@ -169,17 +169,17 @@ functions:
   INDEX GetModelsCount(void) const
   {
     // note: only first N that are no NULL are used
-    if (m_penModel0==NULL) { return 0; };
-    if (m_penModel1==NULL) { return 1; };
-    if (m_penModel2==NULL) { return 2; };
-    if (m_penModel3==NULL) { return 3; };
-    if (m_penModel4==NULL) { return 4; };
+    if (m_penModel0 == NULL) { return 0; };
+    if (m_penModel1 == NULL) { return 1; };
+    if (m_penModel2 == NULL) { return 2; };
+    if (m_penModel3 == NULL) { return 3; };
+    if (m_penModel4 == NULL) { return 4; };
     return 5;
   }
   // get model by its index
   class CModelHolder2 *GetModel(INDEX iModel)
   {
-    ASSERT(iModel<=GetModelsCount());
+    ASSERT(iModel <= GetModelsCount());
     iModel = Clamp(iModel, INDEX(0), GetModelsCount());
     return (CModelHolder2 *)&*(&m_penModel0)[iModel];
   }
@@ -216,7 +216,7 @@ functions:
         if (IsOfClass(&*iten, "ModelHolder2"))
         {
           CModelHolder2 &mhTemplate=(CModelHolder2 &)*iten;
-          if (mhTemplate.GetModelObject()==NULL || penmhDestroyed->GetModelObject()==NULL)
+          if (mhTemplate.GetModelObject() == NULL || penmhDestroyed->GetModelObject() == NULL)
           {
             continue;
           }

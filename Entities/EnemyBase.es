@@ -56,9 +56,9 @@ enum DestinationType {
 };
 
 %{
-#define MF_MOVEZ    (1L<<0)
-#define MF_ROTATEH  (1L<<1)
-#define MF_MOVEXZY  (1L<<2)
+#define MF_MOVEZ    (1L << 0)
+#define MF_ROTATEH  (1L << 1)
+#define MF_MOVEXZY  (1L << 2)
 %}
 
 class export CEnemyBase : CMovableModelEntity {
@@ -293,7 +293,7 @@ functions:
     }
     // maybe switch
     CEntity *penNewEnemy = GetWatcher()->CheckAnotherPlayer(m_penEnemy);
-    if (penNewEnemy!=m_penEnemy && penNewEnemy!=NULL) {
+    if (penNewEnemy != m_penEnemy && penNewEnemy != NULL) {
       m_penEnemy = penNewEnemy;
       SendEvent(EReconsiderBehavior());
     }
@@ -301,7 +301,7 @@ functions:
 
   class CWatcher *GetWatcher(void)
   {
-    ASSERT(m_penWatcher!=NULL);
+    ASSERT(m_penWatcher != NULL);
     return (CWatcher*)&*m_penWatcher;
   }
   export void Copy(CEntity &enOther, ULONG ulFlags)
@@ -343,7 +343,7 @@ functions:
   // calculate delta to given entity
   FLOAT3D CalcDelta(CEntity *penEntity) 
   {
-    ASSERT(penEntity!=NULL);
+    ASSERT(penEntity != NULL);
     // find vector from you to target
     return penEntity->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector;
   };
@@ -371,7 +371,7 @@ functions:
   // calculate delta to given entity in current gravity plane
   FLOAT3D CalcPlaneDelta(CEntity *penEntity) 
   {
-    ASSERT(penEntity!=NULL);
+    ASSERT(penEntity != NULL);
     FLOAT3D vPlaneDelta;
     // find vector from you to target in XZ plane
     GetNormalComponent(
@@ -442,7 +442,7 @@ functions:
   // cast a ray to entity checking only for brushes
   BOOL IsVisible(CEntity *penEntity) 
   {
-    ASSERT(penEntity!=NULL);
+    ASSERT(penEntity != NULL);
     // get ray source and target
     FLOAT3D vSource, vTarget;
     GetPositionCastRay(this, penEntity, vSource, vTarget);
@@ -454,13 +454,13 @@ functions:
     en_pwoWorld->CastRay(crRay);
 
     // if hit nothing (no brush) the entity can be seen
-    return (crRay.cr_penHit==NULL);     
+    return (crRay.cr_penHit == NULL);     
   };
 
   // cast a ray to entity checking all
   BOOL IsVisibleCheckAll(CEntity *penEntity) 
   {
-    ASSERT(penEntity!=NULL);
+    ASSERT(penEntity != NULL);
     // get ray source and target
     FLOAT3D vSource, vTarget;
     GetPositionCastRay(this, penEntity, vSource, vTarget);
@@ -472,7 +472,7 @@ functions:
     en_pwoWorld->CastRay(crRay);
 
     // if the ray hits wanted entity
-    return crRay.cr_penHit==penEntity;
+    return crRay.cr_penHit == penEntity;
   };
 
   /* calculates launch velocity and heading correction for angular launch */
@@ -556,7 +556,7 @@ functions:
   }
   const CTString &GetDescription(void) const {
     ((CTString&)m_strDescription).PrintF("-><none>");
-    if (m_penMarker!=NULL) {
+    if (m_penMarker != NULL) {
       ((CTString&)m_strDescription).PrintF("->%s", m_penMarker->GetName());
     }
     return m_strDescription;
@@ -571,7 +571,7 @@ functions:
   void AddDependentsToPrediction(void)
   {
     m_penSpray->AddToPrediction();
-    if (m_penWatcher!=NULL) {
+    if (m_penWatcher != NULL) {
       GetWatcher()->AddToPrediction();
     }
   }
@@ -585,7 +585,7 @@ functions:
   {
     CMovableModelEntity ::DumpSync_t(strm, iExtensiveSyncCheck);
     strm.FPrintF_t("enemy: ");
-    if (m_penEnemy!=NULL) {
+    if (m_penEnemy != NULL) {
       strm.FPrintF_t("id: %08X\n", m_penEnemy->en_ulID);
     } else {
       strm.FPrintF_t("none\n");
@@ -593,7 +593,7 @@ functions:
  
     /*INDEX ctStates = en_stslStateStack.Count();
     strm.FPrintF_t("state stack @%gs:\n", _pTimer->CurrentTick());
-    for (INDEX iState=ctStates-1; iState>=0; iState--) {
+    for (INDEX iState=ctStates-1; iState >= 0; iState--) {
       SLONG slState = en_stslStateStack[iState];
       strm.FPrintF_t("  0x%08x %s\n", slState, en_pecClass->ec_pdecDLLClass->HandlerNameForState(slState));
     }*/
@@ -605,7 +605,7 @@ functions:
     CMovableModelEntity::Read_t(istr);
 
     // add to fuss if needed
-    if (m_penMainMusicHolder!=NULL) {
+    if (m_penMainMusicHolder != NULL) {
       ((CMusicHolder&)*m_penMainMusicHolder).m_cenFussMakers.Add(this);
     }
   };
@@ -643,7 +643,7 @@ functions:
     fNewDamage *=GetGameDamageMultiplier();
 
     // if no damage
-    if (fNewDamage==0) {
+    if (fNewDamage == 0) {
       // do nothing
       return;
     }
@@ -652,10 +652,10 @@ functions:
     {
       fKickDamage*=1.5;
     }
-    if (dmtType==DMT_DROWNING || dmtType==DMT_CLOSERANGE || dmtType==DMT_CHAINSAW) {
+    if (dmtType == DMT_DROWNING || dmtType == DMT_CLOSERANGE || dmtType == DMT_CHAINSAW) {
       fKickDamage /= 10;
     }
-    if (dmtType==DMT_BURNING)
+    if (dmtType == DMT_BURNING)
     {
       fKickDamage /= 100000;
       UBYTE ubR, ubG, ubB, ubA;
@@ -671,7 +671,7 @@ functions:
     m_tmLastDamage = tmNow;
 
     // fade damage out
-    if (tmDelta>=_pTimer->TickQuantum*3) {
+    if (tmDelta >= _pTimer->TickQuantum*3) {
       m_vDamage=FLOAT3D(0.0f, 0.0f, 0.0f);
     }
     // add new damage
@@ -714,20 +714,20 @@ functions:
     // push it back
     GiveImpulseTranslationAbsolute( m_vDamage/fNewRootLen*fMassFactor);
 
-    /*if ((m_tmSpraySpawned<=_pTimer->CurrentTick()-_pTimer->TickQuantum || 
+    /*if ((m_tmSpraySpawned <= _pTimer->CurrentTick()-_pTimer->TickQuantum || 
       m_fSprayDamage+fNewDamage>50.0f)
-      && m_fSpiritStartTime==0) {*/
+      && m_fSpiritStartTime == 0) {*/
     
     if (m_fMaxDamageAmmount<fDamageAmmount)
     {
       m_fMaxDamageAmmount = fDamageAmmount;
     }
     // if it has no spray, or if this damage overflows it, and not already disappearing
-    if ((m_tmSpraySpawned<=_pTimer->CurrentTick()-_pTimer->TickQuantum*8 || 
+    if ((m_tmSpraySpawned <= _pTimer->CurrentTick()-_pTimer->TickQuantum*8 || 
       m_fSprayDamage+fNewDamage>50.0f)
-      && m_fSpiritStartTime==0 &&
-      dmtType!=DMT_CHAINSAW && 
-      !(dmtType==DMT_BURNING && GetHealth()<0) ) {
+      && m_fSpiritStartTime == 0 &&
+      dmtType != DMT_CHAINSAW && 
+      !(dmtType == DMT_BURNING && GetHealth()<0) ) {
 
       // spawn blood spray
       CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
@@ -770,7 +770,7 @@ functions:
       eSpawnSpray.vDirection = vSpilDirection;
       eSpawnSpray.penOwner = this;
     
-      /*if (dmtType==DMT_BURNING && GetHealth()<0)
+      /*if (dmtType == DMT_BURNING && GetHealth()<0)
       {
         eSpawnSpray.fDamagePower = 1.0f;
       }*/
@@ -812,7 +812,7 @@ functions:
        
     } else {
       if (GetSP()->sp_bMental) {
-        if (GetHealth()<=0) {
+        if (GetHealth() <= 0) {
           if (en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
             GetModelInstance()->SetModelColor(C_WHITE&0xFF);
           } else {
@@ -844,7 +844,7 @@ functions:
         }
       }
     }
-    if (m_colBurning!=COLOR(C_WHITE|CT_OPAQUE))
+    if (m_colBurning != COLOR(C_WHITE|CT_OPAQUE))
     {
       colAmbient = MulColors( colAmbient, m_colBurning);
       colLight = MulColors( colLight, m_colBurning);
@@ -863,11 +863,11 @@ functions:
     }
 
     // if no music holder remembered - not in fuss
-    if (m_penMainMusicHolder==NULL) {
+    if (m_penMainMusicHolder == NULL) {
       // find main music holder
       m_penMainMusicHolder = _pNetwork->GetEntityWithName("MusicHolder", 0);
       // if no music holder found
-      if (m_penMainMusicHolder==NULL) {
+      if (m_penMainMusicHolder == NULL) {
         // just remember last fuss time
         m_tmLastFussTime = _pTimer->CurrentTick();
         // cannot make fuss
@@ -900,7 +900,7 @@ functions:
       return;
     }
     // if no music holder remembered
-    if (m_penMainMusicHolder==NULL) {
+    if (m_penMainMusicHolder == NULL) {
       // not in fuss
       return;
     }
@@ -920,7 +920,7 @@ functions:
   BOOL ShouldCeaseAttack(void)
   {
     // if there is no valid the enemy
-    if (m_penEnemy==NULL ||
+    if (m_penEnemy == NULL ||
       !(m_penEnemy->GetFlags()&ENF_ALIVE) || 
        (m_penEnemy->GetFlags()&ENF_DELETED)) {
       // cease attack
@@ -967,7 +967,7 @@ functions:
   BOOL IsValidForEnemy(CEntity *penPlayer)
   {
     return 
-      penPlayer!=NULL && 
+      penPlayer != NULL && 
       IsDerivedFromClass(penPlayer, "Player") &&
       penPlayer->GetFlags()&ENF_ALIVE;
   }
@@ -989,7 +989,7 @@ functions:
       return FALSE;
     }
     // if we already have any kind of target
-    if (m_ttTarget!=TT_NONE) {
+    if (m_ttTarget != TT_NONE) {
       // do nothing
       return FALSE;
     }
@@ -998,7 +998,7 @@ functions:
     m_ttTarget = TT_SOFT;
     m_dtDestination = DT_PLAYERCURRENT;
     m_penEnemy = penPlayer;
-    return penOld!=penPlayer;
+    return penOld != penPlayer;
   }
 
   // set new player as hard target if possible
@@ -1010,7 +1010,7 @@ functions:
       return FALSE;
     }
     // if we already have hard target
-    if (m_ttTarget==TT_HARD) {
+    if (m_ttTarget == TT_HARD) {
       // do nothing
       return FALSE;
     }
@@ -1019,7 +1019,7 @@ functions:
     m_ttTarget = TT_HARD;
     m_dtDestination = DT_PLAYERCURRENT;
     m_penEnemy = penPlayer;
-    return penOld!=penPlayer;
+    return penOld != penPlayer;
   }
 
   // force new player to be hard target
@@ -1035,7 +1035,7 @@ functions:
     m_ttTarget = TT_HARD;
     m_dtDestination = DT_PLAYERCURRENT;
     m_penEnemy = penPlayer;
-    return penOld!=penPlayer;
+    return penOld != penPlayer;
   }
 
 /************************************************************
@@ -1115,7 +1115,7 @@ functions:
   virtual void MovementAnimation(ULONG ulFlags)
   {
     if (ulFlags&MF_MOVEZ) {
-      if (m_fMoveSpeed==GetProp(m_fAttackRunSpeed) || m_fMoveSpeed==GetProp(m_fCloseRunSpeed)
+      if (m_fMoveSpeed == GetProp(m_fAttackRunSpeed) || m_fMoveSpeed == GetProp(m_fCloseRunSpeed)
         || m_fMoveSpeed>GetProp(m_fWalkSpeed)) {
         RunningAnim();
       } else {
@@ -1124,7 +1124,7 @@ functions:
     } else if (ulFlags&MF_ROTATEH) {
       RotatingAnim();
     } else {
-      if (m_penEnemy!=NULL) {
+      if (m_penEnemy != NULL) {
         StandingAnimFight();
       } else {
         StandingAnim();
@@ -1141,7 +1141,7 @@ functions:
     // get delta to desired position
     FLOAT3D vDelta = m_vDesiredPosition - GetPlacement().pl_PositionVector;
 
-    if (m_dtDestination==DT_PLAYERCURRENT) {
+    if (m_dtDestination == DT_PLAYERCURRENT) {
       ApplyTactics(vDelta);
     }
     
@@ -1233,7 +1233,7 @@ functions:
   // initialize path finding
   virtual void StartPathFinding(void)
   {
-    ASSERT(m_dtDestination==DT_PATHPERSISTENT || m_dtDestination==DT_PATHTEMPORARY);
+    ASSERT(m_dtDestination == DT_PATHPERSISTENT || m_dtDestination == DT_PATHTEMPORARY);
 
     CEntity *penMarker;
     FLOAT3D vPath;
@@ -1242,7 +1242,7 @@ functions:
       GetPlacement().pl_PositionVector, m_penEnemy->GetPlacement().pl_PositionVector,
       penMarker, vPath);
     // if not found, or not visible
-    if (penMarker==NULL || !IsVisible(penMarker)) {
+    if (penMarker == NULL || !IsVisible(penMarker)) {
       // no path finding
       m_dtDestination=DT_PLAYERSPOTTED;
       // remember as if spotted position
@@ -1258,7 +1258,7 @@ functions:
   virtual void FindNextPathMarker(void)
   {
     // if invalid situation
-    if (m_penPathMarker==NULL) {
+    if (m_penPathMarker == NULL) {
       // this should not happen
       ASSERT(FALSE);
       // no path finding
@@ -1274,7 +1274,7 @@ functions:
       penMarker, vPath);
 
     // if not found
-    if (penMarker==NULL || !IsVisible(penMarker)) {
+    if (penMarker == NULL || !IsVisible(penMarker)) {
       // no path finding
       m_dtDestination=DT_PLAYERSPOTTED;
       // remember as if spotted position
@@ -1291,13 +1291,13 @@ functions:
   BOOL CheckTouchForPathFinding(const ETouch &eTouch)
   {
     // if no enemy
-    if (m_penEnemy==NULL) {
+    if (m_penEnemy == NULL) {
       // do nothing
       return FALSE;
     }
 
     // if already path finding
-    if (m_dtDestination==DT_PATHPERSISTENT || m_dtDestination==DT_PATHTEMPORARY) {
+    if (m_dtDestination == DT_PATHPERSISTENT || m_dtDestination == DT_PATHTEMPORARY) {
       // do nothing
       return FALSE;
     }
@@ -1307,13 +1307,13 @@ functions:
     vDir*=GetRotationMatrix();
     // if the touched plane is more or less orthogonal to the current velocity
     if ((eTouch.plCollision%vDir)<-0.5f) {
-      if (m_penEnemy!=NULL && IsVisible(m_penEnemy)) {
+      if (m_penEnemy != NULL && IsVisible(m_penEnemy)) {
         m_dtDestination = DT_PATHPERSISTENT;
       } else {
         m_dtDestination = DT_PATHTEMPORARY;
       }
       StartPathFinding();
-      return m_penPathMarker!=NULL;
+      return m_penPathMarker != NULL;
     } else {
       return FALSE;
     }
@@ -1323,25 +1323,25 @@ functions:
   BOOL CheckFallForPathFinding(const EWouldFall &eWouldFall)
   {
     // if no enemy
-    if (m_penEnemy==NULL) {
+    if (m_penEnemy == NULL) {
       // do nothing
       return FALSE;
     }
 
     // if already path finding
-    if (m_dtDestination==DT_PATHPERSISTENT || m_dtDestination==DT_PATHTEMPORARY) {
+    if (m_dtDestination == DT_PATHPERSISTENT || m_dtDestination == DT_PATHTEMPORARY) {
       // do nothing
       return FALSE;
     }
 
-    if (m_penEnemy!=NULL && IsVisible(m_penEnemy)) {
+    if (m_penEnemy != NULL && IsVisible(m_penEnemy)) {
       m_dtDestination = DT_PATHPERSISTENT;
     } else {
       m_dtDestination = DT_PATHTEMPORARY;
     }
     StartPathFinding();
 
-    return m_penPathMarker!=NULL;
+    return m_penPathMarker != NULL;
   }
 
   /************************************************************
@@ -1352,8 +1352,8 @@ functions:
   
     // return if there is no tactics manager or if it points to wrong type of entity
     // or if there is no enemy
-    if (m_penTacticsHolder==NULL || !IsOfClass(m_penTacticsHolder, "TacticsHolder")
-        || m_penEnemy==NULL) {
+    if (m_penTacticsHolder == NULL || !IsOfClass(m_penTacticsHolder, "TacticsHolder")
+        || m_penEnemy == NULL) {
       return;
     }
   
@@ -1418,8 +1418,8 @@ functions:
     
     // return if there is no tactics manager or if it points to wrong type of entity
     // or if there is no enemy
-    if (m_penTacticsHolder==NULL || !IsOfClass(m_penTacticsHolder, "TacticsHolder")
-        || m_penEnemy==NULL) {
+    if (m_penTacticsHolder == NULL || !IsOfClass(m_penTacticsHolder, "TacticsHolder")
+        || m_penEnemy == NULL) {
       return;
     }
   
@@ -1427,7 +1427,7 @@ functions:
 
     // See if the last activation time of TacticsHolder is greater then the activation
     // time of this monster. If so, start (or reinitialize) the tactics.
-    if (penTactics->m_tmLastActivation==-1 || penTactics->m_tctType==TCT_NONE) {
+    if (penTactics->m_tmLastActivation == -1 || penTactics->m_tctType == TCT_NONE) {
       m_bTacticActive = FALSE;
     } else if (m_tmTacticsActivation < penTactics->m_tmLastActivation) {
       InitializeTactics();
@@ -1699,7 +1699,7 @@ functions:
 
   BOOL WouldNotLeaveAttackRadius(void)
   {
-    if (m_fAttackRadius<=0) {
+    if (m_fAttackRadius <= 0) {
       return FALSE;
     }
     // test if we are inside radius
@@ -1719,7 +1719,7 @@ functions:
     CContentType &ctUp = pen->en_pwoWorld->wo_actContentTypes[pen->en_iUpContent];
     BOOL bEnemyDiving = !(ctUp.ct_ulFlags&CTF_BREATHABLE_LUNGS);
     // may move if can go to enemy without leaving attack radius, and entity is not diving
-    return  WouldNotLeaveAttackRadius() && !bEnemyDiving;
+    return WouldNotLeaveAttackRadius() && !bEnemyDiving;
   };
 
 
@@ -1737,11 +1737,11 @@ functions:
       // allowed 
       GetSP()->sp_bGibs && 
       // dead and
-      GetHealth()<=0 && 
+      GetHealth() <= 0 && 
       // has received large enough damage lately and
       m_vDamage.Length() > m_fBlowUpAmount && 
       // not already disappearing
-      m_fSpiritStartTime==0;
+      m_fSpiritStartTime == 0;
   }
 
 
@@ -1773,12 +1773,12 @@ functions:
       // determine debris texture (color)
       ULONG ulFleshTexture = TEXTURE_FLESH_GREEN;
       ULONG ulFleshModel   = MODEL_FLESH;
-      if (iBloodType==2) { ulFleshTexture = TEXTURE_FLESH_RED; }
+      if (iBloodType == 2) { ulFleshTexture = TEXTURE_FLESH_RED; }
       // spawn debris
       Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, m_fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
       for (INDEX iDebris = 0; iDebris<m_fBodyParts; iDebris++) {
         // flowerpower mode?
-        if (iBloodType==3) {
+        if (iBloodType == 3) {
           switch (IRnd()%5) {
           case 1:  { ulFleshModel = MODEL_FLESH_APPLE;   ulFleshTexture = TEXTURE_FLESH_APPLE;   break; }
           case 2:  { ulFleshModel = MODEL_FLESH_BANANA;  ulFleshTexture = TEXTURE_FLESH_BANANA;  break; }
@@ -1898,13 +1898,13 @@ functions:
   void WoundedNotify(const EDamage &eDamage)
   {
     // if no enemy
-    if (m_penEnemy==NULL) {
+    if (m_penEnemy == NULL) {
       // do nothing
       return;
     }
 
     // if not killed from short distance
-    if (eDamage.dmtType!=DMT_CLOSERANGE && eDamage.dmtType!=DMT_CHAINSAW) {
+    if (eDamage.dmtType != DMT_CLOSERANGE && eDamage.dmtType != DMT_CHAINSAW) {
       // yell
       ESound eSound;
       eSound.EsndtSound = SNDT_YELL;
@@ -1917,7 +1917,7 @@ functions:
   void SeeNotify() 
   {
     // if no enemy
-    if (m_penEnemy==NULL) {
+    if (m_penEnemy == NULL) {
       // do nothing
       return;
     }
@@ -1954,7 +1954,7 @@ functions:
   // render particles
   void RenderParticles(void) {
     // no particles when not existing
-    if (GetRenderType()!=CEntity::RT_MODEL && GetRenderType()!=CEntity::RT_SKAMODEL) {
+    if (GetRenderType() != CEntity::RT_MODEL && GetRenderType() != CEntity::RT_SKAMODEL) {
       return;
     }
     // if is dead
@@ -1972,7 +1972,7 @@ functions:
   /* Handle an event, return false if the event is not handled. */
   BOOL HandleEvent(const CEntityEvent &ee)
   {
-    if (ee.ee_slEvent==EVENTCODE_ETouch)
+    if (ee.ee_slEvent == EVENTCODE_ETouch)
     {
       if (GetCrushHealth() != 0.0f)
       {
@@ -1992,7 +1992,7 @@ functions:
   // returns length of animation
   FLOAT GetAnimLength(int iAnim)
   {
-    if (en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType == RT_SKAMODEL) {
       return GetModelInstance()->GetAnimLength(iAnim);
     } else {
       return GetModelObject()->GetAnimLength(iAnim);
@@ -2002,7 +2002,7 @@ functions:
   // returns lenght of current anim length
   FLOAT GetCurrentAnimLength()
   {
-    if (en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType == RT_SKAMODEL) {
       return 0.5f;
     } else {
       return GetModelObject()->GetCurrentAnimLength();
@@ -2012,7 +2012,7 @@ functions:
   // is animation finished
   BOOL IsAnimFinished()
   {
-    if (en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType == RT_SKAMODEL) {
       return TRUE;
     } else {
       return GetModelObject()->IsAnimFinished();
@@ -2022,7 +2022,7 @@ functions:
   // 
   FLOAT GetPassedTime()
   {
-    if (en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType == RT_SKAMODEL) {
       return 0.0f;
     } else { 
       return GetModelObject()->GetPassedTime();
@@ -2031,7 +2031,7 @@ functions:
 
   FLOAT3D &GetModelStretch()
   {
-    if (en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType == RT_SKAMODEL) {
       return GetModelInstance()->mi_vStretch;
     } else {
       return GetModelObject()->mo_Stretch;
@@ -2041,7 +2041,7 @@ functions:
   // Stretch model
   void StretchModel(FLOAT3D vStretch)
   {
-    if (en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType == RT_SKAMODEL) {
       GetModelInstance()->StretchModel( vStretch);
     } else {
       GetModelObject()->StretchModel( vStretch);
@@ -2051,7 +2051,7 @@ functions:
   // Stretch single model
   void StretchSingleModel( FLOAT3D vStretch)
   {
-    if (en_RenderType==RT_SKAMODEL) {
+    if (en_RenderType == RT_SKAMODEL) {
       GetModelInstance()->StretchSingleModel( vStretch);
     } else {
       GetModelObject()->StretchSingleModel( vStretch);
@@ -2228,7 +2228,7 @@ procedures:
     GetWatcher()->SendEvent(EStart());
   
     // while there is a valid marker, take values from it
-    while (m_penMarker!=NULL && IsOfClass(m_penMarker, "Enemy Marker")) {
+    while (m_penMarker != NULL && IsOfClass(m_penMarker, "Enemy Marker")) {
       CEnemyMarker *pem = (CEnemyMarker *)&*m_penMarker;
 
       // the marker position is our new start position for attack range
@@ -2238,7 +2238,7 @@ procedures:
       FLOAT fA = FRnd()*360.0f;
       m_vDesiredPosition = m_vStartPosition+FLOAT3D(CosFast(fA)*fR, 0, SinFast(fA)*fR);
       // if running 
-      if (pem->m_betRunToMarker==BET_TRUE) {
+      if (pem->m_betRunToMarker == BET_TRUE) {
         // use attack speeds
         m_fMoveSpeed = GetProp(m_fAttackRunSpeed);
         m_aRotateSpeed = GetProp(m_aAttackRotateSpeed);
@@ -2327,7 +2327,7 @@ procedures:
     tmReflex = ClampDn(tmReflex, 0.0f);
 
     // if should wait
-    if (tmReflex>=_pTimer->TickQuantum) {
+    if (tmReflex >= _pTimer->TickQuantum) {
       // stop where you are
       StopMoving();
       StandingAnim();
@@ -2431,7 +2431,7 @@ procedures:
       // get distance from enemy
       FLOAT fEnemyDistance = CalcDist(m_penEnemy);
       // if just entered close range
-      if (m_fRangeLast>GetProp(m_fCloseDistance) && fEnemyDistance<=GetProp(m_fCloseDistance)) {
+      if (m_fRangeLast>GetProp(m_fCloseDistance) && fEnemyDistance <= GetProp(m_fCloseDistance)) {
         // reset shoot time to make it attack immediately
         m_fShootTime = 0.0f;
       }
@@ -2439,7 +2439,7 @@ procedures:
 
       // determine movement frequency depending on enemy distance or path finding
       m_fMoveFrequency = GetAttackMoveFrequency(fEnemyDistance);
-      if (m_dtDestination==DT_PATHPERSISTENT||m_dtDestination==DT_PATHTEMPORARY) {
+      if (m_dtDestination == DT_PATHPERSISTENT||m_dtDestination == DT_PATHTEMPORARY) {
         m_fMoveFrequency = 0.1f;
       }
 
@@ -2454,7 +2454,7 @@ procedures:
 
             // if you have new player visible closer than current and in threat distance
             CEntity *penNewEnemy = GetWatcher()->CheckCloserPlayer(m_penEnemy, GetThreatDistance());
-            if (penNewEnemy!=NULL) {
+            if (penNewEnemy != NULL) {
               // switch to that player
               SetTargetHardForce(penNewEnemy);
               // start new behavior
@@ -2467,7 +2467,7 @@ procedures:
               // remember spotted position
               m_vPlayerSpotted = PlayerDestinationPos();
               // if going to player spotted or temporary path position
-              if (m_dtDestination==DT_PLAYERSPOTTED||m_dtDestination==DT_PATHTEMPORARY) {
+              if (m_dtDestination == DT_PLAYERSPOTTED||m_dtDestination == DT_PATHTEMPORARY) {
                 // switch to player current position
                 m_dtDestination=DT_PLAYERCURRENT;
               }
@@ -2475,7 +2475,7 @@ procedures:
             // if you cannot see player
             } else {
               // if going to player's current position
-              if (m_dtDestination==DT_PLAYERCURRENT) {
+              if (m_dtDestination == DT_PLAYERCURRENT) {
                 // switch to position where player was last seen
                 m_dtDestination=DT_PLAYERSPOTTED;
               }
@@ -2487,7 +2487,7 @@ procedures:
           // if between two fire/hit moments
           } else {
             // if going to player spotted or temporary path position and you just seen the player
-            if ((m_dtDestination==DT_PLAYERSPOTTED||m_dtDestination==DT_PATHTEMPORARY)
+            if ((m_dtDestination == DT_PLAYERSPOTTED||m_dtDestination == DT_PATHTEMPORARY)
               && IsVisible(m_penEnemy)) {
               // switch to player current position
               m_dtDestination=DT_PLAYERCURRENT;
@@ -2498,13 +2498,13 @@ procedures:
 
           // if you are not following the player and you are near current destination position
           FLOAT fAllowedError = m_fMoveSpeed*m_fMoveFrequency*2.0f;
-          if (m_dtDestination==DT_PATHPERSISTENT||m_dtDestination==DT_PATHTEMPORARY) {
+          if (m_dtDestination == DT_PATHPERSISTENT||m_dtDestination == DT_PATHTEMPORARY) {
             fAllowedError = ((CNavigationMarker&)*m_penPathMarker).m_fMarkerRange;
           }
-          if (m_dtDestination!=DT_PLAYERCURRENT &&
+          if (m_dtDestination != DT_PLAYERCURRENT &&
             (CalcDistanceInPlaneToDestination()<fAllowedError || fAllowedError<0.1f)) {
             // if going to where player was last spotted
-            if (m_dtDestination==DT_PLAYERSPOTTED) {
+            if (m_dtDestination == DT_PLAYERSPOTTED) {
               // if you see the player
               if (IsVisible(m_penEnemy)) {
                 // switch to following player
@@ -2516,19 +2516,19 @@ procedures:
                 StartPathFinding();
               }
             // if using pathfinding
-            } else if (m_dtDestination==DT_PATHTEMPORARY||m_dtDestination==DT_PATHPERSISTENT) {
+            } else if (m_dtDestination == DT_PATHTEMPORARY||m_dtDestination == DT_PATHPERSISTENT) {
               // find next path marker
               FindNextPathMarker();
             }
           }
 
           // if following player
-          if (m_dtDestination==DT_PLAYERCURRENT) {
+          if (m_dtDestination == DT_PLAYERCURRENT) {
             // set player's position as destination position
             m_vDesiredPosition = PlayerDestinationPos();
 
           // if going to where player was last seen
-          } else if (m_dtDestination==DT_PLAYERSPOTTED) {
+          } else if (m_dtDestination == DT_PLAYERSPOTTED) {
             // use that as destination position
             m_vDesiredPosition = m_vPlayerSpotted;
           }
@@ -2537,7 +2537,7 @@ procedures:
           FLOAT3D vPosDelta = m_vDesiredPosition-GetPlacement().pl_PositionVector;
           FLOAT fPosDistance = vPosDelta.Length();
           
-          SetSpeedsToDesiredPosition(vPosDelta, fPosDistance, m_dtDestination==DT_PLAYERCURRENT);
+          SetSpeedsToDesiredPosition(vPosDelta, fPosDistance, m_dtDestination == DT_PLAYERCURRENT);
 
           // adjust direction and speed
           ULONG ulFlags = SetDesiredMovement(); 
@@ -2557,7 +2557,7 @@ procedures:
           // if touch is ignored
           } else if (m_bTacticActive) {
             // reinitialize tactics?
-            if (eTouch.penOther->GetRenderType()==CEntity::RT_BRUSH) {
+            if (eTouch.penOther->GetRenderType() == CEntity::RT_BRUSH) {
               FLOAT3D vDir = en_vDesiredTranslationRelative;
               vDir.SafeNormalize();
               vDir*=GetRotationMatrix();
@@ -2767,16 +2767,16 @@ procedures:
 
     // find the one who killed, or other best suitable player
     CEntityPointer penKiller = eDeath.eLastDamage.penInflictor;
-    if (penKiller==NULL || !IsOfClass(penKiller, "Player")) {
+    if (penKiller == NULL || !IsOfClass(penKiller, "Player")) {
       penKiller = m_penEnemy;
     }
 
-    if (penKiller==NULL || !IsOfClass(penKiller, "Player")) {
+    if (penKiller == NULL || !IsOfClass(penKiller, "Player")) {
       penKiller = FixupCausedToPlayer(this, penKiller, /*bWarning=*/FALSE);
     }
 
     // if killed by someone
-    if (penKiller!=NULL) {
+    if (penKiller != NULL) {
       // give him score
       EReceiveScore eScore;
       eScore.iPoints = m_iScore;
@@ -2789,7 +2789,7 @@ procedures:
       if (GetSP()->sp_bCooperative) {
         EComputerMessage eMsg;
         eMsg.fnmMessage = GetComputerMessageName();
-        if (eMsg.fnmMessage!="") {
+        if (eMsg.fnmMessage != "") {
           penKiller->SendEvent(eMsg);
         }
       }
@@ -2890,7 +2890,7 @@ procedures:
       while (_pTimer->CurrentTick()<m_fTacticVar5+GetCurrentAnimLength())
       {
         autowait(_pTimer->TickQuantum);
-        if (en_penReference!=NULL && _pTimer->CurrentTick()>=m_fTacticVar5+m_fTacticVar4 && m_fTacticVar3<0)
+        if (en_penReference != NULL && _pTimer->CurrentTick() >= m_fTacticVar5+m_fTacticVar4 && m_fTacticVar3<0)
         {
           // spawn dust effect
           CPlacement3D plFX=GetPlacement();
@@ -2923,7 +2923,7 @@ procedures:
 
     // check if you have attached flame
     CEntityPointer penFlame = GetChildOfClass("Flame");
-    if (penFlame!=NULL)
+    if (penFlame != NULL)
     {
       // send the event to stop burning
       EStopFlaming esf;
@@ -2939,7 +2939,7 @@ procedures:
     m_fFadeTime = 1.0f,
     m_bFadeOut = TRUE;
     // become passable even if very large corpse
-    SetCollisionFlags(ECF_CORPSE&~((ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID)<<ECB_TEST));
+    SetCollisionFlags(ECF_CORPSE&~((ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID) << ECB_TEST));
     // wait for fading
     autowait(m_fFadeTime);
     // wait for the stardust effect
@@ -2966,7 +2966,7 @@ procedures:
       // if new behavior is requested
       on (EReconsiderBehavior) : {
         // if we have an enemy
-        if (m_penEnemy!=NULL) {
+        if (m_penEnemy != NULL) {
           // attack it
           call AttackEnemy();
         // if we have a marker to walk to
@@ -3148,7 +3148,7 @@ procedures:
     // setup some model parameters that are global for all enemies
     SizeModel();
     // check that max health is properly set
-    ASSERT(m_fMaxHealth==GetHealth() || IsOfClass(this, "Devil") || IsOfClass(this, "ExotechLarva") || IsOfClass(this, "AirElemental") || IsOfClass(this, "Summoner"));
+    ASSERT(m_fMaxHealth == GetHealth() || IsOfClass(this, "Devil") || IsOfClass(this, "ExotechLarva") || IsOfClass(this, "AirElemental") || IsOfClass(this, "Summoner"));
 
     // normalize parameters
     if (m_tmReflexMin<0) {
@@ -3159,7 +3159,7 @@ procedures:
     }
 
     // adjust falldown and step up values
-    if (m_fStepHeight==-1) {
+    if (m_fStepHeight == -1) {
       m_fStepHeight = 2.0f;
     }
 
@@ -3185,7 +3185,7 @@ procedures:
     GetWatcher()->Initialize(eInitWatcher);
 
     // switch to next marker (enemies usually point to the marker they stand on)
-    if (m_penMarker!=NULL && IsOfClass(m_penMarker, "Enemy Marker")) {
+    if (m_penMarker != NULL && IsOfClass(m_penMarker, "Enemy Marker")) {
       CEnemyMarker *pem = (CEnemyMarker *)&*m_penMarker;
       m_penMarker = pem->m_penTarget;
     }
@@ -3208,8 +3208,8 @@ procedures:
     AdjustDifficulty();
 
     // check enemy params
-    ASSERT(m_fStopDistance>=0);
-    ASSERT(m_fCloseDistance>=0);
+    ASSERT(m_fStopDistance >= 0);
+    ASSERT(m_fCloseDistance >= 0);
     ASSERT(m_fAttackDistance>m_fCloseDistance);
     ASSERT(m_fIgnoreRange>m_fAttackDistance);
 
@@ -3227,7 +3227,7 @@ procedures:
       // initially
       on (EBegin) : {
         // start in active or inactive state
-        if (m_penEnemy!=NULL) {
+        if (m_penEnemy != NULL) {
           call Active();
         } else {
           call Inactive();
