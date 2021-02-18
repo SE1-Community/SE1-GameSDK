@@ -27,14 +27,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define CTA_CENTER 3
 
 class CCreditEntry {
-public:
-  CTString strTitle;
-  CTString strName;
-  CTString strQuote;
-  INDEX    iAlign;
-  INDEX    iX, iY;
-  FLOAT    fRelSize;
-  FLOAT    fWait;
+  public:
+    CTString strTitle;
+    CTString strName;
+    CTString strQuote;
+    INDEX    iAlign;
+    INDEX    iX, iY;
+    FLOAT    fRelSize;
+    FLOAT    fWait;
 };
   
 static CStaticStackArray<CCreditEntry> _acceEntries;

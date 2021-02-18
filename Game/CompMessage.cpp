@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -18,12 +18,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CompMessage.h"
 extern CTString _strStatsDetails;
 
-CCompMessage::CCompMessage(void)
-{
+CCompMessage::CCompMessage(void) {
   Clear();
 }
-void CCompMessage::Clear(void)
-{
+void CCompMessage::Clear(void) {
   UnprepareMessage();
   cm_fnmFileName.Clear();
   cm_pcmiOriginal = NULL;
@@ -31,16 +29,14 @@ void CCompMessage::Clear(void)
 }
 
 // constructs message with a filename
-void CCompMessage::SetMessage(CCompMessageID *pcmi)
-{
+void CCompMessage::SetMessage(CCompMessageID *pcmi) {
   cm_fnmFileName = pcmi->cmi_fnmFileName;
   cm_bRead = pcmi->cmi_bRead;
   cm_pcmiOriginal = pcmi;
 }
 
 // load a message from file
-void CCompMessage::Load_t(void)
-{
+void CCompMessage::Load_t(void) {
   // if already loaded
   if (cm_bLoaded) {
     // do nothing
@@ -79,8 +75,7 @@ void CCompMessage::Load_t(void)
 }
 
 // format message for given line width
-void CCompMessage::Format(INDEX ctCharsPerLine)
-{
+void CCompMessage::Format(INDEX ctCharsPerLine) {
   // if already formatted in needed size
   if (cm_ctFormattedWidth == ctCharsPerLine) {
     // do nothing
@@ -95,7 +90,7 @@ void CCompMessage::Format(INDEX ctCharsPerLine)
     strText = _strStatsDetails;
     cm_strFormattedText = strText;
     cm_ctFormattedLines = 1;
-    for (INDEX i=0; i<cm_strFormattedText.Length(); i++) {
+    for (INDEX i = 0; i < cm_strFormattedText.Length(); i++) {
       if (cm_strFormattedText[i] == '\n') {
         cm_ctFormattedLines++;
       }
@@ -104,7 +99,7 @@ void CCompMessage::Format(INDEX ctCharsPerLine)
   }
 
   // allocate overestimated buffer
-  SLONG slMaxBuffer = strlen(strText)*2;
+  SLONG slMaxBuffer = strlen(strText) * 2;
   char *pchBuffer = (char *)AllocMemory(slMaxBuffer);
 
   // start at the beginning of text and buffer
@@ -119,58 +114,57 @@ void CCompMessage::Format(INDEX ctCharsPerLine)
     // if it was line break
     if (chLast == '\n') {
       // new line
-      ctChars=0;
+      ctChars = 0;
       cm_ctFormattedLines++;
       continue;
     }
     ctChars++;
     // if out of row
-    if (ctChars>ctCharsPerLine) {
+    if (ctChars > ctCharsPerLine) {
       // start backtracking
-      const char *pchSrcBck = pchSrc-1;
-            char *pchDstBck = pchDst-1;
+      const char *pchSrcBck = pchSrc - 1;
+      char *pchDstBck = pchDst - 1;
       // while not start of row and not space
-      while (pchSrcBck>pchSrc-ctChars && *pchSrcBck != ' ') {
+      while (pchSrcBck > pchSrc - ctChars && *pchSrcBck != ' ') {
         // go one char back
         pchSrcBck--;
         pchDstBck--;
       }
       // if start of row hit (cannot word-wrap)
-      if (pchSrcBck<pchSrc-ctChars) {
+      if (pchSrcBck < pchSrc - ctChars) {
         // just go to next line
         pchSrc--;
         pchDst--;
-        *pchDst++='\n';
-        ctChars=0;
+        *pchDst++ = '\n';
+        ctChars = 0;
         cm_ctFormattedLines++;
         continue;
       }
       // if can word-wrap, insert break before the last word
-      pchSrc = pchSrcBck+1;
+      pchSrc = pchSrcBck + 1;
       pchDst = pchDstBck;
-      *pchDst++='\n';
-      ctChars=0;
+      *pchDst++ = '\n';
+      ctChars = 0;
       cm_ctFormattedLines++;
     }
   }
 
   // add end marker
-  *pchDst=0;
+  *pchDst = 0;
 
   cm_strFormattedText = pchBuffer;
   FreeMemory(pchBuffer);
 }
 
 // prepare message for using (load, format, etc.)
-void CCompMessage::PrepareMessage(INDEX ctCharsPerLine)
-{
+void CCompMessage::PrepareMessage(INDEX ctCharsPerLine) {
   // if not loaded
   if (!cm_bLoaded) {
     // try to
     try {
       // load it
       Load_t();
-    // if failed
+      // if failed
     } catch (char *strError) {
       // report warning
       CPrintF("Cannot load message'%s': %s\n", (const CTString &)cm_fnmFileName, strError);
@@ -184,8 +178,7 @@ void CCompMessage::PrepareMessage(INDEX ctCharsPerLine)
 }
 
 // free memory used by message, but keep message filename
-void CCompMessage::UnprepareMessage(void)
-{
+void CCompMessage::UnprepareMessage(void) {
   // clear everything except filename
   cm_bLoaded = FALSE;
   cm_strSubject.Clear();
@@ -198,19 +191,17 @@ void CCompMessage::UnprepareMessage(void)
   cm_ctFormattedLines = 0;
 }
 // mark message as read
-void CCompMessage::MarkRead(void)
-{
+void CCompMessage::MarkRead(void) {
   cm_bRead = TRUE;
   cm_pcmiOriginal->cmi_bRead = TRUE;
 }
 
 // get one formatted line
-CTString CCompMessage::GetLine(INDEX iLine)
-{
+CTString CCompMessage::GetLine(INDEX iLine) {
   const char *strText = cm_strFormattedText;
   // find first line
-  INDEX i = 0; 
-  while (i<iLine) {
+  INDEX i = 0;
+  while (i < iLine) {
     strText = strchr(strText, '\n');
     if (strText == NULL) {
       return "";
@@ -221,7 +212,7 @@ CTString CCompMessage::GetLine(INDEX iLine)
   }
   // find end of line
   CTString strLine = strText;
-  char *pchEndOfLine = (char*)strchr(strLine, '\n');
+  char *pchEndOfLine = (char *)strchr(strLine, '\n');
   // if found
   if (pchEndOfLine != NULL) {
     // cut there

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -17,7 +17,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_GAMEINTERFACE_H
 #define SE_INCL_GAMEINTERFACE_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 // controls' declarations
@@ -36,34 +36,32 @@ DECL_DLL extern INDEX plr_iHiScore;
 // type of computer message
 enum CompMsgType {
   CMT_INFORMATION = 0,
-  CMT_BACKGROUND  = 1,
-  CMT_WEAPONS     = 2,
-  CMT_ENEMIES     = 3,
-  CMT_STATISTICS  = 4,
+  CMT_BACKGROUND = 1,
+  CMT_WEAPONS = 2,
+  CMT_ENEMIES = 3,
+  CMT_STATISTICS = 4,
 
   CMT_COUNT = 5,
 };
 
-
 // type of statistic comp message
 enum CompStatType {
-  CST_SHORT  = 1,
+  CST_SHORT = 1,
   CST_DETAIL = 2,
 };
 
-
 // identifier of a computer message
 class DECL_DLL CCompMessageID {
-public:
-  enum CompMsgType cmi_cmtType; // message category
-  CTFileName cmi_fnmFileName;   // message filename
-  BOOL cmi_bRead;               // true if message is read
-  ULONG cmi_ulHash;             // filename hash for fast searching
+  public:
+    enum CompMsgType cmi_cmtType; // message category
+    CTFileName cmi_fnmFileName;   // message filename
+    BOOL cmi_bRead;               // true if message is read
+    ULONG cmi_ulHash;             // filename hash for fast searching
 
-  void Clear(void);
-  void Read_t(CTStream &strm);    // throw char *
-  void Write_t(CTStream &strm);   // throw char *
-  void NewMessage(const CTFileName &fnm);
+    void Clear(void);
+    void Read_t(CTStream &strm);  // throw char *
+    void Write_t(CTStream &strm); // throw char *
+    void NewMessage(const CTFileName &fnm);
 };
 
 // != NULL if some player wants to call computer
@@ -75,6 +73,4 @@ DECL_DLL extern BOOL cmp_bUpdateInBackground;
 // set for initial calling computer without rendering game
 DECL_DLL extern BOOL cmp_bInitialStart;
 
-
-#endif  /* include-once check. */
-
+#endif /* include-once check. */

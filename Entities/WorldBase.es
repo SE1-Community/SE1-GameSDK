@@ -887,22 +887,21 @@ void CWorldBase_OnEndClass(void)
 }
 
 class CFixedForce {
-public:
-  CTString ff_strName;
-  class CForceStrength ff_fsGravity;
-  class CForceStrength ff_fsField;
-  
-  inline CFixedForce(CTString strName,
-    FLOAT3D vDirection,
-    FLOAT fAcceleration,
-    FLOAT fVelocity)
-  {
-    ff_strName = strName;
-    ff_fsGravity.fs_vDirection     =vDirection;
-    ff_fsGravity.fs_fAcceleration  =fAcceleration;
-    ff_fsGravity.fs_fVelocity      =fVelocity;
-  }
-
+  public:
+    CTString ff_strName;
+    class CForceStrength ff_fsGravity;
+    class CForceStrength ff_fsField;
+    
+    inline CFixedForce(CTString strName,
+      FLOAT3D vDirection,
+      FLOAT fAcceleration,
+      FLOAT fVelocity)
+    {
+      ff_strName = strName;
+      ff_fsGravity.fs_vDirection     =vDirection;
+      ff_fsGravity.fs_fAcceleration  =fAcceleration;
+      ff_fsGravity.fs_fVelocity      =fVelocity;
+    }
 };
 
 static CFixedForce affFixedForces[] = 

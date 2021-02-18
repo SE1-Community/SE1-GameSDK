@@ -127,10 +127,10 @@ const FLOAT _fBlowUpAmmount = 70.0f;
 #define CMF_ANALYZE    (1L << 1)
 
 struct MarkerDistance {
-public:
-  FLOAT md_fMinD;
-  CPlayerMarker *md_ppm;
-  void Clear(void);
+  public:
+    FLOAT md_fMinD;
+    CPlayerMarker *md_ppm;
+    void Clear(void);
 };
 
 // export current player projection

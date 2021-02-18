@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -24,15 +24,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 static CListHead _lhOpen;
 static CListHead _lhClosed;
 
-FLOAT NodeDistance(CPathNode *ppn0, CPathNode *ppn1)
-{
-  return (
-    ppn0->pn_pnmMarker->GetPlacement().pl_PositionVector - 
-    ppn1->pn_pnmMarker->GetPlacement().pl_PositionVector).Length();
+FLOAT NodeDistance(CPathNode *ppn0, CPathNode *ppn1) {
+  return (ppn0->pn_pnmMarker->GetPlacement().pl_PositionVector - ppn1->pn_pnmMarker->GetPlacement().pl_PositionVector).Length();
 }
 
-CPathNode::CPathNode(class CNavigationMarker *penMarker)
-{
+CPathNode::CPathNode(class CNavigationMarker *penMarker) {
   pn_pnmMarker = penMarker;
   pn_ppnParent = NULL;
   pn_fG = 0.0f;
@@ -40,17 +36,15 @@ CPathNode::CPathNode(class CNavigationMarker *penMarker)
   pn_fF = 0.0f;
 }
 
-CPathNode::~CPathNode(void)
-{
+CPathNode::~CPathNode(void) {
   // detach from marker when deleting
   ASSERT(pn_pnmMarker != NULL);
   pn_pnmMarker->m_ppnNode = NULL;
 }
 
 // get name of this node
-const CTString &CPathNode::GetName(void)
-{
-  static CTString strNone="<none>";
+const CTString &CPathNode::GetName(void) {
+  static CTString strNone = "<none>";
   if (this == NULL || pn_pnmMarker == NULL) {
     return strNone;
   } else {
@@ -59,8 +53,7 @@ const CTString &CPathNode::GetName(void)
 }
 
 // get link with given index or null if no more (for iteration along the graph)
-CPathNode *CPathNode::GetLink(INDEX i)
-{
+CPathNode *CPathNode::GetLink(INDEX i) {
   if (this == NULL || pn_pnmMarker == NULL) {
     ASSERT(FALSE);
     return NULL;
@@ -73,12 +66,11 @@ CPathNode *CPathNode::GetLink(INDEX i)
 }
 
 // add given node to open list, sorting best first
-static void SortIntoOpenList(CPathNode *ppnLink)
-{
+static void SortIntoOpenList(CPathNode *ppnLink) {
   // start at head of the open list
   LISTITER(CPathNode, pn_lnInOpen) itpn(_lhOpen);
   // while the given node is further than the one in list
-  while (ppnLink->pn_fF>itpn->pn_fF && !itpn.IsPastEnd()) {
+  while (ppnLink->pn_fF > itpn->pn_fF && !itpn.IsPastEnd()) {
     // move to next node
     itpn.MoveToNext();
   }
@@ -87,17 +79,15 @@ static void SortIntoOpenList(CPathNode *ppnLink)
   if (itpn.IsPastEnd()) {
     // add to the end of list
     _lhOpen.AddTail(ppnLink->pn_lnInOpen);
-  // if not past end of list
+    // if not past end of list
   } else {
     // add before current node
     itpn.InsertBeforeCurrent(ppnLink->pn_lnInOpen);
   }
 }
-  
-// find shortest path from one marker to another
-static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst)
-{
 
+// find shortest path from one marker to another
+static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst) {
   ASSERT(pnmSrc != pnmDst);
   CPathNode *ppnSrc = pnmSrc->GetPathNode();
   CPathNode *ppnDst = pnmDst->GetPathNode();
@@ -112,7 +102,7 @@ static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst)
   // add the start node to open list
   ppnSrc->pn_fG = 0.0f;
   ppnSrc->pn_fH = NodeDistance(ppnSrc, ppnDst);
-  ppnSrc->pn_fF = ppnSrc->pn_fG +ppnSrc->pn_fH;
+  ppnSrc->pn_fF = ppnSrc->pn_fG + ppnSrc->pn_fH;
   _lhOpen.AddTail(ppnSrc->pn_lnInOpen);
   PRINTOUT(CPrintF("StartState: %s\n", ppnSrc->GetName()));
 
@@ -121,7 +111,7 @@ static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst)
     // get the first node from open list (that is, the one with lowest F)
     CPathNode *ppnNode = LIST_HEAD(_lhOpen, CPathNode, pn_lnInOpen);
     ppnNode->pn_lnInOpen.Remove();
-      _lhClosed.AddTail(ppnNode->pn_lnInClosed);
+    _lhClosed.AddTail(ppnNode->pn_lnInClosed);
     PRINTOUT(CPrintF("Node: %s - moved from OPEN to CLOSED\n", ppnNode->GetName()));
 
     // if this is the goal
@@ -133,10 +123,10 @@ static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst)
 
     // for each link of current node
     CPathNode *ppnLink = NULL;
-    for (INDEX i=0; (ppnLink=ppnNode->GetLink(i)) != NULL; i++) {
+    for (INDEX i = 0; (ppnLink = ppnNode->GetLink(i)) != NULL; i++) {
       PRINTOUT(CPrintF(" Link %d: %s\n", i, ppnLink->GetName()));
       // get cost to get to this node if coming from current node
-      FLOAT fNewG = ppnLink->pn_fG+NodeDistance(ppnNode, ppnLink);
+      FLOAT fNewG = ppnLink->pn_fG + NodeDistance(ppnNode, ppnLink);
       // if a shorter path already exists
       if ((ppnLink->pn_lnInOpen.IsLinked() || ppnLink->pn_lnInClosed.IsLinked()) && fNewG >= ppnLink->pn_fG) {
         PRINTOUT(CPrintF("  shorter path exists through: %s\n", ppnLink->pn_ppnParent->GetName()));
@@ -167,52 +157,57 @@ static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst)
 }
 
 // clear all temporary structures used for path finding
-static void ClearPath(CEntity *penThis)
+static void ClearPath(CEntity *penThis) {
+  {FORDELETELIST(CPathNode, pn_lnInOpen, _lhOpen, itpn) {delete &itpn.Current();
+}
+}
 {
-  {FORDELETELIST(CPathNode, pn_lnInOpen, _lhOpen, itpn) {
+  FORDELETELIST(CPathNode, pn_lnInClosed, _lhClosed, itpn) {
     delete &itpn.Current();
-  }}
-  {FORDELETELIST(CPathNode, pn_lnInClosed, _lhClosed, itpn) {
-    delete &itpn.Current();          
-  }}
+  }
+}
 
 #ifndef NDEBUG
-  // for each navigation marker in the world
-  {FOREACHINDYNAMICCONTAINER(penThis->en_pwoWorld->wo_cenEntities, CEntity, iten) {
+// for each navigation marker in the world
+{
+  FOREACHINDYNAMICCONTAINER(penThis->en_pwoWorld->wo_cenEntities, CEntity, iten) {
     if (!IsOfClass(iten, "NavigationMarker")) {
       continue;
     }
-    CNavigationMarker &nm = (CNavigationMarker&)*iten;
+    CNavigationMarker &nm = (CNavigationMarker &)*iten;
     ASSERT(nm.m_ppnNode == NULL);
-  }}
+  }
+}
 #endif
 }
 
 // find marker closest to a given position
-static void FindClosestMarker(
-    CEntity *penThis, const FLOAT3D &vSrc, CEntity *&penMarker, FLOAT3D &vPath)
-{
+static void FindClosestMarker(CEntity *penThis, const FLOAT3D &vSrc, CEntity *&penMarker, FLOAT3D &vPath) {
   CNavigationMarker *pnmMin = NULL;
   FLOAT fMinDist = UpperLimit(0.0f);
   // for each sector this entity is in
-  {FOREACHSRCOFDST(penThis->en_rdSectors, CBrushSector, bsc_rsEntities, pbsc)
+  {
+    FOREACHSRCOFDST(penThis->en_rdSectors, CBrushSector, bsc_rsEntities, pbsc)
     // for each navigation marker in that sector
-    {FOREACHDSTOFSRC(pbsc->bsc_rsEntities, CEntity, en_rdSectors, pen)
+    {
+      FOREACHDSTOFSRC(pbsc->bsc_rsEntities, CEntity, en_rdSectors, pen)
       if (!IsOfClass(pen, "NavigationMarker")) {
         continue;
       }
-      CNavigationMarker &nm = (CNavigationMarker&)*pen;
+      CNavigationMarker &nm = (CNavigationMarker &)*pen;
 
       // get distance from source
-      FLOAT fDist = (vSrc-nm.GetPlacement().pl_PositionVector).Length();
+      FLOAT fDist = (vSrc - nm.GetPlacement().pl_PositionVector).Length();
       // if closer than best found
-      if (fDist<fMinDist) {
+      if (fDist < fMinDist) {
         // remember it
         fMinDist = fDist;
         pnmMin = &nm;
       }
-    ENDFOR}
-  ENDFOR}
+      ENDFOR
+    }
+    ENDFOR
+  }
 
   // if none found
   if (pnmMin == NULL) {
@@ -228,15 +223,14 @@ static void FindClosestMarker(
 }
 
 // find first marker for path navigation
-void PATH_FindFirstMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &vDst, CEntity *&penMarker, FLOAT3D &vPath)
-{
+void PATH_FindFirstMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &vDst, CEntity *&penMarker, FLOAT3D &vPath) {
   // find closest markers to source and destination positions
   CNavigationMarker *pnmSrc;
   FLOAT3D vSrcPath;
-  FindClosestMarker(penThis, vSrc, (CEntity*&)pnmSrc, vSrcPath);
+  FindClosestMarker(penThis, vSrc, (CEntity *&)pnmSrc, vSrcPath);
   CNavigationMarker *pnmDst;
   FLOAT3D vDstPath;
-  FindClosestMarker(penThis, vDst, (CEntity*&)pnmDst, vDstPath);
+  FindClosestMarker(penThis, vDst, (CEntity *&)pnmDst, vDstPath);
 
   // if at least one is not found, or if they are same
   if (pnmSrc == NULL || pnmDst == NULL || pnmSrc == pnmDst) {
@@ -252,12 +246,11 @@ void PATH_FindFirstMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &
 }
 
 // find next marker for path navigation
-void PATH_FindNextMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &vDst, CEntity *&penMarker, FLOAT3D &vPath)
-{
+void PATH_FindNextMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &vDst, CEntity *&penMarker, FLOAT3D &vPath) {
   // find closest marker to destination position
   CNavigationMarker *pnmDst;
   FLOAT3D vDstPath;
-  FindClosestMarker(penThis, vDst, (CEntity*&)pnmDst, vDstPath);
+  FindClosestMarker(penThis, vDst, (CEntity *&)pnmDst, vDstPath);
 
   // if at not found, or if same as current
   if (pnmDst == NULL || penMarker == pnmDst) {
@@ -268,7 +261,7 @@ void PATH_FindNextMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &v
   }
 
   // try to find shortest path to the destination
-  BOOL bFound = FindPath((CNavigationMarker*)penMarker, pnmDst);
+  BOOL bFound = FindPath((CNavigationMarker *)penMarker, pnmDst);
 
   // if not found
   if (!bFound) {

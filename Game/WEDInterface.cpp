@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -23,22 +23,19 @@ extern INDEX gam_iStartDifficulty;
 extern INDEX gam_iStartMode;
 
 // initialize game and load settings
-void CGame::Initialize(const CTFileName &fnGameSettings)
-{
+void CGame::Initialize(const CTFileName &fnGameSettings) {
   gm_fnSaveFileName = fnGameSettings;
   InitInternal();
 }
 
 // save settings and cleanup
-void CGame::End(void)
-{
+void CGame::End(void) {
   EndInternal();
 }
 
 // automaticaly manage input enable/disable toggling
 static BOOL _bInputEnabled = FALSE;
-void UpdateInputEnabledState(CViewPort *pvp)
-{
+void UpdateInputEnabledState(CViewPort *pvp) {
   // input should be enabled if application is active
   // and no menu is active and no console is active
   BOOL bShouldBeEnabled = _pGame->gm_csConsoleState == CS_OFF && _pGame->gm_csComputerState == CS_OFF;
@@ -63,19 +60,16 @@ void UpdateInputEnabledState(CViewPort *pvp)
 }
 
 // automaticaly manage pause toggling
-void UpdatePauseState(void)
-{
-  BOOL bShouldPause = 
-     _pGame->gm_csConsoleState == CS_ON || _pGame->gm_csConsoleState == CS_TURNINGON || _pGame->gm_csConsoleState == CS_TURNINGOFF ||
-     _pGame->gm_csComputerState == CS_ON || _pGame->gm_csComputerState == CS_TURNINGON || _pGame->gm_csComputerState == CS_TURNINGOFF;
+void UpdatePauseState(void) {
+  BOOL bShouldPause = _pGame->gm_csConsoleState == CS_ON || _pGame->gm_csConsoleState == CS_TURNINGON
+                      || _pGame->gm_csConsoleState == CS_TURNINGOFF || _pGame->gm_csComputerState == CS_ON
+                      || _pGame->gm_csComputerState == CS_TURNINGON || _pGame->gm_csComputerState == CS_TURNINGOFF;
 
   _pNetwork->SetLocalPause(bShouldPause);
 }
 
 // run a quicktest game from within editor
-void CGame::QuickTest(const CTFileName &fnMapName, 
-  CDrawPort *pdp, CViewPort *pvp)
-{
+void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pvp) {
   UINT uiMessengerMsg = RegisterWindowMessageA("Croteam Messenger: Incoming Message");
   EnableLoadingHook(pdp);
 
@@ -92,7 +86,7 @@ void CGame::QuickTest(const CTFileName &fnMapName,
   SetQuickStartSession(sp);
 
   // start the game
-  if (!NewGame( fnMapName, fnMapName, sp)) {
+  if (!NewGame(fnMapName, fnMapName, sp)) {
     DisableLoadingHook();
     return;
   }
@@ -103,16 +97,14 @@ void CGame::QuickTest(const CTFileName &fnMapName,
   // initialy, game is running
   BOOL bRunning = TRUE;
   // while it is still running
-  while (bRunning)
-  {
+  while (bRunning) {
     // while there are any messages in the message queue
     MSG msg;
-    while (PeekMessage( &msg, NULL, 0, 0, PM_REMOVE)) {
+    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
       // if it is not a mouse message
       if (!(msg.message >= WM_MOUSEFIRST && msg.message <= WM_MOUSELAST)) {
         // if not system key messages
-        if (!(msg.message == WM_KEYDOWN && msg.wParam == VK_F10
-            ||msg.message == WM_SYSKEYDOWN)) {
+        if (!(msg.message == WM_KEYDOWN && msg.wParam == VK_F10 || msg.message == WM_SYSKEYDOWN)) {
           // dispatch it
           TranslateMessage(&msg);
         }
@@ -124,50 +116,41 @@ void CGame::QuickTest(const CTFileName &fnMapName,
       }
 
       // if should stop
-      if ((msg.message == WM_QUIT)
-        ||(msg.message == WM_CLOSE)
-        ||(msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
-        ||(msg.message == WM_ACTIVATE)
-        ||(msg.message == WM_CANCELMODE)
-        ||(msg.message == WM_KILLFOCUS)
-        ||(msg.message == WM_ACTIVATEAPP)) {
+      if ((msg.message == WM_QUIT) || (msg.message == WM_CLOSE) || (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
+          || (msg.message == WM_ACTIVATE) || (msg.message == WM_CANCELMODE) || (msg.message == WM_KILLFOCUS)
+          || (msg.message == WM_ACTIVATEAPP)) {
         // stop running
         bRunning = FALSE;
         break;
       }
 
-      if (msg.message == uiMessengerMsg)
-      {
-        if (!_pNetwork->IsPaused()) 
-        {
+      if (msg.message == uiMessengerMsg) {
+        if (!_pNetwork->IsPaused()) {
           // pause it
           _pNetwork->TogglePause();
         }
-        char *pachrTemp=getenv("TEMP");
-        if (pachrTemp != NULL)
-        {
-          FILE *pfileMessage=fopen(CTString(pachrTemp)+"Messenger.msg","r");
-          if (pfileMessage != NULL)
-          {
+        char *pachrTemp = getenv("TEMP");
+        if (pachrTemp != NULL) {
+          FILE *pfileMessage = fopen(CTString(pachrTemp) + "Messenger.msg", "r");
+          if (pfileMessage != NULL) {
             char achrMessage[1024];
-            char *pachrMessage=fgets( achrMessage, 1024-1, pfileMessage);
-            if (pachrMessage != NULL)
-            {
-              CPrintF("%s",pachrMessage);
+            char *pachrMessage = fgets(achrMessage, 1024 - 1, pfileMessage);
+            if (pachrMessage != NULL) {
+              CPrintF("%s", pachrMessage);
             }
           }
         }
       }
 
       // if pause pressed
-      if (msg.message == WM_KEYDOWN && msg.wParam == VK_PAUSE && 
-        _pGame->gm_csConsoleState == CS_OFF && _pGame->gm_csComputerState == CS_OFF) {
+      if (msg.message == WM_KEYDOWN && msg.wParam == VK_PAUSE && _pGame->gm_csConsoleState == CS_OFF
+          && _pGame->gm_csComputerState == CS_OFF) {
         // toggle pause
         _pNetwork->TogglePause();
       }
-      if (msg.message == WM_KEYDOWN && 
-        (MapVirtualKey(msg.wParam, 0) == 41 // scan code for '~'
-        ||msg.wParam == VK_F1)) {
+      if (msg.message == WM_KEYDOWN
+          && (MapVirtualKey(msg.wParam, 0) == 41 // scan code for '~'
+              || msg.wParam == VK_F1)) {
         if (_pGame->gm_csConsoleState == CS_OFF || _pGame->gm_csConsoleState == CS_TURNINGOFF) {
           _pGame->gm_csConsoleState = CS_TURNINGON;
         } else {
@@ -186,16 +169,13 @@ void CGame::QuickTest(const CTFileName &fnMapName,
         }
       } else if (msg.message == WM_KEYUP) {
         // special handler for talk (not to invoke return key bind)
-        if (msg.wParam == VK_RETURN && _pGame->gm_csConsoleState == CS_TALK) _pGame->gm_csConsoleState = CS_OFF;
+        if (msg.wParam == VK_RETURN && _pGame->gm_csConsoleState == CS_TALK)
+          _pGame->gm_csConsoleState = CS_OFF;
       } else if (msg.message == WM_CHAR) {
         ConsoleChar(msg);
       }
-      if (msg.message == WM_LBUTTONDOWN
-        ||msg.message == WM_RBUTTONDOWN
-        ||msg.message == WM_LBUTTONDBLCLK
-        ||msg.message == WM_RBUTTONDBLCLK
-        ||msg.message == WM_LBUTTONUP
-        ||msg.message == WM_RBUTTONUP) {
+      if (msg.message == WM_LBUTTONDOWN || msg.message == WM_RBUTTONDOWN || msg.message == WM_LBUTTONDBLCLK
+          || msg.message == WM_RBUTTONDBLCLK || msg.message == WM_LBUTTONUP || msg.message == WM_RBUTTONUP) {
         if (_pGame->gm_csConsoleState != CS_ON) {
           ComputerKeyDown(msg);
         }
@@ -211,7 +191,7 @@ void CGame::QuickTest(const CTFileName &fnMapName,
     }
     UpdatePauseState();
     UpdateInputEnabledState(pvp);
-      
+
     // if playing a demo and it is finished
     if (_pNetwork->IsDemoPlayFinished()) {
       // stop running
@@ -220,18 +200,18 @@ void CGame::QuickTest(const CTFileName &fnMapName,
 
     // do the main game loop
     GameMainLoop();
-    
+
     // redraw the view
     if (pdp->Lock()) {
       // if current view preferences will not clear the background, clear it here
       if (_wrpWorldRenderPrefs.GetPolygonsFillType() == CWorldRenderPrefs::FT_NONE) {
         // clear background
-        pdp->Fill(C_BLACK| CT_OPAQUE);
+        pdp->Fill(C_BLACK | CT_OPAQUE);
         pdp->FillZBuffer(ZBUF_BACK);
       }
       // redraw view
       if (_pGame->gm_csComputerState != CS_ON) {
-        GameRedrawView(pdp, (_pGame->gm_csConsoleState == CS_ON)?0:GRV_SHOWEXTRAS);
+        GameRedrawView(pdp, (_pGame->gm_csConsoleState == CS_ON) ? 0 : GRV_SHOWEXTRAS);
       }
       ComputerRender(pdp);
       ConsoleRender(pdp);
