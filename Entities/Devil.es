@@ -1620,7 +1620,7 @@ procedures:
       iRnd = IRnd()%3;
     }
    
-    /*iRnd = Clamp(INDEX(tmp_af[0]), INDEX(0), INDEX(4));*/
+    //iRnd = Clamp(INDEX(tmp_af[0]), INDEX(0), INDEX(4));
     switch (iRnd)
     {
     case 0:

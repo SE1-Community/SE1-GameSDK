@@ -145,7 +145,7 @@ functions:
     } else {*/
       pes->es_fValue = 0;
       pes->es_iScore = 0;
-    /*}*/
+    //}
     return TRUE;
   }
 

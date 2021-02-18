@@ -503,7 +503,7 @@ procedures:
           call Simple();
         } else if (m_estType == EST_TELEPORTER) {
           call Teleporter();
-        } else if (m_estType == EST_RESPAWNER /*|| m_estType == EST_RESPAWNERBYONE*/
+        } else if (m_estType == EST_RESPAWNER //|| m_estType == EST_RESPAWNERBYONE
                || m_estType == EST_TRIGGERED || m_estType == EST_RESPAWNGROUP) {
           call Respawner();
         } else if (m_estType == EST_MAINTAINGROUP) {

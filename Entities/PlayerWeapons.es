@@ -4715,7 +4715,7 @@ procedures:
         // if 3rd person view
         else
         {
-          /*CalcWeaponPosition3rdPersonView(FLOAT3D(tmp_af[0], tmp_af[1], tmp_af[2]), plShell, FALSE);*/
+          //CalcWeaponPosition3rdPersonView(FLOAT3D(tmp_af[0], tmp_af[1], tmp_af[2]), plShell, FALSE);
           CalcWeaponPosition3rdPersonView(FLOAT3D(afMinigunShellPos3rdView[0],
             afMinigunShellPos3rdView[1], afMinigunShellPos3rdView[2]), plShell, FALSE);
         }

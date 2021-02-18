@@ -1405,7 +1405,7 @@ procedures:
       case BET_BULLETSTAINWOODNOSOUND: BulletStainWood(FALSE); break;
       case BET_EXPLOSION_DEBRIS: ExplosionDebris(); break;
       case BET_COLLECT_ENERGY: CollectEnergy(); break;
-      /*case BET_SNIPER_RESIDUE: SniperResidue(); break;*/
+      //case BET_SNIPER_RESIDUE: SniperResidue(); break;
       case BET_EXPLOSION_SMOKE: ExplosionSmoke(); break;
       case BET_SUMMONERSTAREXPLOSION: SummonerStarExplosion(); break;
       case BET_GROWING_SWIRL: GrowingSwirl(); break;
