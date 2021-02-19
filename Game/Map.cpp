@@ -439,6 +439,7 @@ BOOL ObtainMapData(void) {
     _toMapBcgLUSE.SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\MapBcgLU.tex"));
     _toMapBcgRDSE.SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\MapBcgRD.tex"));
     _toMapBcgRUSE.SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\MapBcgRU.tex"));
+
     // force constant textures
     ((CTextureData *)atoIconsSE[0].GetData())->Force(TEX_CONSTANT);
     ((CTextureData *)atoIconsSE[1].GetData())->Force(TEX_CONSTANT);
@@ -479,6 +480,7 @@ BOOL ObtainMapData(void) {
     _toMapBcgLUFE.SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgLU.tex"));
     _toMapBcgRDFE.SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgRD.tex"));
     _toMapBcgRUFE.SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgRU.tex"));
+
     // force constant textures
     ((CTextureData *)atoIconsFE[0].GetData())->Force(TEX_CONSTANT);
     ((CTextureData *)atoIconsFE[1].GetData())->Force(TEX_CONSTANT);
@@ -499,10 +501,12 @@ BOOL ObtainMapData(void) {
     ((CTextureData *)_toMapBcgLUFE.GetData())->Force(TEX_CONSTANT);
     ((CTextureData *)_toMapBcgRDFE.GetData())->Force(TEX_CONSTANT);
     ((CTextureData *)_toMapBcgRUFE.GetData())->Force(TEX_CONSTANT);
+
   } catch (char *strError) {
     CPrintF("%s\n", strError);
     return FALSE;
   }
+
   return TRUE;
 }
 

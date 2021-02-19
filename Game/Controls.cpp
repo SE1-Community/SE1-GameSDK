@@ -39,29 +39,28 @@ CControls::~CControls(void) {
 // Assignment operator.
 CControls &CControls::operator=(CControls &ctrlOriginal) {
   // remove old button actions
-  {FORDELETELIST(CButtonAction, ba_lnNode, ctrl_lhButtonActions, itButtonAction) {delete &*itButtonAction;
-}
-}
-// for each action in the original list
-{
-  FOREACHINLIST(CButtonAction, ba_lnNode, ctrlOriginal.ctrl_lhButtonActions, itButtonAction) {
+  {FORDELETELIST(CButtonAction, ba_lnNode, ctrl_lhButtonActions, itButtonAction) {
+    delete &*itButtonAction;
+  }}
+
+  // for each action in the original list
+  {FOREACHINLIST(CButtonAction, ba_lnNode, ctrlOriginal.ctrl_lhButtonActions, itButtonAction) {
     // create and copy button action
     AddButtonAction() = *itButtonAction;
+  }}
+
+  // for all axis-type actions
+  for (INDEX iAxisAction = 0; iAxisAction < AXIS_ACTIONS_CT; iAxisAction++) {
+    // copy it
+    ctrl_aaAxisActions[iAxisAction] = ctrlOriginal.ctrl_aaAxisActions[iAxisAction];
   }
-}
 
-// for all axis-type actions
-for (INDEX iAxisAction = 0; iAxisAction < AXIS_ACTIONS_CT; iAxisAction++) {
-  // copy it
-  ctrl_aaAxisActions[iAxisAction] = ctrlOriginal.ctrl_aaAxisActions[iAxisAction];
-}
+  // copy global settings
+  ctrl_fSensitivity = ctrlOriginal.ctrl_fSensitivity;
+  ctrl_bInvertLook = ctrlOriginal.ctrl_bInvertLook;
+  ctrl_bSmoothAxes = ctrlOriginal.ctrl_bSmoothAxes;
 
-// copy global settings
-ctrl_fSensitivity = ctrlOriginal.ctrl_fSensitivity;
-ctrl_bInvertLook = ctrlOriginal.ctrl_bInvertLook;
-ctrl_bSmoothAxes = ctrlOriginal.ctrl_bSmoothAxes;
-
-return *this;
+  return *this;
 }
 
 // Switches button and axis action mounters to defaults
@@ -77,12 +76,14 @@ void CControls::SwitchAxesToDefaults(void) {
     ctrl_aaAxisActions[iAxisAction].aa_bSmooth = FALSE;
     ctrl_aaAxisActions[iAxisAction].aa_fLastReading = 0.0f;
   }
+
   // set default controlers for some axis-type actions
   // mouse left/right motion
   ctrl_aaAxisActions[AXIS_TURN_LR].aa_iAxisAction = MOUSE_X_AXIS;
   ctrl_aaAxisActions[AXIS_TURN_LR].aa_fSensitivity = 45;
   ctrl_aaAxisActions[AXIS_TURN_LR].aa_bInvert = FALSE;
   ctrl_aaAxisActions[AXIS_TURN_LR].aa_bRelativeControler = TRUE;
+
   // mouse up/down motion
   ctrl_aaAxisActions[AXIS_TURN_UD].aa_iAxisAction = MOUSE_Y_AXIS;
   ctrl_aaAxisActions[AXIS_TURN_UD].aa_fSensitivity = 45;
@@ -128,11 +129,14 @@ void CControls::CalculateInfluencesForAllAxis(void) {
 }
 
 INDEX DIKForName(CTString strKeyName) {
-  if (strKeyName == "None")
+  if (strKeyName == "None") {
     return KID_NONE;
+  }
+
   for (INDEX iButton = 0; iButton < MAX_OVERALL_BUTTONS; iButton++) {
-    if (_pInput->GetButtonName(iButton) == strKeyName)
+    if (_pInput->GetButtonName(iButton) == strKeyName) {
       return iButton;
+    }
   }
   return KID_NONE;
 }
@@ -144,10 +148,12 @@ CTString ReadTextLine(CTStream &strm, const CTString &strKeyword, BOOL bTranslat
   if (!strLine.RemovePrefix(strKeyword)) {
     return "???";
   }
+
   strLine.TrimSpacesLeft();
   if (bTranslate) {
     strLine.RemovePrefix("TTRS");
   }
+
   strLine.TrimSpacesLeft();
   strLine.TrimSpacesRight();
 
@@ -165,11 +171,9 @@ void CControls::Load_t(CTFileName fnFile) {
   strmFile.Open_t(fnFile);
 
   // if file can be opened for reading remove old button actions
-  {
-    FORDELETELIST(CButtonAction, ba_lnNode, ctrl_lhButtonActions, itButtonAction) {
-      delete &*itButtonAction;
-    }
-  }
+  {FORDELETELIST(CButtonAction, ba_lnNode, ctrl_lhButtonActions, itButtonAction) {
+    delete &*itButtonAction;
+  }}
 
   do {
     achrLine[0] = 0;

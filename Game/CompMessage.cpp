@@ -21,6 +21,7 @@ extern CTString _strStatsDetails;
 CCompMessage::CCompMessage(void) {
   Clear();
 }
+
 void CCompMessage::Clear(void) {
   UnprepareMessage();
   cm_fnmFileName.Clear();
@@ -42,29 +43,38 @@ void CCompMessage::Load_t(void) {
     // do nothing
     return;
   }
+
   // open file
   CTFileStream strm;
   strm.Open_t(cm_fnmFileName);
+
   // read subject line
   strm.ExpectKeyword_t("SUBJECT\r\n");
   strm.GetLine_t(cm_strSubject);
-  // rea image type
+
+  // read image type
   strm.ExpectKeyword_t("IMAGE\r\n");
   CTString strImage;
   strm.GetLine_t(strImage);
+
   if (strImage == "none") {
     cm_itImage = IT_NONE;
+
   } else if (strImage == "statistics") {
     cm_itImage = IT_STATISTICS;
+
   } else if (strImage == "picture") {
     cm_itImage = IT_PICTURE;
     cm_fnmPicture.ReadFromText_t(strm);
+
   } else if (strImage == "model") {
     cm_itImage = IT_MODEL;
     cm_strModel.ReadFromText_t(strm, "");
+
   } else {
     throw TRANS("Unknown image type!");
   }
+
   // read text until end of file
   strm.ExpectKeyword_t("TEXT\r\n");
   cm_strText.ReadUntilEOF_t(strm);
@@ -81,6 +91,7 @@ void CCompMessage::Format(INDEX ctCharsPerLine) {
     // do nothing
     return;
   }
+
   // remember width
   cm_ctFormattedWidth = ctCharsPerLine;
 
@@ -90,6 +101,7 @@ void CCompMessage::Format(INDEX ctCharsPerLine) {
     strText = _strStatsDetails;
     cm_strFormattedText = strText;
     cm_ctFormattedLines = 1;
+
     for (INDEX i = 0; i < cm_strFormattedText.Length(); i++) {
       if (cm_strFormattedText[i] == '\n') {
         cm_ctFormattedLines++;
@@ -111,6 +123,7 @@ void CCompMessage::Format(INDEX ctCharsPerLine) {
   while (*pchSrc != 0) {
     // copy one char
     char chLast = *pchDst++ = *pchSrc++;
+
     // if it was line break
     if (chLast == '\n') {
       // new line
@@ -118,18 +131,21 @@ void CCompMessage::Format(INDEX ctCharsPerLine) {
       cm_ctFormattedLines++;
       continue;
     }
+
     ctChars++;
     // if out of row
     if (ctChars > ctCharsPerLine) {
       // start backtracking
       const char *pchSrcBck = pchSrc - 1;
       char *pchDstBck = pchDst - 1;
+
       // while not start of row and not space
       while (pchSrcBck > pchSrc - ctChars && *pchSrcBck != ' ') {
         // go one char back
         pchSrcBck--;
         pchDstBck--;
       }
+
       // if start of row hit (cannot word-wrap)
       if (pchSrcBck < pchSrc - ctChars) {
         // just go to next line
@@ -140,6 +156,7 @@ void CCompMessage::Format(INDEX ctCharsPerLine) {
         cm_ctFormattedLines++;
         continue;
       }
+
       // if can word-wrap, insert break before the last word
       pchSrc = pchSrcBck + 1;
       pchDst = pchDstBck;
@@ -190,6 +207,7 @@ void CCompMessage::UnprepareMessage(void) {
   cm_ctFormattedWidth = 0;
   cm_ctFormattedLines = 0;
 }
+
 // mark message as read
 void CCompMessage::MarkRead(void) {
   cm_bRead = TRUE;
@@ -201,6 +219,7 @@ CTString CCompMessage::GetLine(INDEX iLine) {
   const char *strText = cm_strFormattedText;
   // find first line
   INDEX i = 0;
+
   while (i < iLine) {
     strText = strchr(strText, '\n');
     if (strText == NULL) {
@@ -210,13 +229,16 @@ CTString CCompMessage::GetLine(INDEX iLine) {
       strText++;
     }
   }
+
   // find end of line
   CTString strLine = strText;
   char *pchEndOfLine = (char *)strchr(strLine, '\n');
+
   // if found
   if (pchEndOfLine != NULL) {
     // cut there
     *pchEndOfLine = 0;
   }
+
   return strLine;
 }

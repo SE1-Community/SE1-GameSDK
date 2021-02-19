@@ -158,39 +158,35 @@ static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst) {
 
 // clear all temporary structures used for path finding
 static void ClearPath(CEntity *penThis) {
-  {FORDELETELIST(CPathNode, pn_lnInOpen, _lhOpen, itpn) {delete &itpn.Current();
-}
-}
-{
-  FORDELETELIST(CPathNode, pn_lnInClosed, _lhClosed, itpn) {
+  {FORDELETELIST(CPathNode, pn_lnInOpen, _lhOpen, itpn) {
     delete &itpn.Current();
-  }
-}
+  }}
 
-#ifndef NDEBUG
-// for each navigation marker in the world
-{
-  FOREACHINDYNAMICCONTAINER(penThis->en_pwoWorld->wo_cenEntities, CEntity, iten) {
+  {FORDELETELIST(CPathNode, pn_lnInClosed, _lhClosed, itpn) {
+    delete &itpn.Current();
+  }}
+
+  #ifndef NDEBUG
+  // for each navigation marker in the world
+  {FOREACHINDYNAMICCONTAINER(penThis->en_pwoWorld->wo_cenEntities, CEntity, iten) {
     if (!IsOfClass(iten, "NavigationMarker")) {
       continue;
     }
     CNavigationMarker &nm = (CNavigationMarker &)*iten;
     ASSERT(nm.m_ppnNode == NULL);
-  }
-}
-#endif
+  }}
+  #endif
 }
 
 // find marker closest to a given position
 static void FindClosestMarker(CEntity *penThis, const FLOAT3D &vSrc, CEntity *&penMarker, FLOAT3D &vPath) {
   CNavigationMarker *pnmMin = NULL;
   FLOAT fMinDist = UpperLimit(0.0f);
+
   // for each sector this entity is in
-  {
-    FOREACHSRCOFDST(penThis->en_rdSectors, CBrushSector, bsc_rsEntities, pbsc)
+  {FOREACHSRCOFDST(penThis->en_rdSectors, CBrushSector, bsc_rsEntities, pbsc)
     // for each navigation marker in that sector
-    {
-      FOREACHDSTOFSRC(pbsc->bsc_rsEntities, CEntity, en_rdSectors, pen)
+    {FOREACHDSTOFSRC(pbsc->bsc_rsEntities, CEntity, en_rdSectors, pen)
       if (!IsOfClass(pen, "NavigationMarker")) {
         continue;
       }
@@ -204,10 +200,8 @@ static void FindClosestMarker(CEntity *penThis, const FLOAT3D &vSrc, CEntity *&p
         fMinDist = fDist;
         pnmMin = &nm;
       }
-      ENDFOR
-    }
-    ENDFOR
-  }
+    ENDFOR}
+  ENDFOR}
 
   // if none found
   if (pnmMin == NULL) {

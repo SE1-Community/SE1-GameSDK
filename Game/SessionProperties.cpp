@@ -54,11 +54,21 @@ static void SetGameModeParameters(CSessionProperties &sp) {
   sp.sp_gmGameMode = (CSessionProperties::GameMode)Clamp(INDEX(gam_iStartMode), -1L, 2L);
 
   switch (sp.sp_gmGameMode) {
-    default: ASSERT(FALSE);
-    case CSessionProperties::GM_COOPERATIVE: sp.sp_ulSpawnFlags |= SPF_SINGLEPLAYER | SPF_COOPERATIVE; break;
-    case CSessionProperties::GM_FLYOVER: sp.sp_ulSpawnFlags |= SPF_FLYOVER | SPF_MASK_DIFFICULTY; break;
+    default:
+      ASSERT(FALSE);
+
+    case CSessionProperties::GM_COOPERATIVE:
+      sp.sp_ulSpawnFlags |= SPF_SINGLEPLAYER | SPF_COOPERATIVE;
+      break;
+
+    case CSessionProperties::GM_FLYOVER:
+      sp.sp_ulSpawnFlags |= SPF_FLYOVER | SPF_MASK_DIFFICULTY;
+      break;
+
     case CSessionProperties::GM_SCOREMATCH:
-    case CSessionProperties::GM_FRAGMATCH: sp.sp_ulSpawnFlags |= SPF_DEATHMATCH; break;
+    case CSessionProperties::GM_FRAGMATCH:
+      sp.sp_ulSpawnFlags |= SPF_DEATHMATCH;
+      break;
   }
 }
 static void SetDifficultyParameters(CSessionProperties &sp) {
@@ -69,6 +79,7 @@ static void SetDifficultyParameters(CSessionProperties &sp) {
   } else {
     sp.sp_bMental = FALSE;
   }
+
   sp.sp_gdGameDifficulty = (CSessionProperties::GameDifficulty)Clamp(INDEX(iDifficulty), -1L, 3L);
 
   switch (sp.sp_gdGameDifficulty) {
@@ -79,6 +90,7 @@ static void SetDifficultyParameters(CSessionProperties &sp) {
       sp.sp_fDamageStrength = gam_afDamageStrength[0];
       sp.sp_fAmmoQuantity = gam_afAmmoQuantity[0];
       break;
+
     case CSessionProperties::GD_EASY:
       sp.sp_ulSpawnFlags = SPF_EASY;
       sp.sp_fEnemyMovementSpeed = gam_afEnemyMovementSpeed[1];
@@ -86,6 +98,7 @@ static void SetDifficultyParameters(CSessionProperties &sp) {
       sp.sp_fDamageStrength = gam_afDamageStrength[1];
       sp.sp_fAmmoQuantity = gam_afAmmoQuantity[1];
       break;
+
     default: ASSERT(FALSE);
     case CSessionProperties::GD_NORMAL:
       sp.sp_ulSpawnFlags = SPF_NORMAL;
@@ -94,6 +107,7 @@ static void SetDifficultyParameters(CSessionProperties &sp) {
       sp.sp_fDamageStrength = gam_afDamageStrength[2];
       sp.sp_fAmmoQuantity = gam_afAmmoQuantity[2];
       break;
+
     case CSessionProperties::GD_HARD:
       sp.sp_ulSpawnFlags = SPF_HARD;
       sp.sp_fEnemyMovementSpeed = gam_afEnemyMovementSpeed[3];
@@ -101,6 +115,7 @@ static void SetDifficultyParameters(CSessionProperties &sp) {
       sp.sp_fDamageStrength = gam_afDamageStrength[3];
       sp.sp_fAmmoQuantity = gam_afAmmoQuantity[3];
       break;
+
     case CSessionProperties::GD_EXTREME:
       sp.sp_ulSpawnFlags = SPF_EXTREME;
       sp.sp_fEnemyMovementSpeed = gam_afEnemyMovementSpeed[4];
@@ -267,10 +282,12 @@ CTString GetGameTypeName(INDEX iMode) {
     case CSessionProperties::GM_FRAGMATCH: return TRANS("Fragmatch"); break;
   }
 }
+
 CTString GetGameTypeNameCfunc(void *pArgs) {
   INDEX iMode = NEXTARGUMENT(INDEX);
   return GetGameTypeName(iMode);
 }
+
 CTString GetCurrentGameTypeName() {
   const CSessionProperties &sp = *GetSP();
   return GetGameTypeName(sp.sp_gmGameMode);
@@ -352,8 +369,9 @@ ULONG GetSpawnFlagsForGameType(INDEX iGameType) {
     case CSessionProperties::GM_COOPERATIVE: return SPF_COOPERATIVE;
     case CSessionProperties::GM_SCOREMATCH: return SPF_DEATHMATCH;
     case CSessionProperties::GM_FRAGMATCH: return SPF_DEATHMATCH;
-  };
+  }
 }
+
 ULONG GetSpawnFlagsForGameTypeCfunc(void *pArgs) {
   INDEX iGameType = NEXTARGUMENT(INDEX);
   return GetSpawnFlagsForGameType(iGameType);

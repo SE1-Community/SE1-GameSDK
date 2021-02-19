@@ -825,6 +825,7 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel) {
   if (_strLastModel != strModel) {
     _strLastModel = strModel;
     _bModelOK = FALSE;
+
     // try to
     try {
       // load model

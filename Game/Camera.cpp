@@ -116,29 +116,34 @@ void SetSpeed(FLOAT fSpeed) {
 void CAM_Start(const CTFileName &fnmDemo) {
   _bCameraOn = FALSE;
   CTFileName fnmScript = fnmDemo.NoExt() + ".ini";
+
   if (cam_bRecord) {
     try {
       _strScript.Create_t(fnmScript);
     } catch (char *strError) {
       CPrintF("Camera: %s\n", strError);
       return;
-    };
+    }
+
     _cp.cp_vPos = FLOAT3D(0.0f, 0.0f, 0.0f);
     _cp.cp_aRot = ANGLE3D(0.0f, 0.0f, 0.0f);
     _cp.cp_aFOV = 90.0f;
     _cp.cp_fSpeed = 1;
     _cp.cp_ftTick = 0;
+
   } else {
     try {
       _strScript.Open_t(fnmScript);
     } catch (char *strError) {
       (void)strError;
       return;
-    };
+    }
   }
+
   _bCameraOn = TRUE;
   _bInitialized = FALSE;
 }
+
 void CAM_Stop(void) {
   if (_bCameraOn) {
     _strScript.Close();
@@ -153,6 +158,7 @@ void CAM_Render(CEntity *pen, CDrawPort *pdp) {
       SetSpeed(1.0f);
       _ftStartTime = _pTimer->GetGameTick();
     }
+
     FLOATmatrix3D m;
     MakeRotationMatrixFast(m, _cp.cp_aRot);
     FLOAT3D vX, vY, vZ;
@@ -171,37 +177,48 @@ void CAM_Render(CEntity *pen, CDrawPort *pdp) {
 
     if (cam_bMoveForward) {
       _cp.cp_vPos -= vZ * cam_fSpeed;
-    };
+    }
+
     if (cam_bMoveBackward) {
       _cp.cp_vPos += vZ * cam_fSpeed;
-    };
+    }
+
     if (cam_bMoveLeft) {
       _cp.cp_vPos -= vX * cam_fSpeed;
-    };
+    }
+
     if (cam_bMoveRight) {
       _cp.cp_vPos += vX * cam_fSpeed;
-    };
+    }
+
     if (cam_bMoveUp) {
       _cp.cp_vPos += vY * cam_fSpeed;
-    };
+    }
+
     if (cam_bMoveDown) {
       _cp.cp_vPos -= vY * cam_fSpeed;
-    };
+    }
+
     if (cam_bTurnBankingLeft) {
       _cp.cp_aRot(3) += 10.0f;
-    };
+    }
+
     if (cam_bTurnBankingRight) {
       _cp.cp_aRot(3) -= 10.0f;
-    };
+    }
+
     if (cam_bZoomIn) {
       _cp.cp_aFOV -= 1.0f;
-    };
+    }
+
     if (cam_bZoomOut) {
       _cp.cp_aFOV += 1.0f;
-    };
+    }
+
     if (cam_bZoomDefault) {
       _cp.cp_aFOV = 90.0f;
-    };
+    }
+
     Clamp(_cp.cp_aFOV, 10.0f, 150.0f);
 
     if (cam_bResetToPlayer) {

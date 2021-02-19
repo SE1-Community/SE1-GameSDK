@@ -24,6 +24,7 @@ extern CGame *_pGame;
 #if USECUSTOMTEXT
 static CTString _strCustomText = "";
 #endif
+
 static CDrawPort *_pdpLoadingHook = NULL; // drawport for loading hook
 extern BOOL _bUserBreakEnabled;
 extern BOOL map_bIsFirstEncounter;
@@ -60,7 +61,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi) {
     throw TRANS("User break!");
   }
 
-#if USECUSTOMTEXT
+  #if USECUSTOMTEXT
   // if no custom loading text
   if (_strCustomText == "") {
     // load it
@@ -70,7 +71,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi) {
       _strCustomText = strError;
     }
   }
-#endif
+  #endif
 
   // measure time since last call
   static CTimerValue tvLast(0I64);

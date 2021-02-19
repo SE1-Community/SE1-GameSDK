@@ -60,6 +60,7 @@ BOOL GetLineCountBackward(const char *pchrStringStart, const char *pchrStringEnd
       ctLinesDone++;
     }
   }
+
   // check that pointer is not outside range
   ASSERT(pchrCurrent >= pchrStringStart && pchrCurrent < pchrStringEnd);
 
@@ -151,8 +152,11 @@ void CGame::ConsoleRender(CDrawPort *pdp) {
   COLOR colLight = LCDFadedColor(C_WHITE | 255);
   COLOR colDark = LCDFadedColor(SE_COL_BLUE_LIGHT | 255);
   INDEX iBackwardLine = con_iFirstLine;
-  if (iBackwardLine > 1)
+
+  if (iBackwardLine > 1) {
     Swap(colLight, colDark);
+  }
+
   PIX pixLineSpacing = _pfdConsoleFont->fd_pixCharHeight + _pfdConsoleFont->fd_pixLineSpacing;
 
   LCDRenderCloudsForComp();
@@ -169,12 +173,14 @@ void CGame::ConsoleRender(CDrawPort *pdp) {
 
   // print editing line of text
   dpConsole.SetTextMode(-1);
+
   CTString strPrompt;
   if (_pGame->gm_csConsoleState == CS_TALK) {
     strPrompt = TRANS("say: ");
   } else {
     strPrompt = "=> ";
   }
+
   CTString strLineOnScreen = strPrompt + strEditingLine;
   dpConsole.PutText(strLineOnScreen, pixTextX, pixYLine, colLight);
   dpConsole.SetTextMode(+1);
@@ -255,17 +261,22 @@ static void Key_ArrowUp(void) {
   if (iHistoryLine == 0)
     strCurrentLine = strEditingLine;
   INDEX iCurrentHistoryLine = iHistoryLine;
+
   do {
     // determine previous line in history
     iCurrentHistoryLine++;
     const char *pchrHistoryStart = (const char *)strInputHistory;
     const char *pchrHistoryEnd = pchrHistoryStart + strlen(strInputHistory) - 1;
+
     // we reach top of history, if line doesn't exist in history
-    if (!GetLineCountBackward(pchrHistoryStart, pchrHistoryEnd, iCurrentHistoryLine, strHistoryLine))
+    if (!GetLineCountBackward(pchrHistoryStart, pchrHistoryEnd, iCurrentHistoryLine, strHistoryLine)) {
       return;
+    }
+
   } while (strCurrentLine != ""
-           && strnicmp(strHistoryLine, strCurrentLine, Min(strlen(strHistoryLine), strlen(strCurrentLine))) != 0
-           && strnicmp(strHistoryLine, strSlash + strCurrentLine, Min(strlen(strHistoryLine), strlen(strCurrentLine) + 1)) != 0);
+        && strnicmp(strHistoryLine, strCurrentLine, Min(strlen(strHistoryLine), strlen(strCurrentLine))) != 0
+        && strnicmp(strHistoryLine, strSlash + strCurrentLine, Min(strlen(strHistoryLine), strlen(strCurrentLine) + 1)) != 0);
+
   // set new editing line
   iHistoryLine = iCurrentHistoryLine;
   strEditingLine = strHistoryLine;
@@ -275,8 +286,11 @@ static void Key_ArrowUp(void) {
 static void Key_ArrowDown(void) {
   CTString strSlash = "/";
   CTString strHistoryLine;
-  if (iHistoryLine == 0)
+
+  if (iHistoryLine == 0) {
     strCurrentLine = strEditingLine;
+  }
+
   INDEX iCurrentHistoryLine = iHistoryLine;
   while (iCurrentHistoryLine > 1) {
     iCurrentHistoryLine--;
@@ -358,17 +372,20 @@ static void Key_Return(void) {
     } else {
       CPrintF("sorry?\n");
     }
-    // parse editing line
+
+  // parse editing line
   } else if (strEditingLine[0] == '/') {
     // add to output and execute
     CPrintF("-> %s\n", strEditingLine);
     strEditingLine += ";";
     _pShell->Execute(strEditingLine + 1);
+
   } else if (!_pGame->gm_bGameOn) {
     // add to output and execute
     CPrintF("-> %s\n", strEditingLine);
     strEditingLine += ";";
     _pShell->Execute(strEditingLine);
+
   } else {
     // just send chat
     _pNetwork->SendChat(-1, -1, strEditingLine);
@@ -382,12 +399,14 @@ static void Key_Return(void) {
 // find first character that is not part of a symbol, backwards
 char *strrnonsym(const char *strString) {
   const char *pch = strString + strlen(strString) - 1;
+
   while (pch >= strString) {
     char ch = *pch;
     if (!isalnum(ch) && ch != '_')
       return (char *)pch;
     pch--;
   }
+
   return NULL;
 }
 
@@ -396,8 +415,9 @@ static void Key_Tab(BOOL bShift) {
   strEditingLine.TrimSpacesLeft();
   strEditingLine.TrimSpacesRight();
   // eventualy prepend the command like with '/'
-  if (strEditingLine[0] != '/')
+  if (strEditingLine[0] != '/') {
     strEditingLine = CTString("/") + strEditingLine;
+  }
 
   // find symbol letter typed so far
   CTString strSymbol;
@@ -406,91 +426,94 @@ static void Key_Tab(BOOL bShift) {
     strExpandStart = strEditingLine;
     iSymbolOffset = 0;
     char *pcLastSymbol = strrnonsym(strEditingLine);
+
     // remember symbol text and offset inside editing line
     if (pcLastSymbol != NULL) {
       strExpandStart = pcLastSymbol + 1;
       iSymbolOffset = (INDEX)(pcLastSymbol + 1 - (const char *)strEditingLine);
     }
+
     // printout all symbols that matches (if not only one, and not TAB only)
     INDEX ctSymbolsFound = 0;
     BOOL bFirstFound = FALSE;
     CTString strLastMatched;
-    {
-      FOREACHINDYNAMICARRAY(_pShell->sh_assSymbols, CShellSymbol, itss) {
-        // TAB only pressd?
-        if (strExpandStart == "")
-          break;
-        // get completion name if current symbol is for user
-        if (!(itss->ss_ulFlags & SSF_USER))
-          continue;
-        strSymbol = itss->GetCompletionString();
-        // if this symbol can be expanded
-        if (strnicmp(strSymbol, strExpandStart, Min(strlen(strSymbol), strlen(strExpandStart))) == 0) {
-          // can we print last found symbol ?
-          if (strLastMatched != "") {
-            if (!bFirstFound)
-              CPrintF("  -\n");
-            CPrintF("  %s\n", strLastMatched);
-            bFirstFound = TRUE;
-          }
-          strLastMatched = strSymbol;
-          ctSymbolsFound++;
+
+    {FOREACHINDYNAMICARRAY(_pShell->sh_assSymbols, CShellSymbol, itss) {
+      // TAB only pressd?
+      if (strExpandStart == "")
+        break;
+      // get completion name if current symbol is for user
+      if (!(itss->ss_ulFlags & SSF_USER))
+        continue;
+      strSymbol = itss->GetCompletionString();
+      // if this symbol can be expanded
+      if (strnicmp(strSymbol, strExpandStart, Min(strlen(strSymbol), strlen(strExpandStart))) == 0) {
+        // can we print last found symbol ?
+        if (strLastMatched != "") {
+          if (!bFirstFound)
+            CPrintF("  -\n");
+          CPrintF("  %s\n", strLastMatched);
+          bFirstFound = TRUE;
         }
+        strLastMatched = strSymbol;
+        ctSymbolsFound++;
       }
-    }
+    }}
+
     // print last symbol
-    if (ctSymbolsFound > 1)
+    if (ctSymbolsFound > 1) {
       CPrintF("  %s\n", strLastMatched);
+    }
   }
 
   // for each of symbols in the shell
   bLastExpandedFound = FALSE;
   BOOL bTabSymbolFound = FALSE;
-  {
-    FOREACHINDYNAMICARRAY(_pShell->sh_assSymbols, CShellSymbol, itss) {
-      // skip if it is not visible to user
-      if (!(itss->ss_ulFlags & SSF_USER))
-        continue;
-      // get completion name for that symbol
-      strSymbol = itss->GetCompletionString();
 
-      // if this symbol can be expanded
-      if (strnicmp(strSymbol, strExpandStart, Min(strlen(strSymbol), strlen(strExpandStart))) == 0) {
-        // at least one symbol is found, so tab will work
-        bTabSymbolFound = TRUE;
-        // if this is first time we are doing this
-        if (strLastExpanded == "") {
-          // remember symbol as last expanded and set it as current
-          strLastExpanded = strSymbol;
-          break;
-        }
-        // if last expanded was already found, set this symbol as result and remember it as last expanded
-        if (bLastExpandedFound) {
-          strLastExpanded = strSymbol;
-          break;
-        }
-        // if last expanded was not found yet, check if this one is last expanded
-        if (stricmp(strLastExpanded, strSymbol) == 0) {
-          // if looping backward (Shift+Tab)
-          if (bShift) {
-            // if we can loop backwards
-            if (strLastThatCanBeExpanded != "") {
-              strLastExpanded = strLastThatCanBeExpanded;
-              break;
-              // act like no symbols are found
-            } else {
-              bTabSymbolFound = FALSE;
-              break;
-            }
-          }
-          // if so, mark it
-          bLastExpandedFound = TRUE;
-        }
-        // remember current as last that can be expanded (for loopbing back)
-        strLastThatCanBeExpanded = strSymbol;
+  {FOREACHINDYNAMICARRAY(_pShell->sh_assSymbols, CShellSymbol, itss) {
+    // skip if it is not visible to user
+    if (!(itss->ss_ulFlags & SSF_USER))
+      continue;
+    // get completion name for that symbol
+    strSymbol = itss->GetCompletionString();
+
+    // if this symbol can be expanded
+    if (strnicmp(strSymbol, strExpandStart, Min(strlen(strSymbol), strlen(strExpandStart))) == 0) {
+      // at least one symbol is found, so tab will work
+      bTabSymbolFound = TRUE;
+      // if this is first time we are doing this
+      if (strLastExpanded == "") {
+        // remember symbol as last expanded and set it as current
+        strLastExpanded = strSymbol;
+        break;
       }
+      // if last expanded was already found, set this symbol as result and remember it as last expanded
+      if (bLastExpandedFound) {
+        strLastExpanded = strSymbol;
+        break;
+      }
+      // if last expanded was not found yet, check if this one is last expanded
+      if (stricmp(strLastExpanded, strSymbol) == 0) {
+        // if looping backward (Shift+Tab)
+        if (bShift) {
+          // if we can loop backwards
+          if (strLastThatCanBeExpanded != "") {
+            strLastExpanded = strLastThatCanBeExpanded;
+            break;
+            // act like no symbols are found
+          } else {
+            bTabSymbolFound = FALSE;
+            break;
+          }
+        }
+        // if so, mark it
+        bLastExpandedFound = TRUE;
+      }
+      // remember current as last that can be expanded (for loopbing back)
+      strLastThatCanBeExpanded = strSymbol;
     }
-  }
+  }}
+
   // if symbol was found
   if (bTabSymbolFound) {
     // set it in current editing line
@@ -501,17 +524,19 @@ static void Key_Tab(BOOL bShift) {
 }
 
 static void Key_PgUp(BOOL bShift) {
-  if (bShift)
+  if (bShift) {
     con_iFirstLine += ctConsoleLinesOnScreen;
-  else
+  } else {
     con_iFirstLine++;
+  }
 }
 
 static void Key_PgDn(BOOL bShift) {
-  if (bShift)
+  if (bShift) {
     con_iFirstLine -= ctConsoleLinesOnScreen;
-  else
+  } else {
     con_iFirstLine--;
+  }
   con_iFirstLine = ClampDn(con_iFirstLine, 1L);
 }
 
@@ -521,6 +546,7 @@ void CGame::ConsoleKeyDown(MSG msg) {
     // do nothing
     return;
   }
+
   BOOL bShift = GetKeyState(VK_SHIFT) & 0x8000;
   switch (msg.wParam) {
     case VK_RETURN: Key_Return(); break;
@@ -531,14 +557,17 @@ void CGame::ConsoleKeyDown(MSG msg) {
     case VK_NEXT: Key_PgDn(bShift); break;
     case VK_BACK: Key_Backspace(bShift, FALSE); break;
     case VK_DELETE: Key_Backspace(bShift, TRUE); break;
+
     case VK_LEFT:
       if (iCursorPos > 0)
         iCursorPos--;
       break;
+
     case VK_RIGHT:
       if (iCursorPos < strlen(strEditingLine))
         iCursorPos++;
       break;
+
     case VK_HOME: iCursorPos = 0; break;
     case VK_END: iCursorPos = strlen(strEditingLine); break;
   }
@@ -546,8 +575,9 @@ void CGame::ConsoleKeyDown(MSG msg) {
 
 void CGame::ConsoleChar(MSG msg) {
   // if console is off, do nothing
-  if (_pGame->gm_csConsoleState == CS_OFF)
+  if (_pGame->gm_csConsoleState == CS_OFF) {
     return;
+  }
 
   // for all keys except tab and shift, discard last found tab browsing symbol
   char chrKey = msg.wParam;
