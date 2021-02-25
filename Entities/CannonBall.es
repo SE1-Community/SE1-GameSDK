@@ -409,11 +409,11 @@ void RangeDamage(void)
 {
   const FLOAT fDamageMul = GetSeriousDamageMultiplier(m_penLauncher);
   if (m_cbtType == CBT_IRON) {
-    InflictRangeDamage(m_penLauncher, DMT_CANNONBALL_EXPLOSION, IRON_RANGE_DAMAGE*fDamageMul,
+    InflictRangeDamage(m_penLauncher, DMT_CB_EXPLOSION, IRON_RANGE_DAMAGE*fDamageMul,
         GetPlacement().pl_PositionVector, IRON_RANGE_HOTSPOT, IRON_RANGE_FALLOFF);
   } else {
     // nuclear explosion ...
-    InflictRangeDamage(m_penLauncher, DMT_CANNONBALL_EXPLOSION, NUKE_RANGE_DAMAGE*fDamageMul,
+    InflictRangeDamage(m_penLauncher, DMT_CB_EXPLOSION, NUKE_RANGE_DAMAGE*fDamageMul,
         GetPlacement().pl_PositionVector, NUKE_RANGE_HOTSPOT, NUKE_RANGE_FALLOFF);
   }
 };

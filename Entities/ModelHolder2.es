@@ -180,7 +180,7 @@ functions:
       return;
     }
     FLOAT fKickDamage = fNewDamage;
-    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
+    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CB_EXPLOSION) )
     {
       fKickDamage*=1.5f;
     }
@@ -223,7 +223,7 @@ functions:
     // NOTE: we don't receive damage here, but handle death differently
     if (m_vDamage.Length()>GetHealth()) {
       if (!penDestruction->m_bRequireExplosion || 
-        dmtType == DMT_EXPLOSION || dmtType == DMT_CANNONBALL || dmtType == DMT_CANNONBALL_EXPLOSION)
+        dmtType == DMT_EXPLOSION || dmtType == DMT_CANNONBALL || dmtType == DMT_CB_EXPLOSION)
       {
         EDeath eDeath;  // we don't need any extra parameters
         SendEvent(eDeath);

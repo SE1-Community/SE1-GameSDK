@@ -20,23 +20,24 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern CGame *_pGame;
 
 static const FLOAT tmComputerFade = 1.0f; // how many seconds it takes computer to fade in/out
-static FLOAT fComputerFadeValue = 0.0f;   // faded value of computer (0..1)
+static FLOAT fComputerFadeValue = 0.0f; // faded value of computer (0..1)
 static CTimerValue tvComputerLast;
 static CTimerValue _tvMessageAppear;
 static CPlayer *_ppenPlayer = NULL;
 extern FLOAT _fMsgAppearFade = 0.0f;
 extern FLOAT _fMsgAppearDelta = 0.0f;
 
-// player statistics are set here
+// Player statistics are set here
 extern CTString _strStatsDetails = "";
 
-// mouse cursor position
+// Mouse cursor position
 static PIX2D _vpixMouse;
 static PIX2D _vpixExternMouse;
 static PIX _pixSliderDragJ = -1;
 static PIX _iSliderDragLine = -1;
 static PIX _bSliderDragText = FALSE;
-// font metrics
+
+// Font metrics
 static PIX _pixCharSizeI = 1;
 static PIX _pixCharSizeJ = 1;
 static PIX _pixCharSize2I = 1;
@@ -44,7 +45,8 @@ static PIX _pixCharSize2J = 1;
 
 static PIX _pixMarginI = 1;
 static PIX _pixMarginJ = 1;
-// general geometry data
+
+// General geometry data
 static FLOAT _fScaling = 1;
 static FLOAT _fScaling2 = 1;
 static PIX _pixSizeI = 0;
@@ -59,26 +61,26 @@ static INDEX _ctMessagesOnScreen = 5;
 static INDEX _ctTextLinesOnScreen = 20;
 static INDEX _ctTextCharsPerRow = 20;
 
-// position of the message list
+// Position of the message list
 static INDEX _iFirstMessageOnScreen = -1;
 static INDEX _iWantedFirstMessageOnScreen = 0;
 static INDEX _iLastActiveMessage = -1;
 static INDEX _iActiveMessage = 0;
 
-// message type selected in the buttons list
-static enum CompMsgType _cmtCurrentType = (enum CompMsgType) - 1;
+// Message type selected in the buttons list
+static enum CompMsgType _cmtCurrentType = (enum CompMsgType)-1;
 static enum CompMsgType _cmtWantedType = CMT_INFORMATION;
 
-// current scroll position of message text
+// Current scroll position of message text
 static INDEX _iTextLineOnScreen = 0;
 
-// message list cache for messages of current type
+// Message list cache for messages of current type
 static CStaticStackArray<CCompMessage> _acmMessages;
 
-// message image data
+// Message image data
 static CTextureObject _toPicture;
 
-// text/graphics colors
+// Text/graphics colors
 static COLOR _colLight;
 static COLOR _colMedium;
 static COLOR _colDark;
@@ -109,6 +111,7 @@ static PIXaabbox2D GetMsgListBox(INDEX i) {
   PIX pixI1 = _boxMsgList.Max()(1) - _pixMarginI * 3;
   PIX pixJ0 = _boxMsgList.Min()(2) + _pixMarginJ;
   PIX pixDJ = _pixCharSizeJ;
+
   return PIXaabbox2D(PIX2D(pixI0, pixJ0 + pixDJ * i), PIX2D(pixI1, pixJ0 + pixDJ * (i + 1) - 1));
 }
 
@@ -121,6 +124,7 @@ static PIXaabbox2D GetSliderBox(INDEX iFirst, INDEX iVisible, INDEX iTotal, PIXa
   PIX pixTop = pixFull * (FLOAT(iFirst) / iTotal) + boxFull.Min()(2);
   PIX pixI0 = boxFull.Min()(1);
   PIX pixI1 = boxFull.Max()(1);
+
   return PIXaabbox2D(PIX2D(pixI0, pixTop), PIX2D(pixI1, pixTop + pixSize));
 }
 
@@ -180,7 +184,7 @@ static PIXaabbox2D GetMsgSliderBox(void) {
   return GetSliderBox(_iFirstMessageOnScreen, _ctMessagesOnScreen, ctLines, GetMsgSliderSpace());
 }
 
-// syncronize message list scrolling to show active message
+// Syncronize message list scrolling to show active message
 void SyncScrollWithActive(void) {
   if (_iActiveMessage < _iFirstMessageOnScreen) {
     _iWantedFirstMessageOnScreen = _iActiveMessage;
@@ -191,11 +195,13 @@ void SyncScrollWithActive(void) {
   }
 }
 
-// select next unread message
+// Select next unread message
 static void NextUnreadMessage(void) {
   INDEX i = _iActiveMessage;
+
   FOREVER {
     i++;
+
     if (i >= _acmMessages.Count()) {
       i = 0;
     }
@@ -212,9 +218,10 @@ static void NextUnreadMessage(void) {
   }
 }
 
-// select last unread message, or last message if all read
+// Select last unread message, or last message if all read
 void LastUnreadMessage(void) {
   BOOL bFound = FALSE;
+
   for (_iActiveMessage = _acmMessages.Count() - 1; _iActiveMessage >= 0; _iActiveMessage--) {
     if (!_acmMessages[_iActiveMessage].cm_bRead) {
       bFound = TRUE;
@@ -229,13 +236,14 @@ void LastUnreadMessage(void) {
   SyncScrollWithActive();
 }
 
-// go to next/previous message
+// Go to next/previous message
 void PrevMessage(void) {
   if (_iActiveMessage < _acmMessages.Count() == 0) {
     return;
   }
 
   _iActiveMessage--;
+
   if (_iActiveMessage < 0) {
     _iActiveMessage = 0;
   }
@@ -249,6 +257,7 @@ void NextMessage(void) {
   }
 
   _iActiveMessage++;
+
   if (_iActiveMessage >= _acmMessages.Count()) {
     _iActiveMessage = _acmMessages.Count() - 1;
   }
@@ -282,7 +291,7 @@ void SelectMessage(INDEX i) {
   SyncScrollWithActive();
 }
 
-// scroll message text
+// Scroll message text
 void MessageTextUp(INDEX ctLines) {
   _iTextLineOnScreen -= ctLines;
 
@@ -290,6 +299,7 @@ void MessageTextUp(INDEX ctLines) {
     _iTextLineOnScreen = 0;
   }
 }
+
 void MessageTextDn(INDEX ctLines) {
   // if no message do nothing
   if (_iActiveMessage < _acmMessages.Count() == 0) {
@@ -299,6 +309,7 @@ void MessageTextDn(INDEX ctLines) {
   // find text lines count
   _acmMessages[_iActiveMessage].PrepareMessage(_ctTextCharsPerRow);
   INDEX ctTextLines = _acmMessages[_iActiveMessage].cm_ctFormattedLines;
+
   // calculate maximum value for first visible line
   INDEX iFirstLine = ctTextLines - _ctTextLinesOnScreen;
 
@@ -308,6 +319,7 @@ void MessageTextDn(INDEX ctLines) {
 
   // increment
   _iTextLineOnScreen += ctLines;
+
   if (_iTextLineOnScreen > iFirstLine) {
     _iTextLineOnScreen = iFirstLine;
   }
@@ -321,7 +333,7 @@ void MessageTextUpDn(INDEX ctLines) {
   }
 }
 
-// mark current message as read
+// Mark current message as read
 void MarkCurrentRead(void) {
   if (_iActiveMessage >= _acmMessages.Count()) {
     return;
@@ -349,7 +361,7 @@ void MarkCurrentRead(void) {
   _acmMessages[_iActiveMessage].MarkRead();
 }
 
-// update scroll position for message list
+// Update scroll position for message list
 static void UpdateFirstOnScreen(void) {
   if (_iFirstMessageOnScreen == _iWantedFirstMessageOnScreen) {
     return;
@@ -375,7 +387,7 @@ static void UpdateFirstOnScreen(void) {
   }
 }
 
-// update current active message category
+// Update current active message category
 static void UpdateType(BOOL bForce = FALSE) {
   if (_cmtCurrentType == _cmtWantedType && !bForce) {
     return;
@@ -383,8 +395,10 @@ static void UpdateType(BOOL bForce = FALSE) {
 
   // cleare message cache
   _acmMessages.Clear();
+
   // for each player's message
   CDynamicStackArray<CCompMessageID> &acmiMsgs = _ppenPlayer->m_acmiMessages;
+
   for (INDEX i = 0; i < acmiMsgs.Count(); i++) {
     CCompMessageID &cmi = acmiMsgs[i];
 
@@ -403,6 +417,7 @@ static void UpdateType(BOOL bForce = FALSE) {
     _iActiveMessage = 0;
     _iLastActiveMessage = -2;
     _iTextLineOnScreen = 0;
+
     LastUnreadMessage();
     UpdateFirstOnScreen();
   }
@@ -410,7 +425,9 @@ static void UpdateType(BOOL bForce = FALSE) {
 
 static void UpdateMessageAppearing(void) {
   if (_iLastActiveMessage != _iActiveMessage) {
-    _pShell->Execute("FreeUnusedStock();"); // make sure user doesn't overflow memory
+    // make sure user doesn't overflow memory
+    _pShell->Execute("FreeUnusedStock();");
+
     _iTextLineOnScreen = 0;
     _iLastActiveMessage = _iActiveMessage;
     _tvMessageAppear = _pTimer->GetHighPrecisionTimer();
@@ -427,7 +444,7 @@ static void UpdateMessageAppearing(void) {
   _fMsgAppearFade = Clamp(_fMsgAppearDelta / 0.5f, 0.0f, 1.0f);
 }
 
-// update screen geometry
+// Update screen geometry
 static void UpdateSize(CDrawPort *pdp) {
   // get screen size
   PIX pixSizeI = pdp->GetWidth();
@@ -479,10 +496,11 @@ static void UpdateSize(CDrawPort *pdp) {
   // calculate box sizes
   _boxTitle = PIXaabbox2D(PIX2D(0, pixJ0Dn - 1), PIX2D(pixI3Lt, pixJ1Up));
   _boxExit = PIXaabbox2D(PIX2D(pixI3Rt, pixJ0Dn - 1), PIX2D(_pixSizeI, pixJ1Up));
+
   PIX pixD = 5;
   PIX pixH = (pixJ2Up - pixJ1Dn - pixD * (CMT_COUNT - 1)) / CMT_COUNT;
-  INDEX i;
 
+  INDEX i;
   for (i = 0; i < CMT_COUNT; i++) {
     _boxButton[i] = PIXaabbox2D(PIX2D(0, pixJ1Dn + (pixH + pixD) * i), PIX2D(pixI1Lt, pixJ1Dn + (pixH + pixD) * i + pixH));
   }
@@ -520,7 +538,7 @@ static void UpdateSize(CDrawPort *pdp) {
 
 static char *_astrButtonTexts[CMT_COUNT];
 
-// print message type buttons
+// Print message type buttons
 void PrintButton(CDrawPort *pdp, INDEX iButton) {
   CDrawPort dpButton(pdp, _boxButton[iButton]);
 
@@ -540,20 +558,23 @@ void PrintButton(CDrawPort *pdp, INDEX iButton) {
   INDEX ctRead = 0;
   CDynamicStackArray<CCompMessageID> &acmiMsgs = _ppenPlayer->m_acmiMessages;
 
-  {for (INDEX i = 0; i < acmiMsgs.Count(); i++) {
+  for (INDEX i = 0; i < acmiMsgs.Count(); i++) {
     CCompMessageID &cmi = acmiMsgs[i];
+
     if (cmi.cmi_cmtType == iButton) {
       ctTotal++;
+
       if (cmi.cmi_bRead) {
         ctRead++;
       }
     }
-  }}
+  }
 
   INDEX ctUnread = ctTotal - ctRead;
 
   // prepare color
   COLOR col = _colMedium;
+
   if (iButton == _cmtCurrentType) {
     col = _colLight;
   }
@@ -562,6 +583,7 @@ void PrintButton(CDrawPort *pdp, INDEX iButton) {
 
   // prepare string
   CTString str;
+
   if (ctUnread == 0) {
     str = _astrButtonTexts[iButton];
   } else {
@@ -573,22 +595,24 @@ void PrintButton(CDrawPort *pdp, INDEX iButton) {
   dpButton.Unlock();
 }
 
-// print title
+// Print title
 void PrintTitle(CDrawPort *pdp) {
   SetFont2(pdp);
+
   CTString strTitle;
   strTitle.PrintF(TRANS("NETRICSA v2.01 - personal version for: %s"), _ppenPlayer->GetPlayerName());
+
   pdp->PutText(strTitle, _pixMarginI * 3, _pixMarginJ - 2 * _fScaling2 + 1, _colMedium);
 }
 
-// print exit button
+// Print exit button
 void PrintExit(CDrawPort *pdp) {
   SetFont2(pdp);
   pdp->PutTextR(TRANS("Exit"), _boxExit.Size()(1) - _pixMarginI * 3, _pixMarginJ - 2 * _fScaling2 + 1,
                 MouseOverColor(_boxExit, _colMedium, _colDark, _colLight));
 }
 
-// print list of messages
+// Print list of messages
 void PrintMessageList(CDrawPort *pdp) {
   PIX pixTextX = _pixMarginI;
   PIX pixYLine = _pixMarginJ;
@@ -603,23 +627,29 @@ void PrintMessageList(CDrawPort *pdp) {
 
   for (INDEX i = iFirst; i <= iLast; i++) {
     COLOR col = _colMedium;
+
     if (_acmMessages[i].cm_bRead) {
       col = _colDark;
     }
+
     if (i == _iActiveMessage) {
       col = _colLight;
     }
+
     if (GetMsgListBox(i - _iFirstMessageOnScreen) >= _vpixMouse) {
       col = LCDBlinkingColor(_colLight, _colMedium);
     }
+
     pdp->PutText(_acmMessages[i].cm_strSubject, pixTextX, pixYLine, col);
     pixYLine += _pixCharSizeJ;
   }
 
   PIXaabbox2D boxSliderSpace = GetMsgSliderSpace();
   LCDDrawBox(0, 0, boxSliderSpace, _colBoxes);
+
   PIXaabbox2D boxSlider = GetMsgSliderBox();
   COLOR col = _colBoxes;
+
   PIXaabbox2D boxSliderTrans = boxSlider;
   boxSliderTrans += _boxMsgList.Min();
 
@@ -630,7 +660,7 @@ void PrintMessageList(CDrawPort *pdp) {
   pdp->Fill(boxSlider.Min()(1) + 2, boxSlider.Min()(2) + 2, boxSlider.Size()(1) - 4, boxSlider.Size()(2) - 4, col);
 }
 
-// print text of current message
+// Print text of current message
 void PrintMessageText(CDrawPort *pdp) {
   if (_acmMessages.Count() == 0 || _iActiveMessage >= _acmMessages.Count() || fComputerFadeValue < 0.99f) {
     return;
@@ -642,7 +672,8 @@ void PrintMessageText(CDrawPort *pdp) {
   CTString strSubject0;
   CTString strSubject1;
   CTString strSubject2;
-  // strSubject.PrintF("%g", _fMsgAppearFade);
+
+  //strSubject.PrintF("%g", _fMsgAppearFade);
   const char *strSubject = _acmMessages[_iActiveMessage].cm_strSubject;
   INDEX ctSubjectLen = strlen(strSubject);
   INDEX ctToPrint = int(_fMsgAppearDelta * 20.0f);
@@ -651,12 +682,16 @@ void PrintMessageText(CDrawPort *pdp) {
     char strChar[2];
     strChar[0] = strSubject[iChar];
     strChar[1] = 0;
+
     if (iChar > ctToPrint) {
       NOTHING;
+
     } else if (iChar == ctToPrint) {
       strSubject2 += strChar;
+
     } else if (iChar == ctToPrint - 1) {
       strSubject1 += strChar;
+
     } else {
       strSubject0 += strChar;
     }
@@ -664,6 +699,7 @@ void PrintMessageText(CDrawPort *pdp) {
 
   PIX pixWidth0 = pdp->GetTextWidth(strSubject0);
   PIX pixWidth1 = pdp->GetTextWidth(strSubject1);
+
   pdp->PutText(strSubject0, _pixMarginI, _pixMarginJ - 1, _colMedium);
   pdp->PutText(strSubject1, _pixMarginI + pixWidth0, _pixMarginJ - 1, LerpColor(_colLight, _colMedium, 0.5f));
   pdp->PutText(strSubject2, _pixMarginI + pixWidth0 + pixWidth1, _pixMarginJ - 1, _colLight);
@@ -681,23 +717,29 @@ void PrintMessageText(CDrawPort *pdp) {
 
   SetFont1(pdp);
   INDEX ctLineToPrint = int(_fMsgAppearDelta * 20.0f);
+
   // print it
   PIX pixJ = _pixMarginJ * 4;
 
   for (INDEX iLine = _iTextLineOnScreen; iLine < _iTextLineOnScreen + _ctTextLinesOnScreen; iLine++) {
     INDEX iPrintLine = iLine - _iTextLineOnScreen;
+
     if (iPrintLine > ctLineToPrint) {
       continue;
     }
+
     COLOR col = LerpColor(_colLight, _colMedium, Clamp(FLOAT(ctLineToPrint - iPrintLine) / 3, 0.0f, 1.0f));
     pdp->PutText(_acmMessages[_iActiveMessage].GetLine(iLine), _pixMarginI, pixJ, col);
+
     pixJ += _pixCharSizeJ;
   }
 
   PIXaabbox2D boxSliderSpace = GetTextSliderSpace();
   LCDDrawBox(0, 0, boxSliderSpace, _colBoxes);
+
   PIXaabbox2D boxSlider = GetTextSliderBox();
   COLOR col = _colBoxes;
+
   PIXaabbox2D boxSliderTrans = boxSlider;
   boxSliderTrans += _boxMsgText.Min();
 
@@ -711,15 +753,16 @@ void PrintMessageText(CDrawPort *pdp) {
 void RenderMessagePicture(CDrawPort *pdp) {
   CCompMessage &cm = _acmMessages[_iActiveMessage];
 
-  // try to
+  // load image
   try {
-    // load image
     _toPicture.SetData_t(cm.cm_fnmPicture);
     ((CTextureData *)_toPicture.GetData())->Force(TEX_CONSTANT);
-    // if failed
+
+  // if failed
   } catch (char *strError) {
     // report error
     CPrintF("Cannot load '%s':\n%s\n", (CTString &)cm.cm_fnmPicture, strError);
+
     // do nothing
     return;
   }
@@ -727,14 +770,15 @@ void RenderMessagePicture(CDrawPort *pdp) {
   // get image and box sizes
   PIX pixImgSizeI = _toPicture.GetWidth();
   PIX pixImgSizeJ = _toPicture.GetHeight();
-  PIXaabbox2D boxPic(PIX2D(_pixMarginI, _pixMarginJ),
-                     PIX2D(_boxMsgImage.Size()(1) - _pixMarginI, _boxMsgImage.Size()(2) - _pixMarginJ));
+  PIXaabbox2D boxPic(PIX2D(_pixMarginI, _pixMarginJ), PIX2D(_boxMsgImage.Size()(1) - _pixMarginI, _boxMsgImage.Size()(2) - _pixMarginJ));
   PIX pixBoxSizeI = boxPic.Size()(1);
   PIX pixBoxSizeJ = boxPic.Size()(2);
   PIX pixCenterI = _boxMsgImage.Size()(1) / 2;
   PIX pixCenterJ = _boxMsgImage.Size()(2) / 2;
+
   // find image stretch to fit in box
   FLOAT fStretch = Min(FLOAT(pixBoxSizeI) / pixImgSizeI, FLOAT(pixBoxSizeJ) / pixImgSizeJ);
+
   // draw the image
   pdp->PutTexture(&_toPicture, PIXaabbox2D(PIX2D(pixCenterI - pixImgSizeI * fStretch / 2, pixCenterJ - pixImgSizeJ * fStretch / 2),
                                            PIX2D(pixCenterI + pixImgSizeI * fStretch / 2, pixCenterJ + pixImgSizeJ * fStretch / 2)));
@@ -747,17 +791,22 @@ void RenderMessageStats(CDrawPort *pdp) {
 
   if (psp->sp_bCooperative) {
     extern void RenderMap(CDrawPort * pdp, ULONG ulLevelMask, CProgressHookInfo * pphi);
+
     if (pdp->Lock()) {
       // get sizes
       PIX pixSizeI = pdp->GetWidth();
       PIX pixSizeJ = pdp->GetHeight();
+
       // clear bcg
       pdp->Fill(1, 1, pixSizeI - 2, pixSizeJ - 2, C_BLACK | CT_OPAQUE);
+
       // render the map if not fading
       COLOR colFade = LCDFadedColor(C_WHITE | 255);
+
       if ((colFade & 255) == 255) {
         RenderMap(pdp, ulLevelMask, NULL);
       }
+
       pdp->Unlock();
     }
   }
@@ -765,7 +814,7 @@ void RenderMessageStats(CDrawPort *pdp) {
 
 extern void RenderMessageModel(CDrawPort *pdp, const CTString &strModel);
 
-// draw image of current message
+// Draw image of current message
 void RenderMessageImage(CDrawPort *pdp) {
   if (!GetSP()->sp_bCooperative) {
     return;
@@ -776,6 +825,7 @@ void RenderMessageImage(CDrawPort *pdp) {
     // render empty
     LCDRenderClouds2();
     LCDScreenBox(_colBoxes);
+
     return;
   }
 
@@ -792,22 +842,28 @@ void RenderMessageImage(CDrawPort *pdp) {
   if (cm.cm_itImage == CCompMessage::IT_NONE) {
     // do nothing
     return;
+
   } else if (cm.cm_itImage == CCompMessage::IT_PICTURE) {
     RenderMessagePicture(pdp);
+
   } else if (cm.cm_itImage == CCompMessage::IT_STATISTICS) {
     RenderMessageStats(pdp);
+
   } else if (cm.cm_itImage == CCompMessage::IT_MODEL) {
     RenderMessageModel(pdp, cm.cm_strModel);
+
   } else {
     ASSERT(FALSE);
   }
 }
 
-// find first group with some unread message
+// Find first group with some unread message
 static BOOL FindGroupWithUnread(void) {
   CDynamicStackArray<CCompMessageID> &acmiMsgs = _ppenPlayer->m_acmiMessages;
+
   for (INDEX i = acmiMsgs.Count() - 1; i >= 0; i--) {
     CCompMessageID &cmi = acmiMsgs[i];
+
     // if it unread
     if (!cmi.cmi_bRead) {
       _cmtWantedType = cmi.cmi_cmtType;
@@ -836,6 +892,7 @@ static void ComputerOn(void) {
   _acmMessages.Clear();
 
   ASSERT(_ppenPlayer != NULL);
+
   if (_ppenPlayer == NULL) {
     return;
   }
@@ -847,7 +904,8 @@ static void ComputerOn(void) {
   if (_ppenPlayer->m_bEndOfLevel || _pNetwork->IsGameFinished()) {
     // select statistics
     _cmtWantedType = CMT_STATISTICS;
-    // if not end of level
+
+  // if not end of level
   } else {
     // find group with some unread messages
     FindGroupWithUnread();
@@ -867,23 +925,28 @@ static void ExitRequested(void) {
       // request app to show high score
       _pShell->Execute("sam_bMenuHiScore=1;");
     }
+
     // hard turn off
     _pGame->gm_csComputerState = CS_OFF;
     fComputerFadeValue = 0.0f;
     ComputerOff();
     cmp_ppenPlayer = NULL;
+
     // stop current game
     _pGame->StopGame();
-    // if not end of level
+
+  // if not end of level
   } else {
     // if can be rendered on second display
     if (cmp_ppenDHPlayer != NULL) {
       // clear pressed keys
       _pInput->ClearInput();
+
       // just switch to background fast
       _pGame->gm_csComputerState = CS_ONINBACKGROUND;
       cmp_ppenPlayer = NULL;
-      // if no second display
+
+    // if no second display
     } else {
       // start turning off
       _pGame->gm_csComputerState = CS_TURNINGOFF;
@@ -909,10 +972,10 @@ void CGame::ComputerMouseMove(PIX pixX, PIX pixY) {
     if (_bSliderDragText) {
       if (_iActiveMessage < _acmMessages.Count()) {
         INDEX ctTextLines = _acmMessages[_iActiveMessage].cm_ctFormattedLines;
-        INDEX iWantedLine
-          = _iSliderDragLine + SliderPixToIndex(pixDelta, _ctTextLinesOnScreen, ctTextLines, GetTextSliderSpace());
+        INDEX iWantedLine = _iSliderDragLine + SliderPixToIndex(pixDelta, _ctTextLinesOnScreen, ctTextLines, GetTextSliderSpace());
         MessageTextUpDn(iWantedLine - _iTextLineOnScreen);
       }
+
     } else {
       INDEX ctLines = _acmMessages.Count();
       INDEX iWantedLine = _iSliderDragLine + SliderPixToIndex(pixDelta, _ctMessagesOnScreen, ctLines, GetMsgSliderSpace());
@@ -923,6 +986,7 @@ void CGame::ComputerMouseMove(PIX pixX, PIX pixY) {
 
 void CGame::ComputerKeyDown(MSG msg) {
   static BOOL bRDown = FALSE;
+
   // if computer is not active
   if (_pGame->gm_csComputerState != CS_ON && _pGame->gm_csComputerState != CS_TURNINGON) {
     // do nothing
@@ -942,14 +1006,18 @@ void CGame::ComputerKeyDown(MSG msg) {
   // if right mouse released
   if (bRDown && msg.message == WM_RBUTTONUP) {
     bRDown = FALSE;
+
     // mark current message as read
     MarkCurrentRead();
+
     // find a group with first unread message
     BOOL bHasUnread = FindGroupWithUnread();
+
     // if some
     if (bHasUnread) {
       // select first unread message in it
       NextUnreadMessage();
+
     } else {
       ExitRequested();
     }
@@ -963,20 +1031,25 @@ void CGame::ComputerKeyDown(MSG msg) {
       case '3': _cmtWantedType = CMT_ENEMIES; return;
       case '4': _cmtWantedType = CMT_BACKGROUND; return;
       case '5': _cmtWantedType = CMT_STATISTICS; return;
+
       // go to next unread
       case 'U':
       case VK_SPACE: NextUnreadMessage(); return;
+
       // scroll message list
       case 219: PrevMessage(); return;
       case 221: NextMessage(); return;
+
       // mark current message as read and go to next
       case VK_RETURN:
         MarkCurrentRead();
         NextUnreadMessage();
         return;
+
       // scroll message text
       case VK_UP: MessageTextUp(1); return;
       case VK_DOWN: MessageTextDn(1); return;
+
       case VK_PRIOR: MessageTextUp(_ctTextLinesOnScreen - 1); return;
       case VK_NEXT: MessageTextDn(_ctTextLinesOnScreen - 1); return;
     }
@@ -991,6 +1064,7 @@ void CGame::ComputerKeyDown(MSG msg) {
       PIXaabbox2D boxSlider = GetTextSliderBox();
       PIXaabbox2D boxSliderTrans = boxSlider;
       boxSliderTrans += _boxMsgText.Min();
+
       if (boxSliderTrans >= _vpixMouse) {
         bOverMsgSlider = TRUE;
         // start dragging
@@ -1005,6 +1079,7 @@ void CGame::ComputerKeyDown(MSG msg) {
       PIXaabbox2D boxSlider = GetMsgSliderBox();
       PIXaabbox2D boxSliderTrans = boxSlider;
       boxSliderTrans += _boxMsgList.Min();
+
       if (boxSliderTrans >= _vpixMouse) {
         // start dragging
         _bSliderDragText = FALSE;
@@ -1034,6 +1109,7 @@ void CGame::ComputerKeyDown(MSG msg) {
   if (msg.message == WM_LBUTTONUP) {
     // stop dragging
     _pixSliderDragJ = -1;
+
     // if over exit
     if (_boxExit >= _vpixMouse) {
       // exit
@@ -1069,12 +1145,15 @@ void CGame::ComputerRender(CDrawPort *pdp) {
   if (cmp_ppenPlayer != NULL) {
     // use that player
     _ppenPlayer = cmp_ppenPlayer;
+
     // if computer is on in background
     if (_pGame->gm_csComputerState == CS_ONINBACKGROUND) {
       // just toggle to on
       _pGame->gm_csComputerState = CS_ON;
+
       // find group with some unread messages
       FindGroupWithUnread();
+
       // force reinit
       _cmtCurrentType = (enum CompMsgType) - 1;
     }
@@ -1083,6 +1162,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
   } else if (cmp_ppenDHPlayer != NULL) {
     // use that player
     _ppenPlayer = cmp_ppenDHPlayer;
+
     // clear dualhead request - it has to be reinitialized every frame
     cmp_ppenDHPlayer = NULL;
 
@@ -1090,6 +1170,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
     if (_cmtWantedType == CMT_STATISTICS) {
       // fill in fresh player statistics
       _ppenPlayer->GetStats(_strStatsDetails, CST_DETAIL, _ctTextCharsPerRow);
+
       // force updating
       UpdateType(TRUE);
     }
@@ -1099,6 +1180,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
       // switch on fast
       ComputerOn();
       fComputerFadeValue = 1.0f;
+
       _pGame->gm_csComputerState = CS_ONINBACKGROUND;
       cmp_bInitialStart = FALSE; // end of eventual initial start
     }
@@ -1107,6 +1189,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
     if (cmp_bUpdateInBackground) {
       cmp_bUpdateInBackground = FALSE;
       FindGroupWithUnread();
+
       // force reinit
       _cmtCurrentType = (enum CompMsgType) - 1;
     }
@@ -1116,6 +1199,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
   if (_ppenPlayer == NULL) {
     // make sure computer is off
     _pGame->gm_csComputerState = CS_OFF;
+
     // do nothing more
     return;
   }
@@ -1124,11 +1208,13 @@ void CGame::ComputerRender(CDrawPort *pdp) {
   if (_pGame->gm_csComputerState == CS_OFF) {
     // just remember time
     tvComputerLast = _pTimer->GetHighPrecisionTimer();
+
     // if a player wants computer
     if (_ppenPlayer != NULL) {
       // start turning on
       _pGame->gm_csComputerState = CS_TURNINGON;
       ComputerOn();
+
     } else {
       return;
     }
@@ -1144,6 +1230,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
   if (_pGame->gm_csComputerState == CS_TURNINGON) {
     // move it down
     fComputerFadeValue += fFadeSpeed;
+
     // if finished moving
     if (fComputerFadeValue > 1.0f) {
       // stop
@@ -1157,13 +1244,16 @@ void CGame::ComputerRender(CDrawPort *pdp) {
   if (_pGame->gm_csComputerState == CS_TURNINGOFF) {
     // move it up
     fComputerFadeValue -= fFadeSpeed;
+
     // if finished moving
     if (fComputerFadeValue < 0.0f) {
       // stop
       fComputerFadeValue = 0.0f;
       _pGame->gm_csComputerState = CS_OFF;
+
       ComputerOff();
       cmp_ppenPlayer = NULL;
+
       // exit computer
       return;
     }
@@ -1176,6 +1266,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
 
   // lock drawport
   CDrawPort dpComp(pdp, FALSE);
+
   if (!dpComp.Lock()) {
     // do nothing
     return;
@@ -1184,6 +1275,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
   // if in fullscreen
   CDisplayMode dmCurrent;
   _pGfx->GetCurrentDisplayMode(dmCurrent);
+
   if (dmCurrent.IsFullScreen() && dmCurrent.IsDualHead()) {
     // clamp mouse pointer
     _vpixMouse(1) = Clamp(_vpixMouse(1), 0L, dpComp.GetWidth());
@@ -1213,17 +1305,19 @@ void CGame::ComputerRender(CDrawPort *pdp) {
   FLOAT fSec = tvNow.GetSeconds();
   TICK llTick = CTimer::InTicks(fSec); // *_pTimer->TickQuantum;
   FLOAT fLerp = (fSec - CTimer::InSeconds(llTick)) / _pTimer->TickQuantum;
+
   _pTimer->SetGameTick(llTick);
   _pTimer->SetLerp(fLerp);
 
-  LCDPrepare(1.0f); // ClampUp(fComputerFadeValue*10,1.0f));
+  LCDPrepare(1.0f); //ClampUp(fComputerFadeValue * 10, 1.0f));
   LCDSetDrawport(&dpComp);
 
   // if initial start
   if (cmp_bInitialStart) {
     // do not allow game to show through
     dpComp.Fill(C_BLACK | 255);
-    // if normal start
+
+  // if normal start
   } else {
     // fade over game view
     dpComp.Fill(LCDFadedColor(C_BLACK | 255));
@@ -1252,13 +1346,14 @@ void CGame::ComputerRender(CDrawPort *pdp) {
 
   // background
   LCDRenderCloudsForComp();
-  //  dpComp.DrawLine( 0, pixSizeJ-1, pixSizeI, pixSizeJ-1, C_GREEN|ulA);
+  //dpComp.DrawLine(0, pixSizeJ - 1, pixSizeI, pixSizeJ - 1, C_GREEN | ulA);
 
   // all done
   dpComp.Unlock();
 
   // print title
   CDrawPort dpTitle(&dpComp, _boxTitle);
+
   if (dpTitle.Lock()) {
     LCDSetDrawport(&dpTitle);
     LCDRenderCompGrid();
@@ -1270,6 +1365,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
 
   // print exit button
   CDrawPort dpExit(&dpComp, _boxExit);
+
   if (dpExit.Lock()) {
     LCDSetDrawport(&dpExit);
     LCDRenderCompGrid();
@@ -1286,6 +1382,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
 
   // print list of messages
   CDrawPort dpMsgList(&dpComp, _boxMsgList);
+
   if (dpMsgList.Lock()) {
     LCDSetDrawport(&dpMsgList);
     LCDRenderCompGrid();
@@ -1297,6 +1394,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
 
   // print text of current message
   CDrawPort dpMsgText(&dpComp, _boxMsgText);
+
   if (dpMsgText.Lock()) {
     LCDSetDrawport(&dpMsgText);
     LCDRenderCompGrid();
@@ -1308,6 +1406,7 @@ void CGame::ComputerRender(CDrawPort *pdp) {
 
   // draw image of current message
   CDrawPort dpMsgImage(&dpComp, _boxMsgImage);
+
   if (dpMsgImage.Lock()) {
     LCDSetDrawport(&dpMsgImage);
     RenderMessageImage(&dpMsgImage);
@@ -1331,6 +1430,7 @@ void CGame::ComputerForceOff() {
   cmp_ppenPlayer = NULL;
   cmp_ppenDHPlayer = NULL;
   _pGame->gm_csComputerState = CS_OFF;
+
   fComputerFadeValue = 0.0f;
   _ppenPlayer = NULL;
 }

@@ -666,6 +666,7 @@ void RenderMap(CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi) {
         iPosX = 200;
         iPosY = 330;
         colText = 0x5c6a9aff;
+
       } else {
         iPosX = 395;
         iPosY = 403;
@@ -691,8 +692,9 @@ void RenderMap(CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi) {
         if (iProgresDot > pphi->phi_fCompleted * 16) {
           colDot = C_WHITE | 64;
         }
-        pdp->PutTexture(&_toPathDot, PIXaabbox2D(PIX2D(pixDotX, pixDotY), PIX2D(pixDotX + 8 * fStretch, pixDotY + 8 * fStretch)),
-                        colDot);
+
+        pdp->PutTexture(&_toPathDot, PIXaabbox2D(PIX2D(pixDotX, pixDotY), PIX2D(pixDotX + 8 * fStretch, pixDotY + 8 * fStretch)), colDot);
+
       } else {
         PIX pixDotX = pixC1S + ((iPosX - 68) + iProgresDot * 8) * fStretch;
         PIX pixDotY = pixR1S + (iPosY + 19) * fStretch;
@@ -701,11 +703,9 @@ void RenderMap(CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi) {
         if (iProgresDot > pphi->phi_fCompleted * 16) {
           colDot = C_BLACK | 64;
         }
-        pdp->PutTexture(&_toPathDot,
-                        PIXaabbox2D(PIX2D(pixDotX, pixDotY), PIX2D(pixDotX + 2 + 8 * fStretch, pixDotY + 2 + 8 * fStretch)),
-                        C_BLACK | 255);
-        pdp->PutTexture(&_toPathDot, PIXaabbox2D(PIX2D(pixDotX, pixDotY), PIX2D(pixDotX + 8 * fStretch, pixDotY + 8 * fStretch)),
-                        colDot);
+
+        pdp->PutTexture(&_toPathDot, PIXaabbox2D(PIX2D(pixDotX, pixDotY), PIX2D(pixDotX + 2 + 8 * fStretch, pixDotY + 2 + 8 * fStretch)), C_BLACK | 255);
+        pdp->PutTexture(&_toPathDot, PIXaabbox2D(PIX2D(pixDotX, pixDotY), PIX2D(pixDotX + 8 * fStretch, pixDotY + 8 * fStretch)), colDot);
       }
     }
   }

@@ -29,14 +29,14 @@ void CCompMessage::Clear(void) {
   cm_bRead = FALSE;
 }
 
-// constructs message with a filename
+// Constructs message with a filename
 void CCompMessage::SetMessage(CCompMessageID *pcmi) {
   cm_fnmFileName = pcmi->cmi_fnmFileName;
   cm_bRead = pcmi->cmi_bRead;
   cm_pcmiOriginal = pcmi;
 }
 
-// load a message from file
+// Load a message from file
 void CCompMessage::Load_t(void) {
   // if already loaded
   if (cm_bLoaded) {
@@ -84,7 +84,7 @@ void CCompMessage::Load_t(void) {
   cm_bLoaded = TRUE;
 }
 
-// format message for given line width
+// Format message for given line width
 void CCompMessage::Format(INDEX ctCharsPerLine) {
   // if already formatted in needed size
   if (cm_ctFormattedWidth == ctCharsPerLine) {
@@ -117,8 +117,10 @@ void CCompMessage::Format(INDEX ctCharsPerLine) {
   // start at the beginning of text and buffer
   const char *pchSrc = strText;
   char *pchDst = pchBuffer;
+
   cm_ctFormattedLines = 1;
   INDEX ctChars = 0;
+
   // while not end of text
   while (*pchSrc != 0) {
     // copy one char
@@ -133,6 +135,7 @@ void CCompMessage::Format(INDEX ctCharsPerLine) {
     }
 
     ctChars++;
+
     // if out of row
     if (ctChars > ctCharsPerLine) {
       // start backtracking
@@ -173,18 +176,19 @@ void CCompMessage::Format(INDEX ctCharsPerLine) {
   FreeMemory(pchBuffer);
 }
 
-// prepare message for using (load, format, etc.)
+// Prepare message for using (load, format, etc.)
 void CCompMessage::PrepareMessage(INDEX ctCharsPerLine) {
   // if not loaded
   if (!cm_bLoaded) {
-    // try to
+    // load it
     try {
-      // load it
       Load_t();
-      // if failed
+
+    // if failed
     } catch (char *strError) {
       // report warning
       CPrintF("Cannot load message'%s': %s\n", (const CTString &)cm_fnmFileName, strError);
+
       // do nothing else
       return;
     }
@@ -194,7 +198,7 @@ void CCompMessage::PrepareMessage(INDEX ctCharsPerLine) {
   Format(ctCharsPerLine);
 }
 
-// free memory used by message, but keep message filename
+// Free memory used by message, but keep message filename
 void CCompMessage::UnprepareMessage(void) {
   // clear everything except filename
   cm_bLoaded = FALSE;
@@ -208,20 +212,22 @@ void CCompMessage::UnprepareMessage(void) {
   cm_ctFormattedLines = 0;
 }
 
-// mark message as read
+// Mark message as read
 void CCompMessage::MarkRead(void) {
   cm_bRead = TRUE;
   cm_pcmiOriginal->cmi_bRead = TRUE;
 }
 
-// get one formatted line
+// Get one formatted line
 CTString CCompMessage::GetLine(INDEX iLine) {
   const char *strText = cm_strFormattedText;
+
   // find first line
   INDEX i = 0;
 
   while (i < iLine) {
     strText = strchr(strText, '\n');
+
     if (strText == NULL) {
       return "";
     } else {

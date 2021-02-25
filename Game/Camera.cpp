@@ -50,7 +50,8 @@ static INDEX cam_bResetToPlayer = FALSE;
 static INDEX cam_bSnapshot = FALSE;
 static INDEX cam_fSpeed = 1.0f;
 
-// camera functions
+// Camera functions
+
 void CAM_Init(void) {
   _pShell->DeclareSymbol("user INDEX cam_bRecord;", &cam_bRecord);
   _pShell->DeclareSymbol("user INDEX cam_bMoveForward;", &cam_bMoveForward);
@@ -261,8 +262,7 @@ void CAM_Render(CEntity *pen, CDrawPort *pdp) {
   // init projection parameters
   CPerspectiveProjection3D prPerspectiveProjection;
   prPerspectiveProjection.FOVL() = _cp.cp_aFOV;
-  prPerspectiveProjection.ScreenBBoxL()
-    = FLOATaabbox2D(FLOAT2D(0.0f, 0.0f), FLOAT2D((float)pdp->GetWidth(), (float)pdp->GetHeight()));
+  prPerspectiveProjection.ScreenBBoxL() = FLOATaabbox2D(FLOAT2D(0.0f, 0.0f), FLOAT2D((float)pdp->GetWidth(), (float)pdp->GetHeight()));
   prPerspectiveProjection.AspectRatioL() = 1.0f;
   prPerspectiveProjection.FrontClipDistanceL() = 0.3f;
 
@@ -271,6 +271,7 @@ void CAM_Render(CEntity *pen, CDrawPort *pdp) {
 
   // set up viewer position
   prProjection->ViewerPlacementL() = plCamera;
+
   // render the view
   RenderView(*pen->en_pwoWorld, *(CEntity *)NULL, prProjection, *pdp);
 }

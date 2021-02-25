@@ -707,17 +707,15 @@ static void FillWeaponAmmoTables(void) {
 
 //<<<<<<< DEBUG FUNCTIONS >>>>>>>
 
+// [Cecil] 2021-02-20: Unified block to avoid many ENTITY_DEBUG checks
 #ifdef ENTITY_DEBUG
 CRationalEntity *DBG_prenStackOutputEntity = NULL;
-#endif
+
 void HUD_SetEntityForStackDisplay(CRationalEntity *pren) {
-#ifdef ENTITY_DEBUG
   DBG_prenStackOutputEntity = pren;
-#endif
   return;
 }
 
-#ifdef ENTITY_DEBUG
 static void HUD_DrawEntityStack() {
   CTString strTemp;
   PIX pixFontHeight;
@@ -744,7 +742,13 @@ static void HUD_DrawEntityStack() {
     }
   }
 }
+
+#else // [Cecil] 2021-02-20: Dummy function definition
+void HUD_SetEntityForStackDisplay(CRationalEntity *pren) {
+  return;
+}
 #endif
+
 //<<<<<<< DEBUG FUNCTIONS >>>>>>>
 
 // main
@@ -1362,11 +1366,11 @@ extern void DrawHUD(const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOOL
       HUD_DrawIcon(fCol, fRow, _toMessage, C_WHITE /*col*/, 0.0f, TRUE);
     }
   }
-
-#ifdef ENTITY_DEBUG
+  
   // if entity debug is on, draw entity stack
+  #ifdef ENTITY_DEBUG
   HUD_DrawEntityStack();
-#endif
+  #endif
 
   // draw cheat modes
   if (GetSP()->sp_ctMaxPlayers == 1) {

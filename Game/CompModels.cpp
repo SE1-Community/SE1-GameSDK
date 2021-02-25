@@ -76,7 +76,7 @@ static COLOR _colLight = C_GRAY;
 static COLOR _colAmbient = C_vdGRAY;
 static COLOR _iParticleType = PARTICLES_NONE;
 
-// model setting values
+// Model setting values
 static CTString _strLastModel = "";
 static BOOL _bModelOK = FALSE;
 
@@ -108,6 +108,7 @@ extern void SetupCompModel_t(const CTString &strName) {
   _moFloor.SetData_t(CTFILENAME("ModelsMP\\Computer\\Floor.mdl"));
   _moFloor.mo_toTexture.SetData_t(CTFILENAME("Models\\Computer\\Floor.tex"));
   pmo->mo_colBlendColor = 0xFFFFFFFF;
+
   if (strName == "Rocketman") {
     pmo->SetData_t(CTFILENAME("Models\\Enemies\\Headman\\Headman.mdl"));
     pmo->PlayAnim(HEADMAN_ANIM_COMPUTERKAMIKAZE, AOF_LOOPING);
@@ -195,8 +196,8 @@ extern void SetupCompModel_t(const CTString &strName) {
     pmo->mo_toSpecular.SetData_t(CTFILENAME("Models\\SpecularTextures\\Medium.tex"));
     pmo->PlayAnim(SCORPMAN_ANIM_WALK, AOF_LOOPING);
     pmo->mo_toTexture.SetData_t(CTFILENAME("Models\\Enemies\\Scorpman\\Soldier.tex"));
-    //    _plModel = CPlacement3D(FLOAT3D(0+0.2f*2,-2,-13), ANGLE3D(150,0,0));
-    //    _fFOV = 30;
+    //_plModel = CPlacement3D(FLOAT3D(0+0.2f*2,-2,-13), ANGLE3D(150,0,0));
+    //_fFOV = 30;
     _plModel = CPlacement3D(FLOAT3D(0 + 0.5f * 3, -3.0f, -7.0) * 2 / 3, ANGLE3D(135, 0, 0));
     _vLightDir = FLOAT3D(0.2f, -0.2f, -0.2f);
     _colLight = C_lGRAY;
@@ -213,8 +214,8 @@ extern void SetupCompModel_t(const CTString &strName) {
     pmo->PlayAnim(SCORPMAN_ANIM_WALK, AOF_LOOPING);
     pmo->mo_toTexture.SetData_t(CTFILENAME("Models\\Enemies\\Scorpman\\General.tex"));
     pmo->mo_toSpecular.SetData_t(CTFILENAME("Models\\SpecularTextures\\Medium.tex"));
-    //    _plModel = CPlacement3D(FLOAT3D(0+0.2f*3,-4,-19), ANGLE3D(150,0,0));
-    //    _fFOV = 30;
+    //_plModel = CPlacement3D(FLOAT3D(0+0.2f*3,-4,-19), ANGLE3D(150,0,0));
+    //_fFOV = 30;
     _plModel = CPlacement3D(FLOAT3D(0 + 0.5f * 3, -3.0f, -7.0), ANGLE3D(135, 0, 0));
     _vLightDir = FLOAT3D(0.2f, -0.2f, -0.2f);
     _colLight = C_lGRAY;
@@ -300,7 +301,7 @@ extern void SetupCompModel_t(const CTString &strName) {
 
     //_plModel = CPlacement3D(FLOAT3D(tmp_af[5],tmp_af[6],tmp_af[7]), ANGLE3D(tmp_af[8],0,0));
     //_fFOV = tmp_af[9];
-    // CPrintF("%f %f %f : %f : %f\n", tmp_af[5],tmp_af[6],tmp_af[7], tmp_af[8], tmp_af[9]);
+    //CPrintF("%f %f %f : %f : %f\n", tmp_af[5],tmp_af[6],tmp_af[7], tmp_af[8], tmp_af[9]);
 
     pmo->StretchModel(FLOAT3D(6, 6, 6));
     _bHasFloor = TRUE;
@@ -347,7 +348,7 @@ extern void SetupCompModel_t(const CTString &strName) {
 
     //_plModel = CPlacement3D(FLOAT3D(tmp_af[5],tmp_af[6],tmp_af[7]), ANGLE3D(tmp_af[8],0,0));
     //_fFOV = tmp_af[9];
-    // CPrintF("%f %f %f : %f : %f\n", tmp_af[5],tmp_af[6],tmp_af[7], tmp_af[8], tmp_af[9]);
+    //CPrintF("%f %f %f : %f : %f\n", tmp_af[5],tmp_af[6],tmp_af[7], tmp_af[8], tmp_af[9]);
 
     pmo->StretchModel(FLOAT3D(1.5f, 1.5f, 1.5f));
     _bHasFloor = TRUE;
@@ -826,12 +827,12 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel) {
     _strLastModel = strModel;
     _bModelOK = FALSE;
 
-    // try to
+    // load model
     try {
-      // load model
       SetupCompModel_t(strModel);
       _bModelOK = TRUE;
-      // if failed
+
+    // if failed
     } catch (char *strError) {
       // report error
       CPrintF("Cannot setup model '%s':\n%s\n", strModel, strError);
@@ -849,7 +850,6 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel) {
   // for each eye
   for (INDEX iEye = STEREO_LEFT; iEye <= (Stereo_IsEnabled() ? STEREO_RIGHT : STEREO_LEFT); iEye++) {
     // prepare projection
-    CRenderModel rm;
     CPerspectiveProjection3D pr;
     pr.FOVL() = AngleDeg(_fFOV);
     pr.ScreenBBoxL() = FLOATaabbox2D(FLOAT2D(0.0f, 0.0f), FLOAT2D((float)pdp->GetWidth(), (float)pdp->GetHeight()));
@@ -867,6 +867,8 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel) {
     CAnyProjection3D apr;
     apr = pr;
     BeginModelRenderingView(apr, pdp);
+
+    CRenderModel rm;
     rm.rm_vLightDirection = _vLightDir;
     const FLOAT fDistance = 1 + 10 * (1 / (_fMsgAppearFade + 0.01) - 1 / (1 + 0.01));
 
@@ -879,6 +881,7 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel) {
       pl.pl_PositionVector(2) += _fFloorY;
       pl.pl_PositionVector(3) *= fDistance;
       rm.SetObjectPlacement(pl);
+
       // render the floor
       rm.rm_colLight = C_WHITE;
       rm.rm_colAmbient = C_WHITE;
@@ -899,9 +902,9 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel) {
     rm.rm_colAmbient = _colAmbient;
     rm.rm_fDistanceFactor = -999; // force highest mip disregarding stretch factors
     _moModel.SetupModelRendering(rm);
+
     FLOATplane3D plFloorPlane = FLOATplane3D(FLOAT3D(0.0f, 1.0f, 0.0f), _plModel.pl_PositionVector(2) + _fFloorY);
-    CPlacement3D plLightPlacement = CPlacement3D(
-      _plModel.pl_PositionVector + rm.rm_vLightDirection * _plModel.pl_PositionVector(3) * 5, ANGLE3D(0.0f, 0.0f, 0.0f));
+    CPlacement3D plLightPlacement = CPlacement3D(_plModel.pl_PositionVector + rm.rm_vLightDirection * _plModel.pl_PositionVector(3) * 5, ANGLE3D(0.0f, 0.0f, 0.0f));
     _moModel.RenderShadow(rm, plLightPlacement, 200.0f, 200.0f, 1.0f, plFloorPlane);
     _moModel.RenderModel(rm);
 
@@ -909,14 +912,17 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel) {
     if (_iParticleType != PARTICLES_NONE) {
       Particle_PrepareSystem(pdp, apr);
       Particle_PrepareEntity(1, 0, 0, NULL);
+
       switch (_iParticleType) {
         case PARTICLES_AIR_ELEMENTAL: Particles_AirElemental_Comp(&_moModel, 1.0f, 1.0f, pl); break;
         case PARTICLES_LAVA_ELEMENTAL: Particles_Burning_Comp(&_moModel, 0.25f, pl); break;
       }
+
       Particle_EndSystem();
     }
 
     EndModelRenderingView();
   }
+
   Stereo_SetBuffer(STEREO_BOTH);
 }

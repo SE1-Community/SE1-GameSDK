@@ -648,7 +648,7 @@ functions:
       return;
     }
     FLOAT fKickDamage = fNewDamage;
-    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
+    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CB_EXPLOSION) )
     {
       fKickDamage*=1.5;
     }
@@ -682,7 +682,7 @@ functions:
       vDirectionFixed = -en_vGravityDir;
     }
     FLOAT3D vDamageOld = m_vDamage;
-/*    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
+    /*if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_CB_EXPLOSION) )
     {
       m_vDamage+=(vDirectionFixed/2-en_vGravityDir/2)*fKickDamage;
     }

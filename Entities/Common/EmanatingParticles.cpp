@@ -58,11 +58,12 @@ FLOAT3D CEmiter::GetGravity(CEntity *pen) {
   if (pen->GetPhysicsFlags() & EPF_MOVABLE) {
     return ((CMovableEntity *)pen)->en_vGravityDir * ((CMovableEntity *)pen)->en_fGravityA;
   }
+
   return FLOAT3D(0, -10.0f, 0);
 }
 
-void CEmiter::AddParticle(FLOAT3D vPos, FLOAT3D vSpeed, FLOAT fRot, FLOAT fRotSpeed, FLOAT tmBirth, FLOAT tmLife, FLOAT fStretch,
-                          COLOR colColor) {
+void CEmiter::AddParticle(FLOAT3D vPos, FLOAT3D vSpeed, FLOAT fRot, FLOAT fRotSpeed,
+                          FLOAT tmBirth, FLOAT tmLife, FLOAT fStretch, COLOR colColor) {
   CEmittedParticle &em = em_aepParticles.Push();
   em.ep_fLastRot = fRot;
   em.ep_fRot = fRot;
@@ -81,33 +82,39 @@ void CEmiter::AnimateParticles(void) {
   FLOAT tmNow = _pTimer->CurrentTick();
   INDEX ctCount = em_aepParticles.Count();
   INDEX iCurrent = 0;
+
   while (iCurrent < ctCount) {
     CEmittedParticle &ep = em_aepParticles[iCurrent];
+
     // not yet alive
     if (ep.ep_tmEmitted < 0) {
       iCurrent++;
-    }
+
     // if shouldn't live any more
-    else if (tmNow > ep.ep_tmEmitted + ep.ep_tmLife) {
+    } else if (tmNow > ep.ep_tmEmitted + ep.ep_tmLife) {
       CEmittedParticle &emLast = em_aepParticles[ctCount - 1];
       ep = emLast;
       ctCount--;
-    }
+
     // it is alive, animate it
-    else {
+    } else {
       // animate position
       ep.ep_vLastPos = ep.ep_vPos;
       ep.ep_vSpeed = ep.ep_vSpeed + em_vG * _pTimer->TickQuantum;
       ep.ep_vPos = ep.ep_vPos + ep.ep_vSpeed * _pTimer->TickQuantum;
+
       // animate rotation
       ep.ep_fLastRot = ep.ep_fRot;
       ep.ep_fRot += ep.ep_fRotSpeed * _pTimer->TickQuantum;
+
       // animate color
       FLOAT fRatio = CalculateRatio(tmNow, ep.ep_tmEmitted, ep.ep_tmEmitted + ep.ep_tmLife, 1, 0);
       ep.ep_colLastColor = ep.ep_colColor;
+
       iCurrent++;
     }
   }
+
   if (em_aepParticles.Count() == 0) {
     em_aepParticles.PopAll();
   } else if (em_aepParticles.Count() != ctCount) {
@@ -120,21 +127,23 @@ void CEmiter::RenderParticles(void) {
     case ET_AIR_ELEMENTAL: Particles_AirElementalBlow(*(CEmiter *)this); break;
     case ET_SUMMONER_STAFF: Particles_SummonerStaff(*(CEmiter *)this); break;
     case ET_FIREWORKS01: Particles_Fireworks01(*(CEmiter *)this); break;
-    default: {
-    }
   }
 }
 
 void CEmiter::Read_t(CTStream &strm) {
-  if (strm.PeekID_t() != CChunkID(ID_EMITER_VER))
+  if (strm.PeekID_t() != CChunkID(ID_EMITER_VER)) {
     return;
+  }
+
   strm.GetID_t();
   INDEX ctMaxParticles;
   strm >> ctMaxParticles;
 
   em_bInitialized = TRUE;
+
   INDEX ietType;
   strm >> ietType;
+
   em_etType = (CEmiterType)ietType;
   strm >> em_tmStart;
   strm >> em_tmLife;
@@ -142,8 +151,10 @@ void CEmiter::Read_t(CTStream &strm) {
   strm >> em_colGlobal;
   strm >> em_iGlobal;
 
-  if (ctMaxParticles == 0)
+  if (ctMaxParticles == 0) {
     return;
+  }
+
   em_aepParticles.Push(ctMaxParticles);
 
   for (INDEX i = 0; i < em_aepParticles.Count(); i++) {
@@ -153,8 +164,10 @@ void CEmiter::Read_t(CTStream &strm) {
 }
 
 void CEmiter::Write_t(CTStream &strm) {
-  if (!em_bInitialized)
+  if (!em_bInitialized) {
     return;
+  }
+
   INDEX ctMaxParticles = em_aepParticles.Count();
   strm.WriteID_t(CChunkID(ID_EMITER_VER));
   strm << ctMaxParticles;

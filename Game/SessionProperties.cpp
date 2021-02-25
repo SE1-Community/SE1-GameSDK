@@ -71,6 +71,7 @@ static void SetGameModeParameters(CSessionProperties &sp) {
       break;
   }
 }
+
 static void SetDifficultyParameters(CSessionProperties &sp) {
   INDEX iDifficulty = gam_iStartDifficulty;
   if (iDifficulty == 4) {
@@ -126,7 +127,7 @@ static void SetDifficultyParameters(CSessionProperties &sp) {
   }
 }
 
-// set properties for a single player session
+// Set properties for a single player session
 void CGame::SetSinglePlayerSession(CSessionProperties &sp) {
   // clear
   memset(&sp, 0, sizeof(sp));
@@ -170,7 +171,7 @@ void CGame::SetSinglePlayerSession(CSessionProperties &sp) {
   sp.sp_bGibs = gam_bGibs;
 }
 
-// set properties for a quick start session
+// Set properties for a quick start session
 void CGame::SetQuickStartSession(CSessionProperties &sp) {
   gam_iStartDifficulty = gam_iQuickStartDifficulty;
   gam_iStartMode = gam_iQuickStartMode;
@@ -181,11 +182,12 @@ void CGame::SetQuickStartSession(CSessionProperties &sp) {
   } else {
     SetMultiPlayerSession(sp);
   }
+
   // quick start type
   sp.sp_bQuickTest = TRUE;
 }
 
-// set properties for a multiplayer session
+// Set properties for a multiplayer session
 void CGame::SetMultiPlayerSession(CSessionProperties &sp) {
   // clear
   memset(&sp, 0, sizeof(sp));
@@ -243,6 +245,7 @@ void CGame::SetMultiPlayerSession(CSessionProperties &sp) {
     sp.sp_bWeaponsStay = FALSE;
     sp.sp_bAmmoStays = FALSE;
     sp.sp_bHealthArmorStays = FALSE;
+
     if (sp.sp_bUseFrags) {
       sp.sp_iScoreLimit = 0;
     } else {
@@ -268,6 +271,7 @@ BOOL IsMenuEnabled(const CTString &strMenuName) {
     return TRUE;
   }
 }
+
 BOOL IsMenuEnabledCfunc(void *pArgs) {
   CTString strMenuName = *NEXTARGUMENT(CTString *);
   return IsMenuEnabled(strMenuName);
@@ -301,6 +305,7 @@ CTString GetGameAgentRulesInfo(void) {
   CTString strDifficulty;
   if (sp.sp_bMental) {
     strDifficulty = TRANS("Mental");
+
   } else {
     switch (sp.sp_gdGameDifficulty) {
       case CSessionProperties::GD_TOURIST: strDifficulty = TRANS("Tourist"); break;
@@ -323,14 +328,19 @@ CTString GetGameAgentRulesInfo(void) {
 
   strKey.PrintF(";ammostays;%d", sp.sp_bAmmoStays ? 0 : 1);
   strOut += strKey;
+
   strKey.PrintF(";healthandarmorstays;%d", sp.sp_bHealthArmorStays ? 0 : 1);
   strOut += strKey;
+
   strKey.PrintF(";allowhealth;%d", sp.sp_bAllowHealth ? 0 : 1);
   strOut += strKey;
+
   strKey.PrintF(";allowarmor;%d", sp.sp_bAllowArmor ? 0 : 1);
   strOut += strKey;
+
   strKey.PrintF(";infiniteammo;%d", sp.sp_bInfiniteAmmo ? 0 : 1);
   strOut += strKey;
+
   strKey.PrintF(";respawninplace;%d", sp.sp_bRespawnInPlace ? 0 : 1);
   strOut += strKey;
 
@@ -338,21 +348,26 @@ CTString GetGameAgentRulesInfo(void) {
     if (sp.sp_ctCredits < 0) {
       strKey.PrintF(";credits;infinite");
       strOut += strKey;
+
     } else if (sp.sp_ctCredits > 0) {
       strKey.PrintF(";credits;%d", sp.sp_ctCredits);
       strOut += strKey;
+
       strKey.PrintF(";credits_left;%d", sp.sp_ctCreditsLeft);
       strOut += strKey;
     }
+
   } else {
     if (sp.sp_bUseFrags && sp.sp_iFragLimit > 0) {
       strKey.PrintF(";fraglimit;%d", sp.sp_iFragLimit);
       strOut += strKey;
     }
+
     if (!sp.sp_bUseFrags && sp.sp_iScoreLimit > 0) {
       strKey.PrintF(";fraglimit;%d", sp.sp_iScoreLimit);
       strOut += strKey;
     }
+
     if (sp.sp_iTimeLimit > 0) {
       strKey.PrintF(";timelimit;%d", sp.sp_iTimeLimit);
       strOut += strKey;

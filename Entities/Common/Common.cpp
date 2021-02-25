@@ -58,18 +58,24 @@ void CCompMessageID::NewMessage(const CTFileName &fnm) {
 
   if (strName.Matches("*messages\\information*")) {
     cmi_cmtType = CMT_INFORMATION;
+
   } else if (strName.Matches("*messages\\weapons*")) {
     cmi_cmtType = CMT_WEAPONS;
+
   } else if (strName.Matches("*messages\\enemies*")) {
     cmi_cmtType = CMT_ENEMIES;
+
   } else if (strName.Matches("*messages\\background*")) {
     cmi_cmtType = CMT_BACKGROUND;
+
   } else if (strName.Matches("*messages\\statistics*")) {
     cmi_cmtType = CMT_STATISTICS;
+
   } else {
     CPrintF("Unknown message type: %s\n", (const CTString &)fnm);
     cmi_cmtType = CMT_INFORMATION;
   }
+
   // mark as unread
   cmi_bRead = FALSE;
 }
@@ -104,6 +110,7 @@ void GetPositionCastRay(CEntity *penSource, CEntity *penTarget, FLOAT3D &vSource
   } else {
     vSource = penSource->GetPlacement().pl_PositionVector;
   }
+
   // target
   if (peiTarget != NULL) {
     GetEntityInfoPosition(penTarget, peiTarget->vTargetCenter, vTarget);
@@ -116,12 +123,7 @@ void GetPositionCastRay(CEntity *penSource, CEntity *penTarget, FLOAT3D &vSource
 void SetBoolFromBoolEType(BOOL &bSet, BoolEType bet) {
   switch (bet) {
     case BET_TRUE: bSet = TRUE; break;
-    case BET_FALSE:
-      bSet = FALSE;
-      break;
-      // case BET_IGNORE:
-      // bSet = bSet;
-      // break
+    case BET_FALSE: bSet = FALSE; break;
   }
 };
 
@@ -136,28 +138,38 @@ void SendToTarget(CEntity *penSendEvent, EventEType eetEventType, CEntity *penCa
         eStart.penCaused = penCaused;
         penSendEvent->SendEvent(eStart);
       } break;
+
       // send STOP event
       case EET_STOP: penSendEvent->SendEvent(EStop()); break;
+
       // send TRIGGER event
       case EET_TRIGGER: {
         ETrigger eTrigger;
         eTrigger.penCaused = penCaused;
         penSendEvent->SendEvent(eTrigger);
       } break;
+
       // don't send event (IGNORE)
       case EET_IGNORE: break;
+
       // send ACTIVATE event
       case EET_ACTIVATE: penSendEvent->SendEvent(EActivate()); break;
+
       // send DEACTIVATE event
       case EET_DEACTIVATE: penSendEvent->SendEvent(EDeactivate()); break;
+
       // send ENVIRONMENTSTART event
       case EET_ENVIRONMENTSTART: penSendEvent->SendEvent(EEnvironmentStart()); break;
+
       // send ENVIRONMENTSTOP event
       case EET_ENVIRONMENTSTOP: penSendEvent->SendEvent(EEnvironmentStop()); break;
+
       // send STARTATTACK event
       case EET_STARTATTACK: penSendEvent->SendEvent(EStartAttack()); break;
+
       // send STOPATTACK event
       case EET_STOPATTACK: penSendEvent->SendEvent(EStopAttack()); break;
+
       case EET_STOPBLINDNESS: penSendEvent->SendEvent(EStopBlindness()); break;
       case EET_STOPDEAFNESS: penSendEvent->SendEvent(EStopDeafness()); break;
       case EET_TELEPORTMOVINGBRUSH: penSendEvent->SendEvent(ETeleportMovingBrush()); break;
@@ -170,24 +182,34 @@ void SendInRange(CEntity *penSource, EventEType eetEventType, const FLOATaabbox3
   switch (eetEventType) {
     // send START event
     case EET_START: penSource->SendEventInRange(EStart(), boxRange); break;
+
     // send STOP event
     case EET_STOP: penSource->SendEventInRange(EStop(), boxRange); break;
+
     // send TRIGGER event
     case EET_TRIGGER: penSource->SendEventInRange(ETrigger(), boxRange); break;
+
     // don't send event (IGNORE)
     case EET_IGNORE: break;
+
     // send ACTIVATE event
     case EET_ACTIVATE: penSource->SendEventInRange(EActivate(), boxRange); break;
+
     // send DEACTIVATE event
     case EET_DEACTIVATE: penSource->SendEventInRange(EDeactivate(), boxRange); break;
+
     // send ENVIRONMENTSTART event
     case EET_ENVIRONMENTSTART: penSource->SendEventInRange(EEnvironmentStart(), boxRange); break;
+
     // send ENVIRONMENTSTOP event
     case EET_ENVIRONMENTSTOP: penSource->SendEventInRange(EEnvironmentStop(), boxRange); break;
+
     // send STARTATTACK event
     case EET_STARTATTACK: penSource->SendEventInRange(EStartAttack(), boxRange); break;
+
     // send STOPATTACK event
     case EET_STOPATTACK: penSource->SendEventInRange(EStopAttack(), boxRange); break;
+
     case EET_STOPBLINDNESS: penSource->SendEventInRange(EStopBlindness(), boxRange); break;
     case EET_STOPDEAFNESS: penSource->SendEventInRange(EStopDeafness(), boxRange); break;
   }
@@ -196,11 +218,13 @@ void SendInRange(CEntity *penSource, EventEType eetEventType, const FLOATaabbox3
 // spawn reminder
 CEntityPointer SpawnReminder(CEntity *penOwner, FLOAT fWaitTime, INDEX iValue) {
   CEntityPointer penReminder;
+
   try {
     penReminder = penOwner->GetWorld()->CreateEntity_t(penOwner->GetPlacement(), CTFILENAME("Classes\\Reminder.ecl"));
   } catch (char *strError) {
     FatalError(TRANS("Cannot create reminder entity class: %s"), strError);
   }
+
   EReminderInit eri;
   eri.penOwner = penOwner;
   eri.fWaitTime = fWaitTime;
@@ -212,73 +236,75 @@ CEntityPointer SpawnReminder(CEntity *penOwner, FLOAT fWaitTime, INDEX iValue) {
 
 EffectParticlesType GetParticleEffectTypeForSurface(INDEX iSurfaceType) {
   EffectParticlesType eptType = EPT_BULLET_STONE;
+
   switch (iSurfaceType) {
     case SURFACE_SAND: {
       eptType = EPT_BULLET_SAND;
-      break;
-    }
+    } break;
+
     case SURFACE_RED_SAND: {
       eptType = EPT_BULLET_RED_SAND;
-      break;
-    }
+    } break;
+
     case SURFACE_WATER: {
       eptType = EPT_BULLET_WATER;
-      break;
-    }
+    } break;
+
     case SURFACE_GRASS:
     case SURFACE_GRASS_SLIDING:
     case SURFACE_GRASS_NOIMPACT: {
       eptType = EPT_BULLET_GRASS;
-      break;
-    }
+    } break;
+
     case SURFACE_WOOD: {
       eptType = EPT_BULLET_WOOD;
-      break;
-    }
+    } break;
+
     case SURFACE_SNOW: {
       eptType = EPT_BULLET_SNOW;
-      break;
-    }
+    } break;
   }
+
   return eptType;
 }
 
 BulletHitType GetBulletHitTypeForSurface(INDEX iSurfaceType) {
   BulletHitType bhtType = BHT_BRUSH_STONE;
+
   switch (iSurfaceType) {
     case SURFACE_SAND: {
       bhtType = BHT_BRUSH_SAND;
-      break;
-    }
+    } break;
+
     case SURFACE_RED_SAND: {
       bhtType = BHT_BRUSH_RED_SAND;
-      break;
-    }
+    } break;
+
     case SURFACE_WATER: {
       bhtType = BHT_BRUSH_WATER;
-      break;
-    }
+    } break;
+
     case SURFACE_GRASS:
     case SURFACE_GRASS_SLIDING:
     case SURFACE_GRASS_NOIMPACT: {
       bhtType = BHT_BRUSH_GRASS;
-      break;
-    }
+    } break;
+
     case SURFACE_WOOD: {
       bhtType = BHT_BRUSH_WOOD;
-      break;
-    }
+    } break;
+
     case SURFACE_SNOW: {
       bhtType = BHT_BRUSH_SNOW;
-      break;
-    }
+    } break;
   }
+
   return bhtType;
 }
 
 // spawn effect from hit type
-void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, FLOAT3D vHitNormal, FLOAT3D vHitPoint,
-                        FLOAT3D vIncommingBulletDir, FLOAT3D vDistance) {
+void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, FLOAT3D vHitNormal,
+                        FLOAT3D vHitPoint, FLOAT3D vIncommingBulletDir, FLOAT3D vDistance) {
   switch (bhtType) {
     case BHT_BRUSH_STONE:
     case BHT_BRUSH_SAND:
@@ -290,60 +316,77 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
     case BHT_BRUSH_SNOW: {
       // bullet stain
       ESpawnEffect ese;
+
       if (bSound) {
         if (bhtType == BHT_BRUSH_STONE) {
           ese.betType = BET_BULLETSTAINSTONE;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_SAND) {
           ese.betType = BET_BULLETSTAINSAND;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_RED_SAND) {
           ese.betType = BET_BULLETSTAINREDSAND;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_WATER) {
           ese.betType = BET_BULLETSTAINWATER;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_UNDER_WATER) {
           ese.betType = BET_BULLETSTAINUNDERWATER;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_GRASS) {
           ese.betType = BET_BULLETSTAINGRASS;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_WOOD) {
           ese.betType = BET_BULLETSTAINWOOD;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_SNOW) {
           ese.betType = BET_BULLETSTAINSNOW;
-        };
+        }
+
       } else {
         if (bhtType == BHT_BRUSH_STONE) {
           ese.betType = BET_BULLETSTAINSTONENOSOUND;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_SAND) {
           ese.betType = BET_BULLETSTAINSANDNOSOUND;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_RED_SAND) {
           ese.betType = BET_BULLETSTAINREDSANDNOSOUND;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_WATER) {
           ese.betType = BET_BULLETSTAINWATERNOSOUND;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_UNDER_WATER) {
           ese.betType = BET_BULLETSTAINUNDERWATERNOSOUND;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_GRASS) {
           ese.betType = BET_BULLETSTAINGRASSNOSOUND;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_WOOD) {
           ese.betType = BET_BULLETSTAINWOODNOSOUND;
-        };
+        }
+
         if (bhtType == BHT_BRUSH_SNOW) {
           ese.betType = BET_BULLETSTAINSNOWNOSOUND;
-        };
+        }
       }
 
       ese.vNormal = vHitNormal;
       ese.colMuliplier = C_WHITE | CT_OPAQUE;
+
       // reflect direction arround normal
       FLOAT fNx = vHitNormal(1);
       FLOAT fNy = vHitNormal(2);
@@ -359,9 +402,11 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
         CPlacement3D plHit = CPlacement3D(vHitPoint - vIncommingBulletDir * 0.1f, pen->GetPlacement().pl_OrientationAngle);
         CEntityPointer penHit = pen->GetWorld()->CreateEntity_t(plHit, CTFILENAME("Classes\\BasicEffect.ecl"));
         penHit->Initialize(ese);
+
       } catch (char *strError) {
         FatalError(TRANS("Cannot create basic effect class: %s"), strError);
       }
+
       break;
     }
     case BHT_FLESH:
@@ -369,28 +414,36 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
       // spawn bullet entry wound
       ESpawnEffect ese;
       ese.colMuliplier = C_WHITE | CT_OPAQUE;
+
       // if there is exit wound blood spill place
       FLOAT fDistance = vDistance.Length();
+
       if (fDistance > 0.01f && !(pen->IRnd() % 2)) {
         // spawn bullet exit wound blood patch
         ese.betType = BET_BLOODSPILL;
+
         if (bhtType == BHT_ACID) {
           ese.colMuliplier = BLOOD_SPILL_GREEN;
         } else {
           ese.colMuliplier = BLOOD_SPILL_RED;
         }
+
         ese.vNormal = vHitNormal;
+
         if (fDistance < 25.0f) {
           GetNormalComponent(vDistance / fDistance, vHitNormal, ese.vDirection);
+
           FLOAT fLength = ese.vDirection.Length();
           fLength = Clamp(fLength * 3.0f, 1.0f, 3.0f);
           fDistance = Clamp((FLOAT)log10(fDistance), 0.5f, 2.0f);
           ese.vStretch = FLOAT3D(fDistance, fLength * fDistance, 1.0f);
+
           try {
             // spawn effect
             CPlacement3D plHit = CPlacement3D(vHitPoint - vIncommingBulletDir * 0.1f, pen->GetPlacement().pl_OrientationAngle);
             CEntityPointer penHit = pen->GetWorld()->CreateEntity_t(plHit, CTFILENAME("Classes\\BasicEffect.ecl"));
             penHit->Initialize(ese);
+
           } catch (char *strError) {
             FatalError(TRANS("Cannot create basic effect class: %s"), strError);
           }
@@ -404,9 +457,12 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
 // spawn flame
 CEntityPointer SpawnFlame(CEntity *penOwner, CEntity *penAttach, const FLOAT3D &vSource) {
   // owner can't flame himself
-  if (penOwner == penAttach)
+  if (penOwner == penAttach) {
     return NULL;
+  }
+
   FLOAT3D vPos = vSource;
+
   // prepare flame event
   EFlame ef;
   ef.penOwner = penOwner;
@@ -417,8 +473,10 @@ CEntityPointer SpawnFlame(CEntity *penOwner, CEntity *penAttach, const FLOAT3D &
   // if the target entity is model
   if (penAttach->GetRenderType() == CEntity::RT_MODEL || penAttach->GetRenderType() == CEntity::RT_SKAMODEL) {
     vPos = penAttach->GetPlacement().pl_PositionVector;
+
     // if the entity already has a flame attached
     penFlame = penAttach->GetChildOfClass("Flame");
+
     if (penFlame != NULL) {
       // just send it the event
       penFlame->SendEvent(ef);
@@ -430,9 +488,11 @@ CEntityPointer SpawnFlame(CEntity *penOwner, CEntity *penAttach, const FLOAT3D &
   try {
     CPlacement3D plFlame(vPos, ANGLE3D(0.0f, 0.0f, 0.0f));
     penFlame = penAttach->GetWorld()->CreateEntity_t(plFlame, CTFILENAME("Classes\\Flame.ecl"));
+
   } catch (char *strError) {
     FatalError(TRANS("Cannot create flame entity class: %s"), strError);
   }
+
   penFlame->Initialize(ef);
 
   return penFlame;
@@ -445,10 +505,13 @@ void KickEntity(CEntity *penTarget, FLOAT3D vSpeed) {
     // do nothing
     return;
   }
+
   EntityInfo *peiTarget = (EntityInfo *)(penTarget->GetEntityInfo());
+
   if (penTarget->GetPhysicsFlags() & EPF_MOVABLE && peiTarget != NULL) {
     // calc new speed acording to target mass
     vSpeed *= 100.0f / peiTarget->fMass;
+
     ((CMovableEntity &)*penTarget).en_vCurrentTranslationAbsolute = vSpeed;
     ((CMovableEntity &)*penTarget).AddToMovers();
   }
@@ -461,20 +524,24 @@ void SetComponents(CEntity *pen, CModelObject &mo, ULONG ulIDModel, ULONG ulIDTe
                    ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
   // model data
   mo.SetData(pen->GetModelDataForComponent(ulIDModel));
+
   // texture data
   mo.mo_toTexture.SetData(pen->GetTextureDataForComponent(ulIDTexture));
+
   // reflection texture data
   if (ulIDReflectionTexture > 0) {
     mo.mo_toReflection.SetData(pen->GetTextureDataForComponent(ulIDReflectionTexture));
   } else {
     mo.mo_toReflection.SetData(NULL);
   }
+
   // specular texture data
   if (ulIDSpecularTexture > 0) {
     mo.mo_toSpecular.SetData(pen->GetTextureDataForComponent(ulIDSpecularTexture));
   } else {
     mo.mo_toSpecular.SetData(NULL);
   }
+
   // bump texture data
   if (ulIDBumpTexture > 0) {
     mo.mo_toBump.SetData(pen->GetTextureDataForComponent(ulIDBumpTexture));
@@ -514,6 +581,7 @@ CLensFlareType _lftProjectileYellowBubbleGlow;
 CLensFlareType _lftPVSpaceShipWindowFlare;
 CLensFlareType _lftCatmanFireGlow;
 CLensFlareType _lftWhiteGlowFar;
+
 static BOOL _bLensFlaresLoaded = FALSE;
 
 #define FLARE_CREATE(type, noof, tex, pos, rot, i, j, flags, amp, des, falloff) \
@@ -527,11 +595,13 @@ static BOOL _bLensFlaresLoaded = FALSE;
   type.lft_aolfFlares[0].olf_fLightAmplification = amp; \
   type.lft_aolfFlares[0].olf_fLightDesaturation = des; \
   type.lft_aolfFlares[0].oft_fFallOffFactor = falloff;
+
 #define FLARE_GLARE(type, compression, intensity, des, falloff) \
   type.lft_fGlareCompression = compression; \
   type.lft_fGlareIntensity = intensity; \
   type.lft_fGlareDesaturation = des; \
   type.lft_fGlareFallOffFactor = falloff;
+
 #define REFLECTION(type, i, fnm, pos, size) \
   type.lft_aolfFlares[i].olf_toTexture.SetData_t(CTFILENAME("Textures\\Effects\\Flares\\" fnm)); \
   type.lft_aolfFlares[i].olf_fReflectionPosition = pos; \
@@ -576,8 +646,7 @@ void InitLensFlares(void) {
   FLARE_GLARE(_lftYellowStarRedRing, 20.0f, 0.3f, 0.8f, 1.0f);
 
   // same yellow star with red ring but visible from far away
-  FLARE_CREATE(_lftYellowStarRedRingFar, 1, "02\\Flare05.tex", 0.0f, 180.0f, 1 / 12.0f, 1 / 12.0f, OLF_FADESIZE, 0.25f, 0.5f,
-               128.0f);
+  FLARE_CREATE(_lftYellowStarRedRingFar, 1, "02\\Flare05.tex", 0.0f, 180.0f, 1 / 12.0f, 1 / 12.0f, OLF_FADESIZE, 0.25f, 0.5f, 128.0f);
   FLARE_GLARE(_lftYellowStarRedRingFar, 20.0f, 0.3f, 0.8f, 1.0f);
 
   // nice yellow star with red ring
@@ -589,13 +658,11 @@ void InitLensFlares(void) {
 
   FLARE_CREATE(_lftWhiteGlowStarNG, 1, "04\\Flare07.tex", 0.0f, 180.0f, 1 / 5.0f, 1 / 5.0f, OLF_FADESIZE, 7.0f, 0.5f, 5.0f);
 
-  FLARE_CREATE(_lftWhiteStarRedRingStreaks, 1, "05\\Flare09.tex", 0.0f, 180.0f, 1 / 5.0f, 1 / 5.0f, OLF_FADESIZE, 7.0f, 0.5f,
-               5.0f);
+  FLARE_CREATE(_lftWhiteStarRedRingStreaks, 1, "05\\Flare09.tex", 0.0f, 180.0f, 1 / 5.0f, 1 / 5.0f, OLF_FADESIZE, 7.0f, 0.5f, 5.0f);
   FLARE_GLARE(_lftWhiteStarRedRingStreaks, 20.0f, 0.3f, 0.8f, 1.0f);
 
   // white star flare with many red and brown hexagons
-  FLARE_CREATE(_lftWhiteStarRedReflections, 12, "06\\WhiteStarManyStreaks.tex", 0.0f, 0.0f, 0.20625f, 0.20625f, OLF_FADESIZE,
-               7.0f, 0.5f, 5.0f);
+  FLARE_CREATE(_lftWhiteStarRedReflections, 12, "06\\WhiteStarManyStreaks.tex", 0.0f, 0.0f, 0.20625f, 0.20625f, OLF_FADESIZE, 7.0f, 0.5f, 5.0f);
   FLARE_GLARE(_lftWhiteStarRedReflections, 20.0f, 0.3f, 0.8f, 1.0f);
   REFLECTION(_lftWhiteStarRedReflections, 1, "06\\DarkRedPentagram.tex", -0.92424242f, 0.06875f);
   REFLECTION(_lftWhiteStarRedReflections, 2, "06\\LillaPentagram.tex", 0.28787879f, 0.0296875f);
@@ -610,8 +677,7 @@ void InitLensFlares(void) {
   REFLECTION(_lftWhiteStarRedReflections, 11, "06\\BrownPentagram.tex", 0.03030303f, 0.021875f);
 
   // blue star flare with many blue flares
-  FLARE_CREATE(_lftBlueStarBlueReflections, 21, "07\\BlueStarManyStreaks.tex", 0.0f, 0.0f, 0.4f, 0.4f, OLF_FADESIZE, 7.0f, 0.5f,
-               5.0f);
+  FLARE_CREATE(_lftBlueStarBlueReflections, 21, "07\\BlueStarManyStreaks.tex", 0.0f, 0.0f, 0.4f, 0.4f, OLF_FADESIZE, 7.0f, 0.5f, 5.0f);
   FLARE_GLARE(_lftBlueStarBlueReflections, 20.0f, 0.3f, 0.8f, 1.0f);
   REFLECTION(_lftBlueStarBlueReflections, 1, "07\\BlueGlow.tex", -0.5f, 0.05f);
   REFLECTION(_lftBlueStarBlueReflections, 2, "07\\BluePentagram.tex", -0.25f, 0.03f);
@@ -634,20 +700,16 @@ void InitLensFlares(void) {
   REFLECTION(_lftBlueStarBlueReflections, 19, "07\\BluePentagram.tex", 2.4f, 0.05f);
   REFLECTION(_lftBlueStarBlueReflections, 20, "07\\DarkBluePentagram.tex", 2.8f, 0.03f);
 
-  FLARE_CREATE(_lftProjectileStarGlow, 1, "08\\FlarePower.tex", 0.0f, 180.0f, 1 / 5.0f, 1 / 5.0f, OLF_FADESIZE, 7.0f, 0.5f,
-               10.0f);
+  FLARE_CREATE(_lftProjectileStarGlow, 1, "08\\FlarePower.tex", 0.0f, 180.0f, 1 / 5.0f, 1 / 5.0f, OLF_FADESIZE, 7.0f, 0.5f, 10.0f);
   FLARE_GLARE(_lftProjectileStarGlow, 20.0f, 0.3f, 0.8f, 1.0f);
 
-  FLARE_CREATE(_lftProjectileWhiteBubbleGlow, 1, "09\\FlareWhiteBubble.tex", 0.0f, 180.0f, 1 / 5.0f, 1 / 5.0f, OLF_FADESIZE, 7.0f,
-               0.5f, 10.0f);
+  FLARE_CREATE(_lftProjectileWhiteBubbleGlow, 1, "09\\FlareWhiteBubble.tex", 0.0f, 180.0f, 1 / 5.0f, 1 / 5.0f, OLF_FADESIZE, 7.0f, 0.5f, 10.0f);
   FLARE_GLARE(_lftProjectileWhiteBubbleGlow, 20.0f, 0.3f, 0.8f, 1.0f);
 
-  FLARE_CREATE(_lftProjectileYellowBubbleGlow, 1, "10\\FlareYellowBubble.tex", 0.0f, 180.0f, 1 / 10.0f, 1 / 10.0f, OLF_FADESIZE,
-               7.0f, 0.5f, 10.0f);
+  FLARE_CREATE(_lftProjectileYellowBubbleGlow, 1, "10\\FlareYellowBubble.tex", 0.0f, 180.0f, 1 / 10.0f, 1 / 10.0f, OLF_FADESIZE, 7.0f, 0.5f, 10.0f);
   FLARE_GLARE(_lftProjectileYellowBubbleGlow, 20.0f, 0.3f, 0.8f, 1.0f);
 
-  FLARE_CREATE(_lftPVSpaceShipWindowFlare, 1, "05\\Flare09.tex", 0.0f, 180.0f, 1 / 10.0f, 1 / 10.0f, OLF_FADESIZE, 1.0f, 0.0f,
-               10.0f);
+  FLARE_CREATE(_lftPVSpaceShipWindowFlare, 1, "05\\Flare09.tex", 0.0f, 180.0f, 1 / 10.0f, 1 / 10.0f, OLF_FADESIZE, 1.0f, 0.0f, 10.0f);
 
   FLARE_CREATE(_lftCatmanFireGlow, 1, "12\\Flare12.tex", 0.0f, 180.0f, 1 / 12.0f, 1 / 12.0f, OLF_FADESIZE, 7.0f, 0.5f, 128.0f);
 
@@ -702,10 +764,14 @@ void SetModel_t(CModelObject *pmo, const CTFileName &fnmModel, const CTFileName 
 // Add attachment to model
 void ModelAddAttachment_t(CModelObject *pmo, INDEX iAttachment, const CTFileName &fnmModel, const CTFileName &fnmTexture) {
   ASSERT(pmo != NULL);
-  if (fnmModel == CTString(""))
+
+  if (fnmModel == CTString("")) {
     return;
-  if (pmo == NULL)
+  }
+
+  if (pmo == NULL) {
     return;
+  }
 
   CAttachmentModelObject *pamo = pmo->AddAttachmentModel(iAttachment);
   SetModel_t(&(pamo->amo_moModelObject), fnmModel, fnmTexture);
@@ -719,13 +785,16 @@ CTString GetNonEmptyLine_t(CTStream &strm) {
     if (strm.AtEOF()) {
       ThrowF_t(TRANS("Unexpected end of file"));
     }
+
     CTString str;
     _ctLines++;
     strm.GetLine_t(str);
     str.TrimSpacesLeft();
+
     if (str.RemovePrefix("//")) { // skip comments
       continue;
     }
+
     if (str != "") {
       str.TrimSpacesRight();
       return str;
@@ -735,6 +804,7 @@ CTString GetNonEmptyLine_t(CTStream &strm) {
 
 void FixupFileName_t(CTString &strFnm) {
   strFnm.TrimSpacesLeft();
+
   if (!strFnm.RemovePrefix(CTString("TF") + "NM ")) { // must not directly have ids in code
     ThrowF_t(TRANS("Expected %s%s before filename"), "TF", "NM");
   }
@@ -743,30 +813,38 @@ void FixupFileName_t(CTString &strFnm) {
 // skip one block in pmc
 void SkipBlock_t(CTStream &strm) {
   CTString strLine;
+
   // expect to begin with an open bracket
   strLine = GetNonEmptyLine_t(strm);
+
   if (strLine != "{") {
     ThrowF_t(TRANS("Expected '{'"));
   }
+
   // start at level one
   INDEX ctLevel = 1;
+
   // repeat
   do {
     strLine = GetNonEmptyLine_t(strm);
+
     // count brackets
     if (strLine == "{") {
       ctLevel++;
     } else if (strLine == "}") {
       ctLevel--;
     }
+
     // until we close down all brackets
   } while (ctLevel > 0);
 }
 
 void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview) {
   CTString strLine;
+
   // expect to begin with an open bracket
   strLine = GetNonEmptyLine_t(strm);
+
   if (strLine != "{") {
     ThrowF_t(TRANS("Expected '{'"));
   }
@@ -788,12 +866,14 @@ void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview) {
       if (bPreview) {
         // keep parsing it
         ParseAMC_t(pmo, strm, bPreview);
-        // if this is not a preview
+
+      // if this is not a preview
       } else {
         // skip that block
         SkipBlock_t(strm);
       }
-      // if include block
+
+    // if include block
     } else if (strLine.RemovePrefix("Include:")) {
       // open the new file
       FixupFileName_t(strLine);
@@ -806,6 +886,7 @@ void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview) {
       _ctLines = 0;
       _strFile = strLine;
       ParseAMC_t(pmo, strmIncluded, bPreview);
+
       strmIncluded.Close();
       _ctLines = ctLinesOld;
       _strFile = strFileOld;
@@ -821,13 +902,16 @@ void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview) {
       // get animation number
       INDEX iAnim = -1;
       strLine.ScanF("%d", &iAnim);
+
       if (iAnim < 0) {
         ThrowF_t(TRANS("Invalid animation number"));
       }
+
       // check it
       if (iAnim >= pmo->GetAnimsCt()) {
         ThrowF_t(TRANS("Animation %d does not exist in that model"), iAnim);
-      };
+      }
+
       // set it
       pmo->PlayAnim(iAnim, AOF_LOOPING);
 
@@ -860,18 +944,23 @@ void ParseAMC_t(CModelObject *pmo, CTStream &strm, BOOL bPreview) {
       // get attachment number
       INDEX iAtt = -1;
       strLine.ScanF("%d", &iAtt);
+
       if (iAtt < 0) {
         ThrowF_t(TRANS("Invalid attachment number"));
       }
+
       // create attachment
       CModelData *pmd = (CModelData *)pmo->GetData();
+
       if (iAtt >= pmd->md_aampAttachedPosition.Count()) {
         ThrowF_t(TRANS("Attachment %d does not exist in that model"), iAtt);
-      };
+      }
+
       CAttachmentModelObject *pamo = pmo->AddAttachmentModel(iAtt);
 
       // recursively parse it
       ParseAMC_t(&pamo->amo_moModelObject, strm, bPreview);
+
     } else {
       ThrowF_t(TRANS("Expected texture or attachment"));
     }
@@ -891,9 +980,11 @@ BOOL SetPlayerAppearance_internal(CModelObject *pmo, const CTFileName &fnmAMC, C
 
     // read the name
     CTString strLine = GetNonEmptyLine_t(strm);
+
     if (!strLine.RemovePrefix("Name: ")) {
       ThrowF_t(TRANS("Expected name"));
     }
+
     strName = strLine;
     strName.TrimSpacesLeft();
 
@@ -901,7 +992,7 @@ BOOL SetPlayerAppearance_internal(CModelObject *pmo, const CTFileName &fnmAMC, C
     ParseAMC_t(pmo, strm, bPreview);
     return TRUE;
 
-    // if anything failed
+  // if anything failed
   } catch (char *strError) {
     // report error
     CPrintF(TRANS("Cannot load player model:\n%s (%d) : %s\n"), (const char *)_strFile, _ctLines, strError);
@@ -924,15 +1015,18 @@ BOOL SetPlayerAppearance(CModelObject *pmo, CPlayerCharacter *ppc, CTString &str
   if (ppc == NULL) {
     // set default appearance
     BOOL bSucceeded = SetPlayerAppearance_internal(pmo, fnmDefault, strName, bPreview);
+
     if (!bSucceeded) {
       FatalError(TRANS("Cannot load default player model!"));
     }
+
     return FALSE;
   }
 
   // get filename from the settings
   CPlayerSettings *pps = (CPlayerSettings *)ppc->pc_aubAppearance;
   CTFileName fnmModelFile = pps->GetModelFilename();
+
   // if dummy (empty settings)
   if (fnmModelFile.FileName() == "") {
     // use default
@@ -940,10 +1034,13 @@ BOOL SetPlayerAppearance(CModelObject *pmo, CPlayerCharacter *ppc, CTString &str
   }
 
   extern INDEX plr_bOnlySam;
+
   if (!plr_bOnlySam && SetPlayerAppearance_internal(pmo, fnmModelFile, strName, bPreview)) {
     return TRUE;
+
   } else if (SetPlayerAppearance_internal(pmo, fnmDefault, strName, bPreview)) { // HAVE TO SET DEFAULT HERE!
     return TRUE;
+
   } else {
     return FALSE;
   }
@@ -997,13 +1094,15 @@ CEntityPointer Debris_Spawn(CEntity *penSpawner, CEntity *penComponents, SLONG i
   // create debris at same world as spawner
   FLOAT3D vPos;
   FLOAT3D vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
+
   if ((penSpawner->en_RenderType == CEntity::RT_MODEL || penSpawner->en_RenderType == CEntity::RT_EDITORMODEL)
-      && penSpawner->GetModelObject() != NULL) {
+    && penSpawner->GetModelObject() != NULL) {
     vStretch = penSpawner->GetModelObject()->mo_Stretch;
   }
+
   penSpawner->GetEntityPointRatio(vPosRatio, vPos);
-  CEntityPointer penDebris
-    = penSpawner->GetWorld()->CreateEntity_t(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CTFILENAME("Classes\\Debris.ecl"));
+  CEntityPointer penDebris = penSpawner->GetWorld()->CreateEntity_t(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CTFILENAME("Classes\\Debris.ecl"));
+
   // prepare parameters
   ESpawnDebris eSpawn;
   eSpawn.bImmaterialASAP = FALSE;
@@ -1019,18 +1118,22 @@ CEntityPointer Debris_Spawn(CEntity *penSpawner, CEntity *penComponents, SLONG i
   eSpawn.iModelAnim = iModelAnim;
   eSpawn.colDebris = _colDebris;
   eSpawn.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
+
   if (fSize == 0) {
     eSpawn.fSize = 1.0f;
   } else {
     eSpawn.fSize = _fEntitySize * fSize;
   }
+
   // initialize it
   penDebris->Initialize(eSpawn);
 
   FLOAT fCone = _fEntitySize * 1.0f;
+
   if (_vSpeed.Length() == 0) {
     fCone = 0;
   }
+
   FLOAT fRndX = (penSpawner->FRnd() * 2 - 1) * fCone * _fConeSize;
   FLOAT fRndY = (penSpawner->FRnd() * 2 - 1) * fCone * _fConeSize;
   FLOAT fRndZ = (penSpawner->FRnd() * 2 - 1) * fCone * _fConeSize;
@@ -1041,6 +1144,7 @@ CEntityPointer Debris_Spawn(CEntity *penSpawner, CEntity *penComponents, SLONG i
 
   FLOAT3D vUp;
   const FLOATmatrix3D &m = penSpawner->GetRotationMatrix();
+
   vUp(1) = m(1, 2);
   vUp(2) = m(2, 2);
   vUp(3) = m(3, 2);
@@ -1048,11 +1152,8 @@ CEntityPointer Debris_Spawn(CEntity *penSpawner, CEntity *penComponents, SLONG i
   // FLOAT fStrength = _vSpeed.Length();
 
   // speed it up
-  ((CMovableEntity &)*penDebris)
-    .LaunchAsFreeProjectile(_vSpawnerSpeed + _vSpeed + FLOAT3D(fRndX, fRndY, fRndZ) + vUp * _fSpeedUp,
-                            (CMovableEntity *)penSpawner);
-  ((CMovableEntity &)*penDebris)
-    .SetDesiredRotation(ANGLE3D(fRndH * 360.0f - 180.0f, fRndP * 360.0f - 180.0f, fRndB * 360.0f - 180.0f));
+  ((CMovableEntity &)*penDebris).LaunchAsFreeProjectile(_vSpawnerSpeed + _vSpeed + FLOAT3D(fRndX, fRndY, fRndZ) + vUp * _fSpeedUp, (CMovableEntity *)penSpawner);
+  ((CMovableEntity &)*penDebris).SetDesiredRotation(ANGLE3D(fRndH * 360.0f - 180.0f, fRndP * 360.0f - 180.0f, fRndB * 360.0f - 180.0f));
 
   return penDebris;
 }
@@ -1063,6 +1164,7 @@ CEntityPointer Debris_Spawn_Independent(CEntity *penSpawner, CEntity *penCompone
                                         FLOAT fSize, CPlacement3D plAbsolutePlacement, FLOAT3D vTranslation, ANGLE3D aRotation) {
   // create debris at same world as spawner
   CEntityPointer penDebris = penSpawner->GetWorld()->CreateEntity_t(plAbsolutePlacement, CTFILENAME("Classes\\Debris.ecl"));
+
   // prepare parameters
   ESpawnDebris eSpawn;
   eSpawn.bImmaterialASAP = FALSE;
@@ -1100,6 +1202,7 @@ CEntityPointer Debris_Spawn_Template(EntityInfoBodyType eibt, enum DebrisParticl
   }
   // create debris at same world as spawner
   CEntityPointer penDebris = penmhDestroyed->GetWorld()->CreateEntity_t(plAbsolutePlacement, CTFILENAME("Classes\\Debris.ecl"));
+
   // prepare parameters
   ESpawnDebris eSpawn;
   eSpawn.bImmaterialASAP = bDebrisImmaterialASAP;
@@ -1107,6 +1210,7 @@ CEntityPointer Debris_Spawn_Template(EntityInfoBodyType eibt, enum DebrisParticl
   eSpawn.Eeibt = eibt;
   eSpawn.dptParticles = dptParticles;
   eSpawn.betStain = betStain;
+
   CModelObject &mo = *penmhTemplate->GetModelObject();
   eSpawn.pmd = mo.GetData();
   eSpawn.ptd = (CTextureData *)mo.mo_toTexture.GetData();
@@ -1119,6 +1223,7 @@ CEntityPointer Debris_Spawn_Template(EntityInfoBodyType eibt, enum DebrisParticl
   eSpawn.vStretch = vStretch;
   eSpawn.bCustomShading = FALSE;
   eSpawn.penFallFXPapa = penmhTemplate;
+
   if (penmhDestroyed->m_cstCustomShading == CST_FULL_CUSTOMIZED) {
     eSpawn.bCustomShading = TRUE;
     eSpawn.aShadingDirection = penmhDestroyed->m_aShadingDirection;
@@ -1131,6 +1236,7 @@ CEntityPointer Debris_Spawn_Template(EntityInfoBodyType eibt, enum DebrisParticl
 
   // move it
   const FLOATmatrix3D &m = penDebris->GetRotationMatrix();
+
   ((CMovableEntity &)*penDebris).LaunchAsFreeProjectile(vLaunchSpeed * !m, (CMovableEntity *)penmhDestroyed);
   ((CMovableEntity &)*penDebris).SetDesiredRotation(aRotSpeed);
 
@@ -1152,39 +1258,17 @@ static EntityInfo eiIce = {EIBT_ICE};
 // get default entity info for given body type
 EntityInfo *GetStdEntityInfo(EntityInfoBodyType eibt) {
   switch (eibt) {
-    case EIBT_FLESH: {
-      return &eiFlesh;
-    } break;
-    case EIBT_WATER: {
-      return &eiWater;
-    } break;
-    case EIBT_ROCK: {
-      return &eiRock;
-    } break;
-    case EIBT_FIRE: {
-      return &eiFire;
-    } break;
-    case EIBT_AIR: {
-      return &eiAir;
-    } break;
-    case EIBT_BONES: {
-      return &eiBones;
-    } break;
-    case EIBT_WOOD: {
-      return &eiWood;
-    } break;
-    case EIBT_METAL: {
-      return &eiMetal;
-    } break;
-    case EIBT_ROBOT: {
-      return &eiRobot;
-    } break;
-    case EIBT_ICE: {
-      return &eiIce;
-    } break;
-    default: {
-      return NULL;
-    } break;
+    case EIBT_FLESH: return &eiFlesh;
+    case EIBT_WATER: return &eiWater;
+    case EIBT_ROCK: return &eiRock;
+    case EIBT_FIRE: return &eiFire;
+    case EIBT_AIR: return &eiAir;
+    case EIBT_BONES: return &eiBones;
+    case EIBT_WOOD: return &eiWood;
+    case EIBT_METAL: return &eiMetal;
+    case EIBT_ROBOT: return &eiRobot;
+    case EIBT_ICE: return &eiIce;
+    default: return NULL;
   };
 }
 
@@ -1192,6 +1276,7 @@ EntityInfo *GetStdEntityInfo(EntityInfoBodyType eibt) {
 FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage) {
   switch (eibtBody) {
     case EIBT_FLESH: return 1.0f;
+
     case EIBT_WATER:
       switch (dtDamage) {
         case DMT_CLOSERANGE: return 0.0f;
@@ -1199,6 +1284,7 @@ FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage) {
         case DMT_DROWNING: return 0.0f;
       }
       return 1.0f;
+
     case EIBT_ROCK:
       switch (dtDamage) {
         case DMT_CLOSERANGE: return 0.0f;
@@ -1206,6 +1292,7 @@ FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage) {
         case DMT_FREEZING: return 0.0f;
       }
       return 1.0f;
+
     case EIBT_ICE:
       switch (dtDamage) {
         case DMT_CLOSERANGE: return 0.5f;
@@ -1213,28 +1300,33 @@ FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage) {
         case DMT_FREEZING: return 0.0f;
       }
       return 1.0f;
+
     case EIBT_FIRE:
       switch (dtDamage) {
         case DMT_CLOSERANGE: return 0.5f;
         case DMT_BURNING: return 0.0f;
       }
       return 1.0f;
+
     case EIBT_AIR:
       switch (dtDamage) {
         case DMT_CLOSERANGE: return 0.0f;
         case DMT_BURNING: return 0.5f;
       }
       return 1.0f;
+
     case EIBT_BONES:
       switch (dtDamage) {
         case DMT_FREEZING: return 0.0f;
       }
       return 1.0f;
+
     case EIBT_WOOD:
       switch (dtDamage) {
         case DMT_FREEZING: return 0.0f;
       }
       return 1.0f;
+
     case EIBT_METAL:
       switch (dtDamage) {
         case DMT_CLOSERANGE: return 0.0f;
@@ -1242,6 +1334,7 @@ FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage) {
         case DMT_FREEZING: return 0.0f;
       }
       return 1.0f;
+
     case EIBT_ROBOT:
       switch (dtDamage) {
         case DMT_CLOSERANGE: return 0.5f;
@@ -1249,6 +1342,7 @@ FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage) {
         case DMT_FREEZING: return 0.5f;
       }
       return 1.0f;
+
     default: ASSERT(FALSE); return 1.0f;
   }
 }
@@ -1272,6 +1366,7 @@ void SpawnRangeSound(CEntity *penPlayer, CEntity *penPos, enum SoundType st, FLO
     // do nothing
     return;
   }
+
   // sound event
   ESound eSound;
   eSound.EsndtSound = st;
@@ -1301,10 +1396,12 @@ CEntity *FixupCausedToPlayer(CEntity *penThis, CEntity *penCaused, BOOL bWarning
   // for all players
   for (INDEX iPlayer = 0; iPlayer < penThis->GetMaxPlayers(); iPlayer++) {
     CEntity *penPlayer = penThis->GetPlayerEntity(iPlayer);
+
     // if player exists
     if (penPlayer != NULL) {
       // calculate distance to player
       FLOAT fDistance = (penPlayer->GetPlacement().pl_PositionVector - penThis->GetPlacement().pl_PositionVector).Length();
+
       // update if closer
       if (fDistance < fClosestPlayer) {
         fClosestPlayer = fDistance;
@@ -1312,6 +1409,7 @@ CEntity *FixupCausedToPlayer(CEntity *penThis, CEntity *penCaused, BOOL bWarning
       }
     }
   }
+
   return penClosestPlayer;
 }
 
@@ -1321,8 +1419,10 @@ CPlacement3D LerpPlacementsPrecise(const CPlacement3D &pl0, const CPlacement3D &
 
   FLOATquat3D q0;
   q0.FromEuler(pl0.pl_OrientationAngle);
+
   FLOATquat3D q1;
   q1.FromEuler(pl1.pl_OrientationAngle);
+
   FLOAT3D v0 = pl0.pl_PositionVector;
   FLOAT3D v1 = pl1.pl_PositionVector;
 
@@ -1341,38 +1441,51 @@ CPlacement3D LerpPlacementsPrecise(const CPlacement3D &pl0, const CPlacement3D &
 FLOAT GetGameDamageMultiplier(void) {
   FLOAT fGameDamageMultiplier = 1.0f;
   FLOAT fExtraStrength = GetSP()->sp_fExtraEnemyStrength;
+
   if (fExtraStrength > 0) {
     fGameDamageMultiplier *= 1.0f / (1 + fExtraStrength);
   }
+
   FLOAT fExtraStrengthPerPlayer = GetSP()->sp_fExtraEnemyStrengthPerPlayer;
+
   if (fExtraStrengthPerPlayer > 0) {
     INDEX ctPlayers = _pNetwork->ga_sesSessionState.GetPlayersCount();
     fGameDamageMultiplier *= 1.0f / (1 + fExtraStrengthPerPlayer * ClampDn(ctPlayers - 1.0f, 0.0f));
   }
+
   if (GetSP()->sp_gdGameDifficulty == CSessionProperties::GD_TOURIST) {
     fGameDamageMultiplier *= 2.0f;
   }
+
   return fGameDamageMultiplier;
 }
 
 // get entity's serious damage multiplier
 FLOAT GetSeriousDamageMultiplier(CEntity *pen) {
-  if (!IsOfClass(pen, "Player"))
+  if (!IsOfClass(pen, "Player")) {
     return 1.0f;
+  }
+
   const TICK llNow = _pTimer->GetGameTick();
   const TICK llDamage = ((CPlayer *)pen)->m_llSeriousDamage;
-  if (llDamage > llNow)
+
+  if (llDamage > llNow) {
     return 4.0f;
+  }
+
   return 1.0f;
 }
 
 class CWorldSettingsController *GetWSC(CEntity *pen) {
   CWorldSettingsController *pwsc = NULL;
+
   // obtain bcg viewer
   class CBackgroundViewer *penBcgViewer = (CBackgroundViewer *)pen->GetWorld()->GetBackgroundViewer();
+
   if (penBcgViewer != NULL) {
     // obtain world settings controller
     pwsc = (CWorldSettingsController *)&*penBcgViewer->m_penWorldSettingsController;
   }
+
   return pwsc;
 }

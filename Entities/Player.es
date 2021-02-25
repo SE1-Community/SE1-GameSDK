@@ -950,7 +950,7 @@ void PrintPlayerDeathMessage(CPlayer *ppl, const EDeath &eDeath)
           CPrintF(TRANS("%s blew %s away\n"), strKillerName, strMyName);
         } else if (eDeath.eLastDamage.dmtType == DMT_CANNONBALL) {
           CPrintF(TRANS("%s smashed %s with a cannon\n"), strKillerName, strMyName);
-        } else if (eDeath.eLastDamage.dmtType == DMT_CANNONBALL_EXPLOSION) {
+        } else if (eDeath.eLastDamage.dmtType == DMT_CB_EXPLOSION) {
           CPrintF(TRANS("%s nuked %s\n"), strKillerName, strMyName);
         } else {
           CPrintF(TRANS("%s killed %s\n"), strKillerName, strMyName);
@@ -2925,7 +2925,7 @@ functions:
     fDamageAmmount = Clamp(fDamageAmmount, 0.0f, 5000.0f);
 
     FLOAT fKickDamage = fDamageAmmount;
-    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CANNONBALL_EXPLOSION) )
+    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CB_EXPLOSION) )
     {
       fKickDamage*=1.5;
     }
@@ -3058,7 +3058,7 @@ functions:
   {
     // don't harm yourself with knife or with rocket in easy/tourist mode
     if (penInflictor == this && (dmtType == DMT_CLOSERANGE || dmtType == DMT_CHAINSAW ||
-        ((dmtType == DMT_EXPLOSION||dmtType == DMT_CANNONBALL_EXPLOSION||dmtType == DMT_PROJECTILE) &&
+        ((dmtType == DMT_EXPLOSION||dmtType == DMT_CB_EXPLOSION||dmtType == DMT_PROJECTILE) &&
           GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY)) ) {
       return;
     }
@@ -3155,7 +3155,7 @@ functions:
     if (fDamageAmmount>1.0f) {
 // !!!! this is obsolete, DamageImpact is used instead!
       if (dmtType == DMT_EXPLOSION || dmtType == DMT_PROJECTILE || dmtType == DMT_BULLET
-       || dmtType == DMT_IMPACT    || dmtType == DMT_CANNONBALL || dmtType == DMT_CANNONBALL_EXPLOSION) {
+       || dmtType == DMT_IMPACT    || dmtType == DMT_CANNONBALL || dmtType == DMT_CB_EXPLOSION) {
 //        GiveImpulseTranslationAbsolute( vDirection*(fDamageAmmount/7.5f)
 //                                        -en_vGravityDir*(fDamageAmmount/15.0f));
       }

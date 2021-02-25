@@ -33,13 +33,14 @@ extern FLOAT con_tmLastLines = 5.0f;
 extern INDEX con_bTalk = 0;
 CTimerValue _tvMenuQuickSave(0I64);
 
-// used filenames
+// Used filenames
 CTFileName fnmPersistentSymbols = CTString("Scripts\\PersistentSymbols.ini");
 CTFileName fnmStartupScript = CTString("Scripts\\Game_startup.ini");
 CTFileName fnmConsoleHistory = CTString("Temp\\ConsoleHistory.txt");
 CTFileName fnmCommonControls = CTString("Controls\\System\\Common.ctl");
 
-// force dependency for player class
+// [Cecil] TODO: Rather not
+// Force dependency for player class
 DECLARE_CTFILENAME(fnmPlayerClass, "Classes\\Player.ecl");
 
 #define MAX_HIGHSCORENAME      16
@@ -47,14 +48,14 @@ DECLARE_CTFILENAME(fnmPlayerClass, "Classes\\Player.ecl");
 UBYTE _aubHighScoreBuffer[MAX_HIGHSCORETABLESIZE];
 UBYTE _aubHighScorePacked[MAX_HIGHSCORETABLESIZE];
 
-// controls used for all commands not belonging to any particular player
+// Controls used for all commands not belonging to any particular player
 static CControls _ctrlCommonControls;
 
-// array for keeping all frames' times
+// Array for keeping all frames' times
 static CStaticStackArray<TIME> _atmFrameTimes;
 static CStaticStackArray<INDEX> _actTriangles; // world, model, particle, total
 
-// one and only Game object
+// One and only Game object
 extern CGame *_pGame = NULL;
 
 extern "C" __declspec(dllexport) CGame *GAME_Create(void) {
@@ -63,7 +64,7 @@ extern "C" __declspec(dllexport) CGame *GAME_Create(void) {
   return _pGame;
 }
 
-// recorded profiling stats
+// Recorded profiling stats
 static CTimerValue _tvDemoStarted;
 static CTimerValue _tvLastFrame;
 static CTString _strProfile;
@@ -139,7 +140,7 @@ static FLOAT gam_fChatSoundVolume = 0.25f;
 extern BOOL _bUserBreakEnabled = FALSE;
 extern BOOL map_bIsFirstEncounter = FALSE;
 
-// make sure that console doesn't show last lines if not playing in network
+// Make sure that console doesn't show last lines if not playing in network
 void MaybeDiscardLastLines(void) {
   // if not in network
   if (!_pNetwork->IsNetworkEnabled()) {
@@ -164,7 +165,7 @@ CEnableUserBreak::~CEnableUserBreak() {
   _bUserBreakEnabled = bOld;
 }
 
-// wrapper function for dump and printout of extensive demo profile report
+// Wrapper function for dump and printout of extensive demo profile report
 static void DumpDemoProfile(void) {
   CTString strFragment, strAnalyzed;
   dem_iProfileRate = Clamp(dem_iProfileRate, 0L, 60L);
@@ -181,6 +182,7 @@ static void DumpDemoProfile(void) {
     strm.FPrintF_t(strAnalyzed);
     // done!
     CPrintF(TRANS("Demo profile data dumped to '%s'.\n"), strFileName);
+
   } catch (char *strError) {
     // something went wrong :(
     CPrintF(TRANS("Cannot dump demo profile data: %s\n"), strError);
@@ -226,6 +228,7 @@ static void PlayScriptSoundCfunc(void *pArgs) {
   FLOAT fVolume = NEXTARGUMENT(FLOAT);
   FLOAT fPitch = NEXTARGUMENT(FLOAT);
   BOOL bLooping = NEXTARGUMENT(INDEX);
+
   PlayScriptSound(iChannel, strSound, fVolume, fPitch, bLooping);
 }
 
@@ -234,6 +237,7 @@ static void StopScriptSound(void *pArgs) {
   if (iChannel < 0 || iChannel >= MAX_SCRIPTSOUNDS || _apsoScriptChannels[iChannel] == NULL) {
     return;
   }
+
   _apsoScriptChannels[iChannel]->Stop();
 }
 
@@ -241,25 +245,26 @@ static INDEX IsScriptSoundPlaying(INDEX iChannel) {
   if (iChannel < 0 || iChannel >= MAX_SCRIPTSOUNDS || _apsoScriptChannels[iChannel] == NULL) {
     return 0;
   }
+
   return _apsoScriptChannels[iChannel]->IsPlaying();
 }
 
-// Dump recorded profiling stats to file.
+// Dump recorded profiling stats to file
 static void DumpProfileToFile(void) {
   _bDumpNextTime = TRUE;
 }
 
-// Dump recorded profiling stats to console.
+// Dump recorded profiling stats to console
 static void DumpProfileToConsole(void) {
   CPutString(_strProfile);
 }
 
-// Record profiling stats.
+// Record profiling stats
 static void RecordProfile(void) {
   _bStartProfilingNextTime = TRUE;
 }
 
-// screen shot saving feature in console
+// Screen shot saving feature in console
 static BOOL bSaveScreenShot = FALSE;
 static INDEX dem_iAnimFrame = -1;
 
@@ -315,7 +320,7 @@ CButtonAction::CButtonAction(void) {
   ba_bSecondKeyDown = FALSE;
 }
 
-// Assignment operator.
+// Assignment
 CButtonAction &CButtonAction ::operator=(CButtonAction &baOriginal) {
   ba_iFirstKey = baOriginal.ba_iFirstKey;
   ba_iSecondKey = baOriginal.ba_iSecondKey;
@@ -354,7 +359,8 @@ void CControls::DoButtonActions(void) {
     if (bFirstPressed && !itButtonAction->ba_bFirstKeyDown) {
       // call pressed command
       _pShell->Execute(itButtonAction->ba_strCommandLineWhenPressed);
-      // if it was just released
+
+    // if it was just released
     } else if (!bFirstPressed && itButtonAction->ba_bFirstKeyDown) {
       // call released command
       _pShell->Execute(itButtonAction->ba_strCommandLineWhenReleased);
@@ -370,7 +376,8 @@ void CControls::DoButtonActions(void) {
     if (bSecondPressed && !itButtonAction->ba_bSecondKeyDown) {
       // call pressed command
       _pShell->Execute(itButtonAction->ba_strCommandLineWhenPressed);
-      // if it was just released
+
+    // if it was just released
     } else if (!bSecondPressed && itButtonAction->ba_bSecondKeyDown) {
       // call released command
       _pShell->Execute(itButtonAction->ba_strCommandLineWhenReleased);
@@ -395,6 +402,7 @@ FLOAT CControls::GetAxisValue(INDEX iAxis) {
     if (ctrl_bSmoothAxes || aa.aa_bSmooth) {
       FLOAT fSmoothed = (aa.aa_fLastReading + fReading) / 2.0f;
       aa.aa_fLastReading = fReading;
+
       fReading = fSmoothed;
     }
 
@@ -444,7 +452,7 @@ void CControls::CreateAction(const CPlayerCharacter &pc, CPlayerAction &paAction
   if (!bPreScan) {
     DoButtonActions();
   }
-  // CPrintF("creating: prescan %d, x:%g\n", bPreScan, paAction.pa_aRotation(1));
+  //CPrintF("creating: prescan %d, x:%g\n", bPreScan, paAction.pa_aRotation(1));
 
   // make the player class create the action packet
   ctl_ComposeActionPacket(pc, paAction, bPreScan);
@@ -476,6 +484,7 @@ static void CalcDemoProfile(INDEX ctFrames, INDEX &ctFramesNoPeaks, DOUBLE &dTim
   INDEX i;
   TIME tmCurrent;
   dTimeSum = 0;
+
   DOUBLE dWTriSum = 0, dMTriSum = 0, dPTriSum = 0, dTTriSum = 0;
   DOUBLE dWTriSumNoPeaks = 0, dMTriSumNoPeaks = 0, dPTriSumNoPeaks = 0, dTTriSumNoPeaks = 0;
 
@@ -495,8 +504,10 @@ static void CalcDemoProfile(INDEX ctFrames, INDEX &ctFramesNoPeaks, DOUBLE &dTim
 
   // calc raw sigma and limits
   DOUBLE dSigmaSum = 0;
+
   for (i = 0; i < ctFrames; i++) {
     tmCurrent = _atmFrameTimes[i];
+
     TIME tmDelta = tmCurrent - tmAverage;
     dSigmaSum += tmDelta * tmDelta;
   }
@@ -515,6 +526,7 @@ static void CalcDemoProfile(INDEX ctFrames, INDEX &ctFramesNoPeaks, DOUBLE &dTim
 
   for (i = 0; i < ctFrames; i++) {
     tmCurrent = _atmFrameTimes[i];
+
     if (tmHighLimit > tmCurrent || tmLowLimit < tmCurrent) {
       dTimeSumNoPeaks -= tmCurrent;
       dWTriSumNoPeaks -= _actTriangles[i * 4 + 0];
@@ -537,20 +549,27 @@ static void CalcDemoProfile(INDEX ctFrames, INDEX &ctFramesNoPeaks, DOUBLE &dTim
 
   for (i = 0; i < ctFrames; i++) {
     tmCurrent = _atmFrameTimes[i];
-    if (tmHighLimit > tmCurrent || tmLowLimit < tmCurrent)
+
+    if (tmHighLimit > tmCurrent || tmLowLimit < tmCurrent) {
       continue;
+    }
+
     TIME tmDelta = tmCurrent - tmAverageNoPeaks;
     dSigmaSum += tmDelta * tmDelta;
-    if (tmHighPeak > tmCurrent)
+
+    if (tmHighPeak > tmCurrent) {
       tmHighPeak = tmCurrent;
-    if (tmLowPeak < tmCurrent)
+    }
+
+    if (tmLowPeak < tmCurrent) {
       tmLowPeak = tmCurrent;
+    }
   }
 
   tmSigma = Sqrt(dSigmaSum / ctFramesNoPeaks);
 }
 
-// dump demo profile to file
+// Dump demo profile to file
 CTString CGame::DemoReportFragmentsProfile(INDEX iRate) {
   CTString strRes = "";
   CTString strTmp;
@@ -572,15 +591,18 @@ CTString CGame::DemoReportFragmentsProfile(INDEX iRate) {
   strRes.PrintF(TRANS("\nDemo performance results (fragment time = %d seconds):\n"), dem_iProfileRate);
   strTmp.PrintF("------------------------------------------------------\n\n");
   strRes += strTmp;
+
   DOUBLE dTimeSum, dTimeSumNoPeaks;
   INDEX ctFramesNoPeaks;
   TIME tmAverage, tmAverageNoPeaks;
   TIME tmSigma, tmHighLimit, tmLowLimit, tmHighPeak, tmLowPeak;
   FLOAT fAvgWTris, fAvgMTris, fAvgPTris, fAvgTTris;
   FLOAT fAvgWTrisNoPeaks, fAvgMTrisNoPeaks, fAvgPTrisNoPeaks, fAvgTTrisNoPeaks;
+
   CalcDemoProfile(ctFrames, ctFramesNoPeaks, dTimeSum, dTimeSumNoPeaks, tmAverage, tmAverageNoPeaks, tmSigma, tmHighLimit,
                   tmLowLimit, tmHighPeak, tmLowPeak, fAvgWTris, fAvgMTris, fAvgPTris, fAvgTTris, fAvgWTrisNoPeaks,
                   fAvgMTrisNoPeaks, fAvgPTrisNoPeaks, fAvgTTrisNoPeaks);
+
   strTmp.PrintF(TRANS("   #   average FPS     average FPS (W/O peaks)\n"));
   strRes += strTmp;
 
@@ -588,6 +610,7 @@ CTString CGame::DemoReportFragmentsProfile(INDEX iRate) {
   dTimeSum = 0;
   dTimeSumNoPeaks = 0;
   ctFramesNoPeaks = 0;
+
   FLOAT fFrameCounter = 0;
   FLOAT fFrameCounterNoPeaks = 0;
   TIME tmRate = dem_iProfileRate;
@@ -609,20 +632,27 @@ CTString CGame::DemoReportFragmentsProfile(INDEX iRate) {
       FLOAT fFrameOver = fTimeOver / tmCurrent;
       FLOAT fFragmentAverage = tmRate / (fFrameCounter - fFrameOver);
       FLOAT fFragmentNoPeaks = (tmRate - (dTimeSum - dTimeSumNoPeaks)) / (fFrameCounterNoPeaks - fFrameOver);
+
       strTmp.PrintF("%4d    %6.1f           %6.1f", iFragment, 1.0f / fFragmentAverage, 1.0f / fFragmentNoPeaks);
       strRes += strTmp;
+
       INDEX iFragmentAverage10 = FloatToInt(5.0f / fFragmentAverage);
       INDEX iFragmentNoPeaks10 = FloatToInt(5.0f / fFragmentNoPeaks);
-      if (iFragmentAverage10 != iFragmentNoPeaks10)
+
+      if (iFragmentAverage10 != iFragmentNoPeaks10) {
         strTmp.PrintF("    !\n");
-      else
+      } else {
         strTmp.PrintF("\n");
+      }
+
       strRes += strTmp;
+
       // restart time and frames
       dTimeSum = fTimeOver;
       dTimeSumNoPeaks = fTimeOver;
       fFrameCounter = fFrameOver;
       fFrameCounterNoPeaks = fFrameOver;
+
       iFragment++;
     }
   }
@@ -649,6 +679,7 @@ CTString CGame::DemoReportAnalyzedProfile(void) {
   TIME tmSigma, tmHighLimit, tmLowLimit, tmHighPeak, tmLowPeak;
   FLOAT fAvgWTris, fAvgMTris, fAvgPTris, fAvgTTris;
   FLOAT fAvgWTrisNoPeaks, fAvgMTrisNoPeaks, fAvgPTrisNoPeaks, fAvgTTrisNoPeaks;
+
   CalcDemoProfile(ctFrames, ctFramesNoPeaks, dTimeSum, dTimeSumNoPeaks, tmAverage, tmAverageNoPeaks, tmSigma, tmHighLimit,
                   tmLowLimit, tmHighPeak, tmLowPeak, fAvgWTris, fAvgMTris, fAvgPTris, fAvgTTris, fAvgWTrisNoPeaks,
                   fAvgMTrisNoPeaks, fAvgPTrisNoPeaks, fAvgTTrisNoPeaks);
@@ -658,10 +689,13 @@ CTString CGame::DemoReportAnalyzedProfile(void) {
   DOUBLE dCurrentHighSum = 0, dCurrentLowSum = 0;
   INDEX ctHighFrames = 0, ctLowFrames = 0;
   INDEX ctCurrentHighFrames = 0, ctCurrentLowFrames = 0;
-  for (INDEX i = 0; i < ctFrames; i++) { // skip low peaks
+
+  for (INDEX i = 0; i < ctFrames; i++) {
+    // skip low peaks
     TIME tmCurrent = _atmFrameTimes[i];
-    if (tmHighLimit > tmCurrent || tmLowLimit < tmCurrent)
+    if (tmHighLimit > tmCurrent || tmLowLimit < tmCurrent) {
       continue;
+    }
 
     // high?
     if ((tmAverageNoPeaks - tmSigma) > tmCurrent) {
@@ -708,14 +742,16 @@ CTString CGame::DemoReportAnalyzedProfile(void) {
   CTString strTmp;
   strTmp.PrintF(TRANS("\n%.1f KB used for demo profile:\n"), 1 + ctFrames * 5 * sizeof(FLOAT) / 1024.0f);
   strRes += strTmp;
-  strTmp.PrintF(TRANS("    Originally recorded: %d frames in %.1f seconds => %5.1f FPS average.\n"), ctFrames, dTimeSum,
-                1.0f / tmAverage);
+
+  strTmp.PrintF(TRANS("    Originally recorded: %d frames in %.1f seconds => %5.1f FPS average.\n"), ctFrames, dTimeSum, 1.0f / tmAverage);
   strRes += strTmp;
-  strTmp.PrintF(TRANS("Without excessive peaks: %d frames in %.1f seconds => %5.1f FPS average.\n"), ctFramesNoPeaks,
-                dTimeSumNoPeaks, 1.0f / tmAverageNoPeaks);
+
+  strTmp.PrintF(TRANS("Without excessive peaks: %d frames in %.1f seconds => %5.1f FPS average.\n"), ctFramesNoPeaks, dTimeSumNoPeaks, 1.0f / tmAverageNoPeaks);
   strRes += strTmp;
+
   strTmp.PrintF(TRANS("       High peak: %5.1f FPS\n"), 1.0f / tmHighPeak);
   strRes += strTmp;
+
   strTmp.PrintF(TRANS("        Low peak: %5.1f FPS\n"), 1.0f / tmLowPeak);
   strRes += strTmp;
 
@@ -735,17 +771,23 @@ CTString CGame::DemoReportAnalyzedProfile(void) {
   if (dem_bProfile == 217) {
     const FLOAT fAvgRTris = fAvgTTris - (fAvgWTris + fAvgMTris + fAvgPTris);
     const FLOAT fAvgRTrisNoPeaks = fAvgTTrisNoPeaks - (fAvgWTrisNoPeaks + fAvgMTrisNoPeaks + fAvgPTrisNoPeaks);
+
     strTmp.PrintF(TRANS("Triangles per frame (with and without excessive peaks):\n"));
     strRes += "\n" + strTmp;
+
     strTmp.PrintF(TRANS("      World: %7.1f / %.1f\n"), fAvgWTris, fAvgWTrisNoPeaks);
     strRes += strTmp;
+
     strTmp.PrintF(TRANS("      Model: %7.1f / %.1f\n"), fAvgMTris, fAvgMTrisNoPeaks);
     strRes += strTmp;
+
     strTmp.PrintF(TRANS("   Particle: %7.1f / %.1f\n"), fAvgPTris, fAvgPTrisNoPeaks);
     strRes += strTmp;
+
     strTmp.PrintF(TRANS("  rest (2D): %7.1f / %.1f\n"), fAvgRTris, fAvgRTrisNoPeaks);
     strRes += strTmp;
     strRes += "           --------------------\n";
+
     strTmp.PrintF(TRANS("      TOTAL: %7.1f / %.1f\n"), fAvgTTris, fAvgTTrisNoPeaks);
     strRes += strTmp;
   }
@@ -770,6 +812,7 @@ void CGame::GameHandleTimer(void) {
       if (gm_lpLocalPlayers[iPlayer].lp_pplsPlayerSource != NULL) {
         INDEX iCurrentPlayer = gm_lpLocalPlayers[iPlayer].lp_iPlayer;
         CControls &ctrls = gm_actrlControls[iCurrentPlayer];
+
         if (ctrls.UsesJoystick()) {
           bAnyJoy = TRUE;
           break;
@@ -801,6 +844,7 @@ void CGame::GameHandleTimer(void) {
 
           CControls &ctrls = gm_actrlControls[iCurrentPlayer];
           ctrls.CreateAction(gm_apcPlayers[iCurrentPlayer], paAction, FALSE);
+
           // set the action in the client source object
           gm_lpLocalPlayers[iPlayer].lp_pplsPlayerSource->SetAction(paAction);
 
@@ -808,6 +852,7 @@ void CGame::GameHandleTimer(void) {
           memcpy(gm_lpLocalPlayers[iPlayer].lp_ubPlayerControlsState, ctl_pvPlayerControls, ctl_slPlayerControlsSize);
         }
       }
+
       // clear player indices
       ctl_iCurrentPlayerLocal = -1;
       ctl_iCurrentPlayer = -1;
@@ -824,13 +869,15 @@ void CGame::GameHandleTimer(void) {
     for (INDEX iPlayer = 0; iPlayer < 4; iPlayer++) { // if this player exist
       if (gm_lpLocalPlayers[iPlayer].lp_pplsPlayerSource != NULL) {
         CPlayerSource &pls = *gm_lpLocalPlayers[iPlayer].lp_pplsPlayerSource;
+
         // create dummy action for the player for this tick
         CPlayerAction paClearAction;
+
         // clear actions
         paClearAction = pls.pls_paAction;
         paClearAction.pa_vTranslation = FLOAT3D(0.0f, 0.0f, 0.0f);
-        //        paClearAction.pa_aRotation     = ANGLE3D(0.0f, 0.0f, 0.0f);
-        //        paClearAction.pa_aViewRotation = ANGLE3D(0.0f, 0.0f, 0.0f);
+        //paClearAction.pa_aRotation = ANGLE3D(0.0f, 0.0f, 0.0f);
+        //paClearAction.pa_aViewRotation = ANGLE3D(0.0f, 0.0f, 0.0f);
         paClearAction.pa_ulButtons = 0;
 
         // clear the action in the client source object
@@ -840,11 +887,11 @@ void CGame::GameHandleTimer(void) {
   }
 }
 
-// Global game object (in our case Flesh) initialization function
+// Global game object initialization function
 void CGame::InitInternal(void) {
-  gam_strCustomLevel = "";                       // filename of custom level chosen
+  gam_strCustomLevel = ""; // filename of custom level chosen
   gam_strSessionName = TRANS("Unnamed session"); // name of multiplayer network session
-  gam_strJoinAddress = TRANS("serveraddress");   // join address
+  gam_strJoinAddress = TRANS("serveraddress"); // join address
 
   gm_MenuSplitScreenCfg = SSC_PLAY1;
   gm_StartSplitScreenCfg = SSC_PLAY1;
@@ -858,6 +905,7 @@ void CGame::InitInternal(void) {
   gm_bProfileDemo = FALSE;
   gm_slPlayerControlsSize = 0;
   gm_pvGlobalPlayerControls = NULL;
+
   memset(gm_aiMenuLocalPlayers, 0, sizeof(gm_aiMenuLocalPlayers));
   memset(gm_aiStartLocalPlayers, 0, sizeof(gm_aiStartLocalPlayers));
 
@@ -871,16 +919,17 @@ void CGame::InitInternal(void) {
   gm_astrAxisNames[AXIS_LOOK_UD] = TRANS("view u/d");
   gm_astrAxisNames[AXIS_LOOK_LR] = TRANS("view l/r");
   gm_astrAxisNames[AXIS_LOOK_BK] = TRANS("view banking");
+
   // but we must not really use the translation for loading
-  gm_astrAxisNames[AXIS_MOVE_UD] = "move u/d";     //
-  gm_astrAxisNames[AXIS_MOVE_LR] = "move l/r";     //
-  gm_astrAxisNames[AXIS_MOVE_FB] = "move f/b";     //
-  gm_astrAxisNames[AXIS_TURN_UD] = "look u/d";     //
-  gm_astrAxisNames[AXIS_TURN_LR] = "turn l/r";     //
-  gm_astrAxisNames[AXIS_TURN_BK] = "banking";      //
-  gm_astrAxisNames[AXIS_LOOK_UD] = "view u/d";     //
-  gm_astrAxisNames[AXIS_LOOK_LR] = "view l/r";     //
-  gm_astrAxisNames[AXIS_LOOK_BK] = "view banking"; //
+  gm_astrAxisNames[AXIS_MOVE_UD] = "move u/d";
+  gm_astrAxisNames[AXIS_MOVE_LR] = "move l/r";
+  gm_astrAxisNames[AXIS_MOVE_FB] = "move f/b";
+  gm_astrAxisNames[AXIS_TURN_UD] = "look u/d";
+  gm_astrAxisNames[AXIS_TURN_LR] = "turn l/r";
+  gm_astrAxisNames[AXIS_TURN_BK] = "banking";
+  gm_astrAxisNames[AXIS_LOOK_UD] = "view u/d";
+  gm_astrAxisNames[AXIS_LOOK_LR] = "view l/r";
+  gm_astrAxisNames[AXIS_LOOK_BK] = "view banking";
 
   gm_csConsoleState = CS_OFF;
   gm_csComputerState = CS_OFF;
@@ -902,6 +951,7 @@ void CGame::InitInternal(void) {
 
   // add game timer handler
   _pTimer->AddHandler(&m_gthGameTimerHandler);
+
   // add shell variables
   _pShell->DeclareSymbol("user void RecordProfile(void);", &RecordProfile);
   _pShell->DeclareSymbol("user void SaveScreenShot(void);", &SaveScreenShot);
@@ -1017,7 +1067,7 @@ void CGame::InitInternal(void) {
 
   // check the size and pointer of player control variables that are local to each player
   if (ctl_slPlayerControlsSize <= 0 || ctl_slPlayerControlsSize > sizeof(((CLocalPlayer *)NULL)->lp_ubPlayerControlsState)
-      || ctl_pvPlayerControls == NULL) {
+   || ctl_pvPlayerControls == NULL) {
     FatalError(TRANS("Current player controls are invalid."));
   }
 
@@ -1025,7 +1075,7 @@ void CGame::InitInternal(void) {
   try {
     _ctrlCommonControls.Load_t(fnmCommonControls);
   } catch (char * /*strError*/) {
-    // FatalError(TRANS("Cannot load common controls: %s\n"), strError);
+    //FatalError(TRANS("Cannot load common controls: %s\n"), strError);
   }
 
   // init LCD textures/fonts
@@ -1033,9 +1083,11 @@ void CGame::InitInternal(void) {
 
   // load console history
   CTString strConsole;
+
   try {
     strConsole.LoadKeepCRLF_t(fnmConsoleHistory);
     gam_strConsoleInputBuffer = strConsole;
+
   } catch (char *strError) {
     (void)strError; // must ignore if there is no history file
   }
@@ -1057,8 +1109,10 @@ void CGame::InitInternal(void) {
 void CGame::EndInternal(void) {
   // stop game if eventually started
   StopGame();
+
   // remove game timer handler
   _pTimer->RemHandler(&m_gthGameTimerHandler);
+
   // save persistent symbols
   if (!_bDedicatedServer) {
     _pShell->StorePersistentSymbols(fnmPersistentSymbols);
@@ -1070,8 +1124,10 @@ void CGame::EndInternal(void) {
   #define MAX_SCRIPTSOUNDS 16
 
   for (INDEX i = 0; i < MAX_SCRIPTSOUNDS; i++) {
-    if (_apsoScriptChannels[i] == NULL)
+    if (_apsoScriptChannels[i] == NULL) {
       continue;
+    }
+
     _apsoScriptChannels[i]->Stop();
     delete _apsoScriptChannels[i];
   }
@@ -1125,11 +1181,14 @@ BOOL CGame::NewGame(const CTString &strSessionName, const CTFileName &fnWorld, C
       gm_aiStartLocalPlayers[0] = -2;
 
       CTFileName fnmDemo = CTString("Temp\\Play.dem");
+
       if (dem_bPlayByName) {
         fnmDemo = fnWorld;
       }
+
       CAM_Start(fnmDemo);
       _pNetwork->StartDemoPlay_t(fnmDemo);
+
     } else {
       BOOL bWaitAllPlayers = sp.sp_bWaitAllPlayers && _pNetwork->IsNetworkEnabled();
       _pNetwork->StartPeerToPeer_t(strSessionName, fnWorld, sp.sp_ulSpawnFlags, sp.sp_ctMaxPlayers, bWaitAllPlayers, &sp);
@@ -1139,8 +1198,10 @@ BOOL CGame::NewGame(const CTString &strSessionName, const CTFileName &fnWorld, C
     gm_bFirstLoading = FALSE;
     // stop network provider
     _pNetwork->StopProvider();
+
     // and display error
     CPrintF(TRANS("Cannot start game:\n%s\n"), strError);
+
     return FALSE;
   }
 
@@ -1151,16 +1212,19 @@ BOOL CGame::NewGame(const CTString &strSessionName, const CTFileName &fnWorld, C
     _pNetwork->StopGame();
     _pNetwork->StopProvider();
     gm_bFirstLoading = FALSE;
+
     return FALSE;
   }
 
   gm_bFirstLoading = FALSE;
   gm_bGameOn = TRUE;
   gm_CurrentSplitScreenCfg = gm_StartSplitScreenCfg;
+
   // clear last set highscore
   gm_iLastSetHighScore = -1;
 
   MaybeDiscardLastLines();
+
   return TRUE;
 }
 
@@ -1183,13 +1247,16 @@ BOOL CGame::JoinGame(CNetworkSession &session) {
     if (gm_StartSplitScreenCfg >= SSC_PLAY1 && gm_StartSplitScreenCfg <= SSC_PLAY4) {
       ctLocalPlayers = (gm_StartSplitScreenCfg - SSC_PLAY1) + 1;
     }
+
     _pNetwork->JoinSession_t(session, ctLocalPlayers);
 
   } catch (char *strError) {
     // stop network provider
     _pNetwork->StopProvider();
+
     // and display error
     CPrintF(TRANS("Cannot join game:\n%s\n"), strError);
+
     return FALSE;
   }
 
@@ -1199,11 +1266,13 @@ BOOL CGame::JoinGame(CNetworkSession &session) {
   if (!AddPlayers()) {
     _pNetwork->StopGame();
     _pNetwork->StopProvider();
+
     return FALSE;
   }
 
   gm_bGameOn = TRUE;
   gm_CurrentSplitScreenCfg = gm_StartSplitScreenCfg;
+
   return TRUE;
 }
 
@@ -1215,8 +1284,9 @@ BOOL CGame::LoadGame(const CTFileName &fnGame) {
   StopGame();
 
   // try to start current network provider
-  if (!StartProviderFromName())
+  if (!StartProviderFromName()) {
     return FALSE;
+  }
 
   // start the new session
   try {
@@ -1226,8 +1296,10 @@ BOOL CGame::LoadGame(const CTFileName &fnGame) {
   } catch (char *strError) {
     // stop network provider
     _pNetwork->StopProvider();
+
     // and display error
     CPrintF(TRANS("Cannot load game: %s\n"), strError);
+
     return FALSE;
   }
 
@@ -1237,11 +1309,13 @@ BOOL CGame::LoadGame(const CTFileName &fnGame) {
   if (!AddPlayers()) {
     _pNetwork->StopGame();
     _pNetwork->StopProvider();
+
     return FALSE;
   }
 
   gm_bGameOn = TRUE;
   gm_CurrentSplitScreenCfg = gm_StartSplitScreenCfg;
+
   // clear last set highscore
   gm_iLastSetHighScore = -1;
 
@@ -1252,6 +1326,7 @@ BOOL CGame::LoadGame(const CTFileName &fnGame) {
   }
 
   MaybeDiscardLastLines();
+
   return TRUE;
 }
 
@@ -1275,9 +1350,11 @@ BOOL CGame::StartDemoPlay(const CTFileName &fnDemo) {
   } catch (char *strError) {
     // stop network provider
     _pNetwork->StopProvider();
+
     // and display error
     CPrintF(TRANS("Cannot play demo: %s\n"), strError);
     gm_bFirstLoading = FALSE;
+
     return FALSE;
   }
 
@@ -1286,6 +1363,7 @@ BOOL CGame::StartDemoPlay(const CTFileName &fnDemo) {
   // setup players from given indices
   gm_StartSplitScreenCfg = CGame::SSC_OBSERVER;
   SetupLocalPlayers();
+
   gm_bGameOn = TRUE;
   gm_CurrentSplitScreenCfg = gm_StartSplitScreenCfg;
 
@@ -1302,14 +1380,17 @@ BOOL CGame::StartDemoPlay(const CTFileName &fnDemo) {
   _tvLastFrame = _tvDemoStarted;
 
   CTFileName fnmScript = fnDemo.NoExt() + ".ini";
+
   if (!FileExists(fnmScript)) {
     fnmScript = CTString("Demos\\Default.ini");
   }
+
   CTString strCmd;
   strCmd.PrintF("include \"%s\"", (const char *)fnmScript);
   _pShell->Execute(strCmd);
 
   MaybeDiscardLastLines();
+
   // all done
   return TRUE;
 }
@@ -1321,19 +1402,22 @@ BOOL CGame::StartDemoRec(const CTFileName &fnDemo) {
     CPrintF(TRANS("Started recording demo: %s\n"), fnDemo);
     // save a thumbnail
     SaveThumbnail(fnDemo.NoExt() + "Tbn.tex");
+
     return TRUE;
 
   } catch (char *strError) {
     // and display error
     CPrintF(TRANS("Cannot start recording: %s\n"), strError);
+
     return FALSE;
   }
 }
 
 void CGame::StopDemoRec(void) {
   // if no game is currently running
-  if (!gm_bGameOn)
+  if (!gm_bGameOn) {
     return;
+  }
 
   _pNetwork->StopDemoRec();
   CPrintF(TRANS("Finished recording.\n"));
@@ -1347,6 +1431,7 @@ BOOL CGame::SaveGame(const CTFileName &fnGame) {
   if (ctPlayers > 0 && ctLivePlayers <= 0) {
     // display error
     CPrintF(TRANS("Won't save game when dead!\n"));
+
     // do not save
     return FALSE;
   }
@@ -1356,11 +1441,13 @@ BOOL CGame::SaveGame(const CTFileName &fnGame) {
     _pNetwork->Save_t(fnGame);
     CPrintF(TRANS("Saved game: %s\n"), fnGame);
     SaveThumbnail(fnGame.NoExt() + "Tbn.tex");
+
     return TRUE;
 
   } catch (char *strError) {
     // and display error
     CPrintF(TRANS("Cannot save game: %s\n"), strError);
+
     return FALSE;
   }
 }
@@ -1369,9 +1456,8 @@ void CGame::StopGame(void) {
   // disable computer quickly
   ComputerForceOff();
 
-  // if no game is currently running
+  // no currently running game
   if (!gm_bGameOn) {
-    // do nothing
     return;
   }
 
@@ -1379,12 +1465,13 @@ void CGame::StopGame(void) {
   CAM_Stop();
 
   // disable direct input
-  //  _pInput->DisableInput();
+  //_pInput->DisableInput();
   // and game
   gm_bGameOn = FALSE;
 
   // stop the game
   _pNetwork->StopGame();
+
   // stop the provider
   _pNetwork->StopProvider();
 
@@ -1400,6 +1487,7 @@ BOOL CGame::StartProviderFromName(void) {
   BOOL bSuccess = FALSE;
   // list to contain available network providers
   CListHead lhAvailableProviders;
+
   // enumerate all providers
   _pNetwork->EnumNetworkProviders(lhAvailableProviders);
 
@@ -1407,6 +1495,7 @@ BOOL CGame::StartProviderFromName(void) {
   FOREACHINLIST(CNetworkProvider, np_Node, lhAvailableProviders, litProviders) {
     // generate provider description
     CTString strProviderName = litProviders->GetDescription();
+
     // is this the provider we are searching for ?
     if (strProviderName == gm_strNetworkProvider) {
       // it is, set it as active network provider
@@ -1421,14 +1510,12 @@ BOOL CGame::StartProviderFromName(void) {
     delete &litDelete.Current();
   }
 
-  // try to
+  // start selected network provider
   try {
-    // start selected network provider
     _pNetwork->StartProvider_t(gm_npNetworkProvider);
 
-  // catch throwed error
+  // if unable, report error
   } catch (char *strError) {
-    // if unable, report error
     CPrintF(TRANS("Can't start provider:\n%s\n"), strError);
     bSuccess = FALSE;
   }
@@ -1454,27 +1541,34 @@ SLONG CGame::PackHighScoreTable(void) {
     char str[MAX_HIGHSCORENAME + 1];
     memset(str, 0, sizeof(str));
     strncpy(str, gm_ahseHighScores[i].hse_strPlayer, MAX_HIGHSCORENAME);
+
     // copy the value and the string
     memcpy(pub, str, sizeof(str));
     pub += MAX_HIGHSCORENAME + 1;
+
     memcpy(pub, &gm_ahseHighScores[i].hse_gdDifficulty, sizeof(INDEX));
     pub += sizeof(INDEX);
+
     memcpy(pub, &gm_ahseHighScores[i].hse_tmTime, sizeof(FLOAT));
     pub += sizeof(FLOAT);
+
     memcpy(pub, &gm_ahseHighScores[i].hse_ctKills, sizeof(INDEX));
     pub += sizeof(INDEX);
+
     memcpy(pub, &gm_ahseHighScores[i].hse_ctScore, sizeof(INDEX));
     pub += sizeof(INDEX);
   }
 
   // just copy it for now
   memcpy(_aubHighScorePacked, _aubHighScoreBuffer, MAX_HIGHSCORETABLESIZE);
+
   return MAX_HIGHSCORETABLESIZE;
 }
 
 void CGame::UnpackHighScoreTable(SLONG slSize) {
   // just copy it for now
   memcpy(_aubHighScoreBuffer, _aubHighScorePacked, slSize);
+
   // start at the beginning of buffer
   UBYTE *pub = _aubHighScoreBuffer;
 
@@ -1482,20 +1576,24 @@ void CGame::UnpackHighScoreTable(SLONG slSize) {
   for (INDEX i = 0; i < HIGHSCORE_COUNT; i++) {
     gm_ahseHighScores[i].hse_strPlayer = (const char *)pub;
     pub += MAX_HIGHSCORENAME + 1;
+
     memcpy(&gm_ahseHighScores[i].hse_gdDifficulty, pub, sizeof(INDEX));
     pub += sizeof(INDEX);
+
     memcpy(&gm_ahseHighScores[i].hse_tmTime, pub, sizeof(FLOAT));
     pub += sizeof(FLOAT);
+
     memcpy(&gm_ahseHighScores[i].hse_ctKills, pub, sizeof(INDEX));
     pub += sizeof(INDEX);
+
     memcpy(&gm_ahseHighScores[i].hse_ctScore, pub, sizeof(INDEX));
     pub += sizeof(INDEX);
   }
 
-  // try to
   try {
     CTFileStream strm;
     strm.Open_t(CTString("table.txt"));
+
     {for (INDEX i = 0; i < HIGHSCORE_COUNT; i++) {
       gm_ahseHighScores[i].hse_gdDifficulty = (CSessionProperties::GameDifficulty)-100;
     }}
@@ -1503,6 +1601,7 @@ void CGame::UnpackHighScoreTable(SLONG slSize) {
     {for (INDEX i = 0; i < HIGHSCORE_COUNT; i++) {
       CTString strLine;
       strm.GetLine_t(strLine);
+
       char strName[256];
       strLine.ScanF("\"%256[^\"]\" %d %g %d %d", strName, &gm_ahseHighScores[i].hse_gdDifficulty,
                     &gm_ahseHighScores[i].hse_tmTime, &gm_ahseHighScores[i].hse_ctKills, &gm_ahseHighScores[i].hse_ctScore);
@@ -1520,13 +1619,15 @@ void CGame::UnpackHighScoreTable(SLONG slSize) {
   gm_iLastSetHighScore = -1;
 }
 
-// Loads CGame from file with file name given trough SetGameSettingsSaveFileName() function
+// Load CGame from file with file name given trough SetGameSettingsSaveFileName() function
 void CGame::Load_t(void) {
   ASSERT(gm_fnSaveFileName != "");
 
   CTFileStream strmFile;
+
   // open file with saved CGameObject
   strmFile.Open_t(gm_fnSaveFileName, CTStream::OM_READ);
+
   // read file ID
   strmFile.ExpectID_t(CChunkID("GAME")); // game
 
@@ -1550,18 +1651,22 @@ void CGame::Load_t(void) {
   SLONG slHSSize;
   strmFile >> slHSSize;
   strmFile.Read_t(&_aubHighScorePacked, slHSSize);
+
   UnpackHighScoreTable(slHSSize);
 }
 
-// Saves current state of CGame under file name given trough SetGameSettingsSaveFileName() function
+// Save current state of CGame under file name given trough SetGameSettingsSaveFileName() function
 void CGame::Save_t(void) {
   ASSERT(gm_fnSaveFileName != "");
 
   CTFileStream strmFile;
+
   // create file to save CGameObject
   strmFile.Create_t(gm_fnSaveFileName);
+
   // write file ID
   strmFile.WriteID_t(CChunkID("GAME")); // game shell
+
   // write version number
   strmFile.WriteID_t(CChunkID(GAME_SHELL_VER));
 
@@ -1624,7 +1729,7 @@ void LoadPlayer(CPlayerCharacter &pc, INDEX i) {
   }
 }
 
-// Loads 8 players and 8 controls
+// Load 8 players and 8 controls
 void CGame::LoadPlayersAndControls(void) {
   for (INDEX iControls = 0; iControls < 8; iControls++) {
     LoadControls(gm_actrlControls[iControls], iControls);
@@ -1637,7 +1742,7 @@ void CGame::LoadPlayersAndControls(void) {
   SavePlayersAndControls();
 }
 
-// Saves 8 players and 8 controls
+// Save 8 players and 8 controls
 void CGame::SavePlayersAndControls(void) {
   try {
     // save players
@@ -1679,8 +1784,9 @@ void CGame::SavePlayersAndControls(void) {
       // if its character in game is different than the one in config
       CPlayerCharacter &pcInGame = lp.lp_pplsPlayerSource->pls_pcCharacter;
       CPlayerCharacter &pcConfig = gm_apcPlayers[lp.lp_iPlayer];
+
       if (pcConfig.pc_strName != pcInGame.pc_strName || pcConfig.pc_strTeam != pcInGame.pc_strTeam
-          || memcmp(pcConfig.pc_aubAppearance, pcInGame.pc_aubAppearance, sizeof(pcInGame.pc_aubAppearance)) != 0) {
+       || memcmp(pcConfig.pc_aubAppearance, pcInGame.pc_aubAppearance, sizeof(pcInGame.pc_aubAppearance)) != 0) {
         // demand change in game
         lp.lp_pplsPlayerSource->ChangeCharacter(pcConfig);
       }
@@ -1718,6 +1824,7 @@ BOOL CGame::AddPlayers(void) {
     for (INDEX i = 0; i < 4; i++) {
       CLocalPlayer &lp = gm_lpLocalPlayers[i];
       INDEX iPlayer = lp.lp_iPlayer;
+
       if (iPlayer >= 0) {
         ASSERT(iPlayer >= 0 && iPlayer < 8);
         lp.lp_pplsPlayerSource = _pNetwork->AddPlayer_t(gm_apcPlayers[iPlayer]);
@@ -1733,7 +1840,7 @@ BOOL CGame::AddPlayers(void) {
   return TRUE;
 }
 
-// save thumbnail for savegame
+// Save thumbnail for savegame
 static CTFileName _fnmThumb = CTString("");
 
 void CGame::SaveThumbnail(const CTFileName &fnm) {
@@ -1742,14 +1849,14 @@ void CGame::SaveThumbnail(const CTFileName &fnm) {
   _fnmThumb = fnm;
 }
 
-// timer variables
+// Timer variables
 #define FRAMES_AVERAGING_MAX 20L
 static CTimerValue _tvLasts[FRAMES_AVERAGING_MAX];
 static CTimerValue _tvDelta[FRAMES_AVERAGING_MAX];
 static INDEX _iCheckNow = 0;
 static INDEX _iCheckMax = 0;
 
-// print resolution, frame rate or extensive profiling, and elapsed time
+// Print resolution, frame rate or extensive profiling, and elapsed time
 static void PrintStats(CDrawPort *pdpDrawPort) {
   // cache some general vars
   SLONG slDPWidth = pdpDrawPort->GetWidth();
@@ -1762,6 +1869,7 @@ static void PrintStats(CDrawPort *pdpDrawPort) {
   if (hud_bShowResolution) {
     CTString strRes;
     strRes.PrintF("%dx%dx%s", slDPWidth, slDPHeight, _pGfx->gl_dmCurrentDisplayMode.DepthString());
+
     pdpDrawPort->SetFont(_pfdDisplayFont);
     pdpDrawPort->SetTextScaling(fTextScale);
     pdpDrawPort->SetTextAspect(1.0f);
@@ -1781,6 +1889,7 @@ static void PrintStats(CDrawPort *pdpDrawPort) {
 
     // printout elapsed time
     CTString strTime;
+
     if (ulTime >= (60 * 60)) {
       // print hours
       strTime.PrintF("%02d:%02d:%02d", ulTime / (60 * 60), (ulTime / 60) % 60, ulTime % 60);
@@ -1816,6 +1925,7 @@ static void PrintStats(CDrawPort *pdpDrawPort) {
   if (hud_bShowNetGraph) { // determine and clamp size
     INDEX ctLines = _pNetwork->ga_angeNetGraph.Count();
     ctLines = ClampUp(ctLines, (INDEX)(slDPHeight * 0.7f));
+
     FLOAT f192oLines = 192.0f / (FLOAT)ctLines;
     const FLOAT fMaxWidth = slDPWidth * 0.1f;
     const PIX pixJ = slDPHeight * 0.9f;
@@ -1828,6 +1938,7 @@ static void PrintStats(CDrawPort *pdpDrawPort) {
     for (INDEX i = 0; i < ctLines; i++) {
       FLOAT fValue = _pNetwork->ga_angeNetGraph[i].nge_fLatency;
       enum NetGraphEntryType nge = _pNetwork->ga_angeNetGraph[i].nge_ngetType;
+
       FLOAT fWidth = Clamp(fValue, 0.0f, 1.0f) * fMaxWidth;
       COLOR colLine = C_GREEN;
 
@@ -1867,6 +1978,7 @@ static void PrintStats(CDrawPort *pdpDrawPort) {
     // display nothing
     _iCheckNow = 0;
     _iCheckMax = 0;
+
     return;
   }
 
@@ -1913,6 +2025,7 @@ static void PrintStats(CDrawPort *pdpDrawPort) {
   CTString strFPS = "?";
   if (fFPS >= 30) {
     strFPS.PrintF("%3.0f", fFPS);
+
   } else if (fFPS >= 0.1f) {
     strFPS.PrintF("%3.1f", fFPS);
   }
@@ -1938,14 +2051,15 @@ static void PrintStats(CDrawPort *pdpDrawPort) {
 
     // printout statistics
     strFPS.PrintF(" frame =%3.0f ms\n---------------\n", 1000.0f / fFPS);
+
     pdpDrawPort->PutText(strFPS, 0, 40, C_WHITE | CT_OPAQUE);
     pdpDrawPort->PutText(strReport, 4, 65, C_GREEN | CT_OPAQUE);
   }
 }
 
-// max possible drawports
+// Max possible drawports
 CDrawPort adpDrawPorts[7];
-// and ptrs to them
+// And pointers to them
 CDrawPort *apdpDrawPorts[7];
 
 INDEX iFirstObserver = 0;
@@ -1963,6 +2077,7 @@ static void MakeSplitDrawports(enum CGame::SplitScreenCfg ssc, INDEX iCount, CDr
   if (ssc == CGame::SSC_OBSERVER) {
     // must have at least one screen
     iCount = Clamp(iCount, 1L, 4L);
+
     // starting at first drawport
     iFirstObserver = 0;
   }
@@ -2138,7 +2253,8 @@ static void MakeSplitDrawports(enum CGame::SplitScreenCfg ssc, INDEX iCount, CDr
   if (ssc == CGame::SSC_OBSERVER) {
     // observing starts at first drawport
     iFirstObserver = 0;
-    // if not observer
+
+  // if not observer
   } else {
     // observing starts after all players
     iFirstObserver = INDEX(ssc) + 1;
@@ -2149,6 +2265,7 @@ static void MakeSplitDrawports(enum CGame::SplitScreenCfg ssc, INDEX iCount, CDr
     // create extra small screens
     #define FREE (1 / 16.0)
     #define FULL (4 / 16.0)
+
     if (iCount == 1) {
       adpDrawPorts[iFirstObserver + 0] = CDrawPort(pdp, 1.0 - FREE - FULL, FREE, FULL, FULL);
       apdpDrawPorts[iFirstObserver + 0] = &adpDrawPorts[iFirstObserver + 0];
@@ -2170,10 +2287,10 @@ static void MakeSplitDrawports(enum CGame::SplitScreenCfg ssc, INDEX iCount, CDr
   }
 }
 
-// this is used to make sure that the thumbnail is never saved with an empty screen
+// This is used to make sure that the thumbnail is never saved with an empty screen
 static BOOL _bPlayerViewRendered = FALSE;
 
-// redraw all game views (for case of split-screens and such)
+// Redraw all game views (for case of split-screens and such)
 void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
   // if thumbnail saving has been required
   if (_fnmThumb != "") { // reset the need for saving thumbnail
@@ -2205,6 +2322,7 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
         // report an error to console, if failed
         CPrintF("%s\n", strError);
       }
+
     } else {
       _fnmThumb = fnm;
     }
@@ -2217,8 +2335,8 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
 
   // if game is started and computer isn't on
   BOOL bClientJoined = FALSE;
-  if (gm_bGameOn && (_pGame->gm_csComputerState == CS_OFF || pdpDrawPort->IsDualHead())
-   && gm_CurrentSplitScreenCfg != SSC_DEDICATED) {
+
+  if (gm_bGameOn && (_pGame->gm_csComputerState == CS_OFF || pdpDrawPort->IsDualHead()) && gm_CurrentSplitScreenCfg != SSC_DEDICATED) {
     INDEX ctObservers = Clamp(gam_iObserverConfig, 0L, 4L);
     INDEX iObserverOffset = ClampDn(gam_iObserverOffset, 0L);
 
@@ -2236,6 +2354,7 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
 
     // get number of local players
     INDEX ctLocals = 0;
+
     {for (INDEX i = 0; i < 4; i++) {
       if (gm_lpLocalPlayers[i].lp_pplsPlayerSource != NULL) {
         ctLocals++;
@@ -2250,11 +2369,11 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
     apenViewers[4] = NULL;
     apenViewers[5] = NULL;
     apenViewers[6] = NULL;
+
     INDEX ctViewers = 0;
 
     // check if input is enabled
-    BOOL bDoPrescan = _pInput->IsInputEnabled() && !_pNetwork->IsPaused() && !_pNetwork->GetLocalPause()
-                   && _pShell->GetINDEX("inp_bAllowPrescan");
+    BOOL bDoPrescan = _pInput->IsInputEnabled() && !_pNetwork->IsPaused() && !_pNetwork->GetLocalPause() && _pShell->GetINDEX("inp_bAllowPrescan");
 
     // prescan input
     if (bDoPrescan) {
@@ -2264,6 +2383,7 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
     // timer must not occur during prescanning
     {
       CTSingleLock csTimer(&_pTimer->tm_csHooks, TRUE);
+
       // for each local player
       for (INDEX i = 0; i < 4; i++) {
         // if local player
@@ -2272,6 +2392,7 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
         if (ppls != NULL) {
           // get local player entity
           apenViewers[ctViewers++] = _pNetwork->GetLocalPlayerEntity(ppls);
+
           // precreate action for it for this tick
           if (bDoPrescan) {
             // copy its local controls to current controls
@@ -2317,10 +2438,12 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
 
     {for (INDEX i = 0; i < ctViewers; i++) {
       CDrawPort *pdp = apdpDrawPorts[i];
+
       if (pdp != NULL && pdp->Lock()) {
         // if there is a viewer
         if (apenViewers[i] != NULL) {
           bHadViewers = TRUE;
+
           // if predicted
           if (apenViewers[i]->IsPredicted()) {
             // use predictor instead
@@ -2331,12 +2454,15 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
             _bPlayerViewRendered = TRUE;
             // render it
             apenViewers[i]->RenderGameView(pdp, (void *)ulFlags);
+
           } else {
             CAM_Render(apenViewers[i], pdp);
           }
+
         } else {
           pdp->Fill(C_BLACK | CT_OPAQUE);
         }
+
         pdp->Unlock();
       }
     }}
@@ -2349,31 +2475,42 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
 
     // create drawport for messages (left on DH)
     CDrawPort dpMsg(pdpDrawPort, TRUE);
+
     if ((ulFlags & GRV_SHOWEXTRAS) && dpMsg.Lock()) {
       // print pause indicators
       CTString strIndicator;
+
       if (_pNetwork->IsDisconnected()) {
         strIndicator.PrintF(TRANS("Disconnected: %s\nPress F9 to reconnect"), (const char *)_pNetwork->WhyDisconnected());
+
       } else if (_pNetwork->IsWaitingForPlayers()) {
         strIndicator = TRANS("Waiting for all players to connect");
+
       } else if (_pNetwork->IsWaitingForServer()) {
         strIndicator = TRANS("Waiting for server to continue");
+
       } else if (!_pNetwork->IsConnectionStable()) {
         strIndicator = TRANS("Trying to stabilize connection...");
+
       } else if (_pNetwork->IsGameFinished()) {
         strIndicator = TRANS("Game finished");
+
       } else if (_pNetwork->IsPaused() || _pNetwork->GetLocalPause()) {
         strIndicator = TRANS("Paused");
+
       } else if (_tvMenuQuickSave.tv_llValue != 0I64 && (_pTimer->GetHighPrecisionTimer() - _tvMenuQuickSave).GetSeconds() < 3) {
         strIndicator = TRANS("Use F6 for QuickSave during game!");
+
       } else if (_pNetwork->ga_sesSessionState.ses_strMOTD != "") {
         CTString strMotd = _pNetwork->ga_sesSessionState.ses_strMOTD;
         static CTString strLastMotd = "";
         static CTimerValue tvLastMotd(0I64);
+
         if (strLastMotd != strMotd) {
           tvLastMotd = _pTimer->GetHighPrecisionTimer();
           strLastMotd = strMotd;
         }
+
         if (tvLastMotd.tv_llValue != 0I64 && (_pTimer->GetHighPrecisionTimer() - tvLastMotd).GetSeconds() < 3) {
           strIndicator = strMotd;
         }
@@ -2406,6 +2543,7 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
       // print demo OSD
       if (dem_bOSD) {
         CTString strMessage;
+
         // print the message
         strMessage.PrintF("%.2fs", _pNetwork->ga_fDemoTimer);
         dpMsg.SetFont(_pfdDisplayFont);
@@ -2426,11 +2564,13 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
         gm_bProfileDemo = FALSE;
         CPrintF(DemoReportAnalyzedProfile());
         CPrintF("-\n");
+
       } else {
         // determine frame time delta
         TIME tmDelta = (tvThisFrame - _tvLastFrame).GetSeconds();
         _tvLastFrame = tvThisFrame;
-        _atmFrameTimes.Push() = tmDelta;            // add new frame time stamp
+        _atmFrameTimes.Push() = tmDelta; // add new frame time stamp
+
         INDEX *piTriangles = _actTriangles.Push(4); // and polygons count
         piTriangles[0] = _pGfx->gl_ctWorldTriangles;
         piTriangles[1] = _pGfx->gl_ctModelTriangles;
@@ -2470,6 +2610,7 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
   if (bSaveScreenShot || dem_iAnimFrame >= 0) {
     // make the screen shot directory if it doesn't already exist
     bSaveScreenShot = FALSE;
+
     CTFileName fnmExpanded;
     ExpandFilePath(EFP_WRITE, CTString("ScreenShots"), fnmExpanded);
     _mkdir(fnmExpanded);
@@ -2479,27 +2620,31 @@ void CGame::GameRedrawView(CDrawPort *pdpDrawPort, ULONG ulFlags) {
 
     if (dem_iAnimFrame < 0) {
       fnmScreenShot = MakeScreenShotName();
+
     } else {
       // create number for the file
       CTString strNumber;
       strNumber.PrintF("%05d", (INDEX)dem_iAnimFrame);
+
       fnmScreenShot = CTString("ScreenShots\\Anim_") + strNumber + ".tga";
       dem_iAnimFrame += 1;
     }
 
     // grab screen creating image info
     CImageInfo iiImageInfo;
+
     if (pdpDrawPort->Lock()) {
       pdpDrawPort->GrabScreen(iiImageInfo, 1);
       pdpDrawPort->Unlock();
     }
 
-    // try to
+    // save screen shot as TGA
     try {
-      // save screen shot as TGA
       iiImageInfo.SaveTGA_t(fnmScreenShot);
-      if (dem_iAnimFrame < 0)
+
+      if (dem_iAnimFrame < 0) {
         CPrintF(TRANS("screen shot: %s\n"), (CTString &)fnmScreenShot);
+      }
 
     // if failed
     } catch (char *strError) {
@@ -2570,9 +2715,10 @@ void CGame::RecordHighScore(void) {
 INDEX CGame::GetLivePlayersCount(void) {
   INDEX ctLive = 0;
 
-  for (INDEX ipl = 0; ipl < NET_MAXGAMEPLAYERS; ipl++) {
-    CEntity *penpl = CEntity::GetPlayerEntity(ipl);
-    if (penpl != NULL && (penpl->GetFlags() & ENF_ALIVE)) {
+  for (INDEX i = 0; i < NET_MAXGAMEPLAYERS; i++) {
+    CEntity *penPlayer = CEntity::GetPlayerEntity(i);
+
+    if (penPlayer != NULL && (penPlayer->GetFlags() & ENF_ALIVE)) {
       ctLive++;
     }
   }
@@ -2594,7 +2740,7 @@ INDEX CGame::GetPlayersCount(void) {
   return ctPlayers;
 }
 
-// get default description for a game (for save games/demos)
+// Get default description for a game (for save games/demos)
 CTString CGame::GetDefaultGameDescription(BOOL bWithInfo) {
   CTString strDescription;
 
@@ -2654,6 +2800,7 @@ INDEX FixQuicksaveDir(const CTFileName &fnmDir, INDEX ctMax) {
     // parse it
     INDEX iFile = -1;
     fnmName.FileName().ScanF("QuickSave%d", &iFile);
+
     // if it can be parsed
     if (iFile >= 0) {
       // create new info for that file
@@ -2692,6 +2839,7 @@ INDEX FixQuicksaveDir(const CTFileName &fnmDir, INDEX ctMax) {
 CTFileName CGame::GetQuickSaveName(BOOL bSave) {
   // find out base directory
   CTFileName fnmDir;
+
   if (GetSP()->sp_ctMaxPlayers == 1) {
     INDEX iPlayer = gm_iSinglePlayer;
 
@@ -2718,6 +2866,7 @@ CTFileName CGame::GetQuickSaveName(BOOL bSave) {
   // add save name to that
   CTFileName fnmName;
   fnmName.PrintF("QuickSave%06d.sav", iLast);
+
   return fnmDir + fnmName;
 }
 
@@ -2728,6 +2877,7 @@ void CGame::GameMainLoop(void) {
     }
 
     gam_bQuickSave = FALSE;
+
     CTFileName fnm = GetQuickSaveName(TRUE);
     CTString strDes = GetDefaultGameDescription(TRUE);
     SaveGame(fnm);
@@ -2742,6 +2892,7 @@ void CGame::GameMainLoop(void) {
     if (!gm_bGameOn || _pNetwork->IsServer()) {
       // do a quickload
       LoadGame(GetQuickSaveName(FALSE));
+
     // otherwise
     } else {
       // rejoin current section
@@ -2764,6 +2915,7 @@ void CGame::GameMainLoop(void) {
     _bStartProfilingNextTime = FALSE;
     _bProfiling = TRUE;
     _ctProfileRecording = 50;
+
     // reset the profiles
     _pfRenderProfile.Reset();
     _pfGfxProfile.Reset();
@@ -2779,6 +2931,7 @@ void CGame::GameMainLoop(void) {
       _bProfiling = FALSE;
       _bDumpNextTime = TRUE;
       _strProfile = " == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =\n";
+
       // Render profile
       CTString strRenderReport;
       _pfRenderProfile.Report(strRenderReport);
@@ -2840,7 +2993,7 @@ void CGame::GameMainLoop(void) {
   }
 }
 
-// SECOND ENCOUNTER MENU
+// Second Encounter menu
 static CTextureObject _toPointer;
 static CTextureObject _toBcgClouds;
 static CTextureObject _toBcgGrid;
@@ -2861,6 +3014,7 @@ static BOOL _bPopup;
 void TiledTextureSE(PIXaabbox2D &_boxScreen, FLOAT fStretch, MEX2D &vScreen, MEXaabbox2D &boxTexture) {
   PIX pixW = _boxScreen.Size()(1);
   PIX pixH = _boxScreen.Size()(2);
+
   boxTexture = MEXaabbox2D(MEX2D(0, 0), MEX2D(pixW / fStretch, pixH / fStretch));
   boxTexture += vScreen;
 }
@@ -2889,6 +3043,7 @@ void CGame::LCDInit(void) {
   } catch (char *strError) {
     FatalError("%s\n", strError);
   }
+
   ::LCDInit();
 }
 
@@ -2955,6 +3110,7 @@ void CGame::LCDRenderClouds1(void) {
     box = PIXaabbox2D(PIX2D(iXL * _pdp_SE->GetWidth() / 640, iYU * _pdp_SE->GetHeight() / 480),
                       PIX2D(iXR * _pdp_SE->GetWidth() / 640, iYM * _pdp_SE->GetHeight() / 480));
     _pdp_SE->PutTexture(&_toSamU, box, SE_COL_BLUE_NEUTRAL | 255);
+
     box = PIXaabbox2D(PIX2D(iXL * _pdp_SE->GetWidth() / 640, iYM * _pdp_SE->GetHeight() / 480),
                       PIX2D(iXR * _pdp_SE->GetWidth() / 640, iYB * _pdp_SE->GetHeight() / 480));
     _pdp_SE->PutTexture(&_toSamD, box, SE_COL_BLUE_NEUTRAL | 255);
@@ -2969,6 +3125,7 @@ void CGame::LCDRenderClouds1(void) {
     box = PIXaabbox2D(PIX2D(iXL * _pdp_SE->GetWidth() / 640, iYU * _pdp_SE->GetWidth() / 640),
                       PIX2D(iXR * _pdp_SE->GetWidth() / 640, iYM * _pdp_SE->GetWidth() / 640));
     _pdp_SE->PutTexture(&_toLeftU, box, SE_COL_BLUE_NEUTRAL | 200);
+
     box = PIXaabbox2D(PIX2D(iXL * _pdp_SE->GetWidth() / 640, iYM * _pdp_SE->GetWidth() / 640),
                       PIX2D(iXR * _pdp_SE->GetWidth() / 640, iYB * _pdp_SE->GetWidth() / 640));
     _pdp_SE->PutTexture(&_toLeftD, box, SE_COL_BLUE_NEUTRAL | 200);
@@ -3026,6 +3183,7 @@ void CGame::LCDRenderCompGrid(void) {
 void CGame::LCDDrawPointer(PIX pixI, PIX pixJ) {
   CDisplayMode dmCurrent;
   _pGfx->GetCurrentDisplayMode(dmCurrent);
+
   if (dmCurrent.IsFullScreen()) {
     while (ShowCursor(FALSE) >= 0);
 
@@ -3033,6 +3191,7 @@ void CGame::LCDDrawPointer(PIX pixI, PIX pixJ) {
     if (!_pInput->IsInputEnabled()) {
       while (ShowCursor(TRUE) < 0);
     }
+
     return;
   }
 
@@ -3040,6 +3199,7 @@ void CGame::LCDDrawPointer(PIX pixI, PIX pixJ) {
   PIX pixSizeJ = _toPointer.GetHeight();
   pixI -= 1;
   pixJ -= 1;
+
   _pdp_SE->PutTexture(&_toPointer, PIXaabbox2D(PIX2D(pixI, pixJ), PIX2D(pixI + pixSizeI, pixJ + pixSizeJ)), LCDFadedColor(C_WHITE | 255));
 
   //::LCDDrawPointer(pixI, pixJ);
@@ -3048,51 +3208,74 @@ void CGame::LCDDrawPointer(PIX pixI, PIX pixJ) {
 COLOR CGame::LCDGetColor(COLOR colDefault, const char *strName) {
   if (!strcmp(strName, "thumbnail border")) {
     colDefault = SE_COL_BLUE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "no thumbnail")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "popup box")) {
     colDefault = SE_COL_BLUE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "tool tip")) {
     colDefault = SE_COL_ORANGE_LIGHT | 255;
+
   } else if (!strcmp(strName, "unselected")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "selected")) {
     colDefault = SE_COL_ORANGE_LIGHT | 255;
+
   } else if (!strcmp(strName, "disabled selected")) {
     colDefault = SE_COL_ORANGE_DARK_LT | 255;
+
   } else if (!strcmp(strName, "disabled unselected")) {
     colDefault = SE_COL_ORANGE_DARK | 255;
+
   } else if (!strcmp(strName, "label")) {
     colDefault = C_WHITE | 255;
+
   } else if (!strcmp(strName, "title")) {
     colDefault = C_WHITE | 255;
+
   } else if (!strcmp(strName, "editing")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "hilited")) {
     colDefault = SE_COL_ORANGE_LIGHT | 255;
+
   } else if (!strcmp(strName, "hilited rectangle")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "edit fill")) {
     colDefault = SE_COL_BLUE_DARK_LT | 75;
+
   } else if (!strcmp(strName, "editing cursor")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "model box")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "hiscore header")) {
     colDefault = SE_COL_ORANGE_LIGHT | 255;
+
   } else if (!strcmp(strName, "hiscore data")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "hiscore last set")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "slider box")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "file info")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "display mode")) {
     colDefault = SE_COL_ORANGE_NEUTRAL | 255;
+
   } else if (!strcmp(strName, "bcg fill")) {
     colDefault = SE_COL_BLUE_DARK | 255;
   }
+
   return ::LCDGetColor(colDefault, strName);
 }
 

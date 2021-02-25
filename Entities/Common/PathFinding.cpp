@@ -39,12 +39,14 @@ CPathNode::CPathNode(class CNavigationMarker *penMarker) {
 CPathNode::~CPathNode(void) {
   // detach from marker when deleting
   ASSERT(pn_pnmMarker != NULL);
+
   pn_pnmMarker->m_ppnNode = NULL;
 }
 
 // get name of this node
 const CTString &CPathNode::GetName(void) {
   static CTString strNone = "<none>";
+
   if (this == NULL || pn_pnmMarker == NULL) {
     return strNone;
   } else {
@@ -58,10 +60,12 @@ CPathNode *CPathNode::GetLink(INDEX i) {
     ASSERT(FALSE);
     return NULL;
   }
+
   CNavigationMarker *pnm = pn_pnmMarker->GetLink(i);
   if (pnm == NULL) {
     return NULL;
   }
+
   return pnm->GetPathNode();
 }
 
@@ -69,6 +73,7 @@ CPathNode *CPathNode::GetLink(INDEX i) {
 static void SortIntoOpenList(CPathNode *ppnLink) {
   // start at head of the open list
   LISTITER(CPathNode, pn_lnInOpen) itpn(_lhOpen);
+
   // while the given node is further than the one in list
   while (ppnLink->pn_fF > itpn->pn_fF && !itpn.IsPastEnd()) {
     // move to next node
@@ -79,7 +84,8 @@ static void SortIntoOpenList(CPathNode *ppnLink) {
   if (itpn.IsPastEnd()) {
     // add to the end of list
     _lhOpen.AddTail(ppnLink->pn_lnInOpen);
-    // if not past end of list
+
+  // if not past end of list
   } else {
     // add before current node
     itpn.InsertBeforeCurrent(ppnLink->pn_lnInOpen);
@@ -123,26 +129,33 @@ static BOOL FindPath(CNavigationMarker *pnmSrc, CNavigationMarker *pnmDst) {
 
     // for each link of current node
     CPathNode *ppnLink = NULL;
+
     for (INDEX i = 0; (ppnLink = ppnNode->GetLink(i)) != NULL; i++) {
       PRINTOUT(CPrintF(" Link %d: %s\n", i, ppnLink->GetName()));
+
       // get cost to get to this node if coming from current node
       FLOAT fNewG = ppnLink->pn_fG + NodeDistance(ppnNode, ppnLink);
+
       // if a shorter path already exists
       if ((ppnLink->pn_lnInOpen.IsLinked() || ppnLink->pn_lnInClosed.IsLinked()) && fNewG >= ppnLink->pn_fG) {
         PRINTOUT(CPrintF("  shorter path exists through: %s\n", ppnLink->pn_ppnParent->GetName()));
+
         // skip this link
         continue;
       }
+
       // remember this path
       ppnLink->pn_ppnParent = ppnNode;
       ppnLink->pn_fG = fNewG;
       ppnLink->pn_fH = NodeDistance(ppnLink, ppnDst);
       ppnLink->pn_fF = ppnLink->pn_fG + ppnLink->pn_fH;
+
       // remove from closed list, if in it
       if (ppnLink->pn_lnInClosed.IsLinked()) {
         ppnLink->pn_lnInClosed.Remove();
         PRINTOUT(CPrintF("  %s removed from CLOSED\n", ppnLink->GetName()));
       }
+
       // add to open if not in it
       if (!ppnLink->pn_lnInOpen.IsLinked()) {
         SortIntoOpenList(ppnLink);
@@ -172,6 +185,7 @@ static void ClearPath(CEntity *penThis) {
     if (!IsOfClass(iten, "NavigationMarker")) {
       continue;
     }
+
     CNavigationMarker &nm = (CNavigationMarker &)*iten;
     ASSERT(nm.m_ppnNode == NULL);
   }}
@@ -190,10 +204,12 @@ static void FindClosestMarker(CEntity *penThis, const FLOAT3D &vSrc, CEntity *&p
       if (!IsOfClass(pen, "NavigationMarker")) {
         continue;
       }
+
       CNavigationMarker &nm = (CNavigationMarker &)*pen;
 
       // get distance from source
       FLOAT fDist = (vSrc - nm.GetPlacement().pl_PositionVector).Length();
+
       // if closer than best found
       if (fDist < fMinDist) {
         // remember it
@@ -208,6 +224,7 @@ static void FindClosestMarker(CEntity *penThis, const FLOAT3D &vSrc, CEntity *&p
     // fail
     vPath = vSrc;
     penMarker = NULL;
+
     return;
   }
 
@@ -222,6 +239,7 @@ void PATH_FindFirstMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &
   CNavigationMarker *pnmSrc;
   FLOAT3D vSrcPath;
   FindClosestMarker(penThis, vSrc, (CEntity *&)pnmSrc, vSrcPath);
+
   CNavigationMarker *pnmDst;
   FLOAT3D vDstPath;
   FindClosestMarker(penThis, vDst, (CEntity *&)pnmDst, vDstPath);
@@ -251,6 +269,7 @@ void PATH_FindNextMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &v
     // fail
     penMarker = NULL;
     vPath = vSrc;
+
     return;
   }
 
@@ -261,17 +280,22 @@ void PATH_FindNextMarker(CEntity *penThis, const FLOAT3D &vSrc, const FLOAT3D &v
   if (!bFound) {
     // just clean up and fail
     delete pnmDst->GetPathNode();
+
     ClearPath(penThis);
+
     penMarker = NULL;
     vPath = vSrc;
+
     return;
   }
 
   // find the first marker position after current
   CPathNode *ppn = pnmDst->GetPathNode();
+
   while (ppn->pn_ppnParent != NULL && ppn->pn_ppnParent->pn_pnmMarker != penMarker) {
     ppn = ppn->pn_ppnParent;
   }
+
   penMarker = ppn->pn_pnmMarker;
 
   // go there

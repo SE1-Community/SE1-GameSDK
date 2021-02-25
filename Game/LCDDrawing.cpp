@@ -127,8 +127,7 @@ extern void LCDRenderGrid(void) {
   _pdp->PutTexture(&_toBcgGrid, _boxScreen, boxBcgGrid, C_dGREEN | _ulA);
 }
 
-/*
-extern void LCDRenderClouds1(void) {
+/*extern void LCDRenderClouds1(void) {
   MEXaabbox2D boxBcgClouds1 = MEXaabbox2D(MEX2D(0, 0), MEX2D(256, 512));
   MEXaabbox2D boxBcgClouds2 = MEXaabbox2D(MEX2D(0, 0), MEX2D(512, 256));
 
@@ -142,21 +141,23 @@ extern void LCDRenderClouds1(void) {
 extern void LCDRenderClouds2(void) {
   MEXaabbox2D boxBcgClouds = MEXaabbox2D(MEX2D(0, 0), MEX2D(512, 512));
   boxBcgClouds += MEX2D(2, 10);
+
   _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds, C_BLACK|(_ulA >> 1));
 }
 
 extern void LCDRenderClouds2Light(void) {
   MEXaabbox2D boxBcgClouds2;
   TiledTexture(_boxScreen, 1.3f, MEX2D(2, 10), boxBcgClouds2);
+
   _pdp->PutTexture(&_toBcgClouds, _boxScreen, boxBcgClouds2, C_BLACK|(_ulA >> 1));
 }
 
 extern void LCDRenderGrid(void) {
   MEXaabbox2D boxBcgGrid;
   TiledTexture(_boxScreen, 1.0f, MEX2D(8, 8), boxBcgGrid);
+
   _pdp->PutTexture(&_toBcgGrid,   _boxScreen, boxBcgGrid, C_dGREEN|_ulA);
-}
-*/
+}*/
 
 extern COLOR LCDGetColor(COLOR colDefault, const char *strName) {
   return colDefault; // || ((colDefault & 0xFF0000) << 8);
@@ -173,6 +174,7 @@ extern COLOR LCDBlinkingColor(COLOR col0, COLOR col1) {
 extern void LCDDrawPointer(PIX pixI, PIX pixJ) {
   CDisplayMode dmCurrent;
   _pGfx->GetCurrentDisplayMode(dmCurrent);
+
   if (dmCurrent.IsFullScreen()) {
     while (ShowCursor(FALSE) >= 0);
 
@@ -180,6 +182,7 @@ extern void LCDDrawPointer(PIX pixI, PIX pixJ) {
     if (!_pInput->IsInputEnabled()) {
       while (ShowCursor(TRUE) < 0);
     }
+
     return;
   }
 

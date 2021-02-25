@@ -22,19 +22,20 @@ extern INDEX gam_iQuickStartMode;
 extern INDEX gam_iStartDifficulty;
 extern INDEX gam_iStartMode;
 
-// initialize game and load settings
+// Initialize game and load settings
 void CGame::Initialize(const CTFileName &fnGameSettings) {
   gm_fnSaveFileName = fnGameSettings;
   InitInternal();
 }
 
-// save settings and cleanup
+// Save settings and cleanup
 void CGame::End(void) {
   EndInternal();
 }
 
-// automaticaly manage input enable/disable toggling
+// Automaticaly manage input enable/disable toggling
 static BOOL _bInputEnabled = FALSE;
+
 void UpdateInputEnabledState(CViewPort *pvp) {
   // input should be enabled if application is active
   // and no menu is active and no console is active
@@ -59,16 +60,16 @@ void UpdateInputEnabledState(CViewPort *pvp) {
   }
 }
 
-// automaticaly manage pause toggling
+// Automaticaly manage pause toggling
 void UpdatePauseState(void) {
   BOOL bShouldPause = _pGame->gm_csConsoleState == CS_ON || _pGame->gm_csConsoleState == CS_TURNINGON
-                      || _pGame->gm_csConsoleState == CS_TURNINGOFF || _pGame->gm_csComputerState == CS_ON
-                      || _pGame->gm_csComputerState == CS_TURNINGON || _pGame->gm_csComputerState == CS_TURNINGOFF;
+                    || _pGame->gm_csConsoleState == CS_TURNINGOFF || _pGame->gm_csComputerState == CS_ON
+                    || _pGame->gm_csComputerState == CS_TURNINGON || _pGame->gm_csComputerState == CS_TURNINGOFF;
 
   _pNetwork->SetLocalPause(bShouldPause);
 }
 
-// run a quicktest game from within editor
+// Run a quicktest game from within editor
 void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pvp) {
   UINT uiMessengerMsg = RegisterWindowMessageA("Croteam Messenger: Incoming Message");
   EnableLoadingHook(pdp);
@@ -96,10 +97,12 @@ void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pv
 
   // initialy, game is running
   BOOL bRunning = TRUE;
+
   // while it is still running
   while (bRunning) {
     // while there are any messages in the message queue
     MSG msg;
+
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
       // if it is not a mouse message
       if (!(msg.message >= WM_MOUSEFIRST && msg.message <= WM_MOUSELAST)) {
@@ -108,6 +111,7 @@ void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pv
           // dispatch it
           TranslateMessage(&msg);
         }
+
         // if paint message
         if (msg.message == WM_PAINT) {
           // dispatch it
@@ -117,8 +121,8 @@ void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pv
 
       // if should stop
       if ((msg.message == WM_QUIT) || (msg.message == WM_CLOSE) || (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
-          || (msg.message == WM_ACTIVATE) || (msg.message == WM_CANCELMODE) || (msg.message == WM_KILLFOCUS)
-          || (msg.message == WM_ACTIVATEAPP)) {
+       || (msg.message == WM_ACTIVATE) || (msg.message == WM_CANCELMODE) || (msg.message == WM_KILLFOCUS)
+       || (msg.message == WM_ACTIVATEAPP)) {
         // stop running
         bRunning = FALSE;
         break;
@@ -129,12 +133,16 @@ void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pv
           // pause it
           _pNetwork->TogglePause();
         }
+
         char *pachrTemp = getenv("TEMP");
+
         if (pachrTemp != NULL) {
           FILE *pfileMessage = fopen(CTString(pachrTemp) + "Messenger.msg", "r");
+
           if (pfileMessage != NULL) {
             char achrMessage[1024];
             char *pachrMessage = fgets(achrMessage, 1024 - 1, pfileMessage);
+
             if (pachrMessage != NULL) {
               CPrintF("%s", pachrMessage);
             }
@@ -148,34 +156,40 @@ void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pv
         // toggle pause
         _pNetwork->TogglePause();
       }
-      if (msg.message == WM_KEYDOWN
-          && (MapVirtualKey(msg.wParam, 0) == 41 // scan code for '~'
-              || msg.wParam == VK_F1)) {
+
+      if (msg.message == WM_KEYDOWN && (MapVirtualKey(msg.wParam, 0) == 41 // scan code for '~'
+       || msg.wParam == VK_F1)) {
         if (_pGame->gm_csConsoleState == CS_OFF || _pGame->gm_csConsoleState == CS_TURNINGOFF) {
           _pGame->gm_csConsoleState = CS_TURNINGON;
         } else {
           _pGame->gm_csConsoleState = CS_TURNINGOFF;
         }
       }
+
       extern INDEX con_bTalk;
       if (con_bTalk && _pGame->gm_csConsoleState == CS_OFF) {
         con_bTalk = FALSE;
         _pGame->gm_csConsoleState = CS_TALK;
       }
+
       if (msg.message == WM_KEYDOWN) {
         ConsoleKeyDown(msg);
         if (_pGame->gm_csConsoleState != CS_ON) {
           ComputerKeyDown(msg);
         }
+
       } else if (msg.message == WM_KEYUP) {
         // special handler for talk (not to invoke return key bind)
-        if (msg.wParam == VK_RETURN && _pGame->gm_csConsoleState == CS_TALK)
+        if (msg.wParam == VK_RETURN && _pGame->gm_csConsoleState == CS_TALK) {
           _pGame->gm_csConsoleState = CS_OFF;
+        }
+
       } else if (msg.message == WM_CHAR) {
         ConsoleChar(msg);
       }
+
       if (msg.message == WM_LBUTTONDOWN || msg.message == WM_RBUTTONDOWN || msg.message == WM_LBUTTONDBLCLK
-          || msg.message == WM_RBUTTONDBLCLK || msg.message == WM_LBUTTONUP || msg.message == WM_RBUTTONUP) {
+       || msg.message == WM_RBUTTONDBLCLK || msg.message == WM_LBUTTONUP || msg.message == WM_RBUTTONUP) {
         if (_pGame->gm_csConsoleState != CS_ON) {
           ComputerKeyDown(msg);
         }
@@ -187,8 +201,10 @@ void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pv
       POINT pt;
       ::GetCursorPos(&pt);
       ::ScreenToClient(pvp->vp_hWnd, &pt);
+
       ComputerMouseMove(pt.x, pt.y);
     }
+
     UpdatePauseState();
     UpdateInputEnabledState(pvp);
 
@@ -209,13 +225,16 @@ void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pv
         pdp->Fill(C_BLACK | CT_OPAQUE);
         pdp->FillZBuffer(ZBUF_BACK);
       }
+
       // redraw view
       if (_pGame->gm_csComputerState != CS_ON) {
         GameRedrawView(pdp, (_pGame->gm_csConsoleState == CS_ON) ? 0 : GRV_SHOWEXTRAS);
       }
+
       ComputerRender(pdp);
       ConsoleRender(pdp);
       pdp->Unlock();
+
       // show it
       pvp->SwapBuffers();
     }
@@ -224,6 +243,7 @@ void CGame::QuickTest(const CTFileName &fnMapName, CDrawPort *pdp, CViewPort *pv
   if (_pGame->gm_csConsoleState != CS_OFF) {
     _pGame->gm_csConsoleState = CS_TURNINGOFF;
   }
+
   if (_pGame->gm_csComputerState != CS_OFF) {
     _pGame->gm_csComputerState = CS_TURNINGOFF;
     cmp_ppenPlayer = NULL;

@@ -24,7 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define AXIS_ACTIONS_CT              9
 #define SENSITIVITY_SLIDER_POSITIONS 25
 
-// all available axis-actions are listed here
+// All available axis-actions are listed here
 #define AXIS_MOVE_UD 0
 #define AXIS_MOVE_LR 1
 #define AXIS_MOVE_FB 2
@@ -46,7 +46,7 @@ enum ConsoleState {
 
 class CGameTimerHandler : public CTimerHandler {
   public:
-    // This is called every TickQuantum seconds.
+    // This is called every TickQuantum seconds
     virtual void HandleTimer(void);
 };
 
@@ -59,19 +59,16 @@ class CAxisAction {
     BOOL aa_bRelativeControler; // if this is controler of type "relative"
     BOOL aa_bSmooth;            // if controler's axis should be smoothed
 
-    // this is value for applying to "angle" or "movement" and it
-    // is calculated from invert flag and sensitivity attributes
-    // (i.e. for rotation colud be: AXIS_ROTATION_SPEED*sensitivity*(-1)(if should invert axis)
+    // Value for applying to "angle" or "movement" and it's calculated from invert flag and sensitivity attributes
+    // (i.e. for rotation colud be: AXIS_ROTATION_SPEED*sensitivity*(-1) (if should invert axis)
     FLOAT aa_fAxisInfluence;
 
     FLOAT aa_fLastReading; // last reading of this axis (for smoothing)
-    FLOAT aa_fAbsolute;    // absolute value of the axis (integrated from previous readings)
+    FLOAT aa_fAbsolute; // absolute value of the axis (integrated from previous readings)
 };
 
 class CButtonAction {
   public:
-    // default constructor
-    CButtonAction();
     CListNode ba_lnNode;
 
     INDEX ba_iFirstKey;
@@ -83,45 +80,50 @@ class CButtonAction {
     CTString ba_strCommandLineWhenPressed;
     CTString ba_strCommandLineWhenReleased;
 
-    // Assignment operator.
-    virtual CButtonAction &operator=(CButtonAction &baOriginal);
+    // Constructor
+    CButtonAction();
 
-    virtual void Read_t(CTStream &istrm);  // throw char*
-    virtual void Write_t(CTStream &ostrm); // throw char*
+    // Assignment
+    virtual CButtonAction &operator=(CButtonAction &baOriginal);
+    
+    // Write and read
+    virtual void Write_t(CTStream &ostrm); // throw char *
+    virtual void Read_t(CTStream &istrm); // throw char *
 };
 
 // Class containing information concerning controls system
 class CControls {
   public:
-    // list of mounted button actions
-    CListHead ctrl_lhButtonActions;
+    CListHead ctrl_lhButtonActions; // list of mounted button actions
 
-    // objects describing mounted controler's axis (mouse L/R, joy U/D) and their
+    // Objects describing mounted controler's axis (mouse L/R, joy U/D) and their
     // attributes (sensitivity, intvertness, type (relative/absolute) ...)
     CAxisAction ctrl_aaAxisActions[AXIS_ACTIONS_CT];
 
     FLOAT ctrl_fSensitivity; // global sensitivity for all axes
-    BOOL ctrl_bInvertLook;   // inverts up/down looking
-    BOOL ctrl_bSmoothAxes;   // smooths axes movements
+    BOOL ctrl_bInvertLook; // inverts up/down looking
+    BOOL ctrl_bSmoothAxes; // smooths axes movements
 
-    // operations
-    CControls(void);          // default constructor
-    virtual ~CControls(void); // default destructor
+    // Constructor
+    CControls(void);
 
-    // Assignment operator.
+    // Destructor
+    virtual ~CControls(void);
+
+    // Assignment
     virtual CControls &operator=(CControls &ctrlOriginal);
 
-    // depending on axis attributes and type (rotation or translation), calculates axis
+    // Depending on axis attributes and type (rotation or translation), calculates axis
     // influence factors for all axis actions
     virtual void CalculateInfluencesForAllAxis(void);
 
-    // get current reading of an axis
+    // Get current reading of an axis
     virtual FLOAT GetAxisValue(INDEX iAxis);
 
-    // check if these controls use any joystick
+    // Check if these controls use any joystick
     virtual BOOL UsesJoystick(void);
 
-    // switches button and axis action mounters to defaults
+    // Switch button and axis action mounters to defaults
     virtual void SwitchAxesToDefaults(void);
     virtual void SwitchToDefaults(void);
 
@@ -130,9 +132,9 @@ class CControls {
 
     virtual CButtonAction &AddButtonAction(void);
     virtual void RemoveButtonAction(CButtonAction &baButtonAction);
-
-    virtual void Load_t(CTFileName fnFile); // throw char *
+    
     virtual void Save_t(CTFileName fnFile); // throw char *
+    virtual void Load_t(CTFileName fnFile); // throw char *
 };
 
 class CLocalPlayer {
@@ -143,7 +145,7 @@ class CLocalPlayer {
     CPlayerSource *lp_pplsPlayerSource;
     UBYTE lp_ubPlayerControlsState[2048]; // current state of player controls that are local to the player
 
-    // Construction
+    // Constructor
     CLocalPlayer(void) {
       lp_pplsPlayerSource = NULL;
       lp_bActive = FALSE;
@@ -156,11 +158,11 @@ class CHighScoreEntry {
   public:
     CTString hse_strPlayer;
     enum CSessionProperties::GameDifficulty hse_gdDifficulty;
+
     TIME hse_tmTime;
     INDEX hse_ctKills;
     INDEX hse_ctScore;
 
-  public:
     CHighScoreEntry(void);
 };
 
@@ -206,23 +208,20 @@ class CGame {
     BOOL gm_bGameOn;
     BOOL gm_bMenuOn;       // set by serioussam.exe to notify that menu is active
     BOOL gm_bFirstLoading; // set by serioussam.exe to notify first loading
-    BOOL gm_bProfileDemo;  // demo profiling required
+    BOOL gm_bProfileDemo; // demo profiling required
 
-    // network provider itself
-    CNetworkProvider gm_npNetworkProvider;
-    // network provider's description
-    CTString gm_strNetworkProvider;
+    CNetworkProvider gm_npNetworkProvider; // network provider itself
+    CTString gm_strNetworkProvider; // network provider's description
 
-    // controls that are local to each player
+    // Controls that are local to each player
     SLONG gm_slPlayerControlsSize;
     void *gm_pvGlobalPlayerControls;
 
-    // index of local player
-    // (-1) if not active
+    // Index of local player (-1 if not active)
     INDEX gm_aiMenuLocalPlayers[4];
     INDEX gm_aiStartLocalPlayers[4];
 
-    // players that are currently playing on local machine (up to 4)
+    // Players that are currently playing on local machine (up to 4)
     CLocalPlayer gm_lpLocalPlayers[4];
 
     // Operations
@@ -238,85 +237,96 @@ class CGame {
     void SaveThumbnail(const CTFileName &fnm);
     CTFileName GetQuickSaveName(BOOL bSave);
     void GameHandleTimer(void);
-
-    virtual void LoadPlayersAndControls(void);
+    
     virtual void SavePlayersAndControls(void);
-
-    virtual void Load_t(void);
+    virtual void LoadPlayersAndControls(void);
+    
     virtual void Save_t(void);
+    virtual void Load_t(void);
 
-    // set properties for a quick start session
+    // Set properties for a quick start session
     virtual void SetQuickStartSession(CSessionProperties &sp);
-    // set properties for a single player session
+
+    // Set properties for a single player session
     virtual void SetSinglePlayerSession(CSessionProperties &sp);
-    // set properties for a multiplayer session
+
+    // Set properties for a multiplayer session
     virtual void SetMultiPlayerSession(CSessionProperties &sp);
 
-    // game loop functions
+    // Game loop functions
     #define GRV_SHOWEXTRAS (1L << 0) // add extra stuff like console, weapon, pause
     virtual void GameRedrawView(CDrawPort *pdpDrawport, ULONG ulFlags);
     virtual void GameMainLoop(void);
 
-    // console functions
+    // Console functions
     virtual void ConsoleKeyDown(MSG msg);
     virtual void ConsoleChar(MSG msg);
     virtual void ConsoleRender(CDrawPort *pdpDrawport);
     virtual void ConsolePrintLastLines(CDrawPort *pdpDrawport);
 
-    // computer functions
+    // Computer functions
     virtual void ComputerMouseMove(PIX pixX, PIX pixY);
     virtual void ComputerKeyDown(MSG msg);
     virtual void ComputerRender(CDrawPort *pdpDrawport);
     virtual void ComputerForceOff();
 
-    // loading hook functions
+    // Loading hook functions
     virtual void EnableLoadingHook(CDrawPort *pdpDrawport);
     virtual void DisableLoadingHook(void);
 
-    // get default description for a game (for save games/demos)
+    // Get default description for a game (for save games/demos)
     virtual CTString GetDefaultGameDescription(BOOL bWithInfo);
 
-    // game start/end functions
+    // Game start/end functions
     virtual BOOL NewGame(const CTString &strSessionName, const CTFileName &fnWorld, class CSessionProperties &sp);
     virtual BOOL JoinGame(CNetworkSession &session);
+    virtual void StopGame(void);
+
     virtual BOOL LoadGame(const CTFileName &fnGame);
     virtual BOOL SaveGame(const CTFileName &fnGame);
-    virtual void StopGame(void);
+
     virtual BOOL StartDemoPlay(const CTFileName &fnDemo);
+
     virtual BOOL StartDemoRec(const CTFileName &fnDemo);
     virtual void StopDemoRec(void);
+
     virtual INDEX GetPlayersCount(void);
     virtual INDEX GetLivePlayersCount(void);
 
-    // printout and dump extensive demo profile report
+    // Printout and dump extensive demo profile report
     virtual CTString DemoReportFragmentsProfile(INDEX iRate);
     virtual CTString DemoReportAnalyzedProfile(void);
 
-    // functions called from world editor
+    // Functions called from world editor
     virtual void Initialize(const CTFileName &fnGameSettings);
     virtual void End(void);
     virtual void QuickTest(const CTFileName &fnMapName, CDrawPort *pdpDrawport, CViewPort *pvpViewport);
 
-    // interface rendering functions
+    // Interface rendering functions
     virtual void LCDInit(void);
     virtual void LCDEnd(void);
+
     virtual void LCDPrepare(FLOAT fFade);
     virtual void LCDSetDrawport(CDrawPort *pdp);
+
     virtual void LCDDrawBox(PIX pixUL, PIX pixDR, PIXaabbox2D &box, COLOR col);
+
     virtual void LCDScreenBox(COLOR col);
     virtual void LCDScreenBoxOpenLeft(COLOR col);
     virtual void LCDScreenBoxOpenRight(COLOR col);
+
     virtual void LCDRenderClouds1(void);
     virtual void LCDRenderClouds2(void);
     void LCDRenderCloudsForComp(void);
     void LCDRenderCompGrid(void);
     virtual void LCDRenderGrid(void);
     virtual void LCDDrawPointer(PIX pixI, PIX pixJ);
+
     virtual COLOR LCDGetColor(COLOR colDefault, const char *strName);
     virtual COLOR LCDFadedColor(COLOR col);
     virtual COLOR LCDBlinkingColor(COLOR col0, COLOR col1);
 
-    // menu interface functions
+    // Menu interface functions
     virtual void MenuPreRenderMenu(const char *strMenuName);
     virtual void MenuPostRenderMenu(const char *strMenuName);
 };

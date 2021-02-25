@@ -19,7 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #pragma once
 #endif
 
-// collision flags
+// Collision flags
 #define ECBI_BRUSH            (1UL << 0)
 #define ECBI_MODEL            (1UL << 1)
 #define ECBI_PROJECTILE_MAGIC (1UL << 2)
@@ -30,7 +30,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define ECBI_CORPSE_SOLID     (1UL << 7)
 #define ECBI_PLAYER           (1UL << 8)
 
-// standard flag combinations:
+// Standard flag combinations
 
 // COLLISION COMBINATIONS
 

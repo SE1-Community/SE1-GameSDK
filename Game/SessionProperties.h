@@ -91,7 +91,7 @@ class CUniversalSessionProperties {
       UBYTE usp_aubDummy[NET_MAXSESSIONPROPERTIES];
     };
 
-    // must have exact the size as allocated block in engine
+    // Must have exact the size as allocated block in engine
     CUniversalSessionProperties() {
       ASSERT(sizeof(CSessionProperties) <= NET_MAXSESSIONPROPERTIES);
       ASSERT(sizeof(CUniversalSessionProperties) == NET_MAXSESSIONPROPERTIES);

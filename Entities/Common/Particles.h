@@ -15,10 +15,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // init particle effects
 void DECL_DLL InitParticles(void);
+
 // close particle effects
 void DECL_DLL CloseParticles(void);
+
 // function for rendering local viewer particles
 void DECL_DLL Particles_ViewerLocal(CEntity *penView);
+
 // different particle effects
 void DECL_DLL Particles_RomboidTrail(CEntity *pen);
 void DECL_DLL Particles_RomboidTrail_Prepare(CEntity *pen);

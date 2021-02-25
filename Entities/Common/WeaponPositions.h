@@ -14,23 +14,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
 #if 0 // use this part when manually setting weapon positions
-
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fH[30+1];",    &wpn_fH);
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fP[30+1];",    &wpn_fP);
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fB[30+1];",    &wpn_fB);
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fX[30+1];",    &wpn_fX);
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fY[30+1];",    &wpn_fY);
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fZ[30+1];",    &wpn_fZ);
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fFOV[30+1];",  &wpn_fFOV);
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fClip[30+1];", &wpn_fClip);
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fFX[30+1];", &wpn_fFX);
-  _pShell->DeclareSymbol("persistent user FLOAT wpn_fFY[30+1];", &wpn_fFY);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fH[30+1];", &wpn_fH);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fP[30+1];", &wpn_fP);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fB[30+1];", &wpn_fB);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fX[30+1];", &wpn_fX);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fY[30+1];", &wpn_fY);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fZ[30+1];", &wpn_fZ);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fFOV[30+1];", &wpn_fFOV);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fClip[30+1];", &wpn_fClip);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fFX[30+1];", &wpn_fFX);
+_pShell->DeclareSymbol("persistent user FLOAT wpn_fFY[30+1];", &wpn_fFY);
 //_pShell->DeclareSymbol("persistent user FLOAT wpn_fFZ[30+1];", &wpn_fFZ);
 #else
-/*
-_pShell->DeclareSymbol("user FLOAT wpn_fFX[30+1];", &wpn_fFX);
-_pShell->DeclareSymbol("user FLOAT wpn_fFY[30+1];", &wpn_fFY);
-*/
+/*_pShell->DeclareSymbol("user FLOAT wpn_fFX[30+1];", &wpn_fFX);
+_pShell->DeclareSymbol("user FLOAT wpn_fFY[30+1];", &wpn_fFY);*/
 
 #pragma warning(disable : 4305)
 
@@ -347,8 +344,8 @@ wpn_fFY[30] = (FLOAT)0;
 
 // the following lines have been moved to the upper part
 
-/*// tommygun
-wpn_fH[6]=(FLOAT)4;
+// tommygun
+/*wpn_fH[6]=(FLOAT)4;
 wpn_fP[6]=(FLOAT)3;
 wpn_fB[6]=(FLOAT)0;
 wpn_fX[6]=(FLOAT)0.121;

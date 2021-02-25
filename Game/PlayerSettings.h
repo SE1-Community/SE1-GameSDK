@@ -41,7 +41,7 @@ class CPlayerSettings {
     #define PSF_NOBOBBING       (1L << 6) // view bobbing on/off (for people with motion sickness problems)
     ULONG ps_ulFlags; // various flags
 
-    // get filename for model
+    // Get filename for model
     CTFileName GetModelFilename(void) const {
       char achModelFile[MAX_PATH + 1];
       memset(achModelFile, 0, sizeof(achModelFile));
