@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -119,16 +119,16 @@ functions:
   };
 
   virtual const CTFileName &GetComputerMessageName(void) const {
-    static DECLARE_CTFILENAME(fnmRocketman,   "Data\\Messages\\Enemies\\Rocketman.txt");
+    static DECLARE_CTFILENAME(fnmRocketman, "Data\\Messages\\Enemies\\Rocketman.txt");
     static DECLARE_CTFILENAME(fnmFirecracker, "Data\\Messages\\Enemies\\Firecracker.txt");
-    static DECLARE_CTFILENAME(fnmBomberman,   "Data\\Messages\\Enemies\\Bomberman.txt");
-    static DECLARE_CTFILENAME(fnmKamikaze,    "Data\\Messages\\Enemies\\Kamikaze.txt");
+    static DECLARE_CTFILENAME(fnmBomberman, "Data\\Messages\\Enemies\\Bomberman.txt");
+    static DECLARE_CTFILENAME(fnmKamikaze, "Data\\Messages\\Enemies\\Kamikaze.txt");
     switch (m_hdtType) {
-    default: ASSERT(FALSE);
-    case HDT_ROCKETMAN:   return fnmRocketman;
-    case HDT_FIRECRACKER: return fnmFirecracker;
-    case HDT_BOMBERMAN:   return fnmBomberman;
-    case HDT_KAMIKAZE:    return fnmKamikaze;
+      default: ASSERT(FALSE);
+      case HDT_ROCKETMAN: return fnmRocketman;
+      case HDT_FIRECRACKER: return fnmFirecracker;
+      case HDT_BOMBERMAN: return fnmBomberman;
+      case HDT_KAMIKAZE: return fnmKamikaze;
     }
   };
 
@@ -140,51 +140,57 @@ functions:
     PrecacheSound(SOUND_DEATH);
 
     switch (m_hdtType) {
-    case HDT_FIRECRACKER: { 
-      PrecacheSound(SOUND_FIREFIRECRACKER);
-      PrecacheClass(CLASS_PROJECTILE, PRT_HEADMAN_FIRECRACKER);
-                          } break;
-    case HDT_ROCKETMAN:   {  
-      PrecacheSound(SOUND_FIREROCKETMAN);
-      PrecacheClass(CLASS_PROJECTILE, PRT_HEADMAN_ROCKETMAN);
-                          } break;
-    case HDT_BOMBERMAN:   {  
-      PrecacheSound(SOUND_FIREBOMBERMAN);
-      PrecacheClass(CLASS_PROJECTILE, PRT_HEADMAN_BOMBERMAN);
-      PrecacheModel(MODEL_BOMB);
-      PrecacheTexture(TEXTURE_BOMB);  
-                          } break;
-    case HDT_KAMIKAZE:    { 
-      PrecacheSound(SOUND_ATTACKKAMIKAZE);
-      PrecacheSound(SOUND_IDLEKAMIKAZE);
-      PrecacheClass(CLASS_BASIC_EFFECT, BET_BOMB);
-      PrecacheModel(MODEL_BOMB);
-      PrecacheTexture(TEXTURE_BOMB);  
-                          } break;
+      case HDT_FIRECRACKER: {
+        PrecacheSound(SOUND_FIREFIRECRACKER);
+        PrecacheClass(CLASS_PROJECTILE, PRT_HEADMAN_FIRECRACKER);
+      } break;
+      case HDT_ROCKETMAN: {
+        PrecacheSound(SOUND_FIREROCKETMAN);
+        PrecacheClass(CLASS_PROJECTILE, PRT_HEADMAN_ROCKETMAN);
+      } break;
+      case HDT_BOMBERMAN: {
+        PrecacheSound(SOUND_FIREBOMBERMAN);
+        PrecacheClass(CLASS_PROJECTILE, PRT_HEADMAN_BOMBERMAN);
+        PrecacheModel(MODEL_BOMB);
+        PrecacheTexture(TEXTURE_BOMB);
+      } break;
+      case HDT_KAMIKAZE: {
+        PrecacheSound(SOUND_ATTACKKAMIKAZE);
+        PrecacheSound(SOUND_IDLEKAMIKAZE);
+        PrecacheClass(CLASS_BASIC_EFFECT, BET_BOMB);
+        PrecacheModel(MODEL_BOMB);
+        PrecacheTexture(TEXTURE_BOMB);
+      } break;
     }
   };
 
   // Fill in entity statistics - for AI purposes only
-  BOOL FillEntityStatistics(EntityStats *pes)
-  {
+  BOOL FillEntityStatistics(EntityStats *pes) {
     CEnemyBase::FillEntityStatistics(pes);
     switch (m_hdtType) {
-    case HDT_FIRECRACKER: { pes->es_strName+=" Firecracker"; } break;
-    case HDT_ROCKETMAN:   { pes->es_strName+=" Rocketman"; } break;
-    case HDT_BOMBERMAN:   { pes->es_strName+=" Bomberman"; } break;
-    case HDT_KAMIKAZE:    { pes->es_strName+=" Kamikaze"; } break;
+      case HDT_FIRECRACKER: {
+        pes->es_strName += " Firecracker";
+      } break;
+      case HDT_ROCKETMAN: {
+        pes->es_strName += " Rocketman";
+      } break;
+      case HDT_BOMBERMAN: {
+        pes->es_strName += " Bomberman";
+      } break;
+      case HDT_KAMIKAZE: {
+        pes->es_strName += " Kamikaze";
+      } break;
     }
     return TRUE;
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // firecracker and rocketman can't harm headman
-    if (!IsOfClass(penInflictor, "Headman") || 
-        !(((CHeadman*)penInflictor)->m_hdtType == HDT_FIRECRACKER || 
-          ((CHeadman*)penInflictor)->m_hdtType == HDT_ROCKETMAN)) {
+    if (!IsOfClass(penInflictor, "Headman")
+        || !(((CHeadman *)penInflictor)->m_hdtType == HDT_FIRECRACKER
+             || ((CHeadman *)penInflictor)->m_hdtType == HDT_ROCKETMAN)) {
       CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
 
       // if died of chainsaw
@@ -195,11 +201,10 @@ functions:
     }
   };
 
-
   // damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
     INDEX iAnim;
-    if (IRnd()%2) {
+    if (IRnd() % 2) {
       iAnim = HEADMAN_ANIM_WOUND1;
     } else {
       iAnim = HEADMAN_ANIM_WOUND2;
@@ -213,15 +218,15 @@ functions:
     INDEX iAnim;
     FLOAT3D vFront;
     GetHeadingDirection(0, vFront);
-    FLOAT fDamageDir = m_vDamage%vFront;
-    if (fDamageDir<0) {
-      if (Abs(fDamageDir)<10.0f) {
+    FLOAT fDamageDir = m_vDamage % vFront;
+    if (fDamageDir < 0) {
+      if (Abs(fDamageDir) < 10.0f) {
         iAnim = HEADMAN_ANIM_DEATH_EASY_FALL_BACK;
       } else {
         iAnim = HEADMAN_ANIM_DEATH_FALL_BACK;
       }
     } else {
-      if (Abs(fDamageDir)<10.0f) {
+      if (Abs(fDamageDir) < 10.0f) {
         iAnim = HEADMAN_ANIM_DEATH_EASY_FALL_FORWARD;
       } else {
         iAnim = HEADMAN_ANIM_DEATH_FALL_ON_KNEES;
@@ -233,33 +238,27 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    vStretch=FLOAT3D(1,1,2);
-    if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_EASY_FALL_BACK)
-    {
-      vStretch=vStretch*0.3f;
+    vStretch = FLOAT3D(1, 1, 2);
+    if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_EASY_FALL_BACK) {
+      vStretch = vStretch * 0.3f;
       return 0.864f;
     }
-    if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_FALL_BACK)
-    {
-      vStretch=vStretch*0.75f;
+    if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_FALL_BACK) {
+      vStretch = vStretch * 0.75f;
       return 0.48f;
-    }    
-    if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_EASY_FALL_FORWARD)
-    {
-      vStretch=vStretch*0.3f;
-      return 1.12f;
     }
-    else if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_FALL_ON_KNEES)
-    {
-      vStretch=vStretch*0.75f;
+    if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_EASY_FALL_FORWARD) {
+      vStretch = vStretch * 0.3f;
+      return 1.12f;
+    } else if (GetModelObject()->GetAnim() == HEADMAN_ANIM_DEATH_FALL_ON_KNEES) {
+      vStretch = vStretch * 0.75f;
       return 1.035f;
     }
     return -1.0f;
   };
 
   // should this enemy blow up (spawn debris)
-  BOOL ShouldBlowUp(void) 
-  {
+  BOOL ShouldBlowUp(void) {
     if (m_hdtType == HDT_KAMIKAZE && GetHealth() <= 0) {
       return TRUE;
     } else {
@@ -274,27 +273,26 @@ functions:
 
   // virtual anim functions
   void StandingAnim(void) {
-    StartModelAnim(HEADMAN_ANIM_IDLE_PATROL, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(HEADMAN_ANIM_IDLE_PATROL, AOF_LOOPING | AOF_NORESTART);
     if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOff();
     }
   };
-  void StandingAnimFight(void)
-  {
-    StartModelAnim(HEADMAN_ANIM_IDLE_FIGHT, AOF_LOOPING|AOF_NORESTART);
+  void StandingAnimFight(void) {
+    StartModelAnim(HEADMAN_ANIM_IDLE_FIGHT, AOF_LOOPING | AOF_NORESTART);
     if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOff();
     }
   }
   void WalkingAnim(void) {
-    StartModelAnim(HEADMAN_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(HEADMAN_ANIM_WALK, AOF_LOOPING | AOF_NORESTART);
   };
   void RunningAnim(void) {
     if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOn();
-      StartModelAnim(HEADMAN_ANIM_KAMIKAZE_ATTACK, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(HEADMAN_ANIM_KAMIKAZE_ATTACK, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(HEADMAN_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(HEADMAN_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void RotatingAnim(void) {
@@ -334,7 +332,7 @@ functions:
   void KamikazeSoundOn(void) {
     if (!m_bAttackSound) {
       m_bAttackSound = TRUE;
-      PlaySound(m_soSound, SOUND_ATTACKKAMIKAZE, SOF_3D|SOF_LOOP);
+      PlaySound(m_soSound, SOUND_ATTACKKAMIKAZE, SOF_3D | SOF_LOOP);
     }
   }
   void KamikazeSoundOff(void) {
@@ -344,7 +342,7 @@ functions:
     }
   }
 
-// BLOW UP FUNCTIONS
+  // BLOW UP FUNCTIONS
 
   void BlowUpNotify(void) {
     // kamikaze and bomberman explode if is not already exploded
@@ -408,12 +406,10 @@ functions:
       FLOAT3D vSource;
       GetEntityInfoPosition(this, eiHeadman.vTargetCenter, vSource);
       if (m_hdtType == HDT_BOMBERMAN) {
-        InflictDirectDamage(this, this, DMT_EXPLOSION, 100.0f, vSource, 
-          -en_vGravityDir);
+        InflictDirectDamage(this, this, DMT_EXPLOSION, 100.0f, vSource, -en_vGravityDir);
         InflictRangeDamage(this, DMT_EXPLOSION, 15.0f, vSource, 1.0f, 6.0f);
       } else {
-        InflictDirectDamage(this, this, DMT_CLOSERANGE, 100.0f, vSource, 
-          -en_vGravityDir);
+        InflictDirectDamage(this, this, DMT_CLOSERANGE, 100.0f, vSource, -en_vGravityDir);
         InflictRangeDamage(this, DMT_EXPLOSION, 30.0f, vSource, 2.75f, 8.0f);
       }
 
@@ -421,9 +417,9 @@ functions:
       CPlacement3D plExplosion = GetPlacement();
       CEntityPointer penExplosion = CreateEntity(plExplosion, CLASS_BASIC_EFFECT);
       ESpawnEffect eSpawnEffect;
-      eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
+      eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
       eSpawnEffect.betType = BET_BOMB;
-      eSpawnEffect.vStretch = FLOAT3D(1.0f,1.0f,1.0f);
+      eSpawnEffect.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
       penExplosion->Initialize(eSpawnEffect);
 
       // explosion debris
@@ -438,20 +434,19 @@ functions:
     }
   };
 
-// ******
-// overrides from CEnemyBase to provide exploding on close range
+  // ******
+  // overrides from CEnemyBase to provide exploding on close range
 
   // set speeds for movement towards desired position
-  void SetSpeedsToDesiredPosition(const FLOAT3D &vPosDelta, FLOAT fPosDistance, BOOL bGoingToPlayer)
-  {
+  void SetSpeedsToDesiredPosition(const FLOAT3D &vPosDelta, FLOAT fPosDistance, BOOL bGoingToPlayer) {
     // if very close to player
     if (m_hdtType == HDT_KAMIKAZE && CalcDist(m_penEnemy) < EXPLODE_KAMIKAZE) {
       // explode
       SetHealth(-10000.0f);
-      m_vDamage = FLOAT3D(0,10000,0);
+      m_vDamage = FLOAT3D(0, 10000, 0);
       SendEvent(EDeath());
 
-    // if not close
+      // if not close
     } else {
       // behave as usual
       CEnemyBase::SetSpeedsToDesiredPosition(vPosDelta, fPosDistance, bGoingToPlayer);
@@ -459,8 +454,7 @@ functions:
   }
 
   // get movement frequency for attack
-  virtual FLOAT GetAttackMoveFrequency(FLOAT fEnemyDistance)
-  {
+  virtual FLOAT GetAttackMoveFrequency(FLOAT fEnemyDistance) {
     // kamikaze must have sharp reflexes when close
     if (m_hdtType == HDT_KAMIKAZE && fEnemyDistance < m_fCloseDistance) {
       return 0.1f;
@@ -470,7 +464,6 @@ functions:
   }
 
 procedures:
-// ATTACK ENEMY
   InitializeAttack(EVoid) : CEnemyBase::InitializeAttack {
     if (m_hdtType == HDT_KAMIKAZE) {
       KamikazeSoundOn();
@@ -612,10 +605,8 @@ procedures:
     return EEnd();
   };
 
-
-
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);

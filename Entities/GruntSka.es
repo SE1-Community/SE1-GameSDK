@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -105,61 +105,58 @@ components:
  58 sound   SOUND_DEATH           "ModelsMP\\Enemies\\Grunt\\Sounds\\Death.wav",
 
 functions:
-
   void CGruntSka(void)
   {
     // Get animation id's
-    idGrunt_Wound          = ska_GetIDFromStringTable("Grunt_Wound");
-    idGrunt_Run            = ska_GetIDFromStringTable("Grunt_Run");
-    idGrunt_IdlePatrol     = ska_GetIDFromStringTable("Grunt_IdlePatrol");
-    idGrunt_IdleAttack     = ska_GetIDFromStringTable("Grunt_IdleAttack");
-    idGrunt_Fire           = ska_GetIDFromStringTable("Grunt_Fire");
-    idGrunt_Default        = ska_GetIDFromStringTable("Grunt_Default");
-    idGrunt_DeathForward   = ska_GetIDFromStringTable("Grunt_DeathForward");
-    idGrunt_DeathBackward  = ska_GetIDFromStringTable("Grunt_DeathBackward");
-    idGrunt_GunModel       = ska_GetIDFromStringTable("Flamer");
-    
+    idGrunt_Wound = ska_GetIDFromStringTable("Grunt_Wound");
+    idGrunt_Run = ska_GetIDFromStringTable("Grunt_Run");
+    idGrunt_IdlePatrol = ska_GetIDFromStringTable("Grunt_IdlePatrol");
+    idGrunt_IdleAttack = ska_GetIDFromStringTable("Grunt_IdleAttack");
+    idGrunt_Fire = ska_GetIDFromStringTable("Grunt_Fire");
+    idGrunt_Default = ska_GetIDFromStringTable("Grunt_Default");
+    idGrunt_DeathForward = ska_GetIDFromStringTable("Grunt_DeathForward");
+    idGrunt_DeathBackward = ska_GetIDFromStringTable("Grunt_DeathBackward");
+    idGrunt_GunModel = ska_GetIDFromStringTable("Flamer");
+
     // Get colision box id's
-    idGrund_NormalBox      = ska_GetIDFromStringTable("Normal");
-    idGrund_DeathBox       = ska_GetIDFromStringTable("Death");
+    idGrund_NormalBox = ska_GetIDFromStringTable("Normal");
+    idGrund_DeathBox = ska_GetIDFromStringTable("Death");
   };
 
-  void CreateTestModelInstance()
-  {
+  void CreateTestModelInstance() {
     try {
-      m_miTest.AddMesh_t((CTString)"ModelsSKA\\Test\\Arm\\Arm.bm");
-      m_miTest.AddSkeleton_t((CTString)"ModelsSKA\\Test\\Arm\\Arm.bs");
-      m_miTest.AddAnimSet_t((CTString)"ModelsSKA\\Test\\Arm\\Arm.ba");
-      m_miTest.AddTexture_t((CTString)"ModelsSKA\\Test\\Arm\\Objects\\Arm.tex","Arm",NULL);
-      m_miTest.AddColisionBox("Default",FLOAT3D(-0.5f,0.0f,-0.5f),FLOAT3D(0.5f,2.0f,0.5f));
+      m_miTest.AddMesh_t((CTString) "ModelsSKA\\Test\\Arm\\Arm.bm");
+      m_miTest.AddSkeleton_t((CTString) "ModelsSKA\\Test\\Arm\\Arm.bs");
+      m_miTest.AddAnimSet_t((CTString) "ModelsSKA\\Test\\Arm\\Arm.ba");
+      m_miTest.AddTexture_t((CTString) "ModelsSKA\\Test\\Arm\\Objects\\Arm.tex", "Arm", NULL);
+      m_miTest.AddColisionBox("Default", FLOAT3D(-0.5f, 0.0f, -0.5f), FLOAT3D(0.5f, 2.0f, 0.5f));
     } catch (char *strErr) {
       FatalError(strErr);
     }
   }
 
-  void BuildGruntModel()
-  {
+  void BuildGruntModel() {
     // CreateTestModelInstance();
 
     en_pmiModelInstance = CreateModelInstance("GruntSka");
     CModelInstance *pmi = GetModelInstance();
-    try{
+    try {
       // setup grunt solider
-      pmi->AddMesh_t((CTString)"ModelsSKA\\Enemies\\Grunt\\Grunt.bm");
-      pmi->AddSkeleton_t((CTString)"ModelsSKA\\Enemies\\Grunt\\Grunt.bs");
-      pmi->AddAnimSet_t((CTString)"ModelsSKA\\Enemies\\Grunt\\Grunt.ba");
-      pmi->AddTexture_t((CTString)"ModelsSKA\\Enemies\\Grunt\\Soldier.tex","Grunt",NULL);
-      pmi->AddColisionBox("Default",FLOAT3D(-0.5f,0.0f,-0.5f),FLOAT3D(0.5f,2.0f,0.5f));
-      
+      pmi->AddMesh_t((CTString) "ModelsSKA\\Enemies\\Grunt\\Grunt.bm");
+      pmi->AddSkeleton_t((CTString) "ModelsSKA\\Enemies\\Grunt\\Grunt.bs");
+      pmi->AddAnimSet_t((CTString) "ModelsSKA\\Enemies\\Grunt\\Grunt.ba");
+      pmi->AddTexture_t((CTString) "ModelsSKA\\Enemies\\Grunt\\Soldier.tex", "Grunt", NULL);
+      pmi->AddColisionBox("Default", FLOAT3D(-0.5f, 0.0f, -0.5f), FLOAT3D(0.5f, 2.0f, 0.5f));
+
       // setup weapon
       CModelInstance *pmiFlamer = CreateModelInstance("Flamer");
-      pmiFlamer->AddMesh_t((CTString)"ModelsSKA\\Weapons\\Flamer\\Flamer.bm");
-      pmiFlamer->AddSkeleton_t((CTString)"ModelsSKA\\Weapons\\Flamer\\Flamer.bs");
-      pmiFlamer->AddAnimSet_t((CTString)"ModelsSKA\\Weapons\\Flamer\\Flamer.ba");
-      pmiFlamer->AddTexture_t((CTString)"ModelsSKA\\Weapons\\Flamer\\Flamer.tex","Flamer",NULL);
-      pmiFlamer->AddTexture_t((CTString)"ModelsSKA\\Enemies\\Grunt\\Lava04FX.tex","Lava04FX",NULL);
+      pmiFlamer->AddMesh_t((CTString) "ModelsSKA\\Weapons\\Flamer\\Flamer.bm");
+      pmiFlamer->AddSkeleton_t((CTString) "ModelsSKA\\Weapons\\Flamer\\Flamer.bs");
+      pmiFlamer->AddAnimSet_t((CTString) "ModelsSKA\\Weapons\\Flamer\\Flamer.ba");
+      pmiFlamer->AddTexture_t((CTString) "ModelsSKA\\Weapons\\Flamer\\Flamer.tex", "Flamer", NULL);
+      pmiFlamer->AddTexture_t((CTString) "ModelsSKA\\Enemies\\Grunt\\Lava04FX.tex", "Lava04FX", NULL);
       // Set flamer offset
-      pmiFlamer->SetOffsetRot(ANGLE3D(0,0,180));
+      pmiFlamer->SetOffsetRot(ANGLE3D(0, 0, 180));
       // Attach flamer to grunt
       pmi->AddChild(pmiFlamer);
 
@@ -169,18 +166,17 @@ functions:
 
       // Set colision info
       SetSkaColisionInfo();
-    } catch(char *strErr) {
+    } catch (char *strErr) {
       FatalError(strErr);
     }
   };
 
-  void BuildCommanderModel(CEntity *penGrunt)
-  {
+  void BuildCommanderModel(CEntity *penGrunt) {
     SetSkaModel("ModelsSKA\\Enemies\\Grunt\\CommanderNoGun.smc");
     CModelInstance *pmiFlamer = NULL;
-    try{
+    try {
       pmiFlamer = ParseSmcFile_t("ModelsSKA\\Weapons\\Flamer\\Flamer.smc");
-    } catch(char *strErr) {
+    } catch (char *strErr) {
       FatalError(strErr);
     }
     // Set flamer parent bone
@@ -189,30 +185,30 @@ functions:
     pmi->AddChild(pmiFlamer);
     pmiFlamer->SetParentBone(iParenBoneID);
     // Set flamer offset
-    pmiFlamer->SetOffsetRot(ANGLE3D(0,0,180));
+    pmiFlamer->SetOffsetRot(ANGLE3D(0, 0, 180));
     // Set colision info
     SetSkaColisionInfo();
   };
-/*
-  void Particles_OneParticle( FLOAT3D vPos )
-  {
-    Particle_PrepareTexture(&_toStar01, PBT_ADDALPHA);
-    Particle_SetTexturePart( 512, 512, 0, 0);
-         
-    COLOR col = RGBAToColor(128, 128, 128, 128);
-    Particle_RenderSquare( vPos, 1.0f, 0.0f, col);
-    Particle_Flush();
-  }
+  /*
+    void Particles_OneParticle( FLOAT3D vPos )
+    {
+      Particle_PrepareTexture(&_toStar01, PBT_ADDALPHA);
+      Particle_SetTexturePart( 512, 512, 0, 0);
 
-  void RenderParticles(void) {
-    INDEX iBoneID = ska_GetIDFromStringTable("R_Hand");
-    FLOAT3D vStartPoint;
-    FLOAT3D vEndPoint;
-    if (GetBoneAbsPosition(iBoneID,vStartPoint,vEndPoint)) {
-      Particles_OneParticle(vStartPoint);
+      COLOR col = RGBAToColor(128, 128, 128, 128);
+      Particle_RenderSquare( vPos, 1.0f, 0.0f, col);
+      Particle_Flush();
     }
-  };
-  */
+
+    void RenderParticles(void) {
+      INDEX iBoneID = ska_GetIDFromStringTable("R_Hand");
+      FLOAT3D vStartPoint;
+      FLOAT3D vEndPoint;
+      if (GetBoneAbsPosition(iBoneID,vStartPoint,vEndPoint)) {
+        Particles_OneParticle(vStartPoint);
+      }
+    };
+    */
   /*
   void AdjustBones()
   {
@@ -258,16 +254,15 @@ functions:
     }
   }
   */
-/*
-  CModelInstance *GetModelInstanceForRendering()
-  {
-    return &m_miTest;
-  };
-*/
+  /*
+    CModelInstance *GetModelInstanceForRendering()
+    {
+      return &m_miTest;
+    };
+  */
 
   // describe how this enemy killed player
-  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
-  {
+  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath) {
     CTString str;
     str.PrintF(TRANS("A Grunt sent %s into the halls of Valhalla"), strPlayerName);
     return str;
@@ -286,19 +281,19 @@ functions:
   };
 
   virtual const CTFileName &GetComputerMessageName(void) const {
-    static DECLARE_CTFILENAME(fnmSoldier,     "DataMP\\Messages\\Enemies\\GruntSoldier.txt");
-    static DECLARE_CTFILENAME(fnmCommander,   "DataMP\\Messages\\Enemies\\GruntCommander.txt");
+    static DECLARE_CTFILENAME(fnmSoldier, "DataMP\\Messages\\Enemies\\GruntSoldier.txt");
+    static DECLARE_CTFILENAME(fnmCommander, "DataMP\\Messages\\Enemies\\GruntCommander.txt");
     switch (m_gtType) {
-    default: ASSERT(FALSE);
-    case GT_SOLDIER:  return fnmSoldier;
-    case GT_COMMANDER: return fnmCommander;
+      default: ASSERT(FALSE);
+      case GT_SOLDIER: return fnmSoldier;
+      case GT_COMMANDER: return fnmCommander;
     }
   };
 
   void Precache(void) {
     CEnemyBase::Precache();
-    
-   if (m_gtType == GT_SOLDIER) {
+
+    if (m_gtType == GT_SOLDIER) {
       PrecacheClass(CLASS_PROJECTILE, PRT_GRUNT_PROJECTILE_SOL);
     }
     if (m_gtType == GT_COMMANDER) {
@@ -313,15 +308,14 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
   };
 
   // damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
-    GetModelInstance()->AddAnimation(idGrunt_Wound,AN_CLEAR,1,0);
+    GetModelInstance()->AddAnimation(idGrunt_Wound, AN_CLEAR, 1, 0);
     return idGrunt_Wound;
   };
 
@@ -330,21 +324,20 @@ functions:
     INDEX idAnimDeath;
     FLOAT3D vFront;
     GetHeadingDirection(0, vFront);
-    FLOAT fDamageDir = m_vDamage%vFront;
-    if (fDamageDir<0) {
+    FLOAT fDamageDir = m_vDamage % vFront;
+    if (fDamageDir < 0) {
       idAnimDeath = idGrunt_DeathBackward;
     } else {
       idAnimDeath = idGrunt_DeathForward;
     }
 
-    GetModelInstance()->AddAnimation(idAnimDeath,AN_CLEAR,1,0);
+    GetModelInstance()->AddAnimation(idAnimDeath, AN_CLEAR, 1, 0);
 
     return idAnimDeath;
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-
-    vStretch=FLOAT3D(1,1,2);
+    vStretch = FLOAT3D(1, 1, 2);
     if (GetModelInstance()->IsAnimationPlaying(idGrunt_DeathBackward)) {
       return 0.5f;
     } else if (GetModelInstance()->IsAnimationPlaying(idGrunt_DeathForward)) {
@@ -362,16 +355,16 @@ functions:
 
   // virtual anim functions
   void StandingAnim(void) {
-    GetModelInstance()->AddAnimation(idGrunt_IdleAttack,AN_LOOPING|AN_NORESTART|AN_CLEAR,1,0);
+    GetModelInstance()->AddAnimation(idGrunt_IdleAttack, AN_LOOPING | AN_NORESTART | AN_CLEAR, 1, 0);
   };
   /*void StandingAnimFight(void)
   {
     StartModelAnim(HEADMAN_ANIM_IDLE_FIGHT, AOF_LOOPING|AOF_NORESTART);
   }*/
   void RunningAnim(void) {
-    GetModelInstance()->AddAnimation(idGrunt_Run,AN_LOOPING|AN_NORESTART|AN_CLEAR,1,0);
+    GetModelInstance()->AddAnimation(idGrunt_Run, AN_LOOPING | AN_NORESTART | AN_CLEAR, 1, 0);
   };
-    void WalkingAnim(void) {
+  void WalkingAnim(void) {
     RunningAnim();
   };
   void RotatingAnim(void) {
@@ -393,15 +386,13 @@ functions:
   };
 
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     // set sound default parameters
     m_soFire1.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
     m_soFire2.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
   };
 
 procedures:
-// ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire {
     // soldier
     if (m_gtType == GT_SOLDIER) {
@@ -478,8 +469,8 @@ procedures:
     return EEnd();
   };
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsSkaModel();
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);

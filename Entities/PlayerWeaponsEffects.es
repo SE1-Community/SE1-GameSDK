@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -64,6 +64,7 @@ components:
   4 texture TEXTURE_MG_SHELL            "Models\\Weapons\\Minigun\\Shell\\Shell.tex",
 
 functions:
+
 procedures:
   ShotgunShell(EVoid) {
     // init as model
@@ -98,6 +99,7 @@ procedures:
     return EEnd();
   };
 
+  // Entry point
   Main(EWeaponEffectInit eInit) {
     // remember the initial parameters
     ASSERT(eInit.penOwner != NULL);

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -36,9 +36,9 @@ uses "Entities/ExotechLarvaCharger";
 uses "Entities/LarvaOffspring";
 
 enum LarvaTarget {
-  0 LT_NONE      "",   // no target
-  1 LT_ENEMY     "",   // follow enemy
-  2 LT_RECHARGER "",   // go to a recharger point
+  0 LT_NONE      "None",      // no target
+  1 LT_ENEMY     "Enemy",     // follow enemy
+  2 LT_RECHARGER "Recharger", // go to a recharger point
 };
 
 event ELarvaArmDestroyed {
@@ -200,23 +200,26 @@ components:
   55 sound   SOUND_CHIRP          "ModelsMP\\Enemies\\ExotechLarva\\Sounds\\Chirp.wav",
   56 sound   SOUND_DEPLOYLASER    "ModelsMP\\Enemies\\ExotechLarva\\Sounds\\DeployLaser.wav",
 
-functions:                                        
-  
+functions:
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if (slPropertyOffset == offsetof(CExotechLarva, m_penMarkerNew))
-    {
-      if (IsOfClass(penTarget, "NavigationMarker")) { return TRUE; }
-      else { return FALSE; }
-    }   
-    if (slPropertyOffset == offsetof(CExotechLarva, m_penRecharger))
-    {
-      if (IsOfClass(penTarget, "ExotechLarvaCharger")) { return TRUE; }
-      else { return FALSE; }
-    }   
+    if (slPropertyOffset == offsetof(CExotechLarva, m_penMarkerNew)) {
+      if (IsOfClass(penTarget, "NavigationMarker")) {
+        return TRUE;
+      } else {
+        return FALSE;
+      }
+    }
+    if (slPropertyOffset == offsetof(CExotechLarva, m_penRecharger)) {
+      if (IsOfClass(penTarget, "ExotechLarvaCharger")) {
+        return TRUE;
+      } else {
+        return FALSE;
+      }
+    }
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }
-  
+
   BOOL DoSafetyChecks(void) {
     if (m_penMarkerNew == NULL) {
       WarningMessage("First ExotechLarva marker not set! Destroying Larva...\n");
@@ -230,77 +233,72 @@ functions:
   }
 
   void FindNewTarget() {
-    
     // if we have a valid enemy, return
     if (m_penEnemy != NULL) {
-      if (m_penEnemy->GetFlags()&ENF_ALIVE && !(m_penEnemy->GetFlags()&ENF_DELETED)) {
-        return;  
+      if (m_penEnemy->GetFlags() & ENF_ALIVE && !(m_penEnemy->GetFlags() & ENF_DELETED)) {
+        return;
       }
     }
 
     // find actual number of players
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
-    
-    for (INDEX i=0; i<ctMaxPlayers; i++) {
-      penPlayer=GetPlayerEntity(i);
-      if (penPlayer != NULL && DistanceTo(this, penPlayer)<200.0f) {
+
+    for (INDEX i = 0; i < ctMaxPlayers; i++) {
+      penPlayer = GetPlayerEntity(i);
+      if (penPlayer != NULL && DistanceTo(this, penPlayer) < 200.0f) {
         // if there is no valid enemy
-        if (penPlayer != NULL && (penPlayer->GetFlags()&ENF_ALIVE) && 
-          !(penPlayer->GetFlags()&ENF_DELETED)) {
+        if (penPlayer != NULL && (penPlayer->GetFlags() & ENF_ALIVE) && !(penPlayer->GetFlags() & ENF_DELETED)) {
           m_penEnemy = penPlayer;
-        }      
+        }
       }
     }
   }
 
   BOOL AnyPlayerCloserThen(FLOAT fDistance) {
-    
     BOOL bClose = FALSE;
 
     // find actual number of players
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
-    
-    for (INDEX i=0; i<ctMaxPlayers; i++) {
-      penPlayer=GetPlayerEntity(i);
+
+    for (INDEX i = 0; i < ctMaxPlayers; i++) {
+      penPlayer = GetPlayerEntity(i);
       if (penPlayer != NULL) {
-        if ((penPlayer->GetFlags()&ENF_ALIVE) && 
-            !(penPlayer->GetFlags()&ENF_DELETED) &&
-            DistanceTo(this, penPlayer)<fDistance)
-        {
+        if ((penPlayer->GetFlags() & ENF_ALIVE) && !(penPlayer->GetFlags() & ENF_DELETED)
+            && DistanceTo(this, penPlayer) < fDistance) {
           bClose = TRUE;
-        }      
+        }
       }
-    }   
+    }
     return bClose;
   }
 
   void PerhapsChangeTarget() {
     // if no current enemy, do nothing
-    if (!m_penEnemy) { return; }
+    if (!m_penEnemy) {
+      return;
+    }
     // if enough time passed, try...
-    if (m_tmLastTargateChange+5.0f<_pTimer->CurrentTick()) {
+    if (m_tmLastTargateChange + 5.0f < _pTimer->CurrentTick()) {
       MaybeSwitchToAnotherPlayer();
       m_tmLastTargateChange = _pTimer->CurrentTick();
     }
   }
-    
-  class CWorldSettingsController *GetWSC(void)
-  {
+
+  class CWorldSettingsController *GetWSC(void) {
     CWorldSettingsController *pwsc = NULL;
     // obtain bcg viewer
-    CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) GetWorld()->GetBackgroundViewer();
+    CBackgroundViewer *penBcgViewer = (CBackgroundViewer *)GetWorld()->GetBackgroundViewer();
     if (penBcgViewer != NULL) {
-      // obtain world settings controller 
-      pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
+      // obtain world settings controller
+      pwsc = (CWorldSettingsController *)&*penBcgViewer->m_penWorldSettingsController;
     }
     return pwsc;
   }
 
   // Shake ground
-  void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, BOOL bFadeIn)
-  {
+  void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, BOOL bFadeIn) {
     CWorldSettingsController *pwsc = GetWSC();
     if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
@@ -310,9 +308,9 @@ functions:
 
       pwsc->m_fShakeIntensityZ = 0;
       pwsc->m_tmShakeFrequencyZ = 5.0f;
-      pwsc->m_fShakeIntensityY = 0.1f*fPower;
+      pwsc->m_fShakeIntensityY = 0.1f * fPower;
       pwsc->m_tmShakeFrequencyY = 5.0f;
-      pwsc->m_fShakeIntensityB = 2.5f*fPower;
+      pwsc->m_fShakeIntensityB = 2.5f * fPower;
       pwsc->m_tmShakeFrequencyB = 7.2f;
 
       pwsc->m_bShakeFadeIn = bFadeIn;
@@ -320,11 +318,13 @@ functions:
   }
 
   void ShootTailProjectile(void) {
-  //ShootProjectile(PRT_LARVA_TAIL_PROJECTILE, m_vFirePosTailRel, ANGLE3D(0, -10, 0));
-    if (m_penEnemy == NULL) { return; }
+    // ShootProjectile(PRT_LARVA_TAIL_PROJECTILE, m_vFirePosTailRel, ANGLE3D(0, -10, 0));
+    if (m_penEnemy == NULL) {
+      return;
+    }
 
     // target enemy body
-    EntityInfo *peiTarget = (EntityInfo*) (m_penEnemy->GetEntityInfo());
+    EntityInfo *peiTarget = (EntityInfo *)(m_penEnemy->GetEntityInfo());
     FLOAT3D vShootTarget;
     GetEntityInfoPosition(m_penEnemy, peiTarget->vTargetCenter, vShootTarget);
 
@@ -337,44 +337,42 @@ functions:
     penProjectile->Initialize(ello);
   }
 
-  BOOL IsOnMarker(CEntity *penMarker)  {
-    
-    if (penMarker == NULL) { return FALSE; }
-    if (DistanceTo(this, penMarker)<0.1f) { return TRUE; }
+  BOOL IsOnMarker(CEntity *penMarker) {
+    if (penMarker == NULL) {
+      return FALSE;
+    }
+    if (DistanceTo(this, penMarker) < 0.1f) {
+      return TRUE;
+    }
     // else
     return FALSE;
   }
 
-  FLOAT DistanceXZ(CEntity *E1, CEntity *E2)
-  {
+  FLOAT DistanceXZ(CEntity *E1, CEntity *E2) {
     FLOAT3D vE1pos = E1->GetPlacement().pl_PositionVector;
     FLOAT3D vE2pos = E2->GetPlacement().pl_PositionVector;
-    vE1pos(2)=0.0f;
-    vE2pos(2)=0.0f;
+    vE1pos(2) = 0.0f;
+    vE2pos(2) = 0.0f;
     return (vE2pos - vE1pos).Length();
   }
 
-  void SpawnWingDebris()
-  {
+  void SpawnWingDebris() {
     FLOAT3D vTranslation = m_vExpDamage + en_vCurrentTranslationAbsolute;
-    
-    Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, 1.0f, m_vExpDamage, en_vCurrentTranslationAbsolute, 5.0f, 2.0f);
-    Debris_Spawn_Independent(this, this, MODEL_WING, TEXTURE_WING, 0, 0, 0, 0, m_fStretch,
-                  m_plExpArmPos, vTranslation , m_aExpArmRot);
-    vTranslation += FLOAT3D(FRnd()*4.0f-2.0f, FRnd()*4.0f-2.0f, FRnd()*4.0f-2.0f);
-    Debris_Spawn_Independent(this, this, MODEL_PLASMAGUN, TEXTURE_PLASMAGUN, 0, 0, 0, 0, m_fStretch,
-                  m_plExpGunPos, vTranslation , m_aExpGunRot);
-  }
-    
 
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
-    
+    Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, 1.0f, m_vExpDamage, en_vCurrentTranslationAbsolute, 5.0f, 2.0f);
+    Debris_Spawn_Independent(this, this, MODEL_WING, TEXTURE_WING, 0, 0, 0, 0, m_fStretch, m_plExpArmPos, vTranslation,
+                             m_aExpArmRot);
+    vTranslation += FLOAT3D(FRnd() * 4.0f - 2.0f, FRnd() * 4.0f - 2.0f, FRnd() * 4.0f - 2.0f);
+    Debris_Spawn_Independent(this, this, MODEL_PLASMAGUN, TEXTURE_PLASMAGUN, 0, 0, 0, 0, m_fStretch, m_plExpGunPos, vTranslation,
+                             m_aExpGunRot);
+  }
+
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     if (m_bInvulnerable) {
       return;
     }
-    
+
     // cannot hurt ourselves
     if (IsOfClass(penInflictor, "ExotechLarva")) {
       return;
@@ -382,43 +380,39 @@ functions:
 
     // preliminary adjustment of damage
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
-    {
+    if (dmtType == DMT_BULLET && fDamageAmmount > 100.0f) {
       fDamageAmmount *= 0.66f;
     }
     // cannonballs inflict less damage then the default
-    if (dmtType == DMT_CANNONBALL)
-    {
+    if (dmtType == DMT_CANNONBALL) {
       fDamageAmmount *= 0.5f;
     }
-    
-
 
     FLOAT fHealthNow = GetHealth();
     FLOAT fHealthAfter = GetHealth() - fDamageAmmount;
-    FLOAT fHealthBlow01 = m_fMaxHealth*PERCENT_RIGHTBLOW;
-    FLOAT fHealthBlow02 = m_fMaxHealth*PERCENT_LEFTBLOW; 
+    FLOAT fHealthBlow01 = m_fMaxHealth * PERCENT_RIGHTBLOW;
+    FLOAT fHealthBlow02 = m_fMaxHealth * PERCENT_LEFTBLOW;
 
     // adjust damage
-    fDamageAmmount *=DamageStrength( ((EntityInfo*)GetEntityInfo())->Eeibt, dmtType);
+    fDamageAmmount *= DamageStrength(((EntityInfo *)GetEntityInfo())->Eeibt, dmtType);
     // apply game extra damage per enemy and per player
-    fDamageAmmount *=GetGameDamageMultiplier();
+    fDamageAmmount *= GetGameDamageMultiplier();
 
     // enough damage to blow both arms
-    if (fHealthNow>fHealthBlow01 && fHealthAfter<fHealthBlow02) {
-        fDamageAmmount = fHealthNow - fHealthBlow01 - 1;
+    if (fHealthNow > fHealthBlow01 && fHealthAfter < fHealthBlow02) {
+      fDamageAmmount = fHealthNow - fHealthBlow01 - 1;
     } else if (m_bExploding) {
       // if damage would cause the second explosion
-      if (fHealthNow>fHealthBlow02 && fHealthAfter<fHealthBlow02) {
+      if (fHealthNow > fHealthBlow02 && fHealthAfter < fHealthBlow02) {
         fDamageAmmount = fHealthNow - fHealthBlow02 - 1;
         // make sure we don't die while exploding
-      } else if (fHealthAfter<0.0f) {
+      } else if (fHealthAfter < 0.0f) {
         fDamageAmmount = fHealthNow - 1;
       }
-    } else if (fHealthNow>fHealthBlow02 && fHealthAfter<0) {
+    } else if (fHealthNow > fHealthBlow02 && fHealthAfter < 0) {
       fDamageAmmount = fHealthNow - 1;
     }
-        
+
     // if no damage
     if (fDamageAmmount == 0) {
       // do nothing
@@ -426,50 +420,47 @@ functions:
     }
 
     // spawn blood spray
-    CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
-    m_penSpray = CreateEntity( plSpray, CLASS_BLOOD_SPRAY);
+    CPlacement3D plSpray = CPlacement3D(vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
+    m_penSpray = CreateEntity(plSpray, CLASS_BLOOD_SPRAY);
     ESpawnSpray eSpawnSpray;
-    eSpawnSpray.colBurnColor=C_WHITE|CT_OPAQUE;
-    if (m_fMaxDamageAmmount > 10.0f)
-    {
+    eSpawnSpray.colBurnColor = C_WHITE | CT_OPAQUE;
+    if (m_fMaxDamageAmmount > 10.0f) {
       eSpawnSpray.fDamagePower = 3.0f;
-    }
-    else if (m_fSprayDamage+fDamageAmmount>50.0f)
-    {
+    } else if (m_fSprayDamage + fDamageAmmount > 50.0f) {
       eSpawnSpray.fDamagePower = 2.0f;
-    }
-    else
-    {
+    } else {
       eSpawnSpray.fDamagePower = 1.0f;
     }
-    switch (IRnd()%4) {
-    case 0: case 1: case 2:
-      // blood spray
-      m_penSpray->SetParent(this);
-      eSpawnSpray.sptType = SPT_BLOOD;
-      break;
-    case 3:
-      // sparks spray
-      eSpawnSpray.sptType = SPT_ELECTRICITY_SPARKS;
-      break;
+    switch (IRnd() % 4) {
+      case 0:
+      case 1:
+      case 2:
+        // blood spray
+        m_penSpray->SetParent(this);
+        eSpawnSpray.sptType = SPT_BLOOD;
+        break;
+      case 3:
+        // sparks spray
+        eSpawnSpray.sptType = SPT_SPARKS_BLOOD;
+        break;
     }
     eSpawnSpray.fSizeMultiplier = 1.0f;
     // setup direction of spray
     FLOAT3D vHitPointRelative = vHitPoint - GetPlacement().pl_PositionVector;
     FLOAT3D vReflectingNormal;
-    GetNormalComponent( vHitPointRelative, en_vGravityDir, vReflectingNormal);
+    GetNormalComponent(vHitPointRelative, en_vGravityDir, vReflectingNormal);
     vReflectingNormal.Normalize();
-    
-    vReflectingNormal(1)/=5.0f;
-    
-    FLOAT3D vProjectedComponent = vReflectingNormal*(vDirection%vReflectingNormal);
-    FLOAT3D vSpilDirection = vDirection-vProjectedComponent*2.0f-en_vGravityDir*0.5f;
-    
+
+    vReflectingNormal(1) /= 5.0f;
+
+    FLOAT3D vProjectedComponent = vReflectingNormal * (vDirection % vReflectingNormal);
+    FLOAT3D vSpilDirection = vDirection - vProjectedComponent * 2.0f - en_vGravityDir * 0.5f;
+
     eSpawnSpray.vDirection = vSpilDirection;
     eSpawnSpray.penOwner = this;
-    
+
     // initialize spray
-    m_penSpray->Initialize( eSpawnSpray);
+    m_penSpray->Initialize(eSpawnSpray);
     m_tmSpraySpawned = _pTimer->CurrentTick();
     m_fSprayDamage = 0.0f;
     m_fMaxDamageAmmount = 0.0f;
@@ -478,18 +469,18 @@ functions:
     // CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount,
     //                          vHitPoint, vDirection);
     // do this (because we don't want an event posted each time we're damaged):
-    
+
     // reduce your health
-    en_fHealth-=fDamageAmmount;
+    en_fHealth -= fDamageAmmount;
     // if health reached zero
     if (en_fHealth <= 0) {
       // throw an event that you have died
       EDeath eDeath;
       SendEvent(eDeath);
     }
-    
+
     if (m_bRightArmActive) {
-      if (GetHealth()<m_fMaxHealth*PERCENT_RIGHTBLOW) {
+      if (GetHealth() < m_fMaxHealth * PERCENT_RIGHTBLOW) {
         ELarvaArmDestroyed ead;
         ead.iArm = ARM_RIGHT;
         SendEvent(ead);
@@ -497,7 +488,7 @@ functions:
       }
     }
     if (m_bLeftArmActive) {
-      if (GetHealth()<m_fMaxHealth*PERCENT_LEFTBLOW) {
+      if (GetHealth() < m_fMaxHealth * PERCENT_LEFTBLOW) {
         ELarvaArmDestroyed ead;
         ead.iArm = ARM_LEFT;
         SendEvent(ead);
@@ -506,8 +497,7 @@ functions:
     }
 
     // bosses don't darken when burning
-    m_colBurning=COLOR(C_WHITE|CT_OPAQUE);
-
+    m_colBurning = COLOR(C_WHITE | CT_OPAQUE);
   }
 
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath) {
@@ -528,48 +518,47 @@ functions:
 
   void Precache(void) {
     CEnemyBase::Precache();
-    
-    PrecacheClass(CLASS_BASIC_EFFECT, BET_ROCKET  );
-    PrecacheClass(CLASS_BASIC_EFFECT, BET_CANNON  );
-    PrecacheClass(CLASS_BLOOD_SPRAY   );
+
+    PrecacheClass(CLASS_BASIC_EFFECT, BET_ROCKET);
+    PrecacheClass(CLASS_BASIC_EFFECT, BET_CANNON);
+    PrecacheClass(CLASS_BLOOD_SPRAY);
     PrecacheClass(CLASS_PROJECTILE, PRT_LARVA_TAIL_PROJECTILE);
     PrecacheClass(CLASS_PROJECTILE, PRT_LARVA_PLASMA);
 
-    PrecacheModel  (MODEL_EXOTECHLARVA   );
-    PrecacheTexture(TEXTURE_EXOTECHLARVA );
-    PrecacheModel  (MODEL_BODY           );
-    PrecacheTexture(TEXTURE_BODY         );
-    PrecacheModel  (MODEL_BEAM           );
-    PrecacheTexture(TEXTURE_BEAM         );
-    PrecacheModel  (MODEL_ENERGYBEAMS    );
-    PrecacheTexture(TEXTURE_ENERGYBEAMS  );
-    PrecacheModel  (MODEL_FLARE          );
-    PrecacheTexture(TEXTURE_FLARE        );
-    PrecacheModel  (MODEL_WING           );
-    PrecacheTexture(TEXTURE_WING         );
-    PrecacheModel  (MODEL_PLASMAGUN      );
-    PrecacheTexture(TEXTURE_PLASMAGUN    );
-    
-    PrecacheModel  (MODEL_BLADES         );
-    PrecacheModel  (MODEL_DEBRIS_BODY    );
-    PrecacheModel  (MODEL_DEBRIS_TAIL01  );
-    PrecacheModel  (MODEL_DEBRIS_TAIL02  );
-    
-    PrecacheModel  (MODEL_DEBRIS_FLESH   );
-    PrecacheTexture(TEXTURE_DEBRIS_FLESH );
-    PrecacheModel  (MODEL_PLASMA         );
-    PrecacheTexture(TEXTURE_PLASMA       );
-    PrecacheModel  (MODEL_BODY           );
-    PrecacheTexture(TEXTURE_BODY           );
+    PrecacheModel(MODEL_EXOTECHLARVA);
+    PrecacheTexture(TEXTURE_EXOTECHLARVA);
+    PrecacheModel(MODEL_BODY);
+    PrecacheTexture(TEXTURE_BODY);
+    PrecacheModel(MODEL_BEAM);
+    PrecacheTexture(TEXTURE_BEAM);
+    PrecacheModel(MODEL_ENERGYBEAMS);
+    PrecacheTexture(TEXTURE_ENERGYBEAMS);
+    PrecacheModel(MODEL_FLARE);
+    PrecacheTexture(TEXTURE_FLARE);
+    PrecacheModel(MODEL_WING);
+    PrecacheTexture(TEXTURE_WING);
+    PrecacheModel(MODEL_PLASMAGUN);
+    PrecacheTexture(TEXTURE_PLASMAGUN);
 
-    PrecacheSound(SOUND_FIRE_PLASMA   );
-    PrecacheSound(SOUND_FIRE_TAIL     );
-    PrecacheSound(SOUND_LASER_CHARGE  );
-    PrecacheSound(SOUND_DEATH         );
-    PrecacheSound(SOUND_ARMDESTROY    );
-    PrecacheSound(SOUND_CHIRP         );
-    PrecacheSound(SOUND_DEPLOYLASER   );
+    PrecacheModel(MODEL_BLADES);
+    PrecacheModel(MODEL_DEBRIS_BODY);
+    PrecacheModel(MODEL_DEBRIS_TAIL01);
+    PrecacheModel(MODEL_DEBRIS_TAIL02);
 
+    PrecacheModel(MODEL_DEBRIS_FLESH);
+    PrecacheTexture(TEXTURE_DEBRIS_FLESH);
+    PrecacheModel(MODEL_PLASMA);
+    PrecacheTexture(TEXTURE_PLASMA);
+    PrecacheModel(MODEL_BODY);
+    PrecacheTexture(TEXTURE_BODY);
+
+    PrecacheSound(SOUND_FIRE_PLASMA);
+    PrecacheSound(SOUND_FIRE_TAIL);
+    PrecacheSound(SOUND_LASER_CHARGE);
+    PrecacheSound(SOUND_DEATH);
+    PrecacheSound(SOUND_ARMDESTROY);
+    PrecacheSound(SOUND_CHIRP);
+    PrecacheSound(SOUND_DEPLOYLASER);
   };
 
   // get the plasma ball attachments
@@ -585,7 +574,7 @@ functions:
   };
 
   BOOL RechargerActive() {
-    if (((CExotechLarvaCharger *)&*m_penRecharger)->m_bActive) { 
+    if (((CExotechLarvaCharger *)&*m_penRecharger)->m_bActive) {
       return TRUE;
     }
     return FALSE;
@@ -593,24 +582,24 @@ functions:
 
   /*void CheckRechargerTargets(void) {
     m_bRechargerExists = FALSE;
-    
+
     CEntityPointer *penModel  = &m_penRCModel01;
     CEntityPointer *penMarker = &m_penRCMarker01;
 
     for (INDEX i=0; i<4; i++) {
       // if model pointer is valid and model is not destroyed
       if (&*penModel[i]) {
-        if (!((*penModel[i]).en_ulFlags&ENF_DELETED)) { 
+        if (!((*penModel[i]).en_ulFlags&ENF_DELETED)) {
           // at least one exists
           m_bRechargerExists = TRUE;
         } else if (m_penRechargerTarget == &*penMarker[i]) {
           m_penRechargerTarget=NULL;
-          penMarker[i] = NULL;  
+          penMarker[i] = NULL;
         }
       // otherwise make sure it is not the current recharging target
       } else if (m_penRechargerTarget == &*penMarker[i]) {
         m_penRechargerTarget=NULL;
-        penMarker[i] = NULL;  
+        penMarker[i] = NULL;
       }
     }
   }
@@ -665,27 +654,30 @@ functions:
   ANGLE GetArmsPitch(void) {
     if (m_bLeftArmActive) {
       CAttachmentModelObject &amo = *GetModelObject()->GetAttachmentModel(BODY_ATTACHMENT_ARM_LEFT);
-      return (amo.amo_plRelative.pl_OrientationAngle(2) + GetPlacement().pl_OrientationAngle(2)); 
+      return (amo.amo_plRelative.pl_OrientationAngle(2) + GetPlacement().pl_OrientationAngle(2));
     }
     return 0.0f;
   }
 
-  ULONG SetDesiredMovement(void) 
-  {
+  ULONG SetDesiredMovement(void) {
     ULONG ulFlags = 0;
     FLOAT3D vPos;
     CEntity *penMarker = m_penMarkerNew;
     CEntity *penTarget;
 
-    if (m_ltTarget == LT_ENEMY && m_penEnemy) { penTarget = m_penEnemy; }
-    else if (m_ltTarget == LT_RECHARGER) { penTarget = m_penRecharger; }
-    else { return ulFlags; }
+    if (m_ltTarget == LT_ENEMY && m_penEnemy) {
+      penTarget = m_penEnemy;
+    } else if (m_ltTarget == LT_RECHARGER) {
+      penTarget = m_penRecharger;
+    } else {
+      return ulFlags;
+    }
 
     // CPrintF("target = %s at %f\n", penTarget->GetName(), _pTimer->CurrentTick());
 
     if (IsOnMarker(m_penMarkerNew)) {
-      PATH_FindNextMarker(penTarget, GetPlacement().pl_PositionVector,
-        penTarget->GetPlacement().pl_PositionVector, penMarker, vPos);
+      PATH_FindNextMarker(penTarget, GetPlacement().pl_PositionVector, penTarget->GetPlacement().pl_PositionVector, penMarker,
+                          vPos);
       if (penMarker != NULL) {
         // remember the old marker
         m_penMarkerOld = m_penMarkerNew;
@@ -698,107 +690,96 @@ functions:
       MoveToMarker(m_penMarkerNew);
       ulFlags |= MF_MOVEZ;
     }
-   
-    if (m_ltTarget == LT_ENEMY && DistanceTo(this, penTarget)<m_fStopRadius) {
+
+    if (m_ltTarget == LT_ENEMY && DistanceTo(this, penTarget) < m_fStopRadius) {
       ForceFullStop();
     }
-    
+
     return ulFlags;
   };
 
   void MoveToMarker(CEntity *penMarker) {
-    if (penMarker == NULL) { return; }
-    FLOAT3D vDesiredDir = penMarker->GetPlacement().pl_PositionVector -
-                   GetPlacement().pl_PositionVector;
-    if (vDesiredDir.Length()>0.0f) {
+    if (penMarker == NULL) {
+      return;
+    }
+    FLOAT3D vDesiredDir = penMarker->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector;
+    if (vDesiredDir.Length() > 0.0f) {
       vDesiredDir.Normalize();
-      FLOAT3D vSpeed = vDesiredDir*m_fAttackRunSpeed;
+      FLOAT3D vSpeed = vDesiredDir * m_fAttackRunSpeed;
       SetDesiredTranslation(vSpeed);
     }
   }
 
   // pre moving
   void PreMoving() {
-    
     if (m_bActive && !m_bRenderLeftLaser && !m_bRenderRightLaser) {
-      
       // rotate to enemy
       if (m_penEnemy != NULL) {
-        
         FLOAT3D vToEnemy;
-        vToEnemy = (m_penEnemy->GetPlacement().pl_PositionVector - 
-          GetPlacement().pl_PositionVector).Normalize();
+        vToEnemy = (m_penEnemy->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector).Normalize();
         ANGLE3D aAngle;
         DirectionVectorToAngles(vToEnemy, aAngle);
         aAngle(1) = aAngle(1) - GetPlacement().pl_OrientationAngle(1);
         aAngle(1) = NormalizeAngle(aAngle(1));
-        SetDesiredRotation(FLOAT3D(aAngle(1)*2.0f, 0.0f, 0.0f));         
+        SetDesiredRotation(FLOAT3D(aAngle(1) * 2.0f, 0.0f, 0.0f));
       } else {
         SetDesiredRotation(FLOAT3D(0.0f, 0.0f, 0.0f));
       }
-      
+
       // lower speed if needed, not to miss the marker
-      if (en_vCurrentTranslationAbsolute.Length()*_pTimer->TickQuantum*2.0f >
-        DistanceTo(this, m_penMarkerNew)) {
-        FLOAT3D vToMarker = m_penMarkerNew->GetPlacement().pl_PositionVector -
-          GetPlacement().pl_PositionVector;
-        SetDesiredTranslation(vToMarker/_pTimer->TickQuantum) ;        
+      if (en_vCurrentTranslationAbsolute.Length() * _pTimer->TickQuantum * 2.0f > DistanceTo(this, m_penMarkerNew)) {
+        FLOAT3D vToMarker = m_penMarkerNew->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector;
+        SetDesiredTranslation(vToMarker / _pTimer->TickQuantum);
       }
-        
+
       // stop when on marker
       if (IsOnMarker(m_penMarkerNew)) {
         ForceStopTranslation();
       }
     } else {
-        ForceFullStop();
+      ForceFullStop();
     }
-    
+
     CEnemyBase::PreMoving();
   }
 
-  void RenderParticles(void)
-  {
-    
+  void RenderParticles(void) {
     FLOATmatrix3D m;
     CPlacement3D plLarva;
 
     if (m_bRenderLeftLaser || m_bRenderRightLaser) {
       plLarva = GetLerpedPlacement();
-      MakeRotationMatrix(m, plLarva.pl_OrientationAngle);      
+      MakeRotationMatrix(m, plLarva.pl_OrientationAngle);
     }
 
     if (m_bRenderLeftLaser) {
-      FLOAT3D vSource = (FIREPOS_LASER_LEFT*m_fStretch)*m + plLarva.pl_PositionVector;
+      FLOAT3D vSource = (FIREPOS_LASER_LEFT * m_fStretch) * m + plLarva.pl_PositionVector;
       Particles_ExotechLarvaLaser(this, vSource, m_vLeftLaserTarget);
     }
     if (m_bRenderRightLaser) {
-      FLOAT3D vSource = (FIREPOS_LASER_RIGHT*m_fStretch)*m + plLarva.pl_PositionVector;
+      FLOAT3D vSource = (FIREPOS_LASER_RIGHT * m_fStretch) * m + plLarva.pl_PositionVector;
       Particles_ExotechLarvaLaser(this, vSource, m_vRightLaserTarget);
     }
-    if (m_bRechargePose && ((CExotechLarvaCharger *)&*m_penRecharger)->m_bBeamActive)
-    {
-      Particles_LarvaEnergy(this, FLOAT3D(0.0f, LARVA_HANDLE_TRANSLATE, 0.0f)*m_fStretch);
+    if (m_bRechargePose && ((CExotechLarvaCharger *)&*m_penRecharger)->m_bBeamActive) {
+      Particles_LarvaEnergy(this, FLOAT3D(0.0f, LARVA_HANDLE_TRANSLATE, 0.0f) * m_fStretch);
     }
   }
 
-  void SizeModel(void)
-  {
+  void SizeModel(void) {
     return;
   }
 
-  void UpdateFiringPos() {    
-    m_vFirePosLeftLaserAbs  = (FIREPOS_LASER_LEFT*m_fStretch)*GetRotationMatrix() + GetPlacement().pl_PositionVector;
-    m_vFirePosRightLaserAbs = (FIREPOS_LASER_RIGHT*m_fStretch)*GetRotationMatrix() + GetPlacement().pl_PositionVector;    
+  void UpdateFiringPos() {
+    m_vFirePosLeftLaserAbs = (FIREPOS_LASER_LEFT * m_fStretch) * GetRotationMatrix() + GetPlacement().pl_PositionVector;
+    m_vFirePosRightLaserAbs = (FIREPOS_LASER_RIGHT * m_fStretch) * GetRotationMatrix() + GetPlacement().pl_PositionVector;
   }
 
-  void BlowUp(void)
-  {
+  void BlowUp(void) {
     NOTHING;
   }
-  
+
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     m_soFire1.Set3DParameters(600.0f, 150.0f, 2.0f, 1.0f);
     m_soFire2.Set3DParameters(600.0f, 150.0f, 2.0f, 1.0f);
     m_soFire3.Set3DParameters(600.0f, 150.0f, 2.0f, 1.0f);
@@ -807,12 +788,12 @@ functions:
     m_soLaser.Set3DParameters(300.0f, 200.0f, 3.0f, 1.0f);
   }
 
-  void FireLaser(void)
-  {
-    
+  void FireLaser(void) {
     FLOAT3D vLaserTarget;
 
-    if (!m_penEnemy) { return; }
+    if (!m_penEnemy) {
+      return;
+    }
 
     if (IsVisible(m_penEnemy)) {
       vLaserTarget = m_penEnemy->GetPlacement().pl_PositionVector;
@@ -821,22 +802,22 @@ functions:
     }
 
     // cast 1st ray
-    CCastRay crRay1( this, m_vFirePosLeftLaserAbs, vLaserTarget);
+    CCastRay crRay1(this, m_vFirePosLeftLaserAbs, vLaserTarget);
     crRay1.cr_fTestR = 0.10f;
     crRay1.cr_bHitTranslucentPortals = FALSE;
     crRay1.cr_bPhysical = FALSE;
     crRay1.cr_ttHitModels = CCastRay::TT_COLLISIONBOX;
     GetWorld()->CastRay(crRay1);
-    
+
     // if entity is hit
     if (crRay1.cr_penHit != NULL) {
       m_bRenderLeftLaser = TRUE;
       m_vLeftLaserTarget = crRay1.cr_vHit;
 
       // apply damage
-      InflictDirectDamage( crRay1.cr_penHit, this, DMT_BURNING, 25.0f,
-          FLOAT3D(0.0f, 0.0f, 0.0f), (m_vFirePosLeftLaserAbs-m_vLeftLaserTarget).Normalize());
-      
+      InflictDirectDamage(crRay1.cr_penHit, this, DMT_BURNING, 25.0f, FLOAT3D(0.0f, 0.0f, 0.0f),
+                          (m_vFirePosLeftLaserAbs - m_vLeftLaserTarget).Normalize());
+
       if (crRay1.cr_penHit->GetRenderType() != RT_BRUSH) {
         crRay1.cr_ttHitModels = CCastRay::TT_NONE;
         GetWorld()->ContinueCast(crRay1);
@@ -847,23 +828,23 @@ functions:
     } else if (TRUE) {
       m_bRenderLeftLaser = FALSE;
     }
-    
+
     // cast 2nd ray
-    CCastRay crRay2( this, m_vFirePosRightLaserAbs, vLaserTarget);
+    CCastRay crRay2(this, m_vFirePosRightLaserAbs, vLaserTarget);
     crRay2.cr_fTestR = 0.10f;
     crRay2.cr_bHitTranslucentPortals = FALSE;
     crRay2.cr_bPhysical = FALSE;
     crRay2.cr_ttHitModels = CCastRay::TT_COLLISIONBOX;
     GetWorld()->CastRay(crRay2);
-    
+
     // if entity is hit
     if (crRay2.cr_penHit != NULL) {
       m_bRenderRightLaser = TRUE;
       m_vRightLaserTarget = crRay2.cr_vHit;
 
       // apply damage
-      InflictDirectDamage( crRay2.cr_penHit, this, DMT_BURNING, 25.0f,
-          FLOAT3D(0.0f, 0.0f, 0.0f), (m_vFirePosRightLaserAbs-m_vRightLaserTarget).Normalize());
+      InflictDirectDamage(crRay2.cr_penHit, this, DMT_BURNING, 25.0f, FLOAT3D(0.0f, 0.0f, 0.0f),
+                          (m_vFirePosRightLaserAbs - m_vRightLaserTarget).Normalize());
 
       if (crRay2.cr_penHit->GetRenderType() != RT_BRUSH) {
         crRay2.cr_ttHitModels = CCastRay::TT_NONE;
@@ -876,65 +857,52 @@ functions:
       m_bRenderRightLaser = FALSE;
     }
   }
-  
-  void ExplodeLaser(void)
-  {
+
+  void ExplodeLaser(void) {
     if (m_bRenderLeftLaser) {
       ESpawnEffect eSpawnEffect;
-      eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
+      eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
       eSpawnEffect.betType = BET_CANNON;
-      eSpawnEffect.vStretch = FLOAT3D(m_fStretch*0.5, m_fStretch*0.5, m_fStretch*0.5);
-      CEntityPointer penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget,
-        ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
-      penExplosion->Initialize(eSpawnEffect);
-      
-        // explosion debris
-      eSpawnEffect.betType = BET_EXPLOSION_DEBRIS;
-      penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, 
-        ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
+      eSpawnEffect.vStretch = FLOAT3D(m_fStretch * 0.5, m_fStretch * 0.5, m_fStretch * 0.5);
+      CEntityPointer penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
       penExplosion->Initialize(eSpawnEffect);
 
-      // explosion smoke
-      eSpawnEffect.betType = BET_EXPLOSION_SMOKE;
-      penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, 
-        ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
-      penExplosion->Initialize(eSpawnEffect);
-
-      InflictRangeDamage( this, DMT_EXPLOSION, 25.0f,
-        m_vLeftLaserTarget, 5.0f, 25.0f);
-    }
-    
-    if (m_bRenderRightLaser) {
-      ESpawnEffect eSpawnEffect;
-      eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
-      eSpawnEffect.betType = BET_CANNON;
-      eSpawnEffect.vStretch = FLOAT3D(m_fStretch*0.5, m_fStretch*0.5, m_fStretch*0.5);
-      CEntityPointer penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget,
-        ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
-      penExplosion->Initialize(eSpawnEffect);
-      
       // explosion debris
       eSpawnEffect.betType = BET_EXPLOSION_DEBRIS;
-      penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, 
-        ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
+      penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
       penExplosion->Initialize(eSpawnEffect);
 
       // explosion smoke
       eSpawnEffect.betType = BET_EXPLOSION_SMOKE;
-      penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, 
-        ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
+      penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
       penExplosion->Initialize(eSpawnEffect);
 
-      InflictRangeDamage( this, DMT_EXPLOSION, 25.0f,
-        m_vLeftLaserTarget, 5.0f, 25.0f);
-    }    
-  }
-  
+      InflictRangeDamage(this, DMT_EXPLOSION, 25.0f, m_vLeftLaserTarget, 5.0f, 25.0f);
+    }
 
-// PROCEDURES
+    if (m_bRenderRightLaser) {
+      ESpawnEffect eSpawnEffect;
+      eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
+      eSpawnEffect.betType = BET_CANNON;
+      eSpawnEffect.vStretch = FLOAT3D(m_fStretch * 0.5, m_fStretch * 0.5, m_fStretch * 0.5);
+      CEntityPointer penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
+      penExplosion->Initialize(eSpawnEffect);
+
+      // explosion debris
+      eSpawnEffect.betType = BET_EXPLOSION_DEBRIS;
+      penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
+      penExplosion->Initialize(eSpawnEffect);
+
+      // explosion smoke
+      eSpawnEffect.betType = BET_EXPLOSION_SMOKE;
+      penExplosion = CreateEntity(CPlacement3D(m_vLeftLaserTarget, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
+      penExplosion->Initialize(eSpawnEffect);
+
+      InflictRangeDamage(this, DMT_EXPLOSION, 25.0f, m_vLeftLaserTarget, 5.0f, 25.0f);
+    }
+  }
 
 procedures:
-  
   // override wounding so that Larva doesn't stutter
   BeWounded(EDamage eDamage) : CEnemyBase::BeWounded { 
     return EReturn();
@@ -1377,7 +1345,8 @@ procedures:
     }
   }
 
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_FLYING|EPF_HASLUNGS|EPF_ABSOLUTETRANSLATE);

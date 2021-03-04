@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -73,7 +73,6 @@ components:
  45 sound   SOUND_DEATH         "ModelsMP\\Enemies\\Guffy\\Sounds\\Death.wav",
 
 functions:
-
 // describe how this enemy killed player
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
   {
@@ -83,7 +82,7 @@ functions:
   }
 
   virtual const CTFileName &GetComputerMessageName(void) const {
-    static DECLARE_CTFILENAME(fnmSoldier,  "DataMP\\Messages\\Enemies\\Guffy.txt");
+    static DECLARE_CTFILENAME(fnmSoldier, "DataMP\\Messages\\Enemies\\Guffy.txt");
     return fnmSoldier;
   }
   /*// overridable function to get range for switching to another player
@@ -102,7 +101,7 @@ functions:
 
   void Precache(void) {
     CEnemyBase::Precache();
-    
+
     // guffy
     PrecacheModel(MODEL_GUFFY);
     PrecacheTexture(TEXTURE_GUFFY);
@@ -112,12 +111,12 @@ functions:
     PrecacheTexture(TEXTURE_GUN);
 
     // sounds
-    PrecacheSound(SOUND_IDLE );
+    PrecacheSound(SOUND_IDLE);
     PrecacheSound(SOUND_SIGHT);
     PrecacheSound(SOUND_DEATH);
     PrecacheSound(SOUND_FIRE);
     PrecacheSound(SOUND_WOUND);
-    
+
     // projectile
     PrecacheClass(CLASS_PROJECTILE, PRT_GUFFY_PROJECTILE);
   };
@@ -136,32 +135,30 @@ functions:
   }*/
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // guffy can't harm guffy
     if (!IsOfClass(penInflictor, "Guffy")) {
       CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
 
-
   // virtual anim functions
   void StandingAnim(void) {
-    StartModelAnim(GUFFY_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(GUFFY_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
   /*void StandingAnimFight(void)
   {
     StartModelAnim(GUFFY_ANIM_FIRE, AOF_LOOPING|AOF_NORESTART);
   }*/
   void RunningAnim(void) {
-    StartModelAnim(GUFFY_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(GUFFY_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
   };
   void WalkingAnim(void) {
     RunningAnim();
   };
   void RotatingAnim(void) {
-    StartModelAnim(GUFFY_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(GUFFY_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
   };
 
   // virtual sound functions
@@ -182,7 +179,7 @@ functions:
   void FireRocket(FLOAT3D &vPos) {
     CPlacement3D plRocket;
     plRocket.pl_PositionVector = vPos;
-    plRocket.pl_OrientationAngle = ANGLE3D(0, -5.0f-FRnd()*10.0f, 0);
+    plRocket.pl_OrientationAngle = ANGLE3D(0, -5.0f - FRnd() * 10.0f, 0);
     plRocket.RelativeToAbsolute(GetPlacement());
     CEntityPointer penProjectile = CreateEntity(plRocket, CLASS_PROJECTILE);
     ELaunchProjectile eLaunch;
@@ -190,10 +187,9 @@ functions:
     eLaunch.prtType = PRT_GUFFY_PROJECTILE;
     penProjectile->Initialize(eLaunch);
   };
-  
+
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     // set sound default parameters
     m_soSound.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
     m_soFire1.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
@@ -207,14 +203,14 @@ functions:
     StartModelAnim(iAnim, 0);
     return iAnim;
   };
-  
+
   // death
   INDEX AnimForDeath(void) {
     INDEX iAnim;
     FLOAT3D vFront;
     GetHeadingDirection(0, vFront);
-    FLOAT fDamageDir = m_vDamage%vFront;
-    if (fDamageDir<0) {
+    FLOAT fDamageDir = m_vDamage % vFront;
+    if (fDamageDir < 0) {
       iAnim = GUFFY_ANIM_DEATHBACKWARD;
     } else {
       iAnim = GUFFY_ANIM_DEATHFORWARD;
@@ -226,20 +222,16 @@ functions:
 
   // death
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    vStretch=FLOAT3D(1,1,2)*1.5f;
-    if (GetModelObject()->GetAnim() == GUFFY_ANIM_DEATHBACKWARD)
-    {
+    vStretch = FLOAT3D(1, 1, 2) * 1.5f;
+    if (GetModelObject()->GetAnim() == GUFFY_ANIM_DEATHBACKWARD) {
       return 0.48f;
-    }
-    else if (GetModelObject()->GetAnim() == GUFFY_ANIM_DEATHFORWARD)
-    {
+    } else if (GetModelObject()->GetAnim() == GUFFY_ANIM_DEATHFORWARD) {
       return 1.0f;
-   }
+    }
     return -1.0f;
   };
 
 procedures:
-// ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire {
     
     StartModelAnim(GUFFY_ANIM_FIRE, AOF_LOOPING);
@@ -301,8 +293,8 @@ procedures:
     return EEnd();
   };*/
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING);

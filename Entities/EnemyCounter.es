@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -43,8 +43,7 @@ functions:
     }
     return (CMusicHolder *)&*m_penMainMusicHolder;
   }
-  void StartCounting(void)
-  {
+  void StartCounting(void) {
     CMusicHolder *pmh = GetMusicHolder();
     if (pmh == NULL) {
       return;
@@ -52,14 +51,12 @@ functions:
     pmh->m_penCounter = this;
     m_iCount = m_iCountFrom;
   }
-  void CountOne(void)
-  {
-    if (m_iCount>0) {
-      m_iCount-=1;
+  void CountOne(void) {
+    if (m_iCount > 0) {
+      m_iCount -= 1;
     }
   }
-  void StopCounting(void)
-  {
+  void StopCounting(void) {
     CMusicHolder *pmh = GetMusicHolder();
     if (pmh == NULL) {
       return;
@@ -67,10 +64,10 @@ functions:
     m_iCount = 0;
     pmh->m_penCounter = NULL;
   }
-procedures:
 
-// MAIN
-  Main(EVoid) {
+procedures:
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);

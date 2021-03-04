@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -18,36 +18,40 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "Entities/BackgroundViewer.h"
 #include "Entities/WorldSettingsController.h"
-// for error checking:
+
+// Error checking
 #include "Entities/SoundHolder.h"
 %}
 
-uses "Entities\FogMarker";
-uses "Entities\HazeMarker";
-uses "Entities\MirrorMarker";
-uses "Entities\GradientMarker";
+uses "Entities/FogMarker";
+uses "Entities/HazeMarker";
+uses "Entities/MirrorMarker";
+uses "Entities/GradientMarker";
 
 %{
+inline void Clear(EntityStats &es) {
+  es.es_strName.Clear();
+};
 
-inline void Clear(EntityStats &es) {es.es_strName.Clear();};
 static CDynamicArray<EntityStats> _aes;
 static CAnimObject _aoLightningColor;
 
-EntityStats *FindStats(const CTString &strName)
-{
+EntityStats *FindStats(const CTString &strName) {
   {FOREACHINDYNAMICARRAY(_aes, EntityStats, ites) {
     EntityStats &es = *ites;
+
     if (es.es_strName == strName) {
       return &es;
     }
   }}
+
   return NULL;
 }
 
-static void MakeWorldStatistics(void)
-{
+static void MakeWorldStatistics(void) {
   // get the world pointer
   CWorld *pwo = (CWorld *)_pShell->GetINDEX("pwoCurrentWorld");
+
   // if there is no current world
   if (pwo == NULL) {
     CPrintF("No current world.\n");
@@ -59,6 +63,7 @@ static void MakeWorldStatistics(void)
     // get its stats
     EntityStats esCurrent;
     BOOL bHasStats = iten->FillEntityStatistics(&esCurrent);
+
     // if no stats
     if (!bHasStats) {
       // skip it
@@ -67,6 +72,7 @@ static void MakeWorldStatistics(void)
 
     // find existing stats with same name
     EntityStats *pesOld = FindStats(esCurrent.es_strName);
+
     // if such stats exists
     if (pesOld != NULL) {
       // update the existing stats
@@ -74,6 +80,7 @@ static void MakeWorldStatistics(void)
       pesOld->es_ctAmmount  += esCurrent.es_ctAmmount*esCurrent.es_ctCount;
       pesOld->es_fValue     += esCurrent.es_fValue*esCurrent.es_ctCount;
       pesOld->es_iScore     += esCurrent.es_iScore*esCurrent.es_ctCount;
+
     // if this a new name
     } else {
       // create new stats
@@ -91,18 +98,20 @@ static void MakeWorldStatistics(void)
     CTFileStream strm;
     CTFileName fnm = CTString("Temp\\Statistics.txt");
     strm.Create_t(fnm);
+
     CTString strLine;
-    strLine.PrintF("%-40s: %8s %8s %10s %10s", 
-      "name", "count", "ammount", "health", "score");
+    strLine.PrintF("%-40s: %8s %8s %10s %10s", "name", "count", "ammount", "health", "score");
     strm.PutLine_t(strLine);
+
     {FOREACHINDYNAMICARRAY(_aes, EntityStats, ites) {
       EntityStats &es = *ites;
       CTString strLine;
-      strLine.PrintF("%-40s: %8d %8d %10g %10d", 
-        es.es_strName, es.es_ctCount, es.es_ctAmmount, es.es_fValue, es.es_iScore);
+      strLine.PrintF("%-40s: %8d %8d %10g %10d", es.es_strName, es.es_ctCount, es.es_ctAmmount, es.es_fValue, es.es_iScore);
       strm.PutLine_t(strLine);
     }}
+
     CPrintF("Dumped to '%s'\n", CTString(fnm));
+
   } catch (char *strError) {
     CPrintF("Error: %s\n", strError);
   }
@@ -110,10 +119,10 @@ static void MakeWorldStatistics(void)
   _aes.Clear();
 }
 
-static void ReoptimizeAllBrushes(void)
-{
+static void ReoptimizeAllBrushes(void) {
   // get the world pointer
   CWorld *pwo = (CWorld *)_pShell->GetINDEX("pwoCurrentWorld");
+
   // if there is no current world
   if (pwo == NULL) {
     CPrintF("No current world.\n");
@@ -122,25 +131,26 @@ static void ReoptimizeAllBrushes(void)
 
   // for each brush in the world
   FOREACHINDYNAMICARRAY(pwo->wo_baBrushes.ba_abrBrushes, CBrush3D, itbr) {
-    CBrush3D &br=*itbr;
+    CBrush3D &br = *itbr;
+
     // for each mip in the brush
     FOREACHINLIST(CBrushMip, bm_lnInBrush, itbr->br_lhBrushMips, itbm) {
       // reoptimize it
       itbm->Reoptimize();
     }
   }
+
   CPrintF("All brushes reoptimized.\n");
 }
 
-static void DoLevelSafetyChecks()
-{
-  
+static void DoLevelSafetyChecks() {
   BOOL bWorldSettingsControllerExists = FALSE;
   
   CPrintF("\n****  BEGIN Level safety checking  ****\n\n");
   
   // get the world pointer
   CWorld *pwo = (CWorld *)_pShell->GetINDEX("pwoCurrentWorld");
+
   // if there is no current world
   if (pwo == NULL) {
     CPrintF("Error - no current world.\n");
@@ -148,11 +158,13 @@ static void DoLevelSafetyChecks()
   }
   
   CPrintF("STEP 1 - Checking model holders...\n");
+
   // for model holder in the world;
   {FOREACHINDYNAMICCONTAINER(pwo->wo_cenEntities, CEntity, iten) {  
     if (IsOfClass(iten, "ModelHolder2")) {
       CModelHolder2 *mh = (CModelHolder2*)&*iten;
       FLOAT3D vPos = mh->GetPlacement().pl_PositionVector;
+
       if (mh->m_penDestruction == NULL) {
         CPrintF("  model holder '%s' at (%2.2f, %2.2f, %2.2f) has no destruction\n", mh->m_strName, vPos(1), vPos(2), vPos(3));
       }
@@ -160,21 +172,24 @@ static void DoLevelSafetyChecks()
   }}
 
   CPrintF("STEP 2 - Checking sound holders...\n");
+
   // for each sound holder in the world
   {FOREACHINDYNAMICCONTAINER(pwo->wo_cenEntities, CEntity, iten) {
     if (IsOfClass(iten, "SoundHolder")) {
       CSoundHolder *sh = (CSoundHolder *)&*iten;
       FLOAT3D vPos = sh->GetPlacement().pl_PositionVector;
+
       if (sh->m_fnSound == CTFILENAME("Sounds\\Default.wav")) {
         CPrintF("  sound holder '%s' at (%2.2f, %2.2f, %2.2f) has default sound!\n", sh->m_strName, vPos(1), vPos(2), vPos(3));
       }
     }
   }}
   
-
   CPrintF("STEP 3 - Checking other important entities...\n");
+
   CWorldSettingsController *pwsc = NULL;
   class CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) pwo->GetBackgroundViewer();
+
   if (penBcgViewer != NULL) {
     // obtain world settings controller 
     pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
@@ -187,103 +202,88 @@ static void DoLevelSafetyChecks()
   }
 
   CPrintF("\n****  END Level safety checking  ****\n");
-
 }
 
-void SetPyramidPlateActivateAlpha(CWorld *pwo, INDEX iBlending,
-                                  TIME tmActivated, TIME tmDeactivated, BOOL bPulsate)
-{
+void SetPyramidPlateActivateAlpha(CWorld *pwo, INDEX iBlending, TIME tmActivated, TIME tmDeactivated, BOOL bPulsate) {
   TIME tmNow = _pTimer->CurrentTick();
   TIME tmStop = 2.0f;
   FLOAT fRatio;
 
   // get alpha
-  if (tmNow>tmDeactivated)
-  {
+  if (tmNow > tmDeactivated) {
     // if plate is deactivated
-    if (tmNow>tmDeactivated+tmStop)
-    {
+    if (tmNow > tmDeactivated + tmStop) {
       fRatio = 0;
-    }
+
     // if fading out
-    else
-    {
+    } else {
       fRatio = CalculateRatio(tmNow, tmDeactivated, tmDeactivated+tmStop, 0.0f, 1.0f);
     }
-  }
-  else if (tmNow>tmActivated)
-  {
+
+  } else if (tmNow > tmActivated) {
     // if full visible
-    if (tmNow>tmActivated+tmStop)
-    {
+    if (tmNow > tmActivated + tmStop) {
       fRatio = 1;
-    }
-    else
-    {
+
+    } else {
       // fade in
       fRatio = CalculateRatio(tmNow, tmActivated, tmActivated+tmStop, 1.0f, 0.0f);
     }
-  }
+
   // not yet activated
-  else
-  {
+  } else {
     fRatio = 0;
   }
+
   FLOAT fSinFactor = 1.0f;
-  if (bPulsate)
-  {
-    fSinFactor = Sin((tmNow-tmActivated) * 720.0f)*0.5f+0.5f;
+
+  if (bPulsate) {
+    fSinFactor = Sin((tmNow - tmActivated) * 720.0f) * 0.5f + 0.5f;
   }
   
-  UBYTE ub = UBYTE( fRatio*fSinFactor*255.0f);
+  UBYTE ub = UBYTE(fRatio * fSinFactor * 255.0f);
+
   // apply blend or add
-  if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ALPHA)
-  {
-    pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = C_WHITE|ub;
-  }
-  else if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ADD)
-  {
-    pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = RGBAToColor(ub,ub,ub,255);
+  if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ALPHA) {
+    pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = C_WHITE | ub;
+
+  } else if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ADD) {
+    pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = RGBAToColor(ub, ub, ub, 255);
   }
 }
 
-void SetPyramidMorphRoomAlpha(CWorld *pwo, INDEX iBlending, TIME tmActivated)
-{
+void SetPyramidMorphRoomAlpha(CWorld *pwo, INDEX iBlending, TIME tmActivated) {
   TIME tmNow = _pTimer->CurrentTick();
   TIME tmDelta = tmNow-tmActivated;
   FLOAT fRatio;
-  FLOAT tmAppear=10.0f;
+  FLOAT tmAppear = 10.0f;
 
-  if (tmNow <= tmActivated) { return;}
+  if (tmNow <= tmActivated) {
+    return;
+  }
   
   // get alpha
-  if (tmNow >= tmActivated+tmAppear)
-  {
+  if (tmNow >= tmActivated + tmAppear) {
     fRatio = 1;
-  }
-  else
-  {
+  } else {
     fRatio = CalculateRatio(tmNow, tmActivated, tmActivated+tmAppear, 1.0f, 0.0f);
   }
 
-  FLOAT fSinFactor = Sin(-90+tmDelta*90*(1.0f+tmDelta/tmAppear*4))*0.5f+0.5f;
-  //FLOAT fSinFactor = Sin(-90+90*tmDelta)*0.5f+0.5f;
-  //UBYTE ub = fSinFactor*255.0f;
-  UBYTE ub = UBYTE((fRatio+(1.0f-fRatio)*fSinFactor)*255.0f);
+  FLOAT fSinFactor = Sin(-90 + tmDelta * 90 * (1.0f + tmDelta / tmAppear * 4)) * 0.5f + 0.5f;
+  //FLOAT fSinFactor = Sin(-90 + 90 * tmDelta) * 0.5f + 0.5f;
+  //UBYTE ub = fSinFactor * 255.0f;
+  UBYTE ub = UBYTE((fRatio + (1.0f - fRatio) * fSinFactor) * 255.0f);
 
   // apply blend or add
-  if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ALPHA)
-  {
-    pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = C_WHITE|ub;
-  }
-  else if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ADD)
-  {
-    pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = RGBAToColor(ub,ub,ub,255);
+  if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ALPHA) {
+    pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = C_WHITE | ub;
+
+  } else if (pwo->wo_atbTextureBlendings[iBlending].tb_ubBlendingType == STXF_BLEND_ADD) {
+    pwo->wo_atbTextureBlendings[iBlending].tb_colMultiply = RGBAToColor(ub, ub, ub, 255);
   }
 }
     
-void CWorldBase_OnWorldInit(CWorld *pwo)
-{
+void CWorldBase_OnWorldInit(CWorld *pwo) {
   pwo->wo_attTextureTransformations[0].tt_strName = "None";
   pwo->wo_attTextureTransformations[1].tt_strName = "R Extremly Slow";
   pwo->wo_attTextureTransformations[2].tt_strName = "R Very Slow";
@@ -337,66 +337,67 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   pwo->wo_attTextureTransformations[44].tt_strName = "D Super Fast";
   pwo->wo_attTextureTransformations[45].tt_strName = "D Abnormaly Fast";
 
-// static
-  pwo->wo_atbTextureBlendings[0].tb_strName         = "Opaque";
-  pwo->wo_atbTextureBlendings[0].tb_ubBlendingType  = STXF_BLEND_OPAQUE;
+  // static
+  pwo->wo_atbTextureBlendings[0].tb_strName        = "Opaque";
+  pwo->wo_atbTextureBlendings[0].tb_ubBlendingType = STXF_BLEND_OPAQUE;
 
-  pwo->wo_atbTextureBlendings[1].tb_strName         = "Shade";
-  pwo->wo_atbTextureBlendings[1].tb_ubBlendingType  = STXF_BLEND_SHADE;
+  pwo->wo_atbTextureBlendings[1].tb_strName        = "Shade";
+  pwo->wo_atbTextureBlendings[1].tb_ubBlendingType = STXF_BLEND_SHADE;
 
-  pwo->wo_atbTextureBlendings[2].tb_strName         = "Blend";
-  pwo->wo_atbTextureBlendings[2].tb_ubBlendingType  = STXF_BLEND_ALPHA;
+  pwo->wo_atbTextureBlendings[2].tb_strName        = "Blend";
+  pwo->wo_atbTextureBlendings[2].tb_ubBlendingType = STXF_BLEND_ALPHA;
 
-  pwo->wo_atbTextureBlendings[3].tb_strName         = "Add";
-  pwo->wo_atbTextureBlendings[3].tb_ubBlendingType  = STXF_BLEND_ADD;
-// pulsating
-  pwo->wo_atbTextureBlendings[4].tb_strName         = "Shade pulsating";
-  pwo->wo_atbTextureBlendings[4].tb_ubBlendingType  = STXF_BLEND_SHADE;
-  pwo->wo_atbTextureBlendings[4].tb_colMultiply     = 0x808080FF;
+  pwo->wo_atbTextureBlendings[3].tb_strName        = "Add";
+  pwo->wo_atbTextureBlendings[3].tb_ubBlendingType = STXF_BLEND_ADD;
 
-  pwo->wo_atbTextureBlendings[5].tb_strName         = "Blend pulsating full";
-  pwo->wo_atbTextureBlendings[5].tb_ubBlendingType  = STXF_BLEND_ALPHA;
-  pwo->wo_atbTextureBlendings[5].tb_colMultiply     = C_WHITE|0x80;
+  // pulsating
+  pwo->wo_atbTextureBlendings[4].tb_strName        = "Shade pulsating";
+  pwo->wo_atbTextureBlendings[4].tb_ubBlendingType = STXF_BLEND_SHADE;
+  pwo->wo_atbTextureBlendings[4].tb_colMultiply    = 0x808080FF;
 
-  pwo->wo_atbTextureBlendings[6].tb_strName         = "Add pulsating";
-  pwo->wo_atbTextureBlendings[6].tb_ubBlendingType  = STXF_BLEND_ADD;
-  pwo->wo_atbTextureBlendings[6].tb_colMultiply     = 0x808080FF;
+  pwo->wo_atbTextureBlendings[5].tb_strName        = "Blend pulsating full";
+  pwo->wo_atbTextureBlendings[5].tb_ubBlendingType = STXF_BLEND_ALPHA;
+  pwo->wo_atbTextureBlendings[5].tb_colMultiply    = C_WHITE|0x80;
 
-  pwo->wo_atbTextureBlendings[7].tb_strName         = "Blend pulsating half";
-  pwo->wo_atbTextureBlendings[7].tb_ubBlendingType  = STXF_BLEND_ALPHA;
-  pwo->wo_atbTextureBlendings[7].tb_colMultiply     = C_WHITE|0xC0;
+  pwo->wo_atbTextureBlendings[6].tb_strName        = "Add pulsating";
+  pwo->wo_atbTextureBlendings[6].tb_ubBlendingType = STXF_BLEND_ADD;
+  pwo->wo_atbTextureBlendings[6].tb_colMultiply    = 0x808080FF;
 
-  pwo->wo_atbTextureBlendings[8].tb_strName         = "Wsc blend";
-  pwo->wo_atbTextureBlendings[8].tb_ubBlendingType  = STXF_BLEND_ALPHA;
-  pwo->wo_atbTextureBlendings[8].tb_colMultiply     = C_WHITE|0x00;
+  pwo->wo_atbTextureBlendings[7].tb_strName        = "Blend pulsating half";
+  pwo->wo_atbTextureBlendings[7].tb_ubBlendingType = STXF_BLEND_ALPHA;
+  pwo->wo_atbTextureBlendings[7].tb_colMultiply    = C_WHITE|0xC0;
 
-  pwo->wo_atbTextureBlendings[9].tb_strName         = "Wsc shade";
-  pwo->wo_atbTextureBlendings[9].tb_ubBlendingType  = STXF_BLEND_SHADE;
-  pwo->wo_atbTextureBlendings[9].tb_colMultiply     = C_WHITE|0xFF;
+  pwo->wo_atbTextureBlendings[8].tb_strName        = "Wsc blend";
+  pwo->wo_atbTextureBlendings[8].tb_ubBlendingType = STXF_BLEND_ALPHA;
+  pwo->wo_atbTextureBlendings[8].tb_colMultiply    = C_WHITE|0x00;
 
-  pwo->wo_atbTextureBlendings[10].tb_strName         = "Pyramid plate appearing";
-  pwo->wo_atbTextureBlendings[10].tb_ubBlendingType  = STXF_BLEND_ALPHA;
-  pwo->wo_atbTextureBlendings[10].tb_colMultiply     = C_WHITE|0x00;
+  pwo->wo_atbTextureBlendings[9].tb_strName        = "Wsc shade";
+  pwo->wo_atbTextureBlendings[9].tb_ubBlendingType = STXF_BLEND_SHADE;
+  pwo->wo_atbTextureBlendings[9].tb_colMultiply    = C_WHITE|0xFF;
 
-  pwo->wo_atbTextureBlendings[11].tb_strName         = "Activated plate 1";
-  pwo->wo_atbTextureBlendings[11].tb_ubBlendingType  = STXF_BLEND_ADD;
-  pwo->wo_atbTextureBlendings[11].tb_colMultiply     = C_BLACK|CT_OPAQUE;
+  pwo->wo_atbTextureBlendings[10].tb_strName        = "Pyramid plate appearing";
+  pwo->wo_atbTextureBlendings[10].tb_ubBlendingType = STXF_BLEND_ALPHA;
+  pwo->wo_atbTextureBlendings[10].tb_colMultiply    = C_WHITE|0x00;
 
-  pwo->wo_atbTextureBlendings[12].tb_strName         = "Activated plate 2";
-  pwo->wo_atbTextureBlendings[12].tb_ubBlendingType  = STXF_BLEND_ADD;
-  pwo->wo_atbTextureBlendings[12].tb_colMultiply     = C_BLACK|CT_OPAQUE;
+  pwo->wo_atbTextureBlendings[11].tb_strName        = "Activated plate 1";
+  pwo->wo_atbTextureBlendings[11].tb_ubBlendingType = STXF_BLEND_ADD;
+  pwo->wo_atbTextureBlendings[11].tb_colMultiply    = C_BLACK|CT_OPAQUE;
 
-  pwo->wo_atbTextureBlendings[13].tb_strName         = "Activated plate 3";
-  pwo->wo_atbTextureBlendings[13].tb_ubBlendingType  = STXF_BLEND_ADD;
-  pwo->wo_atbTextureBlendings[13].tb_colMultiply     = C_BLACK|CT_OPAQUE;
+  pwo->wo_atbTextureBlendings[12].tb_strName        = "Activated plate 2";
+  pwo->wo_atbTextureBlendings[12].tb_ubBlendingType = STXF_BLEND_ADD;
+  pwo->wo_atbTextureBlendings[12].tb_colMultiply    = C_BLACK|CT_OPAQUE;
 
-  pwo->wo_atbTextureBlendings[14].tb_strName         = "Activated plate 4";
-  pwo->wo_atbTextureBlendings[14].tb_ubBlendingType  = STXF_BLEND_ADD;
-  pwo->wo_atbTextureBlendings[14].tb_colMultiply     = C_BLACK|CT_OPAQUE;
+  pwo->wo_atbTextureBlendings[13].tb_strName        = "Activated plate 3";
+  pwo->wo_atbTextureBlendings[13].tb_ubBlendingType = STXF_BLEND_ADD;
+  pwo->wo_atbTextureBlendings[13].tb_colMultiply    = C_BLACK|CT_OPAQUE;
 
-  pwo->wo_atbTextureBlendings[15].tb_strName         = "Activate pyramid morph room";
-  pwo->wo_atbTextureBlendings[15].tb_ubBlendingType  = STXF_BLEND_ALPHA;
-  pwo->wo_atbTextureBlendings[15].tb_colMultiply     = C_WHITE|0x00;
+  pwo->wo_atbTextureBlendings[14].tb_strName        = "Activated plate 4";
+  pwo->wo_atbTextureBlendings[14].tb_ubBlendingType = STXF_BLEND_ADD;
+  pwo->wo_atbTextureBlendings[14].tb_colMultiply    = C_BLACK|CT_OPAQUE;
+
+  pwo->wo_atbTextureBlendings[15].tb_strName        = "Activate pyramid morph room";
+  pwo->wo_atbTextureBlendings[15].tb_ubBlendingType = STXF_BLEND_ALPHA;
+  pwo->wo_atbTextureBlendings[15].tb_colMultiply    = C_WHITE|0x00;
 
   pwo->wo_aitIlluminationTypes[0].it_strName = "None";
   pwo->wo_aitIlluminationTypes[1].it_strName = "Vitraj 1";
@@ -410,7 +411,6 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   pwo->wo_aitIlluminationTypes[9].it_strName = "Misc 3";
 
   // surfaces
-
   pwo->wo_astSurfaceTypes[0].st_strName = "Standard";
   pwo->wo_astSurfaceTypes[0].st_fFriction = 1.0f;
   pwo->wo_astSurfaceTypes[0].st_fStairsHeight = 1.0f;
@@ -564,7 +564,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   // contents
   pwo->wo_actContentTypes[0].ct_strName = "Air";
   pwo->wo_actContentTypes[0].ct_fDensity = 0.0f;
-  pwo->wo_actContentTypes[0].ct_fFluidFriction     = 0.0f;
+  pwo->wo_actContentTypes[0].ct_fFluidFriction = 0.0f;
   pwo->wo_actContentTypes[0].ct_fControlMultiplier = 1.0f;
   pwo->wo_actContentTypes[0].ct_fSpeedMultiplier = 1.0f;
   pwo->wo_actContentTypes[0].ct_fDrowningDamageAmount = 10.0f;
@@ -573,7 +573,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
 
   pwo->wo_actContentTypes[1].ct_strName = "Water";
   pwo->wo_actContentTypes[1].ct_fDensity = 1000.0f;
-  pwo->wo_actContentTypes[1].ct_fFluidFriction     = 0.0f;
+  pwo->wo_actContentTypes[1].ct_fFluidFriction = 0.0f;
   pwo->wo_actContentTypes[1].ct_fControlMultiplier = 2.0f;
   pwo->wo_actContentTypes[1].ct_fSpeedMultiplier = 0.75f;
   pwo->wo_actContentTypes[1].ct_fDrowningDamageAmount = 10.0f;
@@ -582,7 +582,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
 
   pwo->wo_actContentTypes[2].ct_strName = "Lava";
   pwo->wo_actContentTypes[2].ct_fDensity = 800.0f;
-  pwo->wo_actContentTypes[2].ct_fFluidFriction     = 1.0f;
+  pwo->wo_actContentTypes[2].ct_fFluidFriction = 1.0f;
   pwo->wo_actContentTypes[2].ct_fControlMultiplier = 2.0f;
   pwo->wo_actContentTypes[2].ct_fSpeedMultiplier = 0.5f;
   pwo->wo_actContentTypes[2].ct_fDrowningDamageAmount = 0.0f;
@@ -594,7 +594,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
 
   pwo->wo_actContentTypes[3].ct_strName = "Cold Water";
   pwo->wo_actContentTypes[3].ct_fDensity = 1000.0f;
-  pwo->wo_actContentTypes[3].ct_fFluidFriction     = 0.0f;
+  pwo->wo_actContentTypes[3].ct_fFluidFriction = 0.0f;
   pwo->wo_actContentTypes[3].ct_fControlMultiplier = 2.0f;
   pwo->wo_actContentTypes[3].ct_fSpeedMultiplier = 0.75f;
   pwo->wo_actContentTypes[3].ct_fDrowningDamageAmount = 10.0f;
@@ -607,7 +607,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
 
   pwo->wo_actContentTypes[4].ct_strName = "Spikes";
   pwo->wo_actContentTypes[4].ct_fDensity = 500.0f;
-  pwo->wo_actContentTypes[4].ct_fFluidFriction     = 0.5f;
+  pwo->wo_actContentTypes[4].ct_fFluidFriction = 0.5f;
   pwo->wo_actContentTypes[4].ct_fControlMultiplier = 1.0f;
   pwo->wo_actContentTypes[4].ct_fSpeedMultiplier = 0.75f;
   pwo->wo_actContentTypes[4].ct_iKillDamageType = DMT_SPIKESTAB;
@@ -616,7 +616,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
 
   pwo->wo_actContentTypes[5].ct_strName = "Desert heat";
   pwo->wo_actContentTypes[5].ct_fDensity = 0.0f;
-  pwo->wo_actContentTypes[5].ct_fFluidFriction     = 0.0f;
+  pwo->wo_actContentTypes[5].ct_fFluidFriction = 0.0f;
   pwo->wo_actContentTypes[5].ct_fControlMultiplier = 1.0f;
   pwo->wo_actContentTypes[5].ct_fSpeedMultiplier = 1.0f;
   pwo->wo_actContentTypes[5].ct_iSwimDamageType = DMT_HEAT;
@@ -627,7 +627,7 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
 
   pwo->wo_actContentTypes[6].ct_strName = "Lava (-10HP/SEC)";
   pwo->wo_actContentTypes[6].ct_fDensity = 1000.0f;
-  pwo->wo_actContentTypes[6].ct_fFluidFriction     = 0.0f;
+  pwo->wo_actContentTypes[6].ct_fFluidFriction = 0.0f;
   pwo->wo_actContentTypes[6].ct_fControlMultiplier = 2.0f;
   pwo->wo_actContentTypes[6].ct_fSpeedMultiplier = 0.75f;
   pwo->wo_actContentTypes[6].ct_fDrowningDamageAmount = 0.0f;
@@ -638,45 +638,45 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   pwo->wo_actContentTypes[6].ct_ulFlags = CTF_SWIMABLE|CTF_FADESPINNING;
 
   // environments
-  pwo->wo_aetEnvironmentTypes[ 0].et_strName = "Normal";
-  pwo->wo_aetEnvironmentTypes[ 0].et_iType = 1;
-  pwo->wo_aetEnvironmentTypes[ 0].et_fSize = 1.4f;
+  pwo->wo_aetEnvironmentTypes[0].et_strName = "Normal";
+  pwo->wo_aetEnvironmentTypes[0].et_iType = 1;
+  pwo->wo_aetEnvironmentTypes[0].et_fSize = 1.4f;
 
-  pwo->wo_aetEnvironmentTypes[ 1].et_strName = "Generic";
-  pwo->wo_aetEnvironmentTypes[ 1].et_iType = 0;
-  pwo->wo_aetEnvironmentTypes[ 1].et_fSize = 7.5f;
+  pwo->wo_aetEnvironmentTypes[1].et_strName = "Generic";
+  pwo->wo_aetEnvironmentTypes[1].et_iType = 0;
+  pwo->wo_aetEnvironmentTypes[1].et_fSize = 7.5f;
 
-  pwo->wo_aetEnvironmentTypes[ 2].et_strName = "Small room";
-  pwo->wo_aetEnvironmentTypes[ 2].et_iType = EAX_ENVIRONMENT_LIVINGROOM;
-  pwo->wo_aetEnvironmentTypes[ 2].et_fSize = 2.5f;
+  pwo->wo_aetEnvironmentTypes[2].et_strName = "Small room";
+  pwo->wo_aetEnvironmentTypes[2].et_iType = EAX_ENVIRONMENT_LIVINGROOM;
+  pwo->wo_aetEnvironmentTypes[2].et_fSize = 2.5f;
 
-  pwo->wo_aetEnvironmentTypes[ 3].et_strName = "Medium room";
-  pwo->wo_aetEnvironmentTypes[ 3].et_iType = EAX_ENVIRONMENT_STONEROOM;
-  pwo->wo_aetEnvironmentTypes[ 3].et_fSize = 11.6f;
+  pwo->wo_aetEnvironmentTypes[3].et_strName = "Medium room";
+  pwo->wo_aetEnvironmentTypes[3].et_iType = EAX_ENVIRONMENT_STONEROOM;
+  pwo->wo_aetEnvironmentTypes[3].et_fSize = 11.6f;
 
-  pwo->wo_aetEnvironmentTypes[ 4].et_strName = "Big room";
-  pwo->wo_aetEnvironmentTypes[ 4].et_iType = EAX_ENVIRONMENT_AUDITORIUM;
-  pwo->wo_aetEnvironmentTypes[ 4].et_fSize = 21.6f;
+  pwo->wo_aetEnvironmentTypes[4].et_strName = "Big room";
+  pwo->wo_aetEnvironmentTypes[4].et_iType = EAX_ENVIRONMENT_AUDITORIUM;
+  pwo->wo_aetEnvironmentTypes[4].et_fSize = 21.6f;
 
-  pwo->wo_aetEnvironmentTypes[ 5].et_strName = "Corridor";
-  pwo->wo_aetEnvironmentTypes[ 5].et_iType = EAX_ENVIRONMENT_HALLWAY;
-  pwo->wo_aetEnvironmentTypes[ 5].et_fSize = 1.8f;
+  pwo->wo_aetEnvironmentTypes[5].et_strName = "Corridor";
+  pwo->wo_aetEnvironmentTypes[5].et_iType = EAX_ENVIRONMENT_HALLWAY;
+  pwo->wo_aetEnvironmentTypes[5].et_fSize = 1.8f;
 
-  pwo->wo_aetEnvironmentTypes[ 6].et_strName = "Arena";
-  pwo->wo_aetEnvironmentTypes[ 6].et_iType = EAX_ENVIRONMENT_ARENA;
-  pwo->wo_aetEnvironmentTypes[ 6].et_fSize = 36.2f;
+  pwo->wo_aetEnvironmentTypes[6].et_strName = "Arena";
+  pwo->wo_aetEnvironmentTypes[6].et_iType = EAX_ENVIRONMENT_ARENA;
+  pwo->wo_aetEnvironmentTypes[6].et_fSize = 36.2f;
 
-  pwo->wo_aetEnvironmentTypes[ 7].et_strName = "Long corridor";
-  pwo->wo_aetEnvironmentTypes[ 7].et_iType = EAX_ENVIRONMENT_STONECORRIDOR;
-  pwo->wo_aetEnvironmentTypes[ 7].et_fSize = 13.5f;
+  pwo->wo_aetEnvironmentTypes[7].et_strName = "Long corridor";
+  pwo->wo_aetEnvironmentTypes[7].et_iType = EAX_ENVIRONMENT_STONECORRIDOR;
+  pwo->wo_aetEnvironmentTypes[7].et_fSize = 13.5f;
 
-  pwo->wo_aetEnvironmentTypes[ 8].et_strName = "Small canyon";
-  pwo->wo_aetEnvironmentTypes[ 8].et_iType = EAX_ENVIRONMENT_QUARRY;
-  pwo->wo_aetEnvironmentTypes[ 8].et_fSize = 17.5f;
+  pwo->wo_aetEnvironmentTypes[8].et_strName = "Small canyon";
+  pwo->wo_aetEnvironmentTypes[8].et_iType = EAX_ENVIRONMENT_QUARRY;
+  pwo->wo_aetEnvironmentTypes[8].et_fSize = 17.5f;
 
-  pwo->wo_aetEnvironmentTypes[ 9].et_strName = "Big canyon";
-  pwo->wo_aetEnvironmentTypes[ 9].et_iType = EAX_ENVIRONMENT_MOUNTAINS;
-  pwo->wo_aetEnvironmentTypes[ 9].et_fSize = 100.0f;
+  pwo->wo_aetEnvironmentTypes[9].et_strName = "Big canyon";
+  pwo->wo_aetEnvironmentTypes[9].et_iType = EAX_ENVIRONMENT_MOUNTAINS;
+  pwo->wo_aetEnvironmentTypes[9].et_fSize = 100.0f;
 
   pwo->wo_aetEnvironmentTypes[10].et_strName = "Open space";
   pwo->wo_aetEnvironmentTypes[10].et_iType = EAX_ENVIRONMENT_PLAIN;
@@ -700,188 +700,210 @@ void CWorldBase_OnWorldInit(CWorld *pwo)
   _pShell->DeclareSymbol("user void DoLevelSafetyChecks(void);", &DoLevelSafetyChecks);
 }
 
-void CWorldBase_OnWorldRender(CWorld *pwo)
-{
+void CWorldBase_OnWorldRender(CWorld *pwo) {
   // get current tick
-  TIME tmNow = CTimer::InSeconds(_pTimer->LerpedGameTick());
+  TIME tmNow = _pTimer->GetLerpedCurrentTick();
+
   // wrap time to prevent texture coordinates to get unprecise
   tmNow = fmod(tmNow, 600.0f); // (wrap every 10 minutes)
 
-// transformations
+  // transformations
+
   // right
-  pwo->wo_attTextureTransformations[1].tt_mdTransformation.md_fUOffset= 128/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[2].tt_mdTransformation.md_fUOffset= 256/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[3].tt_mdTransformation.md_fUOffset= 512/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[4].tt_mdTransformation.md_fUOffset=1024/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[5].tt_mdTransformation.md_fUOffset=2048/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[6].tt_mdTransformation.md_fUOffset=4096/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[7].tt_mdTransformation.md_fUOffset=8192/1024.0f*tmNow;
+  pwo->wo_attTextureTransformations[1].tt_mdTransformation.md_fUOffset =  128 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[2].tt_mdTransformation.md_fUOffset =  256 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[3].tt_mdTransformation.md_fUOffset =  512 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[4].tt_mdTransformation.md_fUOffset = 1024 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[5].tt_mdTransformation.md_fUOffset = 2048 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[6].tt_mdTransformation.md_fUOffset = 4096 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[7].tt_mdTransformation.md_fUOffset = 8192 / 1024.0f * tmNow;
   
   // down
-  pwo->wo_attTextureTransformations[37].tt_mdTransformation.md_fVOffset= 128/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[38].tt_mdTransformation.md_fVOffset= 256/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[39].tt_mdTransformation.md_fVOffset= 512/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[40].tt_mdTransformation.md_fVOffset=1024/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[41].tt_mdTransformation.md_fVOffset=2048/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[42].tt_mdTransformation.md_fVOffset=4096/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[43].tt_mdTransformation.md_fVOffset=8192/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[44].tt_mdTransformation.md_fVOffset=8192*2/1024.0f*tmNow;
-  pwo->wo_attTextureTransformations[45].tt_mdTransformation.md_fVOffset=8192*4/1024.0f*tmNow;
+  pwo->wo_attTextureTransformations[37].tt_mdTransformation.md_fVOffset =  128 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[38].tt_mdTransformation.md_fVOffset =  256 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[39].tt_mdTransformation.md_fVOffset =  512 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[40].tt_mdTransformation.md_fVOffset = 1024 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[41].tt_mdTransformation.md_fVOffset = 2048 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[42].tt_mdTransformation.md_fVOffset = 4096 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[43].tt_mdTransformation.md_fVOffset = 8192 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[44].tt_mdTransformation.md_fVOffset = 8192 * 2 / 1024.0f * tmNow;
+  pwo->wo_attTextureTransformations[45].tt_mdTransformation.md_fVOffset = 8192 * 4 / 1024.0f * tmNow;
 
   CMappingDefinitionUI mdui;
   mdui.mdui_fUStretch = 1.0f;
   mdui.mdui_fVStretch = 1.0f;
   mdui.mdui_fUOffset = 0.0f;
   mdui.mdui_fVOffset = 0.0f;
+
   // rotations left
   mdui.mdui_aURotation = 8192*1/1024.0f*tmNow;
   mdui.mdui_aVRotation = 8192*1/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[17].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = 8192*2/1024.0f*tmNow;
   mdui.mdui_aVRotation = 8192*2/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[18].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = 8192*4/1024.0f*tmNow;
   mdui.mdui_aVRotation = 8192*4/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[19].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = 8192*8/1024.0f*tmNow;
   mdui.mdui_aVRotation = 8192*8/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[20].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = 8192*16/1024.0f*tmNow;
   mdui.mdui_aVRotation = 8192*16/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[21].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = 8192*32/1024.0f*tmNow;
   mdui.mdui_aVRotation = 8192*32/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[22].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = 8192*64/1024.0f*tmNow;
   mdui.mdui_aVRotation = 8192*64/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[23].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = 8192*128/1024.0f*tmNow;
   mdui.mdui_aVRotation = 8192*128/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[24].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = 8192*256/1024.0f*tmNow;
   mdui.mdui_aVRotation = 8192*256/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[25].tt_mdTransformation.FromUI(mdui);
+
   // rotations right
   mdui.mdui_aURotation = -8192*1/1024.0f*tmNow;
   mdui.mdui_aVRotation = -8192*1/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[27].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = -8192*2/1024.0f*tmNow;
   mdui.mdui_aVRotation = -8192*2/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[28].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = -8192*4/1024.0f*tmNow;
   mdui.mdui_aVRotation = -8192*4/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[29].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = -8192*8/1024.0f*tmNow;
   mdui.mdui_aVRotation = -8192*8/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[30].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = -8192*16/1024.0f*tmNow;
   mdui.mdui_aVRotation = -8192*16/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[31].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = -8192*32/1024.0f*tmNow;
   mdui.mdui_aVRotation = -8192*32/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[32].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = -8192*64/1024.0f*tmNow;
   mdui.mdui_aVRotation = -8192*64/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[33].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = -8192*128/1024.0f*tmNow;
   mdui.mdui_aVRotation = -8192*128/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[34].tt_mdTransformation.FromUI(mdui);
+
   mdui.mdui_aURotation = -8192*256/1024.0f*tmNow;
   mdui.mdui_aVRotation = -8192*256/1024.0f*tmNow;
   pwo->wo_attTextureTransformations[35].tt_mdTransformation.FromUI(mdui);
-// blendings
+
+  // blendings
   FLOAT f = Abs(Sin(tmNow*AngleDeg(180.0f)));
-  pwo->wo_atbTextureBlendings[4].tb_colMultiply = RGBAToColor(f*255, f*255, f*255, 255);
-  pwo->wo_atbTextureBlendings[5].tb_colMultiply = C_WHITE|UBYTE(255*f);
-  pwo->wo_atbTextureBlendings[6].tb_colMultiply = RGBAToColor(f*255, f*255, f*255, 255);
-  pwo->wo_atbTextureBlendings[7].tb_colMultiply = C_WHITE|UBYTE(255*Lerp(0.5f, 1.0f, f));
 
-  pwo->wo_attTextureTransformations[11].tt_mdTransformation.md_fUOffset=Sin( tmNow*22)/30;
-  pwo->wo_attTextureTransformations[11].tt_mdTransformation.md_fVOffset=Cos( tmNow*26)/35;
+  pwo->wo_atbTextureBlendings[4].tb_colMultiply = RGBAToColor(f * 255, f * 255, f * 255, 255);
+  pwo->wo_atbTextureBlendings[5].tb_colMultiply = C_WHITE | UBYTE(255*f);
+  pwo->wo_atbTextureBlendings[6].tb_colMultiply = RGBAToColor(f * 255, f * 255, f * 255, 255);
+  pwo->wo_atbTextureBlendings[7].tb_colMultiply = C_WHITE | UBYTE(255 * Lerp(0.5f, 1.0f, f));
 
-  pwo->wo_attTextureTransformations[12].tt_mdTransformation.md_fUOffset=Sin( tmNow*32)/10;
-  pwo->wo_attTextureTransformations[12].tt_mdTransformation.md_fVOffset=Cos( tmNow*22)/15;
+  pwo->wo_attTextureTransformations[11].tt_mdTransformation.md_fUOffset = Sin(tmNow * 22) / 30;
+  pwo->wo_attTextureTransformations[11].tt_mdTransformation.md_fVOffset = Cos(tmNow * 26) / 35;
 
-  pwo->wo_attTextureTransformations[13].tt_mdTransformation.md_fUOffset=Sin( tmNow*15)/7;
-  pwo->wo_attTextureTransformations[13].tt_mdTransformation.md_fVOffset=Cos( tmNow*25)/8;
+  pwo->wo_attTextureTransformations[12].tt_mdTransformation.md_fUOffset = Sin(tmNow * 32) / 10;
+  pwo->wo_attTextureTransformations[12].tt_mdTransformation.md_fVOffset = Cos(tmNow * 22) / 15;
 
-  pwo->wo_attTextureTransformations[14].tt_mdTransformation.md_fUOffset=Sin( tmNow*32)/3;
-  pwo->wo_attTextureTransformations[14].tt_mdTransformation.md_fVOffset=Cos( tmNow*22)/3;
+  pwo->wo_attTextureTransformations[13].tt_mdTransformation.md_fUOffset = Sin(tmNow * 15) / 7;
+  pwo->wo_attTextureTransformations[13].tt_mdTransformation.md_fVOffset = Cos(tmNow * 25) / 8;
 
-  pwo->wo_attTextureTransformations[15].tt_mdTransformation.md_fUOffset=Sin( tmNow*15);
-  pwo->wo_attTextureTransformations[15].tt_mdTransformation.md_fVOffset=Cos( tmNow*25);
+  pwo->wo_attTextureTransformations[14].tt_mdTransformation.md_fUOffset = Sin(tmNow * 32) / 3;
+  pwo->wo_attTextureTransformations[14].tt_mdTransformation.md_fVOffset = Cos(tmNow * 22) / 3;
 
-  // ----------- Obtain world settings controller
-  CWorldSettingsController *pwsc = NULL;
+  pwo->wo_attTextureTransformations[15].tt_mdTransformation.md_fUOffset = Sin(tmNow * 15);
+  pwo->wo_attTextureTransformations[15].tt_mdTransformation.md_fVOffset = Cos(tmNow * 25);
+  
   // obtain bcg viewer
-  CBackgroundViewer *penBcgViewer = (CBackgroundViewer *) pwo->GetBackgroundViewer();
-  if (penBcgViewer != NULL)
-  {
-    // obtain world settings controller 
+  CBackgroundViewer *penBcgViewer = (CBackgroundViewer *)pwo->GetBackgroundViewer();
+
+  // obtain world settings controller
+  CWorldSettingsController *pwsc = NULL;
+
+  if (penBcgViewer != NULL) {
     pwsc = (CWorldSettingsController *) &*penBcgViewer->m_penWorldSettingsController;
   }
   
-  // ***** Storm effects
+
   // if world settings controller is valid
   if (pwsc != NULL)
   {
+    // storm effects
+
     FLOAT fStormFactor = pwsc->GetStormFactor();
-    COLOR colBlend = LerpColor( pwsc->m_colBlendStart, pwsc->m_colBlendStop, fStormFactor);
+    COLOR colBlend = LerpColor(pwsc->m_colBlendStart, pwsc->m_colBlendStop, fStormFactor);
     pwo->wo_atbTextureBlendings[8].tb_colMultiply = colBlend;
 
     // set world polygon shading multiplier
-    COLOR colShade = LerpColor( pwsc->m_colShadeStart, pwsc->m_colShadeStop, fStormFactor);
+    COLOR colShade = LerpColor(pwsc->m_colShadeStart, pwsc->m_colShadeStop, fStormFactor);
 
     // apply lightning FX
-    if (pwsc->m_tmLightningStart != -1)
-    {
+    if (pwsc->m_tmLightningStart != -1) {
       FLOAT tmLightningLife = tmNow-pwsc->m_tmLightningStart;
       _aoLightningColor.ao_llAnimStart = CTimer::InTicks(pwsc->m_tmLightningStart);
-      COLOR colLightning = _aoLightningColor.GetFrame();
-      // calculate lightning power factor
-      UBYTE ub = UBYTE( pwsc->m_fLightningPower*255);
-      COLOR colFactor = RGBToColor( ub, ub, ub) | CT_OPAQUE;
-      colLightning = MulColors( colLightning, colFactor);
-      colShade = AddColors( colShade, colLightning);
-    }
-    pwo->wo_atbTextureBlendings[9].tb_colMultiply = colShade;
-  }
 
-  // ***** Pyramid blending effects
-  // if world settings controller is valid
-  if (pwsc != NULL)
-  {
+      COLOR colLightning = _aoLightningColor.GetFrame();
+
+      // calculate lightning power factor
+      UBYTE ub = UBYTE(pwsc->m_fLightningPower * 255);
+      COLOR colFactor = RGBToColor(ub, ub, ub) | CT_OPAQUE;
+
+      colLightning = MulColors(colLightning, colFactor);
+      colShade = AddColors(colShade, colLightning);
+    }
+
+    pwo->wo_atbTextureBlendings[9].tb_colMultiply = colShade;
+
+    // pyramid blending effects
+
     // set alpha values for switch-controlled pyramid plate activating
     SetPyramidPlateActivateAlpha(pwo, 10, pwsc->m_tmPyramidPlatesStart, 1e6, FALSE);
     SetPyramidPlateActivateAlpha(pwo, 11, pwsc->m_tmActivatedPlate1, pwsc->m_tmDeactivatedPlate1, TRUE);
     SetPyramidPlateActivateAlpha(pwo, 12, pwsc->m_tmActivatedPlate2, pwsc->m_tmDeactivatedPlate2, TRUE);
     SetPyramidPlateActivateAlpha(pwo, 13, pwsc->m_tmActivatedPlate3, pwsc->m_tmDeactivatedPlate3, TRUE);
     SetPyramidPlateActivateAlpha(pwo, 14, pwsc->m_tmActivatedPlate4, pwsc->m_tmDeactivatedPlate4, TRUE);
+
     // pyramid morph room
     SetPyramidMorphRoomAlpha(pwo, 15, pwsc->m_tmPyramidMorphRoomActivated);
   }
 };
 
-void CWorldBase_OnInitClass(void)
-{
+void CWorldBase_OnInitClass(void) {
   // init particle effects
   InitParticles();
-  try
-  {
+
+  try {
     // setup simple model shadow texture
     _toSimpleModelShadow.SetData_t( CTFILENAME("Textures\\Effects\\Shadow\\SimpleModelShadow.tex"));
     _aoLightningColor.SetData_t( CTFILENAME("Animations\\Lightning.ani"));
+
     // we will use first animation in .ani file for lightning
     _aoLightningColor.PlayAnim(0, AOF_NORESTART);
-  }
-  catch(char *strError)
-  {
+
+  } catch(char *strError) {
     FatalError(TRANS("Cannot load shadow texture: \n%s"), strError);
   }
 }
 
-void CWorldBase_OnEndClass(void)
-{
+void CWorldBase_OnEndClass(void) {
   // close particle effects
   CloseParticles();
 }
@@ -892,11 +914,7 @@ class CFixedForce {
     class CForceStrength ff_fsGravity;
     class CForceStrength ff_fsField;
     
-    inline CFixedForce(CTString strName,
-      FLOAT3D vDirection,
-      FLOAT fAcceleration,
-      FLOAT fVelocity)
-    {
+    inline CFixedForce(CTString strName, FLOAT3D vDirection, FLOAT fAcceleration, FLOAT fVelocity) {
       ff_strName = strName;
       ff_fsGravity.fs_vDirection     =vDirection;
       ff_fsGravity.fs_fAcceleration  =fAcceleration;
@@ -904,42 +922,37 @@ class CFixedForce {
     }
 };
 
-static CFixedForce affFixedForces[] = 
-{
-  CFixedForce ("Normal D", FLOAT3D(0,-1, 0), 30, 70),
-  CFixedForce ("Normal U", FLOAT3D(0,+1, 0), 30, 70),
-  CFixedForce ("Normal N", FLOAT3D(0, 0,-1), 30, 70),
-  CFixedForce ("Normal S", FLOAT3D(0, 0,+1), 30, 70),
+static CFixedForce affFixedForces[] = {
+  CFixedForce ("Normal D", FLOAT3D( 0,-1, 0), 30, 70),
+  CFixedForce ("Normal U", FLOAT3D( 0,+1, 0), 30, 70),
+  CFixedForce ("Normal N", FLOAT3D( 0, 0,-1), 30, 70),
+  CFixedForce ("Normal S", FLOAT3D( 0, 0,+1), 30, 70),
   CFixedForce ("Normal E", FLOAT3D(-1, 0, 0), 30, 70),
   CFixedForce ("Normal W", FLOAT3D(+1, 0, 0), 30, 70),
-  CFixedForce ("ZeroG",    FLOAT3D(+1, 0, 0), 0, 0),
-  CFixedForce ("Unused",   FLOAT3D(+1, 0, 0), 0, 0),
-  CFixedForce ("Unused",   FLOAT3D(+1, 0, 0), 0, 0),
-  CFixedForce ("Unused",   FLOAT3D(+1, 0, 0), 0, 0),
+  CFixedForce ("ZeroG",    FLOAT3D(+1, 0, 0),  0,  0),
+  CFixedForce ("Unused",   FLOAT3D(+1, 0, 0),  0,  0),
+  CFixedForce ("Unused",   FLOAT3D(+1, 0, 0),  0,  0),
+  CFixedForce ("Unused",   FLOAT3D(+1, 0, 0),  0,  0),
 };
+
 static INDEX ctFixedForces = ARRAYCOUNT(affFixedForces);
-extern void GetDefaultForce(INDEX iForce, const FLOAT3D &vPoint, 
-    CForceStrength &fsGravity, CForceStrength &fsField)
-{
-  if (iForce<ctFixedForces) {
+
+extern void GetDefaultForce(INDEX iForce, const FLOAT3D &vPoint, CForceStrength &fsGravity, CForceStrength &fsField) {
+  if (iForce < ctFixedForces) {
     fsGravity = affFixedForces[iForce].ff_fsGravity;
   }
 }
 %}
 
-
 class CWorldBase : CEntity {
 name      "WorldBase";
 thumbnail "Thumbnails\\WorldBase.tbn";
 features  "HasName", "HasDescription", 
-  "ImplementsOnWorldRender", "ImplementsOnWorldInit",
-  "ImplementsOnInitClass", "ImplementsOnEndClass";
-
+          "ImplementsOnWorldRender", "ImplementsOnWorldInit",
+          "ImplementsOnInitClass", "ImplementsOnEndClass";
 
 properties:
-
-
-  1 CTString m_strName "Name" 'N' ="World Base",
+  1 CTString m_strName "Name" 'N' = "World Base",
   3 CTString m_strDescription = "",
   2 BOOL m_bZoning     "Zoning"     'Z' =FALSE,
   4 BOOL m_bBackground "Background" 'B' =FALSE,
@@ -1005,334 +1018,385 @@ properties:
 
   99 FLOAT m_fOpacity "Opacity" = 1.0f,
 
-
 components:
 
-
 functions:
-
-  // get visibility tweaking bits
-  ULONG GetVisTweaks(void)
-  {
-    return m_cbClassificationBits|m_vbVisibilityBits;
+  // Get visibility tweaking bits
+  ULONG GetVisTweaks(void) {
+    return m_cbClassificationBits | m_vbVisibilityBits;
   }
 
   // Validate offered target for one property
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
-  {
-    if (penTarget == NULL)
-    {
+  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget) {
+    if (penTarget == NULL) {
       return FALSE;
     }
-    
+
     ULONG ulFirst, ulLast;
     CTString strClass;
 
     // if gradient marker
     ulFirst = offsetof(CWorldBase, m_penGradient0);
-    ulLast  = offsetof(CWorldBase, m_penGradient19);
+    ulLast = offsetof(CWorldBase, m_penGradient19);
     strClass = "Gradient Marker";
-    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
+
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast)) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
     // if gravity marker
     ulFirst = offsetof(CWorldBase, m_penGravity0);
-    ulLast  = offsetof(CWorldBase, m_penGravity9);
-    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
-      return 
-        IsDerivedFromClass(penTarget, "Gravity Marker")||
-        IsDerivedFromClass(penTarget, "Gravity Router");
+    ulLast = offsetof(CWorldBase, m_penGravity9);
+
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast)) {
+      return IsDerivedFromClass(penTarget, "Gravity Marker") || IsDerivedFromClass(penTarget, "Gravity Router");
     }
 
     // if mirror marker
     ulFirst = offsetof(CWorldBase, m_penMirror0);
-    ulLast  = offsetof(CWorldBase, m_penMirror4);
+    ulLast = offsetof(CWorldBase, m_penMirror4);
     strClass = "Mirror Marker";
-    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
+
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast)) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
     // if fog marker
     ulFirst = offsetof(CWorldBase, m_penFog0);
-    ulLast  = offsetof(CWorldBase, m_penFog9);
+    ulLast = offsetof(CWorldBase, m_penFog9);
     strClass = "Fog Marker";
-    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
+
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast)) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
     // if haze marker
     ulFirst = offsetof(CWorldBase, m_penHaze0);
-    ulLast  = offsetof(CWorldBase, m_penHaze4);
+    ulLast = offsetof(CWorldBase, m_penHaze4);
     strClass = "Haze Marker";
-    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast) ) {
+
+    if ((slPropertyOffset >= ulFirst) && (slPropertyOffset <= ulLast)) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }
 
-  // Get force type name, return empty string if not used.
-  const CTString &GetForceName(INDEX iForce)
-  {
+  // Get force type name, return empty string if not used
+  const CTString &GetForceName(INDEX iForce) {
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    INDEX ctGravityMarkers = &m_penGravity9-&m_penGravity0+1;
+    INDEX ctGravityMarkers = &m_penGravity9 - &m_penGravity0 + 1;
 
-    if (iForce<ctFixedForces) {
+    if (iForce < ctFixedForces) {
       return affFixedForces[iForce].ff_strName;
+
     } else {
-      if (iForce-ctFixedForces <= ctGravityMarkers) {
-        CEntity *pen = &*(&m_penGravity0)[iForce-ctFixedForces];
+      if (iForce - ctFixedForces <= ctGravityMarkers) {
+        CEntity *pen = &*(&m_penGravity0)[iForce - ctFixedForces];
+
         if (pen != NULL) {
           return pen->GetForceName(0);
         } else {
           return strMarkerUnused;
         }
-
       }
+
       return strDummyName;
     }
   }
-  // Get force in given point.
-  void GetForce(INDEX iForce, const FLOAT3D &vPoint, 
-    CForceStrength &fsGravity, CForceStrength &fsField)
-  {
-    INDEX ctGravityMarkers = &m_penGravity9-&m_penGravity0+1;
-    if (iForce<ctFixedForces) {
+
+  // Get force in given point
+  void GetForce(INDEX iForce, const FLOAT3D &vPoint, CForceStrength &fsGravity, CForceStrength &fsField) {
+    INDEX ctGravityMarkers = &m_penGravity9 - &m_penGravity0 + 1;
+
+    if (iForce < ctFixedForces) {
       fsGravity = affFixedForces[iForce].ff_fsGravity;
+
     } else {
-      if (iForce-ctFixedForces<ctGravityMarkers) {
-        CEntity *pen = &*(&m_penGravity0)[iForce-ctFixedForces];
+      if (iForce - ctFixedForces < ctGravityMarkers) {
+        CEntity *pen = &*(&m_penGravity0)[iForce - ctFixedForces];
+
         if (pen != NULL) {
           pen->GetForce(0, vPoint, fsGravity, fsField);
           return;
         }
       }
+
       fsGravity.fs_fAcceleration = 30;
       fsGravity.fs_fVelocity = 70;
       fsGravity.fs_vDirection = FLOAT3D(1.0f, 0.0f, 0.0f);
     }
+
     fsField.fs_fAcceleration = 0;
     fsField.fs_fVelocity = 0;
   }
 
-  // Get entity that controls the force, used for change notification checking.
-  CEntity *GetForceController(INDEX iForce)
-  {
-    INDEX ctGravityMarkers = &m_penGravity9-&m_penGravity0+1;
-    if (iForce<ctFixedForces) {
+  // Get entity that controls the force, used for change notification checking
+  CEntity *GetForceController(INDEX iForce) {
+    INDEX ctGravityMarkers = &m_penGravity9 - &m_penGravity0 + 1;
+
+    if (iForce < ctFixedForces) {
       return NULL;
+
     } else {
-      if (iForce-ctFixedForces<ctGravityMarkers) {
-        CEntity *pen = &*(&m_penGravity0)[iForce-ctFixedForces];
+      if (iForce - ctFixedForces < ctGravityMarkers) {
+        CEntity *pen = &*(&m_penGravity0)[iForce - ctFixedForces];
+
         if (pen != NULL) {
           return pen->GetForceController(0);
         }
       }
     }
+
     return NULL;
   }
-  // Get fog type name, return empty string if not used.
-  const CTString &GetFogName(INDEX iFog)
-  {
-    INDEX ctFogMarkers = &m_penFog9-&m_penFog0+1;
+
+  // Get fog type name, return empty string if not used
+  const CTString &GetFogName(INDEX iFog) {
+    INDEX ctFogMarkers = &m_penFog9 - &m_penFog0 + 1;
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    if (iFog<ctFogMarkers) {
+
+    if (iFog < ctFogMarkers) {
       CFogMarker *pfm = (CFogMarker *)&*(&m_penFog0)[iFog];
+
       if (pfm != NULL) {
         return pfm->GetFogName();
       } else {
         return strMarkerUnused;
       }
     }
+
     return strDummyName;
   }
-  // Get fog, return FALSE for none.
-  BOOL GetFog(INDEX iFog, class CFogParameters &fpFog)
-  {
-    INDEX ctFogMarkers = &m_penFog8-&m_penFog0+1;
-    if (iFog<ctFogMarkers) {
+
+  // Get fog, return FALSE for none
+  BOOL GetFog(INDEX iFog, class CFogParameters &fpFog) {
+    INDEX ctFogMarkers = &m_penFog8 - &m_penFog0 + 1;
+
+    if (iFog < ctFogMarkers) {
       CFogMarker *pfm = (CFogMarker *)&*(&m_penFog0)[iFog];
+
       if (pfm != NULL) {
         pfm->GetFog(fpFog);
         return TRUE;
       }
     }
+
     return FALSE;
   }
-  
-  // Get haze type name, return empty string if not used.
-  const CTString &GetHazeName(INDEX iHaze)
-  {
-    INDEX ctHazeMarkers = &m_penHaze4-&m_penHaze0+1;
+
+  // Get haze type name, return empty string if not used
+  const CTString &GetHazeName(INDEX iHaze) {
+    INDEX ctHazeMarkers = &m_penHaze4 - &m_penHaze0 + 1;
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    if (iHaze<ctHazeMarkers) {
+
+    if (iHaze < ctHazeMarkers) {
       CHazeMarker *pfm = (CHazeMarker *)&*(&m_penHaze0)[iHaze];
+
       if (pfm != NULL) {
         return pfm->GetHazeName();
       } else {
         return strMarkerUnused;
       }
     }
+
     return strDummyName;
   }
-  
-  // Get haze, return FALSE for none.
-  BOOL GetHaze(INDEX iHaze, class CHazeParameters &hpHaze, FLOAT3D &vViewDir)
-  {
-    INDEX ctHazeMarkers = &m_penHaze4-&m_penHaze0+1;
-    if (iHaze<ctHazeMarkers) {
+
+  // Get haze, return FALSE for none
+  BOOL GetHaze(INDEX iHaze, class CHazeParameters &hpHaze, FLOAT3D &vViewDir) {
+    INDEX ctHazeMarkers = &m_penHaze4 - &m_penHaze0 + 1;
+
+    if (iHaze < ctHazeMarkers) {
       CHazeMarker *phm = (CHazeMarker *)&*(&m_penHaze0)[iHaze];
+
       if (phm != NULL) {
         phm->GetHaze(hpHaze, vViewDir);
         return TRUE;
       }
     }
+
     return FALSE;
   }
 
-  // Get mirror type name, return empty string if not used.
-  const CTString &GetMirrorName(INDEX iMirror)
-  {
+  // Get mirror type name, return empty string if not used
+  const CTString &GetMirrorName(INDEX iMirror) {
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
+
     if (iMirror == 0) {
       return strDummyName;
     }
 
     switch (iMirror) {
-    case 1: { static const CTString str("std mirror 1"); return str; }; break;
-    case 2: { static const CTString str("std mirror 2"); return str; }; break;
-    case 3: { static const CTString str("std mirror 3"); return str; }; break;
-    case 4: { static const CTString str("std mirror 4"); return str; }; break;
-    case 5: { static const CTString str("std mirror 5"); return str; }; break;
-    case 6: { static const CTString str("std mirror 6"); return str; }; break;
-    case 7: { static const CTString str("std mirror 7"); return str; }; break;
-    case 8: { static const CTString str("std mirror 8"); return str; }; break;
-    default: {
-      iMirror-=9;
-      INDEX ctMirrorMarkers = &m_penMirror4-&m_penMirror0+1;
-      if (iMirror<ctMirrorMarkers) {
-        CMirrorMarker *pfm = (CMirrorMarker *)&*(&m_penMirror0)[iMirror];
-        if (pfm != NULL) {
-          return pfm->GetMirrorName();
-        } else {
-          return strMarkerUnused;
+      case 1: {
+        static const CTString str("std mirror 1");
+        return str;
+      } break;
+
+      case 2: {
+        static const CTString str("std mirror 2");
+        return str;
+      } break;
+
+      case 3: {
+        static const CTString str("std mirror 3");
+        return str;
+      } break;
+
+      case 4: {
+        static const CTString str("std mirror 4");
+        return str;
+      } break;
+
+      case 5: {
+        static const CTString str("std mirror 5");
+        return str;
+      } break;
+
+      case 6: {
+        static const CTString str("std mirror 6");
+        return str;
+      } break;
+
+      case 7: {
+        static const CTString str("std mirror 7");
+        return str;
+      } break;
+
+      case 8: {
+        static const CTString str("std mirror 8");
+        return str;
+      } break;
+
+      default: {
+        iMirror -= 9;
+        INDEX ctMirrorMarkers = &m_penMirror4 - &m_penMirror0 + 1;
+
+        if (iMirror < ctMirrorMarkers) {
+          CMirrorMarker *pfm = (CMirrorMarker *)&*(&m_penMirror0)[iMirror];
+
+          if (pfm != NULL) {
+            return pfm->GetMirrorName();
+          } else {
+            return strMarkerUnused;
+          }
         }
       }
-             }
     }
     return strDummyName;
   }
 
-  // Get mirror, return FALSE for none.
-  BOOL GetMirror(INDEX iMirror, class CMirrorParameters &mpMirror)
-  {
+  // Get mirror, return FALSE for none
+  BOOL GetMirror(INDEX iMirror, class CMirrorParameters &mpMirror) {
     if (iMirror == 0) {
       return FALSE;
     }
+
     if (iMirror >= 1 && iMirror <= 8) {
       mpMirror.mp_ulFlags = 0;
       return TRUE;
     }
-    iMirror-=9;
-    INDEX ctMirrorMarkers = &m_penMirror4-&m_penMirror0+1;
-    if (iMirror<ctMirrorMarkers) {
+
+    iMirror -= 9;
+    INDEX ctMirrorMarkers = &m_penMirror4 - &m_penMirror0 + 1;
+
+    if (iMirror < ctMirrorMarkers) {
       CMirrorMarker *pmm = (CMirrorMarker *)&*(&m_penMirror0)[iMirror];
+
       if (pmm != NULL) {
         pmm->GetMirror(mpMirror);
         return TRUE;
       }
     }
+
     return FALSE;
   }
-  
-  // Get gradient type name, return empty string if not used.
-  const CTString &GetGradientName(INDEX iGradient)
-  {
-    INDEX ctGradientMarkers = &m_penGradient19-&m_penGradient0+1;
+
+  // Get gradient type name, return empty string if not used
+  const CTString &GetGradientName(INDEX iGradient) {
+    INDEX ctGradientMarkers = &m_penGradient19 - &m_penGradient0 + 1;
     static const CTString strDummyName("");
     static const CTString strMarkerUnused("Marker not set");
-    if (iGradient<ctGradientMarkers) {
+
+    if (iGradient < ctGradientMarkers) {
       CGradientMarker *pgm = (CGradientMarker *)&*(&m_penGradient0)[iGradient];
+
       if (pgm != NULL) {
         return pgm->GetGradientName();
       } else {
         return strMarkerUnused;
       }
     }
+
     return strDummyName;
   }
+
   // Uncache shadows for given gradient
-  void UncacheShadowsForGradient(class CGradientMarker *penDiscard)
-  {
-    INDEX ctGradientMarkers = &m_penGradient19-&m_penGradient0+1;
-    for (INDEX iGradient=0; iGradient<ctGradientMarkers; iGradient++)
-    {
+  void UncacheShadowsForGradient(class CGradientMarker *penDiscard) {
+    INDEX ctGradientMarkers = &m_penGradient19 - &m_penGradient0 + 1;
+
+    for (INDEX iGradient = 0; iGradient < ctGradientMarkers; iGradient++) {
       CGradientMarker *pgm = (CGradientMarker *)&*(&m_penGradient0)[iGradient];
-      if (pgm == penDiscard)
-      {
-        CEntity::UncacheShadowsForGradient( iGradient+1);
+
+      if (pgm == penDiscard) {
+        CEntity::UncacheShadowsForGradient(iGradient + 1);
       }
     }
   }
 
   // Get gradient, return FALSE for none.
-  BOOL GetGradient(INDEX iGradient, class CGradientParameters &fpGradient)
-  {
-    INDEX ctGradientMarkers = &m_penGradient19-&m_penGradient0+1;
-    if ((iGradient<ctGradientMarkers) && (iGradient>0) ) {
-      CGradientMarker *pgm = (CGradientMarker *)&*(&m_penGradient0)[iGradient-1];
+  BOOL GetGradient(INDEX iGradient, class CGradientParameters &fpGradient) {
+    INDEX ctGradientMarkers = &m_penGradient19 - &m_penGradient0 + 1;
+
+    if ((iGradient < ctGradientMarkers) && (iGradient > 0)) {
+      CGradientMarker *pgm = (CGradientMarker *)&*(&m_penGradient0)[iGradient - 1];
       if (pgm != NULL) {
         return pgm->GetGradient(0, fpGradient);
       }
     }
+
     return FALSE;
   }
-  
+
   // Handle an event, return false if the event is not handled.
-  BOOL HandleEvent(const CEntityEvent &ee)
-  {
+  BOOL HandleEvent(const CEntityEvent &ee) {
     // when someone in range is destroyed
     if (ee.ee_slEvent == EVENTCODE_EFirstWorldBase) {
-      SetFlags(GetFlags()|ENF_ZONING);
+      SetFlags(GetFlags() | ENF_ZONING);
       m_bZoning = TRUE;
-      SetFlags(GetFlags()|ENF_ANCHORED);
+
+      SetFlags(GetFlags() | ENF_ANCHORED);
       m_bAnchored = TRUE;
+
       return TRUE;
     }
+
     return FALSE;
   }
 
-
-  // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
-  {
+  // Return bytes of memory used by this object
+  SLONG GetUsedMemory(void) {
     // initial
     SLONG slUsedMemory = sizeof(CWorldBase) - sizeof(CEntity) + CEntity::GetUsedMemory();
+
     // add some more
     slUsedMemory += m_strName.Length();
     slUsedMemory += m_strDescription.Length();
     return slUsedMemory;
   }
 
-
-  // return opacity of the brush
-  FLOAT GetOpacity(void)
-  {
+  // Return opacity of the brush
+  FLOAT GetOpacity(void) {
     return m_fOpacity;
   }
 
-
-
 procedures:
-
-
-  Main(EVoid evoid)
-  {
+  // Entry point
+  Main() {
     // declare yourself as a brush
     InitAsBrush();
     SetPhysicsFlags(EPF_BRUSH_FIXED);
@@ -1342,6 +1406,7 @@ procedures:
     if (m_bZoning) {
       m_strDescription = "zoning";
       SetFlags(GetFlags()|ENF_ZONING);
+
     } else {
       m_strDescription = "non zoning";
       SetFlags(GetFlags()&~ENF_ZONING);
@@ -1351,6 +1416,7 @@ procedures:
     if (m_bBackground) {
       m_strDescription += " background";
       SetFlags(GetFlags()|ENF_BACKGROUND);
+
     } else {
       SetFlags(GetFlags()&~ENF_BACKGROUND);
     }
@@ -1359,6 +1425,7 @@ procedures:
     if (m_bAnchored) {
       m_strDescription += " anchored";
       SetFlags(GetFlags()|ENF_ANCHORED);
+
     } else {
       SetFlags(GetFlags()&~ENF_ANCHORED);
     }

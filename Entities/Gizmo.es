@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -68,13 +68,11 @@ functions:
     return fnm;
   };
   // Entity info
-  void *GetEntityInfo(void)
-  {
+  void *GetEntityInfo(void) {
     return &eiGizmo;
   };
 
-  void Precache(void)
-  {
+  void Precache(void) {
     CEnemyBase::Precache();
     PrecacheSound(SOUND_SIGHT);
     PrecacheSound(SOUND_IDLE);
@@ -88,19 +86,16 @@ functions:
     PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
   };
 
-  void RunningAnim(void)
-  {
+  void RunningAnim(void) {
     StartModelAnim(GIZMO_ANIM_RUN, 0);
   };
 
-  void MortalJumpAnim(void)
-  {
+  void MortalJumpAnim(void) {
     StartModelAnim(GIZMO_ANIM_RUN, 0);
   };
-  
-  void StandAnim(void)
-  {
-    StartModelAnim(GIZMO_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+
+  void StandAnim(void) {
+    StartModelAnim(GIZMO_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
   // virtual sound functions
@@ -108,51 +103,45 @@ functions:
     PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
   };
 
-// BLOW UP FUNCTIONS
+  // BLOW UP FUNCTIONS
   void BlowUpNotify(void) {
     Explode();
   };
 
   // explode only once
-  void Explode(void)
-  {
-    if (!m_bExploded)
-    {
+  void Explode(void) {
+    if (!m_bExploded) {
       m_bExploded = TRUE;
       // spawn blood spray
       CPlacement3D plSpray = GetPlacement();
-      CEntity *penSpray = CreateEntity( plSpray, CLASS_BLOOD_SPRAY);
-      penSpray->SetParent( this);
+      CEntity *penSpray = CreateEntity(plSpray, CLASS_BLOOD_SPRAY);
+      penSpray->SetParent(this);
       ESpawnSpray eSpawnSpray;
-      eSpawnSpray.colBurnColor=C_WHITE|CT_OPAQUE;
+      eSpawnSpray.colBurnColor = C_WHITE | CT_OPAQUE;
       eSpawnSpray.fDamagePower = 2.0f;
       eSpawnSpray.fSizeMultiplier = 1.0f;
       eSpawnSpray.sptType = SPT_SLIME;
-      eSpawnSpray.vDirection = en_vCurrentTranslationAbsolute/8.0f;
+      eSpawnSpray.vDirection = en_vCurrentTranslationAbsolute / 8.0f;
       eSpawnSpray.penOwner = this;
-      penSpray->Initialize( eSpawnSpray);
+      penSpray->Initialize(eSpawnSpray);
 
       // spawn splash fx (sound)
       CPlacement3D plSplash = GetPlacement();
       CEntityPointer penSplash = CreateEntity(plSplash, CLASS_BASIC_EFFECT);
       ESpawnEffect ese;
-      ese.colMuliplier = C_WHITE|CT_OPAQUE;
+      ese.colMuliplier = C_WHITE | CT_OPAQUE;
       ese.betType = BET_GIZMO_SPLASH_FX;
       penSplash->Initialize(ese);
     }
   };
 
-
   // gizmo should always blow up
-  BOOL ShouldBlowUp(void)
-  {
+  BOOL ShouldBlowUp(void) {
     return TRUE;
   }
 
-
   // leave stain
-  virtual void LeaveStain(BOOL bGrow)
-  {
+  virtual void LeaveStain(BOOL bGrow) {
     ESpawnEffect ese;
     FLOAT3D vPoint;
     FLOATplane3D vPlaneNormal;
@@ -160,30 +149,26 @@ functions:
     // get your size
     FLOATaabbox3D box;
     GetBoundingBox(box);
-  
+
     // on plane
-    if (GetNearestPolygon(vPoint, vPlaneNormal, fDistanceToEdge))
-    {
+    if (GetNearestPolygon(vPoint, vPlaneNormal, fDistanceToEdge)) {
       // if near to polygon and away from last stain point
-      if ((vPoint-GetPlacement().pl_PositionVector).Length()<0.5f )
-      {
+      if ((vPoint - GetPlacement().pl_PositionVector).Length() < 0.5f) {
         FLOAT fStretch = box.Size().Length();
         // stain
-        ese.colMuliplier = C_WHITE|CT_OPAQUE;
-        ese.betType    = BET_GIZMOSTAIN;
-        ese.vStretch   = FLOAT3D(fStretch*0.75f, fStretch*0.75f, 1.0f);
-        ese.vNormal    = FLOAT3D(vPlaneNormal);
+        ese.colMuliplier = C_WHITE | CT_OPAQUE;
+        ese.betType = BET_GIZMOSTAIN;
+        ese.vStretch = FLOAT3D(fStretch * 0.75f, fStretch * 0.75f, 1.0f);
+        ese.vNormal = FLOAT3D(vPlaneNormal);
         ese.vDirection = FLOAT3D(0, 0, 0);
-        FLOAT3D vPos = vPoint+ese.vNormal/50.0f*(FRnd()+0.5f);
-        CEntityPointer penEffect = CreateEntity( CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
+        FLOAT3D vPos = vPoint + ese.vNormal / 50.0f * (FRnd() + 0.5f);
+        CEntityPointer penEffect = CreateEntity(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
         penEffect->Initialize(ese);
       }
     }
   };
 
 procedures:
-// ATTACK ENEMY
-
   // close range -> move toward enemy and try to jump onto it
   PerformAttack(EVoid) : CEnemyBase::PerformAttack
   {
@@ -302,8 +287,8 @@ procedures:
     }
   };
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);

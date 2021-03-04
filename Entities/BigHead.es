@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -98,13 +98,11 @@ functions:
   }
 
   // Entity info
-  void *GetEntityInfo(void)
-  {
+  void *GetEntityInfo(void) {
     return &eiMental;
   };
 
-  void Precache(void)
-  {
+  void Precache(void) {
     CEnemyBase::Precache();
     PrecacheSound(SOUND_SIGHT);
     PrecacheSound(SOUND_IDLE);
@@ -116,8 +114,7 @@ functions:
     m_apt.Precache(m_fnmHeadTex);
   };
 
-  INDEX GetWalkAnim(void)
-  {
+  INDEX GetWalkAnim(void) {
     if (m_bhtType == BHT_ZOMBIE) {
       return MENTAL_ANIM_WALKZOMBIE;
     } else if (m_bhtType == BHT_SAINT) {
@@ -144,34 +141,32 @@ functions:
   };
 
   void DeathNotify(void) {
-//    ChangeCollisionBoxIndexWhenPossible(HEADMAN_COLLISION_BOX_DEATH);
+    //    ChangeCollisionBoxIndexWhenPossible(HEADMAN_COLLISION_BOX_DEATH);
     en_fDensity = 500.0f;
   };
 
   // virtual anim functions
   void StandingAnim(void) {
-    StartModelAnim(MENTAL_ANIM_GROUNDREST, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(MENTAL_ANIM_GROUNDREST, AOF_LOOPING | AOF_NORESTART);
   };
   void WalkingAnim(void) {
     PlayWalkSound();
-    StartModelAnim(GetWalkAnim(), AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(GetWalkAnim(), AOF_LOOPING | AOF_NORESTART);
 
-    if (!m_bIgnorePlayer && _pTimer->CurrentTick()>m_tmLastGreetTime+GREET_SENSE_DELAY) {
+    if (!m_bIgnorePlayer && _pTimer->CurrentTick() > m_tmLastGreetTime + GREET_SENSE_DELAY) {
       m_fSenseRange = GREET_SENSE_RANGE;
       m_bDeaf = FALSE;
     }
   };
-  void RunningAnim(void)
-  {
+  void RunningAnim(void) {
     PlayWalkSound();
-    StartModelAnim(GetWalkAnim(), AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(GetWalkAnim(), AOF_LOOPING | AOF_NORESTART);
   };
   void RotatingAnim(void) {
     RunningAnim();
   };
 
-  void PlayWalkSound(void)
-  {
+  void PlayWalkSound(void) {
     INDEX iSound = SOUND_WALKZOMBIE;
     if (m_bhtType == BHT_ZOMBIE) {
       iSound = SOUND_WALKZOMBIE;
@@ -180,7 +175,7 @@ functions:
     } else {
       return;
     }
-    if (!m_bPlayingWalkSound || _pTimer->CurrentTick()-m_tmLastWalkingSoundTime>m_tmWalkingSound) {
+    if (!m_bPlayingWalkSound || _pTimer->CurrentTick() - m_tmLastWalkingSoundTime > m_tmWalkingSound) {
       m_bPlayingWalkSound = TRUE;
       m_tmLastWalkingSoundTime = _pTimer->CurrentTick();
       PlaySound(m_soSound, iSound, SOF_3D);
@@ -292,8 +287,8 @@ procedures:
     return EReturn();
   }
 
-  // MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);

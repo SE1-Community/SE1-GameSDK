@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -98,10 +98,10 @@ functions:
   }
   void Precache(void) {
     CEnemyBase::Precache();
-    PrecacheSound(SOUND_IDLE );
+    PrecacheSound(SOUND_IDLE);
     PrecacheSound(SOUND_SIGHT);
     PrecacheSound(SOUND_WOUND);
-    PrecacheSound(SOUND_BITE );
+    PrecacheSound(SOUND_BITE);
     PrecacheSound(SOUND_PUNCH);
     PrecacheSound(SOUND_DEATH);
     PrecacheSound(SOUND_MUMBLE);
@@ -117,9 +117,8 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // eyeman can't harm eyeman
     if (!IsOfClass(penInflictor, "Eyeman")) {
       CEnemyFly::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
@@ -132,31 +131,33 @@ functions:
   };
 
   // Fill in entity statistics - for AI purposes only
-  BOOL FillEntityStatistics(EntityStats *pes)
-  {
+  BOOL FillEntityStatistics(EntityStats *pes) {
     CEnemyBase::FillEntityStatistics(pes);
     switch (m_EecChar) {
-    case EYC_SERGEANT: { pes->es_strName+=" Sergeant"; } break;
-    case EYC_SOLDIER : { pes->es_strName+=" Soldier"; } break;
+      case EYC_SERGEANT: {
+        pes->es_strName += " Sergeant";
+      } break;
+      case EYC_SOLDIER: {
+        pes->es_strName += " Soldier";
+      } break;
     }
     if (m_bInvisible) {
-      pes->es_strName+=" Invisible";
+      pes->es_strName += " Invisible";
     }
     return TRUE;
   }
 
   virtual const CTFileName &GetComputerMessageName(void) const {
     static DECLARE_CTFILENAME(fnmSergeant, "Data\\Messages\\Enemies\\EyemanGreen.txt");
-    static DECLARE_CTFILENAME(fnmSoldier , "Data\\Messages\\Enemies\\EyemanPurple.txt");
+    static DECLARE_CTFILENAME(fnmSoldier, "Data\\Messages\\Enemies\\EyemanPurple.txt");
     switch (m_EecChar) {
-    default: ASSERT(FALSE);
-    case EYC_SERGEANT: return fnmSergeant;
-    case EYC_SOLDIER : return fnmSoldier;
+      default: ASSERT(FALSE);
+      case EYC_SERGEANT: return fnmSergeant;
+      case EYC_SOLDIER: return fnmSoldier;
     }
   };
   // Adjust model shading parameters if needed.
-  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
-  {
+  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
     // no shadows for invisibles
     if (m_bInvisible) {
       colAmbient = C_WHITE;
@@ -171,7 +172,7 @@ functions:
     DeactivateMumblingSound();
     INDEX iAnim;
     if (m_bInAir) {
-      switch (IRnd()%2) {
+      switch (IRnd() % 2) {
         case 0: iAnim = EYEMAN_ANIM_MORPHWOUND01; break;
         case 1: iAnim = EYEMAN_ANIM_MORPHWOUND02; break;
         default: ASSERTALWAYS("Eyeman unknown fly damage");
@@ -179,15 +180,15 @@ functions:
     } else {
       FLOAT3D vFront;
       GetHeadingDirection(0, vFront);
-      FLOAT fDamageDir = m_vDamage%vFront;
+      FLOAT fDamageDir = m_vDamage % vFront;
       if (Abs(fDamageDir) <= 10) {
-        switch (IRnd()%3) {
+        switch (IRnd() % 3) {
           case 0: iAnim = EYEMAN_ANIM_WOUND03; break;
           case 1: iAnim = EYEMAN_ANIM_WOUND06; break;
           case 2: iAnim = EYEMAN_ANIM_WOUND07; break;
         }
       } else {
-        if (fDamageDir<0) {
+        if (fDamageDir < 0) {
           iAnim = EYEMAN_ANIM_FALL01;
         } else {
           iAnim = EYEMAN_ANIM_FALL02;
@@ -207,8 +208,8 @@ functions:
     } else {
       FLOAT3D vFront;
       GetHeadingDirection(0, vFront);
-      FLOAT fDamageDir = m_vDamage%vFront;
-      if (fDamageDir<0) {
+      FLOAT fDamageDir = m_vDamage % vFront;
+      if (fDamageDir < 0) {
         iAnim = EYEMAN_ANIM_DEATH02;
       } else {
         iAnim = EYEMAN_ANIM_DEATH01;
@@ -219,19 +220,14 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim() == EYEMAN_ANIM_DEATH01)
-    {
-      vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*0.75f;
+    if (GetModelObject()->GetAnim() == EYEMAN_ANIM_DEATH01) {
+      vStretch = FLOAT3D(1.0f, 1.0f, 1.0f) * 0.75f;
       return 0.5f;
-    }
-    else if (GetModelObject()->GetAnim() == EYEMAN_ANIM_DEATH02)
-    {
-      vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*0.75f;
+    } else if (GetModelObject()->GetAnim() == EYEMAN_ANIM_DEATH02) {
+      vStretch = FLOAT3D(1.0f, 1.0f, 1.0f) * 0.75f;
       return 0.5f;
-    }
-    else if (GetModelObject()->GetAnim() == EYEMAN_ANIM_MORPHDEATH)
-    {
-      vStretch=FLOAT3D(1.0f, 1.0f, 1.0f)*1.0f;
+    } else if (GetModelObject()->GetAnim() == EYEMAN_ANIM_MORPHDEATH) {
+      vStretch = FLOAT3D(1.0f, 1.0f, 1.0f) * 1.0f;
       return 0.5f;
     }
     return -1.0f;
@@ -243,15 +239,13 @@ functions:
   };
 
   // mumbling sounds
-  void ActivateMumblingSound(void)
-  {
+  void ActivateMumblingSound(void) {
     if (!m_bMumbleSoundPlaying) {
-      PlaySound(m_soMumble, SOUND_MUMBLE, SOF_3D|SOF_LOOP);
+      PlaySound(m_soMumble, SOUND_MUMBLE, SOF_3D | SOF_LOOP);
       m_bMumbleSoundPlaying = TRUE;
     }
   }
-  void DeactivateMumblingSound(void)
-  {
+  void DeactivateMumblingSound(void) {
     m_soMumble.Stop();
     m_bMumbleSoundPlaying = FALSE;
   }
@@ -260,41 +254,41 @@ functions:
   void StandingAnim(void) {
     DeactivateMumblingSound();
     if (m_bInAir) {
-      StartModelAnim(EYEMAN_ANIM_MORPHATTACKFLY, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(EYEMAN_ANIM_MORPHATTACKFLY, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(EYEMAN_ANIM_STAND, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(EYEMAN_ANIM_STAND, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void WalkingAnim(void) {
     ActivateMumblingSound();
     if (m_bInAir) {
-      StartModelAnim(EYEMAN_ANIM_MORPHATTACKFLY, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(EYEMAN_ANIM_MORPHATTACKFLY, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(EYEMAN_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(EYEMAN_ANIM_WALK, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void RunningAnim(void) {
     ActivateMumblingSound();
     if (m_bInAir) {
-      StartModelAnim(EYEMAN_ANIM_MORPHATTACKFLY, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(EYEMAN_ANIM_MORPHATTACKFLY, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(EYEMAN_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(EYEMAN_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void RotatingAnim(void) {
     if (m_bInAir) {
-      StartModelAnim(EYEMAN_ANIM_MORPHATTACKFLY, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(EYEMAN_ANIM_MORPHATTACKFLY, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(EYEMAN_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(EYEMAN_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
     }
   };
   FLOAT AirToGroundAnim(void) {
     StartModelAnim(EYEMAN_ANIM_MORPHUP, 0);
-    return(GetModelObject()->GetAnimLength(EYEMAN_ANIM_MORPHUP));
+    return (GetModelObject()->GetAnimLength(EYEMAN_ANIM_MORPHUP));
   };
   FLOAT GroundToAirAnim(void) {
     StartModelAnim(EYEMAN_ANIM_MORPHDOWN, 0);
-    return(GetModelObject()->GetAnimLength(EYEMAN_ANIM_MORPHDOWN));
+    return (GetModelObject()->GetAnimLength(EYEMAN_ANIM_MORPHDOWN));
   };
   void ChangeCollisionToAir() {
     ChangeCollisionBoxIndexWhenPossible(EYEMAN_COLLISION_BOX_AIR);
@@ -317,7 +311,7 @@ functions:
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
   };
 
-// BLOW UP FUNCTIONS
+  // BLOW UP FUNCTIONS
 
   // spawn body parts
   /*void BlowUp(void)
@@ -358,11 +352,10 @@ functions:
     SetCollisionFlags(ECF_IMMATERIAL);
   };*/
 
-// MOVING FUNCTIONS
+  // MOVING FUNCTIONS
 
   // check whether may move while attacking
-  BOOL MayMoveToAttack(void) 
-  {
+  BOOL MayMoveToAttack(void) {
     if (m_bInAir) {
       return WouldNotLeaveAttackRadius();
     } else {
@@ -377,9 +370,8 @@ functions:
     }
     return FALSE;
   };
-procedures:
-// ATTACK ENEMY
 
+procedures:
   FlyHit(EVoid) : CEnemyFly::FlyHit {
     if (CalcDist(m_penEnemy) > BITE_AIR) {
       m_fShootTime = _pTimer->CurrentTick() + 0.25f;
@@ -443,8 +435,8 @@ procedures:
     return EReturn();
   };
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);

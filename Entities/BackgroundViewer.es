@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -20,14 +20,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 uses "Entities/Marker";
 
-class CBackgroundViewer: CMarker {
+class CBackgroundViewer : CMarker {
 name      "Background Viewer";
 thumbnail "Thumbnails\\BackgroundViewer.tbn";
-features "IsImportant";
+features  "IsImportant";
 
 properties:
-  1 BOOL m_bActive  "Active" 'A' =TRUE,   // set if active at beginning of game
-  2 CEntityPointer m_penWorldSettingsController  "World settings controller" 'W',
+  1 BOOL m_bActive "Active" 'A' = TRUE, // set if active at beginning of game
+  2 CEntityPointer m_penWorldSettingsController "World settings controller" 'W',
 
 components:
   1 model   MODEL_MARKER     "Models\\Editor\\Axis.mdl",
@@ -35,17 +35,16 @@ components:
 
 functions:
   // Validate offered target for one property
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
-  {
-    if (penTarget == NULL)
-    {
+  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget) {
+    if (penTarget == NULL) {
       return FALSE;
     }
+
     // if gradient marker
-    if (slPropertyOffset == offsetof(CBackgroundViewer, m_penWorldSettingsController))
-    {
+    if (slPropertyOffset == offsetof(CBackgroundViewer, m_penWorldSettingsController)) {
       return IsOfClass(penTarget, "WorldSettingsController");
     }
+
     return TRUE;
   }
 
@@ -59,8 +58,8 @@ functions:
   };
 
 procedures:
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -77,7 +76,7 @@ procedures:
     if (m_bActive) {
       GetWorld()->SetBackgroundViewer(this);
     }
+
     return;
   }
 };
-

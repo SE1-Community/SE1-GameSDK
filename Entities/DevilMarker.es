@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -63,18 +63,16 @@ components:
   2 texture TEXTURE_MARKER   "Models\\Editor\\DevilMarker.tex"
 
 functions:
-  void SetDefaultName(void)
-  {
+  void SetDefaultName(void) {
     m_strName = DevilActionType_enum.NameForValue(INDEX(m_datType));
   }
 
   const CTString &GetDescription(void) const {
     CTString strAction = DevilActionType_enum.NameForValue(INDEX(m_datType));
     if (m_penTarget == NULL) {
-      ((CTString&)m_strDescription).PrintF("%s (%s)-><none>", m_strName, strAction);
+      ((CTString &)m_strDescription).PrintF("%s (%s)-><none>", m_strName, strAction);
     } else {
-      ((CTString&)m_strDescription).PrintF("%s (%s)->%s", m_strName, strAction, 
-        m_penTarget->GetName());
+      ((CTString &)m_strDescription).PrintF("%s (%s)->%s", m_strName, strAction, m_penTarget->GetName());
     }
     return m_strDescription;
   }
@@ -92,59 +90,44 @@ functions:
   }
 
   // Handle an event, return false if the event is not handled.
-  BOOL HandleEvent(const CEntityEvent &ee)
-  {
-    if (ee.ee_slEvent == EVENTCODE_ETrigger)
-    {
-      if (m_datType == DAT_NEXT_ACTION && m_penDevil != NULL && m_penTarget != NULL)
-      {
+  BOOL HandleEvent(const CEntityEvent &ee) {
+    if (ee.ee_slEvent == EVENTCODE_ETrigger) {
+      if (m_datType == DAT_NEXT_ACTION && m_penDevil != NULL && m_penTarget != NULL) {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_FORCE_ACTION;
         eDevilCommand.penForcedAction = m_penTarget;
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
-      }
-      else if (m_datType == DAT_GRAB_LOWER_WEAPONS && m_penDevil != NULL)
-      {
+      } else if (m_datType == DAT_GRAB_LOWER_WEAPONS && m_penDevil != NULL) {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_GRAB_LOWER_WEAPONS;
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
-      }
-      else if (m_datType == DAT_STOP_MOVING && m_penDevil != NULL)
-      {
+      } else if (m_datType == DAT_STOP_MOVING && m_penDevil != NULL) {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_STOP_MOVING;
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
-      }
-      else if (m_datType == DAT_JUMP_INTO_PYRAMID && m_penDevil != NULL)
-      {
+      } else if (m_datType == DAT_JUMP_INTO_PYRAMID && m_penDevil != NULL) {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_JUMP_INTO_PYRAMID;
         eDevilCommand.penForcedAction = this;
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
-      }
-      else if (m_datType == DAT_TELEPORT_INTO_PYRAMID && m_penDevil != NULL)
-      {
+      } else if (m_datType == DAT_TELEPORT_INTO_PYRAMID && m_penDevil != NULL) {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_TELEPORT_INTO_PYRAMID;
         eDevilCommand.penForcedAction = this;
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
-      }
-      else if (m_datType == DAT_FORCE_ATTACK_RADIUS && m_penDevil != NULL)
-      {
+      } else if (m_datType == DAT_FORCE_ATTACK_RADIUS && m_penDevil != NULL) {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_FORCE_ATTACK_RADIUS;
         eDevilCommand.fAttackRadius = m_fAttackRadius;
         eDevilCommand.vCenterOfAttack = GetPlacement().pl_PositionVector;
         m_penDevil->SendEvent(eDevilCommand);
         return TRUE;
-      }
-      else if (m_datType == DAT_DECREASE_ATTACK_RADIUS && m_penDevil != NULL)
-      {
+      } else if (m_datType == DAT_DECREASE_ATTACK_RADIUS && m_penDevil != NULL) {
         EDevilCommand eDevilCommand;
         eDevilCommand.dctType = DC_DECREASE_ATTACK_RADIUS;
         m_penDevil->SendEvent(eDevilCommand);
@@ -155,6 +138,7 @@ functions:
   }
 
 procedures:
+  // Entry point
   Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);

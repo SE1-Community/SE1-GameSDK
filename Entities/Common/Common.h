@@ -168,10 +168,10 @@ DECL_DLL void GetPositionCastRay(CEntity *penSource, CEntity *penTarget, FLOAT3D
 DECL_DLL void SetBoolFromBoolEType(BOOL &bSet, BoolEType bet);
 
 // Send event to target
-DECL_DLL void SendToTarget(CEntity *penSendEvent, EventEType eetEventType, CEntity *penCaused = NULL);
+DECL_DLL void SendToTarget(CEntity *penSendEvent, EEventType eetEventType, CEntity *penCaused = NULL);
 
 // Send event in range
-DECL_DLL void SendInRange(CEntity *penSource, EventEType eetEventType, const FLOATaabbox3D &boxRange);
+DECL_DLL void SendInRange(CEntity *penSource, EEventType eetEventType, const FLOATaabbox3D &boxRange);
 
 // Spawn reminder
 DECL_DLL CEntityPointer SpawnReminder(CEntity *penOwner, FLOAT fWaitTime, INDEX iValue);
@@ -254,7 +254,7 @@ DECL_DLL CEntityPointer Debris_Spawn_Template(EntityInfoBodyType eibt, enum Debr
 DECL_DLL EntityInfo *GetStdEntityInfo(EntityInfoBodyType eibt);
 
 // Damage control functions
-DECL_DLL FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage);
+DECL_DLL FLOAT DamageStrength(EntityInfoBodyType eibtBody, INDEX dtDamage);
 
 // Print center screen message
 DECL_DLL void PrintCenterMessage(CEntity *penThis, CEntity *penTarget, const CTString &strMessage, TIME tmLength,

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -28,16 +28,15 @@ properties:
   1 CTString m_strName          "Name" 'N' = "TacticsChanger",
   2 CTString m_strDescription = "",
 
-  10 enum   TacticType m_tctType "Type" 'Y' = TCT_NONE, // tactic type
-  11 FLOAT  m_fParam1  "Parameter 1" 'D' = 0.0f,   // parameter 1
-  12 FLOAT  m_fParam2  "Parameter 2" 'F' = 0.0f,   // parameter 2
-  13 FLOAT  m_fParam3  "Parameter 3" 'G' = 0.0f,   // parameter 3
-  14 FLOAT  m_fParam4  "Parameter 4" 'H' = 0.0f,   // parameter 4
-  15 FLOAT  m_fParam5  "Parameter 5" 'J' = 0.0f,   // parameter 5
-/*16 BOOL   m_bRetryOnBlock "Retry tactic when blocked" = FALSE,
-  17 INDEX  m_bRetryCount   "Number of retries" = 1,  */
+  10 enum TacticType m_tctType "Type" 'Y' = TCT_NONE, // tactic type
+  11 FLOAT m_fParam1 "Parameter 1" 'D' = 0.0f, // parameter 1
+  12 FLOAT m_fParam2 "Parameter 2" 'F' = 0.0f, // parameter 2
+  13 FLOAT m_fParam3 "Parameter 3" 'G' = 0.0f, // parameter 3
+  14 FLOAT m_fParam4 "Parameter 4" 'H' = 0.0f, // parameter 4
+  15 FLOAT m_fParam5 "Parameter 5" 'J' = 0.0f, // parameter 5
+  //16 BOOL m_bRetryOnBlock "Retry tactic when blocked" = FALSE,
+  //17 INDEX m_bRetryCount "Number of retries" = 1,
   18 CEntityPointer m_penTacticsHolder "Tactics holder" 'H',
-  
 
 components:
   1 model   MODEL_MANAGER     "ModelsMP\\Editor\\TacticsChanger.mdl",
@@ -49,8 +48,8 @@ functions:
   }
 
 procedures:
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -62,8 +61,7 @@ procedures:
     autowait(0.1f);
     
     while (TRUE) {
-      wait()
-      {
+      wait() {
         on (ETrigger) : {
           if (m_penTacticsHolder != NULL) {
             CTacticsHolder *penTactics = &(CTacticsHolder &)*m_penTacticsHolder;
@@ -77,6 +75,7 @@ procedures:
           }
           stop;
         }
+
         otherwise() : {
           resume;
         }

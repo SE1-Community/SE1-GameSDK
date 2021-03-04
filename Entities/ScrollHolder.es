@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -18,10 +18,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "Entities/WorldSettingsController.h"
 #include "Entities/BackgroundViewer.h"
-%}
 
-%{
-#define CT_LINESONSCREEN 18 // this number must be fixed due to desinchronisation in different resolutions
+// [Cecil] TODO: Stretch credits vertically relative to resolution so this workaround isn't necessary
+#define CT_LINESONSCREEN 18 // this number must be fixed due to desynchronisation on different resolutions
+
 static CStaticStackArray<CTString> _astrCredits;
 static CTFileName _fnLastLoaded;
 %}
@@ -32,7 +32,6 @@ thumbnail "Thumbnails\\ScrollHolder.tbn";
 features  "IsTargetable", "HasName", "IsImportant";
 
 properties:
-
   1 CTString m_strName "Name" 'N' = "Scroll holder",
   2 CTString m_strDescription = "",
   3 CTFileName m_fnmMessage  "Scroll Text" 'T' = CTString(""),
@@ -40,12 +39,11 @@ properties:
   6 FLOAT m_fMyTimerLast = 0.0f,
   5 FLOAT m_fSpeed = 1.0f,
  15 CEntityPointer m_penEndCreditsTrigger "EndScroll trigger",
- 
-  20 BOOL m_bDataError = FALSE,
-  {
-    BOOL  bDataLoaded;
-  }
+ 20 BOOL m_bDataError = FALSE,
 
+{
+  BOOL bDataLoaded;
+}
 
 components:
   1 model   MODEL_MARKER     "Models\\Editor\\MessageHolder.mdl",
@@ -53,90 +51,92 @@ components:
 
 functions:
   const CTString &GetDescription(void) const {
-    ((CTString&)m_strDescription).PrintF("%s", m_fnmMessage.FileName());
+    ((CTString &)m_strDescription).PrintF("%s", m_fnmMessage.FileName());
     return m_strDescription;
   }
 
-  void CScrollHolder(void) 
-  {
+  void CScrollHolder(void) {
     bDataLoaded = FALSE;
   }
 
-  BOOL ReloadData(void)
-  {
+  BOOL ReloadData(void) {
     m_bDataError = FALSE;
-    if (!Credits_On(m_fnmMessage))
-    {
+
+    if (!Credits_On(m_fnmMessage)) {
       Credits_Off();
       return FALSE;
-    }    
+    }
+
     return TRUE;
   }
 
-  BOOL LoadOneFile(const CTFileName &fnm)
-  {
-    if (fnm == "") { return FALSE; }
-    try 
-    {
+  BOOL LoadOneFile(const CTFileName &fnm) {
+    if (fnm == "") {
+      return FALSE;
+    }
+
+    try {
       // open the file
       CTFileStream strm;
       strm.Open_t(fnm);
 
       // count number of lines
       INDEX ctLines = 0;
-      while (!strm.AtEOF())
-      {
+
+      while (!strm.AtEOF()) {
         CTString strLine;
         strm.GetLine_t(strLine);
         ctLines++;
       }
+
       strm.SetPos_t(0);
 
       // allocate that much
       CTString *astr = _astrCredits.Push(ctLines);
+
       // load all lines
-      for (INDEX iLine = 0; iLine<ctLines && !strm.AtEOF(); iLine++)
-      {
+      for (INDEX iLine = 0; iLine < ctLines && !strm.AtEOF(); iLine++) {
         strm.GetLine_t(astr[iLine]);
       }
+
       strm.Close();
       return TRUE;
-    }
-    catch (char *strError)
-    {
+
+    } catch (char *strError) {
       CPrintF("%s\n", strError);
       return FALSE;
     }
-    _fnLastLoaded=fnm;
+
+    _fnLastLoaded = fnm;
   }
 
-  // turn credits on
-  BOOL Credits_On(CTFileName fnScrollText)
-  {
+  // Turn credits on
+  BOOL Credits_On(CTFileName fnScrollText) {
     _astrCredits.PopAll();
     return LoadOneFile(fnScrollText);
   }
 
-  // turn credits off
-  void Credits_Off(void)
-  {
+  // Turn credits off
+  void Credits_Off(void) {
     _astrCredits.Clear();
   }
 
-  // render credits to given drawport
-  FLOAT Credits_Render(CScrollHolder *penThis, CDrawPort *pdp)
-  {
-    if (m_bDataError) { return 0; }
-    
+  // Render credits to given drawport
+  FLOAT Credits_Render(CScrollHolder *penThis, CDrawPort *pdp) {
+    if (m_bDataError) {
+      return 0;
+    }
+
     if (!bDataLoaded) {
       if (!ReloadData()) {
         m_bDataError = TRUE;
         return 0;
       }
+
       bDataLoaded = TRUE;
       return 1;
     }
-        
+
     PIX pixW = 0;
     PIX pixH = 0;
     PIX pixJ = 0;
@@ -145,41 +145,44 @@ functions:
     CTString strEmpty;
 
     FLOAT fTime = Lerp(m_fMyTimerLast, m_fMyTimer, _pTimer->GetLerpFactor());
-    CDrawPort *pdpCurr=pdp;
+    CDrawPort *pdpCurr = pdp;
 
     pdp->Unlock();
     pdpCurr->Lock();
-    
-  
+
     pixW = pdpCurr->GetWidth();
     pixH = pdpCurr->GetHeight();
     fResolutionScaling = (FLOAT)pixH / 360.0f;
-    pdpCurr->SetFont( _pfdDisplayFont);
-    pixLineHeight = floor(20*fResolutionScaling);     
+
+    pdpCurr->SetFont(_pfdDisplayFont);
+    pixLineHeight = floor(20 * fResolutionScaling);
 
     const FLOAT fLinesPerSecond = penThis->m_fSpeed;
-    FLOAT fOffset = fTime*fLinesPerSecond;
-    INDEX ctLinesOnScreen = pixH/pixLineHeight;
+    FLOAT fOffset = fTime * fLinesPerSecond;
+    INDEX ctLinesOnScreen = pixH / pixLineHeight;
     INDEX iLine1 = fOffset;
 
-    pixJ = iLine1*pixLineHeight-fOffset*pixLineHeight;
-    iLine1-=ctLinesOnScreen;
+    pixJ = iLine1 * pixLineHeight - fOffset * pixLineHeight;
+    iLine1 -= ctLinesOnScreen;
 
     INDEX ctLines = _astrCredits.Count();
     BOOL bOver = TRUE;
 
-    for (INDEX i = iLine1; i<iLine1+ctLinesOnScreen+1; i++) {
+    for (INDEX i = iLine1; i < iLine1 + ctLinesOnScreen + 1; i++) {
       CTString *pstr = &strEmpty;
       INDEX iLine = i;
-      if (iLine >= 0 && iLine<ctLines) {
+
+      if (iLine >= 0 && iLine < ctLines) {
         pstr = &_astrCredits[iLine];
         bOver = FALSE;
       }
-      pdp->SetFont( _pfdDisplayFont);
-      pdp->SetTextScaling( fResolutionScaling);
-      pdp->SetTextAspect( 1.0f);
-      pdp->PutTextC( *pstr, pixW/2, pixJ, C_WHITE|255);
-      pixJ+=pixLineHeight;
+
+      pdp->SetFont(_pfdDisplayFont);
+      pdp->SetTextScaling(fResolutionScaling);
+      pdp->SetTextAspect(1.0f);
+
+      pdp->PutTextC(*pstr, pixW / 2, pixJ, C_WHITE | 255);
+      pixJ += pixLineHeight;
     }
 
     pdpCurr->Unlock();
@@ -187,28 +190,29 @@ functions:
 
     if (bOver) {
       return 0;
-    } else if (ctLines-iLine1<ctLinesOnScreen) {
-      return FLOAT(ctLines-iLine1)/ctLinesOnScreen;
+
+    } else if (ctLines - iLine1 < ctLinesOnScreen) {
+      return FLOAT(ctLines - iLine1) / ctLinesOnScreen;
+
     } else {
       return 1;
     }
   }
 
-
 procedures:
-  WaitScrollingToEnd()
-  {
-    while (m_fMyTimer<(_astrCredits.Count()+CT_LINESONSCREEN)*m_fSpeed)
-    {
+  WaitScrollingToEnd() {
+    while (m_fMyTimer < (_astrCredits.Count() + CT_LINESONSCREEN) * m_fSpeed) {
       autowait(_pTimer->TickQuantum);
+
       m_fMyTimerLast = m_fMyTimer;
-      m_fMyTimer+=_pTimer->TickQuantum/_pNetwork->GetRealTimeFactor();
+      m_fMyTimer += _pTimer->TickQuantum / _pNetwork->GetRealTimeFactor();
     }
+
     return EStop();
   }
 
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -219,46 +223,49 @@ procedures:
 
     autowait(0.05f);
     
-    if (!Credits_On(m_fnmMessage))
-    {
+    if (!Credits_On(m_fnmMessage)) {
       Credits_Off();
       return;
     }
+
     m_bDataError = FALSE;
 
     wait() {
-      on (EStart eStart):
-      {
+      on (EStart eStart) : {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc != NULL)
-        {
+
+        if (pwsc != NULL) {
           m_fMyTimer = 0;
           m_fMyTimerLast = 0;
+
           EScroll escr;
-          escr.bStart=TRUE;
-          escr.penSender=this;
+          escr.bStart = TRUE;
+          escr.penSender = this;
           pwsc->SendEvent(escr);
         }
+
         call WaitScrollingToEnd();
       }
-      on (EStop eStop): 
-      {
+
+      on (EStop eStop) : {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc != NULL)
-        {
+
+        if (pwsc != NULL) {
           EScroll escr;
-          escr.bStart=FALSE;
-          escr.penSender=this;
+          escr.bStart = FALSE;
+          escr.penSender = this;
           pwsc->SendEvent(escr);
         }
         stop;
       }
     }
+
     Credits_Off();
+
     if (m_penEndCreditsTrigger) {
       SendToTarget(m_penEndCreditsTrigger, EET_TRIGGER, FixupCausedToPlayer(this, NULL, FALSE));
     }
+
     return;
   }
 };
-

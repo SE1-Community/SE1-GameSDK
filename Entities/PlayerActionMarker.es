@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -72,10 +72,9 @@ functions:
   const CTString &GetDescription(void) const {
     CTString strAction = PlayerAutoAction_enum.NameForValue(INDEX(m_paaAction));
     if (m_penTarget == NULL) {
-      ((CTString&)m_strDescription).PrintF("%s (%s)-><none>", m_strName, strAction);
+      ((CTString &)m_strDescription).PrintF("%s (%s)-><none>", m_strName, strAction);
     } else {
-      ((CTString&)m_strDescription).PrintF("%s (%s)->%s", m_strName, strAction, 
-        m_penTarget->GetName());
+      ((CTString &)m_strDescription).PrintF("%s (%s)->%s", m_strName, strAction, m_penTarget->GetName());
     }
     return m_strDescription;
   }
@@ -88,8 +87,7 @@ functions:
   }
 
   // Handle an event, return false if the event is not handled.
-  BOOL HandleEvent(const CEntityEvent &ee)
-  {
+  BOOL HandleEvent(const CEntityEvent &ee) {
     // if triggered
     if (ee.ee_slEvent == EVENTCODE_ETrigger) {
       ETrigger &eTrigger = (ETrigger &)ee;
@@ -105,8 +103,8 @@ functions:
     return FALSE;
   }
 
-
 procedures:
+  // Entry point
   Main()
   {
     InitAsEditorModel();

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -68,35 +68,35 @@ functions:
   };
 
   // Adjust model shading parameters if needed.
-  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
-  {
+  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
     if (m_bCustomShading) {
       // if there is color animation
       if (m_aoLightAnimation.GetData() != NULL) {
         // get lerping info
-        SLONG colFrame0, colFrame1; FLOAT fRatio;
-        m_aoLightAnimation.GetFrame( colFrame0, colFrame1, fRatio);
+        SLONG colFrame0, colFrame1;
+        FLOAT fRatio;
+        m_aoLightAnimation.GetFrame(colFrame0, colFrame1, fRatio);
         UBYTE ubAnimR0, ubAnimG0, ubAnimB0;
         UBYTE ubAnimR1, ubAnimG1, ubAnimB1;
-        ColorToRGB( colFrame0, ubAnimR0, ubAnimG0, ubAnimB0);
-        ColorToRGB( colFrame1, ubAnimR1, ubAnimG1, ubAnimB1);
+        ColorToRGB(colFrame0, ubAnimR0, ubAnimG0, ubAnimB0);
+        ColorToRGB(colFrame1, ubAnimR1, ubAnimG1, ubAnimB1);
 
         // calculate current animation color
-        FLOAT fAnimR = NormByteToFloat( Lerp( ubAnimR0, ubAnimR1, fRatio));
-        FLOAT fAnimG = NormByteToFloat( Lerp( ubAnimG0, ubAnimG1, fRatio));
-        FLOAT fAnimB = NormByteToFloat( Lerp( ubAnimB0, ubAnimB1, fRatio));
-        
+        FLOAT fAnimR = NormByteToFloat(Lerp(ubAnimR0, ubAnimR1, fRatio));
+        FLOAT fAnimG = NormByteToFloat(Lerp(ubAnimG0, ubAnimG1, fRatio));
+        FLOAT fAnimB = NormByteToFloat(Lerp(ubAnimB0, ubAnimB1, fRatio));
+
         // decompose constant colors
         UBYTE ubLightR, ubLightG, ubLightB;
         UBYTE ubAmbientR, ubAmbientG, ubAmbientB;
-        ColorToRGB( m_colLight,   ubLightR,   ubLightG,   ubLightB);
-        ColorToRGB( m_colAmbient, ubAmbientR, ubAmbientG, ubAmbientB);
-        colLight   = RGBToColor( ubLightR  *fAnimR, ubLightG  *fAnimG, ubLightB  *fAnimB);
-        colAmbient = RGBToColor( ubAmbientR*fAnimR, ubAmbientG*fAnimG, ubAmbientB*fAnimB);
+        ColorToRGB(m_colLight, ubLightR, ubLightG, ubLightB);
+        ColorToRGB(m_colAmbient, ubAmbientR, ubAmbientG, ubAmbientB);
+        colLight = RGBToColor(ubLightR * fAnimR, ubLightG * fAnimG, ubLightB * fAnimB);
+        colAmbient = RGBToColor(ubAmbientR * fAnimR, ubAmbientG * fAnimG, ubAmbientB * fAnimB);
 
-      // if there is no color animation
+        // if there is no color animation
       } else {
-        colLight   = m_colLight;
+        colLight = m_colLight;
         colAmbient = m_colAmbient;
       }
 
@@ -109,25 +109,41 @@ functions:
   // Init model holder
   void InitModelHolder(void) {
     // stretch factors must not have extreme values
-    if (m_fStretchX  < 0.01f) { m_fStretchX   = 0.01f;  }
-    if (m_fStretchY  < 0.01f) { m_fStretchY   = 0.01f;  }
-    if (m_fStretchZ  < 0.01f) { m_fStretchZ   = 0.01f;  }
-    if (m_fStretchAll< 0.01f) { m_fStretchAll = 0.01f;  }
-    if (m_fStretchX  >100.0f) { m_fStretchX   = 100.0f; }
-    if (m_fStretchY  >100.0f) { m_fStretchY   = 100.0f; }
-    if (m_fStretchZ  >100.0f) { m_fStretchZ   = 100.0f; }
-    if (m_fStretchAll>100.0f) { m_fStretchAll = 100.0f; }
+    if (m_fStretchX < 0.01f) {
+      m_fStretchX = 0.01f;
+    }
+    if (m_fStretchY < 0.01f) {
+      m_fStretchY = 0.01f;
+    }
+    if (m_fStretchZ < 0.01f) {
+      m_fStretchZ = 0.01f;
+    }
+    if (m_fStretchAll < 0.01f) {
+      m_fStretchAll = 0.01f;
+    }
+    if (m_fStretchX > 100.0f) {
+      m_fStretchX = 100.0f;
+    }
+    if (m_fStretchY > 100.0f) {
+      m_fStretchY = 100.0f;
+    }
+    if (m_fStretchZ > 100.0f) {
+      m_fStretchZ = 100.0f;
+    }
+    if (m_fStretchAll > 100.0f) {
+      m_fStretchAll = 100.0f;
+    }
 
     // if initialized for the first time
     if (m_fnOldModel == "") {
       // just remember the model filename
       m_fnOldModel = m_fnModel;
-    // if re-initialized
+      // if re-initialized
     } else {
       // if the model filename has changed
       if (m_fnOldModel != m_fnModel) {
         // set texture filename to same as the model filename with texture extension
-        m_fnTexture = m_fnModel.FileDir()+m_fnModel.FileName()+CTString(".tex");
+        m_fnTexture = m_fnModel.FileDir() + m_fnModel.FileName() + CTString(".tex");
         // remember the model filename
         m_fnOldModel = m_fnModel;
       }
@@ -143,22 +159,19 @@ functions:
     }
 
     if (m_bClusterShadows) {
-      SetFlags(GetFlags()|ENF_CLUSTERSHADOWS);
+      SetFlags(GetFlags() | ENF_CLUSTERSHADOWS);
     } else {
-      SetFlags(GetFlags()&~ENF_CLUSTERSHADOWS);
+      SetFlags(GetFlags() & ~ENF_CLUSTERSHADOWS);
     }
 
     if (m_bBackground) {
-      SetFlags(GetFlags()|ENF_BACKGROUND);
+      SetFlags(GetFlags() | ENF_BACKGROUND);
     } else {
-      SetFlags(GetFlags()&~ENF_BACKGROUND);
+      SetFlags(GetFlags() & ~ENF_BACKGROUND);
     }
 
     // set model stretch -- MUST BE DONE BEFORE SETTING MODEL!
-    GetModelObject()->mo_Stretch = FLOAT3D(
-      m_fStretchAll*m_fStretchX,
-      m_fStretchAll*m_fStretchY,
-      m_fStretchAll*m_fStretchZ);
+    GetModelObject()->mo_Stretch = FLOAT3D(m_fStretchAll * m_fStretchX, m_fStretchAll * m_fStretchY, m_fStretchAll * m_fStretchZ);
 
     // set appearance
     SetModel(m_fnModel);
@@ -170,14 +183,14 @@ functions:
     try {
       m_aoLightAnimation.SetData_t(m_fnmLightAnimation);
     } catch (char *strError) {
-      WarningMessage(TRANS("Cannot load '%s': %s"), (CTString&)m_fnmLightAnimation, strError);
+      WarningMessage(TRANS("Cannot load '%s': %s"), (CTString &)m_fnmLightAnimation, strError);
       m_fnmLightAnimation = "";
     }
     if (m_aoLightAnimation.GetData() != NULL) {
       m_aoLightAnimation.PlayAnim(m_iLightAnimation, AOF_LOOPING);
     }
 
-    m_strDescription.PrintF("%s,%s", (CTString&)m_fnModel.FileName(), (CTString&)m_fnTexture.FileName());
+    m_strDescription.PrintF("%s,%s", (CTString &)m_fnModel.FileName(), (CTString &)m_fnTexture.FileName());
 
     return;
   };

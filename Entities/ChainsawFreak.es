@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -69,7 +69,6 @@ components:
  57 sound   SOUND_SIGHT      "ModelsMP\\Enemies\\ChainsawFreak\\Sounds\\Sight.wav",
 
 functions:
-  
   // describe how this enemy killed player
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
   {
@@ -80,13 +79,13 @@ functions:
 
   void Precache(void) {
     CEnemyBase::Precache();
-    PrecacheSound(SOUND_IDLE     );
-    PrecacheSound(SOUND_RUN      );
-//    PrecacheSound(SOUND_RUNATTACK);
-    PrecacheSound(SOUND_ATTACK   );
-    PrecacheSound(SOUND_WOUND    );
-    PrecacheSound(SOUND_DEATH    );
-    PrecacheSound(SOUND_SIGHT    );    
+    PrecacheSound(SOUND_IDLE);
+    PrecacheSound(SOUND_RUN);
+    //    PrecacheSound(SOUND_RUNATTACK);
+    PrecacheSound(SOUND_ATTACK);
+    PrecacheSound(SOUND_WOUND);
+    PrecacheSound(SOUND_DEATH);
+    PrecacheSound(SOUND_SIGHT);
   };
 
   // Entity info
@@ -94,8 +93,7 @@ functions:
     return &eiChainsawFreak;
   };
 
-  FLOAT GetCrushHealth(void)
-  {
+  FLOAT GetCrushHealth(void) {
     return 60.0f;
   }
 
@@ -111,24 +109,22 @@ functions:
   }*/
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // note: chainsawfreaks can't hurt each others
     if (!IsOfClass(penInflictor, "ChainsawFreak")) {
       CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
 
-  void AdjustDifficulty(void)
-  {
+  void AdjustDifficulty(void) {
     // chainsaw freak must not change his speed at different difficulties
   }
 
   // death
   INDEX AnimForDeath(void) {
     INDEX iAnim;
-    if (en_vCurrentTranslationAbsolute.Length()>5.0f) {
+    if (en_vCurrentTranslationAbsolute.Length() > 5.0f) {
       iAnim = FREAK_ANIM_DEATHRUN;
     } else {
       iAnim = FREAK_ANIM_DEATHSTAND;
@@ -141,14 +137,11 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim() == FREAK_ANIM_DEATHRUN)
-    {
-      vStretch=FLOAT3D(1,1,2)*1.0f;
+    if (GetModelObject()->GetAnim() == FREAK_ANIM_DEATHRUN) {
+      vStretch = FLOAT3D(1, 1, 2) * 1.0f;
       return 0.65f;
-    }
-    else if (GetModelObject()->GetAnim() == FREAK_ANIM_DEATHSTAND)
-    {
-      vStretch=FLOAT3D(1,1,2)*1.5f;
+    } else if (GetModelObject()->GetAnim() == FREAK_ANIM_DEATHSTAND) {
+      vStretch = FLOAT3D(1, 1, 2) * 1.5f;
       return 0.72f;
     }
     return -1.0f;
@@ -161,36 +154,28 @@ functions:
 
   // virtual anim functions
   void StandingAnim(void) {
-    StartModelAnim(FREAK_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
-    //DeactivateRunningSound();
+    StartModelAnim(FREAK_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
+    // DeactivateRunningSound();
   };
   void WalkingAnim(void) {
-    StartModelAnim(FREAK_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
-    //DeactivateRunningSound();
+    StartModelAnim(FREAK_ANIM_WALK, AOF_LOOPING | AOF_NORESTART);
+    // DeactivateRunningSound();
   };
   void RunningAnim(void) {
-    switch (m_iRunType)
-    {
-    case 0:
-      StartModelAnim(FREAK_ANIM_ATTACKRUN, AOF_LOOPING|AOF_NORESTART);
-      break;
-    case 1:
-      StartModelAnim(FREAK_ANIM_ATTACKRUNFAR, AOF_LOOPING|AOF_NORESTART);
-      break;
-    case 2:
-      StartModelAnim(FREAK_ANIM_ATTACKCHARGE, AOF_LOOPING|AOF_NORESTART);
-      break;
-    default:
-      ASSERTALWAYS("Unknown Chainsaw freak run type!");
+    switch (m_iRunType) {
+      case 0: StartModelAnim(FREAK_ANIM_ATTACKRUN, AOF_LOOPING | AOF_NORESTART); break;
+      case 1: StartModelAnim(FREAK_ANIM_ATTACKRUNFAR, AOF_LOOPING | AOF_NORESTART); break;
+      case 2: StartModelAnim(FREAK_ANIM_ATTACKCHARGE, AOF_LOOPING | AOF_NORESTART); break;
+      default: ASSERTALWAYS("Unknown Chainsaw freak run type!");
     }
-    //ActivateRunningSound();
+    // ActivateRunningSound();
   };
   void ChargeAnim(void) {
-    StartModelAnim(FREAK_ANIM_RUNSLASHING, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(FREAK_ANIM_RUNSLASHING, AOF_LOOPING | AOF_NORESTART);
   };
   void RotatingAnim(void) {
-    m_iRunType = IRnd()%3; 
-    StartModelAnim(FREAK_ANIM_ATTACKSTART, AOF_LOOPING|AOF_NORESTART);
+    m_iRunType = IRnd() % 3;
+    StartModelAnim(FREAK_ANIM_ATTACKSTART, AOF_LOOPING | AOF_NORESTART);
   };
 
   // virtual sound functions
@@ -208,29 +193,26 @@ functions:
   };
 
   // running sounds
-  void ActivateRunningSound(void)
-  {
+  void ActivateRunningSound(void) {
     if (!m_bRunSoundPlaying) {
-      PlaySound(m_soFeet, SOUND_RUN, SOF_3D|SOF_LOOP);
+      PlaySound(m_soFeet, SOUND_RUN, SOF_3D | SOF_LOOP);
       m_bRunSoundPlaying = TRUE;
     }
   }
-  void DeactivateRunningSound(void)
-  {
+  void DeactivateRunningSound(void) {
     m_soFeet.Stop();
     m_bRunSoundPlaying = FALSE;
   }
 
-
-// ATTACK FUNCTIONS
+  // ATTACK FUNCTIONS
 
   // touched another live entity
   void LiveEntityTouched(ETouch etouch) {
-    if (m_penLastTouched != etouch.penOther || _pTimer->CurrentTick() >= m_fLastTouchedTime+0.25f) {
+    if (m_penLastTouched != etouch.penOther || _pTimer->CurrentTick() >= m_fLastTouchedTime + 0.25f) {
       // hit angle
       FLOAT3D vDirection = en_vCurrentTranslationAbsolute;
       vDirection.Normalize();
-      ANGLE aHitAngle = FLOAT3D(etouch.plCollision)%vDirection;
+      ANGLE aHitAngle = FLOAT3D(etouch.plCollision) % vDirection;
       // only hit target in front of you
       if (aHitAngle < 0.0f) {
         // increase mass - only if not another bull
@@ -242,23 +224,22 @@ functions:
         m_penLastTouched = etouch.penOther;
         m_fLastTouchedTime = _pTimer->CurrentTick();
         // damage
-        FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
+        FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector;
         vDirection.Normalize();
-        InflictDirectDamage(etouch.penOther, this, DMT_CHAINSAW, -aHitAngle*40.0f,
-          FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
+        InflictDirectDamage(etouch.penOther, this, DMT_CHAINSAW, -aHitAngle * 40.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
         // kick touched entity
         FLOAT3D vSpeed = -FLOAT3D(etouch.plCollision);
-        vSpeed = vSpeed*10.0f;
+        vSpeed = vSpeed * 10.0f;
         const FLOATmatrix3D &m = GetRotationMatrix();
-        FLOAT3D vSpeedRel = vSpeed*!m;
-        if (vSpeedRel(1)<-0.1f) {
-          vSpeedRel(1)-=5.0f;
+        FLOAT3D vSpeedRel = vSpeed * !m;
+        if (vSpeedRel(1) < -0.1f) {
+          vSpeedRel(1) -= 5.0f;
         } else {
-          vSpeedRel(1)+=5.0f;
+          vSpeedRel(1) += 5.0f;
         }
-        vSpeedRel(2)=5.0f;
+        vSpeedRel(2) = 5.0f;
 
-        vSpeed = vSpeedRel*m;
+        vSpeed = vSpeedRel * m;
         KickEntity(etouch.penOther, vSpeed);
       }
     }
@@ -270,8 +251,7 @@ functions:
   };
 
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     // set sound default parameters
     m_soFeet.Set3DParameters(500.0f, 50.0f, 1.0f, 1.0f);
     m_bRunSoundPlaying = FALSE;
@@ -279,16 +259,13 @@ functions:
   };
 
   void PreMoving() {
-    if (!m_bRunSoundPlaying && _pTimer->CurrentTick()>m_fSightSoundBegin+2.0f && m_bAttacking)
-    {
+    if (!m_bRunSoundPlaying && _pTimer->CurrentTick() > m_fSightSoundBegin + 2.0f && m_bAttacking) {
       ActivateRunningSound();
     }
     CEnemyBase::PreMoving();
   };
 
 procedures:
-// ATTACK ENEMY
-
   // hit enemy
   Hit(EVoid) : CEnemyBase::Hit {
     if (CalcDist(m_penEnemy) < HIT_DISTANCE) {
@@ -355,8 +332,8 @@ procedures:
     return EReturn();
   };
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING);

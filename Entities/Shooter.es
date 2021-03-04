@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -67,8 +67,7 @@ components:
   2 class CLASS_BLOOD_SPRAY   "Classes\\BloodSpray.ecl",
   3 class CLASS_CANNONBALL    "Classes\\CannonBall.ecl",
 
-functions:                                        
-  
+functions:
   void Precache(void) {
     CModelHolder2::Precache();
     PrecacheClass(CLASS_PROJECTILE, PRT_SHOOTER_WOODEN_DART);
@@ -76,65 +75,61 @@ functions:
     PrecacheClass(CLASS_CANNONBALL);
   };
 
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // receive damage if not indestructable, and shooter can't hurt another shooter
     if (!m_bIndestructable && !IsOfClass(penInflictor, "Shooter")) {
-      if (m_tmSpraySpawned <= _pTimer->CurrentTick()-_pTimer->TickQuantum*8 
-          && m_penDestruction != NULL) {
-        
+      if (m_tmSpraySpawned <= _pTimer->CurrentTick() - _pTimer->TickQuantum * 8 && m_penDestruction != NULL) {
         CModelDestruction *penDestruction = GetDestruction();
-        
+
         // spawn blood spray
-        CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
-        m_penSpray = CreateEntity( plSpray, CLASS_BLOOD_SPRAY);
+        CPlacement3D plSpray = CPlacement3D(vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
+        m_penSpray = CreateEntity(plSpray, CLASS_BLOOD_SPRAY);
         m_penSpray->SetParent(this);
         ESpawnSpray eSpawnSpray;
-        eSpawnSpray.colBurnColor=C_WHITE|CT_OPAQUE;
-        
+        eSpawnSpray.colBurnColor = C_WHITE | CT_OPAQUE;
+
         // adjust spray power
         if (fDamageAmmount > 50.0f) {
           eSpawnSpray.fDamagePower = 3.0f;
-        } else if (fDamageAmmount > 25.0f ) {
+        } else if (fDamageAmmount > 25.0f) {
           eSpawnSpray.fDamagePower = 2.0f;
         } else {
           eSpawnSpray.fDamagePower = 1.0f;
         }
-        
+
         // remember spray type
         eSpawnSpray.sptType = penDestruction->m_sptType;
         eSpawnSpray.fSizeMultiplier = 1.0f;
-        
+
         // get your down vector (simulates gravity)
-        FLOAT3D vDn(-en_mRotation(1,2), -en_mRotation(2,2), -en_mRotation(3,2));
-        
+        FLOAT3D vDn(-en_mRotation(1, 2), -en_mRotation(2, 2), -en_mRotation(3, 2));
+
         // setup direction of spray
         FLOAT3D vHitPointRelative = vHitPoint - GetPlacement().pl_PositionVector;
         FLOAT3D vReflectingNormal;
-        GetNormalComponent( vHitPointRelative, vDn, vReflectingNormal);
+        GetNormalComponent(vHitPointRelative, vDn, vReflectingNormal);
         vReflectingNormal.Normalize();
-        
-        vReflectingNormal(1)/=5.0f;
-        
-        FLOAT3D vProjectedComponent = vReflectingNormal*(vDirection%vReflectingNormal);
-        FLOAT3D vSpilDirection = vDirection-vProjectedComponent*2.0f-vDn*0.5f;
-        
+
+        vReflectingNormal(1) /= 5.0f;
+
+        FLOAT3D vProjectedComponent = vReflectingNormal * (vDirection % vReflectingNormal);
+        FLOAT3D vSpilDirection = vDirection - vProjectedComponent * 2.0f - vDn * 0.5f;
+
         eSpawnSpray.vDirection = vSpilDirection;
         eSpawnSpray.penOwner = this;
-        
+
         // initialize spray
-        m_penSpray->Initialize( eSpawnSpray);
+        m_penSpray->Initialize(eSpawnSpray);
         m_tmSpraySpawned = _pTimer->CurrentTick();
       }
-  
+
       CRationalEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   }
 
   // render particles
-  void RenderParticles(void)
-  {
+  void RenderParticles(void) {
     // fire particles
     if (m_sftType == SFT_FIRE) {
     }
@@ -142,13 +137,12 @@ functions:
   }
 
   // Get anim data for given animation property - return NULL for none.
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
-  {
-    if (slPropertyOffset == offsetof(CShooter, m_iModelPreFireAnimation) ||
-        slPropertyOffset == offsetof(CShooter, m_iModelPostFireAnimation)) {
+  CAnimData *GetAnimData(SLONG slPropertyOffset) {
+    if (slPropertyOffset == offsetof(CShooter, m_iModelPreFireAnimation)
+        || slPropertyOffset == offsetof(CShooter, m_iModelPostFireAnimation)) {
       return GetModelObject()->GetData();
-    } else if (slPropertyOffset == offsetof(CShooter, m_iTexturePreFireAnimation) ||
-               slPropertyOffset == offsetof(CShooter, m_iTexturePostFireAnimation)) {
+    } else if (slPropertyOffset == offsetof(CShooter, m_iTexturePreFireAnimation)
+               || slPropertyOffset == offsetof(CShooter, m_iTexturePostFireAnimation)) {
       return GetModelObject()->mo_toTexture.GetData();
     } else {
       return CModelHolder2::GetAnimData(slPropertyOffset);
@@ -174,11 +168,11 @@ functions:
     // flame start position
     CPlacement3D plFlame;
     plFlame = GetPlacement();
-    
+
     FLOAT3D vNormDir;
     AnglesToDirectionVector(plFlame.pl_OrientationAngle, vNormDir);
-    plFlame.pl_PositionVector += vNormDir*0.1f;
-    
+    plFlame.pl_PositionVector += vNormDir * 0.1f;
+
     // create flame
     CEntityPointer penFlame = CreateEntity(plFlame, CLASS_PROJECTILE);
     // init and launch flame
@@ -187,31 +181,30 @@ functions:
     eLaunch.prtType = PRT_SHOOTER_FLAME;
     penFlame->Initialize(eLaunch);
     // link last flame with this one (if not NULL or deleted)
-    if (m_penFlame != NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
-      ((CProjectile&)*m_penFlame).m_penParticles = penFlame;
+    if (m_penFlame != NULL && !(m_penFlame->GetFlags() & ENF_DELETED)) {
+      ((CProjectile &)*m_penFlame).m_penParticles = penFlame;
     }
     // link to this
-    ((CProjectile&)*penFlame).m_penParticles = this;
+    ((CProjectile &)*penFlame).m_penParticles = this;
     // store last flame
     m_penFlame = penFlame;
   };
 
   void StopFlame(void) {
-    ((CProjectile&)*m_penFlame).m_penParticles = NULL;
-    //m_penFlame = NULL;
+    ((CProjectile &)*m_penFlame).m_penParticles = NULL;
+    // m_penFlame = NULL;
   }
 
   void PlayFireSound(void) {
     // if sound entity exists
     if (m_penSoundLaunch != NULL) {
-      CSoundHolder &sh = (CSoundHolder&)*m_penSoundLaunch;
+      CSoundHolder &sh = (CSoundHolder &)*m_penSoundLaunch;
       m_soLaunch.Set3DParameters(FLOAT(sh.m_rFallOffRange), FLOAT(sh.m_rHotSpotRange), sh.m_fVolume, 1.0f);
       PlaySound(m_soLaunch, sh.m_fnSound, sh.m_iPlayType);
     }
   };
 
-  void ShootCannonball()
-  {
+  void ShootCannonball() {
     // cannon ball start position
     CPlacement3D plBall = GetPlacement();
     // create cannon ball
@@ -219,14 +212,13 @@ functions:
     // init and launch cannon ball
     ELaunchCannonBall eLaunch;
     eLaunch.penLauncher = this;
-    eLaunch.fLaunchPower = 10.0f+m_fCannonBallPower; // ranges from 50-150 (since iPower can be max 100)
+    eLaunch.fLaunchPower = 10.0f + m_fCannonBallPower; // ranges from 50-150 (since iPower can be max 100)
     eLaunch.cbtType = CBT_IRON;
     eLaunch.fSize = m_fCannonBallSize;
     penBall->Initialize(eLaunch);
   };
 
-  void ShootFireball()
-  {
+  void ShootFireball() {
     // cannon ball start position
     CPlacement3D plBall = GetPlacement();
     // create cannon ball
@@ -234,14 +226,13 @@ functions:
     // init and launch cannon ball
     ELaunchCannonBall eLaunch;
     eLaunch.penLauncher = this;
-    eLaunch.fLaunchPower = 10.0f+m_fCannonBallPower; // ranges from 50-150 (since iPower can be max 100)
+    eLaunch.fLaunchPower = 10.0f + m_fCannonBallPower; // ranges from 50-150 (since iPower can be max 100)
     eLaunch.cbtType = CBT_IRON;
     eLaunch.fSize = m_fCannonBallSize;
     penBall->Initialize(eLaunch);
   };
 
 procedures:
-  
   FireOnce()
   {
     if (m_sftType == SFT_FIRE) { jump FlameBurst(); }

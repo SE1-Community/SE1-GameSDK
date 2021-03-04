@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -72,63 +72,59 @@ components:
  51 sound   SOUND_SHUTDOWN      "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Sounds\\FloorChargerShutdown.wav",
 
 functions:
- 
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if (slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery01) ||
-        slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery02) ||
-        slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery03) ||
-        slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery04) ||
-        slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery05) ||
-        slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery06))
-    {
-      if (IsOfClass(penTarget, "ExotechLarvaBattery")) { return TRUE; }
-      else { return FALSE; }
-    }   
+    if (slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery01)
+        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery02)
+        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery03)
+        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery04)
+        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery05)
+        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery06)) {
+      if (IsOfClass(penTarget, "ExotechLarvaBattery")) {
+        return TRUE;
+      } else {
+        return FALSE;
+      }
+    }
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }
-  
+
   void Precache(void) {
     CRationalEntity::Precache();
-    
-    PrecacheModel   (MODEL_ELECTRICITY    );
-    PrecacheTexture (TEXTURE_ELECTRICITY  );
-    PrecacheModel   (MODEL_BEAM           );
-    PrecacheTexture (TEXTURE_BEAM         );
 
-    PrecacheSound   (SOUND_HUM            );
-    PrecacheSound   (SOUND_SHUTDOWN       );
+    PrecacheModel(MODEL_ELECTRICITY);
+    PrecacheTexture(TEXTURE_ELECTRICITY);
+    PrecacheModel(MODEL_BEAM);
+    PrecacheTexture(TEXTURE_BEAM);
+
+    PrecacheSound(SOUND_HUM);
+    PrecacheSound(SOUND_SHUTDOWN);
   }
-  
 
   // Adjust model shading parameters if needed.
-  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
-  {
-    if (m_bCustomShading)
-    {
-      colLight   = m_colLight;
+  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
+    if (m_bCustomShading) {
+      colLight = m_colLight;
       colAmbient = m_colAmbient;
-         
+
       AnglesToDirectionVector(m_aShadingDirection, vLightDirection);
       vLightDirection = -vLightDirection;
     }
-    
+
     return TRUE;
   };
 
-
   void UpdateOperationalState(void) {
-    
     CEntityPointer *penFirst = &m_penBattery01;
-    
-    for (INDEX i=0; i<6; i++) {
+
+    for (INDEX i = 0; i < 6; i++) {
       CExotechLarvaBattery *penBattery = (CExotechLarvaBattery *)&(*penFirst[i]);
       // if model pointer is valid
       if (penBattery) {
-        if (penBattery->m_bActive) { 
+        if (penBattery->m_bActive) {
           // at least one exists, so we are still active
           m_bActive = TRUE;
-          return;        
+          return;
         }
       }
     }
@@ -137,44 +133,38 @@ functions:
     EActivateBeam eab;
     eab.bTurnOn = FALSE;
     SendEvent(eab);
-    
+
     PlaySound(m_soSound, SOUND_SHUTDOWN, SOF_3D);
-    
+
     RemoveAttachmentFromModel(*GetModelObject(), FLOORCHARGER_ATTACHMENT_ELECTRICITY);
   }
 
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     NOTHING;
   };
 
-  void RenderParticles(void)
-  {
-    if (m_bBeamActive)
-    {
+  void RenderParticles(void) {
+    if (m_bBeamActive) {
       CEntityPointer *penFirst = &m_penBattery01;
-      
-      for (INDEX i=0; i<6; i++) {
+
+      for (INDEX i = 0; i < 6; i++) {
         CExotechLarvaBattery *penBattery = (CExotechLarvaBattery *)&(*penFirst[i]);
         // if model pointer is valid
         if (penBattery) {
-          if (penBattery->m_bActive) { 
+          if (penBattery->m_bActive) {
             // render electricity
             FLOAT tmNow = _pTimer->GetLerpedCurrentTick();
             Particles_Ghostbuster(GetPlacement().pl_PositionVector + FLOAT3D(0.0f, 0.2f, 0.0f),
-                                  penBattery->GetPlacement().pl_PositionVector + FLOAT3D(0.0f, 0.2f, 0.0f),
-                                  32, 1.0f);
-            Particles_ModelGlow(penBattery, 1e6, PT_STAR05, 1.0f+0.5f*sin(4.0f*tmNow), 4, 0.0f, C_WHITE);
+                                  penBattery->GetPlacement().pl_PositionVector + FLOAT3D(0.0f, 0.2f, 0.0f), 32, 1.0f);
+            Particles_ModelGlow(penBattery, 1e6, PT_STAR05, 1.0f + 0.5f * sin(4.0f * tmNow), 4, 0.0f, C_WHITE);
           }
         }
       }
-      
     }
   };
 
 procedures:
-  
   ActivateBeam()
   {
     AddAttachmentToModel(this, *GetModelObject(), FLOORCHARGER_ATTACHMENT_BEAM, MODEL_BEAM, TEXTURE_BEAM, 0, 0, 0);

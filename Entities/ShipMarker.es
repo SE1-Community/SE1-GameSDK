@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -25,28 +25,29 @@ name      "Ship Marker";
 thumbnail "Thumbnails\\ShipMarker.tbn";
 
 properties:
-  1 BOOL m_bHarbor                    "Harbor" 'H' = FALSE,
-  2 FLOAT m_fSpeed                    "Speed [m/s]" 'S' = -1.0f,
-  3 FLOAT m_fRotation                 "Rotation [deg/s]" 'R' = -1.0f,
-  4 FLOAT m_fAcceleration             "Acceleration" 'C' = 10.0f,
-  5 FLOAT m_fRockingV                 "Rocking V" 'V' = -1.0f,
-  6 FLOAT m_fRockingA                 "Rocking A" 'A' = -1.0f,
-  7 FLOAT m_tmRockingChange           "Rocking Change Time" = 3.0f,
+  1 BOOL m_bHarbor          "Harbor" 'H' = FALSE,
+  2 FLOAT m_fSpeed          "Speed [m/s]" 'S' = -1.0f,
+  3 FLOAT m_fRotation       "Rotation [deg/s]" 'R' = -1.0f,
+  4 FLOAT m_fAcceleration   "Acceleration" 'C' = 10.0f,
+  5 FLOAT m_fRockingV       "Rocking V" 'V' = -1.0f,
+  6 FLOAT m_fRockingA       "Rocking A" 'A' = -1.0f,
+  7 FLOAT m_tmRockingChange "Rocking Change Time" = 3.0f,
 
 components:
-  1 model   MODEL_MARKER     "Models\\Editor\\ShipMarker.mdl",
-  2 texture TEXTURE_MARKER   "Models\\Editor\\ShipMarker.tex"
+  1 model   MODEL_MARKER   "Models\\Editor\\ShipMarker.mdl",
+  2 texture TEXTURE_MARKER "Models\\Editor\\ShipMarker.tex"
 
 functions:
-  // Check if entity can drop marker for making linked route.
+  // Check if entity can drop marker for making linked route
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\ShipMarker.ecl");
     strTargetProperty = "Target";
     return TRUE;
   }
+
 procedures:
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -58,4 +59,3 @@ procedures:
     return;
   }
 };
-

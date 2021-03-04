@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -19,7 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Entities/AnimationChanger.h>
 %}
 
-
 class CAnimationHub : CRationalEntity {
 name      "AnimationHub";
 thumbnail "Thumbnails\\AnimationHub.tbn";
@@ -28,7 +27,6 @@ features  "HasName", "IsTargetable";
 properties:
   1 CTString m_strName          "Name" 'N' = "Animation hub",
   2 CTString m_strDescription = "",
-
   3 FLOAT m_tmDelayEach "Delay each" 'D' = 0.0f,
 
  10 CEntityPointer m_penTarget0  "Target0" 'T' COLOR(C_GREEN|0xFF),
@@ -70,44 +68,49 @@ components:
 
 functions:
   const CTString &GetDescription(void) const {
-    ((CTString&)m_strDescription).PrintF("-><none>");
+    ((CTString &)m_strDescription).PrintF("-><none>");
+
     if (m_penTarget0 != NULL) {
-      ((CTString&)m_strDescription).PrintF("->%s...", m_penTarget0->GetName());
+      ((CTString &)m_strDescription).PrintF("->%s...", m_penTarget0->GetName());
     }
+
     return m_strDescription;
   }
 
 procedures:
-  RelayEvents()
-  {
+  RelayEvents() {
     // for each target
-    m_iCounter=0;
-    while (m_iCounter<10) {
+    m_iCounter = 0;
+
+    while (m_iCounter < 10) {
       // get delay
       FLOAT fDelay = m_tmDelayEach + (&m_tmDelay0)[m_iCounter];
+
       // if has delay
-      if (fDelay>0) {
+      if (fDelay > 0) {
         // wait
         autowait(fDelay);
       }
 
       // get the target
       CEntity *penTarget = (&m_penTarget0)[m_iCounter];
+
       // if no more targets
       if (penTarget == NULL) {
         // stop
         jump WaitChange();
       }
+
       // sent event to it
       EChangeAnim eca;
-      eca.iModelAnim   = m_iModelAnim  ;
-      eca.bModelLoop   = m_bModelLoop  ;
+      eca.iModelAnim = m_iModelAnim;
+      eca.bModelLoop = m_bModelLoop;
       eca.iTextureAnim = m_iTextureAnim;
       eca.bTextureLoop = m_bTextureLoop;
-      eca.iLightAnim   = m_iLightAnim  ;
-      eca.bLightLoop   = m_bLightLoop  ;
-      eca.colAmbient   = m_colAmbient  ;
-      eca.colDiffuse   = m_colDiffuse  ;
+      eca.iLightAnim = m_iLightAnim;
+      eca.bLightLoop = m_bLightLoop;
+      eca.colAmbient = m_colAmbient;
+      eca.colDiffuse = m_colDiffuse;
       penTarget->SendEvent(eca);
 
       m_iCounter++;
@@ -116,28 +119,28 @@ procedures:
     jump WaitChange();
   }
 
-  WaitChange()
-  {
+  WaitChange() {
     // wait forever
     while (TRUE) {
       wait() {
         on (EChangeAnim eca) : {
-          m_iModelAnim    = eca.iModelAnim  ;
-          m_bModelLoop    = eca.bModelLoop  ;
-          m_iTextureAnim  = eca.iTextureAnim;
-          m_bTextureLoop  = eca.bTextureLoop;
-          m_iLightAnim    = eca.iLightAnim  ;
-          m_bLightLoop    = eca.bLightLoop  ;
-          m_colAmbient    = eca.colAmbient  ;
-          m_colDiffuse    = eca.colDiffuse  ;
+          m_iModelAnim = eca.iModelAnim;
+          m_bModelLoop = eca.bModelLoop;
+          m_iTextureAnim = eca.iTextureAnim;
+          m_bTextureLoop = eca.bTextureLoop;
+          m_iLightAnim = eca.iLightAnim;
+          m_bLightLoop = eca.bLightLoop;
+          m_colAmbient = eca.colAmbient;
+          m_colDiffuse = eca.colDiffuse;
+
           jump RelayEvents();
         }
       }
     }
   }
 
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -147,16 +150,17 @@ procedures:
     SetModelMainTexture(TEXTURE_HUB);
 
     // check target types
-    for (INDEX i=0; i<10; i++) {
+    for (INDEX i = 0; i < 10; i++) {
       CEntityPointer &penTarget = (&m_penTarget0)[i];
-      if (penTarget != NULL && 
-        !IsOfClass(penTarget, "ModelHolder2") &&
-        !IsOfClass(penTarget, "Light")) {
+
+      if (penTarget != NULL
+       && !IsOfClass(penTarget, "ModelHolder2")
+       && !IsOfClass(penTarget, "Light")) {
         WarningMessage("All targets must be ModelHolder2 or Light!");
-        penTarget=NULL;
+        penTarget = NULL;
       }
     }
+
     jump WaitChange();
   }
 };
-

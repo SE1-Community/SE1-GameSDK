@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -194,22 +194,20 @@ components:
 
 functions:
   void Read_t( CTStream *istr) // throw char *
-  { 
+  {
     CEnemyBase::Read_t(istr);
     m_emEmiter.Read_t(*istr);
   }
-  
-  void Write_t( CTStream *istr) // throw char *
-  { 
+
+  void Write_t(CTStream *istr) // throw char *
+  {
     CEnemyBase::Write_t(istr);
     m_emEmiter.Write_t(*istr);
   }
- 
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
-  {
-    if (slPropertyOffset >= offsetof(CSummoner, m_penGroup01Template01) &&
-      slPropertyOffset <= offsetof(CSummoner, m_penGroup03Template06))
-    {
+
+  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget) {
+    if (slPropertyOffset >= offsetof(CSummoner, m_penGroup01Template01)
+        && slPropertyOffset <= offsetof(CSummoner, m_penGroup03Template06)) {
       if (IsDerivedFromClass(penTarget, "Enemy Base")) {
         if (((CEnemyBase &)*penTarget).m_bTemplate) {
           return TRUE;
@@ -217,136 +215,124 @@ functions:
           return FALSE;
         }
       } else {
-        return FALSE; 
+        return FALSE;
       }
     }
-    if (slPropertyOffset == offsetof(CSummoner, m_penControlArea))
-    {
+    if (slPropertyOffset == offsetof(CSummoner, m_penControlArea)) {
       if (IsDerivedFromClass(penTarget, "AreaMarker")) {
         return TRUE;
       } else {
         return FALSE;
       }
     }
-    if (slPropertyOffset == offsetof(CSummoner, m_penSpawnMarker))
-    {
+    if (slPropertyOffset == offsetof(CSummoner, m_penSpawnMarker)) {
       if (IsDerivedFromClass(penTarget, "Enemy Marker")) {
         return TRUE;
       } else {
         return FALSE;
       }
     }
-    if (slPropertyOffset == offsetof(CSummoner, m_penTeleportMarker) ||
-        slPropertyOffset == offsetof(CSummoner, m_penDeathMarker))
-    {
+    if (slPropertyOffset == offsetof(CSummoner, m_penTeleportMarker)
+        || slPropertyOffset == offsetof(CSummoner, m_penDeathMarker)) {
       if (IsDerivedFromClass(penTarget, "SummonerMarker")) {
         return TRUE;
       } else {
         return FALSE;
       }
     }
-    return CEntity::IsTargetValid(slPropertyOffset, penTarget);    
+    return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }
-  
-  
+
   BOOL DoSafetyChecks(void) {
-    
     if (m_penSpawnMarker == NULL) {
-      WarningMessage( "No valid Spawn Marker for Summoner boss! Destroying boss...");
+      WarningMessage("No valid Spawn Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
     if (m_penTeleportMarker == NULL) {
-      WarningMessage( "No valid Teleport Marker for Summoner boss! Destroying boss...");
+      WarningMessage("No valid Teleport Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
     if (m_penDeathMarker == NULL) {
-      WarningMessage( "No valid Death Marker for Summoner boss! Destroying boss...");
+      WarningMessage("No valid Death Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
     if (m_penControlArea == NULL) {
-      WarningMessage( "No valid Area Marker for Summoner boss! Destroying boss...");
+      WarningMessage("No valid Area Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
-    if (m_iGroup01Count<1 || m_iGroup02Count<1 || m_iGroup03Count<1)
-    {
-      WarningMessage( "At least one template in each group required! Destroying boss...");
+    if (m_iGroup01Count < 1 || m_iGroup02Count < 1 || m_iGroup03Count < 1) {
+      WarningMessage("At least one template in each group required! Destroying boss...");
       return FALSE;
     }
     return TRUE;
   }
 
   // describe how this enemy killed player
-  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
-  {
+  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath) {
     CTString str;
     str.PrintF(TRANS("The Summoner unsummoned %s"), strPlayerName);
     return str;
   }
-  
+
   virtual const CTFileName &GetComputerMessageName(void) const {
     static DECLARE_CTFILENAME(fnm, "DataMP\\Messages\\Enemies\\Summoner.txt");
     return fnm;
   };
 
-  void Precache(void)
-  {
+  void Precache(void) {
     CEnemyBase::Precache();
-    
-    PrecacheClass(CLASS_BLOOD_SPRAY        );
-    PrecacheClass(CLASS_SPAWNER_PROJECTILE );
 
-    PrecacheClass(CLASS_BASIC_EFFECT, BET_CANNON );
-    
-    PrecacheModel(MODEL_SUMMONER     );
-    PrecacheModel(MODEL_STAFF        );
-    PrecacheTexture(TEXTURE_SUMMONER );
-    PrecacheTexture(TEXTURE_STAFF    );
-  
-    PrecacheModel(MODEL_DEBRIS01     );
-    PrecacheModel(MODEL_DEBRIS02     );
-    PrecacheModel(MODEL_DEBRIS03     );
-    PrecacheModel(MODEL_DEBRIS_FLESH );
-    PrecacheTexture(TEXTURE_DEBRIS_FLESH );
+    PrecacheClass(CLASS_BLOOD_SPRAY);
+    PrecacheClass(CLASS_SPAWNER_PROJECTILE);
 
-    PrecacheSound(SOUND_LAUGH       );
-    PrecacheSound(SOUND_EXPLODE     );
-    PrecacheSound(SOUND_TREMORS     );
-    PrecacheSound(SOUND_DEATH       );
-    PrecacheSound(SOUND_LASTWORDS   );
-    PrecacheSound(SOUND_FIRE        );
-    PrecacheSound(SOUND_CHIMES      );
-    PrecacheSound(SOUND_MATERIALIZE );
-    PrecacheSound(SOUND_TELEPORT    );
-  
-    for (INDEX i=SOUND_TAUNT01; i <= SOUND_TAUNTLAST; i++) { 
-      PrecacheSound(i); 
+    PrecacheClass(CLASS_BASIC_EFFECT, BET_CANNON);
+
+    PrecacheModel(MODEL_SUMMONER);
+    PrecacheModel(MODEL_STAFF);
+    PrecacheTexture(TEXTURE_SUMMONER);
+    PrecacheTexture(TEXTURE_STAFF);
+
+    PrecacheModel(MODEL_DEBRIS01);
+    PrecacheModel(MODEL_DEBRIS02);
+    PrecacheModel(MODEL_DEBRIS03);
+    PrecacheModel(MODEL_DEBRIS_FLESH);
+    PrecacheTexture(TEXTURE_DEBRIS_FLESH);
+
+    PrecacheSound(SOUND_LAUGH);
+    PrecacheSound(SOUND_EXPLODE);
+    PrecacheSound(SOUND_TREMORS);
+    PrecacheSound(SOUND_DEATH);
+    PrecacheSound(SOUND_LASTWORDS);
+    PrecacheSound(SOUND_FIRE);
+    PrecacheSound(SOUND_CHIMES);
+    PrecacheSound(SOUND_MATERIALIZE);
+    PrecacheSound(SOUND_TELEPORT);
+
+    for (INDEX i = SOUND_TAUNT01; i <= SOUND_TAUNTLAST; i++) {
+      PrecacheSound(i);
     }
-  
   };
-
 
   // Entity info
   void *GetEntityInfo(void) {
     return &eiSummoner;
   };
 
-  CMusicHolder *GetMusicHolder()
-  {
+  CMusicHolder *GetMusicHolder() {
     CEntity *penMusicHolder;
     penMusicHolder = _pNetwork->GetEntityWithName("MusicHolder", 0);
     return (CMusicHolder *)&*penMusicHolder;
   }
 
-  BOOL DistanceToAllPlayersGreaterThen(FLOAT fDistance)
-  {
+  BOOL DistanceToAllPlayersGreaterThen(FLOAT fDistance) {
     // find actual number of players
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
-    
-    for (INDEX i=0; i<ctMaxPlayers; i++) {
-      penPlayer=GetPlayerEntity(i);
+
+    for (INDEX i = 0; i < ctMaxPlayers; i++) {
+      penPlayer = GetPlayerEntity(i);
       if (penPlayer) {
-        if (DistanceTo(this, penPlayer)<fDistance) {
+        if (DistanceTo(this, penPlayer) < fDistance) {
           return FALSE;
         }
       }
@@ -355,8 +341,7 @@ functions:
   };
 
   // Shake ground
-  void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, BOOL bFadeIn)
-  {
+  void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, BOOL bFadeIn) {
     CWorldSettingsController *pwsc = GetWSC(this);
     if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
@@ -366,36 +351,33 @@ functions:
 
       pwsc->m_fShakeIntensityZ = 0;
       pwsc->m_tmShakeFrequencyZ = 5.0f;
-      pwsc->m_fShakeIntensityY = 0.1f*fPower;
+      pwsc->m_fShakeIntensityY = 0.1f * fPower;
       pwsc->m_tmShakeFrequencyY = 5.0f;
-      pwsc->m_fShakeIntensityB = 2.5f*fPower;
+      pwsc->m_fShakeIntensityB = 2.5f * fPower;
       pwsc->m_tmShakeFrequencyB = 7.2f;
 
       pwsc->m_bShakeFadeIn = bFadeIn;
     }
   }
 
-  void ChangeEnemyNumberForAllPlayers(INDEX iDelta)
-  {
+  void ChangeEnemyNumberForAllPlayers(INDEX iDelta) {
     // find actual number of players
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
-    
-    for (INDEX i=0; i<ctMaxPlayers; i++) {
-      penPlayer=GetPlayerEntity(i);
+
+    for (INDEX i = 0; i < ctMaxPlayers; i++) {
+      penPlayer = GetPlayerEntity(i);
       if (penPlayer) {
         // set totals for level and increment for game
-        ((CPlayer &)*penPlayer).m_psLevelTotal.ps_iKills+=iDelta;
-        ((CPlayer &)*penPlayer).m_psGameTotal.ps_iKills+=iDelta;
+        ((CPlayer &)*penPlayer).m_psLevelTotal.ps_iKills += iDelta;
+        ((CPlayer &)*penPlayer).m_psGameTotal.ps_iKills += iDelta;
       }
     }
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
-    
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // while we are invulnerable, receive no damage
     if (m_bInvulnerable) {
       return;
@@ -407,41 +389,36 @@ functions:
     }
 
     // boss cannot be telefragged
-    if (dmtType == DMT_TELEPORT)
-    {
+    if (dmtType == DMT_TELEPORT) {
       return;
     }
 
     // cannonballs inflict less damage then the default
-    if (dmtType == DMT_CANNONBALL)
-    {
+    if (dmtType == DMT_CANNONBALL) {
       fDamageAmmount *= 0.5f;
     }
-    
+
     FLOAT fOldHealth = GetHealth();
     CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     FLOAT fNewHealth = GetHealth();
 
-    // increase temp. damage 
+    // increase temp. damage
     m_fDamageSinceLastSpawn += fOldHealth - fNewHealth;
 
     // see if we have to change the spawning scheme
-    for (INDEX i=0; i<SUMMONER_MAX_SS; i++) {
-      FLOAT fHealth = (FLOAT)aiSpawnScheme[i][0]*m_fMaxHealth/100.0f;
-      if (fHealth <= fOldHealth && fHealth>fNewHealth)
-      {
+    for (INDEX i = 0; i < SUMMONER_MAX_SS; i++) {
+      FLOAT fHealth = (FLOAT)aiSpawnScheme[i][0] * m_fMaxHealth / 100.0f;
+      if (fHealth <= fOldHealth && fHealth > fNewHealth) {
         m_iSpawnScheme = i;
       }
     }
-    
+
     // adjust fuss
-    m_fMaxCurrentFuss = (1.0f-(GetHealth()/m_fMaxHealth))*(m_fMaxEndFuss-m_fMaxBeginFuss)+m_fMaxBeginFuss;
-    
+    m_fMaxCurrentFuss = (1.0f - (GetHealth() / m_fMaxHealth)) * (m_fMaxEndFuss - m_fMaxBeginFuss) + m_fMaxBeginFuss;
+
     // bosses don't darken when burning
-    m_colBurning=COLOR(C_WHITE|CT_OPAQUE);
-
+    m_colBurning = COLOR(C_WHITE | CT_OPAQUE);
   };
-
 
   // damage anim
   /*INDEX AnimForDamage(FLOAT fDamage) {
@@ -452,16 +429,16 @@ functions:
   };*/
 
   void StandingAnimFight(void) {
-    StartModelAnim(SUMMONER_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(SUMMONER_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
   // virtual anim functions
   void StandingAnim(void) {
-    StartModelAnim(SUMMONER_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);        
+    StartModelAnim(SUMMONER_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
   void WalkingAnim(void) {
-    StartModelAnim(SUMMONER_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(SUMMONER_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
   void RunningAnim(void) {
@@ -481,78 +458,71 @@ functions:
 
   // virtual sound functions
   void IdleSound(void) {
-    //PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
+    // PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
   };
-  
-  FLOAT3D AcquireTarget()
-  {
+
+  FLOAT3D AcquireTarget() {
     CEnemyMarker *marker;
     marker = &((CEnemyMarker &)*m_penSpawnMarker);
-    
-    INDEX iMarker = IRnd()%m_iSpawnMarkers;
 
-    while (iMarker>0)
-    {
+    INDEX iMarker = IRnd() % m_iSpawnMarkers;
+
+    while (iMarker > 0) {
       marker = &((CEnemyMarker &)*marker->m_penTarget);
       iMarker--;
     }
     FLOAT3D vTarget = marker->GetPlacement().pl_PositionVector;
-    FLOAT fR = FRnd()*marker->m_fMarkerRange;
-    FLOAT fA = FRnd()*360.0f;
-    vTarget += FLOAT3D(CosFast(fA)*fR, 0.05f, SinFast(fA)*fR);
+    FLOAT fR = FRnd() * marker->m_fMarkerRange;
+    FLOAT fA = FRnd() * 360.0f;
+    vTarget += FLOAT3D(CosFast(fA) * fR, 0.05f, SinFast(fA) * fR);
     return vTarget;
   };
 
-  void LaunchMonster(FLOAT3D vTarget, CEntity *penTemplate)
-  {
+  void LaunchMonster(FLOAT3D vTarget, CEntity *penTemplate) {
     ASSERT(penTemplate != NULL);
     // calculate parameters for predicted angular launch curve
-    FLOAT3D vFirePos = FIREPOS_ARMS*m_fStretch;
-    FLOAT3D vShooting = GetPlacement().pl_PositionVector + vFirePos*GetRotationMatrix();
+    FLOAT3D vFirePos = FIREPOS_ARMS * m_fStretch;
+    FLOAT3D vShooting = GetPlacement().pl_PositionVector + vFirePos * GetRotationMatrix();
     FLOAT fLaunchSpeed;
     FLOAT fRelativeHdg;
-    //FLOAT fPitch = FRnd()*30.0f - 5.0f;
-    FLOAT fPitch = FRnd()*10.0f + 25.0f;
+    // FLOAT fPitch = FRnd()*30.0f - 5.0f;
+    FLOAT fPitch = FRnd() * 10.0f + 25.0f;
 
     CPlacement3D pl;
-    CalculateAngularLaunchParams( vShooting, 0.0f, vTarget,
-      FLOAT3D(0.0f, 0.0f, 0.0f), fPitch, fLaunchSpeed, fRelativeHdg);
-    
+    CalculateAngularLaunchParams(vShooting, 0.0f, vTarget, FLOAT3D(0.0f, 0.0f, 0.0f), fPitch, fLaunchSpeed, fRelativeHdg);
+
     PrepareFreeFlyingProjectile(pl, vTarget, vFirePos, ANGLE3D(fRelativeHdg, fPitch, 0.0f));
-    
+
     ESpawnerProjectile esp;
     CEntityPointer penSProjectile = CreateEntity(pl, CLASS_SPAWNER_PROJECTILE);
     esp.penOwner = this;
     esp.penTemplate = penTemplate;
     penSProjectile->Initialize(esp);
-    
-    ((CMovableEntity &)*penSProjectile).LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -fLaunchSpeed), (CMovableEntity*)(CEntity*)this);
-  }
- 
-  FLOAT FussModifier(INDEX iEnemyCount) {
-    return (0.995 + 0.005 * pow(m_iEnemyCount , 2.8));
+
+    ((CMovableEntity &)*penSProjectile)
+      .LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -fLaunchSpeed), (CMovableEntity *)(CEntity *)this);
   }
 
-  void RecalculateFuss(void)
-  {
+  FLOAT FussModifier(INDEX iEnemyCount) {
+    return (0.995 + 0.005 * pow(m_iEnemyCount, 2.8));
+  }
+
+  void RecalculateFuss(void) {
     // get area box
     FLOATaabbox3D box;
     ((CAreaMarker &)*m_penControlArea).GetAreaBox(box);
-    
+
     static CStaticStackArray<CEntity *> apenNearEntities;
     GetWorld()->FindEntitiesNearBox(box, apenNearEntities);
 
     INDEX m_iEnemyCount = 0;
     m_fFuss = 0.0f;
-  
-    for (INDEX i=0; i<apenNearEntities.Count(); i++)
-    {
-      if (IsDerivedFromClass(apenNearEntities[i], "Enemy Base") &&
-        !IsOfClass(apenNearEntities[i], "Summoner")) {
-        if (!((CEnemyBase &)*apenNearEntities[i]).m_bTemplate &&
-          apenNearEntities[i]->GetFlags()&ENF_ALIVE) {
+
+    for (INDEX i = 0; i < apenNearEntities.Count(); i++) {
+      if (IsDerivedFromClass(apenNearEntities[i], "Enemy Base") && !IsOfClass(apenNearEntities[i], "Summoner")) {
+        if (!((CEnemyBase &)*apenNearEntities[i]).m_bTemplate && apenNearEntities[i]->GetFlags() & ENF_ALIVE) {
           m_fFuss += ((CEnemyBase &)*apenNearEntities[i]).m_iScore;
-          m_iEnemyCount  ++;
+          m_iEnemyCount++;
         }
       }
     }
@@ -560,93 +530,85 @@ functions:
     m_fFuss *= FussModifier(m_iEnemyCount);
 
     // if too much fuss, make disable firing
-    if (m_fFuss>m_fMaxCurrentFuss) {
-//CPrintF("FIRE DISABLED -> too much fuss\n");
+    if (m_fFuss > m_fMaxCurrentFuss) {
+      // CPrintF("FIRE DISABLED -> too much fuss\n");
       m_bFireOK = FALSE;
-    // enable firing only when very little fuss
-    } else if (m_fFuss<0.4*m_fMaxCurrentFuss) {
-//CPrintF("FIRE ENABLE -> fuss more then %f\n", 0.4*m_fMaxCurrentFuss);
-      m_bFireOK = TRUE; 
-    // but if significant damage since last spawn, enable firing anyway
-    } else if (m_fDamageSinceLastSpawn>0.07f*m_fMaxHealth) {
-//CPrintF("FIRE ENABLED -> much damagesincelastspawn - %f\n", m_fDamageSinceLastSpawn);
+      // enable firing only when very little fuss
+    } else if (m_fFuss < 0.4 * m_fMaxCurrentFuss) {
+      // CPrintF("FIRE ENABLE -> fuss more then %f\n", 0.4*m_fMaxCurrentFuss);
+      m_bFireOK = TRUE;
+      // but if significant damage since last spawn, enable firing anyway
+    } else if (m_fDamageSinceLastSpawn > 0.07f * m_fMaxHealth) {
+      // CPrintF("FIRE ENABLED -> much damagesincelastspawn - %f\n", m_fDamageSinceLastSpawn);
       m_bFireOK = TRUE;
     }
 
-//CPrintF("Fuss = %f/%f (%d enemies) at %f\n", m_fFuss, m_fMaxCurrentFuss, m_iEnemyCount, _pTimer->CurrentTick());
-//CPrintF("health: %f, scheme: %i\n", GetHealth(), m_iSpawnScheme);
+    // CPrintF("Fuss = %f/%f (%d enemies) at %f\n", m_fFuss, m_fMaxCurrentFuss, m_iEnemyCount, _pTimer->CurrentTick());
+    // CPrintF("health: %f, scheme: %i\n", GetHealth(), m_iSpawnScheme);
     return;
   }
 
-  void CountEnemiesAndScoreValue(INDEX& iEnemies, FLOAT& fScore)
-  {
+  void CountEnemiesAndScoreValue(INDEX &iEnemies, FLOAT &fScore) {
     // get area box
     FLOATaabbox3D box;
     ((CAreaMarker &)*m_penControlArea).GetAreaBox(box);
-    
+
     static CStaticStackArray<CEntity *> apenNearEntities;
     GetWorld()->FindEntitiesNearBox(box, apenNearEntities);
-    
+
     iEnemies = 0;
     fScore = 0.0f;
 
-    for (INDEX i=0; i<apenNearEntities.Count(); i++)
-    {
-      if (IsDerivedFromClass(apenNearEntities[i], "Enemy Base") &&
-        !IsOfClass(apenNearEntities[i], "Summoner")) {
-        if (!((CEnemyBase &)*apenNearEntities[i]).m_bTemplate &&
-          apenNearEntities[i]->GetFlags()&ENF_ALIVE) {
+    for (INDEX i = 0; i < apenNearEntities.Count(); i++) {
+      if (IsDerivedFromClass(apenNearEntities[i], "Enemy Base") && !IsOfClass(apenNearEntities[i], "Summoner")) {
+        if (!((CEnemyBase &)*apenNearEntities[i]).m_bTemplate && apenNearEntities[i]->GetFlags() & ENF_ALIVE) {
           fScore += ((CEnemyBase &)*apenNearEntities[i]).m_iScore;
-          iEnemies  ++;
+          iEnemies++;
         }
       }
     }
     return;
   }
 
-  CEnemyBase *GetRandomTemplate (INDEX iGroup)
-  {
+  CEnemyBase *GetRandomTemplate(INDEX iGroup) {
     CEntityPointer *pen;
     INDEX iCount;
     if (iGroup == 0) {
       pen = &m_penGroup01Template01;
-      iCount = IRnd()%m_iGroup01Count+1;
+      iCount = IRnd() % m_iGroup01Count + 1;
     } else if (iGroup == 1) {
       pen = &m_penGroup02Template01;
-      iCount = IRnd()%m_iGroup02Count+1;
+      iCount = IRnd() % m_iGroup02Count + 1;
     } else if (iGroup == 2) {
       pen = &m_penGroup03Template01;
-      iCount = IRnd()%m_iGroup03Count+1;
+      iCount = IRnd() % m_iGroup03Count + 1;
     } else {
       ASSERT("Invalid group!");
     }
-    ASSERT(iCount>0);
+    ASSERT(iCount > 0);
 
-    INDEX i=-1;
-    while (iCount>0)
-    {
+    INDEX i = -1;
+    while (iCount > 0) {
       i++;
       while (&*pen[i] == NULL) {
         i++;
-      } 
-      iCount--;        
+      }
+      iCount--;
     }
-    ASSERT (&(CEnemyBase &)*pen[i] != NULL);
+    ASSERT(&(CEnemyBase &)*pen[i] != NULL);
     return &(CEnemyBase &)*pen[i];
   }
 
-  void DisappearEffect(void)
-  {
-    CPlacement3D plFX=GetPlacement();
+  void DisappearEffect(void) {
+    CPlacement3D plFX = GetPlacement();
     ESpawnEffect ese;
-    ese.colMuliplier = C_WHITE|CT_OPAQUE;
-    ese.vStretch = FLOAT3D(3,3,3);
+    ese.colMuliplier = C_WHITE | CT_OPAQUE;
+    ese.vStretch = FLOAT3D(3, 3, 3);
     ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
     ese.betType = BET_DUST_FALL;
-    for (INDEX iSmoke=0; iSmoke<3; iSmoke++)
-    {
-      CPlacement3D plSmoke=plFX;
-      plSmoke.pl_PositionVector+=FLOAT3D(0,iSmoke*4+4.0f,0);
+    for (INDEX iSmoke = 0; iSmoke < 3; iSmoke++) {
+      CPlacement3D plSmoke = plFX;
+      plSmoke.pl_PositionVector += FLOAT3D(0, iSmoke * 4 + 4.0f, 0);
       CEntityPointer penFX = CreateEntity(plSmoke, CLASS_BASIC_EFFECT);
       penFX->Initialize(ese);
     }
@@ -659,26 +621,25 @@ functions:
     */
   }
 
-  void SpawnTeleportEffect(void)
-  {
+  void SpawnTeleportEffect(void) {
     ESpawnEffect ese;
-    ese.colMuliplier = C_lMAGENTA|CT_OPAQUE;
-    ese.vStretch = FLOAT3D(5,5,5);
+    ese.colMuliplier = C_lMAGENTA | CT_OPAQUE;
+    ese.vStretch = FLOAT3D(5, 5, 5);
     ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
 
     // explosion debris
     ese.betType = BET_EXPLOSION_DEBRIS;
-    CPlacement3D plFX=GetPlacement();
+    CPlacement3D plFX = GetPlacement();
     CEntityPointer penFX = CreateEntity(plFX, CLASS_BASIC_EFFECT);
     penFX->Initialize(ese);
-    ese.colMuliplier = C_MAGENTA|CT_OPAQUE;
+    ese.colMuliplier = C_MAGENTA | CT_OPAQUE;
     CEntityPointer penFX2 = CreateEntity(plFX, CLASS_BASIC_EFFECT);
     penFX2->Initialize(ese);
-    ese.colMuliplier = C_lCYAN|CT_OPAQUE;
+    ese.colMuliplier = C_lCYAN | CT_OPAQUE;
     CEntityPointer penFX3 = CreateEntity(plFX, CLASS_BASIC_EFFECT);
     penFX3->Initialize(ese);
     ese.betType = BET_CANNON;
-    ese.colMuliplier = C_CYAN|CT_OPAQUE;
+    ese.colMuliplier = C_CYAN | CT_OPAQUE;
     CEntityPointer penFX4 = CreateEntity(plFX, CLASS_BASIC_EFFECT);
     penFX4->Initialize(ese);
 
@@ -695,35 +656,28 @@ functions:
     eLightning.fSize = 24;
     eLightning.ctCount = 32;
 
-    CEntity *penLightning = CreateEntity( plFX, CLASS_EFFECTOR);
-    ANGLE3D angRnd=ANGLE3D(
-      0.0f,
-      90.0f+(FRnd()-0.5f)*30.0f,
-      (FRnd()-0.5f)*30.0f);
+    CEntity *penLightning = CreateEntity(plFX, CLASS_EFFECTOR);
+    ANGLE3D angRnd = ANGLE3D(0.0f, 90.0f + (FRnd() - 0.5f) * 30.0f, (FRnd() - 0.5f) * 30.0f);
 
     FLOAT3D vRndDir;
     AnglesToDirectionVector(angRnd, vRndDir);
-    FLOAT3D vDest=plFX.pl_PositionVector;
-    vDest+=vRndDir*512.0f;
-    eLightning.vDestination = vDest; 
-    penLightning->Initialize( eLightning);
+    FLOAT3D vDest = plFX.pl_PositionVector;
+    vDest += vRndDir * 512.0f;
+    eLightning.vDestination = vDest;
+    penLightning->Initialize(eLightning);
   }
 
-  void KillAllEnemiesInArea(EDeath eDeath)
-  {
+  void KillAllEnemiesInArea(EDeath eDeath) {
     EDeath eDeath2;
     FLOATaabbox3D box;
     ((CAreaMarker &)*m_penControlArea).GetAreaBox(box);
-    
+
     static CStaticStackArray<CEntity *> apenNearEntities;
     GetWorld()->FindEntitiesNearBox(box, apenNearEntities);
-    
-    for (INDEX i=0; i<apenNearEntities.Count(); i++)
-    {
-      if (IsDerivedFromClass(apenNearEntities[i], "Enemy Base") &&
-        !IsOfClass(apenNearEntities[i], "Summoner")) {
-        if (!((CEnemyBase &)*apenNearEntities[i]).m_bTemplate &&
-          apenNearEntities[i]->GetFlags()&ENF_ALIVE) {
+
+    for (INDEX i = 0; i < apenNearEntities.Count(); i++) {
+      if (IsDerivedFromClass(apenNearEntities[i], "Enemy Base") && !IsOfClass(apenNearEntities[i], "Summoner")) {
+        if (!((CEnemyBase &)*apenNearEntities[i]).m_bTemplate && apenNearEntities[i]->GetFlags() & ENF_ALIVE) {
           eDeath2.eLastDamage.penInflictor = eDeath.eLastDamage.penInflictor;
           eDeath2.eLastDamage.vDirection = apenNearEntities[i]->GetPlacement().pl_PositionVector;
           eDeath2.eLastDamage.vHitPoint = eDeath2.eLastDamage.vDirection;
@@ -732,81 +686,74 @@ functions:
           apenNearEntities[i]->SendEvent(eDeath);
         }
       }
- 
+
       CMusicHolder *penMusicHolder = GetMusicHolder();
-      if (IsOfClass(apenNearEntities[i],"SpawnerProjectile")) {
+      if (IsOfClass(apenNearEntities[i], "SpawnerProjectile")) {
         CPlacement3D pl;
         pl.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
         pl.pl_PositionVector = apenNearEntities[i]->GetPlacement().pl_PositionVector;
         CEntityPointer penExplosion = CreateEntity(pl, CLASS_BASIC_EFFECT);
         ESpawnEffect eSpawnEffect;
-        eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
+        eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
         eSpawnEffect.betType = BET_CANNON;
         eSpawnEffect.vStretch = FLOAT3D(2.0f, 2.0f, 2.0f);
         penExplosion->Initialize(eSpawnEffect);
         apenNearEntities[i]->Destroy();
         // decrease the number of spawned enemies for those that haven't been born
-        if (penMusicHolder != NULL) {          
+        if (penMusicHolder != NULL) {
           penMusicHolder->m_ctEnemiesInWorld--;
-        }          
+        }
         ChangeEnemyNumberForAllPlayers(-1);
       }
-    }    
+    }
   }
 
-  void RenderParticles(void)
-  {
+  void RenderParticles(void) {
     FLOAT tmNow = _pTimer->CurrentTick();
-    if (tmNow>m_tmParticlesDisappearStart && tmNow<m_tmParticlesDisappearStart+4.0f)
-    {
+    if (tmNow > m_tmParticlesDisappearStart && tmNow < m_tmParticlesDisappearStart + 4.0f) {
       Particles_SummonerDisappear(this, m_tmParticlesDisappearStart);
     }
 
-    if (tmNow>m_tmLastAnimation)
-    {
-      INDEX ctInterpolations=2;
+    if (tmNow > m_tmLastAnimation) {
+      INDEX ctInterpolations = 2;
       // if invisible or dead don't add new sparks
-      if (!m_bInvulnerable && !m_bExploded && GetHealth()>0)
-      {
-        for (INDEX iInter=0; iInter<ctInterpolations; iInter++)
-        {
+      if (!m_bInvulnerable && !m_bExploded && GetHealth() > 0) {
+        for (INDEX iInter = 0; iInter < ctInterpolations; iInter++) {
           // for holding attachment data
-          FLOATmatrix3D mEn=GetRotationMatrix();
+          FLOATmatrix3D mEn = GetRotationMatrix();
           FLOATmatrix3D mRot;
           FLOAT3D vPos;
-          FLOAT tmBirth=tmNow+iInter*_pTimer->TickQuantum/ctInterpolations;
+          FLOAT tmBirth = tmNow + iInter * _pTimer->TickQuantum / ctInterpolations;
           // head
-          FLOAT fLife=2.5f;
-          FLOAT fCone=360.0f;
-          FLOAT fStretch=1.0f;
-          FLOAT fRotSpeed=360.0f;
-          COLOR col=C_lYELLOW|CT_OPAQUE;
+          FLOAT fLife = 2.5f;
+          FLOAT fCone = 360.0f;
+          FLOAT fStretch = 1.0f;
+          FLOAT fRotSpeed = 360.0f;
+          COLOR col = C_lYELLOW | CT_OPAQUE;
 
           MakeRotationMatrixFast(mRot, ANGLE3D(0.0f, 0.0f, 0.0f));
-          vPos=FLOAT3D(0.0f, 0.0f, 0.0f);
+          vPos = FLOAT3D(0.0f, 0.0f, 0.0f);
           GetModelObject()->GetAttachmentTransformations(SUMMONER_ATTACHMENT_STAFF, mRot, vPos, FALSE);
           // next in hierarchy
           CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(SUMMONER_ATTACHMENT_STAFF);
-          pamo->amo_moModelObject.GetAttachmentTransformations( STAFF_ATTACHMENT_PARTICLES, mRot, vPos, TRUE);
-          vPos=GetPlacement().pl_PositionVector+vPos*GetRotationMatrix();
+          pamo->amo_moModelObject.GetAttachmentTransformations(STAFF_ATTACHMENT_PARTICLES, mRot, vPos, TRUE);
+          vPos = GetPlacement().pl_PositionVector + vPos * GetRotationMatrix();
 
-          FLOAT3D vSpeed=FLOAT3D(0.1f+RAND_05, 0.1f+RAND_05, -1.0f-RAND_05);
-          vSpeed=vSpeed.Normalize()*8.0f;
-          m_emEmiter.AddParticle(vPos, vSpeed*mRot*mEn, RAND_05*360.0f, fRotSpeed, tmBirth, fLife, fStretch, col);
+          FLOAT3D vSpeed = FLOAT3D(0.1f + RAND_05, 0.1f + RAND_05, -1.0f - RAND_05);
+          vSpeed = vSpeed.Normalize() * 8.0f;
+          m_emEmiter.AddParticle(vPos, vSpeed * mRot * mEn, RAND_05 * 360.0f, fRotSpeed, tmBirth, fLife, fStretch, col);
         }
       }
 
-      m_emEmiter.em_vG=m_emEmiter.GetGravity(this);
-      m_emEmiter.em_vG/=2.0f;
+      m_emEmiter.em_vG = m_emEmiter.GetGravity(this);
+      m_emEmiter.em_vG /= 2.0f;
       m_emEmiter.AnimateParticles();
-      m_tmLastAnimation=tmNow;
+      m_tmLastAnimation = tmNow;
     }
     m_emEmiter.RenderParticles();
   }
-  
 
 procedures:
-  
   InitiateTeleport()
   {
     m_bInvulnerable = TRUE;
@@ -1274,9 +1221,8 @@ procedures:
     }
   }
 
-// MAIN
-  Main(EVoid) {
-    
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsEditorModel();
     

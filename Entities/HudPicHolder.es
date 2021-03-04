@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -18,22 +18,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "Entities/WorldSettingsController.h"
 #include "Entities/BackgroundViewer.h"
-%}
 
-
-%{
 BOOL _bDataLoaded = FALSE;
 BOOL _bDataError = FALSE;
 CTextureObject _toTexture;
 %}
 
-class CHudPicHolder: CRationalEntity {
+class CHudPicHolder : CRationalEntity {
 name      "HudPicHolder";
 thumbnail "Thumbnails\\HudPicHolder.tbn";
 features  "IsTargetable", "HasName", "IsImportant";
 
 properties:
-
   1 CTString m_strName "Name" 'N' = "Hud pic holder",
   2 CTString m_strDescription = "",
   3 CTFileName m_fnmPicture "Picture file" 'P' = CTString(""),
@@ -52,103 +48,111 @@ components:
 
 functions:
   const CTString &GetDescription(void) const {
-    ((CTString&)m_strDescription).PrintF("%s", m_fnmPicture.FileName());
+    ((CTString &)m_strDescription).PrintF("%s", m_fnmPicture.FileName());
     return m_strDescription;
   }
 
-  BOOL ReloadData(void)
-  {
+  BOOL ReloadData(void) {
     _bDataError = FALSE;
-    if (!Picture_On(m_fnmPicture))
-    {
+
+    if (!Picture_On(m_fnmPicture)) {
       Picture_Off();
       return FALSE;
-    }    
+    }
+
     return TRUE;
   }
 
-  BOOL LoadOneFile(const CTFileName &fnm)
-  {
-    if (fnm == "") { return FALSE; }
-    try 
-    {
+  BOOL LoadOneFile(const CTFileName &fnm) {
+    if (fnm == "") {
+      return FALSE;
+    }
+
+    try {
       _toTexture.SetData_t(fnm);
       return TRUE;
-    }
-    catch (char *strError)
-    {
+
+    } catch (char *strError) {
       CPrintF("%s\n", strError);
       return FALSE;
     }
   }
 
-  // turn text on
-  BOOL Picture_On(CTFileName fnPic)
-  {
+  // Turn text on
+  BOOL Picture_On(CTFileName fnPic) {
     return LoadOneFile(fnPic);
   }
 
-  // turn text off
-  void Picture_Off(void)
-  {
+  // Turn text off
+  void Picture_Off(void) {
     _toTexture.SetData(NULL);
   }
 
-  // render credits to given drawport
-  FLOAT HudPic_Render(CHudPicHolder *penThis, CDrawPort *pdp)
-  {
-    if (_bDataError) { return 0; }
-    
+  // Render credits to given drawport
+  FLOAT HudPic_Render(CHudPicHolder *penThis, CDrawPort *pdp) {
+    if (_bDataError) {
+      return 0;
+    }
+
     if (!_bDataLoaded) {
       if (!ReloadData()) {
         _bDataError = TRUE;
         return 0;
       }
+
       _bDataLoaded = TRUE;
       return 1;
     }
-    
-    FLOAT fNow=_pTimer->CurrentTick();
-    if (fNow<m_tmFadeInStart) { return 0; }
-    if (fNow>m_tmFadeOutStart+m_tmFadeOutLen) { return 0;}
 
-    CDrawPort *pdpCurr=pdp;
+    FLOAT fNow = _pTimer->CurrentTick();
+
+    if (fNow < m_tmFadeInStart) {
+      return 0;
+    }
+
+    if (fNow > m_tmFadeOutStart + m_tmFadeOutLen) {
+      return 0;
+    }
+
+    CDrawPort *pdpCurr = pdp;
     pdp->Unlock();
     pdpCurr->Lock();
-    
-    FLOAT fRatio=1.0f;
-    if (fNow>m_tmFadeOutStart)
-    {
-      fRatio=CalculateRatio(fNow, m_tmFadeOutStart, m_tmFadeOutStart+m_tmFadeOutLen, 0, 1);
-    }
-    if (fNow<m_tmFadeInStart+m_tmFadeInLen)
-    {
-      fRatio=CalculateRatio(fNow, m_tmFadeInStart, m_tmFadeInStart+m_tmFadeInLen, 1, 0);
-    }
-    UBYTE ubA=ClampUp(UBYTE(fRatio*255.0f), UBYTE(255));
 
-    CTextureData *ptd=(CTextureData *)_toTexture.GetData();
-    
+    FLOAT fRatio = 1.0f;
+
+    if (fNow > m_tmFadeOutStart) {
+      fRatio = CalculateRatio(fNow, m_tmFadeOutStart, m_tmFadeOutStart + m_tmFadeOutLen, 0, 1);
+    }
+
+    if (fNow < m_tmFadeInStart + m_tmFadeInLen) {
+      fRatio = CalculateRatio(fNow, m_tmFadeInStart, m_tmFadeInStart + m_tmFadeInLen, 1, 0);
+    }
+
+    UBYTE ubA = ClampUp(UBYTE(fRatio * 255.0f), UBYTE(255));
+    CTextureData *ptd = (CTextureData *)_toTexture.GetData();
+
     FLOAT fResScale = (FLOAT)pdpCurr->GetHeight() / 480.0f;
     const MEX mexTexW = ptd->GetWidth();
     const MEX mexTexH = ptd->GetHeight();
     FLOAT fPicRatioW, fPicRatioH;
+
     if (mexTexW > mexTexH) {
-      fPicRatioW = mexTexW/mexTexH;
+      fPicRatioW = mexTexW / mexTexH;
       fPicRatioH = 1.0f;
+
     } else {
       fPicRatioW = 1.0f;
-      fPicRatioH = mexTexH/mexTexW;
+      fPicRatioH = mexTexH / mexTexW;
     }
-    PIX picW = 128*m_fPictureStretch*fResScale*fPicRatioW;
-    PIX picH = 128*m_fPictureStretch*fResScale*fPicRatioH;
+
+    PIX picW = 128 * m_fPictureStretch * fResScale * fPicRatioW;
+    PIX picH = 128 * m_fPictureStretch * fResScale * fPicRatioH;
 
     FLOAT fXCenter = m_fXRatio * pdpCurr->GetWidth();
     FLOAT fYCenter = m_fYRatio * pdpCurr->GetHeight();
-    PIXaabbox2D boxScr=PIXaabbox2D(
-      PIX2D(fXCenter-picW/2, fYCenter-picH/2),
-      PIX2D(fXCenter+picW/2, fYCenter+picH/2) );
-    pdpCurr->PutTexture(&_toTexture, boxScr, C_WHITE|ubA);
+
+    PIXaabbox2D boxScr = PIXaabbox2D(PIX2D(fXCenter - picW / 2, fYCenter - picH / 2), PIX2D(fXCenter + picW / 2, fYCenter + picH / 2));
+    pdpCurr->PutTexture(&_toTexture, boxScr, C_WHITE | ubA);
 
     pdpCurr->Unlock();
     pdp->Lock();
@@ -156,33 +160,32 @@ functions:
     return 1;
   }
 
-
 procedures:
-  
-  WaitAndFadeOut(EVoid)
-  {
-    autowait( m_tmAutoFadeOut);
+  WaitAndFadeOut(EVoid) {
+    autowait(m_tmAutoFadeOut);
     jump ApplyFadeOut();
   }
 
-  ApplyFadeOut(EVoid)
-  {
+  ApplyFadeOut(EVoid) {
     m_tmFadeOutStart = _pTimer->CurrentTick();
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc != NULL)
-    {
+
+    if (pwsc != NULL) {
       autowait(m_tmFadeOutLen);
+
       CWorldSettingsController *pwsc = GetWSC(this);
+
       ETextFX etfx;
-      etfx.bStart=FALSE;
-      etfx.penSender=this;
+      etfx.bStart = FALSE;
+      etfx.penSender = this;
       pwsc->SendEvent(etfx);
     }
+
     return EReturn();
   }
 
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -193,47 +196,47 @@ procedures:
 
     autowait(0.05f);
 
-    if (!Picture_On(m_fnmPicture))
-    {
+    if (!Picture_On(m_fnmPicture)) {
       Picture_Off();
       return;
     }
+
     _bDataError = FALSE;
 
     wait() {
-      on (EBegin): 
-      {
+      on (EBegin) : {
         resume;
       }
-      on (EStart eStart): 
-      {
+
+      on (EStart eStart) : {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc != NULL)
-        {
+
+        if (pwsc != NULL) {
           m_tmFadeInStart = _pTimer->CurrentTick();
+
           EHudPicFX etfx;
-          etfx.bStart=TRUE;
-          etfx.penSender=this;
+          etfx.bStart = TRUE;
+          etfx.penSender = this;
           pwsc->SendEvent(etfx);
-          if (m_tmAutoFadeOut != -1)
-          {
+
+          if (m_tmAutoFadeOut != -1) {
             call WaitAndFadeOut();
           }
         }
         resume;
       }
-      on (EStop eStop): 
-      {
+
+      on (EStop eStop) : {
         call ApplyFadeOut();
         resume;
       }
-      on (EReturn): 
-      {
+
+      on (EReturn) : {
         resume;
       }
     }
+
     Picture_Off();
     return;
   }
 };
-

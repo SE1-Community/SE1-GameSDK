@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -97,9 +97,8 @@ components:
  // ************** SOUNDS **************
  50 sound   SOUND_FIRE         "ModelsMP\\Enemies\\CannonRotating\\Sounds\\Fire.wav",
 
-functions:                                        
-
-virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
+functions:
+  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
   {
     CTString str;
     str.PrintF(TRANS("A Cannon killed %s"), strPlayerName);
@@ -126,22 +125,18 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
     PrecacheTexture(TEXTURE_BALL);
 
     PrecacheSound(SOUND_FIRE);
-    
+
     PrecacheClass(CLASS_CANNONBALL);
   };
 
-
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
-    {
-      fDamageAmmount*=0.5f;
+    if (dmtType == DMT_BULLET && fDamageAmmount > 100.0f) {
+      fDamageAmmount *= 0.5f;
     }
 
-    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount,
-                              vHitPoint, vDirection);    
+    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
   };
 
   // damage anim
@@ -155,8 +150,7 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
   };
 
   // cast a ray to entity checking only for brushes
-  BOOL IsVisible(CEntity *penEntity) 
-  {
+  BOOL IsVisible(CEntity *penEntity) {
     ASSERT(penEntity != NULL);
     // get ray source and target
     FLOAT3D vSource, vTarget;
@@ -164,42 +158,41 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
 
     // cast the ray
     CCastRay crRay(this, vSource, vTarget);
-    crRay.cr_ttHitModels = CCastRay::TT_NONE;     // check for brushes only
+    crRay.cr_ttHitModels = CCastRay::TT_NONE; // check for brushes only
     crRay.cr_bHitTranslucentPortals = FALSE;
     en_pwoWorld->CastRay(crRay);
 
     // if hit nothing (no brush) the entity can be seen
-    return (crRay.cr_penHit == NULL);     
+    return (crRay.cr_penHit == NULL);
   };
 
-  BOOL IsInTheLineOfFire(CEntity *penEntity, FLOAT fAngle)
-  {
+  BOOL IsInTheLineOfFire(CEntity *penEntity, FLOAT fAngle) {
     ASSERT(penEntity != NULL);
 
     FLOAT fCosAngle;
     FLOAT3D vHeading;
     FLOAT3D vToPlayer;
 
-    FLOAT3D vSide = FLOAT3D(1.0f, 0.0f, 0.0f)*GetRotationMatrix();
-    FLOAT3D vFront = FLOAT3D(0.0f, 0.0f, -1.0f)*GetRotationMatrix();
+    FLOAT3D vSide = FLOAT3D(1.0f, 0.0f, 0.0f) * GetRotationMatrix();
+    FLOAT3D vFront = FLOAT3D(0.0f, 0.0f, -1.0f) * GetRotationMatrix();
     FLOATmatrix3D m;
-    MakeRotationMatrixFast(m, m_aBeginRotatorRotation);    
-    vSide  = vSide*m;
-    vFront = vFront*m;    
-    
+    MakeRotationMatrixFast(m, m_aBeginRotatorRotation);
+    vSide = vSide * m;
+    vFront = vFront * m;
+
     vToPlayer = penEntity->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector;
     vToPlayer.Normalize();
-    
-    fCosAngle = vToPlayer%vSide;
-    
+
+    fCosAngle = vToPlayer % vSide;
+
     // if on the firing plane
-    if (Abs(fCosAngle)<CosFast(90.0f-fAngle)) {
+    if (Abs(fCosAngle) < CosFast(90.0f - fAngle)) {
       // if in front
-      if ((vToPlayer%vFront)>0.0f) {
-       return TRUE;
+      if ((vToPlayer % vFront) > 0.0f) {
+        return TRUE;
       }
     }
-    return FALSE;    
+    return FALSE;
   }
 
   CPlayer *AcquireTarget() {
@@ -207,64 +200,63 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
 
-    for (INDEX i=0; i<ctMaxPlayers; i++) {
-      penPlayer=GetPlayerEntity(i);
-      if (penPlayer != NULL && DistanceTo(this, penPlayer)<m_fFiringRangeFar) {
+    for (INDEX i = 0; i < ctMaxPlayers; i++) {
+      penPlayer = GetPlayerEntity(i);
+      if (penPlayer != NULL && DistanceTo(this, penPlayer) < m_fFiringRangeFar) {
         // if this player is more or less directly in front of the shooter
         if (IsInTheLineOfFire(penPlayer, m_fViewAngle)) {
           // see if something blocks the path to the player
           if (IsVisible(penPlayer)) {
-            return (CPlayer *)penPlayer; 
+            return (CPlayer *)penPlayer;
           }
-        }        
+        }
       }
     }
     return NULL;
   };
 
   // spawn body parts
-  void CannonBlowUp(void)
-  {
-    FLOAT3D vNormalizedDamage = m_vDamage-m_vDamage*(m_fBlowUpAmount/m_vDamage.Length());
+  void CannonBlowUp(void) {
+    FLOAT3D vNormalizedDamage = m_vDamage - m_vDamage * (m_fBlowUpAmount / m_vDamage.Length());
     vNormalizedDamage /= Sqrt(vNormalizedDamage.Length());
     vNormalizedDamage *= 0.75f;
-    vNormalizedDamage += FLOAT3D(0.0f, 15.0f+FRnd()*10.0f, 0.0f);
-    
-    FLOAT3D vBodySpeed = en_vCurrentTranslationAbsolute-en_vGravityDir*(en_vGravityDir%en_vCurrentTranslationAbsolute);
-    
+    vNormalizedDamage += FLOAT3D(0.0f, 15.0f + FRnd() * 10.0f, 0.0f);
+
+    FLOAT3D vBodySpeed = en_vCurrentTranslationAbsolute - en_vGravityDir * (en_vGravityDir % en_vCurrentTranslationAbsolute);
+
     // spawn debris
     Debris_Begin(EIBT_WOOD, DPT_NONE, BET_NONE, 1.0f, vNormalizedDamage, vBodySpeed, 5.0f, 2.0f);
-    
+
     Debris_Spawn(this, this, MODEL_DEBRIS_MUZZLE, TEXTURE_CANNON, 0, 0, 0, 0, m_fSize,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
     Debris_Spawn(this, this, MODEL_DEBRIS_ROTATOR, TEXTURE_ROTATOR, 0, 0, 0, 0, m_fSize,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
     Debris_Spawn(this, this, MODEL_DEBRIS_ROTATOR, TEXTURE_ROTATOR, 0, 0, 0, 0, m_fSize,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
     Debris_Spawn(this, this, MODEL_DEBRIS_BASE, TEXTURE_TURRET, 0, 0, 0, 0, m_fSize,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
-    Debris_Spawn(this, this, MODEL_BALL, TEXTURE_BALL, 0, 0, 0, 0, m_fSize/2.0f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
-    Debris_Spawn(this, this, MODEL_BALL, TEXTURE_BALL, 0, 0, 0, 0, m_fSize/2.0f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
+    Debris_Spawn(this, this, MODEL_BALL, TEXTURE_BALL, 0, 0, 0, 0, m_fSize / 2.0f,
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
+    Debris_Spawn(this, this, MODEL_BALL, TEXTURE_BALL, 0, 0, 0, 0, m_fSize / 2.0f,
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
 
     // spawn explosion
     CPlacement3D plExplosion = GetPlacement();
     CEntityPointer penExplosion = CreateEntity(plExplosion, CLASS_BASIC_EFFECT);
     ESpawnEffect eSpawnEffect;
-    eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
+    eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
     eSpawnEffect.betType = BET_CANNON;
-    FLOAT fSize = m_fBlowUpSize*1.0f;
-    eSpawnEffect.vStretch = FLOAT3D(fSize,fSize,fSize);
+    FLOAT fSize = m_fBlowUpSize * 1.0f;
+    eSpawnEffect.vStretch = FLOAT3D(fSize, fSize, fSize);
     penExplosion->Initialize(eSpawnEffect);
 
     // spawn shockwave
     plExplosion = GetPlacement();
     penExplosion = CreateEntity(plExplosion, CLASS_BASIC_EFFECT);
-    eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
+    eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
     eSpawnEffect.betType = BET_CANNONSHOCKWAVE;
-    fSize = m_fBlowUpSize*1.0f;
-    eSpawnEffect.vStretch = FLOAT3D(fSize,fSize,fSize);
+    fSize = m_fBlowUpSize * 1.0f;
+    eSpawnEffect.vStretch = FLOAT3D(fSize, fSize, fSize);
     penExplosion->Initialize(eSpawnEffect);
 
     // hide yourself (must do this after spawning debris)
@@ -282,7 +274,7 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
   void PostMoving() {
     CEnemyBase::PostMoving();
     // make sure this entity stays in the moving list
-    SetFlags(GetFlags()&~ENF_INRENDERING);
+    SetFlags(GetFlags() & ~ENF_INRENDERING);
   }
 
   // rotate to between-tick position
@@ -297,38 +289,35 @@ virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const E
     return CEnemyBase::AdjustShadingParameters(vLightDirection, colLight, colAmbient);
   };
 
-  
-  void UpdateAttachmentRotations( void )
-  {
+  void UpdateAttachmentRotations(void) {
     // rotator
     m_aBeginRotatorRotation = m_aEndRotatorRotation;
-    m_aEndRotatorRotation += m_fRotSpeedRotator*_pTimer->TickQuantum;
+    m_aEndRotatorRotation += m_fRotSpeedRotator * _pTimer->TickQuantum;
     // muzzle
     m_aBeginMuzzleRotation = m_aEndMuzzleRotation;
-    m_aEndMuzzleRotation += m_fRotSpeedMuzzle*_pTimer->TickQuantum;
+    m_aEndMuzzleRotation += m_fRotSpeedMuzzle * _pTimer->TickQuantum;
   }
 
   void UpdateFiringPos() {
     FLOATmatrix3D m;
     // initial position
-    m_vFiringPos = FIRING_POSITION_MUZZLE*m_fSize;
-    
+    m_vFiringPos = FIRING_POSITION_MUZZLE * m_fSize;
+
     // heading rotation
     MakeRotationMatrixFast(m, m_aBeginRotatorRotation);
-    m_vFiringPos = m_vFiringPos*m;
- 
+    m_vFiringPos = m_vFiringPos * m;
+
     // pitch rotation
     MakeRotationMatrixFast(m, m_aBeginMuzzleRotation);
-    m_vFiringPos = m_vFiringPos*m;
-    
-    // add translations 
+    m_vFiringPos = m_vFiringPos * m;
+
+    // add translations
     CAttachmentModelObject &amo0 = *GetModelObject()->GetAttachmentModel(TURRET_ATTACHMENT_ROTATORHEADING);
     CAttachmentModelObject &amo1 = *amo0.amo_moModelObject.GetAttachmentModel(ROTATINGMECHANISM_ATTACHMENT_CANNON);
-    m_vFiringPos += amo0.amo_plRelative.pl_PositionVector +  amo1.amo_plRelative.pl_PositionVector;
+    m_vFiringPos += amo0.amo_plRelative.pl_PositionVector + amo1.amo_plRelative.pl_PositionVector;
   }
 
 procedures:
-  
   MainLoop() {
     wait() {
       on (EBegin) : {
@@ -537,7 +526,8 @@ procedures:
     }
   }
 
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);

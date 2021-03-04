@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -14,7 +14,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
 321
-%{
+/* clang-format off */ %{
 #include "StdH.h"
 #include "Models/Enemies/Dragonman/Dragonman.h"
 %}
@@ -28,7 +28,7 @@ enum DragonmanType {
   2 DT_MONSTER    "Monster",
 };
 
-%{
+/* clang-format off */ %{
 // info structure
 static EntityInfo eiDragonmanStand1 = {
   EIBT_FLESH, 200.0f,
@@ -98,79 +98,62 @@ components:
  54 sound   SOUND_KICK      "Models\\Enemies\\Dragonman\\Sounds\\Kick.wav",
  55 sound   SOUND_DEATH     "Models\\Enemies\\Dragonman\\Sounds\\Death.wav",
 
-functions:
+functions: /* clang-format on */
   // Entity info
   void *GetEntityInfo(void) {
     if (m_bInAir) {
       switch (m_EdtType) {
-      case DT_SOLDIER:
-        return &eiDragonmanFly1;
-        break;
-      case DT_SERGEANT:
-        return &eiDragonmanFly2;
-        break;
-      case DT_MONSTER:
-        return &eiDragonmanFly4;
-        break;
-      default: {
-        return &eiDragonmanFly1;
-               } break;
+        case DT_SOLDIER: return &eiDragonmanFly1; break;
+        case DT_SERGEANT: return &eiDragonmanFly2; break;
+        case DT_MONSTER: return &eiDragonmanFly4; break;
+        default: {
+          return &eiDragonmanFly1;
+        } break;
       }
     } else {
       switch (m_EdtType) {
-      case DT_SOLDIER:
-        return &eiDragonmanStand1;
-        break;
-      case DT_SERGEANT:
-        return &eiDragonmanStand2;
-        break;
-      case DT_MONSTER:
-        return &eiDragonmanStand4;
-        break;
-      default: {
-        return &eiDragonmanStand1;
-               } break;
+        case DT_SOLDIER: return &eiDragonmanStand1; break;
+        case DT_SERGEANT: return &eiDragonmanStand2; break;
+        case DT_MONSTER: return &eiDragonmanStand4; break;
+        default: {
+          return &eiDragonmanStand1;
+        } break;
       }
     }
   };
 
   // Fill in entity statistics - for AI purposes only
-  BOOL FillEntityStatistics(EntityStats *pes)
-  {
+  BOOL FillEntityStatistics(EntityStats *pes) {
     CEnemyBase::FillEntityStatistics(pes);
     switch (m_EdtType) {
-    case DT_SOLDIER  : { pes->es_strName+=" Soldier"; } break;
-    case DT_SERGEANT : { pes->es_strName+=" Sergeant"; } break;
-    case DT_MONSTER  : { pes->es_strName+=" Monster"; } break;
+      case DT_SOLDIER: {
+        pes->es_strName += " Soldier";
+      } break;
+      case DT_SERGEANT: {
+        pes->es_strName += " Sergeant";
+      } break;
+      case DT_MONSTER: {
+        pes->es_strName += " Monster";
+      } break;
     }
     return TRUE;
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // woman can't harm woman
     if (!IsOfClass(penInflictor, "Dragonman")) {
       CEnemyFly::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
 
-  FLOAT3D GetStretchedVector(const FLOAT3D&v)
-  {
+  FLOAT3D GetStretchedVector(const FLOAT3D &v) {
     switch (m_EdtType) {
-    case DT_SOLDIER:
-      return v;
-      break;
-    case DT_SERGEANT:
-      return v*2.0f;
-      break;
-    case DT_MONSTER:
-      return v*4.0f;
-      break;
-    default:
-      ASSERT(FALSE);
-      return v;
+      case DT_SOLDIER: return v; break;
+      case DT_SERGEANT: return v * 2.0f; break;
+      case DT_MONSTER: return v * 4.0f; break;
+      default: ASSERT(FALSE); return v;
     }
   }
 
@@ -178,13 +161,13 @@ functions:
   INDEX AnimForDamage(FLOAT fDamage) {
     INDEX iAnim;
     if (m_bInAir) {
-      switch (IRnd()%2) {
+      switch (IRnd() % 2) {
         case 0: iAnim = DRAGONMAN_ANIM_AIRWOUNDSLIGHT; break;
         case 1: iAnim = DRAGONMAN_ANIM_AIRWOUND02CRITICAL; break;
         default: ASSERTALWAYS("Dragonman unknown fly damage");
       }
     } else {
-      switch (IRnd()%3) {
+      switch (IRnd() % 3) {
         case 0: iAnim = DRAGONMAN_ANIM_GROUNDWOUNDCRITICALBACK; break;
         case 1: iAnim = DRAGONMAN_ANIM_GROUNDWOUNDCRITICALFRONT; break;
         case 2: iAnim = DRAGONMAN_ANIM_GROUNDWOUNDCRITICALBACK2; break;
@@ -201,7 +184,7 @@ functions:
     if (m_bInAir) {
       iAnim = DRAGONMAN_ANIM_AIRDEATH;
     } else {
-      switch (IRnd()%2) {
+      switch (IRnd() % 2) {
         case 0: iAnim = DRAGONMAN_ANIM_GROUNDDEATHBACK; break;
         case 1: iAnim = DRAGONMAN_ANIM_GROUNDDEATHFRONT; break;
         default: ASSERTALWAYS("Dragonman unknown ground death");
@@ -219,39 +202,39 @@ functions:
   // virtual anim functions
   void StandingAnim(void) {
     if (m_bInAir) {
-      StartModelAnim(DRAGONMAN_ANIM_AIRSTANDLOOP, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(DRAGONMAN_ANIM_AIRSTANDLOOP, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(DRAGONMAN_ANIM_GROUNDSTANDLOOP, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(DRAGONMAN_ANIM_GROUNDSTANDLOOP, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void WalkingAnim(void) {
     if (m_bInAir) {
-      StartModelAnim(DRAGONMAN_ANIM_AIRFLYLOOP, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(DRAGONMAN_ANIM_AIRFLYLOOP, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(DRAGONMAN_ANIM_GROUNDWALK, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(DRAGONMAN_ANIM_GROUNDWALK, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void RunningAnim(void) {
     if (m_bInAir) {
-      StartModelAnim(DRAGONMAN_ANIM_AIRFLYLOOP, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(DRAGONMAN_ANIM_AIRFLYLOOP, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(DRAGONMAN_ANIM_GROUNDRUN, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(DRAGONMAN_ANIM_GROUNDRUN, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void RotatingAnim(void) {
     if (m_bInAir) {
-      StartModelAnim(DRAGONMAN_ANIM_AIRFLYLOOP, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(DRAGONMAN_ANIM_AIRFLYLOOP, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(DRAGONMAN_ANIM_GROUNDWALK, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(DRAGONMAN_ANIM_GROUNDWALK, AOF_LOOPING | AOF_NORESTART);
     }
   };
   FLOAT AirToGroundAnim(void) {
     StartModelAnim(DRAGONMAN_ANIM_AIRTOGROUND, 0);
-    return(GetModelObject()->GetAnimLength(DRAGONMAN_ANIM_AIRTOGROUND));
+    return (GetModelObject()->GetAnimLength(DRAGONMAN_ANIM_AIRTOGROUND));
   };
   FLOAT GroundToAirAnim(void) {
     StartModelAnim(DRAGONMAN_ANIM_GROUNDTOAIR, 0);
-    return(GetModelObject()->GetAnimLength(DRAGONMAN_ANIM_GROUNDTOAIR));
+    return (GetModelObject()->GetAnimLength(DRAGONMAN_ANIM_GROUNDTOAIR));
   };
   void ChangeCollisionToAir() {
     ChangeCollisionBoxIndexWhenPossible(DRAGONMAN_COLLISION_BOX_AIR);
@@ -291,19 +274,18 @@ functions:
     // create flame
     CEntityPointer penFlame = ShootProjectile(PRT_FLAME, vFlamePos, ANGLE3D(0.0f, 0.0f, 0.0f));
     // link last flame with this one (if not NULL or deleted)
-    if (m_penFlame != NULL && !(m_penFlame->GetFlags()&ENF_DELETED)) {
-      ((CProjectile&)*m_penFlame).m_penParticles = penFlame;
+    if (m_penFlame != NULL && !(m_penFlame->GetFlags() & ENF_DELETED)) {
+      ((CProjectile &)*m_penFlame).m_penParticles = penFlame;
     }
     // link to player weapons
-    ((CProjectile&)*penFlame).m_penParticles = this;
+    ((CProjectile &)*penFlame).m_penParticles = this;
     // store last flame
     m_penFlame = penFlame;
     // flame source position
-    m_vFlameSource = GetPlacement().pl_PositionVector + vFlamePos*GetRotationMatrix();
+    m_vFlameSource = GetPlacement().pl_PositionVector + vFlamePos * GetRotationMatrix();
   };
 
-
-procedures:
+  /* clang-format off */ procedures:
 // PROCEDURES WHEN HARMED
   BeWounded(EDamage eDamage) : CEnemyFly::BeWounded { 
     m_penFlame = NULL;

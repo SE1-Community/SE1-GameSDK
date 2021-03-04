@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -62,70 +62,65 @@ functions:
   virtual FLOAT &GetProp(FLOAT &m_fBase)
   {
     if (m_bInLiquid) {
-      return *((&m_fBase)+(&m_fDiveWalkSpeed-&m_fWalkSpeed));
+      return *((&m_fBase) + (&m_fDiveWalkSpeed - &m_fWalkSpeed));
     } else {
       return m_fBase;
     }
   }
 
   // diving enemies never use pathfinding
-  void StartPathFinding(void)
-  {
-    m_dtDestination=DT_PLAYERSPOTTED;
+  void StartPathFinding(void) {
+    m_dtDestination = DT_PLAYERSPOTTED;
     m_vPlayerSpotted = PlayerDestinationPos();
   }
 
-  virtual void AdjustDifficulty(void)
-  {
+  virtual void AdjustDifficulty(void) {
     FLOAT fMoveSpeed = GetSP()->sp_fEnemyMovementSpeed;
     FLOAT fAttackSpeed = GetSP()->sp_fEnemyMovementSpeed;
-//    m_fDiveWalkSpeed *= fMoveSpeed;
-//    m_aDiveWalkRotateSpeed *= fMoveSpeed;
+    //    m_fDiveWalkSpeed *= fMoveSpeed;
+    //    m_aDiveWalkRotateSpeed *= fMoveSpeed;
     m_fDiveAttackRunSpeed *= fMoveSpeed;
     m_aDiveAttackRotateSpeed *= fMoveSpeed;
     m_fDiveCloseRunSpeed *= fMoveSpeed;
     m_aDiveCloseRotateSpeed *= fMoveSpeed;
-    m_fDiveAttackFireTime *= 1/fAttackSpeed;
-    m_fDiveCloseFireTime *= 1/fAttackSpeed;
-    m_fDiveLockOnEnemyTime *= 1/fAttackSpeed;
+    m_fDiveAttackFireTime *= 1 / fAttackSpeed;
+    m_fDiveCloseFireTime *= 1 / fAttackSpeed;
+    m_fDiveLockOnEnemyTime *= 1 / fAttackSpeed;
 
     CEnemyBase::AdjustDifficulty();
   }
   // close attack if possible
-  virtual BOOL CanHitEnemy(CEntity *penTarget, FLOAT fCosAngle) {
+  virtual BOOL CanHitEnemy(CEntity * penTarget, FLOAT fCosAngle) {
     if (IsInPlaneFrustum(penTarget, fCosAngle)) {
       return IsVisibleCheckAll(penTarget);
     }
     return FALSE;
   };
-  
-// POST MOVING
+
+  // POST MOVING
   void PostMoving(void) {
     CEnemyBase::PostMoving();
     // change to liquid
-    if (m_EedtType != EDT_GROUND_ONLY && !m_bInLiquid && en_fImmersionFactor>0.9f &&
-        (GetWorld()->wo_actContentTypes[en_iDnContent].ct_ulFlags&CTF_SWIMABLE)) {
+    if (m_EedtType != EDT_GROUND_ONLY && !m_bInLiquid && en_fImmersionFactor > 0.9f
+        && (GetWorld()->wo_actContentTypes[en_iDnContent].ct_ulFlags & CTF_SWIMABLE)) {
       m_bInLiquid = TRUE;
       ChangeCollisionToLiquid();
       SendEvent(ERestartAttack());
     }
     // change to ground
-    if (m_EedtType != EDT_DIVE_ONLY && m_bInLiquid && (en_fImmersionFactor<0.5f || en_fImmersionFactor == 1.0f) &&
-        en_penReference != NULL && !(GetWorld()->wo_actContentTypes[en_iUpContent].ct_ulFlags&CTF_SWIMABLE)) {
+    if (m_EedtType != EDT_DIVE_ONLY && m_bInLiquid && (en_fImmersionFactor < 0.5f || en_fImmersionFactor == 1.0f)
+        && en_penReference != NULL && !(GetWorld()->wo_actContentTypes[en_iUpContent].ct_ulFlags & CTF_SWIMABLE)) {
       m_bInLiquid = FALSE;
       ChangeCollisionToGround();
       SendEvent(ERestartAttack());
     }
   };
 
-
-
-// MOVING FUNCTIONS
+  // MOVING FUNCTIONS
 
   // set desired rotation and translation to go/orient towards desired position
   // and get the resulting movement type
-  virtual ULONG SetDesiredMovement(void) 
-  {
+  virtual ULONG SetDesiredMovement(void) {
     // if not in air
     if (!m_bInLiquid) {
       // use base class
@@ -136,11 +131,11 @@ functions:
     ULONG ulFlags = CEnemyBase::SetDesiredMovement();
 
     // if we may move
-    if (m_fMoveSpeed>0.0f) {
+    if (m_fMoveSpeed > 0.0f) {
       // fix translation for 3d movement
       FLOAT3D vTranslation = (m_vDesiredPosition - GetPlacement().pl_PositionVector) * !en_mRotation;
       vTranslation(1) = 0.0f;
-      if (vTranslation(3)>0) { 
+      if (vTranslation(3) > 0) {
         vTranslation(3) = 0.0f;
       }
       vTranslation.Normalize();
@@ -152,22 +147,21 @@ functions:
   }
 
   // check whether may move while attacking
-  BOOL MayMoveToAttack(void) 
-  {
+  BOOL MayMoveToAttack(void) {
     return WouldNotLeaveAttackRadius();
   }
 
-// CLASS SUPPORT FUNCTIONS
+  // CLASS SUPPORT FUNCTIONS
   // set entity position
   void SetEntityPosition() {
     switch (m_EedtType) {
-      case EDT_GROUND_ONLY:         // can't dive
+      case EDT_GROUND_ONLY: // can't dive
         m_bInLiquid = FALSE;
         break;
-      case EDT_DIVE_ONLY:           // always dive can't walk
+      case EDT_DIVE_ONLY: // always dive can't walk
         m_bInLiquid = TRUE;
         break;
-      case EDT_GROUND_DIVE:         // dive and walk
+      case EDT_GROUND_DIVE: // dive and walk
         break;
     }
 
@@ -181,12 +175,9 @@ functions:
     StandingAnim();
   };
 
-
-// VIRTUAL FUNCTIONS THAT NEED OVERRIDE
+  // VIRTUAL FUNCTIONS THAT NEED OVERRIDE
   virtual void ChangeCollisionToLiquid(void) {}
   virtual void ChangeCollisionToGround(void) {}
-
-
 
 procedures:
 // ATTACK ENEMY PROCEDURES
@@ -216,12 +207,10 @@ procedures:
     jump CEnemyBase::MainLoop();
   };
 
-  // dummy main
-  Main(EVoid) {
+  // Entry point
+  Main() {
     return;
   };
-
-
 
 // VIRTUAL PROCEDURES THAT NEED OVERRIDE
 

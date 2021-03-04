@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 uses "Entities/Marker";
 
 %{
-  extern void CPlayerWeapons_Precache(ULONG ulAvailable);
+extern void CPlayerWeapons_Precache(ULONG ulAvailable);
 %}
 
 class CPlayerMarker: CMarker {
@@ -50,7 +50,7 @@ components:
 
 functions:
   void Precache(void) {
-    if (m_iGiveWeapons>1) {
+    if (m_iGiveWeapons > 1) {
       CPlayerWeapons_Precache(m_iGiveWeapons);
     }
   }
@@ -65,13 +65,12 @@ functions:
       pmh->m_penRespawnMarker = this;
 
       // if this is a new marker and we are in single player and the trigger originator is valid
-      CEntity *penCaused = ((ETrigger&)ee).penCaused;
-      if (bNew &&
-        (GetSP()->sp_bSinglePlayer && GetSP()->sp_gmGameMode != CSessionProperties::GM_FLYOVER)
-        && IsOfClass(penCaused, "Player")) {
+      CEntity *penCaused = ((ETrigger &)ee).penCaused;
+      if (bNew && (GetSP()->sp_bSinglePlayer && GetSP()->sp_gmGameMode != CSessionProperties::GM_FLYOVER)
+          && IsOfClass(penCaused, "Player")) {
         // if the player wants auto-save
-        CPlayerSettings *pps = (CPlayerSettings *) (((CPlayerEntity*)penCaused)->en_pcCharacter.pc_aubAppearance);
-        if (pps->ps_ulFlags&PSF_AUTOSAVE) {
+        CPlayerSettings *pps = (CPlayerSettings *)(((CPlayerEntity *)penCaused)->en_pcCharacter.pc_aubAppearance);
+        if (pps->ps_ulFlags & PSF_AUTOSAVE) {
           // save now
           _pShell->Execute("gam_bQuickSave=1;");
         }

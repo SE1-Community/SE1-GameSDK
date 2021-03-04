@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -18,9 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "Entities/WorldSettingsController.h"
 #include "Entities/BackgroundViewer.h"
-%}
 
-%{
 static CStaticStackArray<CTString> _astrLines;
 static CTFileName _fnLastLoaded;
 %}
@@ -31,7 +29,6 @@ thumbnail "Thumbnails\\TextFXHodler.tbn";
 features  "IsTargetable", "HasName", "IsImportant";
 
 properties:
-
   1 CTString m_strName "Name" 'N' = "Text FX holder",
   2 CTString m_strDescription = "",
   3 CTFileName m_fnmMessage  "Text file" 'T' = CTString(""),
@@ -42,103 +39,112 @@ properties:
   8 FLOAT m_tmAutoFadeOut "Auto fade out time" 'A' = -1.0f,
 
   20 BOOL m_bDataError = FALSE,
-  {
-    BOOL  bDataLoaded;
-  }
+
+{
+  BOOL bDataLoaded;
+}
 
 components:
-  1 model   MODEL_MARKER     "Models\\Editor\\MessageHolder.mdl",
-  2 texture TEXTURE_MARKER   "Models\\Editor\\MessageHolder.tex"
+  1 model   MODEL_MARKER   "Models\\Editor\\MessageHolder.mdl",
+  2 texture TEXTURE_MARKER "Models\\Editor\\MessageHolder.tex"
 
 functions:
   const CTString &GetDescription(void) const {
-    ((CTString&)m_strDescription).PrintF("%s", m_fnmMessage.FileName());
+    ((CTString &)m_strDescription).PrintF("%s", m_fnmMessage.FileName());
     return m_strDescription;
   }
 
-  void CTextFXHolder(void) 
-  {
+  void CTextFXHolder(void) {
     bDataLoaded = FALSE;
   }
 
-  BOOL ReloadData(void)
-  {
+  BOOL ReloadData(void) {
     m_bDataError = FALSE;
-    if (!Text_On(m_fnmMessage))
-    {
+
+    if (!Text_On(m_fnmMessage)) {
       Text_Off();
       return FALSE;
-    }    
+    }
+
     return TRUE;
   }
 
-  BOOL LoadOneFile(const CTFileName &fnm)
-  {
-    if (fnm == "") { return FALSE; }
-    try 
-    {
+  BOOL LoadOneFile(const CTFileName &fnm) {
+    if (fnm == "") {
+      return FALSE;
+    }
+
+    try {
       // open the file
       CTFileStream strm;
       strm.Open_t(fnm);
 
       // count number of lines
       INDEX ctLines = 0;
-      while (!strm.AtEOF())
-      {
+
+      while (!strm.AtEOF()) {
         CTString strLine;
         strm.GetLine_t(strLine);
         ctLines++;
       }
+
       strm.SetPos_t(0);
 
       // allocate that much
       CTString *astr = _astrLines.Push(ctLines);
+
       // load all lines
-      for (INDEX iLine = 0; iLine<ctLines && !strm.AtEOF(); iLine++)
-      {
+      for (INDEX iLine = 0; iLine < ctLines && !strm.AtEOF(); iLine++) {
         strm.GetLine_t(astr[iLine]);
       }
+
       strm.Close();
       return TRUE;
-    }
-    catch (char *strError)
-    {
+
+    } catch (char *strError) {
       CPrintF("%s\n", strError);
       return FALSE;
     }
-    _fnLastLoaded=fnm;
+
+    _fnLastLoaded = fnm;
   }
 
-  // turn text on
-  BOOL Text_On(CTFileName fnText)
-  {
+  // Turn text on
+  BOOL Text_On(CTFileName fnText) {
     _astrLines.PopAll();
     return LoadOneFile(fnText);
   }
 
-  // turn text off
-  void Text_Off(void)
-  {
+  // Turn text off
+  void Text_Off(void) {
     _astrLines.Clear();
   }
 
-  // render credits to given drawport
-  FLOAT TextFX_Render(CTextFXHolder *penThis, CDrawPort *pdp)
-  {
-    if (m_bDataError) { return 0; }
-    
+  // Render credits to given drawport
+  FLOAT TextFX_Render(CTextFXHolder *penThis, CDrawPort *pdp) {
+    if (m_bDataError) {
+      return 0;
+    }
+
     if (!bDataLoaded) {
       if (!ReloadData()) {
         m_bDataError = TRUE;
         return 0;
       }
+
       bDataLoaded = TRUE;
       return 1;
     }
-    
-    FLOAT fNow=_pTimer->CurrentTick();
-    if (fNow<m_tmFadeInStart) { return 0; }
-    if (fNow>m_tmFadeOutStart+m_tmFadeOutLen) { return 0;}
+
+    FLOAT fNow = _pTimer->CurrentTick();
+
+    if (fNow < m_tmFadeInStart) {
+      return 0;
+    }
+
+    if (fNow > m_tmFadeOutStart + m_tmFadeOutLen) {
+      return 0;
+    }
 
     PIX pixW = 0;
     PIX pixH = 0;
@@ -147,38 +153,42 @@ functions:
     PIX pixLineHeight;
     CTString strEmpty;
 
-    CDrawPort *pdpCurr=pdp;
+    CDrawPort *pdpCurr = pdp;
     pdp->Unlock();
     pdpCurr->Lock();
-    
+
     pixW = pdpCurr->GetWidth();
     pixH = pdpCurr->GetHeight();
     fResolutionScaling = (FLOAT)pixH / 360.0f;
-    pdpCurr->SetFont( _pfdDisplayFont);
-    pixLineHeight = floor(20*fResolutionScaling);     
 
-    INDEX ctMaxLinesOnScreen = pixH/pixLineHeight;
-    INDEX ctLines=ClampUp(_astrLines.Count(), ctMaxLinesOnScreen);
+    pdpCurr->SetFont(_pfdDisplayFont);
+    pixLineHeight = floor(20 * fResolutionScaling);
 
-    pixJ = PIX(pixH/2-ctLines/2.0f*pixLineHeight);
-    for (INDEX iLine = 0; iLine<ctLines; iLine++)
-    {
+    INDEX ctMaxLinesOnScreen = pixH / pixLineHeight;
+    INDEX ctLines = ClampUp(_astrLines.Count(), ctMaxLinesOnScreen);
+
+    pixJ = PIX(pixH / 2 - ctLines / 2.0f * pixLineHeight);
+
+    for (INDEX iLine = 0; iLine < ctLines; iLine++) {
       CTString *pstr = &_astrLines[iLine];
-      pdp->SetFont( _pfdDisplayFont);
-      pdp->SetTextScaling( fResolutionScaling);
-      pdp->SetTextAspect( 1.0f);
-      FLOAT fRatio=1.0f;
-      if (fNow>m_tmFadeOutStart)
-      {
-        fRatio=CalculateRatio(fNow, m_tmFadeOutStart, m_tmFadeOutStart+m_tmFadeOutLen, 0, 1);
+      pdp->SetFont(_pfdDisplayFont);
+      pdp->SetTextScaling(fResolutionScaling);
+      pdp->SetTextAspect(1.0f);
+
+      FLOAT fRatio = 1.0f;
+
+      if (fNow > m_tmFadeOutStart) {
+        fRatio = CalculateRatio(fNow, m_tmFadeOutStart, m_tmFadeOutStart + m_tmFadeOutLen, 0, 1);
       }
-      if (fNow<m_tmFadeInStart+m_tmFadeInLen)
-      {
-        fRatio=CalculateRatio(fNow, m_tmFadeInStart, m_tmFadeInStart+m_tmFadeInLen, 1, 0);
+
+      if (fNow < m_tmFadeInStart + m_tmFadeInLen) {
+        fRatio = CalculateRatio(fNow, m_tmFadeInStart, m_tmFadeInStart + m_tmFadeInLen, 1, 0);
       }
-      UBYTE ubA=ClampUp(UBYTE(fRatio*255.0f), UBYTE(255));
-      pdp->PutTextC( *pstr, pixW/2, pixJ, C_WHITE|ubA);
-      pixJ+=pixLineHeight;
+
+      UBYTE ubA = ClampUp(UBYTE(fRatio * 255.0f), UBYTE(255));
+      pdp->PutTextC(*pstr, pixW / 2, pixJ, C_WHITE | ubA);
+
+      pixJ += pixLineHeight;
     }
 
     pdpCurr->Unlock();
@@ -187,33 +197,32 @@ functions:
     return 1;
   }
 
-
 procedures:
-  
-  WaitAndFadeOut(EVoid)
-  {
-    autowait( m_tmAutoFadeOut);
+  WaitAndFadeOut(EVoid) {
+    autowait(m_tmAutoFadeOut);
     jump ApplyFadeOut();
   }
 
-  ApplyFadeOut(EVoid)
-  {
+  ApplyFadeOut(EVoid) {
     m_tmFadeOutStart = _pTimer->CurrentTick();
     CWorldSettingsController *pwsc = GetWSC(this);
-    if (pwsc != NULL)
-    {
+
+    if (pwsc != NULL) {
       autowait(m_tmFadeOutLen);
+
       CWorldSettingsController *pwsc = GetWSC(this);
+
       ETextFX etfx;
-      etfx.bStart=FALSE;
-      etfx.penSender=this;
+      etfx.bStart = FALSE;
+      etfx.penSender = this;
       pwsc->SendEvent(etfx);
     }
+
     return EReturn();
   }
 
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -224,47 +233,47 @@ procedures:
 
     autowait(0.05f);
 
-    if (!Text_On(m_fnmMessage))
-    {
+    if (!Text_On(m_fnmMessage)) {
       Text_Off();
       return;
     }
+
     m_bDataError = FALSE;
 
     wait() {
-      on (EBegin): 
-      {
+      on (EBegin) : {
         resume;
       }
-      on (EStart eStart): 
-      {
+
+      on (EStart eStart) : {
         CWorldSettingsController *pwsc = GetWSC(this);
-        if (pwsc != NULL)
-        {
+
+        if (pwsc != NULL) {
           m_tmFadeInStart = _pTimer->CurrentTick();
+
           ETextFX etfx;
-          etfx.bStart=TRUE;
-          etfx.penSender=this;
+          etfx.bStart = TRUE;
+          etfx.penSender = this;
           pwsc->SendEvent(etfx);
-          if (m_tmAutoFadeOut != -1)
-          {
+
+          if (m_tmAutoFadeOut != -1) {
             call WaitAndFadeOut();
           }
         }
         resume;
       }
-      on (EStop eStop): 
-      {
+
+      on (EStop eStop) : {
         call ApplyFadeOut();
         resume;
       }
-      on (EReturn): 
-      {
+
+      on (EReturn) : {
         resume;
       }
     }
+
     Text_Off();
     return;
   }
 };
-

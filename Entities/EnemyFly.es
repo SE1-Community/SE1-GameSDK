@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -76,15 +76,14 @@ functions:
   virtual FLOAT &GetProp(FLOAT &m_fBase)
   {
     if (m_bInAir) {
-      return *((&m_fBase)+(&m_fFlyWalkSpeed-&m_fWalkSpeed));
+      return *((&m_fBase) + (&m_fFlyWalkSpeed - &m_fWalkSpeed));
     } else {
       return m_fBase;
     }
   }
 
   // get position you would like to go to when following player
-  virtual FLOAT3D PlayerDestinationPos(void)
-  {
+  virtual FLOAT3D PlayerDestinationPos(void) {
     // if not in air
     if (!m_bInAir) {
       // use base class
@@ -99,40 +98,36 @@ functions:
     if (fDist <= m_fFlyCloseDistance) {
       // go to fixed height above player
       fHeight = m_fFlyHeight;
-    // if in further
+      // if in further
     } else {
       // fly more above if further
-      fHeight = m_fFlyHeight + fDist/5.0f;
+      fHeight = m_fFlyHeight + fDist / 5.0f;
     }
 
     // calculate the position from the height
-    return 
-      m_penEnemy->GetPlacement().pl_PositionVector
-      + FLOAT3D(m_penEnemy->en_mRotation(1, 2), m_penEnemy->en_mRotation(2, 2), m_penEnemy->en_mRotation(3, 2))
-        * fHeight;
+    return m_penEnemy->GetPlacement().pl_PositionVector
+           + FLOAT3D(m_penEnemy->en_mRotation(1, 2), m_penEnemy->en_mRotation(2, 2), m_penEnemy->en_mRotation(3, 2)) * fHeight;
   }
 
   // flying enemies never use pathfinding
-  void StartPathFinding(void)
-  {
+  void StartPathFinding(void) {
     if (m_bInAir) {
-      m_dtDestination=DT_PLAYERSPOTTED;
+      m_dtDestination = DT_PLAYERSPOTTED;
       m_vPlayerSpotted = PlayerDestinationPos();
     } else {
       CEnemyBase::StartPathFinding();
     }
   }
 
-  virtual void AdjustDifficulty(void)
-  {
+  virtual void AdjustDifficulty(void) {
     FLOAT fMoveSpeed = GetSP()->sp_fEnemyMovementSpeed;
     FLOAT fAttackSpeed = GetSP()->sp_fEnemyMovementSpeed;
 
-    m_fFlyAttackFireTime  *= 1/fAttackSpeed;
-    m_fFlyCloseFireTime  *= 1/fAttackSpeed;
-    m_fFlyLockOnEnemyTime  *= 1/fAttackSpeed;
-//    m_fFlyWalkSpeed *= fMoveSpeed;
-//    m_aFlyWalkRotateSpeed *= fMoveSpeed;
+    m_fFlyAttackFireTime *= 1 / fAttackSpeed;
+    m_fFlyCloseFireTime *= 1 / fAttackSpeed;
+    m_fFlyLockOnEnemyTime *= 1 / fAttackSpeed;
+    //    m_fFlyWalkSpeed *= fMoveSpeed;
+    //    m_aFlyWalkRotateSpeed *= fMoveSpeed;
     m_fFlyAttackRunSpeed *= fMoveSpeed;
     m_aFlyAttackRotateSpeed *= fMoveSpeed;
     m_fFlyCloseRunSpeed *= fMoveSpeed;
@@ -144,19 +139,18 @@ functions:
   }
 
   // close attack if possible
-  virtual BOOL CanHitEnemy(CEntity *penTarget, FLOAT fCosAngle) {
+  virtual BOOL CanHitEnemy(CEntity * penTarget, FLOAT fCosAngle) {
     if (IsInPlaneFrustum(penTarget, fCosAngle)) {
       return IsVisibleCheckAll(penTarget);
     }
     return FALSE;
   };
-  
-// MOVING FUNCTIONS
+
+  // MOVING FUNCTIONS
 
   // set desired rotation and translation to go/orient towards desired position
   // and get the resulting movement type
-  virtual ULONG SetDesiredMovement(void) 
-  {
+  virtual ULONG SetDesiredMovement(void) {
     // if not in air
     if (!m_bInAir) {
       // use base class
@@ -167,11 +161,11 @@ functions:
     ULONG ulFlags = CEnemyBase::SetDesiredMovement();
 
     // if we may move
-    if (m_fMoveSpeed>0.0f) {
+    if (m_fMoveSpeed > 0.0f) {
       // fix translation for 3d movement
       FLOAT3D vTranslation = (m_vDesiredPosition - GetPlacement().pl_PositionVector) * !en_mRotation;
       vTranslation(1) = 0.0f;
-      if (vTranslation(3)>0) { 
+      if (vTranslation(3) > 0) {
         vTranslation(3) = 0.0f;
       }
       vTranslation.Normalize();
@@ -182,13 +176,13 @@ functions:
     return ulFlags;
   }
 
-// CLASS SUPPORT FUNCTIONS
+  // CLASS SUPPORT FUNCTIONS
 
   // set entity position
   void SetEntityPosition() {
     switch (m_EeftType) {
-      case EFT_GROUND_ONLY:         // ground only enemy
-      case EFT_FLY_GROUND_GROUND:   // fly, on ground, start attack on ground
+      case EFT_GROUND_ONLY:       // ground only enemy
+      case EFT_FLY_GROUND_GROUND: // fly, on ground, start attack on ground
         m_bAirAttack = FALSE;
         m_bStartInAir = m_bInAir = FALSE;
         m_bFlyToMarker = FALSE;
@@ -196,7 +190,7 @@ functions:
         ChangeCollisionToGround();
         break;
 
-      case EFT_FLY_GROUND_AIR:      // fly, on ground, start attack in air
+      case EFT_FLY_GROUND_AIR: // fly, on ground, start attack in air
         m_bAirAttack = TRUE;
         m_bStartInAir = m_bInAir = FALSE;
         m_bFlyToMarker = FALSE;
@@ -204,7 +198,7 @@ functions:
         ChangeCollisionToGround();
         break;
 
-      case EFT_FLY_AIR_GROUND:      // fly, in air, start attack on ground
+      case EFT_FLY_AIR_GROUND: // fly, in air, start attack on ground
         m_bAirAttack = FALSE;
         m_bStartInAir = m_bInAir = TRUE;
         m_bFlyToMarker = TRUE;
@@ -212,8 +206,8 @@ functions:
         ChangeCollisionToAir();
         break;
 
-      case EFT_FLY_ONLY:            // air only enemy
-      case EFT_FLY_AIR_AIR:         // fly, in air, start attack in air
+      case EFT_FLY_ONLY:    // air only enemy
+      case EFT_FLY_AIR_AIR: // fly, in air, start attack in air
         m_bAirAttack = TRUE;
         m_bStartInAir = m_bInAir = TRUE;
         m_bFlyToMarker = TRUE;
@@ -224,14 +218,15 @@ functions:
     StandingAnim();
   };
 
-
-// VIRTUAL FUNCTIONS THAT NEED OVERRIDE
-  virtual FLOAT AirToGroundAnim(void) { return _pTimer->TickQuantum; }
-  virtual FLOAT GroundToAirAnim(void) { return _pTimer->TickQuantum; }
+  // VIRTUAL FUNCTIONS THAT NEED OVERRIDE
+  virtual FLOAT AirToGroundAnim(void) {
+    return _pTimer->TickQuantum;
+  }
+  virtual FLOAT GroundToAirAnim(void) {
+    return _pTimer->TickQuantum;
+  }
   virtual void ChangeCollisionToAir(void) {}
   virtual void ChangeCollisionToGround(void) {}
-
-
 
 procedures:
 // PROCEDURES WHEN NO ANY SPECIAL ACTION
@@ -445,8 +440,8 @@ procedures:
     jump CEnemyBase::MainLoop();
   };
 
-  // dummy main
-  Main(EVoid) {
+  // Entry point
+  Main() {
     return;
   };
 

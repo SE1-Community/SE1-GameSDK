@@ -4445,25 +4445,25 @@ void Particles_BloodSpray(enum SprayParticlesType sptType, FLOAT3D vSource, FLOA
       break;
     }
 
-    case SPT_SMALL_LAVA_STONES: {
+    case SPT_SMALL_LAVA: {
       Particle_PrepareTexture(&_toLavaSprayTexture, PBT_BLEND);
       fDamagePower *= 0.75f;
       break;
     }
 
-    case SPT_LAVA_STONES: {
+    case SPT_LAVA: {
       Particle_PrepareTexture(&_toLavaSprayTexture, PBT_BLEND);
       fDamagePower *= 3.0f;
       break;
     }
 
-    case SPT_BEAST_PROJECTILE_SPRAY: {
+    case SPT_BEAST_BALL: {
       Particle_PrepareTexture(&_toBeastProjectileSprayTexture, PBT_BLEND);
       fDamagePower *= 3.0f;
       break;
     }
 
-    case SPT_ELECTRICITY_SPARKS: {
+    case SPT_SPARKS_BLOOD: {
       Particle_PrepareTexture(&_toMetalSprayTexture, PBT_BLEND);
       break;
     }
@@ -4644,22 +4644,22 @@ void Particles_BloodSpray(enum SprayParticlesType sptType, FLOAT3D vSource, FLOA
         break;
       }
 
-      case SPT_LAVA_STONES:
-      case SPT_SMALL_LAVA_STONES: {
+      case SPT_LAVA:
+      case SPT_SMALL_LAVA: {
         col = C_WHITE | ubAlpha;
         fSize /= 12.0f;
         fRotation = fT * 200.0f;
         break;
       }
 
-      case SPT_BEAST_PROJECTILE_SPRAY: {
+      case SPT_BEAST_BALL: {
         col = C_WHITE | ubAlpha;
         fSize /= 12.0f;
         fRotation = fT * 200.0f;
         break;
       }
 
-      case SPT_ELECTRICITY_SPARKS: {
+      case SPT_SPARKS_BLOOD: {
         UBYTE ubRndH = UBYTE(180 + afStarsPositions[int(iSpray + tmStarted * 10) % CT_MAX_PARTICLES_TABLE][0] * 16);
         UBYTE ubRndS = UBYTE(32 + (afStarsPositions[int(iSpray + tmStarted * 10) % CT_MAX_PARTICLES_TABLE][1] + 0.5) * 16);
         UBYTE ubRndV = UBYTE(192 + (afStarsPositions[int(iSpray + tmStarted * 10) % CT_MAX_PARTICLES_TABLE][2]) * 64);

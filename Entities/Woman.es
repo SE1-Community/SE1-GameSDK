@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -84,16 +84,16 @@ functions:
     return str;
   }
   virtual const CTFileName &GetComputerMessageName(void) const {
-    static DECLARE_CTFILENAME(fnm,  "Data\\Messages\\Enemies\\Woman.txt");
+    static DECLARE_CTFILENAME(fnm, "Data\\Messages\\Enemies\\Woman.txt");
     return fnm;
   }
   void Precache(void) {
     CEnemyBase::Precache();
-    PrecacheSound(SOUND_IDLE );
+    PrecacheSound(SOUND_IDLE);
     PrecacheSound(SOUND_SIGHT);
     PrecacheSound(SOUND_WOUND);
-    PrecacheSound(SOUND_FIRE );
-    PrecacheSound(SOUND_KICK );
+    PrecacheSound(SOUND_FIRE);
+    PrecacheSound(SOUND_KICK);
     PrecacheSound(SOUND_DEATH);
     PrecacheClass(CLASS_PROJECTILE, PRT_WOMAN_FIRE);
   };
@@ -108,15 +108,13 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // woman can't harm woman
     if (!IsOfClass(penInflictor, "Woman")) {
       CEnemyFly::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
-
 
   // damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
@@ -143,14 +141,11 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim() == WOMAN_ANIM_AIRDEATH)
-    {
-      vStretch=FLOAT3D(1,1,2)*1.0f;
+    if (GetModelObject()->GetAnim() == WOMAN_ANIM_AIRDEATH) {
+      vStretch = FLOAT3D(1, 1, 2) * 1.0f;
       return 0.6f;
-    }
-    else if (GetModelObject()->GetAnim() == WOMAN_ANIM_GROUNDDEATH01)
-    {
-      vStretch=FLOAT3D(1,1,2)*0.75f;
+    } else if (GetModelObject()->GetAnim() == WOMAN_ANIM_GROUNDDEATH01) {
+      vStretch = FLOAT3D(1, 1, 2) * 0.75f;
       return 0.525f;
     }
     return -1.0f;
@@ -164,39 +159,39 @@ functions:
   // virtual anim functions
   void StandingAnim(void) {
     if (m_bInAir) {
-      StartModelAnim(WOMAN_ANIM_AIRSTAND, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WOMAN_ANIM_AIRSTAND, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(WOMAN_ANIM_GROUNDSTAND, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WOMAN_ANIM_GROUNDSTAND, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void WalkingAnim(void) {
     if (m_bInAir) {
-      StartModelAnim(WOMAN_ANIM_AIRFLY, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WOMAN_ANIM_AIRFLY, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(WOMAN_ANIM_GROUNDWALK, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WOMAN_ANIM_GROUNDWALK, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void RunningAnim(void) {
     if (m_bInAir) {
-      StartModelAnim(WOMAN_ANIM_AIRFLY, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WOMAN_ANIM_AIRFLY, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(WOMAN_ANIM_GROUNDRUN, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WOMAN_ANIM_GROUNDRUN, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void RotatingAnim(void) {
     if (m_bInAir) {
-      StartModelAnim(WOMAN_ANIM_AIRFLY, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WOMAN_ANIM_AIRFLY, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(WOMAN_ANIM_GROUNDWALK, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WOMAN_ANIM_GROUNDWALK, AOF_LOOPING | AOF_NORESTART);
     }
   };
   FLOAT AirToGroundAnim(void) {
     StartModelAnim(WOMAN_ANIM_AIRTOGROUND, 0);
-    return(GetModelObject()->GetAnimLength(WOMAN_ANIM_AIRTOGROUND));
+    return (GetModelObject()->GetAnimLength(WOMAN_ANIM_AIRTOGROUND));
   };
   FLOAT GroundToAirAnim(void) {
     StartModelAnim(WOMAN_ANIM_GROUNDTOAIR, 0);
-    return(GetModelObject()->GetAnimLength(WOMAN_ANIM_GROUNDTOAIR));
+    return (GetModelObject()->GetAnimLength(WOMAN_ANIM_GROUNDTOAIR));
   };
   void ChangeCollisionToAir() {
     ChangeCollisionBoxIndexWhenPossible(WOMAN_COLLISION_BOX_AIR);
@@ -218,9 +213,8 @@ functions:
   void DeathSound(void) {
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
   };
-  
-  void AttachKamikaze()
-  {
+
+  void AttachKamikaze() {
     AddAttachmentToModel(this, *GetModelObject(), WOMAN_ATTACHMENT_KAMIKAZE, MODEL_HEADMAN, TEXTURE_HEADMAN, 0, 0, 0);
     CModelObject &amo = GetModelObject()->GetAttachmentModel(WOMAN_ATTACHMENT_KAMIKAZE)->amo_moModelObject;
     AddAttachmentToModel(this, amo, HEADMAN_ATTACHMENT_BOMB_RIGHT_HAND, MODEL_BOMB, TEXTURE_BOMB, 0, 0, 0);
@@ -229,31 +223,31 @@ functions:
     m_bKamikazeAttached = TRUE;
   }
 
-  void RemoveKamikaze()
-  {
+  void RemoveKamikaze() {
     RemoveAttachmentFromModel(*GetModelObject(), WOMAN_ATTACHMENT_KAMIKAZE);
   }
 
-  void DropKamikaze()
-  {
-    if (!m_bKamikazeAttached) { return; }
+  void DropKamikaze() {
+    if (!m_bKamikazeAttached) {
+      return;
+    }
 
     CEntity *pen = NULL;
-    
+
     CPlacement3D pl;
     pl = GetPlacement();
-    pl.pl_PositionVector += KAMIKAZE_ATTACH*GetRotationMatrix();
+    pl.pl_PositionVector += KAMIKAZE_ATTACH * GetRotationMatrix();
     pen = CreateEntity(pl, CLASS_HEADMAN);
 
     ((CHeadman *)&*pen)->m_hdtType = HDT_KAMIKAZE;
 
     // change needed properties
     pen->End();
-    
-    CEnemyBase *peb = ((CEnemyBase*)pen);
+
+    CEnemyBase *peb = ((CEnemyBase *)pen);
     peb->m_bTemplate = FALSE;
-    pen->Initialize();        
-    
+    pen->Initialize();
+
     // mark that we don't have the kamikaze any more
     m_bKamikazeAttached = FALSE;
 
@@ -261,33 +255,29 @@ functions:
     RemoveKamikaze();
   }
 
-
   void PreMoving() {
     if (m_bKamikazeAttached && m_bKamikazeCarrier) {
       // see if any of players are close enough to drop the kamikaze
       INDEX ctMaxPlayers = GetMaxPlayers();
       CEntity *penPlayer;
-      for (INDEX i=0; i<ctMaxPlayers; i++) {
-        penPlayer=GetPlayerEntity(i);
+      for (INDEX i = 0; i < ctMaxPlayers; i++) {
+        penPlayer = GetPlayerEntity(i);
         if (penPlayer != NULL) {
-          if (DistanceTo(this, penPlayer)<m_rKamikazeDropDistance && IsVisible(penPlayer)) {
+          if (DistanceTo(this, penPlayer) < m_rKamikazeDropDistance && IsVisible(penPlayer)) {
             DropKamikaze();
-          }        
+          }
         }
       } // end for
     }
     CEnemyFly::PreMoving();
   }
 
-  void BlowUp(void)
-  {
+  void BlowUp(void) {
     DropKamikaze();
     CEnemyFly::BlowUp();
   }
-  
 
 procedures:
-// ATTACK ENEMY
   FlyFire(EVoid) : CEnemyFly::FlyFire {
     if (m_bKamikazeAttached) { return EReturn(); }
 
@@ -397,10 +387,8 @@ procedures:
     return EReturn();
   };
 
-
-
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);

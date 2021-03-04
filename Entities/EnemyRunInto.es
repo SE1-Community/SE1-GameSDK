@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -48,27 +48,24 @@ functions:
 
     CEnemyBase::AdjustDifficulty();
   }
-// ATTACK SPECIFIC
-  void IncreaseKickedMass(CEntity *pen) {
-    EntityInfo *peiTarget = (EntityInfo*) (pen->GetEntityInfo());
+  // ATTACK SPECIFIC
+  void IncreaseKickedMass(CEntity * pen) {
+    EntityInfo *peiTarget = (EntityInfo *)(pen->GetEntityInfo());
     if (peiTarget != NULL) {
       m_fMassKicked += peiTarget->fMass;
     }
   };
 
-
-
-
-// VIRTUAL ATTACK FUNCTIONS THAT NEED OVERRIDE
+  // VIRTUAL ATTACK FUNCTIONS THAT NEED OVERRIDE
   // touched another live entity
   virtual void LiveEntityTouched(ETouch etouch) {};
   // touched entity with higher mass
-  virtual BOOL HigherMass(void) { return FALSE; }
+  virtual BOOL HigherMass(void) {
+    return FALSE;
+  }
   virtual void ChargeAnim(void) {};
 
-
 procedures:
-// ATTACK ENEMY PROCEDURES
   // attack range -> fire and move toward enemy
   Fire() : CEnemyBase::Fire {
     m_fMassKicked = 0.0f;
@@ -295,8 +292,8 @@ procedures:
     jump CEnemyBase::MainLoop();
   };
 
-  // dummy main
-  Main(EVoid) {
+  // Entry point
+  Main() {
     return;
   };
 };

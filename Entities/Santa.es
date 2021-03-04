@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -61,13 +61,13 @@ components:
 functions:
   void Precache(void) {
     CEnemyBase::Precache();
-    PrecacheSound(SOUND_RUN  );
+    PrecacheSound(SOUND_RUN);
     PrecacheSound(SOUND_WOUND);
     PrecacheSound(SOUND_DEATH);
   };
 
   virtual const CTFileName &GetComputerMessageName(void) const {
-    //static DECLARE_CTFILENAME(fnm, "DataMP\\Messages\\Enemies\\Santa.txt");
+    // static DECLARE_CTFILENAME(fnm, "DataMP\\Messages\\Enemies\\Santa.txt");
     static CTFileName fnm;
     return fnm;
   };
@@ -78,22 +78,19 @@ functions:
   };
 
   // running sounds
-  void ActivateRunningSound(void)
-  {
+  void ActivateRunningSound(void) {
     if (!m_bRunSoundPlaying) {
-      PlaySound(m_soRunning, SOUND_RUN, SOF_3D|SOF_LOOP);
+      PlaySound(m_soRunning, SOUND_RUN, SOF_3D | SOF_LOOP);
       m_bRunSoundPlaying = TRUE;
     }
   }
-  void DeactivateRunningSound(void)
-  {
+  void DeactivateRunningSound(void) {
     m_soRunning.Stop();
     m_bRunSoundPlaying = FALSE;
   }
 
   // Handle an event, return false if the event is not handled.
-  BOOL HandleEvent(const CEntityEvent &ee)
-  {
+  BOOL HandleEvent(const CEntityEvent &ee) {
     // ignore touching, damaging...
     if (ee.ee_slEvent == EVENTCODE_ETouch || ee.ee_slEvent == EVENTCODE_EDamage) {
       return TRUE;
@@ -103,14 +100,13 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // skip base enemy damage handling
     CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
 
     // if not enough time passed since lst item spawning
-    if (_pTimer->CurrentTick()-m_tmLastSpawnTime<m_tmMinSpawnInterval) {
+    if (_pTimer->CurrentTick() - m_tmLastSpawnTime < m_tmMinSpawnInterval) {
       // do nothing
       return;
     }
@@ -122,87 +118,94 @@ functions:
     m_tmLastSpawnTime = _pTimer->CurrentTick();
     // choose an item to spawn
     INDEX ctTemplates = 0;
-    if (m_penTemplate0 != NULL) { ctTemplates++; }
-    if (m_penTemplate1 != NULL) { ctTemplates++; }
-    if (m_penTemplate2 != NULL) { ctTemplates++; }
-    if (m_penTemplate3 != NULL) { ctTemplates++; }
-    if (m_penTemplate4 != NULL) { ctTemplates++; }
+    if (m_penTemplate0 != NULL) {
+      ctTemplates++;
+    }
+    if (m_penTemplate1 != NULL) {
+      ctTemplates++;
+    }
+    if (m_penTemplate2 != NULL) {
+      ctTemplates++;
+    }
+    if (m_penTemplate3 != NULL) {
+      ctTemplates++;
+    }
+    if (m_penTemplate4 != NULL) {
+      ctTemplates++;
+    }
     if (ctTemplates == 0) {
       return;
     }
-    INDEX iTemplate = IRnd()%ctTemplates;
+    INDEX iTemplate = IRnd() % ctTemplates;
     CEntity *penItem = (&m_penTemplate0)[iTemplate];
 
     // if the target doesn't exist, or is destroyed
-    if (penItem == NULL || (penItem->GetFlags()&ENF_DELETED)) {
+    if (penItem == NULL || (penItem->GetFlags() & ENF_DELETED)) {
       // do nothing
       return;
     }
 
-    CEntity *penSpawned = GetWorld()->CopyEntityInWorld( *penItem,
-      CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0.0f, 0.0f, 0.0f)) );
+    CEntity *penSpawned = GetWorld()->CopyEntityInWorld(
+      *penItem, CPlacement3D(FLOAT3D(-32000.0f + FRnd() * 200.0f, -32000.0f + FRnd() * 200.0f, 0), ANGLE3D(0.0f, 0.0f, 0.0f)));
 
     // teleport back
     CPlacement3D pl = GetPlacement();
-    pl.pl_PositionVector += GetRotationMatrix().GetColumn(2)*1.5f;  // a bit up in the air
+    pl.pl_PositionVector += GetRotationMatrix().GetColumn(2) * 1.5f; // a bit up in the air
     penSpawned->Teleport(pl, FALSE);
   };
 
-  void LeaveStain( BOOL bGrow)
-  {
-  }
+  void LeaveStain(BOOL bGrow) {}
 
   // damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
-//    StartModelAnim(iAnim, 0);
+    //    StartModelAnim(iAnim, 0);
     return 0;
   };
 
   // death
   INDEX AnimForDeath(void) {
-//    StartModelAnim(iAnim, 0);
+    //    StartModelAnim(iAnim, 0);
     return 0;
   };
 
   void DeathNotify(void) {
     SwitchToEditorModel();
-//    ChangeCollisionBoxIndexWhenPossible(PLAYER_COLLISION_BOX_DEATH);
+    //    ChangeCollisionBoxIndexWhenPossible(PLAYER_COLLISION_BOX_DEATH);
     SetCollisionFlags(ECF_MODEL);
     DeactivateRunningSound();
   };
 
-  CModelObject *GetBody(void)
-  {
+  CModelObject *GetBody(void) {
     return &GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject;
   }
 
-// virtual anim functions
+  // virtual anim functions
   void StandingAnim(void) {
-//    StartModelAnim(PLAYER_ANIM_STAND, AOF_LOOPING|AOF_NORESTART);
-//    GetBody()->PlayAnim(BODY_ANIM_WAIT, AOF_LOOPING|AOF_NORESTART);
+    //    StartModelAnim(PLAYER_ANIM_STAND, AOF_LOOPING|AOF_NORESTART);
+    //    GetBody()->PlayAnim(BODY_ANIM_WAIT, AOF_LOOPING|AOF_NORESTART);
   };
   void WalkingAnim(void) {
     ActivateRunningSound();
-//    StartModelAnim(PLAYER_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
-//    GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
+    //    StartModelAnim(PLAYER_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
+    //    GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
   };
   void RunningAnim(void) {
     ActivateRunningSound();
-//    StartModelAnim(PLAYER_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
-//    GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
+    //    StartModelAnim(PLAYER_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+    //    GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
   };
   void RotatingAnim(void) {
     ActivateRunningSound();
-//    StartModelAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
-//    GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
+    //    StartModelAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
+    //    GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
   };
 
   // virtual sound functions
   void IdleSound(void) {
-//    PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
+    //    PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
   };
   void SightSound(void) {
-//    PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
+    //    PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
   };
   void WoundSound(void) {
     PlaySound(m_soSound, SOUND_WOUND, SOF_3D);
@@ -211,16 +214,13 @@ functions:
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
   };
 
-
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     // set sound default parameters
     m_soSound.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
   };
 
 procedures:
-// ATTACK ENEMY
   // shoot
   Fire(EVoid) : CEnemyBase::Fire{
     return EReturn();
@@ -231,9 +231,8 @@ procedures:
     return EReturn();
   };
 
-// MAIN
-  Main(EVoid) {
-
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);

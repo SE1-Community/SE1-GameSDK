@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -21,88 +21,105 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 uses "Entities/EnvironmentMarker";
 uses "Entities/WatchPlayers";
 
-class CEnvironmentBase: CMovableEntity {
+class CEnvironmentBase : CMovableEntity {
 name      "Environment Base";
 thumbnail "Thumbnails\\EnvironmentBase.tbn";
 features  "HasName", "IsTargetable";
 
 properties:
-  1 CTString m_strName            "Name" 'N' = "Base Environment",
+  1 CTString m_strName "Name" 'N' = "Base Environment",
   2 CTString m_strDescription = "",
-  3 RANGE m_fDistance             "Range" 'R' = 100.0f,   // distance when player is seen
-  4 FLOAT m_fStretch              "Stretch" 'S' = 1.0f,
+  3 RANGE m_fDistance "Range" 'R' = 100.0f, // distance when player is seen
+  4 FLOAT m_fStretch "Stretch" 'S' = 1.0f,
 
-  5 CEntityPointer m_penTarget    "Target" 'T',
+  5 CEntityPointer m_penTarget "Target" 'T',
   6 CEntityPointer m_penWatcher,
-  7 FLOAT m_fWatcherFrequency     "Watcher frequency" = 2.0f,   // watcher will look every x seconds for players
-  8 FLOAT3D m_vDesiredPosition = FLOAT3D(0.0f, 0.0f, 0.0f),              // desired position for moving
+  7 FLOAT m_fWatcherFrequency "Watcher frequency" = 2.0f, // watcher will look every x seconds for players
+  8 FLOAT3D m_vDesiredPosition = FLOAT3D(0.0f, 0.0f, 0.0f), // desired position for moving
 
- 10 FLOAT m_fMoveSpeed            "Move speed" 'V' = 2.0f,
- 11 FLOAT m_fRotateSpeed          "Rotate speed" 'B' = 60.0f,
- 12 FLOAT m_fMoveFrequency        "Move frequency" = 0.5f,
- 13 BOOL m_bUseWatcher            "Use watcher" = FALSE,    // use individual watcher
- 14 BOOL m_bFlying                "Flying" 'F' = FALSE,     // flying model
+ 10 FLOAT m_fMoveSpeed     "Move speed" 'V' = 2.0f,
+ 11 FLOAT m_fRotateSpeed   "Rotate speed" 'B' = 60.0f,
+ 12 FLOAT m_fMoveFrequency "Move frequency" = 0.5f,
+ 13 BOOL m_bUseWatcher "Use watcher" = FALSE, // use individual watcher
+ 14 BOOL m_bFlying     "Flying" 'F' = FALSE, // flying model
  16 FLOAT m_fWaitTime = 0.0f,
 
- 20 CTFileName m_fnMdl           "Model" 'M' = CTFILENAME("Models\\Editor\\Axis.mdl"),
- 21 CTFileName m_fnTex           "Texture" 'X' = CTString(""),
- 22 ANIMATION m_iAnim            "Animation" =0,
+ 20 CTFileName m_fnMdl "Model" 'M' = CTFILENAME("Models\\Editor\\Axis.mdl"),
+ 21 CTFileName m_fnTex "Texture" 'X' = CTString(""),
+ 22 ANIMATION m_iAnim  "Animation" = 0,
 
- 25 CTFileName m_fnAtt1Mdl       "Attachment 1 Model" = CTString(""),
- 26 CTFileName m_fnAtt1Tex       "Attachment 1 Texture" = CTString(""),
- 27 INDEX m_iAtt1Position        "Attachment 1 position"=0,
- 28 ANIMATION m_iAtt1Anim        "Attachment 1 animation"=0,
+ 25 CTFileName m_fnAtt1Mdl "Attachment 1 Model" = CTString(""),
+ 26 CTFileName m_fnAtt1Tex "Attachment 1 Texture" = CTString(""),
+ 27 INDEX m_iAtt1Position  "Attachment 1 position" = 0,
+ 28 ANIMATION m_iAtt1Anim  "Attachment 1 animation" = 0,
 
- 30 CTFileName m_fnAtt2Mdl       "Attachment 2 Model" = CTString(""),
- 31 CTFileName m_fnAtt2Tex       "Attachment 2 Texture" = CTString(""),
- 32 INDEX m_iAtt2Position        "Attachment 2 position"=1,
- 33 ANIMATION m_iAtt2Anim        "Attachment 2 animation"=0,
+ 30 CTFileName m_fnAtt2Mdl "Attachment 2 Model" = CTString(""),
+ 31 CTFileName m_fnAtt2Tex "Attachment 2 Texture" = CTString(""),
+ 32 INDEX m_iAtt2Position  "Attachment 2 position" = 1,
+ 33 ANIMATION m_iAtt2Anim  "Attachment 2 animation" = 0,
 
- 35 CTFileName m_fnAtt3Mdl       "Attachment 3 Model" = CTString(""),
- 36 CTFileName m_fnAtt3Tex       "Attachment 3 Texture" = CTString(""),
- 37 INDEX m_iAtt3Position        "Attachment 3 position"=1,
- 38 ANIMATION m_iAtt3Anim        "Attachment 3 animation"=0,
+ 35 CTFileName m_fnAtt3Mdl "Attachment 3 Model" = CTString(""),
+ 36 CTFileName m_fnAtt3Tex "Attachment 3 Texture" = CTString(""),
+ 37 INDEX m_iAtt3Position  "Attachment 3 position" = 1,
+ 38 ANIMATION m_iAtt3Anim  "Attachment 3 animation" = 0,
 
 components:
   1 class   CLASS_WATCHPLAYERS    "Classes\\WatchPlayers.ecl",
 
 functions:
-  // Check if entity is moved on a route set up by its targets.
+  // Check if entity is moved on a route set up by its targets
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Target";
     return TRUE;
   };
-  // Check if entity can drop marker for making linked route.
+
+  // Check if entity can drop marker for making linked route
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\EnvironmentMarker.ecl");
     strTargetProperty = "Target";
     return TRUE;
   };
+
   const CTString &GetDescription(void) const {
-    ((CTString&)m_strDescription).PrintF("-><none>");
+    ((CTString &)m_strDescription).PrintF("-><none>");
+
     if (m_penTarget != NULL) {
-      ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
+      ((CTString &)m_strDescription).PrintF("->%s", m_penTarget->GetName());
     }
+
     return m_strDescription;
   };
-  // Get anim data for given animation property - return NULL for none.
+
+  // Get anim data for given animation property - return NULL for none
   CAnimData *GetAnimData(SLONG slPropertyOffset) {
     if (slPropertyOffset == offsetof(CEnvironmentBase, m_iAnim)) {
       return GetModelObject()->GetData();
 
     } else if (slPropertyOffset == offsetof(CEnvironmentBase, m_iAtt1Anim)) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt1Position);
-      if (pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
+
+      if (pamo != NULL) {
+        return pamo->amo_moModelObject.GetData();
+      }
+
       return CEntity::GetAnimData(slPropertyOffset);
 
     } else if (slPropertyOffset == offsetof(CEnvironmentBase, m_iAtt2Anim)) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt2Position);
-      if (pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
+
+      if (pamo != NULL) {
+        return pamo->amo_moModelObject.GetData();
+      }
+
       return CEntity::GetAnimData(slPropertyOffset);
 
     } else if (slPropertyOffset == offsetof(CEnvironmentBase, m_iAtt3Anim)) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt3Position);
-      if (pamo != NULL) { return pamo->amo_moModelObject.GetData(); }
+
+      if (pamo != NULL) {
+        return pamo->amo_moModelObject.GetData();
+      }
+
       return CEntity::GetAnimData(slPropertyOffset);
 
     } else {
@@ -110,11 +127,7 @@ functions:
     }
   };
 
-
-
-// MOVE FUNCTIONS
-
-  // switch to next marker
+  // Switch to next marker
   BOOL NextMarker(void) {
     if (m_penTarget == NULL) {
       return FALSE;
@@ -128,8 +141,8 @@ functions:
     }
 
     // get next marker
-    CMarker *penTarget = (CMarker *)(CEntity*)m_penTarget;
-    CMarker *penNextTarget = (CMarker *)(CEntity*)penTarget->m_penTarget;
+    CMarker *penTarget = (CMarker *)(CEntity *)m_penTarget;
+    CMarker *penNextTarget = (CMarker *)(CEntity *)penTarget->m_penTarget;
 
     // if got to end
     if (penNextTarget == NULL) {
@@ -142,39 +155,42 @@ functions:
     return TRUE;
   };
 
-  // calculate rotation
+  // Calculate rotation
   void CalcRotation(ANGLE aWantedHeadingRelative, ANGLE3D &aRotation) {
     // normalize it to [-180,+180] degrees
     aWantedHeadingRelative = NormalizeAngle(aWantedHeadingRelative);
 
     // if desired position is left
-    if (aWantedHeadingRelative<-m_fRotateSpeed*m_fMoveFrequency) {
+    if (aWantedHeadingRelative < -m_fRotateSpeed * m_fMoveFrequency) {
       // start turning left
       aRotation(1) = -m_fRotateSpeed;
+
     // if desired position is right
-    } else if (aWantedHeadingRelative>m_fRotateSpeed*m_fMoveFrequency) {
+    } else if (aWantedHeadingRelative > m_fRotateSpeed * m_fMoveFrequency) {
       // start turning right
       aRotation(1) = +m_fRotateSpeed;
+
     // if desired position is more-less ahead
     } else {
-      aRotation(1) = aWantedHeadingRelative/m_fMoveFrequency;
+      aRotation(1) = aWantedHeadingRelative / m_fMoveFrequency;
     }
   };
 
-  // stop moving
+  // Stop moving
   void StopMoving(void) {
     SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
     SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
   };
 
-  // move to position
+  // Move to position
   void MoveToPosition(void) {
     FLOAT3D vDesiredAngle;
 
     // desired angle vector
     vDesiredAngle = (m_vDesiredPosition - GetPlacement().pl_PositionVector).Normalize();
+
     // find relative heading towards the desired angle
-    ANGLE3D aRotation(0,0,0);
+    ANGLE3D aRotation(0, 0, 0);
     CalcRotation(GetRelativeHeading(vDesiredAngle), aRotation);
 
     // determine translation speed
@@ -183,7 +199,7 @@ functions:
 
     // if flying set y axis translation speed
     if (m_bFlying) {
-      vTranslation(2) = Sgn(vDesiredAngle(2)) * m_fMoveSpeed/10;
+      vTranslation(2) = Sgn(vDesiredAngle(2)) * m_fMoveSpeed / 10;
     }
 
     // start moving
@@ -191,69 +207,72 @@ functions:
     SetDesiredTranslation(vTranslation);
   };
 
-  // calc destination
+  // Calc destination
   void CalcDestination() {
     // new position to walk to
-    FLOAT fR = FRnd()*((CEnvironmentMarker&)*m_penTarget).m_fMarkerRange;
-    FLOAT fA = FRnd()*360.0f;
-    m_vDesiredPosition = m_penTarget->GetPlacement().pl_PositionVector + 
-                          FLOAT3D(CosFast(fA)*fR, 0, SinFast(fA)*fR);
+    FLOAT fR = FRnd() * ((CEnvironmentMarker &)*m_penTarget).m_fMarkerRange;
+    FLOAT fA = FRnd() * 360.0f;
+    m_vDesiredPosition = m_penTarget->GetPlacement().pl_PositionVector + FLOAT3D(CosFast(fA) * fR, 0, SinFast(fA) * fR);
   };
 
-  // marker parameters
+  // Marker parameters
   void MarkerParameters() {
     if (m_penTarget != NULL) {
-      CEnvironmentMarker &em = (CEnvironmentMarker&)*m_penTarget;
+      CEnvironmentMarker &em = (CEnvironmentMarker &)*m_penTarget;
+
       if (em.m_fMoveSpeed > 0.0f) {
         m_fMoveSpeed = em.m_fMoveSpeed;
       }
+
       if (em.m_fRotateSpeed > 0.0f) {
         m_fRotateSpeed = em.m_fRotateSpeed;
       }
     }
   };
 
-
-
-// INITIALIZE FUNCTIONS
+  // Initialize
   void Initialize(void) {
     // declare yourself as a model
     InitAsModel();
-    SetPhysicsFlags(EPF_MODEL_WALKING&~(EPF_ORIENTEDBYGRAVITY|EPF_TRANSLATEDBYGRAVITY));
+    SetPhysicsFlags(EPF_MODEL_WALKING & ~(EPF_ORIENTEDBYGRAVITY | EPF_TRANSLATEDBYGRAVITY));
     SetCollisionFlags(ECF_MODEL);
 
-    // set model stretch -- MUST BE DONE BEFORE SETTING MODEL!
+    // set model stretch - MUST BE DONE BEFORE SETTING MODEL!
     GetModelObject()->mo_Stretch = FLOAT3D(m_fStretch, m_fStretch, m_fStretch);
 
     // set appearance
     SetModel(m_fnMdl);
     GetModelObject()->PlayAnim(m_iAnim, AOF_LOOPING);
+
     if (m_fnTex != CTString("")) {
       GetModelObject()->mo_toTexture.SetData_t(m_fnTex);
     }
 
     GetModelObject()->RemoveAllAttachmentModels();
-    
-    AddAttachment( m_iAtt1Position, m_fnAtt1Mdl, m_fnAtt1Tex);
-    CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel( m_iAtt1Position);
+
+    AddAttachment(m_iAtt1Position, m_fnAtt1Mdl, m_fnAtt1Tex);
+    CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt1Position);
+
     if (pamo != NULL) {
-      pamo->amo_moModelObject.StartAnim( m_iAtt1Anim);
+      pamo->amo_moModelObject.StartAnim(m_iAtt1Anim);
     }
 
-    if ((m_iAtt2Position != m_iAtt1Position) && (m_fnAtt1Mdl != m_fnAtt2Mdl) ) {
-      AddAttachment( m_iAtt2Position, m_fnAtt2Mdl, m_fnAtt2Tex);
-      CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel( m_iAtt2Position);
+    if ((m_iAtt2Position != m_iAtt1Position) && (m_fnAtt1Mdl != m_fnAtt2Mdl)) {
+      AddAttachment(m_iAtt2Position, m_fnAtt2Mdl, m_fnAtt2Tex);
+      CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt2Position);
+
       if (pamo != NULL) {
-        pamo->amo_moModelObject.StartAnim( m_iAtt2Anim);
+        pamo->amo_moModelObject.StartAnim(m_iAtt2Anim);
       }
     }
 
-    if ((m_iAtt3Position != m_iAtt1Position) && (m_fnAtt1Mdl != m_fnAtt3Mdl) && 
-        (m_iAtt3Position != m_iAtt2Position) && (m_fnAtt2Mdl != m_fnAtt3Mdl) ) {
-      AddAttachment( m_iAtt3Position, m_fnAtt3Mdl, m_fnAtt3Tex);
-      CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel( m_iAtt3Position);
+    if ((m_iAtt3Position != m_iAtt1Position) && (m_fnAtt1Mdl != m_fnAtt3Mdl)
+     && (m_iAtt3Position != m_iAtt2Position) && (m_fnAtt2Mdl != m_fnAtt3Mdl)) {
+      AddAttachment(m_iAtt3Position, m_fnAtt3Mdl, m_fnAtt3Tex);
+      CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(m_iAtt3Position);
+
       if (pamo != NULL) {
-        pamo->amo_moModelObject.StartAnim( m_iAtt3Anim);
+        pamo->amo_moModelObject.StartAnim(m_iAtt3Anim);
       }
     }
 
@@ -262,17 +281,16 @@ functions:
       WarningMessage("Target '%s' is not of Environment Marker class!", m_penTarget->GetName());
       m_penTarget = NULL;
     }
-};
+  };
 
-
-// WATCHER FUNCTIONS
+  // Create a watcher
   void InitializeWatcher(FLOAT fWaitTime) {
     // spawn player watcher
     m_penWatcher = CreateEntity(GetPlacement(), CLASS_WATCHPLAYERS);
     m_penWatcher->Initialize(EVoid());
 
     // setup player watcher
-    CWatchPlayers &pw = (CWatchPlayers&)*m_penWatcher;
+    CWatchPlayers &pw = (CWatchPlayers &)*m_penWatcher;
     pw.m_penOwner = this;
     pw.m_fWaitTime = 2.0f;
     pw.m_fDistance = m_fDistance;
@@ -281,35 +299,32 @@ functions:
     pw.m_eetEventFar = EET_ENVIRONMENTSTOP;
   };
 
-
-
-// ANIMATION FUCNTIONS
-
-  // play default anim
+  // Play default anim
   void PlayDefaultAnim(void) {
-    GetModelObject()->PlayAnim(m_iAnim, AOF_LOOPING|AOF_NORESTART);
+    GetModelObject()->PlayAnim(m_iAnim, AOF_LOOPING | AOF_NORESTART);
   };
 
-  // play marker animation
+  // Play marker animation
   void PlayMarkerAnimation(void) {
     if (m_penTarget != NULL) {
-      GetModelObject()->PlayAnim(((CEnvironmentMarker&)*m_penTarget).m_iAnim, AOF_LOOPING|AOF_NORESTART);
+      GetModelObject()->PlayAnim(((CEnvironmentMarker &)*m_penTarget).m_iAnim, AOF_LOOPING | AOF_NORESTART);
     }
   };
 
-  // change default anim
+  // Change default anim
   void ChangeDefaultAnim(void) {
-    if (m_penTarget != NULL && ((CEnvironmentMarker&)*m_penTarget).m_bChangeDefaultAnim) {
-      m_iAnim = ((CEnvironmentMarker&)*m_penTarget).m_iAnim;
+    if (m_penTarget != NULL && ((CEnvironmentMarker &)*m_penTarget).m_bChangeDefaultAnim) {
+      m_iAnim = ((CEnvironmentMarker &)*m_penTarget).m_iAnim;
     }
   };
 
-  // wait on marker
+  // Wait on marker
   void WaitOnMarker(void) {
     if (m_penTarget != NULL) {
-      CEnvironmentMarker &em = (CEnvironmentMarker&)*m_penTarget;
-      m_fWaitTime = em.m_fWaitTime;               // wait time
-      m_fWaitTime += FRnd() * em.m_fRandomTime;   // random wait time
+      CEnvironmentMarker &em = (CEnvironmentMarker &)*m_penTarget;
+      m_fWaitTime = em.m_fWaitTime; // wait time
+      m_fWaitTime += FRnd() * em.m_fRandomTime; // random wait time
+
       // fixed anim length
       if (em.m_bFixedAnimLength) {
         m_fWaitTime = floor(m_fWaitTime + 0.5f);
@@ -317,62 +332,72 @@ functions:
     }
   };
 
-
-
 procedures:
-// SUPPORT PROCEDURES
-
-  // move to marker
+  // Move to marker
   MoveToMarker(EVoid) {
     // if next marker exist
     if (NextMarker()) {
       // destination
       CalcDestination();
+
       // move to marker
-      while ((m_vDesiredPosition-GetPlacement().pl_PositionVector).Length() > 5.0f) {
-        wait(m_fMoveFrequency) {
+      while ((m_vDesiredPosition - GetPlacement().pl_PositionVector).Length() > 5.0f) {
+        wait (m_fMoveFrequency) {
           on (EBegin) : {
             MoveToPosition();
             resume;
           }
-          on (ETimer) : { stop; }
+
+          on (ETimer) : {
+            stop;
+          }
         }
       }
     }
+
     // stop moving
     StopMoving();
     return EEnd();
   };
 
-
-
-// ACTIONS
-
-  // activate
+  // Activate
   Activate(EVoid) {
     wait() {
-      on (EBegin) : { call DoAction(); }
-      on (EEnvironmentStop) : { jump Stop(); }
+      on (EBegin) : {
+        call DoAction();
+      }
+
+      on (EEnvironmentStop) : {
+        jump Stop();
+      }
     }
   };
 
-  // just wait
+  // Just wait
   Stop(EVoid) {
     StopMoving();
+
     wait() {
-      on (EBegin) : { resume; }
-      on (EEnvironmentStart) : { jump Activate(); }
+      on (EBegin) : {
+        resume;
+      }
+
+      on (EEnvironmentStart) : {
+        jump Activate();
+      }
     }
   };
 
-  // do actions
+  // Do actions
   DoAction(EVoid) {
     while (TRUE) {
       WaitOnMarker();
+
       if (m_fWaitTime > 0.0f) {
         PlayMarkerAnimation();
         autowait(m_fWaitTime);
       }
+
       ChangeDefaultAnim();
 
       MarkerParameters();
@@ -386,7 +411,7 @@ procedures:
     }
   };
 
-  // main loop
+  // Main loop
   MainLoop(EVoid) {
     autocall Stop() EEnd;
 
@@ -399,12 +424,13 @@ procedures:
     return;
   };
 
+  // Entry point
   Main() {
     // initialize
     Initialize();
 
     // wait until game starts
-    autowait(FRnd()*2.0f+1.0f);
+    autowait(FRnd() * 2.0f + 1.0f);
 
     // initialize watcher
     if (m_bUseWatcher) {

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -148,13 +148,13 @@ components:
 
 functions:
   void Read_t( CTStream *istr) // throw char *
-  { 
+  {
     CEnemyBase::Read_t(istr);
     m_emEmiter.Read_t(*istr);
   }
-  
-  void Write_t( CTStream *istr) // throw char *
-  { 
+
+  void Write_t(CTStream *istr) // throw char *
+  {
     CEnemyBase::Write_t(istr);
     m_emEmiter.Write_t(*istr);
   }
@@ -166,10 +166,9 @@ functions:
       else { return FALSE; }
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }*/
-  
+
   // describe how this enemy killed player
-  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
-  {
+  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath) {
     CTString str;
     str.PrintF(TRANS("%s was -*blown away*- by an Air Elemental"), strPlayerName);
     return str;
@@ -179,24 +178,23 @@ functions:
     return fnm;
   };
 
-  void Precache(void)
-  {
+  void Precache(void) {
     CEnemyBase::Precache();
 
-    PrecacheClass(CLASS_TWISTER       );
-    PrecacheClass(CLASS_BLOOD_SPRAY   );
-    PrecacheClass(CLASS_PROJECTILE, PRT_AIRELEMENTAL_WIND );   
+    PrecacheClass(CLASS_TWISTER);
+    PrecacheClass(CLASS_BLOOD_SPRAY);
+    PrecacheClass(CLASS_PROJECTILE, PRT_AIRELEMENTAL_WIND);
 
-    PrecacheModel(MODEL_INVISIBLE     );
-    PrecacheModel(MODEL_ELEMENTAL     );
+    PrecacheModel(MODEL_INVISIBLE);
+    PrecacheModel(MODEL_ELEMENTAL);
 
-    PrecacheTexture(TEXTURE_ELEMENTAL );
+    PrecacheTexture(TEXTURE_ELEMENTAL);
 
-    PrecacheSound(SOUND_FIREWINDBLAST );
-    PrecacheSound(SOUND_FIRETWISTER   );
-    PrecacheSound(SOUND_ROAR          );
-    PrecacheSound(SOUND_DEATH         );
-    PrecacheSound(SOUND_EXPLOSION     );  
+    PrecacheSound(SOUND_FIREWINDBLAST);
+    PrecacheSound(SOUND_FIRETWISTER);
+    PrecacheSound(SOUND_ROAR);
+    PrecacheSound(SOUND_DEATH);
+    PrecacheSound(SOUND_EXPLOSION);
   };
 
   // Entity info
@@ -211,29 +209,30 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // nothing can harm elemental during initial animation
-    if (m_bInitialAnim) { return; }
+    if (m_bInitialAnim) {
+      return;
+    }
 
     // make sure we don't trigger another growth while growing
     FLOAT fHealth = GetHealth();
-    FLOAT fFullDamage = fDamageAmmount * DamageStrength( ((EntityInfo*)GetEntityInfo())->Eeibt, dmtType) * GetGameDamageMultiplier();
-    if (m_bAttGrow && m_iSize<2) { 
-      if (fHealth-fFullDamage<afGrowArray[m_iSize+1][0]*m_fMaxHealth) {
+    FLOAT fFullDamage
+      = fDamageAmmount * DamageStrength(((EntityInfo *)GetEntityInfo())->Eeibt, dmtType) * GetGameDamageMultiplier();
+    if (m_bAttGrow && m_iSize < 2) {
+      if (fHealth - fFullDamage < afGrowArray[m_iSize + 1][0] * m_fMaxHealth) {
         CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
         SetHealth(fHealth);
-        return; 
+        return;
       }
     } else if (m_bAttGrow && m_iSize == 2) {
-      if (fHealth-fFullDamage<1.0f) {
+      if (fHealth - fFullDamage < 1.0f) {
         CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
         SetHealth(fHealth);
         return;
       }
     }
-
 
     // elemental can't harm elemental
     if (IsOfClass(penInflictor, "AirElemental")) {
@@ -241,49 +240,41 @@ functions:
     }
 
     // boss cannot be telefragged
-    if (dmtType == DMT_TELEPORT)
-    {
+    if (dmtType == DMT_TELEPORT) {
       return;
     }
-    
+
     // air elemental cannot be harmed by following kinds of damage:
-    if (dmtType == DMT_CLOSERANGE ||
-       dmtType == DMT_BULLET ||
-       dmtType == DMT_IMPACT ||
-       dmtType == DMT_CHAINSAW)
-    {
+    if (dmtType == DMT_CLOSERANGE || dmtType == DMT_BULLET || dmtType == DMT_IMPACT || dmtType == DMT_CHAINSAW) {
       return;
     }
-    
+
     // cannonballs inflict less damage then the default
-    if (dmtType == DMT_CANNONBALL)
-    {
+    if (dmtType == DMT_CANNONBALL) {
       fDamageAmmount *= 0.6f;
     }
-    
+
     FLOAT fOldHealth = GetHealth();
     CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     FLOAT fNewHealth = GetHealth();
-        
+
     CEntityPointer *penTrigger = &m_penTrigger01;
     // see if any triggers have to be set
-    INDEX i=0;
-    for (i=0; i<AIRBOSS_MAX_TA; i++) {
-      FLOAT fHealth = afTriggerArray[i]*m_fMaxHealth;
+    INDEX i = 0;
+    for (i = 0; i < AIRBOSS_MAX_TA; i++) {
+      FLOAT fHealth = afTriggerArray[i] * m_fMaxHealth;
       // triggers
-      if (fHealth <= fOldHealth && fHealth>fNewHealth)
-      {
+      if (fHealth <= fOldHealth && fHealth > fNewHealth) {
         if (&*penTrigger[i]) {
           SendToTarget(&*penTrigger[i], EET_TRIGGER, FixupCausedToPlayer(this, m_penEnemy));
         }
       }
     }
     // see if we have to grow
-    for (i=0; i<AIRBOSS_MAX_GA; i++) {
-      FLOAT fHealth = afGrowArray[i][0]*m_fMaxHealth;
+    for (i = 0; i < AIRBOSS_MAX_GA; i++) {
+      FLOAT fHealth = afGrowArray[i][0] * m_fMaxHealth;
       // growing
-      if (fHealth <= fOldHealth && fHealth>fNewHealth)
-      {
+      if (fHealth <= fOldHealth && fHealth > fNewHealth) {
         m_fAttSizeRequested = afGrowArray[i][1];
         m_iSize = i;
         EElementalGrow eeg;
@@ -292,8 +283,7 @@ functions:
     }
 
     // bosses don't darken when burning
-    m_colBurning=COLOR(C_WHITE|CT_OPAQUE);
-
+    m_colBurning = COLOR(C_WHITE | CT_OPAQUE);
   };
 
   // damage anim
@@ -304,21 +294,19 @@ functions:
   };
 
   void StandingAnimFight(void) {
-    ElementalModel()->PlayAnim(ELEMENTAL_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+    ElementalModel()->PlayAnim(ELEMENTAL_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
   // virtual anim functions
   void StandingAnim(void) {
-    ElementalModel()->PlayAnim(ELEMENTAL_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+    ElementalModel()->PlayAnim(ELEMENTAL_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
-  void WalkingAnim(void)
-  {
-    ElementalModel()->PlayAnim(ELEMENTAL_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+  void WalkingAnim(void) {
+    ElementalModel()->PlayAnim(ELEMENTAL_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
-  void RunningAnim(void)
-  {
+  void RunningAnim(void) {
     WalkingAnim();
   };
 
@@ -326,8 +314,7 @@ functions:
     WalkingAnim();
   };
 
-  INDEX AnimForDeath(void)
-  {
+  INDEX AnimForDeath(void) {
     INDEX iAnim;
     iAnim = ELEMENTAL_ANIM_IDLE;
     ElementalModel()->PlayAnim(iAnim, 0);
@@ -336,14 +323,13 @@ functions:
 
   // virtual sound functions
   void IdleSound(void) {
-    //PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
+    // PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
   };
   void WoundSound(void) {
-    //PlaySound(m_soSound, SOUND_WOUND, SOF_3D);
+    // PlaySound(m_soSound, SOUND_WOUND, SOF_3D);
   };
-  
-  void SizeModel(void)
-  {
+
+  void SizeModel(void) {
     return;
   };
 
@@ -351,9 +337,8 @@ functions:
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
     return CMovableModelEntity::AdjustShadingParameters(vLightDirection, colLight, colAmbient);
   };
-  
 
-// BLOW UP FUNCTIONS
+  // BLOW UP FUNCTIONS
 
   // spawn body parts
   void BlowUp(void) {
@@ -374,57 +359,53 @@ functions:
     SetCollisionFlags(ECF_IMMATERIAL);*/
   };
 
-
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     m_soFire.Set3DParameters(600.0f, 150.0f, 2.0f, 1.0f);
     m_soVoice.Set3DParameters(600.0f, 150.0f, 2.0f, 1.0f);
     m_soSound.Set3DParameters(600.0f, 150.0f, 2.0f, 1.0f);
   };
 
-  void LaunchTwister(FLOAT3D vEnemyOffset)
-  {
+  void LaunchTwister(FLOAT3D vEnemyOffset) {
     // calculate parameters for predicted angular launch curve
-    FLOAT3D vFirePos = FIREPOS_TWISTER*m_fAttSizeCurrent*GetRotationMatrix();
+    FLOAT3D vFirePos = FIREPOS_TWISTER * m_fAttSizeCurrent * GetRotationMatrix();
     FLOAT3D vShooting = GetPlacement().pl_PositionVector + vFirePos;
     FLOAT3D vTarget = m_penEnemy->GetPlacement().pl_PositionVector;
     FLOAT fLaunchSpeed;
     FLOAT fRelativeHdg;
-    
+
     // shoot in front of the enemy
-    EntityInfo *peiTarget = (EntityInfo*) (m_penEnemy->GetEntityInfo());
-    
+    EntityInfo *peiTarget = (EntityInfo *)(m_penEnemy->GetEntityInfo());
+
     // adjust target position
     vTarget += vEnemyOffset;
 
     CPlacement3D pl;
-    CalculateAngularLaunchParams( vShooting, peiTarget->vTargetCenter[1]-6.0f/3.0f,
-      vTarget, FLOAT3D(0.0f, 0.0f, 0.0f), 0.0f, fLaunchSpeed, fRelativeHdg);
-    
+    CalculateAngularLaunchParams(vShooting, peiTarget->vTargetCenter[1] - 6.0f / 3.0f, vTarget, FLOAT3D(0.0f, 0.0f, 0.0f), 0.0f,
+                                 fLaunchSpeed, fRelativeHdg);
+
     PrepareFreeFlyingProjectile(pl, vTarget, vFirePos, ANGLE3D(fRelativeHdg, 0.0f, 0.0f));
-    
+
     ETwister et;
     CEntityPointer penTwister = CreateEntity(pl, CLASS_TWISTER);
     et.penOwner = this;
-//    et.fSize = FRnd()*15.0f+5.0f;
-    et.fSize = FRnd()*10.0f+m_fAttSizeCurrent/5.0f+3.0f;
-    et.fDuration = 15.0f + FRnd()+5.0f;
-    et.sgnSpinDir = (INDEX)(Sgn(FRnd()-0.5f));
+    //    et.fSize = FRnd()*15.0f+5.0f;
+    et.fSize = FRnd() * 10.0f + m_fAttSizeCurrent / 5.0f + 3.0f;
+    et.fDuration = 15.0f + FRnd() + 5.0f;
+    et.sgnSpinDir = (INDEX)(Sgn(FRnd() - 0.5f));
     et.bGrow = TRUE;
-    et.bMovingAllowed=TRUE;
+    et.bMovingAllowed = TRUE;
     penTwister->Initialize(et);
-    
-    ((CMovableEntity &)*penTwister).LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -fLaunchSpeed), (CMovableEntity*)(CEntity*)this);
+
+    ((CMovableEntity &)*penTwister).LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -fLaunchSpeed), (CMovableEntity *)(CEntity *)this);
   }
 
   void PreMoving() {
-
     // TODO: decomment this when shockwave is fixed
     /*// see if any of the players are really close to us
     INDEX ctMaxPlayers = GetMaxPlayers();
     CEntity *penPlayer;
-        
+
     for (INDEX i=0; i<ctMaxPlayers; i++) {
       penPlayer=GetPlayerEntity(i);
       if (penPlayer != NULL) {
@@ -444,50 +425,45 @@ functions:
     CEnemyBase::PreMoving();
   };
 
-  void GetAirElementalAttachmentData(INDEX iAttachment, FLOATmatrix3D &mRot, FLOAT3D &vPos)
-  {
+  void GetAirElementalAttachmentData(INDEX iAttachment, FLOATmatrix3D &mRot, FLOAT3D &vPos) {
     MakeRotationMatrixFast(mRot, ANGLE3D(0.0f, 0.0f, 0.0f));
-    vPos=FLOAT3D(0.0f, 0.0f, 0.0f);
+    vPos = FLOAT3D(0.0f, 0.0f, 0.0f);
     GetModelObject()->GetAttachmentTransformations(AIRELEMENTAL_ATTACHMENT_BODY, mRot, vPos, FALSE);
     // next in hierarchy
     CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(AIRELEMENTAL_ATTACHMENT_BODY);
-    pamo->amo_moModelObject.GetAttachmentTransformations( iAttachment, mRot, vPos, TRUE);
-    vPos=GetPlacement().pl_PositionVector+vPos*GetRotationMatrix();
+    pamo->amo_moModelObject.GetAttachmentTransformations(iAttachment, mRot, vPos, TRUE);
+    vPos = GetPlacement().pl_PositionVector + vPos * GetRotationMatrix();
   }
 
-  FLOAT GetCurrentStretchRatio(void)
-  {
-    CAttachmentModelObject &amo=*GetModelObject()->GetAttachmentModel(AIRELEMENTAL_ATTACHMENT_BODY);
-    FLOAT fCurrentStretch=amo.amo_moModelObject.mo_Stretch(1);
-    FLOAT fStretch=(fCurrentStretch-m_fAttSizeBegin)/(m_fAttSizeEnd-m_fAttSizeBegin);
+  FLOAT GetCurrentStretchRatio(void) {
+    CAttachmentModelObject &amo = *GetModelObject()->GetAttachmentModel(AIRELEMENTAL_ATTACHMENT_BODY);
+    FLOAT fCurrentStretch = amo.amo_moModelObject.mo_Stretch(1);
+    FLOAT fStretch = (fCurrentStretch - m_fAttSizeBegin) / (m_fAttSizeEnd - m_fAttSizeBegin);
     return fStretch;
   }
 
-  void RenderParticles(void)
-  {
+  void RenderParticles(void) {
     static TIME tmLastGrowTime = 0.0f;
-    
+
     if (m_bFloat) {
       FLOAT fTime = _pTimer->GetLerpedCurrentTick();
       CAttachmentModelObject &amo0 = *GetModelObject()->GetAttachmentModel(AIRELEMENTAL_ATTACHMENT_BODY);
-      amo0.amo_plRelative.pl_PositionVector(2) = m_fAttPosY + pow(sin(fTime*2.0f),2.0f)*m_fAttSizeCurrent*2.0f/m_fAttSizeBegin;
+      amo0.amo_plRelative.pl_PositionVector(2)
+        = m_fAttPosY + pow(sin(fTime * 2.0f), 2.0f) * m_fAttSizeCurrent * 2.0f / m_fAttSizeBegin;
     }
     if (m_bAttGrow) {
       FLOAT fSize = Lerp(m_fLastSize, m_fTargetSize, _pTimer->GetLerpFactor());
       ElementalModel()->StretchModel(FLOAT3D(fSize, fSize, fSize));
     }
 
-    if (m_bRenderParticles)
-    {
-      FLOAT fStretchRatio=GetCurrentStretchRatio();
-      FLOAT fStretch=1.0f+(fStretchRatio)*6.0f;
+    if (m_bRenderParticles) {
+      FLOAT fStretchRatio = GetCurrentStretchRatio();
+      FLOAT fStretch = 1.0f + (fStretchRatio)*6.0f;
       Particles_AirElemental(this, fStretch, 1.0f, m_tmDeath, m_colParticles);
     }
   }
 
-
 procedures:
-  
   Die(EDeath eDeath) : CEnemyBase::Die { 
     
     SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
@@ -678,8 +654,8 @@ procedures:
     }
   }
 
-  Main(EVoid) {
-    
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsEditorModel();
     

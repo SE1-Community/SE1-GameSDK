@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -97,15 +97,15 @@ functions:
     static DECLARE_CTFILENAME(fnmBig, "Data\\Messages\\Enemies\\BeastBig.txt");
     static DECLARE_CTFILENAME(fnmHuge, "DataMP\\Messages\\Enemies\\BeastBiggest.txt");
     switch (m_bcType) {
-    default: ASSERT(FALSE);
-    case BT_NORMAL: return fnmNormal;
-    case BT_BIG: return fnmBig;
-    case BT_HUGE: return fnmHuge;
+      default: ASSERT(FALSE);
+      case BT_NORMAL: return fnmNormal;
+      case BT_BIG: return fnmBig;
+      case BT_HUGE: return fnmHuge;
     }
   };
   void Precache(void) {
     CEnemyBase::Precache();
-    PrecacheSound(SOUND_IDLE );
+    PrecacheSound(SOUND_IDLE);
     PrecacheSound(SOUND_SIGHT);
     PrecacheSound(SOUND_WOUND);
     PrecacheSound(SOUND_ANGER);
@@ -134,8 +134,7 @@ functions:
     }
   };
 
-  void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower)
-  {
+  void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower) {
     CWorldSettingsController *pwsc = GetWSC(this);
     if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
@@ -145,17 +144,16 @@ functions:
 
       pwsc->m_fShakeIntensityZ = 0.0f;
       pwsc->m_tmShakeFrequencyZ = 5.0f;
-      pwsc->m_fShakeIntensityY = 0.1f*fPower;
+      pwsc->m_fShakeIntensityY = 0.1f * fPower;
       pwsc->m_tmShakeFrequencyY = 5.0f;
-      pwsc->m_fShakeIntensityB = 2.5f*fPower;
+      pwsc->m_fShakeIntensityB = 2.5f * fPower;
       pwsc->m_tmShakeFrequencyB = 7.2f;
 
       pwsc->m_bShakeFadeIn = FALSE;
     }
   }
 
-  FLOAT GetCrushHealth(void)
-  {
+  FLOAT GetCrushHealth(void) {
     if (m_bcType == BT_BIG) {
       return 100.0f;
     } else if (m_bcType == BT_HUGE) {
@@ -164,25 +162,20 @@ functions:
     return 0.0f;
   }
 
-  BOOL ForcesCannonballToExplode(void)
-  {
+  BOOL ForcesCannonballToExplode(void) {
     return TRUE;
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
-    
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
-    {
-      fDamageAmmount*=0.5f;
+    if (dmtType == DMT_BULLET && fDamageAmmount > 100.0f) {
+      fDamageAmmount *= 0.5f;
     }
 
     // cannonballs inflict less damage then the default
-    if (m_bcType == BT_BIG && dmtType == DMT_CANNONBALL)
-    {
+    if (m_bcType == BT_BIG && dmtType == DMT_CANNONBALL) {
       fDamageAmmount *= 0.3333f;
     }
 
@@ -192,11 +185,10 @@ functions:
     }
   };
 
-
   // damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
     INDEX iAnim;
-    if ((m_bcType == BT_BIG || m_bcType == BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
+    if ((m_bcType == BT_BIG || m_bcType == BT_HUGE) && GetHealth() <= m_fMaxHealth / 2) {
       iAnim = BEAST_ANIM_ANGER;
     } else {
       iAnim = BEAST_ANIM_WOUND;
@@ -219,9 +211,8 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim() == BEAST_ANIM_DEATH)
-    {
-      vStretch=FLOAT3D(1,1,2)*2.0f;
+    if (GetModelObject()->GetAnim() == BEAST_ANIM_DEATH) {
+      vStretch = FLOAT3D(1, 1, 2) * 2.0f;
       return 0.3f;
     }
     return -1.0f;
@@ -235,20 +226,19 @@ functions:
   // virtual anim functions
   void StandingAnim(void) {
     _tmLastStandingAnim = _pTimer->CurrentTick();
-    StartModelAnim(BEAST_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(BEAST_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
   void WalkingAnim(void) {
-    if (_pTimer->CurrentTick() >= _tmLastStandingAnim-_pTimer->TickQuantum &&
-       _pTimer->CurrentTick() <= _tmLastStandingAnim+_pTimer->TickQuantum)
-    {
-      //BREAKPOINT;
+    if (_pTimer->CurrentTick() >= _tmLastStandingAnim - _pTimer->TickQuantum
+        && _pTimer->CurrentTick() <= _tmLastStandingAnim + _pTimer->TickQuantum) {
+      // BREAKPOINT;
     }
 
     if (m_bcType == BT_BIG || m_bcType == BT_HUGE) {
-      StartModelAnim(BEAST_ANIM_WALKBIG, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(BEAST_ANIM_WALKBIG, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(BEAST_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(BEAST_ANIM_WALK, AOF_LOOPING | AOF_NORESTART);
     }
   };
 
@@ -267,7 +257,7 @@ functions:
     PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
   };
   void WoundSound(void) {
-    if ((m_bcType == BT_BIG || m_bcType == BT_HUGE) && GetHealth() <= m_fMaxHealth/2) {
+    if ((m_bcType == BT_BIG || m_bcType == BT_HUGE) && GetHealth() <= m_fMaxHealth / 2) {
       PlaySound(m_soSound, SOUND_ANGER, SOF_3D);
     } else {
       PlaySound(m_soSound, SOUND_WOUND, SOF_3D);
@@ -281,15 +271,13 @@ functions:
     }
   };
 
-
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     m_soSound.Set3DParameters(160.0f, 50.0f, 2.0f, 1.0f);
   };
 
 procedures:
-// DEATH
+  // DEATH
   Death(EVoid) : CEnemyBase::Death {
     if (m_bcType == BT_NORMAL) {
       jump CEnemyBase::Death();
@@ -489,8 +477,8 @@ procedures:
     return EReturn();
   };
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING);

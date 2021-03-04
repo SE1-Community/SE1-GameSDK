@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -14,7 +14,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
 503
-%{
+/* clang-format off */ %{
 #include "StdH.h"
 %}
 
@@ -28,7 +28,7 @@ event EDropPipebomb {
   FLOAT fSpeed,                   // launch speed
 };
 
-%{
+/* clang-format off */ %{
 #define ECF_PIPEBOMB ( \
   ((ECBI_MODEL|ECBI_BRUSH|ECBI_PROJECTILE_SOLID|ECBI_MODEL_HOLDER) << ECB_TEST) |\
   ((ECBI_PROJECTILE_SOLID) << ECB_IS) )
@@ -69,7 +69,7 @@ components:
  11 texture TEXTURE_PIPEBOMB    "Models\\Weapons\\Pipebomb\\Grenade\\Grenade.tex",
  12 sound   SOUND_LAUNCH        "Sounds\\Weapons\\RocketFired.wav",
 
-functions:
+functions: /* clang-format on */
   // Read from stream.
   void Read_t( CTStream *istr) // throw char *
   {
@@ -78,8 +78,7 @@ functions:
   }
 
   // Get static light source information.
-  CLightSource *GetLightSource(void)
-  {
+  CLightSource *GetLightSource(void) {
     if (!IsPredictor()) {
       return &m_lsLightSource;
     } else {
@@ -88,11 +87,10 @@ functions:
   }
 
   // Setup light source
-  void SetupLightSource(void)
-  {
+  void SetupLightSource(void) {
     // setup light source
     CLightSource lsNew;
-    lsNew.ls_ulFlags = LSF_NONPERSISTENT|LSF_DYNAMIC;
+    lsNew.ls_ulFlags = LSF_NONPERSISTENT | LSF_DYNAMIC;
     lsNew.ls_colColor = C_vdRED;
     lsNew.ls_rFallOff = 1.0f;
     lsNew.ls_rHotSpot = 0.1f;
@@ -109,88 +107,83 @@ functions:
     Particles_GrenadeTrail(this);
   }
 
-// PIPEBOMB
-void Pipebomb(void) {
-  // set appearance
-  InitAsModel();
-  SetPhysicsFlags(EPF_MODEL_BOUNCING);
-  SetCollisionFlags(ECF_PIPEBOMB);
-  //GetModelObject()->StretchModel(FLOAT3D(2.5f, 2.5f, 2.5f));
-  //ModelChangeNotify();
-  SetModel(MODEL_PIPEBOMB);
-  SetModelMainTexture(TEXTURE_PIPEBOMB);
-  // start moving
-  LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -m_fSpeed), (CMovableEntity*)&*m_penLauncher);
-  SetDesiredRotation(ANGLE3D(0, FRnd()*120.0f+120.0f, FRnd()*250.0f-125.0f));
-  en_fBounceDampNormal   = 0.7f;
-  en_fBounceDampParallel = 0.7f;
-  en_fJumpControlMultiplier = 0.0f;
-  en_fCollisionSpeedLimit = 45.0f;
-  en_fCollisionDamageFactor = 10.0f;
-  SetHealth(20.0f);
-};
+  // PIPEBOMB
+  void Pipebomb(void) {
+    // set appearance
+    InitAsModel();
+    SetPhysicsFlags(EPF_MODEL_BOUNCING);
+    SetCollisionFlags(ECF_PIPEBOMB);
+    // GetModelObject()->StretchModel(FLOAT3D(2.5f, 2.5f, 2.5f));
+    // ModelChangeNotify();
+    SetModel(MODEL_PIPEBOMB);
+    SetModelMainTexture(TEXTURE_PIPEBOMB);
+    // start moving
+    LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -m_fSpeed), (CMovableEntity *)&*m_penLauncher);
+    SetDesiredRotation(ANGLE3D(0, FRnd() * 120.0f + 120.0f, FRnd() * 250.0f - 125.0f));
+    en_fBounceDampNormal = 0.7f;
+    en_fBounceDampParallel = 0.7f;
+    en_fJumpControlMultiplier = 0.0f;
+    en_fCollisionSpeedLimit = 45.0f;
+    en_fCollisionDamageFactor = 10.0f;
+    SetHealth(20.0f);
+  };
 
-void PipebombExplosion(void) {
-  ESpawnEffect ese;
-  FLOAT3D vPoint;
-  FLOATplane3D vPlaneNormal;
-  FLOAT fDistanceToEdge;
+  void PipebombExplosion(void) {
+    ESpawnEffect ese;
+    FLOAT3D vPoint;
+    FLOATplane3D vPlaneNormal;
+    FLOAT fDistanceToEdge;
 
-  // explosion
-  ese.colMuliplier = C_WHITE|CT_OPAQUE;
-  ese.betType = BET_GRENADE;
-  ese.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
-  SpawnEffect(GetPlacement(), ese);
-  // spawn sound event in range
-  if (IsDerivedFromClass( m_penLauncher, "Player")) {
-    SpawnRangeSound( m_penLauncher, this, SNDT_PLAYER, 50.0f);
-  }
-
-  // on plane
-  if (GetNearestPolygon(vPoint, vPlaneNormal, fDistanceToEdge)) {
-    if ((vPoint-GetPlacement().pl_PositionVector).Length() < 3.5f) {
-      // wall stain
-      ese.betType = BET_EXPLOSIONSTAIN;
-      ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
-      // shock wave
-      ese.betType = BET_SHOCKWAVE;
-      ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
-      // second explosion on plane
-      ese.betType = BET_GRENADE_PLANE;
-      ese.vNormal = FLOAT3D(vPlaneNormal);
-      SpawnEffect(CPlacement3D(vPoint+ese.vNormal/50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
+    // explosion
+    ese.colMuliplier = C_WHITE | CT_OPAQUE;
+    ese.betType = BET_GRENADE;
+    ese.vStretch = FLOAT3D(1.0f, 1.0f, 1.0f);
+    SpawnEffect(GetPlacement(), ese);
+    // spawn sound event in range
+    if (IsDerivedFromClass(m_penLauncher, "Player")) {
+      SpawnRangeSound(m_penLauncher, this, SNDT_PLAYER, 50.0f);
     }
-  }
-};
 
-// COMMON FUNCTIONS
+    // on plane
+    if (GetNearestPolygon(vPoint, vPlaneNormal, fDistanceToEdge)) {
+      if ((vPoint - GetPlacement().pl_PositionVector).Length() < 3.5f) {
+        // wall stain
+        ese.betType = BET_EXPLOSIONSTAIN;
+        ese.vNormal = FLOAT3D(vPlaneNormal);
+        SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
+        // shock wave
+        ese.betType = BET_SHOCKWAVE;
+        ese.vNormal = FLOAT3D(vPlaneNormal);
+        SpawnEffect(CPlacement3D(vPoint, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
+        // second explosion on plane
+        ese.betType = BET_GRENADE_PLANE;
+        ese.vNormal = FLOAT3D(vPlaneNormal);
+        SpawnEffect(CPlacement3D(vPoint + ese.vNormal / 50.0f, ANGLE3D(0.0f, 0.0f, 0.0f)), ese);
+      }
+    }
+  };
 
-// projectile hitted (or time expired or can't move any more)
-void ProjectileHit(void) {
-  // explode ...
-  InflictRangeDamage(m_penLauncher, DMT_EXPLOSION, 100.0f,
-      GetPlacement().pl_PositionVector, 4.0f, 8.0f);
-  // sound event
-  ESound eSound;
-  eSound.EsndtSound = SNDT_EXPLOSION;
-  eSound.penTarget = m_penLauncher;
-  SendEventInRange(eSound, FLOATaabbox3D(GetPlacement().pl_PositionVector, 50.0f));
-};
+  // COMMON FUNCTIONS
 
+  // projectile hitted (or time expired or can't move any more)
+  void ProjectileHit(void) {
+    // explode ...
+    InflictRangeDamage(m_penLauncher, DMT_EXPLOSION, 100.0f, GetPlacement().pl_PositionVector, 4.0f, 8.0f);
+    // sound event
+    ESound eSound;
+    eSound.EsndtSound = SNDT_EXPLOSION;
+    eSound.penTarget = m_penLauncher;
+    SendEventInRange(eSound, FLOATaabbox3D(GetPlacement().pl_PositionVector, 50.0f));
+  };
 
-// spawn effect
-void SpawnEffect(const CPlacement3D &plEffect, const ESpawnEffect &eSpawnEffect) {
-  CEntityPointer penEffect = CreateEntity(plEffect, CLASS_BASIC_EFFECT);
-  penEffect->Initialize(eSpawnEffect);
-};
+  // spawn effect
+  void SpawnEffect(const CPlacement3D &plEffect, const ESpawnEffect &eSpawnEffect) {
+    CEntityPointer penEffect = CreateEntity(plEffect, CLASS_BASIC_EFFECT);
+    penEffect->Initialize(eSpawnEffect);
+  };
 
-
-
-
-// PROCEDURES
-procedures:
+  // PROCEDURES
+  /* clang-format off */ procedures:
   // --->>> PROJECTILE SLIDE ON BRUSH
   ProjectileSlide(EVoid) {
     m_bCollected = FALSE;

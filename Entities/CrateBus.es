@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -103,94 +103,85 @@ components:
   15 texture TEXTURE_HEAD           "ModelsMP\\Enemies\\Mental\\Head.tex",
 
 functions:
-
   void Precache(void)
   {
     PrecacheClass(CLASS_BASIC_EFFECT, BET_BOMB);
     PrecacheTexture(TEXTURE_HEAD);
   };
 
-  void AddRiders()
-  {
+  void AddRiders() {
     GetModelObject()->RemoveAllAttachmentModels();
-    for (INDEX i=0; i<CT_BIGHEADS; i++)
-    {
-      AddAttachment(CRATEBUS_ATTACHMENT_1+i, MODEL_MENTAL, TEXTURE_MENTAL);
-      CAttachmentModelObject *pamoMental = GetModelObject()->GetAttachmentModel(CRATEBUS_ATTACHMENT_1+i);
-      if (pamoMental == NULL) { continue; }
-      CModelObject &moMental=pamoMental->amo_moModelObject;
+    for (INDEX i = 0; i < CT_BIGHEADS; i++) {
+      AddAttachment(CRATEBUS_ATTACHMENT_1 + i, MODEL_MENTAL, TEXTURE_MENTAL);
+      CAttachmentModelObject *pamoMental = GetModelObject()->GetAttachmentModel(CRATEBUS_ATTACHMENT_1 + i);
+      if (pamoMental == NULL) {
+        continue;
+      }
+      CModelObject &moMental = pamoMental->amo_moModelObject;
       AddAttachmentToModel(this, moMental, MENTAL_ATTACHMENT_HEAD, MODEL_HEAD, TEXTURE_HEAD, 0, 0, 0);
       CAttachmentModelObject *pamoHead = moMental.GetAttachmentModel(MENTAL_ATTACHMENT_HEAD);
-      if (pamoHead == NULL) { continue; }
-      CTFileName fnm=(&m_fnmHeadTex01)[i];
-      if (fnm != "")
-      {
+      if (pamoHead == NULL) {
+        continue;
+      }
+      CTFileName fnm = (&m_fnmHeadTex01)[i];
+      if (fnm != "") {
         // try to
-        try
-        {
+        try {
           pamoHead->amo_moModelObject.mo_toTexture.SetData_t(fnm);
         }
         // if anything failed
-        catch (char *strError)
-        {
+        catch (char *strError) {
           // report error
           CPrintF("%s\n", strError);
         }
       }
-      INDEX iRndLeft=IRnd()%(sizeof(_aiLeftAnimations)/sizeof(INDEX));
-      INDEX iRndRight=IRnd()%(sizeof(_aiRightAnimations)/sizeof(INDEX));
-      if (i&1)
-      {
+      INDEX iRndLeft = IRnd() % (sizeof(_aiLeftAnimations) / sizeof(INDEX));
+      INDEX iRndRight = IRnd() % (sizeof(_aiRightAnimations) / sizeof(INDEX));
+      if (i & 1) {
         moMental.PlayAnim(_aiRightAnimations[iRndRight], AOF_LOOPING);
-      }
-      else    
-      {
+      } else {
         moMental.PlayAnim(_aiLeftAnimations[iRndLeft], AOF_LOOPING);
       }
-      FLOAT tmOffsetPhase=-FRnd()*10.0f;
+      FLOAT tmOffsetPhase = -FRnd() * 10.0f;
       moMental.OffsetPhase(tmOffsetPhase);
     }
   }
 
   // particles
-  void RenderParticles(void)
-  {
-    CEntity *penParent=GetParent();
-    if (m_bShowTrail && penParent != NULL)
-    {
-      Particles_AfterBurner( penParent, 0.0f, 0.5f);
-      //Particles_RocketTrail(penParent, 25.0f);
+  void RenderParticles(void) {
+    CEntity *penParent = GetParent();
+    if (m_bShowTrail && penParent != NULL) {
+      Particles_AfterBurner(penParent, 0.0f, 0.5f);
+      // Particles_RocketTrail(penParent, 25.0f);
     }
   }
 
-  void SpawnExplosion(INDEX iCharacter, FLOAT fAddY, FLOAT fSize)
-  {
-    FLOAT3D vOffset=FLOAT3D(0.0f, 0.0f, 0.0f);
+  void SpawnExplosion(INDEX iCharacter, FLOAT fAddY, FLOAT fSize) {
+    FLOAT3D vOffset = FLOAT3D(0.0f, 0.0f, 0.0f);
     // spawn explosion
-    if (iCharacter >= 0)
-    {
+    if (iCharacter >= 0) {
       CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(iCharacter);
-      if (pamo == NULL && fAddY >= 0) {return;}
+      if (pamo == NULL && fAddY >= 0) {
+        return;
+      }
       GetModelObject()->RemoveAttachmentModel(iCharacter);
       m_ctMentals--;
       // character pos
-      INDEX iX=iCharacter%2;
-      INDEX iZ=iCharacter/2;
-      vOffset=FLOAT3D(-1.0f+iX*2.0f, 3.0f+(FRnd())*1.0f+fAddY, -14.5f+iZ*2.8f)*m_fStretch;
-    }
-    else
-    {
+      INDEX iX = iCharacter % 2;
+      INDEX iZ = iCharacter / 2;
+      vOffset = FLOAT3D(-1.0f + iX * 2.0f, 3.0f + (FRnd()) * 1.0f + fAddY, -14.5f + iZ * 2.8f) * m_fStretch;
+    } else {
       // rnd pos
-      vOffset=FLOAT3D((FRnd()-0.5f)*4.0f, 3.0f+(FRnd())*1.0f+fAddY, (FRnd()-0.5f)*36.0f)*m_fStretch;
+      vOffset = FLOAT3D((FRnd() - 0.5f) * 4.0f, 3.0f + (FRnd()) * 1.0f + fAddY, (FRnd() - 0.5f) * 36.0f) * m_fStretch;
     }
 
     CPlacement3D plExplosion = GetPlacement();
-    plExplosion.pl_PositionVector=plExplosion.pl_PositionVector+vOffset;
+    plExplosion.pl_PositionVector = plExplosion.pl_PositionVector + vOffset;
     CEntityPointer penExplosion = CreateEntity(plExplosion, CLASS_BASIC_EFFECT);
     ESpawnEffect eSpawnEffect;
-    eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
+    eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
     eSpawnEffect.betType = BET_BOMB;
-    eSpawnEffect.vStretch = FLOAT3D(m_fExplosionStretch,m_fExplosionStretch,m_fExplosionStretch);
+    eSpawnEffect.vStretch = FLOAT3D(m_fExplosionStretch, m_fExplosionStretch, m_fExplosionStretch);
     penExplosion->Initialize(eSpawnEffect);
 
     // explosion debris
@@ -204,8 +195,7 @@ functions:
     penExplosionSmoke->Initialize(eSpawnEffect);
   }
 
-  CPlacement3D GetLerpedPlacement(void) const
-  {
+  CPlacement3D GetLerpedPlacement(void) const {
     return CEntity::GetLerpedPlacement(); // we never move anyway, so let's be able to be parented
   }
 
@@ -283,8 +273,8 @@ procedures:
     return;
   }
 
- // MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     if (m_bActive)
     {

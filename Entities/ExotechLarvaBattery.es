@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -64,105 +64,99 @@ components:
  50 sound   SOUND_SHUTDOWN      "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Sounds\\WallChargerShutdown.wav",
 
 functions:
-  
   void Precache(void) {
     CRationalEntity::Precache();
-    PrecacheSound( SOUND_SHUTDOWN       );
-    PrecacheModel( MODEL_BATTERY        );
-    PrecacheTexture( TEXTURE_BATTERY    );
-    PrecacheModel( MODEL_PLASMA         );
-    PrecacheTexture( TEXTURE_PLASMA     );
-    PrecacheModel( MODEL_ELECTRO        );
-    PrecacheTexture( TEXTURE_ELECTRO    );
+    PrecacheSound(SOUND_SHUTDOWN);
+    PrecacheModel(MODEL_BATTERY);
+    PrecacheTexture(TEXTURE_BATTERY);
+    PrecacheModel(MODEL_PLASMA);
+    PrecacheTexture(TEXTURE_PLASMA);
+    PrecacheModel(MODEL_ELECTRO);
+    PrecacheTexture(TEXTURE_ELECTRO);
   }
-  
 
   // Adjust model shading parameters if needed.
-  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
-  {
-    if (m_bCustomShading)
-    {
-      colLight   = m_colLight;
+  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
+    if (m_bCustomShading) {
+      colLight = m_colLight;
       colAmbient = m_colAmbient;
-         
+
       AnglesToDirectionVector(m_aShadingDirection, vLightDirection);
       vLightDirection = -vLightDirection;
     }
-    
+
     return TRUE;
   };
 
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
-    if (GetHealth()<0.0f) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
+    if (GetHealth() < 0.0f) {
       return;
     }
 
-    if ((dmtType != DMT_BURNING) && (m_tmSpraySpawned <= _pTimer->CurrentTick()-_pTimer->TickQuantum*8))
-    {
+    if ((dmtType != DMT_BURNING) && (m_tmSpraySpawned <= _pTimer->CurrentTick() - _pTimer->TickQuantum * 8)) {
       // spawn blood spray
-      CPlacement3D plSpray = CPlacement3D( vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
-      m_penSpray = CreateEntity( plSpray, CLASS_BLOOD_SPRAY);
+      CPlacement3D plSpray = CPlacement3D(vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
+      m_penSpray = CreateEntity(plSpray, CLASS_BLOOD_SPRAY);
       m_penSpray->SetParent(this);
       ESpawnSpray eSpawnSpray;
-      eSpawnSpray.colBurnColor=C_WHITE|CT_OPAQUE;
+      eSpawnSpray.colBurnColor = C_WHITE | CT_OPAQUE;
       eSpawnSpray.fDamagePower = 3.0f;
-      eSpawnSpray.sptType = SPT_ELECTRICITY_SPARKS_NO_BLOOD;
+      eSpawnSpray.sptType = SPT_SPARKS;
       eSpawnSpray.fSizeMultiplier = 1.0f;
       eSpawnSpray.vDirection = FLOAT3D(0.0f, 1.0f, 0.0f);
       eSpawnSpray.penOwner = this;
-      m_penSpray->Initialize( eSpawnSpray);
+      m_penSpray->Initialize(eSpawnSpray);
 
       m_tmSpraySpawned = _pTimer->CurrentTick();
     }
 
     FLOAT fLastHealth = GetHealth();
-    CRationalEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount,
-                              vHitPoint, vDirection);    
+    CRationalEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     FLOAT fNewHealth = GetHealth();
-    if (fNewHealth <= 0.66f*m_fMaxHealth && fLastHealth>0.66f*m_fMaxHealth) {
+    if (fNewHealth <= 0.66f * m_fMaxHealth && fLastHealth > 0.66f * m_fMaxHealth) {
       RemoveAttachment(WALLCHARGER_ATTACHMENT_LIGHT);
-      GetModelObject()->PlayAnim(WALLCHARGER_ANIM_DAMAGE01, AOF_SMOOTHCHANGE|AOF_NORESTART);
+      GetModelObject()->PlayAnim(WALLCHARGER_ANIM_DAMAGE01, AOF_SMOOTHCHANGE | AOF_NORESTART);
       SpawnExplosions();
-    } else if (fNewHealth <= 0.33*m_fMaxHealth && fLastHealth>0.33*m_fMaxHealth) {
+    } else if (fNewHealth <= 0.33 * m_fMaxHealth && fLastHealth > 0.33 * m_fMaxHealth) {
       RemoveAttachment(WALLCHARGER_ATTACHMENT_PLASMA);
-      GetModelObject()->PlayAnim(WALLCHARGER_ANIM_DAMAGE02, AOF_SMOOTHCHANGE|AOF_NORESTART);
+      GetModelObject()->PlayAnim(WALLCHARGER_ANIM_DAMAGE02, AOF_SMOOTHCHANGE | AOF_NORESTART);
       SpawnExplosions();
     }
   };
 
-  void RenderParticles(void)
-  {
+  void RenderParticles(void) {
     FLOAT fBurnStrength;
     FLOAT fHealth = GetHealth();
-    if (fHealth<m_fBurnTreshold) {
-      fBurnStrength = 1.0f - fHealth/m_fBurnTreshold;
-      if (fBurnStrength>0.99f) { fBurnStrength=0.99f; }
+    if (fHealth < m_fBurnTreshold) {
+      fBurnStrength = 1.0f - fHealth / m_fBurnTreshold;
+      if (fBurnStrength > 0.99f) {
+        fBurnStrength = 0.99f;
+      }
       Particles_Burning(this, 1.0f, fBurnStrength);
     }
-    if (fHealth<1.0f) {
-      Particles_Smoke(this, FLOAT3D(0.0f, 0.0f, 0.25f)*m_fStretch, 100, 6.0f, 0.4f, 4.0f*m_fStretch, 2.5f); 
+    if (fHealth < 1.0f) {
+      Particles_Smoke(this, FLOAT3D(0.0f, 0.0f, 0.25f) * m_fStretch, 100, 6.0f, 0.4f, 4.0f * m_fStretch, 2.5f);
     }
   };
 
   void SpawnExplosions(void) {
     CPlacement3D pl = GetPlacement();
     ESpawnEffect eSpawnEffect;
-    eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
+    eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
     eSpawnEffect.betType = BET_CANNON;
-    eSpawnEffect.vStretch = FLOAT3D(m_fStretch*1.5f, m_fStretch*1.5f, m_fStretch*1.5f);
+    eSpawnEffect.vStretch = FLOAT3D(m_fStretch * 1.5f, m_fStretch * 1.5f, m_fStretch * 1.5f);
     CEntityPointer penExplosion = CreateEntity(pl, CLASS_BASIC_EFFECT);
     penExplosion->Initialize(eSpawnEffect);
-    pl.pl_PositionVector += FLOAT3D(FRnd()*0.5f, FRnd()*0.5f, 0.0f);
+    pl.pl_PositionVector += FLOAT3D(FRnd() * 0.5f, FRnd() * 0.5f, 0.0f);
     penExplosion = CreateEntity(pl, CLASS_BASIC_EFFECT);
     penExplosion->Initialize(eSpawnEffect);
-    pl.pl_PositionVector += FLOAT3D(FRnd()*0.5f, FRnd()*0.5f, 0.0f);
+    pl.pl_PositionVector += FLOAT3D(FRnd() * 0.5f, FRnd() * 0.5f, 0.0f);
     penExplosion = CreateEntity(pl, CLASS_BASIC_EFFECT);
     penExplosion->Initialize(eSpawnEffect);
-    InflictRangeDamage( this, DMT_EXPLOSION, 25.0f, GetPlacement().pl_PositionVector, 5.0f, 25.0f);
+    InflictRangeDamage(this, DMT_EXPLOSION, 25.0f, GetPlacement().pl_PositionVector, 5.0f, 25.0f);
   }
-  
+
   void AddAttachments(void) {
     AddAttachmentToModel(this, *GetModelObject(), WALLCHARGER_ATTACHMENT_LIGHT, MODEL_BEAM, TEXTURE_BEAM, 0, 0, 0);
     AddAttachmentToModel(this, *GetModelObject(), WALLCHARGER_ATTACHMENT_PLASMA, MODEL_PLASMA, TEXTURE_PLASMA, 0, 0, 0);

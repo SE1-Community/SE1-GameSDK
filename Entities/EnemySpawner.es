@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -17,7 +17,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 %{
 #include "StdH.h"
 %}
-
 
 uses "Entities/EnemyBase";
 uses "Entities/BasicEffects";
@@ -77,69 +76,57 @@ components:
 
 
 functions:
-
   void Precache(void)
   {
     PrecacheClass(CLASS_BASIC_EFFECT, BET_TELEPORT);
   }
 
-
-  const CTString &GetDescription(void) const
-  {
-    ((CTString&)m_strDescription).PrintF("-><none>");
+  const CTString &GetDescription(void) const {
+    ((CTString &)m_strDescription).PrintF("-><none>");
     if (m_penTarget != NULL) {
-      ((CTString&)m_strDescription).PrintF("->%s", m_penTarget->GetName());
+      ((CTString &)m_strDescription).PrintF("->%s", m_penTarget->GetName());
       if (m_penSeriousTarget != NULL) {
-        ((CTString&)m_strDescription).PrintF("->%s, %s", 
-          m_penTarget->GetName(), m_penSeriousTarget->GetName());
+        ((CTString &)m_strDescription).PrintF("->%s, %s", m_penTarget->GetName(), m_penSeriousTarget->GetName());
       }
     }
-    ((CTString&)m_strDescription) = EnemySpawnerType_enum.NameForValue(INDEX(m_estType))
-      + m_strDescription;
+    ((CTString &)m_strDescription) = EnemySpawnerType_enum.NameForValue(INDEX(m_estType)) + m_strDescription;
     return m_strDescription;
   }
 
-
   // check if one template is valid for this spawner
-  BOOL CheckTemplateValid(CEntity *pen)
-  {
+  BOOL CheckTemplateValid(CEntity *pen) {
     if (pen == NULL || !IsDerivedFromClass(pen, "Enemy Base")) {
       return FALSE;
     }
     if (m_estType == EST_TELEPORTER) {
-      return !(((CEnemyBase&)*pen).m_bTemplate);
+      return !(((CEnemyBase &)*pen).m_bTemplate);
     } else {
-      return ((CEnemyBase&)*pen).m_bTemplate;
+      return ((CEnemyBase &)*pen).m_bTemplate;
     }
   }
 
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
-  {
-    if (slPropertyOffset == offsetof(CEnemySpawner, m_penTarget))
-    {
+  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget) {
+    if (slPropertyOffset == offsetof(CEnemySpawner, m_penTarget)) {
       return CheckTemplateValid(penTarget);
-    }
-    else if (slPropertyOffset == offsetof(CEnemySpawner, m_penPatrol))
-    {
+    } else if (slPropertyOffset == offsetof(CEnemySpawner, m_penPatrol)) {
       return (penTarget != NULL && IsDerivedFromClass(penTarget, "Enemy Marker"));
-    }
-    else if (slPropertyOffset == offsetof(CEnemySpawner, m_penSeriousTarget))
-    {
+    } else if (slPropertyOffset == offsetof(CEnemySpawner, m_penSeriousTarget)) {
       return CheckTemplateValid(penTarget);
-    }   
-    else if (slPropertyOffset == offsetof(CEnemySpawner, m_penTacticsHolder))
-    {
-      if (IsOfClass(penTarget, "TacticsHolder")) { return TRUE; }
-      else { return FALSE; }
-    }   
+    } else if (slPropertyOffset == offsetof(CEnemySpawner, m_penTacticsHolder)) {
+      if (IsOfClass(penTarget, "TacticsHolder")) {
+        return TRUE;
+      } else {
+        return FALSE;
+      }
+    }
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }
 
-
   // Fill in entity statistics - for AI purposes only
-  BOOL FillEntityStatistics(EntityStats *pes)
-  {
-    if (m_penTarget == NULL) { return FALSE; }
+  BOOL FillEntityStatistics(EntityStats *pes) {
+    if (m_penTarget == NULL) {
+      return FALSE;
+    }
     m_penTarget->FillEntityStatistics(pes);
     pes->es_ctCount = m_ctTotal;
     pes->es_strName += " (spawned)";
@@ -153,19 +140,19 @@ functions:
   void SpawnEntity(BOOL bCopy) {
     // spawn new entity if of class basic enemy
     if (CheckTemplateValid(m_penTarget)) {
-
       CEntity *pen = NULL;
       if (bCopy) {
         // copy template entity
-        pen = GetWorld()->CopyEntityInWorld( *m_penTarget,
-          CPlacement3D(FLOAT3D(-32000.0f+FRnd()*200.0f, -32000.0f+FRnd()*200.0f, 0), ANGLE3D(0.0f, 0.0f, 0.0f)) );
+        pen = GetWorld()->CopyEntityInWorld(
+          *m_penTarget,
+          CPlacement3D(FLOAT3D(-32000.0f + FRnd() * 200.0f, -32000.0f + FRnd() * 200.0f, 0), ANGLE3D(0.0f, 0.0f, 0.0f)));
 
         // change needed properties
         pen->End();
-        CEnemyBase *peb = ((CEnemyBase*)pen);
+        CEnemyBase *peb = ((CEnemyBase *)pen);
         peb->m_bTemplate = FALSE;
         if (m_estType == EST_RESPAWNER //|| m_estType == EST_RESPAWNERBYONE
-         || m_estType == EST_MAINTAINGROUP || m_estType == EST_RESPAWNGROUP) {
+            || m_estType == EST_MAINTAINGROUP || m_estType == EST_RESPAWNGROUP) {
           peb->m_penSpawnerTarget = this;
         }
         if (m_penPatrol != NULL) {
@@ -176,18 +163,18 @@ functions:
         pen = m_penTarget;
         m_penTarget = NULL;
       }
-      
+
       // adjust circle radii to account for enemy size
       FLOAT fEntityR = 0;
       if (pen->en_pciCollisionInfo != NULL) {
         fEntityR = pen->en_pciCollisionInfo->GetMaxFloorRadius();
       }
-      FLOAT fOuterCircle = ClampDn(m_fOuterCircle-fEntityR, 0.0f);
-      FLOAT fInnerCircle = ClampUp(m_fInnerCircle+fEntityR, fOuterCircle);
+      FLOAT fOuterCircle = ClampDn(m_fOuterCircle - fEntityR, 0.0f);
+      FLOAT fInnerCircle = ClampUp(m_fInnerCircle + fEntityR, fOuterCircle);
       // calculate new position
-      FLOAT fR = fInnerCircle + FRnd()*(fOuterCircle-fInnerCircle);
-      FLOAT fA = FRnd()*360.0f;
-      CPlacement3D pl(FLOAT3D(CosFast(fA)*fR, 0.05f, SinFast(fA)*fR), ANGLE3D(0.0f, 0.0f, 0.0f));
+      FLOAT fR = fInnerCircle + FRnd() * (fOuterCircle - fInnerCircle);
+      FLOAT fA = FRnd() * 360.0f;
+      CPlacement3D pl(FLOAT3D(CosFast(fA) * fR, 0.05f, SinFast(fA) * fR), ANGLE3D(0.0f, 0.0f, 0.0f));
       pl.RelativeToAbsolute(GetPlacement());
 
       // teleport back
@@ -196,12 +183,12 @@ functions:
       // spawn teleport effect
       if (m_bSpawnEffect) {
         ESpawnEffect ese;
-        ese.colMuliplier = C_WHITE|CT_OPAQUE;
+        ese.colMuliplier = C_WHITE | CT_OPAQUE;
         ese.betType = BET_TELEPORT;
         ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
         FLOATaabbox3D box;
         pen->GetBoundingBox(box);
-        FLOAT fEntitySize = box.Size().MaxNorm()*2;
+        FLOAT fEntitySize = box.Size().MaxNorm() * 2;
         ese.vStretch = FLOAT3D(fEntitySize, fEntitySize, fEntitySize);
         CEntityPointer penEffect = CreateEntity(pl, CLASS_BASIC_EFFECT);
         penEffect->Initialize(ese);
@@ -210,7 +197,7 @@ functions:
       // initialize tactics
       if (m_penTacticsHolder != NULL) {
         if (IsOfClass(m_penTacticsHolder, "TacticsHolder")) {
-          CEnemyBase *peb = ((CEnemyBase*)pen);
+          CEnemyBase *peb = ((CEnemyBase *)pen);
           peb->m_penTacticsHolder = m_penTacticsHolder;
           if (m_bTacticsAutostart) {
             // start tactics
@@ -218,39 +205,33 @@ functions:
           }
         }
       }
-      
     }
   };
 
   // Handle an event, return false if the event is not handled
-  BOOL HandleEvent(const CEntityEvent &ee)
-  {
-    if (ee.ee_slEvent == EVENTCODE_ETrigger)
-    {
-      ETrigger eTrigger = ((ETrigger &) ee);
+  BOOL HandleEvent(const CEntityEvent &ee) {
+    if (ee.ee_slEvent == EVENTCODE_ETrigger) {
+      ETrigger eTrigger = ((ETrigger &)ee);
       if (IsDerivedFromClass(eTrigger.penCaused, "Enemy Base")
-        && (m_estType == EST_MAINTAINGROUP || m_estType == EST_RESPAWNGROUP)) {
+          && (m_estType == EST_MAINTAINGROUP || m_estType == EST_RESPAWNGROUP)) {
         m_iEnemiesTriggered++;
       }
     }
     return CRationalEntity::HandleEvent(ee);
   }
 
-
-  // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
-  {
+  // Return bytes of memory used by this object
+  SLONG GetUsedMemory(void) {
     // initial
     SLONG slUsedMemory = sizeof(CEnemySpawner) - sizeof(CRationalEntity) + CRationalEntity::GetUsedMemory();
     // add some more
     slUsedMemory += m_strDescription.Length();
     slUsedMemory += m_strName.Length();
-    slUsedMemory += 1* sizeof(CSoundObject);
+    slUsedMemory += 1 * sizeof(CSoundObject);
     return slUsedMemory;
   }
 
 procedures:
-
   // spawn one group of entities
   SpawnGroup() 
   {

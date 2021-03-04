@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -76,12 +76,12 @@ functions:
 
   void Precache(void) {
     CEnemyBase::Precache();
-    PrecacheSound(SOUND_IDLE    );
-    PrecacheSound(SOUND_SIGHT   );
+    PrecacheSound(SOUND_IDLE);
+    PrecacheSound(SOUND_SIGHT);
     PrecacheSound(SOUND_KICKHORN);
-    PrecacheSound(SOUND_IMPACT  );
-    PrecacheSound(SOUND_DEATH   );
-    PrecacheSound(SOUND_RUN     );
+    PrecacheSound(SOUND_IMPACT);
+    PrecacheSound(SOUND_DEATH);
+    PrecacheSound(SOUND_RUN);
   };
 
   // Entity info
@@ -89,8 +89,7 @@ functions:
     return &eiWerebull;
   };
 
-  FLOAT GetCrushHealth(void)
-  {
+  FLOAT GetCrushHealth(void) {
     return 60.0f;
   }
 
@@ -100,31 +99,28 @@ functions:
   };
 
   // render particles
-  void RenderParticles(void)
-  {
+  void RenderParticles(void) {
     Particles_RunningDust(this);
     CEnemyBase::RenderParticles();
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // werebull can't harm werebull
     if (!IsOfClass(penInflictor, "Werebull")) {
       CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
 
-  void AdjustDifficulty(void)
-  {
+  void AdjustDifficulty(void) {
     // bull must not change its speed at different difficulties
   }
 
   // death
   INDEX AnimForDeath(void) {
     INDEX iAnim;
-    if (en_vCurrentTranslationAbsolute.Length()>5.0f) {
+    if (en_vCurrentTranslationAbsolute.Length() > 5.0f) {
       iAnim = WEREBULL_ANIM_DEATHRUN;
     } else {
       iAnim = WEREBULL_ANIM_DEATH;
@@ -135,14 +131,11 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim() == WEREBULL_ANIM_DEATHRUN)
-    {
-      vStretch=FLOAT3D(1,1,2)*2.0f;
+    if (GetModelObject()->GetAnim() == WEREBULL_ANIM_DEATHRUN) {
+      vStretch = FLOAT3D(1, 1, 2) * 2.0f;
       return 0.6f;
-    }
-    else if (GetModelObject()->GetAnim() == WEREBULL_ANIM_DEATH)
-    {
-      vStretch=FLOAT3D(1,1,2)*2.0f;
+    } else if (GetModelObject()->GetAnim() == WEREBULL_ANIM_DEATH) {
+      vStretch = FLOAT3D(1, 1, 2) * 2.0f;
       return 0.7f;
     }
     return -1.0f;
@@ -155,20 +148,20 @@ functions:
 
   // virtual anim functions
   void StandingAnim(void) {
-    StartModelAnim(WEREBULL_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(WEREBULL_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
     DeactivateRunningSound();
   };
   void WalkingAnim(void) {
-    StartModelAnim(WEREBULL_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(WEREBULL_ANIM_WALK, AOF_LOOPING | AOF_NORESTART);
     DeactivateRunningSound();
   };
   void RunningAnim(void) {
-    StartModelAnim(WEREBULL_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(WEREBULL_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
     ActivateRunningSound();
   };
   void RotatingAnim(void) {
-    StartModelAnim(WEREBULL_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
-    //DeactivateRunningSound();
+    StartModelAnim(WEREBULL_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
+    // DeactivateRunningSound();
     ActivateRunningSound();
   };
 
@@ -179,37 +172,32 @@ functions:
   void SightSound(void) {
     PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
   };
-  void WoundSound(void) {
-  };
+  void WoundSound(void) {};
   void DeathSound(void) {
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
   };
 
-
   // running sounds
-  void ActivateRunningSound(void)
-  {
+  void ActivateRunningSound(void) {
     if (!m_bRunSoundPlaying) {
-      PlaySound(m_soFeet, SOUND_RUN, SOF_3D|SOF_LOOP);
+      PlaySound(m_soFeet, SOUND_RUN, SOF_3D | SOF_LOOP);
       m_bRunSoundPlaying = TRUE;
     }
   }
-  void DeactivateRunningSound(void)
-  {
+  void DeactivateRunningSound(void) {
     m_soFeet.Stop();
     m_bRunSoundPlaying = FALSE;
   }
 
-
-// ATTACK FUNCTIONS
+  // ATTACK FUNCTIONS
 
   // touched another live entity
   void LiveEntityTouched(ETouch etouch) {
-    if (m_penLastTouched != etouch.penOther || _pTimer->CurrentTick() >= m_fLastTouchedTime+0.25f) {
+    if (m_penLastTouched != etouch.penOther || _pTimer->CurrentTick() >= m_fLastTouchedTime + 0.25f) {
       // hit angle
       FLOAT3D vDirection = en_vCurrentTranslationAbsolute;
       vDirection.Normalize();
-      ANGLE aHitAngle = FLOAT3D(etouch.plCollision)%vDirection;
+      ANGLE aHitAngle = FLOAT3D(etouch.plCollision) % vDirection;
       // only hit target in front of you
       if (aHitAngle < 0.0f) {
         // increase mass - only if not another bull
@@ -221,23 +209,22 @@ functions:
         m_penLastTouched = etouch.penOther;
         m_fLastTouchedTime = _pTimer->CurrentTick();
         // damage
-        FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector-GetPlacement().pl_PositionVector;
+        FLOAT3D vDirection = m_penEnemy->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector;
         vDirection.Normalize();
-        InflictDirectDamage(etouch.penOther, this, DMT_CLOSERANGE, -aHitAngle*40.0f,
-          FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
+        InflictDirectDamage(etouch.penOther, this, DMT_CLOSERANGE, -aHitAngle * 40.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
         // kick touched entity
         FLOAT3D vSpeed = -FLOAT3D(etouch.plCollision);
-        vSpeed = vSpeed*10.0f;
+        vSpeed = vSpeed * 10.0f;
         const FLOATmatrix3D &m = GetRotationMatrix();
-        FLOAT3D vSpeedRel = vSpeed*!m;
-        if (vSpeedRel(1)<-0.1f) {
-          vSpeedRel(1)-=15.0f;
+        FLOAT3D vSpeedRel = vSpeed * !m;
+        if (vSpeedRel(1) < -0.1f) {
+          vSpeedRel(1) -= 15.0f;
         } else {
-          vSpeedRel(1)+=15.0f;
+          vSpeedRel(1) += 15.0f;
         }
-        vSpeedRel(2)=15.0f;
+        vSpeedRel(2) = 15.0f;
 
-        vSpeed = vSpeedRel*m;
+        vSpeed = vSpeedRel * m;
         KickEntity(etouch.penOther, vSpeed);
       }
     }
@@ -249,8 +236,7 @@ functions:
   };
 
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     // set sound default parameters
     m_soFeet.Set3DParameters(500.0f, 50.0f, 1.0f, 1.0f);
     m_bRunSoundPlaying = FALSE;
@@ -258,7 +244,6 @@ functions:
   };
 
 procedures:
-// ATTACK ENEMY
   // hit enemy
   Hit(EVoid) : CEnemyBase::Hit {
     if (CalcDist(m_penEnemy) < HIT_DISTANCE) {
@@ -289,10 +274,8 @@ procedures:
     return EReturn();
   };
 
-
-
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING);

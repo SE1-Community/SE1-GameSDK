@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -259,73 +259,71 @@ functions:
 
   void Precache(void) {
     CEnemyBase::Precache();
-// ************** DEVIL **************
-    PrecacheModel   (MODEL_DEVIL         );
-    PrecacheTexture (TEXTURE_DEVIL       );
+    // ************** DEVIL **************
+    PrecacheModel(MODEL_DEVIL);
+    PrecacheTexture(TEXTURE_DEVIL);
 
-// ************** LASER **************
-    PrecacheModel   (MODEL_LASER                 );
-    PrecacheTexture (TEXTURE_LASER               );
+    // ************** LASER **************
+    PrecacheModel(MODEL_LASER);
+    PrecacheTexture(TEXTURE_LASER);
 
-// ************** ROCKET LAUNCHER **************
-    PrecacheModel   (MODEL_ROCKETLAUNCHER        );
-    PrecacheTexture (TEXTURE_ROCKETLAUNCHER     );
+    // ************** ROCKET LAUNCHER **************
+    PrecacheModel(MODEL_ROCKETLAUNCHER);
+    PrecacheTexture(TEXTURE_ROCKETLAUNCHER);
 
-// ************** ELECTRICITY GUN **************
-    PrecacheModel   (MODEL_ELECTRICITYGUN);
-    PrecacheTexture (TEXTURE_ELECTRICITYGUN);
+    // ************** ELECTRICITY GUN **************
+    PrecacheModel(MODEL_ELECTRICITYGUN);
+    PrecacheTexture(TEXTURE_ELECTRICITYGUN);
 
-// ************** PROJECTILE GUN **************
-    PrecacheModel   (MODEL_PROJECTILEGUN);
-    PrecacheTexture (TEXTURE_PROJECTILEGUN);
+    // ************** PROJECTILE GUN **************
+    PrecacheModel(MODEL_PROJECTILEGUN);
+    PrecacheTexture(TEXTURE_PROJECTILEGUN);
 
-// ************** PREDICTED PROJECTILE **************
-    PrecacheClass(CLASS_PROJECTILE, PRT_LAVAMAN_BIG_BOMB); 
+    // ************** PREDICTED PROJECTILE **************
+    PrecacheClass(CLASS_PROJECTILE, PRT_LAVAMAN_BIG_BOMB);
     PrecacheClass(CLASS_PROJECTILE, PRT_DEVIL_GUIDED_PROJECTILE);
     PrecacheClass(CLASS_PROJECTILE, PRT_DEVIL_LASER);
     PrecacheClass(CLASS_PROJECTILE, PRT_DEVIL_ROCKET);
 
-// ************** SOUNDS **************
-    PrecacheSound   (SOUND_ANGER01               );
-    PrecacheSound   (SOUND_ANGER02               );
-    PrecacheSound   (SOUND_ATTACKCLOSE           );
-    PrecacheSound   (SOUND_CELEBRATE01           );
-    PrecacheSound   (SOUND_DEATH                 );
-    PrecacheSound   (SOUND_DRAW_LOWER_WEAPONS    );
-    PrecacheSound   (SOUND_DRAW_UPPER_WEAPONS    );
-    PrecacheSound   (SOUND_GETUP                 );
-    PrecacheSound   (SOUND_IDLE                  );
-    PrecacheSound   (SOUND_PUNCH                 );
-    PrecacheSound   (SOUND_SMASH                 );
-    PrecacheSound   (SOUND_WALK_LEFT             );
-    PrecacheSound   (SOUND_WALK_RIGHT            );
-    PrecacheSound   (SOUND_WOUND                 );
-    PrecacheSound   (SOUND_ATTACK_BREATH_START   );
-    PrecacheSound   (SOUND_ATTACK_BREATH_FIRE    );
-    PrecacheSound   (SOUND_ATTACK_BREATH_END     );
-    PrecacheSound   (SOUND_HEAL                  );
-    PrecacheSound   (SOUND_ROCKETLAUNCHER        );
-    PrecacheSound   (SOUND_LASER                 );
-    PrecacheSound   (SOUND_LAVABOMB              );
-    PrecacheSound   (SOUND_GHOSTBUSTER           );
-    PrecacheSound   (SOUND_ATTACK_BREATH_LOOP    );
-    PrecacheSound   (SOUND_CLIMB                 );
-    PrecacheSound   (SOUND_DEATHPARTICLES        );    
-    PrecacheSound   (SOUND_DISAPPEAR             );
+    // ************** SOUNDS **************
+    PrecacheSound(SOUND_ANGER01);
+    PrecacheSound(SOUND_ANGER02);
+    PrecacheSound(SOUND_ATTACKCLOSE);
+    PrecacheSound(SOUND_CELEBRATE01);
+    PrecacheSound(SOUND_DEATH);
+    PrecacheSound(SOUND_DRAW_LOWER_WEAPONS);
+    PrecacheSound(SOUND_DRAW_UPPER_WEAPONS);
+    PrecacheSound(SOUND_GETUP);
+    PrecacheSound(SOUND_IDLE);
+    PrecacheSound(SOUND_PUNCH);
+    PrecacheSound(SOUND_SMASH);
+    PrecacheSound(SOUND_WALK_LEFT);
+    PrecacheSound(SOUND_WALK_RIGHT);
+    PrecacheSound(SOUND_WOUND);
+    PrecacheSound(SOUND_ATTACK_BREATH_START);
+    PrecacheSound(SOUND_ATTACK_BREATH_FIRE);
+    PrecacheSound(SOUND_ATTACK_BREATH_END);
+    PrecacheSound(SOUND_HEAL);
+    PrecacheSound(SOUND_ROCKETLAUNCHER);
+    PrecacheSound(SOUND_LASER);
+    PrecacheSound(SOUND_LAVABOMB);
+    PrecacheSound(SOUND_GHOSTBUSTER);
+    PrecacheSound(SOUND_ATTACK_BREATH_LOOP);
+    PrecacheSound(SOUND_CLIMB);
+    PrecacheSound(SOUND_DEATHPARTICLES);
+    PrecacheSound(SOUND_DISAPPEAR);
   }
 
   // Validate offered target for one property
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
-  {
-    if (penTarget == NULL)
-    {
+  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget) {
+    if (penTarget == NULL) {
       return FALSE;
     }
     return (IsDerivedFromClass(penTarget, "Devil Marker"));
   }
 
   // Read from stream.
-  void Read_t( CTStream *istr) { // throw char *
+  void Read_t(CTStream *istr) { // throw char *
     CEnemyBase::Read_t(istr);
 
     // setup light source
@@ -345,7 +343,7 @@ functions:
   void SetupLightSource(void) {
     // setup light source
     CLightSource lsNew;
-    lsNew.ls_ulFlags = LSF_NONPERSISTENT|LSF_DYNAMIC;
+    lsNew.ls_ulFlags = LSF_NONPERSISTENT | LSF_DYNAMIC;
     lsNew.ls_rHotSpot = 2.0f;
     lsNew.ls_rFallOff = 8.0f;
     lsNew.ls_colColor = RGBToColor(128, 128, 128);
@@ -363,50 +361,42 @@ functions:
     }
   };
 
-
   // Entity info
   void *GetEntityInfo(void) {
     return &eiDevil;
   };
 
-  BOOL ForcesCannonballToExplode(void)
-  {
+  BOOL ForcesCannonballToExplode(void) {
     return TRUE;
   }
 
-  void SetSpeedsToDesiredPosition(const FLOAT3D &vPosDelta, FLOAT fPosDist, BOOL bGoingToPlayer)
-  {
-    if (m_penEnemy != NULL)
-    {
+  void SetSpeedsToDesiredPosition(const FLOAT3D &vPosDelta, FLOAT fPosDist, BOOL bGoingToPlayer) {
+    if (m_penEnemy != NULL) {
       FLOAT fEnemyDistance = CalcDist(m_penEnemy);
       FLOAT fRadius1 = 75.0f;
       FLOAT fRadius2 = 200.0f;
       FLOAT fSpeedRadius1 = 6.0f;
       FLOAT fSpeedRadius2 = 14.0f;
 
-      FLOAT fDistanceRatio = CalculateRatio( fEnemyDistance, fRadius1, fRadius2, 1, 0);
-      if (fEnemyDistance >= fRadius2)
-      {
+      FLOAT fDistanceRatio = CalculateRatio(fEnemyDistance, fRadius1, fRadius2, 1, 0);
+      if (fEnemyDistance >= fRadius2) {
         fDistanceRatio = 1.0f;
       }
-      m_fAttackRunSpeed = fSpeedRadius1+fDistanceRatio*(fSpeedRadius2-fSpeedRadius1);
+      m_fAttackRunSpeed = fSpeedRadius1 + fDistanceRatio * (fSpeedRadius2 - fSpeedRadius1);
       m_fCloseRunSpeed = m_fAttackRunSpeed;
-      if (cht_bDebugFinalBoss)
-      {
-        CPrintF( "Enm dist:%g, Speed=%g\n", fEnemyDistance, m_fAttackRunSpeed);
+      if (cht_bDebugFinalBoss) {
+        CPrintF("Enm dist:%g, Speed=%g\n", fEnemyDistance, m_fAttackRunSpeed);
       }
-    }    
+    }
     CEnemyBase::SetSpeedsToDesiredPosition(vPosDelta, fPosDist, bGoingToPlayer);
   }
 
-  FLOAT GetCrushHealth(void)
-  {
+  FLOAT GetCrushHealth(void) {
     return 1000.0f;
   }
 
-  void SelectRandomAnger(void)
-  {
-    if (IRnd()%2) {
+  void SelectRandomAnger(void) {
+    if (IRnd() % 2) {
       m_iAngryAnim = DEVIL_ANIM_ANGER01;
       m_iAngrySound = SOUND_ANGER01;
     } else {
@@ -415,13 +405,11 @@ functions:
     }
   }
 
-  virtual FLOAT GetLockRotationSpeed(void)
-  {
-    return m_aAttackRotateSpeed*4;
+  virtual FLOAT GetLockRotationSpeed(void) {
+    return m_aAttackRotateSpeed * 4;
   };
 
-  void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower)
-  {
+  void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower) {
     CWorldSettingsController *pwsc = GetWSC(this);
     if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
@@ -431,17 +419,16 @@ functions:
 
       pwsc->m_fShakeIntensityZ = 0.0f;
       pwsc->m_tmShakeFrequencyZ = 5.0f;
-      pwsc->m_fShakeIntensityY = 0.1f*fPower;
+      pwsc->m_fShakeIntensityY = 0.1f * fPower;
       pwsc->m_tmShakeFrequencyY = 5.0f;
-      pwsc->m_fShakeIntensityB = 2.5f*fPower;
+      pwsc->m_fShakeIntensityB = 2.5f * fPower;
       pwsc->m_tmShakeFrequencyB = 7.2f;
 
       pwsc->m_bShakeFadeIn = FALSE;
     }
   }
 
-  void ShakeItFarBaby(FLOAT tmShaketime, FLOAT fPower)
-  {
+  void ShakeItFarBaby(FLOAT tmShaketime, FLOAT fPower) {
     CWorldSettingsController *pwsc = GetWSC(this);
     if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
@@ -451,25 +438,23 @@ functions:
 
       pwsc->m_fShakeIntensityZ = 0.0f;
       pwsc->m_tmShakeFrequencyZ = 5.0f;
-      pwsc->m_fShakeIntensityY = 0.1f*fPower;
+      pwsc->m_fShakeIntensityY = 0.1f * fPower;
       pwsc->m_tmShakeFrequencyY = 5.0f;
-      pwsc->m_fShakeIntensityB = 2.5f*fPower;
+      pwsc->m_fShakeIntensityB = 2.5f * fPower;
       pwsc->m_tmShakeFrequencyB = 7.2f;
 
       pwsc->m_bShakeFadeIn = FALSE;
     }
   }
 
-  void InflictHoofDamage( FLOAT3D vOffset)
-  {
+  void InflictHoofDamage(FLOAT3D vOffset) {
     // apply range damage for right foot
     FLOAT3D vFootRel = vOffset;
-    FLOAT3D vFootAbs = vFootRel*GetRotationMatrix()+GetPlacement().pl_PositionVector;
+    FLOAT3D vFootAbs = vFootRel * GetRotationMatrix() + GetPlacement().pl_PositionVector;
     InflictRangeDamage(this, DMT_IMPACT, 1000.0f, vFootAbs, DEVIL_HOOF_RADIUS, DEVIL_HOOF_RADIUS);
   }
 
-  void ApplyFootQuake(void)
-  {
+  void ApplyFootQuake(void) {
     CModelObject &mo = *GetModelObject();
     TIME tmNow = _pTimer->CurrentTick();
     FLOAT tmAnim = -1;
@@ -479,53 +464,42 @@ functions:
 
     // [Cecil] New timer: Anim time in seconds
     const TIME tmAnimStart = CTimer::InSeconds(mo.ao_llAnimStart);
-    
+
     // if we are now playing walk anim, but another anim is scheduled to happen after walk
-    if (mo.ao_iLastAnim == DEVIL_ANIM_WALK && tmAnimStart > tmNow)
-    {
+    if (mo.ao_iLastAnim == DEVIL_ANIM_WALK && tmAnimStart > tmNow) {
       // we started one anim time back from anim start time
       tmAnim = tmAnimStart - tmWalkLen;
-    }
-    else if (mo.ao_iCurrentAnim == DEVIL_ANIM_WALK && tmAnimStart <= tmNow)
-    {
+    } else if (mo.ao_iCurrentAnim == DEVIL_ANIM_WALK && tmAnimStart <= tmNow) {
       tmAnim = tmAnimStart;
     }
     // if we are now playing walk wo idle anim, but another anim is scheduled to happen after walk to idle
-    else if (mo.ao_iLastAnim == DEVIL_ANIM_FROMWALKTOIDLE && tmAnimStart > tmNow)
-    {
+    else if (mo.ao_iLastAnim == DEVIL_ANIM_FROMWALKTOIDLE && tmAnimStart > tmNow) {
       // we started one anim time back from anim start time
       tmAnim = tmAnimStart - tmWalkLen;
       tmLeftFootOffset = 0.6f;
       tmRightFootOffset = 1.7f;
-    }
-    else if (mo.ao_iCurrentAnim == DEVIL_ANIM_FROMWALKTOIDLE && tmAnimStart <= tmNow)
-    {
+    } else if (mo.ao_iCurrentAnim == DEVIL_ANIM_FROMWALKTOIDLE && tmAnimStart <= tmNow) {
       tmAnim = tmAnimStart;
       tmLeftFootOffset = 0.6f;
       tmRightFootOffset = 1.7f;
     }
 
     // WARNING !!! foot variable names are switched
-    if (tmAnim != -1)
-    {
-      FLOAT tmAnimLast = tmAnim+INDEX((tmNow-tmAnim)/tmWalkLen)*tmWalkLen;
-      FLOAT tmLeftFootDown  = tmAnimLast+tmLeftFootOffset;
-      FLOAT tmRightFootDown = tmAnimLast+tmRightFootOffset;
+    if (tmAnim != -1) {
+      FLOAT tmAnimLast = tmAnim + INDEX((tmNow - tmAnim) / tmWalkLen) * tmWalkLen;
+      FLOAT tmLeftFootDown = tmAnimLast + tmLeftFootOffset;
+      FLOAT tmRightFootDown = tmAnimLast + tmRightFootOffset;
       CWorldSettingsController *pwsc = GetWSC(this);
-      if (pwsc != NULL)
-      {
-        if (tmNow >= tmRightFootDown && pwsc->m_tmShakeStarted<tmRightFootDown-0.1f)
-        {
+      if (pwsc != NULL) {
+        if (tmNow >= tmRightFootDown && pwsc->m_tmShakeStarted < tmRightFootDown - 0.1f) {
           // apply range damage for right foot
-          InflictHoofDamage( DEVIL_WALK_HOOF_LEFT_OFFSET);
+          InflictHoofDamage(DEVIL_WALK_HOOF_LEFT_OFFSET);
           // shake
           ShakeItBaby(tmRightFootDown, 1.0f);
           PlaySound(m_soRight, SOUND_WALK_RIGHT, SOF_3D);
-        }
-        else if (tmNow >= tmLeftFootDown && pwsc->m_tmShakeStarted<tmLeftFootDown-0.1f)
-        {
+        } else if (tmNow >= tmLeftFootDown && pwsc->m_tmShakeStarted < tmLeftFootDown - 0.1f) {
           // apply range damage for left foot
-          InflictHoofDamage( DEVIL_WALK_HOOF_RIGHT_OFFSET);
+          InflictHoofDamage(DEVIL_WALK_HOOF_RIGHT_OFFSET);
           // shake
           ShakeItBaby(tmLeftFootDown, 1.0f);
           PlaySound(m_soLeft, SOUND_WALK_LEFT, SOF_3D);
@@ -534,139 +508,112 @@ functions:
     }
   }
 
-  void StopFireBreathParticles(void)
-  {
+  void StopFireBreathParticles(void) {
     m_tmFireBreathStop = _pTimer->CurrentTick();
   }
 
-  void StopRegenerationParticles(void)
-  {
+  void StopRegenerationParticles(void) {
     m_tmRegenerationStop = _pTimer->CurrentTick();
   }
 
-  void TurnOnPhysics(void)
-  {
+  void TurnOnPhysics(void) {
     SetPhysicsFlags(EPF_MODEL_WALKING);
     SetCollisionFlags(ECF_MODEL);
   }
 
-  void TurnOffPhysics(void)
-  {
-    SetPhysicsFlags(EPF_MODEL_WALKING&~EPF_TRANSLATEDBYGRAVITY);
+  void TurnOffPhysics(void) {
+    SetPhysicsFlags(EPF_MODEL_WALKING & ~EPF_TRANSLATEDBYGRAVITY);
     SetCollisionFlags(((ECBI_MODEL) << ECB_TEST) | ((ECBI_MODEL) << ECB_PASS) | ((ECBI_ITEM) << ECB_IS));
   }
 
   // render particles
-  void RenderParticles(void)
-  {
-    if (m_bRenderElectricity)
-    {
+  void RenderParticles(void) {
+    if (m_bRenderElectricity) {
       // calculate electricity ray source pos
       Particles_Ghostbuster(m_vElectricitySource, m_vElectricityTarget, 24, 2.0f, 2.0f, 96.0f);
     }
 
     // fire breath particles
-    if (_pTimer->CurrentTick()>m_tmFireBreathStart)
-    {
+    if (_pTimer->CurrentTick() > m_tmFireBreathStart) {
       // render fire breath particles
-      INDEX ctRendered = Particles_FireBreath(this, m_vFireBreathSource, m_vFireBreathTarget,
-        m_tmFireBreathStart, m_tmFireBreathStop);
+      INDEX ctRendered
+        = Particles_FireBreath(this, m_vFireBreathSource, m_vFireBreathTarget, m_tmFireBreathStart, m_tmFireBreathStop);
       // if should stop rendering fire breath particles
-      if (_pTimer->CurrentTick()>m_tmFireBreathStop && ctRendered == 0)
-      {
+      if (_pTimer->CurrentTick() > m_tmFireBreathStop && ctRendered == 0) {
         m_tmFireBreathStart = UpperLimit(0.0f);
       }
     }
 
     // regeneration particles
-    if (_pTimer->CurrentTick()>m_tmRegenerationStart)
-    {
+    if (_pTimer->CurrentTick() > m_tmRegenerationStart) {
       // render fire breath particles
       INDEX ctRendered = Particles_Regeneration(this, m_tmRegenerationStart, m_tmRegenerationStop, 1.0f, FALSE);
       // if should stop rendering regeneration particles
-      if (_pTimer->CurrentTick()>m_tmRegenerationStop && ctRendered == 0)
-      {
+      if (_pTimer->CurrentTick() > m_tmRegenerationStop && ctRendered == 0) {
         m_tmRegenerationStart = UpperLimit(0.0f);
       }
     }
 
     // if is dead
-    if (m_tmDeathTime != -1.0f && _pTimer->CurrentTick()>m_tmDeathTime && _pTimer->CurrentTick()<m_tmDeathTime+4.0f)
-    {
-      INDEX ctRendered = Particles_Regeneration(this, m_tmDeathTime, m_tmDeathTime+2.0f, 0.25f, TRUE);
+    if (m_tmDeathTime != -1.0f && _pTimer->CurrentTick() > m_tmDeathTime && _pTimer->CurrentTick() < m_tmDeathTime + 4.0f) {
+      INDEX ctRendered = Particles_Regeneration(this, m_tmDeathTime, m_tmDeathTime + 2.0f, 0.25f, TRUE);
     }
 
     CEnemyBase::RenderParticles();
   }
 
-  FLOAT3D GetWeaponPositionRelative(void)
-  {
+  FLOAT3D GetWeaponPositionRelative(void) {
     CAttachmentModelObject &amo = *GetModelObject()->GetAttachmentModel(m_iAttID);
     FLOAT3D vAttachment = FLOAT3D(0.0f, 0.0f, 0.0f);
-    switch (m_iAttID)
-    {
-    case DEVIL_ATTACHMENT_LASER:
-      vAttachment = ATT_LASER;
-      break;
-    case DEVIL_ATTACHMENT_PROJECTILEGUN:
-      vAttachment = ATT_PROJECTILE_GUN;
-      break;
-    case DEVIL_ATTACHMENT_ELETRICITYGUN:
-      vAttachment = ATT_ELECTRICITYGUN;
-      break;
-    case DEVIL_ATTACHMENT_ROCKETLAUNCHER:
-      vAttachment = ATT_ROCKETLAUNCHER;
-      break;
-    default:
-      ASSERTALWAYS("Invalid attachment ID");
+    switch (m_iAttID) {
+      case DEVIL_ATTACHMENT_LASER: vAttachment = ATT_LASER; break;
+      case DEVIL_ATTACHMENT_PROJECTILEGUN: vAttachment = ATT_PROJECTILE_GUN; break;
+      case DEVIL_ATTACHMENT_ELETRICITYGUN: vAttachment = ATT_ELECTRICITYGUN; break;
+      case DEVIL_ATTACHMENT_ROCKETLAUNCHER: vAttachment = ATT_ROCKETLAUNCHER; break;
+      default: ASSERTALWAYS("Invalid attachment ID");
     }
-    return(vAttachment);
+    return (vAttachment);
   }
 
-  FLOAT3D GetWeaponPositionAbsolute(void)
-  {
-    return GetPlacement().pl_PositionVector + GetWeaponPositionRelative()*GetRotationMatrix();
+  FLOAT3D GetWeaponPositionAbsolute(void) {
+    return GetPlacement().pl_PositionVector + GetWeaponPositionRelative() * GetRotationMatrix();
   }
-  
-  FLOAT3D GetFireingPositionRelative(void)
-  {
+
+  FLOAT3D GetFireingPositionRelative(void) {
     CAttachmentModelObject &amo = *GetModelObject()->GetAttachmentModel(m_iAttID);
     FLOAT3D vWeaponPipe = FLOAT3D(0.0f, 0.0f, 0.0f);
     FLOAT3D vAttachment = FLOAT3D(0.0f, 0.0f, 0.0f);
-    switch (m_iAttID)
-    {
-    case DEVIL_ATTACHMENT_LASER:
-      vWeaponPipe = LASER_PIPE;
-      vAttachment = ATT_LASER;
-      break;
-    case DEVIL_ATTACHMENT_PROJECTILEGUN:
-      vWeaponPipe = PROJECTILEGUN_PIPE;
-      vAttachment = ATT_PROJECTILE_GUN;
-      break;
-    case DEVIL_ATTACHMENT_ELETRICITYGUN:
-      vWeaponPipe = ELECTROGUN_PIPE;
-      vAttachment = ATT_ELECTRICITYGUN;
-      break;
-    case DEVIL_ATTACHMENT_ROCKETLAUNCHER:
-      vWeaponPipe = ROCKETLAUNCHER_PIPE;
-      vAttachment = ATT_ROCKETLAUNCHER;
-      break;
-    default:
-      ASSERTALWAYS("Invalid attachment ID");
+    switch (m_iAttID) {
+      case DEVIL_ATTACHMENT_LASER:
+        vWeaponPipe = LASER_PIPE;
+        vAttachment = ATT_LASER;
+        break;
+      case DEVIL_ATTACHMENT_PROJECTILEGUN:
+        vWeaponPipe = PROJECTILEGUN_PIPE;
+        vAttachment = ATT_PROJECTILE_GUN;
+        break;
+      case DEVIL_ATTACHMENT_ELETRICITYGUN:
+        vWeaponPipe = ELECTROGUN_PIPE;
+        vAttachment = ATT_ELECTRICITYGUN;
+        break;
+      case DEVIL_ATTACHMENT_ROCKETLAUNCHER:
+        vWeaponPipe = ROCKETLAUNCHER_PIPE;
+        vAttachment = ATT_ROCKETLAUNCHER;
+        break;
+      default: ASSERTALWAYS("Invalid attachment ID");
     }
 
     // create matrix
     FLOATmatrix3D mWpn;
     MakeRotationMatrixFast(mWpn, amo.amo_plRelative.pl_OrientationAngle);
-    return (vAttachment+vWeaponPipe*mWpn);
+    return (vAttachment + vWeaponPipe * mWpn);
   }
 
-  FLOAT3D GetFireingPositionAbsolute(void)
-  {
-    return GetPlacement().pl_PositionVector + GetFireingPositionRelative()*GetRotationMatrix();
-  }  
+  FLOAT3D GetFireingPositionAbsolute(void) {
+    return GetPlacement().pl_PositionVector + GetFireingPositionRelative() * GetRotationMatrix();
+  }
 
-  /* 
+  /*
   Regeneration legend:
   --------------------
     - if less than    0     -> no generation
@@ -676,49 +623,37 @@ functions:
     - class 4     -> drops when constantly hitted with rockets
     - if greater than class 5 -> no regeneration
   */
-  void ApplyTickRegeneration(void) 
-  {
-    if (cht_bKillFinalBoss && GetSP()->sp_bSinglePlayer)
-    {
-      cht_bKillFinalBoss=FALSE;
+  void ApplyTickRegeneration(void) {
+    if (cht_bKillFinalBoss && GetSP()->sp_bSinglePlayer) {
+      cht_bKillFinalBoss = FALSE;
       SetHealth(-1);
       return;
     }
     // if currently regenerating or died or out of healing range or recently hit by space ship beam
-    if (m_dsDevilState == DS_REGENERATION_IMPULSE ||
-       GetHealth() <= 0 || GetHealth() >= HEALTH_CLASS_4 || 
-       _pTimer->CurrentTick()<m_tmHitBySpaceShipBeam+0.5f)
-    {
+    if (m_dsDevilState == DS_REGENERATION_IMPULSE || GetHealth() <= 0 || GetHealth() >= HEALTH_CLASS_4
+        || _pTimer->CurrentTick() < m_tmHitBySpaceShipBeam + 0.5f) {
       return;
     }
 
-    FLOAT fDmgRocketsPerTick = 1800.0f/10.0f*_pTimer->TickQuantum;
-    FLOAT fDmgCannonsPerTick = 2959.0f/10.0f*_pTimer->TickQuantum;
+    FLOAT fDmgRocketsPerTick = 1800.0f / 10.0f * _pTimer->TickQuantum;
+    FLOAT fDmgCannonsPerTick = 2959.0f / 10.0f * _pTimer->TickQuantum;
     FLOAT fRegeneration = 0.0f;
 
-    if (GetHealth()<HEALTH_CLASS_1)
-    {
+    if (GetHealth() < HEALTH_CLASS_1) {
       SendEvent(ERegenerationImpuls());
-    }
-    else if (GetHealth()<HEALTH_CLASS_2)
-    {
-      fRegeneration = fDmgCannonsPerTick*CLASS_2_CANNON_FACTOR;
-    }
-    else if (GetHealth()<HEALTH_CLASS_3)
-    {
-      fRegeneration = fDmgRocketsPerTick*CLASS_3_ROCKETLAUNCHER_FACTOR;
-    }
-    else if (GetHealth()<HEALTH_CLASS_4)
-    {
-      fRegeneration = fDmgRocketsPerTick*CLASS_4_ROCKETLAUNCHER_FACTOR;
+    } else if (GetHealth() < HEALTH_CLASS_2) {
+      fRegeneration = fDmgCannonsPerTick * CLASS_2_CANNON_FACTOR;
+    } else if (GetHealth() < HEALTH_CLASS_3) {
+      fRegeneration = fDmgRocketsPerTick * CLASS_3_ROCKETLAUNCHER_FACTOR;
+    } else if (GetHealth() < HEALTH_CLASS_4) {
+      fRegeneration = fDmgRocketsPerTick * CLASS_4_ROCKETLAUNCHER_FACTOR;
     }
     // apply regeneration
-    SetHealth(GetHealth()+fRegeneration);
+    SetHealth(GetHealth() + fRegeneration);
   };
 
   // Post moving
-  void PostMoving(void)
-  {
+  void PostMoving(void) {
     ApplyFootQuake();
     CEnemyBase::PostMoving();
     // discard non-moving optimization
@@ -727,113 +662,93 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // don't allow telefrag damage
-    if (dmtType == DMT_TELEPORT)
-    {
-       return;
-    }
-
-    if (!(m_dsDevilState == DS_ENEMY || m_dsDevilState == DS_PYRAMID_FIGHT) || penInflictor == this)
-    {
+    if (dmtType == DMT_TELEPORT) {
       return;
     }
-    
-    if (m_dsDevilState != DS_PYRAMID_FIGHT)
-    {
-      if (GetHealth()<1000.0f)
-      {
+
+    if (!(m_dsDevilState == DS_ENEMY || m_dsDevilState == DS_PYRAMID_FIGHT) || penInflictor == this) {
+      return;
+    }
+
+    if (m_dsDevilState != DS_PYRAMID_FIGHT) {
+      if (GetHealth() < 1000.0f) {
         return;
       }
-      fDamageAmmount=ClampUp(fDamageAmmount, GetHealth()/2.0f);
+      fDamageAmmount = ClampUp(fDamageAmmount, GetHealth() / 2.0f);
     }
 
     CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
   };
 
-  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
-  {
-    if (cht_bDebugFinalBoss)
-    {
+  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
+    if (cht_bDebugFinalBoss) {
       // print state change
-      if (m_dsDevilState != m_dsLastDevilState)
-      {
+      if (m_dsDevilState != m_dsLastDevilState) {
         m_dsLastDevilState = m_dsDevilState;
         CTString strDevilState = DevilState_enum.NameForValue(INDEX(m_dsDevilState));
-        CPrintF( "New devil state: %s\n", strDevilState);
+        CPrintF("New devil state: %s\n", strDevilState);
       }
 
       // print fire power state change
-      if (m_dapAttackPower != m_dapLastAttackPower)
-      {
+      if (m_dapAttackPower != m_dapLastAttackPower) {
         m_dapLastAttackPower = m_dapAttackPower;
         CTString strAttackPower = DevilAttackPower_enum.NameForValue(INDEX(m_dapAttackPower));
-        CPrintF( "New attack power: %s\n", strAttackPower);
+        CPrintF("New attack power: %s\n", strAttackPower);
       }
 
       // print radius of attack change
-      if ((vLastStartPosition != m_vStartPosition) ||
-          (vLastAttackRadius != m_fAttackRadius) )
-      {
+      if ((vLastStartPosition != m_vStartPosition) || (vLastAttackRadius != m_fAttackRadius)) {
         vLastStartPosition = m_vStartPosition;
         vLastAttackRadius = m_fAttackRadius;
-        CPrintF( "Coordinate of attack (%g, %g, %g), Radius of attack: %g\n", 
-          m_vStartPosition(1), m_vStartPosition(2), m_vStartPosition(3), 
-          m_fAttackRadius);
+        CPrintF("Coordinate of attack (%g, %g, %g), Radius of attack: %g\n", m_vStartPosition(1), m_vStartPosition(2),
+                m_vStartPosition(3), m_fAttackRadius);
       }
     }
 
-    if (cht_bDebugFinalBossAnimations)
-    {
+    if (cht_bDebugFinalBossAnimations) {
       CModelObject &mo = *GetModelObject();
       // obtain current and scheduled animation
       INDEX iCurrentAnim, iScheduledAnim;
-      if (mo.ao_llAnimStart > _pTimer->GetGameTick())
-      {
+      if (mo.ao_llAnimStart > _pTimer->GetGameTick()) {
         iCurrentAnim = mo.ao_iLastAnim;
         iScheduledAnim = mo.ao_iCurrentAnim;
-      }
-      else
-      {
+      } else {
         iCurrentAnim = mo.ao_iCurrentAnim;
         iScheduledAnim = -1;
       }
 
-      if (iCurrentAnim != m_iLastCurrentAnim || iScheduledAnim != m_iLastScheduledAnim)
-      {
+      if (iCurrentAnim != m_iLastCurrentAnim || iScheduledAnim != m_iLastScheduledAnim) {
         CAnimData *pad = mo.GetData();
         CAnimInfo aiCurrent;
         mo.GetAnimInfo(iCurrentAnim, aiCurrent);
         CTString strCurrentAnimName = aiCurrent.ai_AnimName;
 
         CTString strScheduledAnimName = ".....";
-        if (iScheduledAnim != -1)
-        {
+        if (iScheduledAnim != -1) {
           CAnimInfo aiScheduled;
           mo.GetAnimInfo(iScheduledAnim, aiScheduled);
           strScheduledAnimName = aiScheduled.ai_AnimName;
         }
-        CPrintF("Time: %-10g %20s, %s\n",
-          _pTimer->GetLerpedCurrentTick(), strCurrentAnimName, strScheduledAnimName);
+        CPrintF("Time: %-10g %20s, %s\n", _pTimer->GetLerpedCurrentTick(), strCurrentAnimName, strScheduledAnimName);
       }
       m_iLastCurrentAnim = iCurrentAnim;
       m_iLastScheduledAnim = iScheduledAnim;
     }
-    
-    if (cht_bDumpFinalBossData)
-    {
-      cht_bDumpFinalBossData=FALSE;
+
+    if (cht_bDumpFinalBossData) {
+      cht_bDumpFinalBossData = FALSE;
       // dump devil data to console
       CPrintF("\n\n\n\n\n\n\n");
       CPrintF("Devil class data ...................\n");
       CPrintF("\n\n");
-      
+
       CTString strAttackPower = DevilAttackPower_enum.NameForValue(INDEX(m_dapAttackPower));
-      CPrintF( "Attack power: %s\n", strAttackPower);
+      CPrintF("Attack power: %s\n", strAttackPower);
       CTString strDevilState = DevilState_enum.NameForValue(INDEX(m_dsDevilState));
-      CPrintF( "Devil state: %s\n", strDevilState);
+      CPrintF("Devil state: %s\n", strDevilState);
 
       CPrintF("m_fFireTime = %g\n", m_fFireTime);
       CPrintF("m_iFiredProjectiles = %d\n", m_iFiredProjectiles);
@@ -858,85 +773,82 @@ functions:
       CPrintF("Enemy base data ...................\n");
       CPrintF("\n\n");
 
-      CPrintF( "m_ttTarget (type): %d\n", INDEX(m_ttTarget));
+      CPrintF("m_ttTarget (type): %d\n", INDEX(m_ttTarget));
 
-      CPrintF( "m_penWatcher %x\n", m_penWatcher);
+      CPrintF("m_penWatcher %x\n", m_penWatcher);
       CTString strEnemyName = "Null ptr, no name";
-      if (m_penEnemy != NULL) 
-      {
+      if (m_penEnemy != NULL) {
         strEnemyName = m_penEnemy->GetName();
       }
-      CPrintF( "m_penEnemy %x, enemy name: %s\n", m_penEnemy, strEnemyName);
+      CPrintF("m_penEnemy %x, enemy name: %s\n", m_penEnemy, strEnemyName);
 
-      CPrintF( "m_vStartPosition (%g, %g, %g)\n", m_vStartPosition(1), m_vStartPosition(2), m_vStartPosition(3));
-      CPrintF( "m_vStartDirection (%g, %g, %g)\n", m_vStartDirection(1), m_vStartDirection(2), m_vStartDirection(3));
-      CPrintF( "m_bOnStartPosition = %d\n", m_bOnStartPosition);
-      CPrintF( "m_fFallHeight = %g\n", m_fFallHeight);
-      CPrintF( "m_fStepHeight = %g\n", m_fStepHeight);
-      CPrintF( "m_fSenseRange = %g\n", m_fSenseRange);
-      CPrintF( "m_fViewAngle = %g\n", m_fViewAngle);
+      CPrintF("m_vStartPosition (%g, %g, %g)\n", m_vStartPosition(1), m_vStartPosition(2), m_vStartPosition(3));
+      CPrintF("m_vStartDirection (%g, %g, %g)\n", m_vStartDirection(1), m_vStartDirection(2), m_vStartDirection(3));
+      CPrintF("m_bOnStartPosition = %d\n", m_bOnStartPosition);
+      CPrintF("m_fFallHeight = %g\n", m_fFallHeight);
+      CPrintF("m_fStepHeight = %g\n", m_fStepHeight);
+      CPrintF("m_fSenseRange = %g\n", m_fSenseRange);
+      CPrintF("m_fViewAngle = %g\n", m_fViewAngle);
 
-      CPrintF( "m_fWalkSpeed = %g\n", m_fWalkSpeed);
-      CPrintF( "m_aWalkRotateSpeed = %g\n", m_aWalkRotateSpeed);
-      CPrintF( "m_fAttackRunSpeed = %g\n", m_fAttackRunSpeed);
-      CPrintF( "m_aAttackRotateSpeed = %g\n", m_aAttackRotateSpeed);
-      CPrintF( "m_fCloseRunSpeed = %g\n", m_fCloseRunSpeed);
-      CPrintF( "m_aCloseRotateSpeed = %g\n", m_aCloseRotateSpeed);
-      CPrintF( "m_fAttackDistance = %g\n", m_fAttackDistance);
-      CPrintF( "m_fCloseDistance = %g\n", m_fCloseDistance);
-      CPrintF( "m_fAttackFireTime = %g\n", m_fAttackFireTime);
-      CPrintF( "m_fCloseFireTime = %g\n", m_fCloseFireTime);
-      CPrintF( "m_fStopDistance = %g\n", m_fStopDistance);
-      CPrintF( "m_fIgnoreRange = %g\n", m_fIgnoreRange);
-      CPrintF( "m_fLockOnEnemyTime = %g\n", m_fLockOnEnemyTime);
+      CPrintF("m_fWalkSpeed = %g\n", m_fWalkSpeed);
+      CPrintF("m_aWalkRotateSpeed = %g\n", m_aWalkRotateSpeed);
+      CPrintF("m_fAttackRunSpeed = %g\n", m_fAttackRunSpeed);
+      CPrintF("m_aAttackRotateSpeed = %g\n", m_aAttackRotateSpeed);
+      CPrintF("m_fCloseRunSpeed = %g\n", m_fCloseRunSpeed);
+      CPrintF("m_aCloseRotateSpeed = %g\n", m_aCloseRotateSpeed);
+      CPrintF("m_fAttackDistance = %g\n", m_fAttackDistance);
+      CPrintF("m_fCloseDistance = %g\n", m_fCloseDistance);
+      CPrintF("m_fAttackFireTime = %g\n", m_fAttackFireTime);
+      CPrintF("m_fCloseFireTime = %g\n", m_fCloseFireTime);
+      CPrintF("m_fStopDistance = %g\n", m_fStopDistance);
+      CPrintF("m_fIgnoreRange = %g\n", m_fIgnoreRange);
+      CPrintF("m_fLockOnEnemyTime = %g\n", m_fLockOnEnemyTime);
 
-      CPrintF( "m_fMoveTime = %g\n", m_fMoveTime);
-      CPrintF( "m_vDesiredPosition (%g, %g, %g)\n", m_vDesiredPosition(1), m_vDesiredPosition(2), m_vDesiredPosition(3));
-  
+      CPrintF("m_fMoveTime = %g\n", m_fMoveTime);
+      CPrintF("m_vDesiredPosition (%g, %g, %g)\n", m_vDesiredPosition(1), m_vDesiredPosition(2), m_vDesiredPosition(3));
+
       CTString strDestinationType = DestinationType_enum.NameForValue(INDEX(m_dtDestination));
-      CPrintF( "m_dtDestination: %s\n", strDestinationType);
-      CPrintF( "m_penPathMarker %x\n", m_penPathMarker);
+      CPrintF("m_dtDestination: %s\n", strDestinationType);
+      CPrintF("m_penPathMarker %x\n", m_penPathMarker);
 
-      CPrintF( "m_vPlayerSpotted (%g, %g, %g)\n", m_vPlayerSpotted(1), m_vPlayerSpotted(2), m_vPlayerSpotted(3));
-      CPrintF( "m_fMoveFrequency = %g\n", m_fMoveFrequency);
-      CPrintF( "m_fMoveSpeed = %g\n", m_fMoveSpeed);
-      CPrintF( "m_aRotateSpeed = %g\n", m_aRotateSpeed);
-      CPrintF( "m_fLockStartTime = %g\n", m_fLockStartTime);
-      CPrintF( "m_fRangeLast = %g\n", m_fRangeLast);
-      CPrintF( "m_fShootTime = %g\n", m_fShootTime);
-      CPrintF( "m_fAttackRadius = %g\n", m_fAttackRadius);
-      CPrintF( "m_tmGiveUp = %g\n", m_tmGiveUp);
-      CPrintF( "m_fActivityRange = %g\n", m_fActivityRange);
+      CPrintF("m_vPlayerSpotted (%g, %g, %g)\n", m_vPlayerSpotted(1), m_vPlayerSpotted(2), m_vPlayerSpotted(3));
+      CPrintF("m_fMoveFrequency = %g\n", m_fMoveFrequency);
+      CPrintF("m_fMoveSpeed = %g\n", m_fMoveSpeed);
+      CPrintF("m_aRotateSpeed = %g\n", m_aRotateSpeed);
+      CPrintF("m_fLockStartTime = %g\n", m_fLockStartTime);
+      CPrintF("m_fRangeLast = %g\n", m_fRangeLast);
+      CPrintF("m_fShootTime = %g\n", m_fShootTime);
+      CPrintF("m_fAttackRadius = %g\n", m_fAttackRadius);
+      CPrintF("m_tmGiveUp = %g\n", m_tmGiveUp);
+      CPrintF("m_fActivityRange = %g\n", m_fActivityRange);
 
       CTString strMarkerName = "Null ptr, no name";
-      if (m_penMarker != NULL) 
-      {
+      if (m_penMarker != NULL) {
         strMarkerName = m_penMarker->GetName();
       }
-      CPrintF( "m_penMarker %x, marker name: %s\n", m_penMarker, strMarkerName);
+      CPrintF("m_penMarker %x, marker name: %s\n", m_penMarker, strMarkerName);
 
       CTString strMainMusicHolderName = "Null ptr, no name";
-      if (m_penMainMusicHolder != NULL) 
-      {
+      if (m_penMainMusicHolder != NULL) {
         strMainMusicHolderName = m_penMainMusicHolder->GetName();
       }
-      CPrintF( "m_penMainMusicHolder %x, MainMusicHolder name: %s\n", m_penMainMusicHolder, strMainMusicHolderName);
-      CPrintF( "m_tmLastFussTime = %g\n", m_tmLastFussTime);
-      CPrintF( "m_iScore = %d\n", m_iScore);
-      CPrintF( "m_fMaxHealth = %g\n", m_fMaxHealth);
-      CPrintF( "m_bBoss = %d\n", m_bBoss);
-      CPrintF( "m_fSpiritStartTime = %g\n", m_fSpiritStartTime);
-      CPrintF( "m_tmSpraySpawned = %g\n", m_tmSpraySpawned);
-      CPrintF( "m_fSprayDamage = %g\n", m_fSprayDamage);
-      CPrintF( "m_fMaxDamageAmmount  = %g\n", m_fMaxDamageAmmount );
+      CPrintF("m_penMainMusicHolder %x, MainMusicHolder name: %s\n", m_penMainMusicHolder, strMainMusicHolderName);
+      CPrintF("m_tmLastFussTime = %g\n", m_tmLastFussTime);
+      CPrintF("m_iScore = %d\n", m_iScore);
+      CPrintF("m_fMaxHealth = %g\n", m_fMaxHealth);
+      CPrintF("m_bBoss = %d\n", m_bBoss);
+      CPrintF("m_fSpiritStartTime = %g\n", m_fSpiritStartTime);
+      CPrintF("m_tmSpraySpawned = %g\n", m_tmSpraySpawned);
+      CPrintF("m_fSprayDamage = %g\n", m_fSprayDamage);
+      CPrintF("m_fMaxDamageAmmount  = %g\n", m_fMaxDamageAmmount);
     }
-    
+
     vLightDirection = FLOAT3D(0.0f, 270.0f, 0.0f);
-    colAmbient = RGBToColor(32,32,32);
-    colLight = RGBToColor(255,235,145);
+    colAmbient = RGBToColor(32, 32, 32);
+    colLight = RGBToColor(255, 235, 145);
 
     return CMovableModelEntity::AdjustShadingParameters(vLightDirection, colLight, colAmbient);
-    //return CEnemyBase::AdjustShadingParameters(vLightDirection, colLight, colAmbient);
+    // return CEnemyBase::AdjustShadingParameters(vLightDirection, colLight, colAmbient);
   };
 
   // damage anim
@@ -958,19 +870,17 @@ functions:
 
   // virtual anim functions
   void StandingAnim(void) {
-    StartModelAnim(DEVIL_ANIM_IDLE, AOF_SMOOTHCHANGE|AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(DEVIL_ANIM_IDLE, AOF_SMOOTHCHANGE | AOF_LOOPING | AOF_NORESTART);
   };
 
   void WalkingAnim(void) {
-    if (!m_bForMPIntro)
-    {
+    if (!m_bForMPIntro) {
       CModelObject &mo = *GetModelObject();
       INDEX iAnim = mo.GetAnim();
-      if (iAnim == DEVIL_ANIM_WALK)
-      {
+      if (iAnim == DEVIL_ANIM_WALK) {
         // do nothing
       } else if (iAnim == DEVIL_ANIM_FROMIDLETOWALK) {
-        StartModelAnim(DEVIL_ANIM_WALK, AOF_LOOPING|AOF_SMOOTHCHANGE);
+        StartModelAnim(DEVIL_ANIM_WALK, AOF_LOOPING | AOF_SMOOTHCHANGE);
       } else {
         StartModelAnim(DEVIL_ANIM_FROMIDLETOWALK, AOF_SMOOTHCHANGE);
       }
@@ -988,37 +898,35 @@ functions:
     PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
   };
   void SightSound(void) {
-    //PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
+    // PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
   };
   void WoundSound(void) {
     PlaySound(m_soSound, SOUND_WOUND, SOF_3D);
   };
   void DeathSound(void) {
-    PlaySound(m_soSound, SOUND_DEATH, SOF_3D|SOF_VOLUMETRIC);
+    PlaySound(m_soSound, SOUND_DEATH, SOF_3D | SOF_VOLUMETRIC);
   };
-
 
   // start fire laser
   void StartFireLaser(void) {
-    //PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
-    PlayLightAnim(LIGHT_ANIM_FIRE, AOF_LOOPING|SOF_3D);
+    // PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
+    PlayLightAnim(LIGHT_ANIM_FIRE, AOF_LOOPING | SOF_3D);
   };
 
   // fire one laser
-  void FireOneLaser(FLOAT fRatio, FLOAT fDeltaPitch)
-  {
-    PlayWeaponSound( SOUND_LASER);
+  void FireOneLaser(FLOAT fRatio, FLOAT fDeltaPitch) {
+    PlayWeaponSound(SOUND_LASER);
     FLOAT3D vWpnPipeRel = GetFireingPositionRelative();
     FLOAT3D vWpnPipeAbs = GetFireingPositionAbsolute();
     // calculate predicted position
     FLOAT3D vTarget = m_penEnemy->GetPlacement().pl_PositionVector;
-    FLOAT3D vSpeedDst = ((CMovableEntity&) *m_penEnemy).en_vCurrentTranslationAbsolute*fRatio;
+    FLOAT3D vSpeedDst = ((CMovableEntity &)*m_penEnemy).en_vCurrentTranslationAbsolute * fRatio;
     FLOAT fSpeedSrc = DEVIL_LASER_SPEED;
-    m_vDesiredPosition = CalculatePredictedPosition(vWpnPipeAbs, vTarget, fSpeedSrc,
-      vSpeedDst, GetPlacement().pl_PositionVector(2) );
+    m_vDesiredPosition
+      = CalculatePredictedPosition(vWpnPipeAbs, vTarget, fSpeedSrc, vSpeedDst, GetPlacement().pl_PositionVector(2));
     // shoot predicted propelled projectile
     ShootPredictedProjectile(PRT_DEVIL_LASER, m_vDesiredPosition, vWpnPipeRel, ANGLE3D(0, fDeltaPitch, 0));
-    //PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
+    // PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
     PlayLightAnim(LIGHT_ANIM_FIRE, AOF_LOOPING);
   };
 
@@ -1030,35 +938,33 @@ functions:
 
   // start fire rocket
   void StartFireRocket(void) {
-    //PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
+    // PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
     PlayLightAnim(LIGHT_ANIM_FIRE, AOF_LOOPING);
   };
 
-  void PlayWeaponSound( ULONG idSound)
-  {
+  void PlayWeaponSound(ULONG idSound) {
     CSoundObject &so = (&m_soWeapon0)[m_iNextChannel];
-    m_iNextChannel = (m_iNextChannel+1)%5;
+    m_iNextChannel = (m_iNextChannel + 1) % 5;
     PlaySound(so, idSound, SOF_3D);
   }
 
   // fire one rocket
-  void FireOneRocket(FLOAT fRatio)
-  {
-    PlayWeaponSound( SOUND_ROCKETLAUNCHER);
+  void FireOneRocket(FLOAT fRatio) {
+    PlayWeaponSound(SOUND_ROCKETLAUNCHER);
     FLOAT3D vWpnPipeRel = GetFireingPositionRelative();
     FLOAT3D vWpnPipeAbs = GetFireingPositionAbsolute();
     // calculate predicted position
     FLOAT3D vTarget = m_penEnemy->GetPlacement().pl_PositionVector;
-    FLOAT3D vSpeedDst = ((CMovableEntity&) *m_penEnemy).en_vCurrentTranslationAbsolute*fRatio;
+    FLOAT3D vSpeedDst = ((CMovableEntity &)*m_penEnemy).en_vCurrentTranslationAbsolute * fRatio;
     FLOAT fSpeedSrc = DEVIL_ROCKET_SPEED;
-    m_vDesiredPosition = CalculatePredictedPosition(vWpnPipeAbs, vTarget, fSpeedSrc,
-      vSpeedDst, GetPlacement().pl_PositionVector(2) );
+    m_vDesiredPosition
+      = CalculatePredictedPosition(vWpnPipeAbs, vTarget, fSpeedSrc, vSpeedDst, GetPlacement().pl_PositionVector(2));
     // shoot predicted propelled projectile
     ShootPredictedProjectile(PRT_DEVIL_ROCKET, m_vDesiredPosition, vWpnPipeRel, ANGLE3D(0.0f, 0.0f, 0.0f));
-    //PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
+    // PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
     PlayLightAnim(LIGHT_ANIM_FIRE, AOF_LOOPING);
 
-    //PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
+    // PlaySound(m_soSound, SOUND_FIRE, SOF_3D|SOF_LOOP);
     PlayLightAnim(LIGHT_ANIM_FIRE, AOF_LOOPING);
   };
 
@@ -1068,59 +974,57 @@ functions:
     PlayLightAnim(LIGHT_ANIM_NONE, 0);
   };
 
-  void AddLowerWeapons(void)
-  {
+  void AddLowerWeapons(void) {
     // laser
     AddAttachmentToModel(this, *GetModelObject(), DEVIL_ATTACHMENT_LASER, MODEL_LASER, TEXTURE_LASER, 0, 0, 0);
     // projectile gun
-    AddAttachmentToModel(this, *GetModelObject(), DEVIL_ATTACHMENT_PROJECTILEGUN, MODEL_PROJECTILEGUN, TEXTURE_PROJECTILEGUN, 0, 0, 0);
+    AddAttachmentToModel(this, *GetModelObject(), DEVIL_ATTACHMENT_PROJECTILEGUN, MODEL_PROJECTILEGUN, TEXTURE_PROJECTILEGUN, 0,
+                         0, 0);
     GetModelObject()->StretchModel(FLOAT3D(SIZE, SIZE, SIZE));
   };
 
-  void AddUpperWeapons(void)
-  {
+  void AddUpperWeapons(void) {
     // rocket launcher
-    AddAttachmentToModel(this, *GetModelObject(), DEVIL_ATTACHMENT_ROCKETLAUNCHER, MODEL_ROCKETLAUNCHER, TEXTURE_ROCKETLAUNCHER, 0, 0, 0);
+    AddAttachmentToModel(this, *GetModelObject(), DEVIL_ATTACHMENT_ROCKETLAUNCHER, MODEL_ROCKETLAUNCHER, TEXTURE_ROCKETLAUNCHER,
+                         0, 0, 0);
     // electro gun
-    AddAttachmentToModel(this, *GetModelObject(), DEVIL_ATTACHMENT_ELETRICITYGUN, MODEL_ELECTRICITYGUN, TEXTURE_ELECTRICITYGUN, 0, 0, 0);
+    AddAttachmentToModel(this, *GetModelObject(), DEVIL_ATTACHMENT_ELETRICITYGUN, MODEL_ELECTRICITYGUN, TEXTURE_ELECTRICITYGUN, 0,
+                         0, 0);
     GetModelObject()->StretchModel(FLOAT3D(SIZE, SIZE, SIZE));
   };
 
-  void RemoveWeapons(void)
-  {
+  void RemoveWeapons(void) {
     // remove all weapons
-    RemoveAttachmentFromModel(*GetModelObject(), DEVIL_ATTACHMENT_LASER);         
-    RemoveAttachmentFromModel(*GetModelObject(), DEVIL_ATTACHMENT_PROJECTILEGUN); 
-    RemoveAttachmentFromModel(*GetModelObject(), DEVIL_ATTACHMENT_ELETRICITYGUN); 
+    RemoveAttachmentFromModel(*GetModelObject(), DEVIL_ATTACHMENT_LASER);
+    RemoveAttachmentFromModel(*GetModelObject(), DEVIL_ATTACHMENT_PROJECTILEGUN);
+    RemoveAttachmentFromModel(*GetModelObject(), DEVIL_ATTACHMENT_ELETRICITYGUN);
     RemoveAttachmentFromModel(*GetModelObject(), DEVIL_ATTACHMENT_ROCKETLAUNCHER);
   }
 
-  class CDevilMarker *GetAction(void)
-  {
-    CDevilMarker *penAction = (CDevilMarker *) (CEntity*) m_penAction;
-    ASSERT( penAction != NULL);
+  class CDevilMarker *GetAction(void) {
+    CDevilMarker *penAction = (CDevilMarker *)(CEntity *)m_penAction;
+    ASSERT(penAction != NULL);
     return penAction;
   };
 
-// PREDICTED PROJECTILE
-  void F_FirePredictedProjectile(void)
-  {
-    PlayWeaponSound( SOUND_LAVABOMB);
+  // PREDICTED PROJECTILE
+  void F_FirePredictedProjectile(void) {
+    PlayWeaponSound(SOUND_LAVABOMB);
     FLOAT3D vFireingRel = GetFireingPositionRelative();
     FLOAT3D vFireingAbs = GetFireingPositionAbsolute();
 
     FLOAT3D vTarget = m_penEnemy->GetPlacement().pl_PositionVector;
-    FLOAT3D vSpeedDest = ((CMovableEntity&) *m_penEnemy).en_vCurrentTranslationAbsolute;
+    FLOAT3D vSpeedDest = ((CMovableEntity &)*m_penEnemy).en_vCurrentTranslationAbsolute;
     FLOAT fLaunchSpeed;
     FLOAT fRelativeHdg;
-    
+
     // obtain current gun orientation
     CAttachmentModelObject &amo = *GetModelObject()->GetAttachmentModel(m_iAttID);
     FLOAT fPitch = amo.amo_plRelative.pl_OrientationAngle(2);
-    
+
     // calculate parameters for predicted angular launch curve
-    EntityInfo *peiTarget = (EntityInfo*) (m_penEnemy->GetEntityInfo());
-    CalculateAngularLaunchParams( vFireingAbs, 0, vTarget, vSpeedDest, fPitch, fLaunchSpeed, fRelativeHdg);
+    EntityInfo *peiTarget = (EntityInfo *)(m_penEnemy->GetEntityInfo());
+    CalculateAngularLaunchParams(vFireingAbs, 0, vTarget, vSpeedDest, fPitch, fLaunchSpeed, fRelativeHdg);
 
     // target enemy body
     FLOAT3D vShootTarget;
@@ -1135,22 +1039,17 @@ functions:
     eLaunch.fSpeed = fLaunchSpeed;
     penProjectile->Initialize(eLaunch);
   }
-  
+
   // Handle an event, return false if the event is not handled.
-  BOOL HandleEvent(const CEntityEvent &ee)
-  {
-    if (ee.ee_slEvent == EVENTCODE_EDevilCommand)
-    {
-      EDevilCommand eDevilCommand = ((EDevilCommand &) ee);
-      if (eDevilCommand.dctType == DC_FORCE_ATTACK_RADIUS)
-      {
+  BOOL HandleEvent(const CEntityEvent &ee) {
+    if (ee.ee_slEvent == EVENTCODE_EDevilCommand) {
+      EDevilCommand eDevilCommand = ((EDevilCommand &)ee);
+      if (eDevilCommand.dctType == DC_FORCE_ATTACK_RADIUS) {
         m_fAttackRadius = eDevilCommand.fAttackRadius;
         m_vStartPosition = eDevilCommand.vCenterOfAttack;
       }
-      if (eDevilCommand.dctType == DC_DECREASE_ATTACK_RADIUS)
-      {
-        if (m_fAttackRadius>21.0f)
-        {
+      if (eDevilCommand.dctType == DC_DECREASE_ATTACK_RADIUS) {
+        if (m_fAttackRadius > 21.0f) {
           m_fAttackRadius -= 20.0f;
         }
       }
@@ -1160,8 +1059,6 @@ functions:
   }
 
 procedures:
-// TRY TO REACH DESTINATION
-
   // move to given destination position
   WalkTo(EVoid) 
   {
@@ -2211,8 +2108,8 @@ procedures:
     return EEnd();
   };
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     m_sptType = SPT_NONE;
     // declare yourself as a model
     InitAsEditorModel();

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -29,8 +29,8 @@ properties:
   2 FLOAT m_fWaitTime         "Wait time" 'W' = 0.1f,         // watch time
   3 RANGE m_fDistance         "Watch distance" 'D' = 100.0f,  // distance when player is seen
   4 BOOL m_bRangeWatcher      "Range watcher" 'R' = TRUE,    // range watcher
-  5 enum EventEType m_eetEventClose  "Close Event type" 'T' = EET_TRIGGER,   // type of event to send
-  6 enum EventEType m_eetEventFar    "Far Event type" 'Y' = EET_ENVIRONMENTSTOP,      // type of event to send
+  5 enum EEventType m_eetEventClose  "Close Event type" 'T' = EET_TRIGGER,   // type of event to send
+  6 enum EEventType m_eetEventFar    "Far Event type" 'Y' = EET_ENVIRONMENTSTOP,      // type of event to send
   7 CEntityPointer m_penCurrentWatch,
   8 BOOL m_bActive  "Active" 'A' = TRUE,
   9 CTString m_strName "Name" 'N' = "",
@@ -40,57 +40,62 @@ components:
   2 texture TEXTURE_WATCHPLAYERS    "Models\\Editor\\WatchPlayers.tex"
 
 functions:
-// USER FUNCTIONS
-  // check if any player is close
+  // Check if any player is close
   BOOL IsAnyPlayerClose(void) {
     // far enough to not move at all
     FLOAT fClosest = 100000.0f;
     FLOAT fDistance;
 
     m_penCurrentWatch = NULL;
+
     // for all players
-    for (INDEX iPlayer=0; iPlayer<GetMaxPlayers(); iPlayer++) {
+    for (INDEX iPlayer = 0; iPlayer < GetMaxPlayers(); iPlayer++) {
       CEntity *penPlayer = GetPlayerEntity(iPlayer);
+
       // if player is alive and visible
-      if (penPlayer != NULL && penPlayer->GetFlags()&ENF_ALIVE && !(penPlayer->GetFlags()&ENF_INVISIBLE)) {
+      if (penPlayer != NULL && penPlayer->GetFlags() & ENF_ALIVE && !(penPlayer->GetFlags() & ENF_INVISIBLE)) {
         fDistance = 100000.0f;
+
         if (m_bRangeWatcher) {
           // calculate distance to player from wathcer
-          fDistance = (penPlayer->GetPlacement().pl_PositionVector-
-                       GetPlacement().pl_PositionVector).Length();
+          fDistance = (penPlayer->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector).Length();
+
         } else {
           if (m_penOwner != NULL) {
             // calculate distance to player from owner
-            fDistance = (penPlayer->GetPlacement().pl_PositionVector-
-                         m_penOwner->GetPlacement().pl_PositionVector).Length();
+            fDistance = (penPlayer->GetPlacement().pl_PositionVector - m_penOwner->GetPlacement().pl_PositionVector).Length();
           }
         }
-        if (fDistance<fClosest) {
+
+        if (fDistance < fClosest) {
           fClosest = fDistance;
           m_penCurrentWatch = penPlayer;
         }
       }
     }
+
     // if close enough start moving
     return (fClosest < m_fDistance);
   };
 
-  // send close event
+  // Send close event
   void SendCloseEvent(void) {
     // send range event
     if (m_bRangeWatcher && m_penOwner == NULL) {
-//      SendInRange(this, m_eetEventClose, FLOATaabbox3D(GetPlacement().pl_PositionVector, m_fDistance));
+      //SendInRange(this, m_eetEventClose, FLOATaabbox3D(GetPlacement().pl_PositionVector, m_fDistance));
+
     // send to owner
     } else {
       SendToTarget(m_penOwner, m_eetEventClose, m_penCurrentWatch);
     }
   };
 
-  // send far event
+  // Send far event
   void SendFarEvent(void) {
     // send range event
     if (m_bRangeWatcher && m_penOwner == NULL) {
-//      SendInRange(this, m_eetEventFar, FLOATaabbox3D(GetPlacement().pl_PositionVector, m_fDistance));
+      //SendInRange(this, m_eetEventFar, FLOATaabbox3D(GetPlacement().pl_PositionVector, m_fDistance));
+
     // send to owner
     } else {
       if (m_penFar != NULL) {
@@ -102,8 +107,8 @@ functions:
   };
 
 procedures:
-  // main (initialization)
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // init as nothing
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
@@ -113,8 +118,8 @@ procedures:
     SetModel(MODEL_WATCHPLAYERS);
     SetModelMainTexture(TEXTURE_WATCHPLAYERS);
 
-    if (m_fWaitTime<0.1f) {
-      m_fWaitTime=0.1f;
+    if (m_fWaitTime < 0.1f) {
+      m_fWaitTime = 0.1f;
     }
 
     if (m_bActive) {
@@ -124,26 +129,26 @@ procedures:
     }
   };
 
-  Active()
-  {
+  Active() {
     autocall FarWatch() EDeactivate;
     jump Inactive();
   }
 
-  Inactive()
-  {
+  Inactive() {
     wait() {
       on (EActivate) : {
         stop;
       };
+
       otherwise() : {
         resume;
       };
     }
+
     jump Active();
   }
 
-  // player is close
+  // Player is close
   CloseWatch(EVoid) {
     while (TRUE) {
       wait(m_fWaitTime) {
@@ -155,12 +160,15 @@ procedures:
           }
           resume;
         }
-        on (ETimer) : { stop; }
+
+        on (ETimer) : {
+          stop;
+        }
       }
     }
   };
   
-  // player is far
+  // Player is far
   FarWatch(EVoid) {
     while (TRUE) {
       wait(m_fWaitTime) {
@@ -172,7 +180,10 @@ procedures:
           }
           resume;
         }
-        on (ETimer) : { stop; }
+
+        on (ETimer) : {
+          stop;
+        }
       }
     }
   };

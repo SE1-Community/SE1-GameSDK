@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -24,56 +24,52 @@ event EChangeGravity {
   CEntityPointer penNewGravity,
 };
 
-class CGravityRouter: CMarker {
+class CGravityRouter : CMarker {
 name      "Gravity Router";
 thumbnail "Thumbnails\\GravityRouter.tbn";
-features "IsImportant";
+features  "IsImportant";
 
 properties:
 
 components:
-  1 model   MODEL_MARKER     "Models\\Editor\\GravityRouter.mdl",
-  2 texture TEXTURE_MARKER   "Models\\Editor\\GravityRouter.tex"
+  1 model   MODEL_MARKER   "Models\\Editor\\GravityRouter.mdl",
+  2 texture TEXTURE_MARKER "Models\\Editor\\GravityRouter.tex"
 
 functions:
-
-  // Get force type name, return empty string if not used.
-  const CTString &GetForceName(INDEX i)
-  {
+  // Get force type name, return empty string if not used
+  const CTString &GetForceName(INDEX i) {
     return m_strName;
   }
-  
-  // Get force in given point.
-  void GetForce(INDEX i, const FLOAT3D &vPoint, 
-    CForceStrength &fsGravity, CForceStrength &fsField)
-  {
-    if ((m_penTarget != NULL) && (IsOfClass( m_penTarget, "Gravity Marker")))
-    {
+
+  // Get force in given point
+  void GetForce(INDEX i, const FLOAT3D &vPoint, CForceStrength &fsGravity, CForceStrength &fsField) {
+    if ((m_penTarget != NULL) && (IsOfClass(m_penTarget, "Gravity Marker"))) {
       m_penTarget->GetForce(i, vPoint, fsGravity, fsField);
     }
   }
-  // Get entity that controls the force, used for change notification checking.
-  CEntity *GetForceController(INDEX iForce)
-  {
+
+  // Get entity that controls the force, used for change notification checking
+  CEntity *GetForceController(INDEX iForce) {
     return this;
   }
 
-  // Handle an event, return false if the event is not handled.
-  BOOL HandleEvent(const CEntityEvent &ee)
-  {
-    if (((EChangeGravity &) ee).ee_slEvent == EVENTCODE_EChangeGravity)
-    {
-      m_penTarget = ((EChangeGravity &) ee).penNewGravity;
+  // Handle an event, return false if the event is not handled
+  BOOL HandleEvent(const CEntityEvent &ee) {
+    if (((EChangeGravity &)ee).ee_slEvent == EVENTCODE_EChangeGravity) {
+      m_penTarget = ((EChangeGravity &)ee).penNewGravity;
+
       // notify engine that gravity defined by this entity has changed
       NotifyGravityChanged();
+
       return TRUE;
     }
+
     return FALSE;
   }
 
 procedures:
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -95,4 +91,3 @@ procedures:
     return;
   }
 };
-

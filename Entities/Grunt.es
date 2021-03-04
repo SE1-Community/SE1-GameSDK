@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -83,7 +83,6 @@ components:
  58 sound   SOUND_DEATH           "ModelsMP\\Enemies\\Grunt\\Sounds\\Death.wav",
 
 functions:
-    
   // describe how this enemy killed player
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
   {
@@ -105,19 +104,19 @@ functions:
   };
 
   virtual const CTFileName &GetComputerMessageName(void) const {
-    static DECLARE_CTFILENAME(fnmSoldier,     "DataMP\\Messages\\Enemies\\GruntSoldier.txt");
-    static DECLARE_CTFILENAME(fnmCommander,   "DataMP\\Messages\\Enemies\\GruntCommander.txt");
+    static DECLARE_CTFILENAME(fnmSoldier, "DataMP\\Messages\\Enemies\\GruntSoldier.txt");
+    static DECLARE_CTFILENAME(fnmCommander, "DataMP\\Messages\\Enemies\\GruntCommander.txt");
     switch (m_gtType) {
-    default: ASSERT(FALSE);
-    case GT_SOLDIER:  return fnmSoldier;
-    case GT_COMMANDER: return fnmCommander;
+      default: ASSERT(FALSE);
+      case GT_SOLDIER: return fnmSoldier;
+      case GT_COMMANDER: return fnmCommander;
     }
   };
 
   void Precache(void) {
     CEnemyBase::Precache();
-    
-   if (m_gtType == GT_SOLDIER) {
+
+    if (m_gtType == GT_SOLDIER) {
       PrecacheClass(CLASS_PROJECTILE, PRT_GRUNT_PROJECTILE_SOL);
     }
     if (m_gtType == GT_COMMANDER) {
@@ -132,9 +131,8 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
   };
 
@@ -151,8 +149,8 @@ functions:
     INDEX iAnim;
     FLOAT3D vFront;
     GetHeadingDirection(0, vFront);
-    FLOAT fDamageDir = m_vDamage%vFront;
-    if (fDamageDir<0) {
+    FLOAT fDamageDir = m_vDamage % vFront;
+    if (fDamageDir < 0) {
       iAnim = GRUNT_ANIM_DEATHBACKWARD;
     } else {
       iAnim = GRUNT_ANIM_DEATHFORWARD;
@@ -163,13 +161,10 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    vStretch=FLOAT3D(1,1,2);
-    if (GetModelObject()->GetAnim() == GRUNT_ANIM_DEATHBACKWARD)
-    {
+    vStretch = FLOAT3D(1, 1, 2);
+    if (GetModelObject()->GetAnim() == GRUNT_ANIM_DEATHBACKWARD) {
       return 0.5f;
-    }
-    else if (GetModelObject()->GetAnim() == GRUNT_ANIM_DEATHFORWARD)
-    {
+    } else if (GetModelObject()->GetAnim() == GRUNT_ANIM_DEATHFORWARD) {
       return 1.0f;
     }
     return -1.0f;
@@ -182,16 +177,16 @@ functions:
 
   // virtual anim functions
   void StandingAnim(void) {
-    StartModelAnim(GRUNT_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(GRUNT_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
   /*void StandingAnimFight(void)
   {
     StartModelAnim(HEADMAN_ANIM_IDLE_FIGHT, AOF_LOOPING|AOF_NORESTART);
   }*/
   void RunningAnim(void) {
-    StartModelAnim(GRUNT_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(GRUNT_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
   };
-    void WalkingAnim(void) {
+  void WalkingAnim(void) {
     RunningAnim();
   };
   void RotatingAnim(void) {
@@ -213,15 +208,13 @@ functions:
   };
 
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     // set sound default parameters
     m_soFire1.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
     m_soFire2.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
   };
 
 procedures:
-// ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire {
     // soldier
     if (m_gtType == GT_SOLDIER) {
@@ -296,8 +289,8 @@ procedures:
     return EEnd();
   };
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);

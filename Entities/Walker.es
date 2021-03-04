@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -105,22 +105,20 @@ functions:
   }
 
   virtual const CTFileName &GetComputerMessageName(void) const {
-    static DECLARE_CTFILENAME(fnmSoldier,  "Data\\Messages\\Enemies\\WalkerSmall.txt");
+    static DECLARE_CTFILENAME(fnmSoldier, "Data\\Messages\\Enemies\\WalkerSmall.txt");
     static DECLARE_CTFILENAME(fnmSergeant, "Data\\Messages\\Enemies\\WalkerBig.txt");
     switch (m_EwcChar) {
-    default: ASSERT(FALSE);
-    case WLC_SOLDIER:   return fnmSoldier;
-    case WLC_SERGEANT: return fnmSergeant;
+      default: ASSERT(FALSE);
+      case WLC_SOLDIER: return fnmSoldier;
+      case WLC_SERGEANT: return fnmSergeant;
     }
   }
   // overridable function to get range for switching to another player
-  FLOAT GetThreatDistance(void)
-  {
+  FLOAT GetThreatDistance(void) {
     return m_fThreatDistance;
   }
 
-  BOOL ForcesCannonballToExplode(void)
-  {
+  BOOL ForcesCannonballToExplode(void) {
     if (m_EwcChar == WLC_SERGEANT) {
       return TRUE;
     }
@@ -132,10 +130,9 @@ functions:
 
     PrecacheModel(MODEL_WALKER);
 
-    if (m_EwcChar == WLC_SOLDIER)
-    {
+    if (m_EwcChar == WLC_SOLDIER) {
       // sounds
-      PrecacheSound(SOUND_SOLDIER_IDLE );
+      PrecacheSound(SOUND_SOLDIER_IDLE);
       PrecacheSound(SOUND_SOLDIER_SIGHT);
       PrecacheSound(SOUND_SOLDIER_DEATH);
       PrecacheSound(SOUND_SOLDIER_FIRE_LASER);
@@ -147,9 +144,7 @@ functions:
       PrecacheTexture(TEXTURE_LASER);
       // projectile
       PrecacheClass(CLASS_PROJECTILE, PRT_CYBORG_LASER);
-    }
-    else
-    {
+    } else {
       // sounds
       PrecacheSound(SOUND_SERGEANT_IDLE);
       PrecacheSound(SOUND_SERGEANT_SIGHT);
@@ -170,8 +165,7 @@ functions:
     return &eiWalker;
   };
 
-  FLOAT GetCrushHealth(void)
-  {
+  FLOAT GetCrushHealth(void) {
     if (m_EwcChar == WLC_SERGEANT) {
       return 100.0f;
     }
@@ -179,40 +173,34 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
-
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
-    {
-      fDamageAmmount*=0.666f;
+    if (dmtType == DMT_BULLET && fDamageAmmount > 100.0f) {
+      fDamageAmmount *= 0.666f;
     }
 
     // walker can't harm walker
-    if (!IsOfClass(penInflictor, "Walker") ||
-      ((CWalker*)penInflictor)->m_EwcChar != m_EwcChar) {
+    if (!IsOfClass(penInflictor, "Walker") || ((CWalker *)penInflictor)->m_EwcChar != m_EwcChar) {
       CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
 
-
   // virtual anim functions
   void StandingAnim(void) {
     DeactivateWalkingSound();
-    StartModelAnim(WALKER_ANIM_STAND01, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(WALKER_ANIM_STAND01, AOF_LOOPING | AOF_NORESTART);
   };
-  void StandingAnimFight(void)
-  {
+  void StandingAnimFight(void) {
     DeactivateWalkingSound();
-    StartModelAnim(WALKER_ANIM_IDLEFIGHT, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(WALKER_ANIM_IDLEFIGHT, AOF_LOOPING | AOF_NORESTART);
   }
   void WalkingAnim(void) {
     ActivateWalkingSound();
     if (m_EwcChar == WLC_SERGEANT) {
-      StartModelAnim(WALKER_ANIM_WALKBIG, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WALKER_ANIM_WALKBIG, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(WALKER_ANIM_WALK, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(WALKER_ANIM_WALK, AOF_LOOPING | AOF_NORESTART);
     }
   };
   void RunningAnim(void) {
@@ -234,15 +222,13 @@ functions:
   };
 
   // walking sounds
-  void ActivateWalkingSound(void)
-  {
+  void ActivateWalkingSound(void) {
     if (!m_bWalkSoundPlaying) {
-      PlaySound(m_soFeet, WALKERSOUND(WALK), SOF_3D|SOF_LOOP);
+      PlaySound(m_soFeet, WALKERSOUND(WALK), SOF_3D | SOF_LOOP);
       m_bWalkSoundPlaying = TRUE;
     }
   }
-  void DeactivateWalkingSound(void)
-  {
+  void DeactivateWalkingSound(void) {
     m_soFeet.Stop();
     m_bWalkSoundPlaying = FALSE;
   }
@@ -251,7 +237,7 @@ functions:
   void FireDeathRocket(FLOAT3D &vPos) {
     CPlacement3D plRocket;
     plRocket.pl_PositionVector = vPos;
-    plRocket.pl_OrientationAngle = ANGLE3D(0, -5.0f-FRnd()*10.0f, 0);
+    plRocket.pl_OrientationAngle = ANGLE3D(0, -5.0f - FRnd() * 10.0f, 0);
     plRocket.RelativeToAbsolute(GetPlacement());
     CEntityPointer penProjectile = CreateEntity(plRocket, CLASS_PROJECTILE);
     ELaunchProjectile eLaunch;
@@ -263,7 +249,7 @@ functions:
   void FireDeathLaser(FLOAT3D &vPos) {
     CPlacement3D plLaser;
     plLaser.pl_PositionVector = vPos;
-    plLaser.pl_OrientationAngle = ANGLE3D(0, -5.0f-FRnd()*10.0f, 0);
+    plLaser.pl_OrientationAngle = ANGLE3D(0, -5.0f - FRnd() * 10.0f, 0);
     plLaser.RelativeToAbsolute(GetPlacement());
     CEntityPointer penProjectile = CreateEntity(plLaser, CLASS_PROJECTILE);
     ELaunchProjectile eLaunch;
@@ -272,11 +258,8 @@ functions:
     penProjectile->Initialize(eLaunch);
   };
 
-
-
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     // set sound default parameters
     m_soSound.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
     m_soFeet.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
@@ -286,41 +269,40 @@ functions:
     m_soFire4.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
   };
 
-// BLOW UP FUNCTIONS
+  // BLOW UP FUNCTIONS
 
   // spawn body parts
-/*  void BlowUp(void)
-  {
-    // get your size
-    FLOATaabbox3D box;
-    GetBoundingBox(box);
-    FLOAT fEntitySize = box.Size().MaxNorm();
+  /*  void BlowUp(void)
+    {
+      // get your size
+      FLOATaabbox3D box;
+      GetBoundingBox(box);
+      FLOAT fEntitySize = box.Size().MaxNorm();
 
-    FLOAT3D vNormalizedDamage = m_vDamage-m_vDamage*(m_fBlowUpAmount/m_vDamage.Length());
-    vNormalizedDamage /= Sqrt(vNormalizedDamage.Length());
+      FLOAT3D vNormalizedDamage = m_vDamage-m_vDamage*(m_fBlowUpAmount/m_vDamage.Length());
+      vNormalizedDamage /= Sqrt(vNormalizedDamage.Length());
 
-    vNormalizedDamage *= 0.75f;
-    FLOAT3D vBodySpeed = en_vCurrentTranslationAbsolute-en_vGravityDir*(en_vGravityDir%en_vCurrentTranslationAbsolute);
+      vNormalizedDamage *= 0.75f;
+      FLOAT3D vBodySpeed = en_vCurrentTranslationAbsolute-en_vGravityDir*(en_vGravityDir%en_vCurrentTranslationAbsolute);
 
-    // spawn debris
-    Debris_Begin(EIBT_FLESH, DPT_NONE, BET_NONE, fEntitySize, vNormalizedDamage, vBodySpeed, 5.0f, 2.0f);
-    Debris_Spawn(this, this, MODEL_WALKER_HEAD1, TEXTURE_WALKER_SOLDIER, 0, 0, 0, 0, 0.1250f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
-    Debris_Spawn(this, this, MODEL_WALKER_HEAD2, TEXTURE_WALKER_SOLDIER, 0, 0, 0, 0, 0.125f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
-    Debris_Spawn(this, this, MODEL_WALKER_LEG, TEXTURE_WALKER_SOLDIER, 0, 0, 0, 0, 0.125f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
-    Debris_Spawn(this, this, MODEL_WALKER_LEG, TEXTURE_WALKER_SOLDIER, 0, 0, 0, 0, 0.125f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+      // spawn debris
+      Debris_Begin(EIBT_FLESH, DPT_NONE, BET_NONE, fEntitySize, vNormalizedDamage, vBodySpeed, 5.0f, 2.0f);
+      Debris_Spawn(this, this, MODEL_WALKER_HEAD1, TEXTURE_WALKER_SOLDIER, 0, 0, 0, 0, 0.1250f,
+        FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+      Debris_Spawn(this, this, MODEL_WALKER_HEAD2, TEXTURE_WALKER_SOLDIER, 0, 0, 0, 0, 0.125f,
+        FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+      Debris_Spawn(this, this, MODEL_WALKER_LEG, TEXTURE_WALKER_SOLDIER, 0, 0, 0, 0, 0.125f,
+        FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+      Debris_Spawn(this, this, MODEL_WALKER_LEG, TEXTURE_WALKER_SOLDIER, 0, 0, 0, 0, 0.125f,
+        FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
 
-    // hide yourself (must do this after spawning debris)
-    SwitchToEditorModel();
-    SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
-    SetCollisionFlags(ECF_IMMATERIAL);
-  };*/
+      // hide yourself (must do this after spawning debris)
+      SwitchToEditorModel();
+      SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
+      SetCollisionFlags(ECF_IMMATERIAL);
+    };*/
 
 procedures:
-// ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire {
     DeactivateWalkingSound();
     // to fire
@@ -457,8 +439,8 @@ procedures:
     return EEnd();
   };
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING);
@@ -473,7 +455,7 @@ procedures:
     }
     en_fDensity = 3000.0f;
 
-    m_sptType = SPT_ELECTRICITY_SPARKS;
+    m_sptType = SPT_SPARKS_BLOOD;
 
     // set your appearance
     SetModel(MODEL_WALKER);

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -69,14 +69,14 @@ components:
 functions:
   void Precache(void) {
     CEnemyBase::Precache();
-    PrecacheSound(SOUND_IDLE );
+    PrecacheSound(SOUND_IDLE);
     PrecacheSound(SOUND_SIGHT);
     PrecacheSound(SOUND_WOUND);
-    PrecacheSound(SOUND_FIRE );
-    PrecacheSound(SOUND_KICK );
+    PrecacheSound(SOUND_FIRE);
+    PrecacheSound(SOUND_KICK);
     PrecacheSound(SOUND_PUNCH);
     PrecacheSound(SOUND_DEATH);
-    PrecacheSound(SOUND_RUN  );
+    PrecacheSound(SOUND_RUN);
 
     PrecacheModel(MODEL_BONEMAN_BODY);
     PrecacheModel(MODEL_BONEMAN_HAND);
@@ -86,8 +86,7 @@ functions:
   };
 
   // describe how this enemy killed player
-  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
-  {
+  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath) {
     CTString str;
     if (eDeath.eLastDamage.dmtType == DMT_CLOSERANGE) {
       str.PrintF(TRANS("%s was ripped apart by a Kleer"), strPlayerName);
@@ -108,24 +107,22 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // boneman can't harm boneman
     if (!IsOfClass(penInflictor, "Boneman")) {
       CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
 
-  void LeaveStain(BOOL bGrow)
-  {
+  void LeaveStain(BOOL bGrow) {
     // boneman doesn't leave bloody stain
   }
 
   // damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
     INDEX iAnim;
-    switch (IRnd()%5) {
+    switch (IRnd() % 5) {
       case 0: iAnim = BONEMAN_ANIM_WOUNDCRITICAL01; break;
       case 1: iAnim = BONEMAN_ANIM_WOUNDCRITICAL02; break;
       case 2: iAnim = BONEMAN_ANIM_WOUNDCRITICAL03; break;
@@ -141,7 +138,7 @@ functions:
   // death
   INDEX AnimForDeath(void) {
     INDEX iAnim;
-    switch (IRnd()%2) {
+    switch (IRnd() % 2) {
       case 0: iAnim = BONEMAN_ANIM_DEATHTOBACK; break;
       case 1: iAnim = BONEMAN_ANIM_DEATHTOFRONT; break;
       default: ASSERTALWAYS("Boneman unknown death");
@@ -152,14 +149,11 @@ functions:
   };
 
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    if (GetModelObject()->GetAnim() == BONEMAN_ANIM_DEATHTOBACK)
-    {
-      vStretch=FLOAT3D(1,1,2)*1.0f;
+    if (GetModelObject()->GetAnim() == BONEMAN_ANIM_DEATHTOBACK) {
+      vStretch = FLOAT3D(1, 1, 2) * 1.0f;
       return 0.48f;
-    }
-    else if (GetModelObject()->GetAnim() == BONEMAN_ANIM_DEATHTOFRONT)
-    {
-      vStretch=FLOAT3D(1,1,2)*0.75f;
+    } else if (GetModelObject()->GetAnim() == BONEMAN_ANIM_DEATHTOFRONT) {
+      vStretch = FLOAT3D(1, 1, 2) * 0.75f;
       return 0.48f;
     }
     return -1.0f;
@@ -171,19 +165,19 @@ functions:
 
   // virtual anim functions
   void StandingAnim(void) {
-    StartModelAnim(BONEMAN_ANIM_STANDLOOP, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(BONEMAN_ANIM_STANDLOOP, AOF_LOOPING | AOF_NORESTART);
     DeactivateRunningSound();
   };
   void WalkingAnim(void) {
-    StartModelAnim(BONEMAN_ANIM_WALKLOOP, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(BONEMAN_ANIM_WALKLOOP, AOF_LOOPING | AOF_NORESTART);
     DeactivateRunningSound();
   };
   void RunningAnim(void) {
-    StartModelAnim(BONEMAN_ANIM_RUNLOOP, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(BONEMAN_ANIM_RUNLOOP, AOF_LOOPING | AOF_NORESTART);
     ActivateRunningSound();
   };
   void RotatingAnim(void) {
-    StartModelAnim(BONEMAN_ANIM_WALKLOOP, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(BONEMAN_ANIM_WALKLOOP, AOF_LOOPING | AOF_NORESTART);
     DeactivateRunningSound();
   };
 
@@ -201,22 +195,19 @@ functions:
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
   };
 
-
   // running sounds
-  void ActivateRunningSound(void)
-  {
+  void ActivateRunningSound(void) {
     if (!m_bRunSoundPlaying) {
-      PlaySound(m_soFeet, SOUND_RUN, SOF_3D|SOF_LOOP);
+      PlaySound(m_soFeet, SOUND_RUN, SOF_3D | SOF_LOOP);
       m_bRunSoundPlaying = TRUE;
     }
   }
-  void DeactivateRunningSound(void)
-  {
+  void DeactivateRunningSound(void) {
     m_soFeet.Stop();
     m_bRunSoundPlaying = FALSE;
   }
 
-// BLOW UP FUNCTIONS
+  // BLOW UP FUNCTIONS
   // spawn body parts
   void BlowUp(void) {
     // get your size
@@ -224,24 +215,24 @@ functions:
     GetBoundingBox(box);
     FLOAT fEntitySize = box.Size().MaxNorm();
 
-    FLOAT3D vNormalizedDamage = m_vDamage-m_vDamage*(m_fBlowUpAmount/m_vDamage.Length());
+    FLOAT3D vNormalizedDamage = m_vDamage - m_vDamage * (m_fBlowUpAmount / m_vDamage.Length());
     vNormalizedDamage /= Sqrt(vNormalizedDamage.Length());
 
     vNormalizedDamage *= 0.75f;
 
-    FLOAT3D vBodySpeed = en_vCurrentTranslationAbsolute-en_vGravityDir*(en_vGravityDir%en_vCurrentTranslationAbsolute);
+    FLOAT3D vBodySpeed = en_vCurrentTranslationAbsolute - en_vGravityDir * (en_vGravityDir % en_vCurrentTranslationAbsolute);
 
     // spawn debris
     Debris_Begin(EIBT_BONES, DPT_NONE, BET_NONE, fEntitySize, vNormalizedDamage, vBodySpeed, 5.0f, 2.0f);
-    
+
     Debris_Spawn(this, this, MODEL_BONEMAN_BODY, TEXTURE_BONEMAN, 0, 0, 0, 0, 0.0f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
     Debris_Spawn(this, this, MODEL_BONEMAN_HAND, TEXTURE_BONEMAN, 0, 0, 0, 0, 0.0f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
     Debris_Spawn(this, this, MODEL_BONEMAN_HAND, TEXTURE_BONEMAN, 0, 0, 0, 0, 0.0f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
     Debris_Spawn(this, this, MODEL_BONEMAN_LEGS, TEXTURE_BONEMAN, 0, 0, 0, 0, 0.0f,
-      FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f));
+                 FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
 
     // hide yourself (must do this after spawning debris)
     SwitchToEditorModel();
@@ -249,12 +240,8 @@ functions:
     SetCollisionFlags(ECF_IMMATERIAL);
   };
 
-
-
-
-
 procedures:
-// ATTACK ENEMY
+  // ATTACK ENEMY
   Fire(EVoid) : CEnemyBase::Fire {
     // fire projectile
     StartModelAnim(BONEMAN_ANIM_ATTACKCLOSELOOP, 0);
@@ -356,10 +343,8 @@ procedures:
     return EReturn();
   };
 
-
-
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING);

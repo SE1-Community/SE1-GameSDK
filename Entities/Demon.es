@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -65,17 +65,14 @@ components:
  57 sound   SOUND_CAST      "ModelsMP\\Enemies\\Demon\\Sounds\\Cast.wav",
 
 functions:
- 
   BOOL HandleEvent(const CEntityEvent &ee)
   {
     // when the shooting of projectile is over, this event comes
     // to make sure we deattach the projectile attachment (in case
     // the shooting was interrupted
-    if (ee.ee_slEvent == EVENTCODE_EReminder)
-    {
-      EReminder eReminder = ((EReminder &) ee);
-      if (eReminder.iValue == REMINDER_DEATTACH_FIREBALL)
-      {
+    if (ee.ee_slEvent == EVENTCODE_EReminder) {
+      EReminder eReminder = ((EReminder &)ee);
+      if (eReminder.iValue == REMINDER_DEATTACH_FIREBALL) {
         RemoveAttachment(DEMON_ATTACHMENT_FIREBALL);
       }
       return TRUE;
@@ -84,21 +81,20 @@ functions:
   }
 
   // describe how this enemy killed player
-  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
-  {
+  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath) {
     CTString str;
     str.PrintF(TRANS("A Demon executed %s"), strPlayerName);
     return str;
   }
-  
+
   virtual const CTFileName &GetComputerMessageName(void) const {
     static DECLARE_CTFILENAME(fnmDemon, "DataMP\\Messages\\Enemies\\Demon.txt");
     return fnmDemon;
   }
-  
+
   void Precache(void) {
     CEnemyBase::Precache();
-    PrecacheSound(SOUND_IDLE );
+    PrecacheSound(SOUND_IDLE);
     PrecacheSound(SOUND_SIGHT);
     PrecacheSound(SOUND_WOUND);
     PrecacheSound(SOUND_DEATH);
@@ -115,8 +111,7 @@ functions:
     return &eiDemon;
   };
 
-  BOOL ForcesCannonballToExplode(void)
-  {
+  BOOL ForcesCannonballToExplode(void) {
     return TRUE;
   }
 
@@ -129,13 +124,11 @@ functions:
   }*/
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType == DMT_BULLET && fDamageAmmount>100.0f)
-    {
-      fDamageAmmount*=0.5f;
+    if (dmtType == DMT_BULLET && fDamageAmmount > 100.0f) {
+      fDamageAmmount *= 0.5f;
     }
 
     // can't harm own class
@@ -143,7 +136,6 @@ functions:
       CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
-
 
   // damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
@@ -154,8 +146,7 @@ functions:
 
   // death
   INDEX AnimForDeath(void) {
-    if (m_penFireFX != NULL)
-    {
+    if (m_penFireFX != NULL) {
       m_penFireFX->SendEvent(EStop());
       m_penFireFX = NULL;
     }
@@ -165,9 +156,8 @@ functions:
     return DEMON_ANIM_DEATHFORWARD;
   };
 
-  FLOAT WaitForDust(FLOAT3D &vStretch)
-  {
-    vStretch=FLOAT3D(1,1,2)*3.0f;
+  FLOAT WaitForDust(FLOAT3D &vStretch) {
+    vStretch = FLOAT3D(1, 1, 2) * 3.0f;
     return 1.1f;
   };
 
@@ -179,7 +169,7 @@ functions:
   // virtual anim functions
   void StandingAnim(void) {
     //_tmLastStandingAnim = _pTimer->CurrentTick();
-    StartModelAnim(DEMON_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(DEMON_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
   void WalkingAnim(void) {
@@ -192,10 +182,10 @@ functions:
   };
 
   void RunningAnim(void) {
-    StartModelAnim(DEMON_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(DEMON_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
   };
   void RotatingAnim(void) {
-    StartModelAnim(DEMON_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+    StartModelAnim(DEMON_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
   };
 
   // virtual sound functions
@@ -212,18 +202,13 @@ functions:
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
   };
 
-
   // adjust sound and watcher parameters here if needed
-  void EnemyPostInit(void) 
-  {
+  void EnemyPostInit(void) {
     m_soSound.Set3DParameters(160.0f, 50.0f, 2.0f, 1.0f);
   };
 
 procedures:
-// ATTACK ENEMY
-  Fire(EVoid) : CEnemyBase::Fire
-  {
-    
+  Fire(EVoid) : CEnemyBase::Fire {
     // SetDesiredTranslation???
     if (m_fMoveSpeed>0.0f) {
       SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, -m_fMoveSpeed));
@@ -295,9 +280,8 @@ procedures:
     return EReturn();
   }
 
-
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING);

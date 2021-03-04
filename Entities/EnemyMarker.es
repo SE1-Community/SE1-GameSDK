@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -43,30 +43,32 @@ components:
   2 texture TEXTURE_MARKER   "Models\\Editor\\EnemyMarker.tex"
 
 functions:
-  // Check if entity is moved on a route set up by its targets.
+  // Check if entity is moved on a route set up by its targets
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Target";
     return TRUE;
   };
-  
-  // Check if entity can drop marker for making linked route.
+
+  // Check if entity can drop marker for making linked route
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\EnemyMarker.ecl");
     strTargetProperty = "Target";
     return TRUE;
   }
 
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
-  {
-    if (slPropertyOffset == offsetof(CMarker, m_penTarget))
-    {
-      if (IsOfClass(penTarget, "Enemy Marker")) { return TRUE; }
-      else { return FALSE; }
-    }   
+  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget) {
+    if (slPropertyOffset == offsetof(CMarker, m_penTarget)) {
+      if (IsOfClass(penTarget, "Enemy Marker")) {
+        return TRUE;
+      } else {
+        return FALSE;
+      }
+    }
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }
 
 procedures:
+  // Entry point
   Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);

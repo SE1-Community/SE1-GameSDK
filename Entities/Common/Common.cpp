@@ -128,7 +128,7 @@ void SetBoolFromBoolEType(BOOL &bSet, BoolEType bet) {
 };
 
 // send event to target
-void SendToTarget(CEntity *penSendEvent, EventEType eetEventType, CEntity *penCaused) {
+void SendToTarget(CEntity *penSendEvent, EEventType eetEventType, CEntity *penCaused) {
   // if target is valid
   if (penSendEvent != NULL) {
     switch (eetEventType) {
@@ -172,13 +172,13 @@ void SendToTarget(CEntity *penSendEvent, EventEType eetEventType, CEntity *penCa
 
       case EET_STOPBLINDNESS: penSendEvent->SendEvent(EStopBlindness()); break;
       case EET_STOPDEAFNESS: penSendEvent->SendEvent(EStopDeafness()); break;
-      case EET_TELEPORTMOVINGBRUSH: penSendEvent->SendEvent(ETeleportMovingBrush()); break;
+      case EET_TELEPORTMB: penSendEvent->SendEvent(ETeleportMovingBrush()); break;
     }
   }
 };
 
 // send event in range
-void SendInRange(CEntity *penSource, EventEType eetEventType, const FLOATaabbox3D &boxRange) {
+void SendInRange(CEntity *penSource, EEventType eetEventType, const FLOATaabbox3D &boxRange) {
   switch (eetEventType) {
     // send START event
     case EET_START: penSource->SendEventInRange(EStart(), boxRange); break;
@@ -1273,7 +1273,7 @@ EntityInfo *GetStdEntityInfo(EntityInfoBodyType eibt) {
 }
 
 // damage control functions
-FLOAT DamageStrength(EntityInfoBodyType eibtBody, enum DamageType dtDamage) {
+FLOAT DamageStrength(EntityInfoBodyType eibtBody, INDEX dtDamage) {
   switch (eibtBody) {
     case EIBT_FLESH: return 1.0f;
 

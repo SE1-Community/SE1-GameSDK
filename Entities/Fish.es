@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -70,7 +70,7 @@ functions:
   };
   void Precache(void) {
     CEnemyBase::Precache();
-    PrecacheModel(MODEL_GLOW  );
+    PrecacheModel(MODEL_GLOW);
     PrecacheTexture(TEXTURE_GLOW);
     PrecacheSound(SOUND_IDLE);
     PrecacheSound(SOUND_SIGHT);
@@ -82,29 +82,26 @@ functions:
   };
 
   // Entity info
-  void *GetEntityInfo(void)
-  {
+  void *GetEntityInfo(void) {
     return &eiFish;
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, enum DamageType dmtType,
-    FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) 
-  {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
+                     const FLOAT3D &vDirection) {
     if (dmtType == DMT_DROWNING) {
-      //en_tmMaxHoldBreath = -5.0f;
-      fDamageAmmount/=2.0f;
+      // en_tmMaxHoldBreath = -5.0f;
+      fDamageAmmount /= 2.0f;
     }
+
     // fish can't harm fish
     if (!IsOfClass(penInflictor, "Fish")) {
       CEnemyDive::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
     }
   };
 
-
   // damage anim
-  INDEX AnimForDamage(FLOAT fDamage)
-  {
+  INDEX AnimForDamage(FLOAT fDamage) {
     m_bAttackingByElectricity = FALSE;
     INDEX iAnim = FISH_ANIM_WOUND;
     StartModelAnim(iAnim, 0);
@@ -117,7 +114,7 @@ functions:
       return AnimForDamage(10.0f);
     }
     INDEX iAnim;
-    switch (IRnd()%3) {
+    switch (IRnd() % 3) {
       default: iAnim = FISH_ANIM_DEATH; break;
       case 0: iAnim = FISH_ANIM_DEATH; break;
       case 1: iAnim = FISH_ANIM_DEATH02; break;
@@ -127,98 +124,83 @@ functions:
     return iAnim;
   };
 
-  void DeathNotify(void)
-  {
+  void DeathNotify(void) {
     m_bAttackingByElectricity = FALSE;
     en_fDensity = 500.0f;
   };
 
-  void RenderParticles(void)
-  {
-    if (m_bAttackingByElectricity && m_penEnemy != NULL)
-    {
+  void RenderParticles(void) {
+    if (m_bAttackingByElectricity && m_penEnemy != NULL) {
       // render one lightning toward enemy
       FLOAT3D vSource = GetPlacement().pl_PositionVector;
       FLOAT3D vTarget = m_penEnemy->GetPlacement().pl_PositionVector;
-      FLOAT3D vDirection = (vTarget-vSource).Normalize();
+      FLOAT3D vDirection = (vTarget - vSource).Normalize();
       Particles_Ghostbuster(vSource, vTarget, 32, 1.0f);
 
       // random lightnings arround
-      for (INDEX i=0; i<4; i++)
-      {
+      for (INDEX i = 0; i < 4; i++) {
         FLOAT3D vDirection = vSource;
-        vDirection(1) += ((FLOAT(rand())/RAND_MAX)-0.5f) * DISTANCE_ELECTRICITY/1.0f;
-        vDirection(2) += ((FLOAT(rand())/RAND_MAX)-0.5f) * DISTANCE_ELECTRICITY/1.0f;
-        vDirection(3) += ((FLOAT(rand())/RAND_MAX)-0.5f) * DISTANCE_ELECTRICITY/1.0f;
+        vDirection(1) += ((FLOAT(rand()) / RAND_MAX) - 0.5f) * DISTANCE_ELECTRICITY / 1.0f;
+        vDirection(2) += ((FLOAT(rand()) / RAND_MAX) - 0.5f) * DISTANCE_ELECTRICITY / 1.0f;
+        vDirection(3) += ((FLOAT(rand()) / RAND_MAX) - 0.5f) * DISTANCE_ELECTRICITY / 1.0f;
         Particles_Ghostbuster(vSource, vDirection, 32, 1.0f);
       }
     }
     CEnemyBase::RenderParticles();
   }
   // virtual anim functions
-  void StandingAnim(void)
-  {
-    StartModelAnim(FISH_ANIM_IDLE, AOF_LOOPING|AOF_NORESTART);
+  void StandingAnim(void) {
+    StartModelAnim(FISH_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
-  void WalkingAnim(void)
-  {
+  void WalkingAnim(void) {
     if (m_bInLiquid) {
-      StartModelAnim(FISH_ANIM_SWIM, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(FISH_ANIM_SWIM, AOF_LOOPING | AOF_NORESTART);
     } else {
-      StartModelAnim(FISH_ANIM_WOUND, AOF_LOOPING|AOF_NORESTART);
+      StartModelAnim(FISH_ANIM_WOUND, AOF_LOOPING | AOF_NORESTART);
     }
   };
-  void RunningAnim(void)
-  {
+  void RunningAnim(void) {
     WalkingAnim();
   };
-  void RotatingAnim(void)
-  {
+  void RotatingAnim(void) {
     WalkingAnim();
   };
 
   // virtual sound functions
-  void IdleSound(void)
-  {
-    PlaySound(m_soSound, SOUND_IDLE, SOF_3D|SOF_NOFILTER);
+  void IdleSound(void) {
+    PlaySound(m_soSound, SOUND_IDLE, SOF_3D | SOF_NOFILTER);
   };
-  void SightSound(void)
-  {
-    PlaySound(m_soSound, SOUND_SIGHT, SOF_3D|SOF_NOFILTER);
+  void SightSound(void) {
+    PlaySound(m_soSound, SOUND_SIGHT, SOF_3D | SOF_NOFILTER);
   };
-  void WoundSound(void)
-  {
+  void WoundSound(void) {
     if (m_bInLiquid) {
-      PlaySound(m_soSound, SOUND_WOUND, SOF_3D|SOF_NOFILTER);
+      PlaySound(m_soSound, SOUND_WOUND, SOF_3D | SOF_NOFILTER);
     } else {
-      PlaySound(m_soSound, SOUND_WOUNDAIR, SOF_3D|SOF_NOFILTER);
+      PlaySound(m_soSound, SOUND_WOUNDAIR, SOF_3D | SOF_NOFILTER);
     }
   };
-  void DeathSound(void)
-  {
+  void DeathSound(void) {
     if (m_bInLiquid) {
-      PlaySound(m_soSound, SOUND_DEATH, SOF_3D|SOF_NOFILTER);
+      PlaySound(m_soSound, SOUND_DEATH, SOF_3D | SOF_NOFILTER);
     } else {
-      PlaySound(m_soSound, SOUND_DEATHAIR, SOF_3D|SOF_NOFILTER);
+      PlaySound(m_soSound, SOUND_DEATHAIR, SOF_3D | SOF_NOFILTER);
     }
   };
 
-  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient)
-  {
-    FLOAT fTimePassed = _pTimer->GetLerpedCurrentTick()-m_tmElectricityTimeStart;
-    if (m_bAttackingByElectricity && (fTimePassed>0))
-    {
+  BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
+    FLOAT fTimePassed = _pTimer->GetLerpedCurrentTick() - m_tmElectricityTimeStart;
+    if (m_bAttackingByElectricity && (fTimePassed > 0)) {
       FLOAT fDieFactor = 1.0f;
-      if (fTimePassed > 0.25f)
-      {
+      if (fTimePassed > 0.25f) {
         // calculate light dying factor
-        fDieFactor = 1.0-(ClampUp(fTimePassed-0.25f,0.5f)/0.5f);
+        fDieFactor = 1.0 - (ClampUp(fTimePassed - 0.25f, 0.5f) / 0.5f);
       }
       // adjust light fx
-      FLOAT fR = 0.7f+0.1f*(FLOAT(rand())/RAND_MAX);
-      FLOAT fG = 0.7f+0.2f*(FLOAT(rand())/RAND_MAX);
-      FLOAT fB = 0.7f+0.3f*(FLOAT(rand())/RAND_MAX);
-      colAmbient = RGBToColor( fR*128*fDieFactor, fG*128*fDieFactor, fB*128*fDieFactor);
+      FLOAT fR = 0.7f + 0.1f * (FLOAT(rand()) / RAND_MAX);
+      FLOAT fG = 0.7f + 0.2f * (FLOAT(rand()) / RAND_MAX);
+      FLOAT fB = 0.7f + 0.3f * (FLOAT(rand()) / RAND_MAX);
+      colAmbient = RGBToColor(fR * 128 * fDieFactor, fG * 128 * fDieFactor, fB * 128 * fDieFactor);
       colLight = C_WHITE;
       return CEnemyBase::AdjustShadingParameters(vLightDirection, colLight, colAmbient);
     }
@@ -226,7 +208,6 @@ functions:
   };
 
 procedures:
-// ATTACK ENEMY
   DiveHit(EVoid) : CEnemyDive::DiveHit
   {
     if (CalcDist(m_penEnemy) > DISTANCE_ELECTRICITY)
@@ -274,8 +255,8 @@ procedures:
     jump DiveHit();
   }
 
-// MAIN
-  Main(EVoid) {
+  // Entry point
+  Main() {
     // declare yourself as a model
     InitAsModel();
     // fish must not go upstairs, or it will get out of water

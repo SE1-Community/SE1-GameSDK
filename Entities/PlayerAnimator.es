@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -448,33 +448,28 @@ components:
 
 
 functions:
-  
   // Read from stream.
   void Read_t( CTStream *istr) // throw char *
-  { 
+  {
     CRationalEntity::Read_t(istr);
   }
 
-  void Precache(void)
-  {
-    INDEX iAvailableWeapons = ((CPlayerWeapons&)*(((CPlayer&)*m_penPlayer).m_penWeapons)).m_iAvailableWeapons;
+  void Precache(void) {
+    INDEX iAvailableWeapons = ((CPlayerWeapons &)*(((CPlayer &)*m_penPlayer).m_penWeapons)).m_iAvailableWeapons;
     CPlayerAnimator_Precache(iAvailableWeapons);
   }
-  
-  CPlayer *GetPlayer(void)
-  {
-    return ((CPlayer*)&*m_penPlayer);
+
+  CPlayer *GetPlayer(void) {
+    return ((CPlayer *)&*m_penPlayer);
   }
-  CModelObject *GetBody(void)
-  {
+  CModelObject *GetBody(void) {
     CAttachmentModelObject *pamoBody = GetPlayer()->GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO);
     if (pamoBody == NULL) {
       return NULL;
     }
     return &pamoBody->amo_moModelObject;
   }
-  CModelObject *GetBodyRen(void)
-  {
+  CModelObject *GetBodyRen(void) {
     CAttachmentModelObject *pamoBody = GetPlayer()->m_moRender.GetAttachmentModel(PLAYER_ATTACHMENT_TORSO);
     if (pamoBody == NULL) {
       return NULL;
@@ -483,26 +478,26 @@ functions:
   }
 
   // Set components
-  void SetComponents(CModelObject *mo, ULONG ulIDModel, ULONG ulIDTexture,
-                     ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+  void SetComponents(CModelObject * mo, ULONG ulIDModel, ULONG ulIDTexture, ULONG ulIDReflectionTexture,
+                     ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
     // model data
     mo->SetData(GetModelDataForComponent(ulIDModel));
     // texture data
     mo->mo_toTexture.SetData(GetTextureDataForComponent(ulIDTexture));
     // reflection texture data
-    if (ulIDReflectionTexture>0) {
+    if (ulIDReflectionTexture > 0) {
       mo->mo_toReflection.SetData(GetTextureDataForComponent(ulIDReflectionTexture));
     } else {
       mo->mo_toReflection.SetData(NULL);
     }
     // specular texture data
-    if (ulIDSpecularTexture>0) {
+    if (ulIDSpecularTexture > 0) {
       mo->mo_toSpecular.SetData(GetTextureDataForComponent(ulIDSpecularTexture));
     } else {
       mo->mo_toSpecular.SetData(NULL);
     }
     // bump texture data
-    if (ulIDBumpTexture>0) {
+    if (ulIDBumpTexture > 0) {
       mo->mo_toBump.SetData(GetTextureDataForComponent(ulIDBumpTexture));
     } else {
       mo->mo_toBump.SetData(NULL);
@@ -511,17 +506,17 @@ functions:
   };
 
   // Add attachment model
-  void AddAttachmentModel(CModelObject *mo, INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture,
-                          ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
-    SetComponents(&mo->AddAttachmentModel(iAttachment)->amo_moModelObject, ulIDModel, 
-                  ulIDTexture, ulIDReflectionTexture, ulIDSpecularTexture, ulIDBumpTexture);
+  void AddAttachmentModel(CModelObject * mo, INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture, ULONG ulIDReflectionTexture,
+                          ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+    SetComponents(&mo->AddAttachmentModel(iAttachment)->amo_moModelObject, ulIDModel, ulIDTexture, ulIDReflectionTexture,
+                  ulIDSpecularTexture, ulIDBumpTexture);
   };
 
   // Add weapon attachment
-  void AddWeaponAttachment(INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture,
-                           ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
-    AddAttachmentModel(pmoModel, iAttachment, ulIDModel, ulIDTexture,
-                       ulIDReflectionTexture, ulIDSpecularTexture, ulIDBumpTexture);
+  void AddWeaponAttachment(INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture, ULONG ulIDReflectionTexture,
+                           ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+    AddAttachmentModel(pmoModel, iAttachment, ulIDModel, ulIDTexture, ulIDReflectionTexture, ulIDSpecularTexture,
+                       ulIDBumpTexture);
   };
 
   // set active attachment (model)
@@ -530,8 +525,7 @@ functions:
   };
 
   // synchronize any possible weapon attachment(s) with default appearance
-  void SyncWeapon(void)
-  {
+  void SyncWeapon(void) {
     CModelObject *pmoBodyRen = GetBodyRen();
     CModelObject *pmoBodyDef = GetBody();
     // for each weapon attachment
@@ -543,19 +537,19 @@ functions:
         // just skip it
         NOTHING;
 
-      // if exists only in rendering model
+        // if exists only in rendering model
       } else if (pamoWeapRen != NULL && pamoWeapDef == NULL) {
         // remove it from rendering
         delete pamoWeapRen;
 
-      // if exists only in default
+        // if exists only in default
       } else if (pamoWeapRen == NULL && pamoWeapDef != NULL) {
         // add it to rendering
         pamoWeapRen = pmoBodyRen->AddAttachmentModel(iWeapon);
         pamoWeapRen->amo_plRelative = pamoWeapDef->amo_plRelative;
         pamoWeapRen->amo_moModelObject.Copy(pamoWeapDef->amo_moModelObject);
 
-      // if exists in both
+        // if exists in both
       } else {
         // just synchronize
         pamoWeapRen->amo_plRelative = pamoWeapDef->amo_plRelative;
@@ -566,218 +560,239 @@ functions:
 
   // set weapon
   void SetWeapon(void) {
-    INDEX iWeapon = ((CPlayerWeapons&)*(((CPlayer&)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
+    INDEX iWeapon = ((CPlayerWeapons &)*(((CPlayer &)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
     m_iWeaponLast = iWeapon;
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
     pmoModel = &(pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
     switch (iWeapon) {
-    // *********** KNIFE ***********
+        // *********** KNIFE ***********
       case WEAPON_KNIFE:
-        AddWeaponAttachment(BODY_ATTACHMENT_KNIFE, MODEL_KNIFE,
-                            TEXTURE_KNIFE, TEX_REFL_BWRIPLES02, TEX_SPEC_WEAK, 0);
+        AddWeaponAttachment(BODY_ATTACHMENT_KNIFE, MODEL_KNIFE, TEXTURE_KNIFE, TEX_REFL_BWRIPLES02, TEX_SPEC_WEAK, 0);
         break;
 
-    // *********** DOUBLE COLT ***********
+        // *********** DOUBLE COLT ***********
       case WEAPON_DOUBLECOLT:
         AddWeaponAttachment(BODY_ATTACHMENT_COLT_LEFT, MODEL_COLT, TEXTURE_COLTMAIN, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_COLT_LEFT);
-        AddWeaponAttachment(COLTITEM_ATTACHMENT_BULLETS, MODEL_COLTBULLETS,
-                            TEXTURE_COLTBULLETS, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(COLTITEM_ATTACHMENT_COCK, MODEL_COLTCOCK,
-                            TEXTURE_COLTCOCK, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(COLTITEM_ATTACHMENT_BODY, MODEL_COLTMAIN,
-                            TEXTURE_COLTMAIN, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(COLTITEM_ATTACHMENT_BULLETS, MODEL_COLTBULLETS, TEXTURE_COLTBULLETS, TEX_REFL_LIGHTBLUEMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(COLTITEM_ATTACHMENT_COCK, MODEL_COLTCOCK, TEXTURE_COLTCOCK, TEX_REFL_LIGHTBLUEMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(COLTITEM_ATTACHMENT_BODY, MODEL_COLTMAIN, TEXTURE_COLTMAIN, TEX_REFL_LIGHTBLUEMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         SetAttachment(COLTITEM_ATTACHMENT_BODY);
         AddWeaponAttachment(COLTMAIN_ATTACHMENT_FLARE, MODEL_FLARE02, TEXTURE_FLARE02, 0, 0, 0);
         // reset to player body
         pmoModel = &(pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
 
-    // *********** COLT ***********
+        // *********** COLT ***********
       case WEAPON_COLT:
         AddWeaponAttachment(BODY_ATTACHMENT_COLT_RIGHT, MODEL_COLT, TEXTURE_COLTMAIN, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_COLT_RIGHT);
-        AddWeaponAttachment(COLTITEM_ATTACHMENT_BULLETS, MODEL_COLTBULLETS,
-                            TEXTURE_COLTBULLETS, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(COLTITEM_ATTACHMENT_COCK, MODEL_COLTCOCK,
-                            TEXTURE_COLTCOCK, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(COLTITEM_ATTACHMENT_BODY, MODEL_COLTMAIN,
-                            TEXTURE_COLTMAIN, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(COLTITEM_ATTACHMENT_BULLETS, MODEL_COLTBULLETS, TEXTURE_COLTBULLETS, TEX_REFL_LIGHTBLUEMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(COLTITEM_ATTACHMENT_COCK, MODEL_COLTCOCK, TEXTURE_COLTCOCK, TEX_REFL_LIGHTBLUEMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(COLTITEM_ATTACHMENT_BODY, MODEL_COLTMAIN, TEXTURE_COLTMAIN, TEX_REFL_LIGHTBLUEMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         SetAttachment(COLTITEM_ATTACHMENT_BODY);
         AddWeaponAttachment(COLTMAIN_ATTACHMENT_FLARE, MODEL_FLARE02, TEXTURE_FLARE02, 0, 0, 0);
         break;
 
-    // *********** SINGLE SHOTGUN ***********
+        // *********** SINGLE SHOTGUN ***********
       case WEAPON_SINGLESHOTGUN:
         AddWeaponAttachment(BODY_ATTACHMENT_SINGLE_SHOTGUN, MODEL_SINGLESHOTGUN, TEXTURE_SS_HANDLE, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_SINGLE_SHOTGUN);
-        AddWeaponAttachment(SINGLESHOTGUNITEM_ATTACHMENT_BARRELS, MODEL_SS_BARRELS,
-                            TEXTURE_SS_BARRELS, TEX_REFL_DARKMETAL, TEX_SPEC_WEAK, 0);
-        AddWeaponAttachment(SINGLESHOTGUNITEM_ATTACHMENT_HANDLE, MODEL_SS_HANDLE,
-                            TEXTURE_SS_HANDLE, TEX_REFL_DARKMETAL, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(SINGLESHOTGUNITEM_ATTACHMENT_SLIDER, MODEL_SS_SLIDER,
-                            TEXTURE_SS_BARRELS, TEX_REFL_DARKMETAL, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(SINGLESHOTGUNITEM_ATTACHMENT_BARRELS, MODEL_SS_BARRELS, TEXTURE_SS_BARRELS, TEX_REFL_DARKMETAL,
+                            TEX_SPEC_WEAK, 0);
+        AddWeaponAttachment(SINGLESHOTGUNITEM_ATTACHMENT_HANDLE, MODEL_SS_HANDLE, TEXTURE_SS_HANDLE, TEX_REFL_DARKMETAL,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(SINGLESHOTGUNITEM_ATTACHMENT_SLIDER, MODEL_SS_SLIDER, TEXTURE_SS_BARRELS, TEX_REFL_DARKMETAL,
+                            TEX_SPEC_MEDIUM, 0);
         SetAttachment(SINGLESHOTGUNITEM_ATTACHMENT_BARRELS);
         AddWeaponAttachment(BARRELS_ATTACHMENT_FLARE, MODEL_FLARE02, TEXTURE_FLARE02, 0, 0, 0);
         break;
 
-    // *********** DOUBLE SHOTGUN ***********
+        // *********** DOUBLE SHOTGUN ***********
       case WEAPON_DOUBLESHOTGUN:
         AddWeaponAttachment(BODY_ATTACHMENT_DOUBLE_SHOTGUN, MODEL_DOUBLESHOTGUN, TEXTURE_DS_HANDLE, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_DOUBLE_SHOTGUN);
-        AddWeaponAttachment(DOUBLESHOTGUNITEM_ATTACHMENT_BARRELS, MODEL_DS_BARRELS,
-                            TEXTURE_DS_BARRELS, TEX_REFL_BWRIPLES01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(DOUBLESHOTGUNITEM_ATTACHMENT_HANDLE, MODEL_DS_HANDLE,
-                            TEXTURE_DS_HANDLE, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(DOUBLESHOTGUNITEM_ATTACHMENT_SWITCH, MODEL_DS_SWITCH,
-                            TEXTURE_DS_SWITCH, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(DOUBLESHOTGUNITEM_ATTACHMENT_BARRELS, MODEL_DS_BARRELS, TEXTURE_DS_BARRELS, TEX_REFL_BWRIPLES01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(DOUBLESHOTGUNITEM_ATTACHMENT_HANDLE, MODEL_DS_HANDLE, TEXTURE_DS_HANDLE, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(DOUBLESHOTGUNITEM_ATTACHMENT_SWITCH, MODEL_DS_SWITCH, TEXTURE_DS_SWITCH, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         SetAttachment(DOUBLESHOTGUNITEM_ATTACHMENT_BARRELS);
         AddWeaponAttachment(DSHOTGUNBARRELS_ATTACHMENT_FLARE, MODEL_FLARE02, TEXTURE_FLARE02, 0, 0, 0);
         break;
 
-
-    // *********** TOMMYGUN ***********
+        // *********** TOMMYGUN ***********
       case WEAPON_TOMMYGUN:
         AddWeaponAttachment(BODY_ATTACHMENT_TOMMYGUN, MODEL_TOMMYGUN, TEXTURE_TG_BODY, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_TOMMYGUN);
-        AddWeaponAttachment(TOMMYGUNITEM_ATTACHMENT_BODY, MODEL_TG_BODY, TEXTURE_TG_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(TOMMYGUNITEM_ATTACHMENT_SLIDER, MODEL_TG_SLIDER, TEXTURE_TG_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(TOMMYGUNITEM_ATTACHMENT_BODY, MODEL_TG_BODY, TEXTURE_TG_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM,
+                            0);
+        AddWeaponAttachment(TOMMYGUNITEM_ATTACHMENT_SLIDER, MODEL_TG_SLIDER, TEXTURE_TG_BODY, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         SetAttachment(TOMMYGUNITEM_ATTACHMENT_BODY);
         AddWeaponAttachment(BODY_ATTACHMENT_FLARE, MODEL_FLARE02, TEXTURE_FLARE02, 0, 0, 0);
         break;
 
-    // *********** SNIPER ***********
+        // *********** SNIPER ***********
       case WEAPON_SNIPER:
         AddWeaponAttachment(BODY_ATTACHMENT_FLAMER, MODEL_SNIPER, TEXTURE_SNIPER_BODY, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_FLAMER);
-        AddWeaponAttachment(SNIPERITEM_ATTACHMENT_BODY, MODEL_SNIPER_BODY, TEXTURE_SNIPER_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(SNIPERITEM_ATTACHMENT_BODY, MODEL_SNIPER_BODY, TEXTURE_SNIPER_BODY, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         SetAttachment(SNIPERITEM_ATTACHMENT_BODY);
         AddWeaponAttachment(BODY_ATTACHMENT_FLARE, MODEL_FLARE02, TEXTURE_FLARE02, 0, 0, 0);
         break;
 
-    // *********** MINIGUN ***********
+        // *********** MINIGUN ***********
       case WEAPON_MINIGUN:
         AddWeaponAttachment(BODY_ATTACHMENT_MINIGUN, MODEL_MINIGUN, TEXTURE_MG_BODY, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_MINIGUN);
-        AddWeaponAttachment(MINIGUNITEM_ATTACHMENT_BARRELS, MODEL_MG_BARRELS, TEXTURE_MG_BARRELS, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0); 
-        AddWeaponAttachment(MINIGUNITEM_ATTACHMENT_BODY, MODEL_MG_BODY, TEXTURE_MG_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);          
-        AddWeaponAttachment(MINIGUNITEM_ATTACHMENT_ENGINE, MODEL_MG_ENGINE, TEXTURE_MG_BARRELS, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);      
+        AddWeaponAttachment(MINIGUNITEM_ATTACHMENT_BARRELS, MODEL_MG_BARRELS, TEXTURE_MG_BARRELS, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(MINIGUNITEM_ATTACHMENT_BODY, MODEL_MG_BODY, TEXTURE_MG_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM,
+                            0);
+        AddWeaponAttachment(MINIGUNITEM_ATTACHMENT_ENGINE, MODEL_MG_ENGINE, TEXTURE_MG_BARRELS, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         SetAttachment(MINIGUNITEM_ATTACHMENT_BODY);
         AddWeaponAttachment(BODY_ATTACHMENT_FLARE, MODEL_FLARE02, TEXTURE_FLARE02, 0, 0, 0);
         break;
 
-    // *********** ROCKET LAUNCHER ***********
+        // *********** ROCKET LAUNCHER ***********
       case WEAPON_ROCKETLAUNCHER:
         AddWeaponAttachment(BODY_ATTACHMENT_ROCKET_LAUNCHER, MODEL_ROCKETLAUNCHER, TEXTURE_RL_BODY, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_ROCKET_LAUNCHER);
-        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_BODY, MODEL_RL_BODY, TEXTURE_RL_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROTATINGPART, MODEL_RL_ROTATINGPART, TEXTURE_RL_ROTATINGPART, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROCKET1, MODEL_RL_ROCKET, TEXTURE_RL_ROCKET, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROCKET2, MODEL_RL_ROCKET, TEXTURE_RL_ROCKET, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROCKET3, MODEL_RL_ROCKET, TEXTURE_RL_ROCKET, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROCKET4, MODEL_RL_ROCKET, TEXTURE_RL_ROCKET, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_BODY, MODEL_RL_BODY, TEXTURE_RL_BODY, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROTATINGPART, MODEL_RL_ROTATINGPART, TEXTURE_RL_ROTATINGPART,
+                            TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROCKET1, MODEL_RL_ROCKET, TEXTURE_RL_ROCKET, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROCKET2, MODEL_RL_ROCKET, TEXTURE_RL_ROCKET, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROCKET3, MODEL_RL_ROCKET, TEXTURE_RL_ROCKET, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(ROCKETLAUNCHERITEM_ATTACHMENT_ROCKET4, MODEL_RL_ROCKET, TEXTURE_RL_ROCKET, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         break;
 
-    // *********** GRENADE LAUNCHER ***********
+        // *********** GRENADE LAUNCHER ***********
       case WEAPON_GRENADELAUNCHER:
         AddWeaponAttachment(BODY_ATTACHMENT_GRENADE_LAUNCHER, MODEL_GRENADELAUNCHER, TEXTURE_GL_BODY, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_GRENADE_LAUNCHER);
-        AddWeaponAttachment(GRENADELAUNCHERITEM_ATTACHMENT_BODY, MODEL_GL_BODY, TEXTURE_GL_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(GRENADELAUNCHERITEM_ATTACHMENT_MOVING_PART, MODEL_GL_MOVINGPART, TEXTURE_GL_MOVINGPART, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(GRENADELAUNCHERITEM_ATTACHMENT_GRENADE, MODEL_GL_GRENADE, TEXTURE_GL_MOVINGPART, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(GRENADELAUNCHERITEM_ATTACHMENT_BODY, MODEL_GL_BODY, TEXTURE_GL_BODY, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(GRENADELAUNCHERITEM_ATTACHMENT_MOVING_PART, MODEL_GL_MOVINGPART, TEXTURE_GL_MOVINGPART,
+                            TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(GRENADELAUNCHERITEM_ATTACHMENT_GRENADE, MODEL_GL_GRENADE, TEXTURE_GL_MOVINGPART,
+                            TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
         break;
 
-/*    // *********** PIPEBOMB ***********
-      case WEAPON_PIPEBOMB:
-        AddWeaponAttachment(BODY_ATTACHMENT_COLT_RIGHT, MODEL_PIPEBOMB_STICK, TEXTURE_PB_STICK, 0, 0, 0);
-        SetAttachment(BODY_ATTACHMENT_COLT_RIGHT);
-        AddWeaponAttachment(STICKITEM_ATTACHMENT_STICK, MODEL_PB_STICK, TEXTURE_PB_STICK, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(STICKITEM_ATTACHMENT_SHIELD, MODEL_PB_SHIELD, TEXTURE_PB_STICK, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(STICKITEM_ATTACHMENT_BUTTON, MODEL_PB_BUTTON, TEXTURE_PB_STICK, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
-        // reset to player body
-        pmoModel = &(pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
-        AddWeaponAttachment(BODY_ATTACHMENT_COLT_LEFT, MODEL_PB_BOMB, TEXTURE_PB_BOMB, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
-        break;
-*/
-    // *********** FLAMER ***********
+        /*    // *********** PIPEBOMB ***********
+              case WEAPON_PIPEBOMB:
+                AddWeaponAttachment(BODY_ATTACHMENT_COLT_RIGHT, MODEL_PIPEBOMB_STICK, TEXTURE_PB_STICK, 0, 0, 0);
+                SetAttachment(BODY_ATTACHMENT_COLT_RIGHT);
+                AddWeaponAttachment(STICKITEM_ATTACHMENT_STICK, MODEL_PB_STICK, TEXTURE_PB_STICK, TEX_REFL_LIGHTBLUEMETAL01,
+           TEX_SPEC_MEDIUM, 0); AddWeaponAttachment(STICKITEM_ATTACHMENT_SHIELD, MODEL_PB_SHIELD, TEXTURE_PB_STICK,
+           TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0); AddWeaponAttachment(STICKITEM_ATTACHMENT_BUTTON, MODEL_PB_BUTTON,
+           TEXTURE_PB_STICK, TEX_REFL_LIGHTBLUEMETAL01, TEX_SPEC_MEDIUM, 0);
+                // reset to player body
+                pmoModel = &(pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
+                AddWeaponAttachment(BODY_ATTACHMENT_COLT_LEFT, MODEL_PB_BOMB, TEXTURE_PB_BOMB, TEX_REFL_LIGHTBLUEMETAL01,
+           TEX_SPEC_MEDIUM, 0); break;
+        */
+        // *********** FLAMER ***********
       case WEAPON_FLAMER:
         AddWeaponAttachment(BODY_ATTACHMENT_FLAMER, MODEL_FLAMER, TEXTURE_FL_BODY, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_FLAMER);
         AddWeaponAttachment(FLAMERITEM_ATTACHMENT_BODY, MODEL_FL_BODY, TEXTURE_FL_BODY, TEX_REFL_BWRIPLES02, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(FLAMERITEM_ATTACHMENT_FUEL, MODEL_FL_RESERVOIR, TEXTURE_FL_FUELRESERVOIR, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(FLAMERITEM_ATTACHMENT_FUEL, MODEL_FL_RESERVOIR, TEXTURE_FL_FUELRESERVOIR, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         AddWeaponAttachment(FLAMERITEM_ATTACHMENT_FLAME, MODEL_FL_FLAME, TEXTURE_FL_FLAME, 0, 0, 0);
         break;
 
-    // *********** CHAINSAW ***********
+        // *********** CHAINSAW ***********
       case WEAPON_CHAINSAW: {
         AddWeaponAttachment(BODY_ATTACHMENT_MINIGUN, MODEL_CHAINSAW, TEXTURE_CS_BODY, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_MINIGUN);
-        AddWeaponAttachment(CHAINSAWFORPLAYER_ATTACHMENT_CHAINSAW, MODEL_CS_BODY, TEXTURE_CS_BODY, TEX_REFL_BWRIPLES02, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(CHAINSAWFORPLAYER_ATTACHMENT_BLADE, MODEL_CS_BLADE, TEXTURE_CS_BLADE, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(CHAINSAWFORPLAYER_ATTACHMENT_CHAINSAW, MODEL_CS_BODY, TEXTURE_CS_BODY, TEX_REFL_BWRIPLES02,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(CHAINSAWFORPLAYER_ATTACHMENT_BLADE, MODEL_CS_BLADE, TEXTURE_CS_BLADE, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         CModelObject *pmo = pmoModel;
         SetAttachment(CHAINSAWFORPLAYER_ATTACHMENT_BLADE);
         AddWeaponAttachment(BLADEFORPLAYER_ATTACHMENT_TEETH, MODEL_CS_TEETH, TEXTURE_CS_TEETH, 0, 0, 0);
-        break; }
+        break;
+      }
 
-    // *********** LASER ***********
+        // *********** LASER ***********
       case WEAPON_LASER:
         AddWeaponAttachment(BODY_ATTACHMENT_LASER, MODEL_LASER, TEXTURE_LS_BODY, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_LASER);
         AddWeaponAttachment(LASERITEM_ATTACHMENT_BODY, MODEL_LS_BODY, TEXTURE_LS_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(LASERITEM_ATTACHMENT_LEFTUP,    MODEL_LS_BARREL, TEXTURE_LS_BARREL, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(LASERITEM_ATTACHMENT_LEFTDOWN,  MODEL_LS_BARREL, TEXTURE_LS_BARREL, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(LASERITEM_ATTACHMENT_RIGHTUP,   MODEL_LS_BARREL, TEXTURE_LS_BARREL, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(LASERITEM_ATTACHMENT_RIGHTDOWN, MODEL_LS_BARREL, TEXTURE_LS_BARREL, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(LASERITEM_ATTACHMENT_LEFTUP, MODEL_LS_BARREL, TEXTURE_LS_BARREL, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(LASERITEM_ATTACHMENT_LEFTDOWN, MODEL_LS_BARREL, TEXTURE_LS_BARREL, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(LASERITEM_ATTACHMENT_RIGHTUP, MODEL_LS_BARREL, TEXTURE_LS_BARREL, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
+        AddWeaponAttachment(LASERITEM_ATTACHMENT_RIGHTDOWN, MODEL_LS_BARREL, TEXTURE_LS_BARREL, TEX_REFL_LIGHTMETAL01,
+                            TEX_SPEC_MEDIUM, 0);
         break;
 
-/*
-    // *********** GHOSTBUSTER ***********
-      case WEAPON_GHOSTBUSTER: {
-        AddWeaponAttachment(BODY_ATTACHMENT_LASER, MODEL_GHOSTBUSTER, TEXTURE_GB_BODY, 0, 0, 0);
-        SetAttachment(BODY_ATTACHMENT_LASER);
-        AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_BODY, MODEL_GB_BODY, TEXTURE_GB_BODY, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_ROTATOR, MODEL_GB_ROTATOR, TEXTURE_GB_ROTATOR, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-        AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT01, MODEL_GB_EFFECT1, TEXTURE_GB_LIGHTNING, 0, 0, 0);
-        AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT02, MODEL_GB_EFFECT1, TEXTURE_GB_LIGHTNING, 0, 0, 0);
-        AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT03, MODEL_GB_EFFECT1, TEXTURE_GB_LIGHTNING, 0, 0, 0);
-        AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT04, MODEL_GB_EFFECT1, TEXTURE_GB_LIGHTNING, 0, 0, 0);
-        CModelObject *pmo = pmoModel;
-        SetAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT01);
-        AddWeaponAttachment(EFFECT01_ATTACHMENT_FLARE, MODEL_GB_EFFECT1FLARE, TEXTURE_GB_FLARE, 0, 0, 0);
-        pmoModel = pmo;
-        SetAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT02);
-        AddWeaponAttachment(EFFECT01_ATTACHMENT_FLARE, MODEL_GB_EFFECT1FLARE, TEXTURE_GB_FLARE, 0, 0, 0);
-        pmoModel = pmo;
-        SetAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT03);
-        AddWeaponAttachment(EFFECT01_ATTACHMENT_FLARE, MODEL_GB_EFFECT1FLARE, TEXTURE_GB_FLARE, 0, 0, 0);
-        pmoModel = pmo;
-        SetAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT04);
-        AddWeaponAttachment(EFFECT01_ATTACHMENT_FLARE, MODEL_GB_EFFECT1FLARE, TEXTURE_GB_FLARE, 0, 0, 0);
-        break; }
-*/
-    // *********** CANNON ***********
+        /*
+            // *********** GHOSTBUSTER ***********
+              case WEAPON_GHOSTBUSTER: {
+                AddWeaponAttachment(BODY_ATTACHMENT_LASER, MODEL_GHOSTBUSTER, TEXTURE_GB_BODY, 0, 0, 0);
+                SetAttachment(BODY_ATTACHMENT_LASER);
+                AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_BODY, MODEL_GB_BODY, TEXTURE_GB_BODY, TEX_REFL_LIGHTMETAL01,
+           TEX_SPEC_MEDIUM, 0); AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_ROTATOR, MODEL_GB_ROTATOR, TEXTURE_GB_ROTATOR,
+           TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0); AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT01, MODEL_GB_EFFECT1,
+           TEXTURE_GB_LIGHTNING, 0, 0, 0); AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT02, MODEL_GB_EFFECT1,
+           TEXTURE_GB_LIGHTNING, 0, 0, 0); AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT03, MODEL_GB_EFFECT1,
+           TEXTURE_GB_LIGHTNING, 0, 0, 0); AddWeaponAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT04, MODEL_GB_EFFECT1,
+           TEXTURE_GB_LIGHTNING, 0, 0, 0); CModelObject *pmo = pmoModel; SetAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT01);
+                AddWeaponAttachment(EFFECT01_ATTACHMENT_FLARE, MODEL_GB_EFFECT1FLARE, TEXTURE_GB_FLARE, 0, 0, 0);
+                pmoModel = pmo;
+                SetAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT02);
+                AddWeaponAttachment(EFFECT01_ATTACHMENT_FLARE, MODEL_GB_EFFECT1FLARE, TEXTURE_GB_FLARE, 0, 0, 0);
+                pmoModel = pmo;
+                SetAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT03);
+                AddWeaponAttachment(EFFECT01_ATTACHMENT_FLARE, MODEL_GB_EFFECT1FLARE, TEXTURE_GB_FLARE, 0, 0, 0);
+                pmoModel = pmo;
+                SetAttachment(GHOSTBUSTERITEM_ATTACHMENT_EFFECT04);
+                AddWeaponAttachment(EFFECT01_ATTACHMENT_FLARE, MODEL_GB_EFFECT1FLARE, TEXTURE_GB_FLARE, 0, 0, 0);
+                break; }
+        */
+        // *********** CANNON ***********
       case WEAPON_IRONCANNON:
-//      case WEAPON_NUKECANNON:
+        //      case WEAPON_NUKECANNON:
         AddWeaponAttachment(BODY_ATTACHMENT_CANNON, MODEL_CANNON, TEXTURE_CANNON, 0, 0, 0);
         SetAttachment(BODY_ATTACHMENT_CANNON);
         AddWeaponAttachment(CANNON_ATTACHMENT_BODY, MODEL_CN_BODY, TEXTURE_CANNON, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-//        AddWeaponAttachment(CANNON_ATTACHMENT_NUKEBOX, MODEL_CN_NUKEBOX, TEXTURE_CANNON, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
-//        AddWeaponAttachment(CANNON_ATTACHMENT_LIGHT, MODEL_CN_LIGHT, TEXTURE_CANNON, TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
+        //        AddWeaponAttachment(CANNON_ATTACHMENT_NUKEBOX, MODEL_CN_NUKEBOX, TEXTURE_CANNON, TEX_REFL_LIGHTMETAL01,
+        //        TEX_SPEC_MEDIUM, 0); AddWeaponAttachment(CANNON_ATTACHMENT_LIGHT, MODEL_CN_LIGHT, TEXTURE_CANNON,
+        //        TEX_REFL_LIGHTMETAL01, TEX_SPEC_MEDIUM, 0);
         break;
-      default:
-        ASSERTALWAYS("Unknown weapon.");
+      default: ASSERTALWAYS("Unknown weapon.");
     }
     // sync apperances
     SyncWeapon();
   };
 
   // set item
-  void SetItem(CModelObject *pmo) {
+  void SetItem(CModelObject * pmo) {
     pmoModel = &(GetPlayer()->GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
-    AddWeaponAttachment(BODY_ATTACHMENT_ITEM, MODEL_GOLDAMON,
-                        TEXTURE_GOLDAMON, TEX_REFL_GOLD01, TEX_SPEC_MEDIUM, 0);
+    AddWeaponAttachment(BODY_ATTACHMENT_ITEM, MODEL_GOLDAMON, TEXTURE_GOLDAMON, TEX_REFL_GOLD01, TEX_SPEC_MEDIUM, 0);
     if (pmo != NULL) {
-      CPlayer &pl = (CPlayer&)*m_penPlayer;
-      CAttachmentModelObject *pamo = pl.GetModelObject()->GetAttachmentModelList(PLAYER_ATTACHMENT_TORSO, BODY_ATTACHMENT_ITEM, -1);
+      CPlayer &pl = (CPlayer &)*m_penPlayer;
+      CAttachmentModelObject *pamo
+        = pl.GetModelObject()->GetAttachmentModelList(PLAYER_ATTACHMENT_TORSO, BODY_ATTACHMENT_ITEM, -1);
       pmoModel = &(pamo->amo_moModelObject);
       pmoModel->Copy(*pmo);
       pmoModel->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
@@ -790,18 +805,21 @@ functions:
   // set player body animation
   void SetBodyAnimation(INDEX iAnimation, ULONG ulFlags) {
     // on weapon change skip anim
-    if (m_bChangeWeapon) { return; }
+    if (m_bChangeWeapon) {
+      return;
+    }
     // on firing skip anim
-    if (m_bAttacking) { return; }
+    if (m_bAttacking) {
+      return;
+    }
     // play body anim
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
     CModelObject &moBody = pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject;
     moBody.PlayAnim(iAnimation, ulFlags);
-    m_fBodyAnimTime = moBody.GetAnimLength(iAnimation);     // anim length
+    m_fBodyAnimTime = moBody.GetAnimLength(iAnimation); // anim length
   };
 
-
-// INITIALIZE
+  // INITIALIZE
   void Initialize(void) {
     // set internal properties
     m_bReference = TRUE;
@@ -820,10 +838,10 @@ functions:
     m_fWeaponYLastOffset = 0.0f;
     m_fWeaponYOffset = 0.0f;
     m_fWeaponYSpeed = 0.0f;
-//    m_fRecoilLastOffset = 0.0f;
-//    m_fRecoilOffset = 0.0f;
-//    m_fRecoilSpeed = 0.0f;
-    
+    //    m_fRecoilLastOffset = 0.0f;
+    //    m_fRecoilOffset = 0.0f;
+    //    m_fRecoilSpeed = 0.0f;
+
     // clear moving banking
     m_bMoving = FALSE;
     m_fMoveLastBanking = 0.0f;
@@ -836,19 +854,18 @@ functions:
 
     // weapon
     SetWeapon();
-    SetBodyAnimation(BODY_ANIM_COLT_STAND, AOF_LOOPING|AOF_NORESTART);
+    SetBodyAnimation(BODY_ANIM_COLT_STAND, AOF_LOOPING | AOF_NORESTART);
   };
 
-
-// ANIMATE BANKING AND SOFT EYES
+  // ANIMATE BANKING AND SOFT EYES
   // store for lerping
   void StoreLast(void) {
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
-    m_vLastPlayerPosition = pl.GetPlacement().pl_PositionVector;  // store last player position
-    m_fEyesYLastOffset = m_fEyesYOffset;                          // store last eyes offset
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
+    m_vLastPlayerPosition = pl.GetPlacement().pl_PositionVector; // store last player position
+    m_fEyesYLastOffset = m_fEyesYOffset;                         // store last eyes offset
     m_fWeaponYLastOffset = m_fWeaponYOffset;
-//    m_fRecoilLastOffset = m_fRecoilOffset;
-    m_fMoveLastBanking = m_fMoveBanking;                          // store last banking for lerping
+    //    m_fRecoilLastOffset = m_fRecoilOffset;
+    m_fMoveLastBanking = m_fMoveBanking; // store last banking for lerping
     m_fSidestepLastBanking = m_fSidestepBanking;
   };
 
@@ -859,11 +876,11 @@ functions:
       // move banking left
       if (m_iMovingSide == 0) {
         m_fMoveBanking += 0.35f;
-        if (m_fMoveBanking > 1.0f) { 
+        if (m_fMoveBanking > 1.0f) {
           m_fMoveBanking = 1.0f;
           m_iMovingSide = 1;
         }
-      // move banking right
+        // move banking right
       } else {
         m_fMoveBanking -= 0.35f;
         if (m_fMoveBanking < -1.0f) {
@@ -876,45 +893,57 @@ functions:
       // sidestep banking left
       if (m_bSidestepBankingLeft) {
         m_fSidestepBanking += fBankingSpeed;
-        if (m_fSidestepBanking > 1.0f) { m_fSidestepBanking = 1.0f; }
+        if (m_fSidestepBanking > 1.0f) {
+          m_fSidestepBanking = 1.0f;
+        }
       }
       // sidestep banking right
       if (m_bSidestepBankingRight) {
         m_fSidestepBanking -= fBankingSpeed;
-        if (m_fSidestepBanking < -1.0f) { m_fSidestepBanking = -1.0f; }
+        if (m_fSidestepBanking < -1.0f) {
+          m_fSidestepBanking = -1.0f;
+        }
       }
 
-    // restore banking
+      // restore banking
     } else {
       // move banking
       if (m_fMoveBanking > 0.0f) {
         m_fMoveBanking -= 0.1f;
-        if (m_fMoveBanking < 0.0f) { m_fMoveBanking = 0.0f; }
+        if (m_fMoveBanking < 0.0f) {
+          m_fMoveBanking = 0.0f;
+        }
       } else if (m_fMoveBanking < 0.0f) {
         m_fMoveBanking += 0.1f;
-        if (m_fMoveBanking > 0.0f) { m_fMoveBanking = 0.0f; }
+        if (m_fMoveBanking > 0.0f) {
+          m_fMoveBanking = 0.0f;
+        }
       }
       // sidestep banking
       if (m_fSidestepBanking > 0.0f) {
         m_fSidestepBanking -= 0.4f;
-        if (m_fSidestepBanking < 0.0f) { m_fSidestepBanking = 0.0f; }
+        if (m_fSidestepBanking < 0.0f) {
+          m_fSidestepBanking = 0.0f;
+        }
       } else if (m_fSidestepBanking < 0.0f) {
         m_fSidestepBanking += 0.4f;
-        if (m_fSidestepBanking > 0.0f) { m_fSidestepBanking = 0.0f; }
+        if (m_fSidestepBanking > 0.0f) {
+          m_fSidestepBanking = 0.0f;
+        }
       }
     }
 
-    if (GetPlayer()->GetSettings()->ps_ulFlags&PSF_NOBOBBING) {
+    if (GetPlayer()->GetSettings()->ps_ulFlags & PSF_NOBOBBING) {
       m_fSidestepBanking = m_fMoveBanking = 0.0f;
     }
   };
 
   // animate soft eyes
   void AnimateSoftEyes(void) {
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
     // find eyes offset and speed (differential formula realized in numerical mathematics)
-    FLOAT fRelY = (pl.GetPlacement().pl_PositionVector-m_vLastPlayerPosition) %
-                  FLOAT3D(pl.en_mRotation(1, 2), pl.en_mRotation(2, 2), pl.en_mRotation(3, 2));
+    FLOAT fRelY = (pl.GetPlacement().pl_PositionVector - m_vLastPlayerPosition)
+                  % FLOAT3D(pl.en_mRotation(1, 2), pl.en_mRotation(2, 2), pl.en_mRotation(3, 2));
 
     // if just jumped
     if (pl.en_llJumped > _pTimer->GetGameTick() - CTimer::InTicks(0.5f)) {
@@ -923,23 +952,23 @@ functions:
     m_fEyesYOffset -= fRelY;
     m_fWeaponYOffset -= ClampUp(fRelY, 0.0f);
 
-    plr_fViewDampFactor      = Clamp(plr_fViewDampFactor      ,0.0f,1.0f);
-    plr_fViewDampLimitGroundUp = Clamp(plr_fViewDampLimitGroundUp ,0.0f,2.0f);
-    plr_fViewDampLimitGroundDn = Clamp(plr_fViewDampLimitGroundDn ,0.0f,2.0f);
-    plr_fViewDampLimitWater  = Clamp(plr_fViewDampLimitWater  ,0.0f,2.0f);
+    plr_fViewDampFactor = Clamp(plr_fViewDampFactor, 0.0f, 1.0f);
+    plr_fViewDampLimitGroundUp = Clamp(plr_fViewDampLimitGroundUp, 0.0f, 2.0f);
+    plr_fViewDampLimitGroundDn = Clamp(plr_fViewDampLimitGroundDn, 0.0f, 2.0f);
+    plr_fViewDampLimitWater = Clamp(plr_fViewDampLimitWater, 0.0f, 2.0f);
 
-    m_fEyesYSpeed = (m_fEyesYSpeed - m_fEyesYOffset*plr_fViewDampFactor) * (1.0f-plr_fViewDampFactor);
+    m_fEyesYSpeed = (m_fEyesYSpeed - m_fEyesYOffset * plr_fViewDampFactor) * (1.0f - plr_fViewDampFactor);
     m_fEyesYOffset += m_fEyesYSpeed;
-    
-    m_fWeaponYSpeed = (m_fWeaponYSpeed - m_fWeaponYOffset*plr_fViewDampFactor) * (1.0f-plr_fViewDampFactor);
+
+    m_fWeaponYSpeed = (m_fWeaponYSpeed - m_fWeaponYOffset * plr_fViewDampFactor) * (1.0f - plr_fViewDampFactor);
     m_fWeaponYOffset += m_fWeaponYSpeed;
 
     if (m_bSwim) {
-      m_fEyesYOffset = Clamp(m_fEyesYOffset, -plr_fViewDampLimitWater,  +plr_fViewDampLimitWater);
-      m_fWeaponYOffset = Clamp(m_fWeaponYOffset, -plr_fViewDampLimitWater,  +plr_fViewDampLimitWater);
+      m_fEyesYOffset = Clamp(m_fEyesYOffset, -plr_fViewDampLimitWater, +plr_fViewDampLimitWater);
+      m_fWeaponYOffset = Clamp(m_fWeaponYOffset, -plr_fViewDampLimitWater, +plr_fViewDampLimitWater);
     } else {
-      m_fEyesYOffset = Clamp(m_fEyesYOffset, -plr_fViewDampLimitGroundDn,  +plr_fViewDampLimitGroundUp);
-      m_fWeaponYOffset = Clamp(m_fWeaponYOffset, -plr_fViewDampLimitGroundDn,  +plr_fViewDampLimitGroundUp);
+      m_fEyesYOffset = Clamp(m_fEyesYOffset, -plr_fViewDampLimitGroundDn, +plr_fViewDampLimitGroundUp);
+      m_fWeaponYOffset = Clamp(m_fWeaponYOffset, -plr_fViewDampLimitGroundDn, +plr_fViewDampLimitGroundUp);
     }
   };
 
@@ -973,10 +1002,10 @@ functions:
   };
   */
   // change view
-  void ChangeView(CPlacement3D &pl) {
+  void ChangeView(CPlacement3D & pl) {
     TIME tmNow = _pTimer->GetLerpedCurrentTick();
 
-    if (!(GetPlayer()->GetSettings()->ps_ulFlags&PSF_NOBOBBING)) {
+    if (!(GetPlayer()->GetSettings()->ps_ulFlags & PSF_NOBOBBING)) {
       // banking
       FLOAT fBanking = Lerp(m_fMoveLastBanking, m_fMoveBanking, _pTimer->GetLerpFactor());
       fBanking = fBanking * fBanking * Sgn(fBanking) * 0.25f;
@@ -985,47 +1014,45 @@ functions:
       pl.pl_OrientationAngle(3) += fBanking;
     }
 
-/*
-    // recoil pitch
-    INDEX iWeapon = ((CPlayerWeapons&)*((CPlayer&)*m_penPlayer).m_penWeapons).m_iCurrentWeapon;
-    FLOAT fRecoil = Lerp(m_fRecoilLastOffset, m_fRecoilOffset, _pTimer->GetLerpFactor());
-    FLOAT fRecoilP = wpn_fRecoilFactorP[iWeapon]*fRecoil;
-    pl.pl_OrientationAngle(2) += fRecoilP;
-    // adjust recoil pitch handle
-    FLOAT fRecoilH = wpn_fRecoilOffset[iWeapon];
-    FLOAT fDY = fRecoilH*(1.0f-Cos(fRecoilP));
-    FLOAT fDZ = fRecoilH*Sin(fRecoilP);
-    pl.pl_PositionVector(2)-=fDY;
-    pl.pl_PositionVector(3)+=fDZ+wpn_fRecoilFactorZ[iWeapon]*fRecoil;
-    */
+    /*
+        // recoil pitch
+        INDEX iWeapon = ((CPlayerWeapons&)*((CPlayer&)*m_penPlayer).m_penWeapons).m_iCurrentWeapon;
+        FLOAT fRecoil = Lerp(m_fRecoilLastOffset, m_fRecoilOffset, _pTimer->GetLerpFactor());
+        FLOAT fRecoilP = wpn_fRecoilFactorP[iWeapon]*fRecoil;
+        pl.pl_OrientationAngle(2) += fRecoilP;
+        // adjust recoil pitch handle
+        FLOAT fRecoilH = wpn_fRecoilOffset[iWeapon];
+        FLOAT fDY = fRecoilH*(1.0f-Cos(fRecoilP));
+        FLOAT fDZ = fRecoilH*Sin(fRecoilP);
+        pl.pl_PositionVector(2)-=fDY;
+        pl.pl_PositionVector(3)+=fDZ+wpn_fRecoilFactorZ[iWeapon]*fRecoil;
+        */
 
     // swimming
     if (m_bSwim) {
-      pl.pl_OrientationAngle(1) += sin(tmNow*0.9)*2.0f;
-      pl.pl_OrientationAngle(2) += sin(tmNow*1.7)*2.0f;
-      pl.pl_OrientationAngle(3) += sin(tmNow*2.5)*2.0f;
+      pl.pl_OrientationAngle(1) += sin(tmNow * 0.9) * 2.0f;
+      pl.pl_OrientationAngle(2) += sin(tmNow * 1.7) * 2.0f;
+      pl.pl_OrientationAngle(3) += sin(tmNow * 2.5) * 2.0f;
     }
     // eyes up/down for jumping and breathing
     FLOAT fEyesOffsetY = Lerp(m_fEyesYLastOffset, m_fEyesYOffset, _pTimer->GetLerpFactor());
-    fEyesOffsetY+= sin(tmNow*1.5)*0.05f * plr_fBreathingStrength;
+    fEyesOffsetY += sin(tmNow * 1.5) * 0.05f * plr_fBreathingStrength;
     fEyesOffsetY = Clamp(fEyesOffsetY, -1.0f, 1.0f);
     pl.pl_PositionVector(2) += fEyesOffsetY;
   }
 
-
-
-// ANIMATE PLAYER
+  // ANIMATE PLAYER
   // body and head animation
-  void BodyAndHeadOrientation(CPlacement3D &plView) {
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+  void BodyAndHeadOrientation(CPlacement3D & plView) {
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
     CAttachmentModelObject *pamoBody = pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO);
     ANGLE3D a = plView.pl_OrientationAngle;
-    if (!(pl.GetFlags()&ENF_ALIVE)) {
+    if (!(pl.GetFlags() & ENF_ALIVE)) {
       a = ANGLE3D(0.0f, 0.0f, 0.0f);
     }
     pamoBody->amo_plRelative.pl_OrientationAngle = a;
     pamoBody->amo_plRelative.pl_OrientationAngle(3) *= 4.0f;
-    
+
     CAttachmentModelObject *pamoHead = (pamoBody->amo_moModelObject).GetAttachmentModel(BODY_ATTACHMENT_HEAD);
     pamoHead->amo_plRelative.pl_OrientationAngle = a;
     pamoHead->amo_plRelative.pl_OrientationAngle(1) = 0.0f;
@@ -1034,8 +1061,10 @@ functions:
 
     // forbid players from cheating by kissing their @$$
     const FLOAT fMaxBanking = 5.0f;
-    pamoBody->amo_plRelative.pl_OrientationAngle(3) = Clamp(pamoBody->amo_plRelative.pl_OrientationAngle(3), -fMaxBanking, fMaxBanking);
-    pamoHead->amo_plRelative.pl_OrientationAngle(3) = Clamp(pamoHead->amo_plRelative.pl_OrientationAngle(3), -fMaxBanking, fMaxBanking);
+    pamoBody->amo_plRelative.pl_OrientationAngle(3)
+      = Clamp(pamoBody->amo_plRelative.pl_OrientationAngle(3), -fMaxBanking, fMaxBanking);
+    pamoHead->amo_plRelative.pl_OrientationAngle(3)
+      = Clamp(pamoHead->amo_plRelative.pl_OrientationAngle(3), -fMaxBanking, fMaxBanking);
   };
 
   // animate player
@@ -1043,7 +1072,7 @@ functions:
     if (m_bDisableAnimating) {
       return;
     }
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
 
     FLOAT3D vDesiredTranslation = pl.en_vDesiredTranslationRelative;
     FLOAT3D vCurrentTranslation = pl.en_vCurrentTranslationAbsolute * !pl.en_mRotation;
@@ -1051,140 +1080,137 @@ functions:
     ANGLE3D aCurrentRotation = pl.en_aCurrentRotationAbsolute;
 
     // if player is moving
-    if (vDesiredTranslation.ManhattanNorm()>0.01f
-      ||aDesiredRotation.ManhattanNorm()>0.01f) {
+    if (vDesiredTranslation.ManhattanNorm() > 0.01f || aDesiredRotation.ManhattanNorm() > 0.01f) {
       // prevent idle weapon animations
       m_fLastActionTime = _pTimer->CurrentTick();
     }
 
     // swimming
     if (m_bSwim) {
-      if (vDesiredTranslation.Length()>1.0f && vCurrentTranslation.Length()>1.0f) {
-        pl.StartModelAnim(PLAYER_ANIM_SWIM, AOF_LOOPING|AOF_NORESTART);
+      if (vDesiredTranslation.Length() > 1.0f && vCurrentTranslation.Length() > 1.0f) {
+        pl.StartModelAnim(PLAYER_ANIM_SWIM, AOF_LOOPING | AOF_NORESTART);
       } else {
-        pl.StartModelAnim(PLAYER_ANIM_SWIMIDLE, AOF_LOOPING|AOF_NORESTART);
+        pl.StartModelAnim(PLAYER_ANIM_SWIMIDLE, AOF_LOOPING | AOF_NORESTART);
       }
       BodyStillAnimation();
 
-    // stand
+      // stand
     } else {
       // has reference (floor)
       if (m_bReference) {
         // jump
-        if (pl.en_llJumped + 1/*_pTimer->TickQuantum*/ >= _pTimer->GetGameTick() &&
-            pl.en_llJumped <= _pTimer->GetGameTick()) {
+        if (pl.en_llJumped + 1 /*_pTimer->TickQuantum*/ >= _pTimer->GetGameTick() && pl.en_llJumped <= _pTimer->GetGameTick()) {
           m_bReference = FALSE;
           pl.StartModelAnim(PLAYER_ANIM_JUMPSTART, AOF_NORESTART);
           BodyStillAnimation();
           m_fLastActionTime = _pTimer->CurrentTick();
 
-        // not in jump anim and in stand mode change
+          // not in jump anim and in stand mode change
         } else if (!m_bWaitJumpAnim && m_iCrouchDownWait == 0 && m_iRiseUpWait == 0) {
           // standing
           if (!m_bCrouch) {
             // running anim
-            if (vDesiredTranslation.Length()>5.0f && vCurrentTranslation.Length()>5.0f) {
-              if (vCurrentTranslation(3)<0) {
-                pl.StartModelAnim(PLAYER_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
+            if (vDesiredTranslation.Length() > 5.0f && vCurrentTranslation.Length() > 5.0f) {
+              if (vCurrentTranslation(3) < 0) {
+                pl.StartModelAnim(PLAYER_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
               } else {
-                pl.StartModelAnim(PLAYER_ANIM_BACKPEDALRUN, AOF_LOOPING|AOF_NORESTART);
+                pl.StartModelAnim(PLAYER_ANIM_BACKPEDALRUN, AOF_LOOPING | AOF_NORESTART);
               }
               BodyStillAnimation();
               m_fLastActionTime = _pTimer->CurrentTick();
-            // walking anim
-            } else if (vDesiredTranslation.Length()>2.0f && vCurrentTranslation.Length()>2.0f) {
-              if (vCurrentTranslation(3)<0) {
-                pl.StartModelAnim(PLAYER_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
+              // walking anim
+            } else if (vDesiredTranslation.Length() > 2.0f && vCurrentTranslation.Length() > 2.0f) {
+              if (vCurrentTranslation(3) < 0) {
+                pl.StartModelAnim(PLAYER_ANIM_NORMALWALK, AOF_LOOPING | AOF_NORESTART);
               } else {
-                pl.StartModelAnim(PLAYER_ANIM_BACKPEDAL, AOF_LOOPING|AOF_NORESTART);
+                pl.StartModelAnim(PLAYER_ANIM_BACKPEDAL, AOF_LOOPING | AOF_NORESTART);
               }
               BodyStillAnimation();
               m_fLastActionTime = _pTimer->CurrentTick();
-            // left rotation anim
-            } else if (aDesiredRotation(1)>0.5f) {
-              pl.StartModelAnim(PLAYER_ANIM_TURNLEFT, AOF_LOOPING|AOF_NORESTART);
+              // left rotation anim
+            } else if (aDesiredRotation(1) > 0.5f) {
+              pl.StartModelAnim(PLAYER_ANIM_TURNLEFT, AOF_LOOPING | AOF_NORESTART);
               BodyStillAnimation();
               m_fLastActionTime = _pTimer->CurrentTick();
-            // right rotation anim
-            } else if (aDesiredRotation(1)<-0.5f) {
-              pl.StartModelAnim(PLAYER_ANIM_TURNRIGHT, AOF_LOOPING|AOF_NORESTART);
+              // right rotation anim
+            } else if (aDesiredRotation(1) < -0.5f) {
+              pl.StartModelAnim(PLAYER_ANIM_TURNRIGHT, AOF_LOOPING | AOF_NORESTART);
               BodyStillAnimation();
               m_fLastActionTime = _pTimer->CurrentTick();
-            // standing anim
+              // standing anim
             } else {
-              pl.StartModelAnim(PLAYER_ANIM_STAND, AOF_LOOPING|AOF_NORESTART);
+              pl.StartModelAnim(PLAYER_ANIM_STAND, AOF_LOOPING | AOF_NORESTART);
               BodyStillAnimation();
             }
-          // crouch
+            // crouch
           } else {
             // walking anim
-            if (vDesiredTranslation.Length()>2.0f && vCurrentTranslation.Length()>2.0f) {
-              if (vCurrentTranslation(3)<0) {
-                pl.StartModelAnim(PLAYER_ANIM_CROUCH_WALK, AOF_LOOPING|AOF_NORESTART);
+            if (vDesiredTranslation.Length() > 2.0f && vCurrentTranslation.Length() > 2.0f) {
+              if (vCurrentTranslation(3) < 0) {
+                pl.StartModelAnim(PLAYER_ANIM_CROUCH_WALK, AOF_LOOPING | AOF_NORESTART);
               } else {
-                pl.StartModelAnim(PLAYER_ANIM_CROUCH_WALKBACK, AOF_LOOPING|AOF_NORESTART);
+                pl.StartModelAnim(PLAYER_ANIM_CROUCH_WALKBACK, AOF_LOOPING | AOF_NORESTART);
               }
               BodyStillAnimation();
               m_fLastActionTime = _pTimer->CurrentTick();
-            // left rotation anim
-            } else if (aDesiredRotation(1)>0.5f) {
-              pl.StartModelAnim(PLAYER_ANIM_CROUCH_TURNLEFT, AOF_LOOPING|AOF_NORESTART);
+              // left rotation anim
+            } else if (aDesiredRotation(1) > 0.5f) {
+              pl.StartModelAnim(PLAYER_ANIM_CROUCH_TURNLEFT, AOF_LOOPING | AOF_NORESTART);
               BodyStillAnimation();
               m_fLastActionTime = _pTimer->CurrentTick();
-            // right rotation anim
-            } else if (aDesiredRotation(1)<-0.5f) {
-              pl.StartModelAnim(PLAYER_ANIM_CROUCH_TURNRIGHT, AOF_LOOPING|AOF_NORESTART);
+              // right rotation anim
+            } else if (aDesiredRotation(1) < -0.5f) {
+              pl.StartModelAnim(PLAYER_ANIM_CROUCH_TURNRIGHT, AOF_LOOPING | AOF_NORESTART);
               BodyStillAnimation();
               m_fLastActionTime = _pTimer->CurrentTick();
-            // standing anim
+              // standing anim
             } else {
-              pl.StartModelAnim(PLAYER_ANIM_CROUCH_IDLE, AOF_LOOPING|AOF_NORESTART);
+              pl.StartModelAnim(PLAYER_ANIM_CROUCH_IDLE, AOF_LOOPING | AOF_NORESTART);
               BodyStillAnimation();
             }
           }
-
         }
 
-      // no reference (in air)
-      } else {                           
+        // no reference (in air)
+      } else {
         // touched reference
         if (pl.en_penReference != NULL) {
           m_bReference = TRUE;
           pl.StartModelAnim(PLAYER_ANIM_JUMPEND, AOF_NORESTART);
           BodyStillAnimation();
-          SpawnReminder(this, pl.GetModelObject()->GetAnimLength(PLAYER_ANIM_JUMPEND), (INDEX) AA_JUMPDOWN);
+          SpawnReminder(this, pl.GetModelObject()->GetAnimLength(PLAYER_ANIM_JUMPEND), (INDEX)AA_JUMPDOWN);
           m_bWaitJumpAnim = TRUE;
         }
       }
     }
 
     // boring weapon animation
-    if (_pTimer->CurrentTick()-m_fLastActionTime > 10.0f) {
+    if (_pTimer->CurrentTick() - m_fLastActionTime > 10.0f) {
       m_fLastActionTime = _pTimer->CurrentTick();
-      ((CPlayerWeapons&)*pl.m_penWeapons).SendEvent(EBoringWeapon());
+      ((CPlayerWeapons &)*pl.m_penWeapons).SendEvent(EBoringWeapon());
     }
 
     // moving view change
     // translating -> change banking
-    if (m_bReference != NULL && vDesiredTranslation.Length()>1.0f && vCurrentTranslation.Length()>1.0f) {
+    if (m_bReference != NULL && vDesiredTranslation.Length() > 1.0f && vCurrentTranslation.Length() > 1.0f) {
       m_bMoving = TRUE;
       // sidestep banking
       FLOAT vSidestepSpeedDesired = vDesiredTranslation(1);
       FLOAT vSidestepSpeedCurrent = vCurrentTranslation(1);
       // right
-      if (vSidestepSpeedDesired>1.0f && vSidestepSpeedCurrent>1.0f) {
+      if (vSidestepSpeedDesired > 1.0f && vSidestepSpeedCurrent > 1.0f) {
         m_bSidestepBankingRight = TRUE;
         m_bSidestepBankingLeft = FALSE;
-      // left
-      } else if (vSidestepSpeedDesired<-1.0f && vSidestepSpeedCurrent<-1.0f) {
+        // left
+      } else if (vSidestepSpeedDesired < -1.0f && vSidestepSpeedCurrent < -1.0f) {
         m_bSidestepBankingLeft = TRUE;
         m_bSidestepBankingRight = FALSE;
-      // none
+        // none
       } else {
         m_bSidestepBankingLeft = FALSE;
         m_bSidestepBankingRight = FALSE;
       }
-    // in air (space) or not moving
+      // in air (space) or not moving
     } else {
       m_bMoving = FALSE;
       m_bSidestepBankingLeft = FALSE;
@@ -1197,9 +1223,9 @@ functions:
     if (m_bDisableAnimating) {
       return;
     }
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
     pl.StartModelAnim(PLAYER_ANIM_CROUCH, AOF_NORESTART);
-    SpawnReminder(this, pl.GetModelObject()->GetAnimLength(PLAYER_ANIM_CROUCH), (INDEX) AA_CROUCH);
+    SpawnReminder(this, pl.GetModelObject()->GetAnimLength(PLAYER_ANIM_CROUCH), (INDEX)AA_CROUCH);
     m_iCrouchDownWait++;
     m_bCrouch = TRUE;
   };
@@ -1209,9 +1235,9 @@ functions:
     if (m_bDisableAnimating) {
       return;
     }
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
     pl.StartModelAnim(PLAYER_ANIM_RISE, AOF_NORESTART);
-    SpawnReminder(this, pl.GetModelObject()->GetAnimLength(PLAYER_ANIM_RISE), (INDEX) AA_RISE);
+    SpawnReminder(this, pl.GetModelObject()->GetAnimLength(PLAYER_ANIM_RISE), (INDEX)AA_RISE);
     m_iRiseUpWait++;
     m_bCrouch = FALSE;
   };
@@ -1221,9 +1247,11 @@ functions:
     if (m_bDisableAnimating) {
       return;
     }
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
     pl.StartModelAnim(PLAYER_ANIM_JUMPSTART, AOF_NORESTART);
-    if (_pNetwork->ga_ulDemoMinorVersion>6) { m_bCrouch = FALSE; }
+    if (_pNetwork->ga_ulDemoMinorVersion > 6) {
+      m_bCrouch = FALSE;
+    }
     m_bReference = FALSE;
   };
 
@@ -1232,9 +1260,11 @@ functions:
     if (m_bDisableAnimating) {
       return;
     }
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
-    pl.StartModelAnim(PLAYER_ANIM_SWIM, AOF_LOOPING|AOF_NORESTART);
-    if (_pNetwork->ga_ulDemoMinorVersion>2) { m_bCrouch = FALSE; }
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
+    pl.StartModelAnim(PLAYER_ANIM_SWIM, AOF_LOOPING | AOF_NORESTART);
+    if (_pNetwork->ga_ulDemoMinorVersion > 2) {
+      m_bCrouch = FALSE;
+    }
     m_bSwim = TRUE;
   };
 
@@ -1243,38 +1273,48 @@ functions:
     if (m_bDisableAnimating) {
       return;
     }
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
-    pl.StartModelAnim(PLAYER_ANIM_STAND, AOF_LOOPING|AOF_NORESTART);
-    if (_pNetwork->ga_ulDemoMinorVersion>2) { m_bCrouch = FALSE; }
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
+    pl.StartModelAnim(PLAYER_ANIM_STAND, AOF_LOOPING | AOF_NORESTART);
+    if (_pNetwork->ga_ulDemoMinorVersion > 2) {
+      m_bCrouch = FALSE;
+    }
     m_bSwim = FALSE;
   };
 
   // fire/attack
   void FireAnimation(INDEX iAnim, ULONG ulFlags) {
     if (m_bSwim) {
-      INDEX iWeapon = ((CPlayerWeapons&)*(((CPlayer&)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
+      INDEX iWeapon = ((CPlayerWeapons &)*(((CPlayer &)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
       switch (iWeapon) {
-        case WEAPON_NONE:
+        case WEAPON_NONE: break;
+        case WEAPON_KNIFE:
+        case WEAPON_COLT:
+        case WEAPON_DOUBLECOLT: // case WEAPON_PIPEBOMB:
+          iAnim += BODY_ANIM_COLT_SWIM_STAND - BODY_ANIM_COLT_STAND;
           break;
-        case WEAPON_KNIFE: case WEAPON_COLT: case WEAPON_DOUBLECOLT: //case WEAPON_PIPEBOMB:
-          iAnim += BODY_ANIM_COLT_SWIM_STAND-BODY_ANIM_COLT_STAND;
+        case WEAPON_SINGLESHOTGUN:
+        case WEAPON_DOUBLESHOTGUN:
+        case WEAPON_TOMMYGUN:
+        case WEAPON_SNIPER:
+        case WEAPON_LASER:
+        case WEAPON_FLAMER: // case WEAPON_GHOSTBUSTER:
+          iAnim += BODY_ANIM_SHOTGUN_SWIM_STAND - BODY_ANIM_SHOTGUN_STAND;
           break;
-        case WEAPON_SINGLESHOTGUN: case WEAPON_DOUBLESHOTGUN: case WEAPON_TOMMYGUN:
-        case WEAPON_SNIPER: case WEAPON_LASER: case WEAPON_FLAMER: //case WEAPON_GHOSTBUSTER:
-          iAnim += BODY_ANIM_SHOTGUN_SWIM_STAND-BODY_ANIM_SHOTGUN_STAND;
-          break;
-        case WEAPON_MINIGUN: case WEAPON_ROCKETLAUNCHER: case WEAPON_GRENADELAUNCHER:
-        case WEAPON_IRONCANNON: case WEAPON_CHAINSAW: // case WEAPON_NUKECANNON:
-          iAnim += BODY_ANIM_MINIGUN_SWIM_STAND-BODY_ANIM_MINIGUN_STAND;
+        case WEAPON_MINIGUN:
+        case WEAPON_ROCKETLAUNCHER:
+        case WEAPON_GRENADELAUNCHER:
+        case WEAPON_IRONCANNON:
+        case WEAPON_CHAINSAW: // case WEAPON_NUKECANNON:
+          iAnim += BODY_ANIM_MINIGUN_SWIM_STAND - BODY_ANIM_MINIGUN_STAND;
           break;
       }
     }
     m_bAttacking = FALSE;
     m_bChangeWeapon = FALSE;
     SetBodyAnimation(iAnim, ulFlags);
-    if (!(ulFlags&AOF_LOOPING)) {
-      SpawnReminder(this, m_fBodyAnimTime, (INDEX) AA_ATTACK);
-      m_tmAttackingDue = _pTimer->CurrentTick()+m_fBodyAnimTime;
+    if (!(ulFlags & AOF_LOOPING)) {
+      SpawnReminder(this, m_fBodyAnimTime, (INDEX)AA_ATTACK);
+      m_tmAttackingDue = _pTimer->CurrentTick() + m_fBodyAnimTime;
     }
     m_bAttacking = TRUE;
   };
@@ -1282,28 +1322,39 @@ functions:
     m_bAttacking = FALSE;
   };
 
-
-  
-// CHANGE BODY ANIMATION
+  // CHANGE BODY ANIMATION
   // body animation template
   void BodyAnimationTemplate(INDEX iNone, INDEX iColt, INDEX iShotgun, INDEX iMinigun, ULONG ulFlags) {
-    INDEX iWeapon = ((CPlayerWeapons&)*(((CPlayer&)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
+    INDEX iWeapon = ((CPlayerWeapons &)*(((CPlayer &)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
     switch (iWeapon) {
-      case WEAPON_NONE:
-        SetBodyAnimation(iNone, ulFlags);
-        break;
-      case WEAPON_KNIFE: case WEAPON_COLT: case WEAPON_DOUBLECOLT: // case WEAPON_PIPEBOMB:
-        if (m_bSwim) { iColt += BODY_ANIM_COLT_SWIM_STAND-BODY_ANIM_COLT_STAND; }
+      case WEAPON_NONE: SetBodyAnimation(iNone, ulFlags); break;
+      case WEAPON_KNIFE:
+      case WEAPON_COLT:
+      case WEAPON_DOUBLECOLT: // case WEAPON_PIPEBOMB:
+        if (m_bSwim) {
+          iColt += BODY_ANIM_COLT_SWIM_STAND - BODY_ANIM_COLT_STAND;
+        }
         SetBodyAnimation(iColt, ulFlags);
         break;
-      case WEAPON_SINGLESHOTGUN: case WEAPON_DOUBLESHOTGUN: case WEAPON_TOMMYGUN:
-      case WEAPON_SNIPER: case WEAPON_LASER: case WEAPON_FLAMER: //case WEAPON_GHOSTBUSTER:
-        if (m_bSwim) { iShotgun += BODY_ANIM_SHOTGUN_SWIM_STAND-BODY_ANIM_SHOTGUN_STAND; }
+      case WEAPON_SINGLESHOTGUN:
+      case WEAPON_DOUBLESHOTGUN:
+      case WEAPON_TOMMYGUN:
+      case WEAPON_SNIPER:
+      case WEAPON_LASER:
+      case WEAPON_FLAMER: // case WEAPON_GHOSTBUSTER:
+        if (m_bSwim) {
+          iShotgun += BODY_ANIM_SHOTGUN_SWIM_STAND - BODY_ANIM_SHOTGUN_STAND;
+        }
         SetBodyAnimation(iShotgun, ulFlags);
         break;
-      case WEAPON_MINIGUN: case WEAPON_ROCKETLAUNCHER: case WEAPON_GRENADELAUNCHER:
-      case WEAPON_IRONCANNON: case WEAPON_CHAINSAW: // case WEAPON_NUKECANNON:
-        if (m_bSwim) { iMinigun+=BODY_ANIM_MINIGUN_SWIM_STAND-BODY_ANIM_MINIGUN_STAND; }
+      case WEAPON_MINIGUN:
+      case WEAPON_ROCKETLAUNCHER:
+      case WEAPON_GRENADELAUNCHER:
+      case WEAPON_IRONCANNON:
+      case WEAPON_CHAINSAW: // case WEAPON_NUKECANNON:
+        if (m_bSwim) {
+          iMinigun += BODY_ANIM_MINIGUN_SWIM_STAND - BODY_ANIM_MINIGUN_STAND;
+        }
         SetBodyAnimation(iMinigun, ulFlags);
         break;
       default: ASSERTALWAYS("Player Animator - Unknown weapon");
@@ -1312,89 +1363,64 @@ functions:
 
   // walk
   void BodyWalkAnimation() {
-    BodyAnimationTemplate(BODY_ANIM_NORMALWALK, 
-      BODY_ANIM_COLT_STAND, BODY_ANIM_SHOTGUN_STAND, BODY_ANIM_MINIGUN_STAND, 
-      AOF_LOOPING|AOF_NORESTART);
+    BodyAnimationTemplate(BODY_ANIM_NORMALWALK, BODY_ANIM_COLT_STAND, BODY_ANIM_SHOTGUN_STAND, BODY_ANIM_MINIGUN_STAND,
+                          AOF_LOOPING | AOF_NORESTART);
   };
 
   // stand
   void BodyStillAnimation() {
-    BodyAnimationTemplate(BODY_ANIM_WAIT, 
-      BODY_ANIM_COLT_STAND, BODY_ANIM_SHOTGUN_STAND, BODY_ANIM_MINIGUN_STAND, 
-      AOF_LOOPING|AOF_NORESTART);
+    BodyAnimationTemplate(BODY_ANIM_WAIT, BODY_ANIM_COLT_STAND, BODY_ANIM_SHOTGUN_STAND, BODY_ANIM_MINIGUN_STAND,
+                          AOF_LOOPING | AOF_NORESTART);
   };
 
   // push weapon
   void BodyPushAnimation() {
     m_bAttacking = FALSE;
     m_bChangeWeapon = FALSE;
-    BodyAnimationTemplate(BODY_ANIM_WAIT, 
-      BODY_ANIM_COLT_REDRAW, BODY_ANIM_SHOTGUN_REDRAW, BODY_ANIM_MINIGUN_REDRAW, 0);
+    BodyAnimationTemplate(BODY_ANIM_WAIT, BODY_ANIM_COLT_REDRAW, BODY_ANIM_SHOTGUN_REDRAW, BODY_ANIM_MINIGUN_REDRAW, 0);
     m_bChangeWeapon = TRUE;
   };
 
   // remove weapon attachment
-  void RemoveWeapon(void) 
-  {
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+  void RemoveWeapon(void) {
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
     pmoModel = &(pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
     switch (m_iWeaponLast) {
       case WEAPON_NONE:
-      case WEAPON_KNIFE:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_KNIFE);
-        break;
+      case WEAPON_KNIFE: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_KNIFE); break;
       case WEAPON_DOUBLECOLT:
         pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_COLT_LEFT);
         // reset to player body
         pmoModel = &(pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
-      case WEAPON_COLT:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_COLT_RIGHT);
-        break;
-      case WEAPON_SINGLESHOTGUN:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_SINGLE_SHOTGUN);
-        break;
-      case WEAPON_DOUBLESHOTGUN:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_DOUBLE_SHOTGUN);
-        break;
-      case WEAPON_TOMMYGUN:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_TOMMYGUN);
-        break;
-      case WEAPON_SNIPER:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_FLAMER);
-        break;
-      case WEAPON_MINIGUN:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_MINIGUN);
-        break;
-      case WEAPON_ROCKETLAUNCHER:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_ROCKET_LAUNCHER);
-        break;
+      case WEAPON_COLT: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_COLT_RIGHT); break;
+      case WEAPON_SINGLESHOTGUN: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_SINGLE_SHOTGUN); break;
+      case WEAPON_DOUBLESHOTGUN: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_DOUBLE_SHOTGUN); break;
+      case WEAPON_TOMMYGUN: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_TOMMYGUN); break;
+      case WEAPON_SNIPER: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_FLAMER); break;
+      case WEAPON_MINIGUN: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_MINIGUN); break;
+      case WEAPON_ROCKETLAUNCHER: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_ROCKET_LAUNCHER); break;
       case WEAPON_GRENADELAUNCHER:
         pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_GRENADE_LAUNCHER);
         break;
-/*    case WEAPON_PIPEBOMB:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_COLT_RIGHT);
-        // reset to player body
-        pmoModel = &(pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_COLT_LEFT);
-        break;      */
-      case WEAPON_FLAMER:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_FLAMER);
-        break;
-      case WEAPON_CHAINSAW:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_MINIGUN);
-        break;
+        /*    case WEAPON_PIPEBOMB:
+                pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_COLT_RIGHT);
+                // reset to player body
+                pmoModel = &(pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
+                pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_COLT_LEFT);
+                break;      */
+      case WEAPON_FLAMER: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_FLAMER); break;
+      case WEAPON_CHAINSAW: pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_MINIGUN); break;
       case WEAPON_LASER:
         pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_LASER);
         break;
-/*    case WEAPON_GHOSTBUSTER:
-        pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_LASER);
-        break;      */
+        /*    case WEAPON_GHOSTBUSTER:
+                pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_LASER);
+                break;      */
       case WEAPON_IRONCANNON:
-//      case WEAPON_NUKECANNON:
+        //      case WEAPON_NUKECANNON:
         pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_CANNON);
         break;
-      default:
-        ASSERT(FALSE);
+      default: ASSERT(FALSE);
     }
     // sync apperances
     SyncWeapon();
@@ -1410,12 +1436,11 @@ functions:
 
     // pull weapon
     m_bChangeWeapon = FALSE;
-    BodyAnimationTemplate(BODY_ANIM_WAIT, 
-      BODY_ANIM_COLT_DRAW, BODY_ANIM_SHOTGUN_DRAW, BODY_ANIM_MINIGUN_DRAW, 0);
-    INDEX iWeapon = ((CPlayerWeapons&)*(((CPlayer&)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
+    BodyAnimationTemplate(BODY_ANIM_WAIT, BODY_ANIM_COLT_DRAW, BODY_ANIM_SHOTGUN_DRAW, BODY_ANIM_MINIGUN_DRAW, 0);
+    INDEX iWeapon = ((CPlayerWeapons &)*(((CPlayer &)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
     if (iWeapon != WEAPON_NONE) {
       m_bChangeWeapon = TRUE;
-      SpawnReminder(this, m_fBodyAnimTime, (INDEX) AA_PULLWEAPON);
+      SpawnReminder(this, m_fBodyAnimTime, (INDEX)AA_PULLWEAPON);
     }
     // sync apperances
     SyncWeapon();
@@ -1430,7 +1455,7 @@ functions:
     m_bChangeWeapon = FALSE;
     SetBodyAnimation(BODY_ANIM_STATUE_PULL, 0);
     m_bChangeWeapon = TRUE;
-    SpawnReminder(this, m_fBodyAnimTime, (INDEX) AA_PULLWEAPON);
+    SpawnReminder(this, m_fBodyAnimTime, (INDEX)AA_PULLWEAPON);
     // sync apperances
     SyncWeapon();
   };
@@ -1444,33 +1469,32 @@ functions:
     m_bChangeWeapon = FALSE;
     SetBodyAnimation(BODY_ANIM_KEYLIFT, 0);
     m_bChangeWeapon = TRUE;
-    SpawnReminder(this, m_fBodyAnimTime, (INDEX) AA_PULLWEAPON);
+    SpawnReminder(this, m_fBodyAnimTime, (INDEX)AA_PULLWEAPON);
     // sync apperances
     SyncWeapon();
   };
 
   // remove item
   void BodyRemoveItem() {
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
     pmoModel = &(pl.GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject);
     pmoModel->RemoveAttachmentModel(BODY_ATTACHMENT_ITEM);
     // sync apperances
     SyncWeapon();
   };
 
-
-// FIRE FLARE
+  // FIRE FLARE
   void OnPreRender(void) {
     ControlFlareAttachment();
 
     // Minigun Specific
-    CPlayerWeapons &plw = (CPlayerWeapons&)*(((CPlayer&)*m_penPlayer).m_penWeapons);
+    CPlayerWeapons &plw = (CPlayerWeapons &)*(((CPlayer &)*m_penPlayer).m_penWeapons);
     if (plw.m_iCurrentWeapon == WEAPON_MINIGUN) {
       ANGLE aAngle = Lerp(plw.m_aMiniGunLast, plw.m_aMiniGun, _pTimer->GetLerpFactor());
       // rotate minigun barrels
-      CPlayer &pl = (CPlayer&)*m_penPlayer;
-      CAttachmentModelObject *pamo = pl.GetModelObject()->GetAttachmentModelList(
-        PLAYER_ATTACHMENT_TORSO, BODY_ATTACHMENT_MINIGUN, MINIGUNITEM_ATTACHMENT_BARRELS, -1);
+      CPlayer &pl = (CPlayer &)*m_penPlayer;
+      CAttachmentModelObject *pamo = pl.GetModelObject()->GetAttachmentModelList(PLAYER_ATTACHMENT_TORSO, BODY_ATTACHMENT_MINIGUN,
+                                                                                 MINIGUNITEM_ATTACHMENT_BARRELS, -1);
       if (pamo != NULL) {
         pamo->amo_plRelative.pl_OrientationAngle(3) = aAngle;
       }
@@ -1479,11 +1503,11 @@ functions:
 
   // show flare
   void ShowFlare(INDEX iAttachWeapon, INDEX iAttachObject, INDEX iAttachFlare) {
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
-    CAttachmentModelObject *pamo = pl.GetModelObject()->GetAttachmentModelList(
-      PLAYER_ATTACHMENT_TORSO, iAttachWeapon, iAttachObject, iAttachFlare, -1);
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
+    CAttachmentModelObject *pamo
+      = pl.GetModelObject()->GetAttachmentModelList(PLAYER_ATTACHMENT_TORSO, iAttachWeapon, iAttachObject, iAttachFlare, -1);
     if (pamo != NULL) {
-      pamo->amo_plRelative.pl_OrientationAngle(3) = (rand()*360.0f)/RAND_MAX;
+      pamo->amo_plRelative.pl_OrientationAngle(3) = (rand() * 360.0f) / RAND_MAX;
       CModelObject &mo = pamo->amo_moModelObject;
       mo.StretchModel(FLOAT3D(1, 1, 1));
     }
@@ -1491,9 +1515,9 @@ functions:
 
   // hide flare
   void HideFlare(INDEX iAttachWeapon, INDEX iAttachObject, INDEX iAttachFlare) {
-    CPlayer &pl = (CPlayer&)*m_penPlayer;
-    CAttachmentModelObject *pamo = pl.GetModelObject()->GetAttachmentModelList(
-      PLAYER_ATTACHMENT_TORSO, iAttachWeapon, iAttachObject, iAttachFlare, -1);
+    CPlayer &pl = (CPlayer &)*m_penPlayer;
+    CAttachmentModelObject *pamo
+      = pl.GetModelObject()->GetAttachmentModelList(PLAYER_ATTACHMENT_TORSO, iAttachWeapon, iAttachObject, iAttachFlare, -1);
     if (pamo != NULL) {
       CModelObject &mo = pamo->amo_moModelObject;
       mo.StretchModel(FLOAT3D(0.0f, 0.0f, 0.0f));
@@ -1501,24 +1525,23 @@ functions:
   };
 
   // flare attachment
-  void ControlFlareAttachment(void) 
-  {
-/*    if (!IsPredictionHead()) {
-      return;
-    }
-    */
+  void ControlFlareAttachment(void) {
+    /*    if (!IsPredictionHead()) {
+          return;
+        }
+        */
 
     // get your prediction tail
     CPlayerAnimator *pen = (CPlayerAnimator *)GetPredictionTail();
 
-    INDEX iWeapon = ((CPlayerWeapons&)*(((CPlayer&)*pen->m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
+    INDEX iWeapon = ((CPlayerWeapons &)*(((CPlayer &)*pen->m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
     // second colt only
     if (iWeapon == WEAPON_DOUBLECOLT) {
       // add flare
       if (pen->m_iSecondFlare == FLARE_ADD) {
         pen->m_iSecondFlare = FLARE_REMOVE;
         ShowFlare(BODY_ATTACHMENT_COLT_LEFT, COLTITEM_ATTACHMENT_BODY, COLTMAIN_ATTACHMENT_FLARE);
-      // remove flare
+        // remove flare
       } else if (m_iSecondFlare == FLARE_REMOVE) {
         HideFlare(BODY_ATTACHMENT_COLT_LEFT, COLTITEM_ATTACHMENT_BODY, COLTMAIN_ATTACHMENT_FLARE);
       }
@@ -1529,54 +1552,36 @@ functions:
       pen->m_iFlare = FLARE_REMOVE;
       pen->m_tmFlareAdded = _pTimer->CurrentTick();
       switch (iWeapon) {
-        case WEAPON_DOUBLECOLT: case WEAPON_COLT:
-          ShowFlare(BODY_ATTACHMENT_COLT_RIGHT, COLTITEM_ATTACHMENT_BODY, COLTMAIN_ATTACHMENT_FLARE);
-          break;
+        case WEAPON_DOUBLECOLT:
+        case WEAPON_COLT: ShowFlare(BODY_ATTACHMENT_COLT_RIGHT, COLTITEM_ATTACHMENT_BODY, COLTMAIN_ATTACHMENT_FLARE); break;
         case WEAPON_SINGLESHOTGUN:
           ShowFlare(BODY_ATTACHMENT_SINGLE_SHOTGUN, SINGLESHOTGUNITEM_ATTACHMENT_BARRELS, BARRELS_ATTACHMENT_FLARE);
           break;
         case WEAPON_DOUBLESHOTGUN:
           ShowFlare(BODY_ATTACHMENT_DOUBLE_SHOTGUN, DOUBLESHOTGUNITEM_ATTACHMENT_BARRELS, DSHOTGUNBARRELS_ATTACHMENT_FLARE);
           break;
-        case WEAPON_TOMMYGUN:
-          ShowFlare(BODY_ATTACHMENT_TOMMYGUN, TOMMYGUNITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE);
-          break;
-        case WEAPON_SNIPER:
-          ShowFlare(BODY_ATTACHMENT_FLAMER, SNIPERITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE);
-          break;
-        case WEAPON_MINIGUN:
-          ShowFlare(BODY_ATTACHMENT_MINIGUN, MINIGUNITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE);
-          break;
+        case WEAPON_TOMMYGUN: ShowFlare(BODY_ATTACHMENT_TOMMYGUN, TOMMYGUNITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE); break;
+        case WEAPON_SNIPER: ShowFlare(BODY_ATTACHMENT_FLAMER, SNIPERITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE); break;
+        case WEAPON_MINIGUN: ShowFlare(BODY_ATTACHMENT_MINIGUN, MINIGUNITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE); break;
       }
-    // remove
-    } else if (m_iFlare == FLARE_REMOVE &&
-      _pTimer->CurrentTick()>pen->m_tmFlareAdded+_pTimer->TickQuantum) {
+      // remove
+    } else if (m_iFlare == FLARE_REMOVE && _pTimer->CurrentTick() > pen->m_tmFlareAdded + _pTimer->TickQuantum) {
       switch (iWeapon) {
-        case WEAPON_DOUBLECOLT: case WEAPON_COLT:
-          HideFlare(BODY_ATTACHMENT_COLT_RIGHT, COLTITEM_ATTACHMENT_BODY, COLTMAIN_ATTACHMENT_FLARE);
-          break;
+        case WEAPON_DOUBLECOLT:
+        case WEAPON_COLT: HideFlare(BODY_ATTACHMENT_COLT_RIGHT, COLTITEM_ATTACHMENT_BODY, COLTMAIN_ATTACHMENT_FLARE); break;
         case WEAPON_SINGLESHOTGUN:
           HideFlare(BODY_ATTACHMENT_SINGLE_SHOTGUN, SINGLESHOTGUNITEM_ATTACHMENT_BARRELS, BARRELS_ATTACHMENT_FLARE);
           break;
         case WEAPON_DOUBLESHOTGUN:
           HideFlare(BODY_ATTACHMENT_DOUBLE_SHOTGUN, DOUBLESHOTGUNITEM_ATTACHMENT_BARRELS, DSHOTGUNBARRELS_ATTACHMENT_FLARE);
           break;
-        case WEAPON_TOMMYGUN:
-          HideFlare(BODY_ATTACHMENT_TOMMYGUN, TOMMYGUNITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE);
-          break;
-        case WEAPON_SNIPER:
-          HideFlare(BODY_ATTACHMENT_FLAMER, SNIPERITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE);
-          break;
-        case WEAPON_MINIGUN:
-          HideFlare(BODY_ATTACHMENT_MINIGUN, MINIGUNITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE);
-          break;
+        case WEAPON_TOMMYGUN: HideFlare(BODY_ATTACHMENT_TOMMYGUN, TOMMYGUNITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE); break;
+        case WEAPON_SNIPER: HideFlare(BODY_ATTACHMENT_FLAMER, SNIPERITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE); break;
+        case WEAPON_MINIGUN: HideFlare(BODY_ATTACHMENT_MINIGUN, MINIGUNITEM_ATTACHMENT_BODY, BODY_ATTACHMENT_FLARE); break;
       }
     }
   };
 
-
-
-// PROCEDURES
 procedures:
   ReminderAction(EReminder er) {
     switch (er.iValue) {
@@ -1590,6 +1595,7 @@ procedures:
     return EBegin();
   };
 
+  // Entry point
   Main(EAnimatorInit eInit) {
     // remember the initial parameters
     ASSERT(eInit.penPlayer != NULL);

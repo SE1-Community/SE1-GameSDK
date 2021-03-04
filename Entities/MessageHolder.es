@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -25,7 +25,7 @@ thumbnail "Thumbnails\\MessageHolder.tbn";
 features  "HasName", "IsTargetable";
 
 properties:
-  1 CTString m_strName          "Name" 'N' = "MessageHolder",
+  1 CTString m_strName "Name" 'N' = "MessageHolder",
   3 CTString m_strDescription = "",
   2 CTFileName m_fnmMessage  "Message" 'M' = CTString(""),
   4 FLOAT m_fDistance  "Distance" 'D' = 2.0f,
@@ -33,18 +33,18 @@ properties:
   6 CEntityPointer m_penNext "Next" 'X',
 
 components:
-  1 model   MODEL_MARKER     "Models\\Editor\\MessageHolder.mdl",
-  2 texture TEXTURE_MARKER   "Models\\Editor\\MessageHolder.tex"
+  1 model   MODEL_MARKER   "Models\\Editor\\MessageHolder.mdl",
+  2 texture TEXTURE_MARKER "Models\\Editor\\MessageHolder.tex"
 
 functions:
   const CTString &GetDescription(void) const {
-    ((CTString&)m_strDescription).PrintF("%s", m_fnmMessage.FileName());
+    ((CTString &)m_strDescription).PrintF("%s", m_fnmMessage.FileName());
     return m_strDescription;
   }
 
 procedures:
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -52,27 +52,33 @@ procedures:
     // set appearance
     SetModel(MODEL_MARKER);
     SetModelMainTexture(TEXTURE_MARKER);
+
     wait() {
-      on (ETrigger eTrigger): {
+      on (ETrigger eTrigger) : {
         if (!m_bActive) {
           resume;
         }
+
         CEntity *penCaused = FixupCausedToPlayer(this, eTrigger.penCaused);
+
         EComputerMessage eMsg;
         eMsg.fnmMessage = m_fnmMessage;
         penCaused->SendEvent(eMsg);
+
         resume;
       }
-      on (EActivate): {
+
+      on (EActivate) : {
         m_bActive = TRUE;
         resume;
       }
-      on (EDeactivate): {
+
+      on (EDeactivate) : {
         m_bActive = FALSE;
         resume;
       }
     }
+
     return;
   }
 };
-
