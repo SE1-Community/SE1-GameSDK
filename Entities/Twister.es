@@ -168,7 +168,10 @@ functions:
       BOOL bNoSpinner = TRUE;
 
       {FOREACHINLIST(CEntity, en_lnInParent, pen->en_lhChildren, iten) {
-        if (IsOfClass(iten, "Spinner")) {
+        // [Cecil] 2021-04-12: For safety
+        CEntity *pen = iten;
+
+        if (IsOfClass(pen, "Spinner")) {
           bNoSpinner = FALSE;
           return;
         }

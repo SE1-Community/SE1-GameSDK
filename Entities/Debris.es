@@ -320,12 +320,15 @@ procedures:
           // shake or some other effect
           if (m_penFallFXPapa != NULL && !m_bTouchedGround) {
             // loop all children of FX papa
-            FOREACHINLIST( CEntity, en_lnInParent, m_penFallFXPapa->en_lhChildren, iten) {
+            FOREACHINLIST(CEntity, en_lnInParent, m_penFallFXPapa->en_lhChildren, iten) {
+              // [Cecil] 2021-04-12: For safety
+              CEntity *pen = iten;
+
               // start it
-              CEntity *penNew = GetWorld()->CopyEntityInWorld( *iten, GetPlacement());
+              CEntity *penNew = GetWorld()->CopyEntityInWorld(*pen, GetPlacement());
               penNew->SetParent(NULL);
 
-              if (IsOfClass(&*penNew, "SoundHolder")) {
+              if (IsOfClass(penNew, "SoundHolder")) {
                 penNew->SendEvent(EStart());
               } else {
                 penNew->SendEvent(ETrigger());

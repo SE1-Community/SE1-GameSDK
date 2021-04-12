@@ -729,9 +729,12 @@ procedures:
 
     // all children lights named pulsating should pulsate
     FOREACHINLIST( CEntity, en_lnInParent, en_lhChildren, iten) {
-      if (IsOfClass(iten, "Light")) {
-        if (iten->GetName() == "Pulsating") {
-          CLight *penLight = (CLight *) &*iten;
+      // [Cecil] 2021-04-12: For safety
+      CEntity *pen = iten;
+
+      if (IsOfClass(pen, "Light")) {
+        if (pen->GetName() == "Pulsating") {
+          CLight *penLight = (CLight *)pen;
 
           EChangeAnim eChange;
           eChange.iLightAnim = 3;
@@ -739,8 +742,8 @@ procedures:
 
           penLight->SendEvent(eChange);
 
-        } else if (iten->GetName() == "Motors") {
-          CLight *penLight = (CLight *) &*iten;
+        } else if (pen->GetName() == "Motors") {
+          CLight *penLight = (CLight *)pen;
 
           EChangeAnim eChange;
           eChange.iLightAnim = 4;

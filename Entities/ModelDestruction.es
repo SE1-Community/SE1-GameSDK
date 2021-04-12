@@ -232,8 +232,11 @@ functions:
 
         // launch all children of model holder type
         FOREACHINLIST(CEntity, en_lnInParent, en_lhChildren, iten) {
-          if (IsOfClass(&*iten, "ModelHolder2")) {
-            CModelHolder2 &mhTemplate = (CModelHolder2 &)*iten;
+          // [Cecil] 2021-04-12: For safety
+          CEntity *pen = iten;
+
+          if (IsOfClass(pen, "ModelHolder2")) {
+            CModelHolder2 &mhTemplate = (CModelHolder2 &)*pen;
 
             if (mhTemplate.GetModelObject() == NULL || penmhDestroyed->GetModelObject() == NULL) {
               continue;
@@ -276,8 +279,8 @@ functions:
                                   penmhDestroyed->m_colBurning);
           }
 
-          if (IsOfClass(&*iten, "SoundHolder")) {
-            CSoundHolder &ensh = (CSoundHolder &)*iten;
+          if (IsOfClass(pen, "SoundHolder")) {
+            CSoundHolder &ensh = (CSoundHolder &)*pen;
 
             // copy it at the placement of destroyed model
             CEntity *penNewSH = GetWorld()->CopyEntityInWorld(ensh, penmhDestroyed->GetPlacement());

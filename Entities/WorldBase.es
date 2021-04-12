@@ -160,9 +160,12 @@ static void DoLevelSafetyChecks() {
   CPrintF("STEP 1 - Checking model holders...\n");
 
   // for model holder in the world;
-  {FOREACHINDYNAMICCONTAINER(pwo->wo_cenEntities, CEntity, iten) {  
-    if (IsOfClass(iten, "ModelHolder2")) {
-      CModelHolder2 *mh = (CModelHolder2*)&*iten;
+  {FOREACHINDYNAMICCONTAINER(pwo->wo_cenEntities, CEntity, iten) {
+    // [Cecil] 2021-04-12: For safety
+    CEntity *pen = iten;
+
+    if (IsOfClass(pen, "ModelHolder2")) {
+      CModelHolder2 *mh = (CModelHolder2 *)pen;
       FLOAT3D vPos = mh->GetPlacement().pl_PositionVector;
 
       if (mh->m_penDestruction == NULL) {
@@ -175,8 +178,11 @@ static void DoLevelSafetyChecks() {
 
   // for each sound holder in the world
   {FOREACHINDYNAMICCONTAINER(pwo->wo_cenEntities, CEntity, iten) {
-    if (IsOfClass(iten, "SoundHolder")) {
-      CSoundHolder *sh = (CSoundHolder *)&*iten;
+    // [Cecil] 2021-04-12: For safety
+    CEntity *pen = iten;
+
+    if (IsOfClass(pen, "SoundHolder")) {
+      CSoundHolder *sh = (CSoundHolder *)pen;
       FLOAT3D vPos = sh->GetPlacement().pl_PositionVector;
 
       if (sh->m_fnSound == CTFILENAME("Sounds\\Default.wav")) {

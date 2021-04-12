@@ -548,7 +548,7 @@ void Particles_ViewerLocal(CEntity *penView) {
     // next environment particles holder
     eph = (CEnvironmentParticlesHolder *)&*eph->m_penNextHolder;
 
-    if (!(IsOfClass(eph, "EnvironmentParticlesHolder"))) {
+    if (!IsOfClass(eph, "EnvironmentParticlesHolder")) {
       break;
     }
   }

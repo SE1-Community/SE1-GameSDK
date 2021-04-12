@@ -182,11 +182,14 @@ static void ClearPath(CEntity *penThis) {
   #ifndef NDEBUG
   // for each navigation marker in the world
   {FOREACHINDYNAMICCONTAINER(penThis->en_pwoWorld->wo_cenEntities, CEntity, iten) {
-    if (!IsOfClass(iten, "NavigationMarker")) {
+    // [Cecil] 2021-04-12: For safety
+    CEntity *pen = iten;
+
+    if (!IsOfClass(pen, "NavigationMarker")) {
       continue;
     }
 
-    CNavigationMarker &nm = (CNavigationMarker &)*iten;
+    CNavigationMarker &nm = (CNavigationMarker &)*pen;
     ASSERT(nm.m_ppnNode == NULL);
   }}
   #endif
@@ -200,7 +203,10 @@ static void FindClosestMarker(CEntity *penThis, const FLOAT3D &vSrc, CEntity *&p
   // for each sector this entity is in
   {FOREACHSRCOFDST(penThis->en_rdSectors, CBrushSector, bsc_rsEntities, pbsc)
     // for each navigation marker in that sector
-    {FOREACHDSTOFSRC(pbsc->bsc_rsEntities, CEntity, en_rdSectors, pen)
+    {FOREACHDSTOFSRC(pbsc->bsc_rsEntities, CEntity, en_rdSectors, iten)
+      // [Cecil] 2021-04-12: For safety
+      CEntity *pen = iten;
+
       if (!IsOfClass(pen, "NavigationMarker")) {
         continue;
       }
