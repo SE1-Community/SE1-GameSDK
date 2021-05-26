@@ -128,7 +128,7 @@ functions:
   }
 
   // Notify owner that a player has been seen
-  void SendWatchEvent(CEntity * penPlayer) {
+  void SendWatchEvent(CEntity *penPlayer) {
     EWatch eWatch;
     eWatch.penSeen = penPlayer;
     m_penOwner->SendEvent(eWatch);
@@ -242,7 +242,7 @@ functions:
   };
 
   // This is called directly from enemybase to check if another player has come too close
-  CEntity *CheckCloserPlayer(CEntity * penCurrentTarget, FLOAT fRange) {
+  CEntity *CheckCloserPlayer(CEntity *penCurrentTarget, FLOAT fRange) {
     // if the owner is blind
     if (GetOwner()->m_bBlind) {
       // don't even bother checking
@@ -279,7 +279,7 @@ functions:
   }
 
   // This is called directly from enemybase to attack multiple players (for really big enemies)
-  CEntity *CheckAnotherPlayer(CEntity * penCurrentTarget) {
+  CEntity *CheckAnotherPlayer(CEntity *penCurrentTarget) {
     // if the owner is blind, or no current target
     if (GetOwner()->m_bBlind || penCurrentTarget == NULL) {
       // don't even check

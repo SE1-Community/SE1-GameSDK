@@ -144,16 +144,16 @@ procedures:
 
     wait() {
       // on the beginning
-      on(EBegin) : {
+      on (EBegin) : {
         resume;
       }
 
-      on(EStart) : {
+      on (EStart) : {
         call OpenBook();
         resume;
       }
 
-      on(EReturn) : {
+      on (EReturn) : {
         resume;
       }
     }

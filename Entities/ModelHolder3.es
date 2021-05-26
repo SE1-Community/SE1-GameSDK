@@ -251,7 +251,7 @@ procedures:
 
     // wait forever
     wait() {
-      on(EBegin): {
+      on (EBegin) : {
         resume;
       }
 
@@ -280,7 +280,7 @@ procedures:
       }
 
       // when your parent is destroyed
-      on(ERangeModelDestruction): {
+      on (ERangeModelDestruction) : {
         // for each child of this entity
         {FOREACHINLIST(CEntity, en_lnInParent, en_lhChildren, itenChild) {
           // send it destruction event
@@ -293,11 +293,11 @@ procedures:
       }
 
       // when dead
-      on(EDeath): {
+      on (EDeath) : {
         resume;
       }
 
-      otherwise(): {
+      otherwise() : {
         resume;
       }
     }

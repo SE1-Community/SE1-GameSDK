@@ -3213,7 +3213,7 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity * penInflictor, INDEX dmtType, FLOAT fDamageAmmount,
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount,
                      const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // cannonball immediately destroys demons fireball
     if (m_prtType == PRT_DEMON_FIREBALL && dmtType == DMT_CANNONBALL) {
@@ -3279,7 +3279,7 @@ procedures:
 
         // ignore another projectile of same type
         BOOL bHit = !((!m_bCanHitHimself && IsOfClass(etouch.penOther, "Projectile")
-                  && ((CProjectile*)&*etouch.penOther)->m_prtType == m_prtType));     
+                  && ((CProjectile*)&*etouch.penOther)->m_prtType == m_prtType));
         
         if (bHit) {
           ProjectileTouch(etouch.penOther);
@@ -3823,7 +3823,7 @@ procedures:
         } else {
           // ignore another projectile of same type
           bHit = !((!m_bCanHitHimself && IsOfClass(etouch.penOther, "Projectile")
-               && ((CProjectile*)&*etouch.penOther)->m_prtType == m_prtType));     
+               && ((CProjectile*)&*etouch.penOther)->m_prtType == m_prtType));
         
           if (bHit) {
             ProjectileTouch(etouch.penOther);
@@ -3988,8 +3988,8 @@ procedures:
       case PRT_LAVAMAN_BOMB: LavamanBombDebrisExplosion(); break;
       case PRT_BEAST_BIG_PROJECTILE: BeastBigProjectileExplosion(); break;
       case PRT_BEAST_PROJECTILE: BeastProjectileExplosion(); break;
-      case PRT_BEAST_DEBRIS: BeastDebrisExplosion(); break;      
-      case PRT_BEAST_BIG_DEBRIS: BeastBigDebrisExplosion(); break;      
+      case PRT_BEAST_DEBRIS: BeastDebrisExplosion(); break;
+      case PRT_BEAST_BIG_DEBRIS: BeastBigDebrisExplosion(); break;
       case PRT_DEVIL_ROCKET: DevilRocketExplosion(); break;
       case PRT_DEVIL_GUIDED_PROJECTILE: DevilGuidedProjectileExplosion(); break;
       case PRT_GUFFY_PROJECTILE: GuffyProjectileExplosion(); break;

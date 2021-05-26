@@ -27,8 +27,8 @@ uses "Entities/Projectile";
 // info structure
 static EntityInfo eiGuffy = {
   EIBT_FLESH, 800.0f,
-  0.0f, 1.9f, 0.0f,     // source (eyes)
-  0.0f, 1.0f, 0.0f,     // target (body)
+  0.0f, 1.9f, 0.0f, // source (eyes)
+  0.0f, 1.0f, 0.0f, // target (body)
 };
 
 #define FIRE_LEFT_ARM   FLOAT3D(-0.56f, +1.125f, -1.32f)

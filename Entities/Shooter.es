@@ -329,6 +329,7 @@ procedures:
     }
   };
 
+  // Entry point
   Main() {
     // init as model
     CModelHolder2::InitModelHolder();

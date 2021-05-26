@@ -123,7 +123,7 @@ procedures:
       autowait(0.25f);
 
       ExplodeBomb();
-      autowait(1.75f);   
+      autowait(1.75f);
     }
 
     Destroy();

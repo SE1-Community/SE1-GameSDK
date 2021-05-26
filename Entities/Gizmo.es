@@ -26,8 +26,8 @@ uses "Entities/BasicEffects";
 // info structure
 static EntityInfo eiGizmo = {
   EIBT_FLESH, 100.0f,
-  0.0f, 1.3f, 0.0f,     // source (eyes)
-  0.0f, 1.0f, 0.0f,     // target (body)
+  0.0f, 1.3f, 0.0f, // source (eyes)
+  0.0f, 1.0f, 0.0f, // target (body)
 };
 
 #define EXPLODE_GIZMO   2.5f

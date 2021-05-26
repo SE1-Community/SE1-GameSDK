@@ -18,56 +18,60 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 %}
 
+// [Cecil] NOTE: Obsolete class
 class CModelHolder : CEntity {
 name      "ModelHolder";
 thumbnail "";
-features "HasName", "HasDescription";
+features  "HasName", "HasDescription";
 
 properties:
-  1 CTFileName m_fnModel    "Model" 'M' =CTFILENAME("Models\\Editor\\Axis.mdl"),
-  2 CTFileName m_fnTexture  "Texture" 'T' =CTFILENAME("Models\\Editor\\Vector.tex"),
-  3 FLOAT m_fStretchAll     "StretchAll" 'S' = 1.0f,
-  4 FLOAT m_fStretchX       "StretchX"   'X' = 1.0f,
-  5 FLOAT m_fStretchY       "StretchY"   'Y' = 1.0f,
-  6 FLOAT m_fStretchZ       "StretchZ"   'Z' = 1.0f,
-  7 CTString m_strName      "Name" 'N' ="",
+  1 CTFileName m_fnModel "Model" 'M' =CTFILENAME("Models\\Editor\\Axis.mdl"),
+  2 CTFileName m_fnTexture "Texture" 'T' =CTFILENAME("Models\\Editor\\Vector.tex"),
+  3 FLOAT m_fStretchAll "StretchAll" 'S' = 1.0f,
+  4 FLOAT m_fStretchX "StretchX" 'X' = 1.0f,
+  5 FLOAT m_fStretchY "StretchY" 'Y' = 1.0f,
+  6 FLOAT m_fStretchZ "StretchZ" 'Z' = 1.0f,
+  7 CTString m_strName "Name" 'N' ="",
  12 CTString m_strDescription = "",
-  8 BOOL m_bColliding       "Colliding" 'C' = FALSE,    // set if model is not immatierial
-  9 ANIMATION m_iModelAnimation   "Model animation" 'A' = 0,
+  8 BOOL m_bColliding "Colliding" 'C' = FALSE, // set if model is not immatierial
+  9 ANIMATION m_iModelAnimation "Model animation" 'A' = 0,
  10 ANIMATION m_iTextureAnimation "Texture animation" = 0,
- 11 BOOL m_bClusterShadows "Cluster shadows" = FALSE,   // set if model uses cluster shadows
- 13 BOOL m_bBackground     "Background" = FALSE,   // set if model is rendered in background
+ 11 BOOL m_bClusterShadows "Cluster shadows" = FALSE, // set if model uses cluster shadows
+ 13 BOOL m_bBackground "Background" = FALSE, // set if model is rendered in background
 
  // parameters for custom shading of a model (overrides automatic shading calculation)
- 14 BOOL m_bCustomShading       "Custom shading" 'H' = FALSE,
+ 14 BOOL m_bCustomShading "Custom shading" 'H' = FALSE,
  15 ANGLE3D m_aShadingDirection "Light direction" = ANGLE3D(AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
  16 COLOR m_colLight            "Light color" = C_WHITE,
  17 COLOR m_colAmbient          "Ambient color" = C_BLACK,
  18 CTFileName m_fnmLightAnimation "Light animation file" = CTString(""),
- 19 ANIMATION m_iLightAnimation "Light animation" = 0,
+ 19 ANIMATION m_iLightAnimation    "Light animation" = 0,
  20 CAnimObject m_aoLightAnimation,
+
 {
-  CTFileName m_fnOldModel;  // used for remembering last selected model (not saved at all)
+  CTFileName m_fnOldModel; // used for remembering last selected model (not saved at all)
 }
 
 components:
 
 functions:
-  // Get anim data for given animation property - return NULL for none.
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
-  {
+  // Get anim data for given animation property - return NULL for none
+  CAnimData *GetAnimData(SLONG slPropertyOffset) {
     if (slPropertyOffset == offsetof(CModelHolder, m_iModelAnimation)) {
       return GetModelObject()->GetData();
+
     } else if (slPropertyOffset == offsetof(CModelHolder, m_iTextureAnimation)) {
       return GetModelObject()->mo_toTexture.GetData();
+
     } else if (slPropertyOffset == offsetof(CModelHolder, m_iLightAnimation)) {
       return m_aoLightAnimation.GetData();
+
     } else {
       return CEntity::GetAnimData(slPropertyOffset);
     }
   };
 
-  // Adjust model shading parameters if needed.
+  // Adjust model shading parameters if needed
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
     if (m_bCustomShading) {
       // if there is color animation
@@ -76,6 +80,7 @@ functions:
         SLONG colFrame0, colFrame1;
         FLOAT fRatio;
         m_aoLightAnimation.GetFrame(colFrame0, colFrame1, fRatio);
+
         UBYTE ubAnimR0, ubAnimG0, ubAnimB0;
         UBYTE ubAnimR1, ubAnimG1, ubAnimB1;
         ColorToRGB(colFrame0, ubAnimR0, ubAnimG0, ubAnimB0);
@@ -89,12 +94,14 @@ functions:
         // decompose constant colors
         UBYTE ubLightR, ubLightG, ubLightB;
         UBYTE ubAmbientR, ubAmbientG, ubAmbientB;
+
         ColorToRGB(m_colLight, ubLightR, ubLightG, ubLightB);
         ColorToRGB(m_colAmbient, ubAmbientR, ubAmbientG, ubAmbientB);
+
         colLight = RGBToColor(ubLightR * fAnimR, ubLightG * fAnimG, ubLightB * fAnimB);
         colAmbient = RGBToColor(ubAmbientR * fAnimR, ubAmbientG * fAnimG, ubAmbientB * fAnimB);
 
-        // if there is no color animation
+      // if there is no color animation
       } else {
         colLight = m_colLight;
         colAmbient = m_colAmbient;
@@ -103,6 +110,7 @@ functions:
       AnglesToDirectionVector(m_aShadingDirection, vLightDirection);
       vLightDirection = -vLightDirection;
     }
+
     return TRUE;
   };
 
@@ -112,24 +120,31 @@ functions:
     if (m_fStretchX < 0.01f) {
       m_fStretchX = 0.01f;
     }
+
     if (m_fStretchY < 0.01f) {
       m_fStretchY = 0.01f;
     }
+
     if (m_fStretchZ < 0.01f) {
       m_fStretchZ = 0.01f;
     }
+
     if (m_fStretchAll < 0.01f) {
       m_fStretchAll = 0.01f;
     }
+
     if (m_fStretchX > 100.0f) {
       m_fStretchX = 100.0f;
     }
+
     if (m_fStretchY > 100.0f) {
       m_fStretchY = 100.0f;
     }
+
     if (m_fStretchZ > 100.0f) {
       m_fStretchZ = 100.0f;
     }
+
     if (m_fStretchAll > 100.0f) {
       m_fStretchAll = 100.0f;
     }
@@ -138,21 +153,25 @@ functions:
     if (m_fnOldModel == "") {
       // just remember the model filename
       m_fnOldModel = m_fnModel;
-      // if re-initialized
+
+    // if re-initialized
     } else {
       // if the model filename has changed
       if (m_fnOldModel != m_fnModel) {
         // set texture filename to same as the model filename with texture extension
         m_fnTexture = m_fnModel.FileDir() + m_fnModel.FileName() + CTString(".tex");
+
         // remember the model filename
         m_fnOldModel = m_fnModel;
       }
     }
 
     InitAsModel();
+
     if (m_bColliding) {
       SetPhysicsFlags(EPF_MODEL_FIXED);
       SetCollisionFlags(ECF_MODEL_HOLDER);
+
     } else {
       SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
       SetCollisionFlags(ECF_IMMATERIAL);
@@ -170,7 +189,7 @@ functions:
       SetFlags(GetFlags() & ~ENF_BACKGROUND);
     }
 
-    // set model stretch -- MUST BE DONE BEFORE SETTING MODEL!
+    // set model stretch - MUST BE DONE BEFORE SETTING MODEL!
     GetModelObject()->mo_Stretch = FLOAT3D(m_fStretchAll * m_fStretchX, m_fStretchAll * m_fStretchY, m_fStretchAll * m_fStretchZ);
 
     // set appearance
@@ -182,10 +201,12 @@ functions:
 
     try {
       m_aoLightAnimation.SetData_t(m_fnmLightAnimation);
+
     } catch (char *strError) {
       WarningMessage(TRANS("Cannot load '%s': %s"), (CTString &)m_fnmLightAnimation, strError);
       m_fnmLightAnimation = "";
     }
+
     if (m_aoLightAnimation.GetData() != NULL) {
       m_aoLightAnimation.PlayAnim(m_iLightAnimation, AOF_LOOPING);
     }
@@ -196,9 +217,10 @@ functions:
   };
 
 procedures:
-  Main()
-  {
+  // Entry point
+  Main() {
     InitModelHolder();
+
     return;
   }
 };

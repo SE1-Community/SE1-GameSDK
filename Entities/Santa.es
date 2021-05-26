@@ -27,8 +27,8 @@ uses "Entities/EnemyBase";
 // info structure
 static EntityInfo eiSanta = {
   EIBT_AIR, 100.0f,
-  0, 1.6f, 0,     // source (eyes)
-  0.0f, 1.0f, 0.0f,     // target (body)
+  0.0f, 1.6f, 0.0f, // source (eyes)
+  0.0f, 1.0f, 0.0f, // target (body)
 };
 %}
 

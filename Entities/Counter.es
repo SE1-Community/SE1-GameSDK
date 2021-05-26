@@ -111,7 +111,7 @@ procedures:
     DisplayNumber();
 
     wait() {
-      on(EBegin) : {
+      on (EBegin) : {
         resume;
       }
 
@@ -123,7 +123,7 @@ procedures:
         call CountDown();
       }
 
-      on(EReturn) : {
+      on (EReturn) : {
         if (m_penTarget != NULL) {
           SendToTarget(m_penTarget, EET_TRIGGER);
         }

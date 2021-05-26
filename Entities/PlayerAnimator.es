@@ -122,50 +122,50 @@ void CPlayerAnimator_Precache(ULONG ulAvailable)
     pdec->PrecacheModel(MODEL_COLTCOCK              );
     pdec->PrecacheModel(MODEL_COLTMAIN              );
     pdec->PrecacheModel(MODEL_COLTBULLETS           );
-    pdec->PrecacheTexture(TEXTURE_COLTMAIN          );  
-    pdec->PrecacheTexture(TEXTURE_COLTBULLETS       );  
-    pdec->PrecacheTexture(TEXTURE_COLTBULLETS       );  
+    pdec->PrecacheTexture(TEXTURE_COLTMAIN          );
+    pdec->PrecacheTexture(TEXTURE_COLTBULLETS       );
+    pdec->PrecacheTexture(TEXTURE_COLTBULLETS       );
   }
 
   if (ulAvailable&(1 << (WEAPON_SINGLESHOTGUN-1)) ) {
-    pdec->PrecacheModel(MODEL_SINGLESHOTGUN     );    
-    pdec->PrecacheModel(MODEL_SS_SLIDER         );    
-    pdec->PrecacheModel(MODEL_SS_HANDLE         );    
-    pdec->PrecacheModel(MODEL_SS_BARRELS        );    
-    pdec->PrecacheTexture(TEXTURE_SS_HANDLE);      
-    pdec->PrecacheTexture(TEXTURE_SS_BARRELS);      
+    pdec->PrecacheModel(MODEL_SINGLESHOTGUN     );
+    pdec->PrecacheModel(MODEL_SS_SLIDER         );
+    pdec->PrecacheModel(MODEL_SS_HANDLE         );
+    pdec->PrecacheModel(MODEL_SS_BARRELS        );
+    pdec->PrecacheTexture(TEXTURE_SS_HANDLE);
+    pdec->PrecacheTexture(TEXTURE_SS_BARRELS);
   }
 
   if (ulAvailable&(1 << (WEAPON_DOUBLESHOTGUN-1)) ) {
-    pdec->PrecacheModel(MODEL_DOUBLESHOTGUN        ); 
-    pdec->PrecacheModel(MODEL_DS_HANDLE            ); 
-    pdec->PrecacheModel(MODEL_DS_BARRELS           ); 
-    pdec->PrecacheModel(MODEL_DS_SWITCH            ); 
-    pdec->PrecacheTexture(TEXTURE_DS_HANDLE        );   
-    pdec->PrecacheTexture(TEXTURE_DS_BARRELS       );   
-    pdec->PrecacheTexture(TEXTURE_DS_SWITCH        );   
+    pdec->PrecacheModel(MODEL_DOUBLESHOTGUN        );
+    pdec->PrecacheModel(MODEL_DS_HANDLE            );
+    pdec->PrecacheModel(MODEL_DS_BARRELS           );
+    pdec->PrecacheModel(MODEL_DS_SWITCH            );
+    pdec->PrecacheTexture(TEXTURE_DS_HANDLE        );
+    pdec->PrecacheTexture(TEXTURE_DS_BARRELS       );
+    pdec->PrecacheTexture(TEXTURE_DS_SWITCH        );
   }
 
   if (ulAvailable&(1 << (WEAPON_TOMMYGUN-1)) ) {
     pdec->PrecacheModel(MODEL_TOMMYGUN              );
     pdec->PrecacheModel(MODEL_TG_BODY               );
     pdec->PrecacheModel(MODEL_TG_SLIDER             );
-    pdec->PrecacheTexture(TEXTURE_TG_BODY           );  
+    pdec->PrecacheTexture(TEXTURE_TG_BODY           );
   }
 
   if (ulAvailable&(1 << (WEAPON_SNIPER-1)) ) {
-    pdec->PrecacheModel(MODEL_SNIPER          ); 
-    pdec->PrecacheModel(MODEL_SNIPER_BODY     ); 
-    pdec->PrecacheTexture(TEXTURE_SNIPER_BODY );   
+    pdec->PrecacheModel(MODEL_SNIPER          );
+    pdec->PrecacheModel(MODEL_SNIPER_BODY     );
+    pdec->PrecacheTexture(TEXTURE_SNIPER_BODY );
   }
 
   if (ulAvailable&(1 << (WEAPON_MINIGUN-1)) ) {
-    pdec->PrecacheModel(MODEL_MINIGUN          );     
-    pdec->PrecacheModel(MODEL_MG_BARRELS       );     
-    pdec->PrecacheModel(MODEL_MG_BODY          );     
-    pdec->PrecacheModel(MODEL_MG_ENGINE        );     
-    pdec->PrecacheTexture(TEXTURE_MG_BODY      );       
-    pdec->PrecacheTexture(TEXTURE_MG_BARRELS   );       
+    pdec->PrecacheModel(MODEL_MINIGUN          );
+    pdec->PrecacheModel(MODEL_MG_BARRELS       );
+    pdec->PrecacheModel(MODEL_MG_BODY          );
+    pdec->PrecacheModel(MODEL_MG_ENGINE        );
+    pdec->PrecacheTexture(TEXTURE_MG_BODY      );
+    pdec->PrecacheTexture(TEXTURE_MG_BARRELS   );
   }
                                          
   if (ulAvailable&(1 << (WEAPON_ROCKETLAUNCHER-1)) ) {
@@ -179,12 +179,12 @@ void CPlayerAnimator_Precache(ULONG ulAvailable)
   }                                        
 
   if (ulAvailable&(1 << (WEAPON_GRENADELAUNCHER-1)) ) {
-    pdec->PrecacheModel(MODEL_GRENADELAUNCHER       ); 
-    pdec->PrecacheModel(MODEL_GL_BODY               ); 
-    pdec->PrecacheModel(MODEL_GL_MOVINGPART         ); 
-    pdec->PrecacheModel(MODEL_GL_GRENADE            ); 
-    pdec->PrecacheTexture(TEXTURE_GL_BODY           );   
-    pdec->PrecacheTexture(TEXTURE_GL_MOVINGPART     );   
+    pdec->PrecacheModel(MODEL_GRENADELAUNCHER       );
+    pdec->PrecacheModel(MODEL_GL_BODY               );
+    pdec->PrecacheModel(MODEL_GL_MOVINGPART         );
+    pdec->PrecacheModel(MODEL_GL_GRENADE            );
+    pdec->PrecacheTexture(TEXTURE_GL_BODY           );
+    pdec->PrecacheTexture(TEXTURE_GL_MOVINGPART     );
   }
 
 /*

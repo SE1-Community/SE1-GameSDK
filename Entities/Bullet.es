@@ -76,7 +76,7 @@ functions:
     m_vTargetCopy = m_vTarget;
   };
 
-  void CalcTarget(CEntity * pen, FLOAT fRange) {
+  void CalcTarget(CEntity *pen, FLOAT fRange) {
     FLOAT3D vTarget;
 
     // target body

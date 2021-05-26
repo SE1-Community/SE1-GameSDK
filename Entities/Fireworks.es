@@ -146,6 +146,7 @@ procedures:
     return EReturn();
   }
 
+  // Entry point
   Main() {
     // init model
     InitAsEditorModel();

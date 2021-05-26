@@ -99,6 +99,7 @@ properties:
 
  // damage/explode properties - CAN BE SET
  40 FLOAT m_fBlowUpAmount = 0.0f,             // damage in minus for blow up
+ // [Cecil] TODO: Rename to m_iBodyParts to match the type
  41 INDEX m_fBodyParts = 4,                   // number of spawned body parts
  42 FLOAT m_fDamageWounded = 0.0f,            // damage amount to be wounded
  43 FLOAT3D m_vDamage = FLOAT3D(0.0f, 0.0f, 0.0f),       // current damage impact
@@ -329,17 +330,17 @@ functions:
   }
 
   // calculate delta to given entity
-  FLOAT3D CalcDelta(CEntity * penEntity) {
+  FLOAT3D CalcDelta(CEntity *penEntity) {
     ASSERT(penEntity != NULL);
     // find vector from you to target
     return penEntity->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector;
   };
   // calculate distance to given entity
-  FLOAT CalcDist(CEntity * penEntity) {
+  FLOAT CalcDist(CEntity *penEntity) {
     return CalcDelta(penEntity).Length();
   };
 
-  BOOL IfTargetCrushed(CEntity * penOther, const FLOAT3D &vDirection) {
+  BOOL IfTargetCrushed(CEntity *penOther, const FLOAT3D &vDirection) {
     if (IsOfClass(penOther, "ModelHolder2")) {
       FLOAT fCrushHealth = GetCrushHealth();
       if (fCrushHealth > ((CRationalEntity &)*penOther).GetHealth()) {
@@ -1627,6 +1628,7 @@ functions:
 
   // should this enemy blow up (spawn debris)
   virtual BOOL ShouldBlowUp(void) {
+    // [Cecil] TODO: Shouldn't be here
     // exotech larva boss allways blows up
     if (IsOfClass(this, "ExotechLarva")) {
       return TRUE;
@@ -2973,7 +2975,7 @@ procedures:
   Inactive(EVoid) 
   {
     // stop moving
-    StopMoving();                 
+    StopMoving();
     StandingAnim();
     // start watching
     GetWatcher()->SendEvent(EStart());

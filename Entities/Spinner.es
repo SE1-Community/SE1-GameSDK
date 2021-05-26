@@ -112,7 +112,7 @@ procedures:
       // if the parent is deleted, stop existing
       if (m_penParent->GetFlags() & ENF_DELETED) {
         Destroy();
-        return;      
+        return;
       }
       
       if (((CMovableEntity&)*m_penParent).en_vCurrentTranslationAbsolute != m_vLastSpeed

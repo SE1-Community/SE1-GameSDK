@@ -21,6 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 uses "Entities/Marker";
 uses "Entities/Devil";
 
+// Devil action type
 enum DevilActionType {
   0 DAT_NONE                   "None",
   1 DAT_WALK                   "Walk",
@@ -45,22 +46,22 @@ enum DevilActionType {
  20 DAT_DECREASE_ATTACK_RADIUS "Decrease attack radius",
 };
 
-class CDevilMarker: CMarker {
+class CDevilMarker : CMarker {
 name      "Devil Marker";
 thumbnail "Thumbnails\\EnemyMarker.tbn";
 
 properties:
- 1 enum DevilActionType m_datType    "Action"  'A' = DAT_NONE,
- 4 INDEX m_iWaitIdles                "Wait idles"  'W' = 2,
- 5 CEntityPointer m_penDevil         "Devil"  'D',
- 6 CEntityPointer m_penTrigger       "Trigger" 'G',
- 7 CEntityPointer m_penToDestroy1    "Destroy target 1"  'E',
- 8 CEntityPointer m_penToDestroy2    "Destroy target 2"  'R',
- 9 RANGE m_fAttackRadius             "Attack radius"  'S' = 100.0f,
+ 1 enum DevilActionType m_datType "Action"  'A' = DAT_NONE,
+ 4 INDEX m_iWaitIdles             "Wait idles" 'W' = 2,
+ 5 CEntityPointer m_penDevil      "Devil"  'D',
+ 6 CEntityPointer m_penTrigger    "Trigger" 'G',
+ 7 CEntityPointer m_penToDestroy1 "Destroy target 1"  'E',
+ 8 CEntityPointer m_penToDestroy2 "Destroy target 2"  'R',
+ 9 RANGE m_fAttackRadius          "Attack radius"  'S' = 100.0f,
 
 components:
-  1 model   MODEL_MARKER     "Models\\Editor\\EnemyMarker.mdl",
-  2 texture TEXTURE_MARKER   "Models\\Editor\\DevilMarker.tex"
+  1 model   MODEL_MARKER   "Models\\Editor\\EnemyMarker.mdl",
+  2 texture TEXTURE_MARKER "Models\\Editor\\DevilMarker.tex"
 
 functions:
   void SetDefaultName(void) {
@@ -69,72 +70,91 @@ functions:
 
   const CTString &GetDescription(void) const {
     CTString strAction = DevilActionType_enum.NameForValue(INDEX(m_datType));
+
     if (m_penTarget == NULL) {
       ((CTString &)m_strDescription).PrintF("%s (%s)-><none>", m_strName, strAction);
     } else {
       ((CTString &)m_strDescription).PrintF("%s (%s)->%s", m_strName, strAction, m_penTarget->GetName());
     }
+
     return m_strDescription;
   }
 
-  // Check if entity is moved on a route set up by its targets.
+  // Check if entity is moved on a route set up by its targets
   BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Target";
     return TRUE;
   };
-  // Check if entity can drop marker for making linked route.
+
+  // Check if entity can drop marker for making linked route
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\DevilMarker.ecl");
     strTargetProperty = "Target";
+
     return TRUE;
   }
 
-  // Handle an event, return false if the event is not handled.
+  // Handle an event, return false if the event is not handled
   BOOL HandleEvent(const CEntityEvent &ee) {
-    if (ee.ee_slEvent == EVENTCODE_ETrigger) {
-      if (m_datType == DAT_NEXT_ACTION && m_penDevil != NULL && m_penTarget != NULL) {
-        EDevilCommand eDevilCommand;
-        eDevilCommand.dctType = DC_FORCE_ACTION;
-        eDevilCommand.penForcedAction = m_penTarget;
-        m_penDevil->SendEvent(eDevilCommand);
-        return TRUE;
-      } else if (m_datType == DAT_GRAB_LOWER_WEAPONS && m_penDevil != NULL) {
-        EDevilCommand eDevilCommand;
-        eDevilCommand.dctType = DC_GRAB_LOWER_WEAPONS;
-        m_penDevil->SendEvent(eDevilCommand);
-        return TRUE;
-      } else if (m_datType == DAT_STOP_MOVING && m_penDevil != NULL) {
-        EDevilCommand eDevilCommand;
-        eDevilCommand.dctType = DC_STOP_MOVING;
-        m_penDevil->SendEvent(eDevilCommand);
-        return TRUE;
-      } else if (m_datType == DAT_JUMP_INTO_PYRAMID && m_penDevil != NULL) {
-        EDevilCommand eDevilCommand;
-        eDevilCommand.dctType = DC_JUMP_INTO_PYRAMID;
-        eDevilCommand.penForcedAction = this;
-        m_penDevil->SendEvent(eDevilCommand);
-        return TRUE;
-      } else if (m_datType == DAT_TELEPORT_INTO_PYRAMID && m_penDevil != NULL) {
-        EDevilCommand eDevilCommand;
-        eDevilCommand.dctType = DC_TELEPORT_INTO_PYRAMID;
-        eDevilCommand.penForcedAction = this;
-        m_penDevil->SendEvent(eDevilCommand);
-        return TRUE;
-      } else if (m_datType == DAT_FORCE_ATTACK_RADIUS && m_penDevil != NULL) {
-        EDevilCommand eDevilCommand;
-        eDevilCommand.dctType = DC_FORCE_ATTACK_RADIUS;
-        eDevilCommand.fAttackRadius = m_fAttackRadius;
-        eDevilCommand.vCenterOfAttack = GetPlacement().pl_PositionVector;
-        m_penDevil->SendEvent(eDevilCommand);
-        return TRUE;
-      } else if (m_datType == DAT_DECREASE_ATTACK_RADIUS && m_penDevil != NULL) {
-        EDevilCommand eDevilCommand;
-        eDevilCommand.dctType = DC_DECREASE_ATTACK_RADIUS;
-        m_penDevil->SendEvent(eDevilCommand);
-        return TRUE;
+    EDevilCommand eDevilCommand;
+
+    // accept trigger event if devil exists
+    if (ee.ee_slEvent == EVENTCODE_ETrigger && m_penDevil != NULL)
+    {
+      switch (m_datType) {
+        case DAT_NEXT_ACTION:
+          if (m_penTarget != NULL) {
+            eDevilCommand.dctType = DC_FORCE_ACTION;
+            eDevilCommand.penForcedAction = m_penTarget;
+
+          } else {
+            return FALSE;
+          }
+          break;
+
+        case DAT_GRAB_LOWER_WEAPONS:
+          eDevilCommand.dctType = DC_GRAB_LOWER_WEAPONS;
+          break;
+
+        case DAT_STOP_MOVING:
+          eDevilCommand.dctType = DC_STOP_MOVING;
+          break;
+
+        case DAT_JUMP_INTO_PYRAMID:
+          eDevilCommand.dctType = DC_JUMP_INTO_PYRAMID;
+          eDevilCommand.penForcedAction = this;
+          break;
+
+        case DAT_TELEPORT_INTO_PYRAMID:
+          eDevilCommand.dctType = DC_TELEPORT_INTO_PYRAMID;
+          eDevilCommand.penForcedAction = this;
+          break;
+
+        case DAT_FORCE_ATTACK_RADIUS:
+          eDevilCommand.dctType = DC_FORCE_ATTACK_RADIUS;
+          eDevilCommand.fAttackRadius = m_fAttackRadius;
+          eDevilCommand.vCenterOfAttack = GetPlacement().pl_PositionVector;
+          break;
+
+        case DAT_DECREASE_ATTACK_RADIUS:
+          eDevilCommand.dctType = DC_DECREASE_ATTACK_RADIUS;
+          break;
+
+        // wrong action
+        default: {
+          return FALSE;
+        }
       }
+
+    // wrong event or no devil
+    } else {
+      return FALSE;
     }
-    return FALSE;
+    
+    // send action to the devil
+    m_penDevil->SendEvent(eDevilCommand);
+
+    return TRUE;
   }
 
 procedures:
@@ -145,10 +165,11 @@ procedures:
     SetCollisionFlags(ECF_IMMATERIAL);
 
     SetDefaultName();
+
     // set appearance
     SetModel(MODEL_MARKER);
     SetModelMainTexture(TEXTURE_MARKER);
+
     return;
   }
 };
-

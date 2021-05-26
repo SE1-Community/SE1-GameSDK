@@ -34,8 +34,8 @@ enum HeadmanType {
 // info structure
 static EntityInfo eiHeadman = {
   EIBT_FLESH, 100.0f,
-  0.0f, 1.9f, 0.0f,     // source (eyes)
-  0.0f, 1.0f, 0.0f,     // target (body)
+  0.0f, 1.9f, 0.0f, // source (eyes)
+  0.0f, 1.0f, 0.0f, // target (body)
 };
 
 #define EXPLODE_KAMIKAZE   2.5f

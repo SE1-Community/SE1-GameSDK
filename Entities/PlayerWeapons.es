@@ -295,67 +295,67 @@ void CPlayerWeapons_Precache(ULONG ulAvailable)
   }
 
   if (ulAvailable&(1 << (WEAPON_SINGLESHOTGUN-1)) ) {
-    pdec->PrecacheModel(MODEL_SINGLESHOTGUN     );    
-    pdec->PrecacheModel(MODEL_SS_SLIDER         );    
-    pdec->PrecacheModel(MODEL_SS_HANDLE         );    
-    pdec->PrecacheModel(MODEL_SS_BARRELS        );    
-    pdec->PrecacheTexture(TEXTURE_SS_HANDLE     );    
-    pdec->PrecacheTexture(TEXTURE_SS_BARRELS    );    
-    pdec->PrecacheSound(SOUND_SINGLESHOTGUN_FIRE);    
+    pdec->PrecacheModel(MODEL_SINGLESHOTGUN     );
+    pdec->PrecacheModel(MODEL_SS_SLIDER         );
+    pdec->PrecacheModel(MODEL_SS_HANDLE         );
+    pdec->PrecacheModel(MODEL_SS_BARRELS        );
+    pdec->PrecacheTexture(TEXTURE_SS_HANDLE     );
+    pdec->PrecacheTexture(TEXTURE_SS_BARRELS    );
+    pdec->PrecacheSound(SOUND_SINGLESHOTGUN_FIRE);
   }
 
   if (ulAvailable&(1 << (WEAPON_DOUBLESHOTGUN-1)) ) {
-    pdec->PrecacheModel(MODEL_DOUBLESHOTGUN        ); 
-    pdec->PrecacheModel(MODEL_DS_HANDLE            ); 
-    pdec->PrecacheModel(MODEL_DS_BARRELS           ); 
-    pdec->PrecacheModel(MODEL_DS_AMMO              ); 
-    pdec->PrecacheModel(MODEL_DS_SWITCH            ); 
-    pdec->PrecacheModel(MODEL_DS_HANDWITHAMMO      ); 
-    pdec->PrecacheTexture(TEXTURE_DS_HANDLE        );   
-    pdec->PrecacheTexture(TEXTURE_DS_BARRELS       );   
-    pdec->PrecacheTexture(TEXTURE_DS_AMMO          );   
-    pdec->PrecacheTexture(TEXTURE_DS_SWITCH        );   
-    pdec->PrecacheSound(SOUND_DOUBLESHOTGUN_FIRE   ); 
-    pdec->PrecacheSound(SOUND_DOUBLESHOTGUN_RELOAD ); 
+    pdec->PrecacheModel(MODEL_DOUBLESHOTGUN        );
+    pdec->PrecacheModel(MODEL_DS_HANDLE            );
+    pdec->PrecacheModel(MODEL_DS_BARRELS           );
+    pdec->PrecacheModel(MODEL_DS_AMMO              );
+    pdec->PrecacheModel(MODEL_DS_SWITCH            );
+    pdec->PrecacheModel(MODEL_DS_HANDWITHAMMO      );
+    pdec->PrecacheTexture(TEXTURE_DS_HANDLE        );
+    pdec->PrecacheTexture(TEXTURE_DS_BARRELS       );
+    pdec->PrecacheTexture(TEXTURE_DS_AMMO          );
+    pdec->PrecacheTexture(TEXTURE_DS_SWITCH        );
+    pdec->PrecacheSound(SOUND_DOUBLESHOTGUN_FIRE   );
+    pdec->PrecacheSound(SOUND_DOUBLESHOTGUN_RELOAD );
   }
 
   if (ulAvailable&(1 << (WEAPON_TOMMYGUN-1)) ) {
     pdec->PrecacheModel(MODEL_TOMMYGUN              );
     pdec->PrecacheModel(MODEL_TG_BODY               );
     pdec->PrecacheModel(MODEL_TG_SLIDER             );
-    pdec->PrecacheTexture(TEXTURE_TG_BODY           );  
+    pdec->PrecacheTexture(TEXTURE_TG_BODY           );
     pdec->PrecacheSound(SOUND_TOMMYGUN_FIRE         );
   }
 
   if (ulAvailable&(1 << (WEAPON_SNIPER-1)) ) {
-    pdec->PrecacheModel(MODEL_SNIPER          ); 
-    pdec->PrecacheModel(MODEL_SNIPER_BODY     ); 
-    pdec->PrecacheTexture(TEXTURE_SNIPER_BODY );   
-    pdec->PrecacheSound(SOUND_SNIPER_FIRE     ); 
+    pdec->PrecacheModel(MODEL_SNIPER          );
+    pdec->PrecacheModel(MODEL_SNIPER_BODY     );
+    pdec->PrecacheTexture(TEXTURE_SNIPER_BODY );
+    pdec->PrecacheSound(SOUND_SNIPER_FIRE     );
   }
 
   if (ulAvailable&(1 << (WEAPON_MINIGUN-1)) ) {
-    pdec->PrecacheModel(MODEL_MINIGUN          );     
-    pdec->PrecacheModel(MODEL_MG_BARRELS       );     
-    pdec->PrecacheModel(MODEL_MG_BODY          );     
-    pdec->PrecacheModel(MODEL_MG_ENGINE        );     
-    pdec->PrecacheTexture(TEXTURE_MG_BODY      );       
-    pdec->PrecacheTexture(TEXTURE_MG_BARRELS   );       
-    pdec->PrecacheSound(SOUND_MINIGUN_FIRE     );     
-    pdec->PrecacheSound(SOUND_MINIGUN_ROTATE   );     
-    pdec->PrecacheSound(SOUND_MINIGUN_SPINUP   );     
-    pdec->PrecacheSound(SOUND_MINIGUN_SPINDOWN );     
-    pdec->PrecacheSound(SOUND_MINIGUN_CLICK    );     
+    pdec->PrecacheModel(MODEL_MINIGUN          );
+    pdec->PrecacheModel(MODEL_MG_BARRELS       );
+    pdec->PrecacheModel(MODEL_MG_BODY          );
+    pdec->PrecacheModel(MODEL_MG_ENGINE        );
+    pdec->PrecacheTexture(TEXTURE_MG_BODY      );
+    pdec->PrecacheTexture(TEXTURE_MG_BARRELS   );
+    pdec->PrecacheSound(SOUND_MINIGUN_FIRE     );
+    pdec->PrecacheSound(SOUND_MINIGUN_ROTATE   );
+    pdec->PrecacheSound(SOUND_MINIGUN_SPINUP   );
+    pdec->PrecacheSound(SOUND_MINIGUN_SPINDOWN );
+    pdec->PrecacheSound(SOUND_MINIGUN_CLICK    );
   }
                                          
   if (ulAvailable&(1 << (WEAPON_ROCKETLAUNCHER-1)) ) {
-    pdec->PrecacheModel(MODEL_ROCKETLAUNCHER     );   
-    pdec->PrecacheModel(MODEL_RL_BODY            );   
-    pdec->PrecacheModel(MODEL_RL_ROTATINGPART    );   
-    pdec->PrecacheModel(MODEL_RL_ROCKET          );   
-    pdec->PrecacheTexture(TEXTURE_RL_BODY        );     
-    pdec->PrecacheTexture(TEXTURE_RL_ROCKET      );     
-    pdec->PrecacheSound(SOUND_ROCKETLAUNCHER_FIRE);   
+    pdec->PrecacheModel(MODEL_ROCKETLAUNCHER     );
+    pdec->PrecacheModel(MODEL_RL_BODY            );
+    pdec->PrecacheModel(MODEL_RL_ROTATINGPART    );
+    pdec->PrecacheModel(MODEL_RL_ROCKET          );
+    pdec->PrecacheTexture(TEXTURE_RL_BODY        );
+    pdec->PrecacheTexture(TEXTURE_RL_ROCKET      );
+    pdec->PrecacheSound(SOUND_ROCKETLAUNCHER_FIRE);
     pdec->PrecacheClass(CLASS_PROJECTILE, PRT_ROCKET);
   }                                        
 
@@ -364,7 +364,7 @@ void CPlayerWeapons_Precache(ULONG ulAvailable)
     pdec->PrecacheModel(MODEL_GL_BODY               ); 
     pdec->PrecacheModel(MODEL_GL_MOVINGPART         ); 
     pdec->PrecacheModel(MODEL_GL_GRENADE            ); 
-    pdec->PrecacheTexture(TEXTURE_GL_BODY           );   
+    pdec->PrecacheTexture(TEXTURE_GL_BODY           );
     pdec->PrecacheTexture(TEXTURE_GL_MOVINGPART     );
     pdec->PrecacheSound(SOUND_GRENADELAUNCHER_FIRE ); 
     pdec->PrecacheClass(CLASS_PROJECTILE, PRT_GRENADE);
@@ -393,7 +393,7 @@ void CPlayerWeapons_Precache(ULONG ulAvailable)
     pdec->PrecacheModel(MODEL_CS_TEETH     );
     pdec->PrecacheTexture(TEXTURE_CS_BODY  );  
     pdec->PrecacheTexture(TEXTURE_CS_BLADE );  
-    pdec->PrecacheTexture(TEXTURE_CS_TEETH );              
+    pdec->PrecacheTexture(TEXTURE_CS_TEETH );
     pdec->PrecacheSound(SOUND_CS_FIRE      );
     pdec->PrecacheSound(SOUND_CS_BEGINFIRE );
     pdec->PrecacheSound(SOUND_CS_ENDFIRE   );
@@ -3670,8 +3670,8 @@ procedures:
       // start engine sound if chainsaw
       if (m_iCurrentWeapon == WEAPON_CHAINSAW) {
         CPlayer &pl = (CPlayer&)*m_penPlayer;
-        pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 1.0f, 1.0f);        
-        PlaySound(pl.m_soWeaponAmbient, SOUND_CS_IDLE, SOF_3D|SOF_VOLUMETRIC|SOF_LOOP|SOF_SMOOTHCHANGE);                
+        pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 1.0f, 1.0f);
+        PlaySound(pl.m_soWeaponAmbient, SOUND_CS_IDLE, SOF_3D|SOF_VOLUMETRIC|SOF_LOOP|SOF_SMOOTHCHANGE);
         if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawIdle");}
       }
 
@@ -3737,7 +3737,7 @@ procedures:
         break;
       case WEAPON_CHAINSAW: {
         CPlayer &pl = (CPlayer&)*m_penPlayer;
-        PlaySound(pl.m_soWeaponAmbient, SOUND_CS_BRINGDOWN, SOF_3D|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);                
+        PlaySound(pl.m_soWeaponAmbient, SOUND_CS_BRINGDOWN, SOF_3D|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);
         if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("ChainsawIdle");}
         m_iAnim = CHAINSAW_ANIM_DEACTIVATE;
         break; }
@@ -3854,8 +3854,8 @@ procedures:
       case WEAPON_CHAINSAW: {
         m_iAnim = CHAINSAW_ANIM_ACTIVATE;
         CPlayer &pl = (CPlayer&)*m_penPlayer;
-        pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 1.0f, 1.0f);        
-        PlaySound(pl.m_soWeaponAmbient, SOUND_CS_BRINGUP, SOF_3D|SOF_VOLUMETRIC|SOF_LOOP);        
+        pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 1.0f, 1.0f);
+        PlaySound(pl.m_soWeaponAmbient, SOUND_CS_BRINGUP, SOF_3D|SOF_VOLUMETRIC|SOF_LOOP);
         break; }
       case WEAPON_LASER:
         m_iAnim = LASER_ANIM_ACTIVATE;
@@ -5100,7 +5100,7 @@ procedures:
     // firing
     CPlayer &pl = (CPlayer&)*m_penPlayer;
     // mute the chainsaw engine sound
-    pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 0.5f, 1.0f);        
+    pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 0.5f, 1.0f);
     
     PlaySound(pl.m_soWeapon0, SOUND_CS_FIRE, SOF_3D|SOF_LOOP|SOF_VOLUMETRIC|SOF_SMOOTHCHANGE);
     if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_StopEffect("ChainsawIdle");}
@@ -5131,7 +5131,7 @@ procedures:
     if (_pNetwork->IsPlayerLocal(m_penPlayer)) {IFeel_PlayEffect("ChainsawIdle");}
 //    PlaySound(pl.m_soWeapon0, SOUND_SILENCE, SOF_3D|SOF_VOLUMETRIC/*|SOF_SMOOTHCHANGE*/);
     // restore volume to engine sound
-    pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 1.0f, 1.0f);        
+    pl.m_soWeaponAmbient.Set3DParameters(30.0f, 3.0f, 1.0f, 1.0f);
     
     m_moWeapon.PlayAnim(CHAINSAW_ANIM_FIRE2WAIT, 0);
     autowait(m_moWeapon.GetAnimLength(CHAINSAW_ANIM_FIRE2WAIT));
@@ -5225,7 +5225,7 @@ procedures:
   GhostBusterStop() {
     GetAnimator()->FireAnimationOff();
     // destroy ray
-    ((CGhostBusterRay&)*m_penGhostBusterRay).DestroyGhostBusterRay();    
+    ((CGhostBusterRay&)*m_penGhostBusterRay).DestroyGhostBusterRay();
     CPlayer &pl = (CPlayer&)*m_penPlayer;
     pl.m_soWeapon0.Stop();
     jump Idle();
@@ -5540,7 +5540,7 @@ procedures:
     SetCurrentWeaponModel();
 
     // play default anim
-    PlayDefaultAnim();    
+    PlayDefaultAnim();
 
     wait() {
       on (EBegin) : { call Idle(); }

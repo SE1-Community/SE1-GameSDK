@@ -222,7 +222,7 @@ procedures:
 
     while (_pTimer->CurrentTick() < m_tmEnd) {
       autowait(_pTimer->TickQuantum);
-      TestForCollisionAndLaunchEntity();        
+      TestForCollisionAndLaunchEntity();
     }
 
     // cease to exist

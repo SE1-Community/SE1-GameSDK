@@ -121,7 +121,7 @@ functions:
   };
 
   // check if given player already picked this item, and mark if not
-  BOOL MarkPickedBy(CEntity * pen) {
+  BOOL MarkPickedBy(CEntity *pen) {
     if (!IsOfClass(pen, "Player")) {
       return FALSE;
     }

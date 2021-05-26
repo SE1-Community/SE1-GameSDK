@@ -13,8 +13,7 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-// common headers for flesh entity classes
-
+// Brush surface types
 #define SURFACE_SAND           9
 #define SURFACE_WATER          12
 #define SURFACE_RED_SAND       13
@@ -73,66 +72,66 @@ enum EmptyShellType {
   ESL_COLT_SMOKE = 5,
 };
 
-// empty shell launch info
+// Empty shell launch info
 #define MAX_FLYING_SHELLS 32
 struct ShellLaunchData {
-  FLOAT sld_fSize;            // size multiplier
-  FLOAT3D sld_vPos;           // launch position
-  FLOAT3D sld_vSpeed;         // launch speed
-  FLOAT3D sld_vUp;            // up vector in moment of launch
-  FLOAT sld_tmLaunch;         // time of launch
+  FLOAT sld_fSize; // size multiplier
+  FLOAT3D sld_vPos; // launch position
+  FLOAT3D sld_vSpeed; // launch speed
+  FLOAT3D sld_vUp; // up vector in moment of launch
+  FLOAT sld_tmLaunch; // time of launch
   EmptyShellType sld_estType; // shell type
 };
 
 #define ShellLaunchData_array m_asldData[MAX_FLYING_SHELLS]
 
-// player bullet spray fx list
+// Player bullet spray fx list
 #define MAX_BULLET_SPRAYS 32
 struct BulletSprayLaunchData {
-  INDEX bsld_iRndBase;              // random base
-  FLOAT3D bsld_vPos;                // launch position
-  FLOAT3D bsld_vG;                  // gravity vector
+  INDEX bsld_iRndBase; // random base
+  FLOAT3D bsld_vPos; // launch position
+  FLOAT3D bsld_vG; // gravity vector
   EffectParticlesType bsld_eptType; // type
-  FLOAT bsld_tmLaunch;              // time of launch
-  FLOAT3D bsld_vStretch;            // stretch
+  FLOAT bsld_tmLaunch; // time of launch
+  FLOAT3D bsld_vStretch; // stretch
 };
 
 #define BulletSprayLaunchData_array m_absldData[MAX_BULLET_SPRAYS]
 
 #define MAX_GORE_SPRAYS 32
 struct GoreSprayLaunchData {
-  FLOAT3D gsld_vPos;               // launch position
-  FLOAT3D gsld_v3rdPos;            // launch position for 3rd perspective
-  FLOAT3D gsld_vG;                 // gravity vector
-  FLOAT gsld_fGA;                  // gravity strength
+  FLOAT3D gsld_vPos; // launch position
+  FLOAT3D gsld_v3rdPos; // launch position for 3rd perspective
+  FLOAT3D gsld_vG; // gravity vector
+  FLOAT gsld_fGA; // gravity strength
   SprayParticlesType gsld_sptType; // type
-  FLOATaabbox3D gsld_boxHitted;    // box of hitted object
-  FLOAT3D gsld_vSpilDirection;     // spill direction
-  FLOAT gsld_fDamagePower;         // damage power
-  FLOAT gsld_tmLaunch;             // time of launch
-  COLOR gsld_colParticles;         // color of particles
+  FLOATaabbox3D gsld_boxHitted; // box of hitted object
+  FLOAT3D gsld_vSpilDirection; // spill direction
+  FLOAT gsld_fDamagePower; // damage power
+  FLOAT gsld_tmLaunch; // time of launch
+  COLOR gsld_colParticles; // color of particles
 };
 
 #define GoreSprayLaunchData_array m_agsldData[MAX_GORE_SPRAYS]
 
-// world change
+// World change
 struct WorldChange {
-  CTString strGroup;   // group name
+  CTString strGroup; // group name
   CPlacement3D plLink; // link placement for relative change
-  INDEX iType;         // change type
+  INDEX iType; // change type
 };
 
 extern struct WorldChange _SwcWorldChange;
 
-// entity info
+// Entity info
 struct EntityInfo {
   EntityInfoBodyType Eeibt; // body type
-  FLOAT fMass;              // mass (in kg)
-  FLOAT vSourceCenter[3];   // body point (offset from handle) when entity look another entity
-  FLOAT vTargetCenter[3];   // body point (offset from handle) when entity is target of look
+  FLOAT fMass; // mass (in kg)
+  FLOAT vSourceCenter[3]; // body point (offset from handle) when entity look another entity
+  FLOAT vTargetCenter[3]; // body point (offset from handle) when entity is target of look
 };
 
-// entity info
+// Entity info
 struct EntityStats {
   CTString es_strName;
   INDEX es_ctCount;
@@ -141,7 +140,7 @@ struct EntityStats {
   INDEX es_iScore;
 };
 
-// statistics data for player stats management
+// Statistics data for player stats management
 struct DECL_DLL PlayerStats {
   INDEX ps_iScore;
   INDEX ps_iKills;
@@ -226,9 +225,9 @@ DECL_DLL const char *PrintStack(CEntity *pen);
 DECL_DLL void Debris_Begin(EntityInfoBodyType Eeibt, enum DebrisParticlesType dptParticles, enum BasicEffectType betStain,
                            FLOAT fEntitySize, // entity size in meters
                            const FLOAT3D &vSpeed,
-                           const FLOAT3D &vSpawnerSpeed,   // how fast was the entity moving
-                           const FLOAT fConeSize,          // size multiplier for debris cone
-                           const FLOAT fSpeedUp,           // size multiplier for debris catapulting up (0-no multiply)
+                           const FLOAT3D &vSpawnerSpeed, // how fast was the entity moving
+                           const FLOAT fConeSize, // size multiplier for debris cone
+                           const FLOAT fSpeedUp, // size multiplier for debris catapulting up (0-no multiply)
                            const COLOR colDebris = C_WHITE // multiply color
 );
 

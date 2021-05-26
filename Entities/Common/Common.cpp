@@ -26,6 +26,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "ModelsMP/Player/SeriousSam/Player.h"
 #include "ModelsMP/Player/SeriousSam/Body.h"
 #include "ModelsMP/Player/SeriousSam/Head.h"
+
 extern INDEX ent_bReportBrokenChains;
 
 void CCompMessageID::Clear(void) {
@@ -80,12 +81,12 @@ void CCompMessageID::NewMessage(const CTFileName &fnm) {
   cmi_bRead = FALSE;
 }
 
-// COMMON FUNCTIONS FOR ENTITY CLASSES
+// Common functions for entity classes
 
-// world change
+// World change
 struct WorldChange _SwcWorldChange;
 
-// get info position for entity
+// Get info position for entity
 void GetEntityInfoPosition(CEntity *pen, FLOAT *pf, FLOAT3D &vPos) {
   ASSERT(pen != NULL);
 
@@ -97,7 +98,7 @@ void GetEntityInfoPosition(CEntity *pen, FLOAT *pf, FLOAT3D &vPos) {
   }
 };
 
-// get source and target positions for ray cast
+// Get source and target positions for ray cast
 void GetPositionCastRay(CEntity *penSource, CEntity *penTarget, FLOAT3D &vSource, FLOAT3D &vTarget) {
   EntityInfo *peiSource = (EntityInfo *)(penSource->GetEntityInfo());
   EntityInfo *peiTarget = (EntityInfo *)(penTarget->GetEntityInfo());
@@ -119,7 +120,7 @@ void GetPositionCastRay(CEntity *penSource, CEntity *penTarget, FLOAT3D &vSource
   }
 };
 
-// set bool from bool enum type
+// Set bool from bool enum type
 void SetBoolFromBoolEType(BOOL &bSet, BoolEType bet) {
   switch (bet) {
     case BET_TRUE: bSet = TRUE; break;
@@ -127,7 +128,7 @@ void SetBoolFromBoolEType(BOOL &bSet, BoolEType bet) {
   }
 };
 
-// send event to target
+// Send event to target
 void SendToTarget(CEntity *penSendEvent, EEventType eetEventType, CEntity *penCaused) {
   // if target is valid
   if (penSendEvent != NULL) {
@@ -177,7 +178,7 @@ void SendToTarget(CEntity *penSendEvent, EEventType eetEventType, CEntity *penCa
   }
 };
 
-// send event in range
+// Send event in range
 void SendInRange(CEntity *penSource, EEventType eetEventType, const FLOATaabbox3D &boxRange) {
   switch (eetEventType) {
     // send START event
@@ -215,7 +216,7 @@ void SendInRange(CEntity *penSource, EEventType eetEventType, const FLOATaabbox3
   }
 };
 
-// spawn reminder
+// Spawn reminder
 CEntityPointer SpawnReminder(CEntity *penOwner, FLOAT fWaitTime, INDEX iValue) {
   CEntityPointer penReminder;
 
@@ -238,31 +239,31 @@ EffectParticlesType GetParticleEffectTypeForSurface(INDEX iSurfaceType) {
   EffectParticlesType eptType = EPT_BULLET_STONE;
 
   switch (iSurfaceType) {
-    case SURFACE_SAND: {
+    case SURFACE_SAND:
       eptType = EPT_BULLET_SAND;
-    } break;
+      break;
 
-    case SURFACE_RED_SAND: {
+    case SURFACE_RED_SAND:
       eptType = EPT_BULLET_RED_SAND;
-    } break;
+      break;
 
-    case SURFACE_WATER: {
+    case SURFACE_WATER:
       eptType = EPT_BULLET_WATER;
-    } break;
+      break;
 
     case SURFACE_GRASS:
     case SURFACE_GRASS_SLIDING:
-    case SURFACE_GRASS_NOIMPACT: {
+    case SURFACE_GRASS_NOIMPACT:
       eptType = EPT_BULLET_GRASS;
-    } break;
+      break;
 
-    case SURFACE_WOOD: {
+    case SURFACE_WOOD:
       eptType = EPT_BULLET_WOOD;
-    } break;
+      break;
 
-    case SURFACE_SNOW: {
+    case SURFACE_SNOW:
       eptType = EPT_BULLET_SNOW;
-    } break;
+      break;
   }
 
   return eptType;
@@ -272,37 +273,37 @@ BulletHitType GetBulletHitTypeForSurface(INDEX iSurfaceType) {
   BulletHitType bhtType = BHT_BRUSH_STONE;
 
   switch (iSurfaceType) {
-    case SURFACE_SAND: {
+    case SURFACE_SAND:
       bhtType = BHT_BRUSH_SAND;
-    } break;
+      break;
 
-    case SURFACE_RED_SAND: {
+    case SURFACE_RED_SAND:
       bhtType = BHT_BRUSH_RED_SAND;
-    } break;
+      break;
 
-    case SURFACE_WATER: {
+    case SURFACE_WATER:
       bhtType = BHT_BRUSH_WATER;
-    } break;
+      break;
 
     case SURFACE_GRASS:
     case SURFACE_GRASS_SLIDING:
-    case SURFACE_GRASS_NOIMPACT: {
+    case SURFACE_GRASS_NOIMPACT:
       bhtType = BHT_BRUSH_GRASS;
-    } break;
+      break;
 
-    case SURFACE_WOOD: {
+    case SURFACE_WOOD:
       bhtType = BHT_BRUSH_WOOD;
-    } break;
+      break;
 
-    case SURFACE_SNOW: {
+    case SURFACE_SNOW:
       bhtType = BHT_BRUSH_SNOW;
-    } break;
+      break;
   }
 
   return bhtType;
 }
 
-// spawn effect from hit type
+// Spawn effect from hit type
 void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, FLOAT3D vHitNormal,
                         FLOAT3D vHitPoint, FLOAT3D vIncommingBulletDir, FLOAT3D vDistance) {
   switch (bhtType) {
@@ -318,69 +319,27 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
       ESpawnEffect ese;
 
       if (bSound) {
-        if (bhtType == BHT_BRUSH_STONE) {
-          ese.betType = BET_BULLETSTAINSTONE;
-        }
-
-        if (bhtType == BHT_BRUSH_SAND) {
-          ese.betType = BET_BULLETSTAINSAND;
-        }
-
-        if (bhtType == BHT_BRUSH_RED_SAND) {
-          ese.betType = BET_BULLETSTAINREDSAND;
-        }
-
-        if (bhtType == BHT_BRUSH_WATER) {
-          ese.betType = BET_BULLETSTAINWATER;
-        }
-
-        if (bhtType == BHT_BRUSH_UNDER_WATER) {
-          ese.betType = BET_BULLETSTAINUNDERWATER;
-        }
-
-        if (bhtType == BHT_BRUSH_GRASS) {
-          ese.betType = BET_BULLETSTAINGRASS;
-        }
-
-        if (bhtType == BHT_BRUSH_WOOD) {
-          ese.betType = BET_BULLETSTAINWOOD;
-        }
-
-        if (bhtType == BHT_BRUSH_SNOW) {
-          ese.betType = BET_BULLETSTAINSNOW;
+        switch (bhtType) {
+          case BHT_BRUSH_STONE: ese.betType = BET_BULLETSTAINSTONE; break;
+          case BHT_BRUSH_SAND: ese.betType = BET_BULLETSTAINSAND; break;
+          case BHT_BRUSH_RED_SAND: ese.betType = BET_BULLETSTAINREDSAND; break;
+          case BHT_BRUSH_WATER: ese.betType = BET_BULLETSTAINWATER; break;
+          case BHT_BRUSH_UNDER_WATER: ese.betType = BET_BULLETSTAINUNDERWATER; break;
+          case BHT_BRUSH_GRASS: ese.betType = BET_BULLETSTAINGRASS; break;
+          case BHT_BRUSH_WOOD: ese.betType = BET_BULLETSTAINWOOD; break;
+          case BHT_BRUSH_SNOW: ese.betType = BET_BULLETSTAINSNOW; break;
         }
 
       } else {
-        if (bhtType == BHT_BRUSH_STONE) {
-          ese.betType = BET_BULLETSTAINSTONENOSOUND;
-        }
-
-        if (bhtType == BHT_BRUSH_SAND) {
-          ese.betType = BET_BULLETSTAINSANDNOSOUND;
-        }
-
-        if (bhtType == BHT_BRUSH_RED_SAND) {
-          ese.betType = BET_BULLETSTAINREDSANDNOSOUND;
-        }
-
-        if (bhtType == BHT_BRUSH_WATER) {
-          ese.betType = BET_BULLETSTAINWATERNOSOUND;
-        }
-
-        if (bhtType == BHT_BRUSH_UNDER_WATER) {
-          ese.betType = BET_BULLETSTAINUNDERWATERNOSOUND;
-        }
-
-        if (bhtType == BHT_BRUSH_GRASS) {
-          ese.betType = BET_BULLETSTAINGRASSNOSOUND;
-        }
-
-        if (bhtType == BHT_BRUSH_WOOD) {
-          ese.betType = BET_BULLETSTAINWOODNOSOUND;
-        }
-
-        if (bhtType == BHT_BRUSH_SNOW) {
-          ese.betType = BET_BULLETSTAINSNOWNOSOUND;
+        switch (bhtType) {
+          case BHT_BRUSH_STONE: ese.betType = BET_BULLETSTAINSTONENOSOUND; break;
+          case BHT_BRUSH_SAND: ese.betType = BET_BULLETSTAINSANDNOSOUND; break;
+          case BHT_BRUSH_RED_SAND: ese.betType = BET_BULLETSTAINREDSANDNOSOUND; break;
+          case BHT_BRUSH_WATER: ese.betType = BET_BULLETSTAINWATERNOSOUND; break;
+          case BHT_BRUSH_UNDER_WATER: ese.betType = BET_BULLETSTAINUNDERWATERNOSOUND; break;
+          case BHT_BRUSH_GRASS: ese.betType = BET_BULLETSTAINGRASSNOSOUND; break;
+          case BHT_BRUSH_WOOD: ese.betType = BET_BULLETSTAINWOODNOSOUND; break;
+          case BHT_BRUSH_SNOW: ese.betType = BET_BULLETSTAINSNOWNOSOUND; break;
         }
       }
 
@@ -406,9 +365,8 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
       } catch (char *strError) {
         FatalError(TRANS("Cannot create basic effect class: %s"), strError);
       }
+    } break;
 
-      break;
-    }
     case BHT_FLESH:
     case BHT_ACID: {
       // spawn bullet entry wound
@@ -449,12 +407,11 @@ void SpawnHitTypeEffect(CEntity *pen, enum BulletHitType bhtType, BOOL bSound, F
           }
         }
       }
-      break;
-    }
+    } break;
   }
 }
 
-// spawn flame
+// Spawn flame
 CEntityPointer SpawnFlame(CEntity *penOwner, CEntity *penAttach, const FLOAT3D &vSource) {
   // owner can't flame himself
   if (penOwner == penAttach) {
@@ -517,7 +474,7 @@ void KickEntity(CEntity *penTarget, FLOAT3D vSpeed) {
   }
 };
 
-// SET MODEL AND ATTACHMENT
+// Set model and attachment
 
 // Set components
 void SetComponents(CEntity *pen, CModelObject &mo, ULONG ulIDModel, ULONG ulIDTexture, ULONG ulIDReflectionTexture,
@@ -562,9 +519,9 @@ void RemoveAttachmentFromModel(CModelObject &mo, INDEX iAttachment) {
   mo.RemoveAttachmentModel(iAttachment);
 };
 
-// FLARES
+// Flares
 
-// lens flare variables
+// Lens flare variables
 CLensFlareType _lftStandard;
 CLensFlareType _lftStandardReflections;
 CLensFlareType _lftYellowStarRedRing;
@@ -613,7 +570,7 @@ static BOOL _bLensFlaresLoaded = FALSE;
   type.lft_aolfFlares[i].olf_fLightDesaturation = 0.5f; \
   type.lft_aolfFlares[i].oft_fFallOffFactor = 5.0f;
 
-// init lens flare effects
+// Init lens flare effects
 void InitLensFlares(void) {
   if (_bLensFlaresLoaded) {
     return; // Player class is not auto-freed, so the engine may attempt to access this function several times
@@ -718,7 +675,7 @@ void InitLensFlares(void) {
   _bLensFlaresLoaded = TRUE;
 };
 
-// close lens flares effects
+// Close lens flares effects
 void CloseLensFlares(void) {
   _lftStandard.lft_aolfFlares.Clear();
   _lftStandardReflections.lft_aolfFlares.Clear();
@@ -741,7 +698,7 @@ void CloseLensFlares(void) {
 
 static BOOL _bFatalChecks = FALSE;
 
-// PLAYER APPEARANCE
+// Player appearance
 
 // Set the model data
 void SetModelData_t(CModelObject *pmo, const CTFileName &fnmModel) {
@@ -810,7 +767,7 @@ void FixupFileName_t(CTString &strFnm) {
   }
 }
 
-// skip one block in pmc
+// Skip one block in pmc
 void SkipBlock_t(CTStream &strm) {
   CTString strLine;
 
@@ -1046,7 +1003,7 @@ BOOL SetPlayerAppearance(CModelObject *pmo, CPlayerCharacter *ppc, CTString &str
   }
 }
 
-// debugging functions
+// Debugging functions
 const char *PrintConsole(void) {
   _RPT1(_CRT_WARN, "%s", CON_GetBuffer());
   return NULL;
@@ -1056,7 +1013,7 @@ const char *PrintStack(CEntity *pen) {
   return pen->PrintStackDebug();
 }
 
-// DEBRIS
+// Debris
 
 EntityInfoBodyType _Eeibt;
 enum DebrisParticlesType _dptParticles;
@@ -1068,14 +1025,14 @@ FLOAT _fConeSize;
 FLOAT _fSpeedUp;
 COLOR _colDebris;
 
-// debris spawning
+// Debris spawning
 void Debris_Begin(EntityInfoBodyType Eeibt, enum DebrisParticlesType dptParticles, enum BasicEffectType betStain,
                   FLOAT fEntitySize, // entity size in meters
                   const FLOAT3D &vSpeed,
-                  const FLOAT3D &vSpawnerSpeed,      // how fast was the entity moving
-                  const FLOAT fConeSize,             // size multiplier for debris cone
-                  const FLOAT fSpeedUp,              // size multiplier for debris catapulting up (0-no multiply)
-                  const COLOR colDebris /*=C_WHITE*/ // multiply color
+                  const FLOAT3D &vSpawnerSpeed, // how fast was the entity moving
+                  const FLOAT fConeSize, // size multiplier for debris cone
+                  const FLOAT fSpeedUp, // size multiplier for debris catapulting up (0-no multiply)
+                  const COLOR colDebris // multiply color
 ) {
   _Eeibt = Eeibt;
   _dptParticles = dptParticles;
@@ -1149,7 +1106,7 @@ CEntityPointer Debris_Spawn(CEntity *penSpawner, CEntity *penComponents, SLONG i
   vUp(2) = m(2, 2);
   vUp(3) = m(3, 2);
 
-  // FLOAT fStrength = _vSpeed.Length();
+  //FLOAT fStrength = _vSpeed.Length();
 
   // speed it up
   ((CMovableEntity &)*penDebris).LaunchAsFreeProjectile(_vSpawnerSpeed + _vSpeed + FLOAT3D(fRndX, fRndY, fRndZ) + vUp * _fSpeedUp, (CMovableEntity *)penSpawner);
@@ -1200,6 +1157,7 @@ CEntityPointer Debris_Spawn_Template(EntityInfoBodyType eibt, enum DebrisParticl
   if (penmhTemplate == NULL || penmhTemplate->GetModelObject() == NULL) {
     return NULL;
   }
+
   // create debris at same world as spawner
   CEntityPointer penDebris = penmhDestroyed->GetWorld()->CreateEntity_t(plAbsolutePlacement, CTFILENAME("Classes\\Debris.ecl"));
 
@@ -1243,7 +1201,7 @@ CEntityPointer Debris_Spawn_Template(EntityInfoBodyType eibt, enum DebrisParticl
   return penDebris;
 }
 
-// info structure
+// Info structure
 static EntityInfo eiFlesh = {EIBT_FLESH};
 static EntityInfo eiWater = {EIBT_WATER};
 static EntityInfo eiRock = {EIBT_ROCK};
@@ -1255,7 +1213,7 @@ static EntityInfo eiMetal = {EIBT_METAL};
 static EntityInfo eiRobot = {EIBT_ROBOT};
 static EntityInfo eiIce = {EIBT_ICE};
 
-// get default entity info for given body type
+// Get default entity info for given body type
 EntityInfo *GetStdEntityInfo(EntityInfoBodyType eibt) {
   switch (eibt) {
     case EIBT_FLESH: return &eiFlesh;
@@ -1272,7 +1230,7 @@ EntityInfo *GetStdEntityInfo(EntityInfoBodyType eibt) {
   };
 }
 
-// damage control functions
+// Damage control functions
 FLOAT DamageStrength(EntityInfoBodyType eibtBody, INDEX dtDamage) {
   switch (eibtBody) {
     case EIBT_FLESH: return 1.0f;
@@ -1359,7 +1317,7 @@ void PrintCenterMessage(CEntity *penThis, CEntity *penCaused, const CTString &st
   penCaused->SendEvent(eMsg);
 }
 
-// i.e. weapon sound when fireing or exploding
+// I.e. weapon sound when firing or exploding
 void SpawnRangeSound(CEntity *penPlayer, CEntity *penPos, enum SoundType st, FLOAT fRange) {
   // if not really player
   if (!IsDerivedFromClass(penPlayer, "Player")) {
@@ -1374,8 +1332,8 @@ void SpawnRangeSound(CEntity *penPlayer, CEntity *penPos, enum SoundType st, FLO
   penPos->SendEventInRange(eSound, FLOATaabbox3D(penPos->GetPlacement().pl_PositionVector, fRange));
 }
 
-// get some player for trigger source if any is existing
-CEntity *FixupCausedToPlayer(CEntity *penThis, CEntity *penCaused, BOOL bWarning /*=TRUE*/) {
+// Get some player for trigger source if any is existing
+CEntity *FixupCausedToPlayer(CEntity *penThis, CEntity *penCaused, BOOL bWarning) {
   if (penCaused != NULL && IsOfClass(penCaused, "Player")) {
     return penCaused;
   }
@@ -1413,7 +1371,7 @@ CEntity *FixupCausedToPlayer(CEntity *penThis, CEntity *penCaused, BOOL bWarning
   return penClosestPlayer;
 }
 
-// precisely lerp between two placement using quaternions
+// Precisely lerp between two placement using quaternions
 CPlacement3D LerpPlacementsPrecise(const CPlacement3D &pl0, const CPlacement3D &pl1, FLOAT fRatio) {
   CPlacement3D pl;
 
@@ -1460,7 +1418,7 @@ FLOAT GetGameDamageMultiplier(void) {
   return fGameDamageMultiplier;
 }
 
-// get entity's serious damage multiplier
+// Get entity's serious damage multiplier
 FLOAT GetSeriousDamageMultiplier(CEntity *pen) {
   if (!IsOfClass(pen, "Player")) {
     return 1.0f;

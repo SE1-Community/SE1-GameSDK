@@ -100,17 +100,17 @@ procedures:
    
     // start moving
     wait() {
-      on( EActivate) : {
+      on (EActivate) : {
         m_bActive = TRUE;
         resume;
       }
 
-      on( EDeactivate) : {
+      on (EDeactivate) : {
         m_bActive = FALSE;
         resume;
       }
 
-      on( ETrigger) : {
+      on (ETrigger) : {
         if (m_bActive) {
           // apply impulse
           m_fSpeed += m_fTriggerImpulse;

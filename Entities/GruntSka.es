@@ -34,14 +34,14 @@ enum GruntSkaType {
 // info structure
 static EntityInfo eiGruntSoldier = {
   EIBT_FLESH, 200.0f,
-  0.0f, 1.9f*STRETCH_SOLDIER, 0.0f,     // source (eyes)
-  0.0f, 1.3f*STRETCH_SOLDIER, 0.0f,     // target (body)
+  0.0f, 1.9f*STRETCH_SOLDIER, 0.0f, // source (eyes)
+  0.0f, 1.3f*STRETCH_SOLDIER, 0.0f, // target (body)
 };
 
 static EntityInfo eiGruntCommander = {
   EIBT_FLESH, 250.0f,
-  0.0f, 1.9f*STRETCH_COMMANDER, 0.0f,     // source (eyes)
-  0.0f, 1.3f*STRETCH_COMMANDER, 0.0f,     // target (body)
+  0.0f, 1.9f*STRETCH_COMMANDER, 0.0f, // source (eyes)
+  0.0f, 1.3f*STRETCH_COMMANDER, 0.0f, // target (body)
 };
 
 #define FIREPOS_SOLDIER       FLOAT3D(0.07f, 1.36f, -0.78f)*STRETCH_SOLDIER

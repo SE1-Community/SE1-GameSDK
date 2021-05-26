@@ -47,8 +47,8 @@ enum PlayerAutoAction {
  23 PAA_STOPSCROLLER      "StopScroller",     // stop intro scroll, or end-of-game credits
  24 PAA_NOGRAVITY         "NoGravity",        // deactivate gravity influence for player
  25 PAA_TURNONGRAVITY     "TurnOnGravity",    // turn on gravity
- 26 PAA_LOGO_FIRE_INTROSE "SE Logo Fire",       // for SE intro
- 27 PAA_INTROSE_SELECT_WEAPON "SE Logo draw weapon",
+ 26 PAA_LOGO_FIRE_INTROSE "SE Logo Fire",     // for SE intro
+ 27 PAA_INTROSE_WEAPON    "SE Logo draw weapon",
  28 PAA_STOPANDWAIT       "StopAndWait",      // stop immediately and wait
 };
 
@@ -60,53 +60,58 @@ properties:
   1 enum PlayerAutoAction m_paaAction "Action" 'A' = PAA_RUN, // what to do here
   2 FLOAT m_tmWait "Wait" 'W' = 0.0f, // how long to wait (if wait action)
   3 CEntityPointer m_penDoorController "Door for item" 'D', // where to use the item (if use action)
-  4 CEntityPointer m_penTrigger "Trigger" 'G',  // triggered when player gets here
-  5 FLOAT m_fSpeed "Speed" 'S' = 1.0f,    // how fast to run towards marker
+  4 CEntityPointer m_penTrigger "Trigger" 'G', // triggered when player gets here
+  5 FLOAT m_fSpeed "Speed" 'S' = 1.0f, // how fast to run towards marker
   6 CEntityPointer m_penItem "Item to pick" 'I',
 
 components:
-  1 model   MODEL_MARKER     "Models\\Editor\\PlayerActionMarker.mdl",
-  2 texture TEXTURE_MARKER   "Models\\Editor\\PlayerActionMarker.tex",
+  1 model   MODEL_MARKER   "Models\\Editor\\PlayerActionMarker.mdl",
+  2 texture TEXTURE_MARKER "Models\\Editor\\PlayerActionMarker.tex",
 
 functions:
   const CTString &GetDescription(void) const {
     CTString strAction = PlayerAutoAction_enum.NameForValue(INDEX(m_paaAction));
+
     if (m_penTarget == NULL) {
       ((CTString &)m_strDescription).PrintF("%s (%s)-><none>", m_strName, strAction);
+
     } else {
       ((CTString &)m_strDescription).PrintF("%s (%s)->%s", m_strName, strAction, m_penTarget->GetName());
     }
+
     return m_strDescription;
   }
 
-  // Check if entity can drop marker for making linked route.
+  // Check if entity can drop marker for making linked route
   BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\PlayerActionMarker.ecl");
     strTargetProperty = "Target";
     return TRUE;
   }
 
-  // Handle an event, return false if the event is not handled.
+  // Handle an event, return false if the event is not handled
   BOOL HandleEvent(const CEntityEvent &ee) {
     // if triggered
     if (ee.ee_slEvent == EVENTCODE_ETrigger) {
       ETrigger &eTrigger = (ETrigger &)ee;
+
       // if triggered by a player
       if (IsDerivedFromClass(eTrigger.penCaused, "Player")) {
         // send it event to start auto actions from here
         EAutoAction eAutoAction;
         eAutoAction.penFirstMarker = this;
+
         eTrigger.penCaused->SendEvent(eAutoAction);
       }
       return TRUE;
     }
+
     return FALSE;
   }
 
 procedures:
   // Entry point
-  Main()
-  {
+  Main() {
     InitAsEditorModel();
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
@@ -120,4 +125,3 @@ procedures:
     return;
   }
 };
-

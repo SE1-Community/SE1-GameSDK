@@ -49,7 +49,7 @@ functions:
     CEnemyBase::AdjustDifficulty();
   }
   // ATTACK SPECIFIC
-  void IncreaseKickedMass(CEntity * pen) {
+  void IncreaseKickedMass(CEntity *pen) {
     EntityInfo *peiTarget = (EntityInfo *)(pen->GetEntityInfo());
     if (peiTarget != NULL) {
       m_fMassKicked += peiTarget->fMass;

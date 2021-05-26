@@ -342,7 +342,7 @@ extern INDEX cht_bFly        = FALSE;
 extern INDEX cht_bGhost      = FALSE;
 extern INDEX cht_bInvisible  = FALSE;
 extern FLOAT cht_fTranslationMultiplier = 1.0f;
-extern INDEX cht_bEnable     = 0;   
+extern INDEX cht_bEnable     = 0;
 
 // interface control
 static INDEX hud_bShowAll      = TRUE; // used internaly in menu/console
@@ -890,18 +890,18 @@ FLOAT TopHealth(void)
 // info structure
 static EntityInfo eiPlayerGround = {
   EIBT_FLESH, 80.0f,
-  0.0f, 1.7f, 0.0f,     // source (eyes)
-  0.0f, 1.0f, 0.0f,     // target (body)
+  0.0f, 1.7f, 0.0f, // source (eyes)
+  0.0f, 1.0f, 0.0f, // target (body)
 };
 static EntityInfo eiPlayerCrouch = {
   EIBT_FLESH, 80.0f,
-  0.0f, 1.2f, 0.0f,     // source (eyes)
-  0.0f, 0.7f, 0.0f,     // target (body)
+  0.0f, 1.2f, 0.0f, // source (eyes)
+  0.0f, 0.7f, 0.0f, // target (body)
 };
 static EntityInfo eiPlayerSwim = {
   EIBT_FLESH, 40.0f,
-  0.0f, 0.0f, 0.0f,     // source (eyes)
-  0.0f, 0.0f, 0.0f,     // target (body)
+  0.0f, 0.0f, 0.0f, // source (eyes)
+  0.0f, 0.0f, 0.0f, // target (body)
 };
 
 
@@ -5335,7 +5335,7 @@ procedures:
 
     // make sure we discontinue zooming
     CPlayerWeapons *penWeapon = GetPlayerWeapons();
-    penWeapon->m_fSniperFOVlast = penWeapon->m_fSniperFOV = penWeapon->m_fSniperMaxFOV;      
+    penWeapon->m_fSniperFOVlast = penWeapon->m_fSniperFOV = penWeapon->m_fSniperMaxFOV;
     penWeapon->m_bSniping=FALSE;
     m_ulFlags&=~PLF_ISZOOMING;
 
@@ -6164,7 +6164,7 @@ procedures:
         autocall AutoAppear() EReturn;
       } else if (GetActionMarker()->m_paaAction == PAA_TRAVELING_IN_BEAM) {
         autocall TravellingInBeam() EReturn;
-      } else if (GetActionMarker()->m_paaAction == PAA_INTROSE_SELECT_WEAPON) {
+      } else if (GetActionMarker()->m_paaAction == PAA_INTROSE_WEAPON) {
         // order playerweapons to select weapon
         ESelectWeapon eSelect;
         eSelect.iWeapon = 1;
@@ -6254,13 +6254,13 @@ procedures:
       // if should run to the marker
       } else if (GetActionMarker()->m_paaAction == PAA_RUN) {
         // go to it
-        m_fAutoSpeed = plr_fSpeedForward*GetActionMarker()->m_fSpeed;                                             
+        m_fAutoSpeed = plr_fSpeedForward*GetActionMarker()->m_fSpeed;
         autocall AutoGoToMarker() EReturn;
 
       // if should run to the marker and stop exactly there
       } else if (GetActionMarker()->m_paaAction == PAA_RUNANDSTOP) {
         // go to it
-        m_fAutoSpeed = plr_fSpeedForward*GetActionMarker()->m_fSpeed;                                             
+        m_fAutoSpeed = plr_fSpeedForward*GetActionMarker()->m_fSpeed;
         autocall AutoGoToMarkerAndStop() EReturn;
 
       // if should record end-of-level stats
@@ -6516,7 +6516,7 @@ procedures:
         // make sure we discontinue zooming (even if not changing from sniper)
         ((CPlayerWeapons&)*m_penWeapons).m_bSniping=FALSE;
         m_ulFlags&=~PLF_ISZOOMING;
-        PlaySound(m_soSniperZoom, SOUND_SILENCE, SOF_3D);        
+        PlaySound(m_soSniperZoom, SOUND_SILENCE, SOF_3D);
         if (_pNetwork->IsPlayerLocal(this)) {IFeel_StopEffect("SniperZoom");}
         resume;
       }

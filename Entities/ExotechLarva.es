@@ -53,8 +53,8 @@ event ELarvaRechargePose {
 // info structure
 static EntityInfo eiExotechLarva = {
   EIBT_FLESH, 9999999999.9f,
-  0.0f, -1.0f, 0.0f,     // source (eyes)
-  0.0f, -1.5f, 0.0f,     // target (body)
+  0.0f, -1.0f, 0.0f, // source (eyes)
+  0.0f, -1.5f, 0.0f, // target (body)
   };
 
 #define MF_MOVEZ    (1L << 0)
@@ -1079,7 +1079,7 @@ procedures:
       plDebris, vTranslation, ANGLE3D(145.0f, 30.0f, 0.0f));
     for (INDEX i=0; i<8; i++) {
       Debris_Spawn(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch, 
-        FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f+LARVA_HANDLE_TRANSLATE, FRnd()*0.6f+0.2f));        
+        FLOAT3D(FRnd()*0.6f+0.2f, FRnd()*0.6f+0.2f+LARVA_HANDLE_TRANSLATE, FRnd()*0.6f+0.2f));
     }
     
     // explosion
@@ -1204,7 +1204,7 @@ procedures:
           CModelObject &amo = GetModelObject()->GetAttachmentModel(BODY_ATTACHMENT_BACKARMS)->amo_moModelObject;
           amo.PlayAnim(BACKARMS_ANIM_ACTIVATING, AOF_SMOOTHCHANGE|AOF_NORESTART);
           PlaySound(m_soFire1, SOUND_DEPLOYLASER, SOF_3D);
-          SpawnReminder(this, amo.GetAnimLength(BACKARMS_ANIM_ACTIVATING), 160);           
+          SpawnReminder(this, amo.GetAnimLength(BACKARMS_ANIM_ACTIVATING), 160);
         }
         call CEnemyBase::MainLoop();
       }
@@ -1292,7 +1292,7 @@ procedures:
           resume;
         // check to see if guided missile firing is needed
         } else if (er.iValue == 145) {
-          FindNewTarget();        
+          FindNewTarget();
           if (AnyPlayerCloserThen(9.0f) && GetHealth()>0.1f*m_fMaxHealth) {
             UpdateFiringPos();
             PlaySound(m_soFire3, SOUND_FIRE_TAIL, SOF_3D);

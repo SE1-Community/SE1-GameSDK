@@ -41,20 +41,20 @@ enum ScorpmanType {
 // info structure
 static EntityInfo eiScorpman = {
   EIBT_FLESH, 1000.0f,
-  0, 1.6f*STRETCH_SOLDIER, 0,     // source (eyes)
-  0.0f, 1.0f*STRETCH_SOLDIER, 0.0f,     // target (body)
+  0.0f, 1.6f*STRETCH_SOLDIER, 0.0f, // source (eyes)
+  0.0f, 1.0f*STRETCH_SOLDIER, 0.0f, // target (body)
 };
 
 static EntityInfo eiScorpmanGeneral = {
   EIBT_FLESH, 1500.0f,
-  0, 1.6f*STRETCH_GENERAL, 0,     // source (eyes)
-  0.0f, 1.0f*STRETCH_GENERAL, 0.0f,     // target (body)
+  0.0f, 1.6f*STRETCH_GENERAL, 0.0f, // source (eyes)
+  0.0f, 1.0f*STRETCH_GENERAL, 0.0f, // target (body)
 };
 
 static EntityInfo eiScorpmanMonster = {
   EIBT_FLESH, 2000.0f,
-  0, 1.6f*STRETCH_MONSTER, 0,     // source (eyes)
-  0.0f, 1.0f*STRETCH_MONSTER, 0.0f,     // target (body)
+  0.0f, 1.6f*STRETCH_MONSTER, 0.0f, // source (eyes)
+  0.0f, 1.0f*STRETCH_MONSTER, 0.0f, // target (body)
 };
 #define LIGHT_ANIM_FIRE 3
 #define LIGHT_ANIM_NONE 5
@@ -475,24 +475,26 @@ procedures:
     return EReturn();
   };
 
-  Sleep(EVoid)
-  {
+  Sleep(EVoid) {
     // start sleeping anim
     StartModelAnim(SCORPMAN_ANIM_SLEEP, AOF_LOOPING);
+
     // repeat
     wait() {
       // if triggered
-      on(ETrigger eTrigger) : {
+      on (ETrigger eTrigger) : {
         // remember enemy
         SetTargetSoft(eTrigger.penCaused);
         // wake up
         jump WakeUp();
       }
+
       // if damaged
-      on(EDamage eDamage) : {
+      on (EDamage eDamage) : {
         // wake up
         jump WakeUp();
       }
+
       otherwise() : {
         resume;
       }
@@ -523,11 +525,13 @@ procedures:
         on (EBegin) : {
           call Sleep();
         }
+
         on (EReturn) : {
           stop;
-        };
+        }
+
         // if dead
-        on(EDeath eDeath) : {
+        on (EDeath eDeath) : {
           // die
           jump CEnemyBase::Die(eDeath);
         }

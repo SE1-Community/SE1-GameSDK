@@ -796,7 +796,7 @@ procedures:
 
     } else {
       m_rMipFadeDistMetric = 0.0f;
-      m_fMipFadeLenMetric  = 0.0f;     
+      m_fMipFadeLenMetric  = 0.0f;
     }*/
     
     // convert metric factors to mip factors
@@ -852,7 +852,7 @@ procedures:
       }
 
       // when your parent is destroyed
-      on(ERangeModelDestruction): {
+      on (ERangeModelDestruction) : {
         // for each child of this entity
         {FOREACHINLIST(CEntity, en_lnInParent, en_lhChildren, itenChild) {
           // send it destruction event

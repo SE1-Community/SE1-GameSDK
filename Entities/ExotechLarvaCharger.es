@@ -48,44 +48,39 @@ properties:
  15 CEntityPointer m_penBattery06 "Wall Battery 06", 
 
  20 BOOL m_bCustomShading "Custom Shading" = FALSE,
- 21 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D(AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
+ 21 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D(45.0f, 45.0f, 45.0f),
  22 COLOR m_colLight "Light Color" = C_WHITE,
  23 COLOR m_colAmbient "Ambient Light Color" = C_BLACK,
  
  50 CSoundObject m_soSound,
 
 components:
-
-  1 class   CLASS_BASIC_EFFECT  "Classes\\BasicEffect.ecl",
-  2 class   CLASS_BLOOD_SPRAY   "Classes\\BloodSpray.ecl",
+  1 class CLASS_BASIC_EFFECT "Classes\\BasicEffect.ecl",
+  2 class CLASS_BLOOD_SPRAY  "Classes\\BloodSpray.ecl",
   
-  5 model   MODEL_CHARGER       "ModelsMP\\Enemies\\ExotechLarva\\Charger\\FloorCharger.mdl",
-  6 texture TEXTURE_CHARGER     "ModelsMP\\Enemies\\ExotechLarva\\Charger\\FloorCharger.tex",
+  5 model   MODEL_CHARGER   "ModelsMP\\Enemies\\ExotechLarva\\Charger\\FloorCharger.mdl",
+  6 texture TEXTURE_CHARGER "ModelsMP\\Enemies\\ExotechLarva\\Charger\\FloorCharger.tex",
 
-  7 model   MODEL_BEAM          "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Beam.mdl",
-  8 texture TEXTURE_BEAM        "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Beam.tex",
+  7 model   MODEL_BEAM   "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Beam.mdl",
+  8 texture TEXTURE_BEAM "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Beam.tex",
 
   9 model   MODEL_ELECTRICITY   "ModelsMP\\Enemies\\ExotechLarva\\Charger\\ElectricityBeams.mdl",
  10 texture TEXTURE_ELECTRICITY "ModelsMP\\Effects\\Laser\\Laser_Red.tex",
 
- 50 sound   SOUND_HUM           "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Sounds\\FloorChargerHum.wav",
- 51 sound   SOUND_SHUTDOWN      "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Sounds\\FloorChargerShutdown.wav",
+ 50 sound SOUND_HUM      "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Sounds\\FloorChargerHum.wav",
+ 51 sound SOUND_SHUTDOWN "ModelsMP\\Enemies\\ExotechLarva\\Charger\\Sounds\\FloorChargerShutdown.wav",
 
 functions:
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
-  {
+  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget) {
     if (slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery01)
-        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery02)
-        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery03)
-        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery04)
-        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery05)
-        || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery06)) {
-      if (IsOfClass(penTarget, "ExotechLarvaBattery")) {
-        return TRUE;
-      } else {
-        return FALSE;
-      }
+     || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery02)
+     || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery03)
+     || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery04)
+     || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery05)
+     || slPropertyOffset == offsetof(CExotechLarvaCharger, m_penBattery06)) {
+      return IsOfClass(penTarget, "ExotechLarvaBattery");
     }
+
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }
 
@@ -119,17 +114,20 @@ functions:
 
     for (INDEX i = 0; i < 6; i++) {
       CExotechLarvaBattery *penBattery = (CExotechLarvaBattery *)&(*penFirst[i]);
+
       // if model pointer is valid
       if (penBattery) {
         if (penBattery->m_bActive) {
           // at least one exists, so we are still active
           m_bActive = TRUE;
+
           return;
         }
       }
     }
     // if no batteries found, change the state to inactive
     m_bActive = FALSE;
+
     EActivateBeam eab;
     eab.bTurnOn = FALSE;
     SendEvent(eab);
@@ -139,8 +137,7 @@ functions:
     RemoveAttachmentFromModel(*GetModelObject(), FLOORCHARGER_ATTACHMENT_ELECTRICITY);
   }
 
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
-                     const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     NOTHING;
   };
 
@@ -150,6 +147,7 @@ functions:
 
       for (INDEX i = 0; i < 6; i++) {
         CExotechLarvaBattery *penBattery = (CExotechLarvaBattery *)&(*penFirst[i]);
+
         // if model pointer is valid
         if (penBattery) {
           if (penBattery->m_bActive) {
@@ -157,6 +155,7 @@ functions:
             FLOAT tmNow = _pTimer->GetLerpedCurrentTick();
             Particles_Ghostbuster(GetPlacement().pl_PositionVector + FLOAT3D(0.0f, 0.2f, 0.0f),
                                   penBattery->GetPlacement().pl_PositionVector + FLOAT3D(0.0f, 0.2f, 0.0f), 32, 1.0f);
+
             Particles_ModelGlow(penBattery, 1e6, PT_STAR05, 1.0f + 0.5f * sin(4.0f * tmNow), 4, 0.0f, C_WHITE);
           }
         }
@@ -165,28 +164,30 @@ functions:
   };
 
 procedures:
-  ActivateBeam()
-  {
+  ActivateBeam() {
     AddAttachmentToModel(this, *GetModelObject(), FLOORCHARGER_ATTACHMENT_BEAM, MODEL_BEAM, TEXTURE_BEAM, 0, 0, 0);
+
     CModelObject &amo = GetModelObject()->GetAttachmentModel(FLOORCHARGER_ATTACHMENT_BEAM)->amo_moModelObject;
     amo.StretchModelRelative(FLOAT3D(m_fStretch, m_fStretch, m_fStretch));
+
     m_bBeamActive = TRUE;
+
     return;
   }
 
-  DeactivateBeam()
-  {
+  DeactivateBeam() {
     RemoveAttachmentFromModel(*GetModelObject(), FLOORCHARGER_ATTACHMENT_BEAM);
     m_bBeamActive = FALSE;
+
     return;
   }
 
-  Main()
-  {
+  // Entry point
+  Main() {
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_FIXED);
     SetCollisionFlags(ECF_IMMATERIAL);
-    SetFlags(GetFlags()|ENF_ALIVE);
+    SetFlags(GetFlags() | ENF_ALIVE);
     
     // set your appearance
     SetModel(MODEL_CHARGER);
@@ -198,48 +199,63 @@ procedures:
     
     autowait(0.05f);
 
-    m_soSound.Set3DParameters(m_rSound, m_rSound/2.0f, 2.0f, 1.0f);
+    m_soSound.Set3DParameters(m_rSound, m_rSound / 2.0f, 2.0f, 1.0f);
     m_bActive = FALSE;
     m_bBeamActive = FALSE;
 
     // wait to be triggered
     wait() {
-      on (EBegin) : { resume; }
-      on (ETrigger) : { stop; }
-      otherwise (): { resume; }
+      on (EBegin) : {
+        resume;
+      }
+
+      on (ETrigger) : {
+        stop;
+      }
+
+      otherwise (): {
+        resume;
+      }
     }
 
     UpdateOperationalState();
+
     if (m_bActive) {
       AddAttachmentToModel(this, *GetModelObject(), FLOORCHARGER_ATTACHMENT_ELECTRICITY, MODEL_ELECTRICITY, TEXTURE_ELECTRICITY, 0, 0, 0);
+
       CAttachmentModelObject *amo = GetModelObject()->GetAttachmentModel(FLOORCHARGER_ATTACHMENT_ELECTRICITY);
       amo->amo_moModelObject.StretchModel(FLOAT3D(m_fStretch, m_fStretch, m_fStretch));
+
       PlaySound(m_soSound, SOUND_HUM, SOF_3D|SOF_LOOP);
     }
 
     while (TRUE) {
-      wait(0.5f)
-      {
+      wait (0.5f) {
         on (EBegin) : {
           resume;
         }
+
         on (ETimer) : {
           if (m_bActive) {
             UpdateOperationalState();
           }
+
           stop;
         }
+
         on (EActivateBeam eab) : {
           if (eab.bTurnOn == TRUE && m_bBeamActive != TRUE) {
             call ActivateBeam();
+
           } else if (eab.bTurnOn == FALSE && m_bBeamActive != FALSE) {
             call DeactivateBeam();
           }
+
           resume;
         }
       }
     }
+
     return;
   }
-
 };

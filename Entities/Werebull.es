@@ -31,8 +31,8 @@ enum BullChar {
 // info structure
 static EntityInfo eiWerebull = {
   EIBT_FLESH, 500.0f,
-  0.0f, 3.0f, 0.0f,     // source (eyes)
-  0.0f, 1.5f, 0.0f,     // target (body)
+  0.0f, 3.0f, 0.0f, // source (eyes)
+  0.0f, 1.5f, 0.0f, // target (body)
 };
 
 #define HIT_DISTANCE 5.0f

@@ -957,7 +957,7 @@ procedures:
     
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
     StartModelAnim(SUMMONER_ANIM_DEATHBLOW, SOF_SMOOTHCHANGE);
-    autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_DEATHBLOW)-0.25f);    
+    autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_DEATHBLOW)-0.25f);
 
     // hide model
     SwitchToEditorModel();
@@ -997,19 +997,19 @@ procedures:
         Debris_Spawn_Independent(this, this, MODEL_DEBRIS01, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
           plPos, vSpeed*70.0f, aAng);
         Debris_Spawn_Independent(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch*0.33f, 
-          plPos, vSpeed*70.0f, aAng);        
+          plPos, vSpeed*70.0f, aAng);
         break;
       case 1:
         Debris_Spawn_Independent(this, this, MODEL_DEBRIS02, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
           plPos, vSpeed*70.0f, aAng);
         Debris_Spawn_Independent(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch*0.33f, 
-          plPos, vSpeed*70.0f, aAng);        
+          plPos, vSpeed*70.0f, aAng);
         break;
       case 2:
         Debris_Spawn_Independent(this, this, MODEL_DEBRIS03, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
           plPos, vSpeed*70.0f, aAng);
         Debris_Spawn_Independent(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch*0.33f, 
-          plPos, vSpeed*70.0f, aAng);                
+          plPos, vSpeed*70.0f, aAng);
         break;
       }
     }

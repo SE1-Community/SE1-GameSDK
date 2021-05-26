@@ -20,7 +20,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Entities/PlayerWeapons.h"
 %}
 
-
 enum ViewType {
   0 VT_PLAYERDEATH   "Death",        // player death
   1 VT_PLAYERREBIRTH "Rebirth",      // player rebirth (player is spawned)
@@ -28,18 +27,18 @@ enum ViewType {
   3 VT_3RDPERSONVIEW "Third person", // 3rd person view
 };
 
-// input parameter for viewer
+// Input parameter for viewer
 event EViewInit {
-  CEntityPointer penOwner,        // who owns it
-  CEntityPointer penCamera,       // first camera for camera view
-  enum ViewType vtView,           // view type
+  CEntityPointer penOwner, // who owns it
+  CEntityPointer penCamera, // first camera for camera view
+  enum ViewType vtView, // view type
   BOOL bDeathFixed,
 };
 
 %{
-void CPlayerView_Precache(void) 
-{
+void CPlayerView_Precache(void) {
   CDLLEntityClass *pdec = &CPlayerView_DLLClass;
+
   pdec->PrecacheModel(MODEL_MARKER);
   pdec->PrecacheTexture(TEXTURE_MARKER);
 }
@@ -48,45 +47,51 @@ void CPlayerView_Precache(void)
 class export CPlayerView : CMovableEntity {
 name      "Player View";
 thumbnail "";
-features "CanBePredictable";
+features  "CanBePredictable";
 
 properties:
-  1 CEntityPointer m_penOwner,            // class which owns it
-  2 INDEX m_iViewType=0,                  // view type
-  3 FLOAT m_fDistance = 1.0f,             // current distance
+  1 CEntityPointer m_penOwner, // class which owns it
+  2 INDEX m_iViewType = 0, // view type
+  3 FLOAT m_fDistance = 1.0f, // current distance
   4 FLOAT3D m_vZLast = FLOAT3D(0.0f, 0.0f, 0.0f), 
   5 FLOAT3D m_vTargetLast = FLOAT3D(0.0f, 0.0f, 0.0f), 
-  6 BOOL m_bFixed = FALSE,  // fixed view (player falling in abyss)
+  6 BOOL m_bFixed = FALSE, // fixed view (player falling in abyss)
 
 components:
-  1 model   MODEL_MARKER     "Models\\Editor\\Axis.mdl",
-  2 texture TEXTURE_MARKER   "Models\\Editor\\Vector.tex"
+  1 model   MODEL_MARKER   "Models\\Editor\\Axis.mdl",
+  2 texture TEXTURE_MARKER "Models\\Editor\\Vector.tex"
 
 functions:
   // add to prediction any entities that this entity depends on
-  void AddDependentsToPrediction(void)
-  {
+  void AddDependentsToPrediction(void) {
     m_penOwner->AddToPrediction();
   }
+
   void PreMoving() {};
+
   void DoMoving() {
     en_plLastPlacement = GetPlacement(); // remember old placement for lerping
   };
+
   void PostMoving() {
     SetCameraPosition();
   }
+
   CPlacement3D GetLerpedPlacement(void) const {
     FLOAT fLerpFactor;
+
     if (IsPredictor()) {
       fLerpFactor = _pTimer->GetLerpFactor();
     } else {
       fLerpFactor = _pTimer->GetLerpFactor2();
     }
+
     return LerpPlacementsPrecise(en_plLastPlacement, en_plPlacement, fLerpFactor);
-    // return CMovableEntity::GetLerpedPlacement();
+
+    //return CMovableEntity::GetLerpedPlacement();
   }
 
-  // render particles
+  // Render particles
   void RenderParticles(void) {
     if (Particle_GetViewer() == this) {
       Particles_ViewerLocal(this);
@@ -101,11 +106,12 @@ functions:
 
     if (m_iViewType == VT_3RDPERSONVIEW) {
       // little above player eyes so it can be seen where he is firing
-      pl.pl_OrientationAngle(2) -= 12.0f; // 10.0f;
+      pl.pl_OrientationAngle(2) -= 12.0f; // [Cecil] NOTE: TFE - 10.0f
       pl.pl_PositionVector(2) += 1.0f;
-      fDistance = 4.2f; // 5.75f;
+      fDistance = 4.2f; // // [Cecil] NOTE: TFE - 5.75f
       bFollowCrossHair = TRUE;
-      // death
+
+    // death
     } else if (m_iViewType == VT_PLAYERDEATH) {
       fDistance = 3.5f;
       bFollowCrossHair = FALSE;
@@ -115,6 +121,7 @@ functions:
 
     // transform rotation angle
     pl.RelativeToAbsolute(m_penOwner->GetPlacement());
+
     // make base placement to back out from
     FLOAT3D vBase;
     EntityInfo *pei = (EntityInfo *)(m_penOwner->GetEntityInfo());
@@ -135,6 +142,7 @@ functions:
     vDest[4] = vBase + vFront * fDistance;
 
     FLOAT fBack = 0;
+
     // for each ray
     for (INDEX i = 0; i < 5; i++) {
       // cast a ray to find if any brush is hit
@@ -147,6 +155,7 @@ functions:
       if (crRay.cr_penHit != NULL) {
         // clamp distance
         fDistance = Min(fDistance, crRay.cr_fHitDistance - 0.5f);
+
         // if hit polygon
         if (crRay.cr_pbpoBrushPolygon != NULL) {
           // back off
@@ -156,14 +165,18 @@ functions:
         }
       }
     }
+
     fDistance = ClampDn(fDistance - fBack, 0.0f);
     m_fDistance = fDistance;
+
     vBase += vFront * fDistance;
 
     CPlayerWeapons *ppw = ((CPlayer &)*m_penOwner).GetPlayerWeapons();
+
     if (bFollowCrossHair) {
       FLOAT3D vTarget = vBase - ppw->m_vRayHit;
       FLOAT fLen = vTarget.Length();
+
       if (fLen > 0.01) {
         vTarget /= fLen;
       } else {
@@ -181,8 +194,10 @@ functions:
 
       vX = vY * vZ;
       vX.Normalize();
+
       vY = vZ * vX;
       vY.Normalize();
+
       m_vZLast = vZ;
 
       m(1, 1) = vX(1);
@@ -200,8 +215,10 @@ functions:
     if (m_bFixed) {
       pl.pl_PositionVector = GetPlacement().pl_PositionVector;
       pl.pl_OrientationAngle = ANGLE3D(0, -90, 0);
+
       m_fDistance = (pl.pl_PositionVector - m_penOwner->GetPlacement().pl_PositionVector).Length();
       MakeRotationMatrixFast(m, pl.pl_OrientationAngle);
+
     } else {
       pl.pl_PositionVector = vBase;
     }
@@ -210,66 +227,22 @@ functions:
     SetPlacement_internal(pl, m, TRUE); // TRUE = try to optimize for small movements
   };
 
-  /*void SetCameraPosition()
-  {
-    // 3rd person view
-    FLOAT fDistance = 1.0f;
-    CPlacement3D pl = ((CPlayerEntity&) *m_penOwner).en_plViewpoint;
-
-    pl.pl_PositionVector += FLOAT3D(tmp_af[4],tmp_af[5],tmp_af[6]);
-    pl.pl_OrientationAngle = ANGLE3D(0.0f, tmp_af[1], 0.0f);
-    fDistance = tmp_af[5];
-
-    // transform rotation angle
-    pl.RelativeToAbsolute(m_penOwner->GetPlacement());
-
-    // create a set ray to test
-    FLOATmatrix3D m;
-    MakeRotationMatrixFast(m, pl.pl_OrientationAngle);
-    FLOAT3D vRight = m.GetColumn(1);
-    FLOAT3D vUp    = m.GetColumn(2);
-    FLOAT3D vFront = m.GetColumn(3);
-
-    FLOAT3D vDest;
-    vDest = vFront*fDistance;
-
-    //FLOAT fBack = 0;
-    /*
-    // cast a ray to find if any brush is hit
-    CCastRay crRay( m_penOwner, pl.pl_PositionVector, vDest);
-    crRay.cr_bHitTranslucentPortals = FALSE;
-    crRay.cr_ttHitModels = CCastRay::TT_NONE;
-    GetWorld()->CastRay(crRay);
-
-    // if hit something
-    if (crRay.cr_penHit != NULL) {
-      // clamp distance
-      fDistance = Min(fDistance, crRay.cr_fHitDistance-0.5f);
-    }
-    //pl.pl_PositionVector += FLOAT3D(0.0f, m_fDistance, 0.0f)*m;
-    */
-  /*
-  m_fDistance = fDistance;
-
-  // set camera placement
-  SetPlacement_internal(pl, m, TRUE); // TRUE = try to optimize for small movements
-};*/
-
 procedures:
   // Entry point
   Main(EViewInit eInit) {
+    ASSERT(eInit.penOwner != NULL && IsOfClass(eInit.penOwner, "Player"));
+
     // remember the initial parameters
-    ASSERT(eInit.penOwner != NULL);
     m_penOwner = eInit.penOwner;
     m_iViewType = eInit.vtView;
     m_bFixed = eInit.bDeathFixed;
-    ASSERT(IsOfClass(m_penOwner, "Player"));
 
     // init as model
     InitAsEditorModel();
-    SetFlags(GetFlags()|ENF_CROSSESLEVELS);
-    SetPhysicsFlags(EPF_MODEL_IMMATERIAL|EPF_MOVABLE);
+    SetFlags(GetFlags() | ENF_CROSSESLEVELS);
+    SetPhysicsFlags(EPF_MODEL_IMMATERIAL | EPF_MOVABLE);
     SetCollisionFlags(ECF_IMMATERIAL);
+
     // set appearance
     SetModel(MODEL_MARKER);
     SetModelMainTexture(TEXTURE_MARKER);
@@ -280,21 +253,31 @@ procedures:
     }
 
     SendEvent(EStart());
+
     wait() {
-      on (EBegin) : { resume; }
+      on (EBegin) : {
+        resume;
+      }
+
       on (EStart) : {  
         SetCameraPosition();
         en_plLastPlacement = GetPlacement();  // remember old placement for lerping
         m_vTargetLast = ((CPlayer&) *m_penOwner).GetPlayerWeapons()->m_vRayHit;
         resume;
-      };
-      on (EEnd) : { stop; }
-      otherwise() : { resume; }
+      }
+
+      on (EEnd) : {
+        stop;
+      }
+
+      otherwise() : {
+        resume;
+      }
     }
+
     // cease to exist
     Destroy();
 
     return;
   };
 };
-
