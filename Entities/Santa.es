@@ -262,11 +262,11 @@ procedures:
     m_iScore = 1000;
     // setup moving speed
     m_fWalkSpeed = (FRnd() + 1.5f)*1.5f;
-    m_aWalkRotateSpeed = AngleDeg(FRnd()*20.0f + 550.0f);
+    m_aWalkRotateSpeed = FRnd()*20.0f + 550.0f;
     m_fAttackRunSpeed = FRnd()*1.5f + 4.5f;
-    m_aAttackRotateSpeed = AngleDeg(FRnd()*50.0f + 275.0f);
+    m_aAttackRotateSpeed = FRnd()*50.0f + 275.0f;
     m_fCloseRunSpeed = FRnd()*1.5f + 4.5f;
-    m_aCloseRotateSpeed = AngleDeg(FRnd()*50.0f + 275.0f);
+    m_aCloseRotateSpeed = FRnd()*50.0f + 275.0f;
 
     // set stretch factors for height and width
     CEnemyBase::SizeModel();

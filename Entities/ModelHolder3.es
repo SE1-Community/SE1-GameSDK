@@ -53,7 +53,7 @@ properties:
 
  // parameters for custom shading of a model (overrides automatic shading calculation)
  14 enum SkaCustomShadingType m_cstCustomShading "Shading mode" 'H' = SCST_NONE,
- 15 ANGLE3D m_aShadingDirection "Shade. Light direction" 'D' = ANGLE3D(AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
+ 15 ANGLE3D m_aShadingDirection "Shade. Light direction" 'D' = ANGLE3D(45.0f, 45.0f, 45.0f),
  16 COLOR m_colLight            "Shade. Light color" 'O' = C_WHITE,
  17 COLOR m_colAmbient          "Shade. Ambient color" 'A' = C_BLACK,
  26 BOOL m_bActive "Active" = TRUE,

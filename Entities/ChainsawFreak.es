@@ -333,7 +333,7 @@ procedures:
         InflictDirectDamage(m_penEnemy, this, DMT_CHAINSAW, 20.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
         
         vDirection = vDirection * 10.0f;
-        //GetPitchDirection(AngleDeg(90.0f), vSpeed);
+        //GetPitchDirection(90.0f, vSpeed);
 
         FLOATmatrix3D mDirection;
         MakeRotationMatrixFast(mDirection, ANGLE3D(0.0f, 30.0f, 0.0f));
@@ -400,12 +400,12 @@ procedures:
 
     // setup moving speed
     m_fWalkSpeed = FRnd() + 2.5f;
-    m_aWalkRotateSpeed = AngleDeg(FRnd() * 25.0f + 45.0f);
+    m_aWalkRotateSpeed = FRnd() * 25.0f + 45.0f;
     m_fAttackRunSpeed = FRnd() * 2.0f + 13.0f;
-    m_fAttackRotateRunInto = AngleDeg(FRnd() * 30.0f + 50.0f);
+    m_fAttackRotateRunInto = FRnd() * 30.0f + 50.0f;
     m_aAttackRotateSpeed = m_fAttackRotateRunInto;
     m_fCloseRunSpeed = FRnd() + 10.5f;
-    m_aCloseRotateSpeed = AngleDeg(FRnd() * 50.0f + 250.0f);
+    m_aCloseRotateSpeed = FRnd() * 50.0f + 250.0f;
 
     // setup attack distances
     m_fAttackDistance = 50.0f;

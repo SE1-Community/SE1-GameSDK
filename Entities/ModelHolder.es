@@ -41,7 +41,7 @@ properties:
 
  // parameters for custom shading of a model (overrides automatic shading calculation)
  14 BOOL m_bCustomShading "Custom shading" 'H' = FALSE,
- 15 ANGLE3D m_aShadingDirection "Light direction" = ANGLE3D(AngleDeg(45.0f),AngleDeg(45.0f),AngleDeg(45.0f)),
+ 15 ANGLE3D m_aShadingDirection "Light direction" = ANGLE3D(45.0f, 45.0f, 45.0f),
  16 COLOR m_colLight            "Light color" = C_WHITE,
  17 COLOR m_colAmbient          "Ambient color" = C_BLACK,
  18 CTFileName m_fnmLightAnimation "Light animation file" = CTString(""),

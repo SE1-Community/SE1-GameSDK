@@ -742,81 +742,81 @@ void CWorldBase_OnWorldRender(CWorld *pwo) {
   mdui.mdui_fVOffset = 0.0f;
 
   // rotations left
-  mdui.mdui_aURotation = 8192*1/1024.0f*tmNow;
-  mdui.mdui_aVRotation = 8192*1/1024.0f*tmNow;
+  mdui.mdui_aURotation = 8192 * 1 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = 8192 * 1 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[17].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = 8192*2/1024.0f*tmNow;
-  mdui.mdui_aVRotation = 8192*2/1024.0f*tmNow;
+  mdui.mdui_aURotation = 8192 * 2 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = 8192 * 2 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[18].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = 8192*4/1024.0f*tmNow;
-  mdui.mdui_aVRotation = 8192*4/1024.0f*tmNow;
+  mdui.mdui_aURotation = 8192 * 4 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = 8192 * 4 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[19].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = 8192*8/1024.0f*tmNow;
-  mdui.mdui_aVRotation = 8192*8/1024.0f*tmNow;
+  mdui.mdui_aURotation = 8192 * 8 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = 8192 * 8 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[20].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = 8192*16/1024.0f*tmNow;
-  mdui.mdui_aVRotation = 8192*16/1024.0f*tmNow;
+  mdui.mdui_aURotation = 8192 * 16 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = 8192 * 16 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[21].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = 8192*32/1024.0f*tmNow;
-  mdui.mdui_aVRotation = 8192*32/1024.0f*tmNow;
+  mdui.mdui_aURotation = 8192 * 32 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = 8192 * 32 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[22].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = 8192*64/1024.0f*tmNow;
-  mdui.mdui_aVRotation = 8192*64/1024.0f*tmNow;
+  mdui.mdui_aURotation = 8192 * 64 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = 8192 * 64 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[23].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = 8192*128/1024.0f*tmNow;
-  mdui.mdui_aVRotation = 8192*128/1024.0f*tmNow;
+  mdui.mdui_aURotation = 8192 * 128 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = 8192 * 128 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[24].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = 8192*256/1024.0f*tmNow;
-  mdui.mdui_aVRotation = 8192*256/1024.0f*tmNow;
+  mdui.mdui_aURotation = 8192 * 256 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = 8192 * 256 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[25].tt_mdTransformation.FromUI(mdui);
 
   // rotations right
-  mdui.mdui_aURotation = -8192*1/1024.0f*tmNow;
-  mdui.mdui_aVRotation = -8192*1/1024.0f*tmNow;
+  mdui.mdui_aURotation = -8192 * 1 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = -8192 * 1 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[27].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = -8192*2/1024.0f*tmNow;
-  mdui.mdui_aVRotation = -8192*2/1024.0f*tmNow;
+  mdui.mdui_aURotation = -8192 * 2 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = -8192 * 2 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[28].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = -8192*4/1024.0f*tmNow;
-  mdui.mdui_aVRotation = -8192*4/1024.0f*tmNow;
+  mdui.mdui_aURotation = -8192 * 4 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = -8192 * 4 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[29].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = -8192*8/1024.0f*tmNow;
-  mdui.mdui_aVRotation = -8192*8/1024.0f*tmNow;
+  mdui.mdui_aURotation = -8192 * 8 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = -8192 * 8 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[30].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = -8192*16/1024.0f*tmNow;
-  mdui.mdui_aVRotation = -8192*16/1024.0f*tmNow;
+  mdui.mdui_aURotation = -8192 * 16 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = -8192 * 16 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[31].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = -8192*32/1024.0f*tmNow;
-  mdui.mdui_aVRotation = -8192*32/1024.0f*tmNow;
+  mdui.mdui_aURotation = -8192 * 32 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = -8192 * 32 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[32].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = -8192*64/1024.0f*tmNow;
-  mdui.mdui_aVRotation = -8192*64/1024.0f*tmNow;
+  mdui.mdui_aURotation = -8192 * 64 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = -8192 * 64 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[33].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = -8192*128/1024.0f*tmNow;
-  mdui.mdui_aVRotation = -8192*128/1024.0f*tmNow;
+  mdui.mdui_aURotation = -8192 * 128 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = -8192 * 128 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[34].tt_mdTransformation.FromUI(mdui);
 
-  mdui.mdui_aURotation = -8192*256/1024.0f*tmNow;
-  mdui.mdui_aVRotation = -8192*256/1024.0f*tmNow;
+  mdui.mdui_aURotation = -8192 * 256 / 1024.0f * tmNow;
+  mdui.mdui_aVRotation = -8192 * 256 / 1024.0f * tmNow;
   pwo->wo_attTextureTransformations[35].tt_mdTransformation.FromUI(mdui);
 
   // blendings
-  FLOAT f = Abs(Sin(tmNow*AngleDeg(180.0f)));
+  FLOAT f = Abs(Sin(tmNow * 180.0f));
 
   pwo->wo_atbTextureBlendings[4].tb_colMultiply = RGBAToColor(f * 255, f * 255, f * 255, 255);
   pwo->wo_atbTextureBlendings[5].tb_colMultiply = C_WHITE | UBYTE(255*f);

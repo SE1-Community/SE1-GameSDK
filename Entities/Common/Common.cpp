@@ -545,7 +545,7 @@ static BOOL _bLensFlaresLoaded = FALSE;
   type.lft_aolfFlares.New(noof); \
   type.lft_aolfFlares[0].olf_toTexture.SetData_t(CTFILENAME("Textures\\Effects\\Flares\\" tex)); \
   type.lft_aolfFlares[0].olf_fReflectionPosition = pos; \
-  type.lft_aolfFlares[0].olf_aRotationFactor = AngleDeg(rot); \
+  type.lft_aolfFlares[0].olf_aRotationFactor = rot; \
   type.lft_aolfFlares[0].olf_fSizeIOverScreenSizeI = i; \
   type.lft_aolfFlares[0].olf_fSizeJOverScreenSizeI = j; \
   type.lft_aolfFlares[0].olf_ulFlags = flags; \
@@ -562,7 +562,7 @@ static BOOL _bLensFlaresLoaded = FALSE;
 #define REFLECTION(type, i, fnm, pos, size) \
   type.lft_aolfFlares[i].olf_toTexture.SetData_t(CTFILENAME("Textures\\Effects\\Flares\\" fnm)); \
   type.lft_aolfFlares[i].olf_fReflectionPosition = pos; \
-  type.lft_aolfFlares[i].olf_aRotationFactor = AngleDeg(0.0f); \
+  type.lft_aolfFlares[i].olf_aRotationFactor = 0.0f; \
   type.lft_aolfFlares[i].olf_fSizeIOverScreenSizeI = size; \
   type.lft_aolfFlares[i].olf_fSizeJOverScreenSizeI = size; \
   type.lft_aolfFlares[i].olf_ulFlags = OLF_FADEINTENSITY | OLF_FADEOFCENTER; \

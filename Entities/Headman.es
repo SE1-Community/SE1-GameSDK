@@ -628,11 +628,11 @@ procedures:
         AddAttachment(HEADMAN_ATTACHMENT_CHAINSAW, MODEL_CHAINSAW, TEXTURE_CHAINSAW);
         // setup moving speed
         m_fWalkSpeed = FRnd() + 1.5f;
-        m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 500.0f);
+        m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
         m_fAttackRunSpeed = FRnd() + 5.0f;
-        m_aAttackRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aAttackRotateSpeed = FRnd()*50 + 245.0f;
         m_fCloseRunSpeed = FRnd() + 5.0f;
-        m_aCloseRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aCloseRotateSpeed = FRnd()*50 + 245.0f;
         // setup attack distances
         m_fAttackDistance = 50.0f;
         m_fCloseDistance = 0.0f;
@@ -654,11 +654,11 @@ procedures:
         AddAttachment(HEADMAN_ATTACHMENT_ROCKET_LAUNCHER, MODEL_ROCKETLAUNCHER, TEXTURE_ROCKETLAUNCHER);
         // setup moving speed
         m_fWalkSpeed = FRnd() + 1.5f;
-        m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 500.0f);
+        m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
         m_fAttackRunSpeed = FRnd()*2.0f + 6.0f;
-        m_aAttackRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aAttackRotateSpeed = FRnd()*50 + 245.0f;
         m_fCloseRunSpeed = FRnd()*2.0f + 6.0f;
-        m_aCloseRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aCloseRotateSpeed = FRnd()*50 + 245.0f;
         // setup attack distances
         m_fAttackDistance = 50.0f;
         m_fCloseDistance = 0.0f;
@@ -679,11 +679,11 @@ procedures:
         AddAttachment(HEADMAN_ATTACHMENT_HEAD, MODEL_HEAD, TEXTURE_HEAD);
         // setup moving speed
         m_fWalkSpeed = FRnd() + 1.5f;
-        m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 500.0f);
+        m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
         m_fAttackRunSpeed = FRnd() + 4.0f;
-        m_aAttackRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aAttackRotateSpeed = FRnd()*50 + 245.0f;
         m_fCloseRunSpeed = FRnd() + 4.0f;
-        m_aCloseRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aCloseRotateSpeed = FRnd()*50 + 245.0f;
         // setup attack distances
         m_fAttackDistance = 45.0f;
         m_fCloseDistance = 0.0f;
@@ -705,11 +705,11 @@ procedures:
         AddAttachment(HEADMAN_ATTACHMENT_BOMB_LEFT_HAND, MODEL_BOMB, TEXTURE_BOMB);
         // setup moving speed
         m_fWalkSpeed = FRnd() + 1.5f;
-        m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 500.0f);
+        m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
         m_fAttackRunSpeed = FRnd()*2.0f + 10.0f;
-        m_aAttackRotateSpeed = AngleDeg(FRnd()*100 + 600.0f);
+        m_aAttackRotateSpeed = FRnd()*100 + 600.0f;
         m_fCloseRunSpeed = FRnd()*2.0f + 10.0f;
-        m_aCloseRotateSpeed = AngleDeg(FRnd()*100 + 600.0f);
+        m_aCloseRotateSpeed = FRnd()*100 + 600.0f;
         // setup attack distances
         m_fAttackDistance = 50.0f;
         m_fCloseDistance = 10.0f;

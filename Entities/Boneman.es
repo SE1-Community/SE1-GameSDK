@@ -354,7 +354,7 @@ procedures:
 
       // push target left
       FLOAT3D vSpeed;
-      GetHeadingDirection(AngleDeg(90.0f), vSpeed);
+      GetHeadingDirection(90.0f, vSpeed);
       vSpeed = vSpeed * 5.0f;
 
       KickEntity(m_penEnemy, vSpeed);
@@ -386,7 +386,7 @@ procedures:
 
       // push target left
       FLOAT3D vSpeed;
-      GetHeadingDirection(AngleDeg(-90.0f), vSpeed);
+      GetHeadingDirection(-90.0f, vSpeed);
       vSpeed = vSpeed * 5.0f;
 
       KickEntity(m_penEnemy, vSpeed);

@@ -65,7 +65,7 @@ properties:
 
  // parameters for custom shading of a model (overrides automatic shading calculation)
  14 enum CustomShadingType m_cstCustomShading "Custom shading" 'H' = CST_NONE,
- 15 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D(AngleDeg(45.0f), AngleDeg(45.0f), AngleDeg(45.0f)),
+ 15 ANGLE3D m_aShadingDirection "Light direction" 'D' = ANGLE3D(45.0f, 45.0f, 45.0f),
  16 COLOR m_colLight   "Light color" 'O' = C_WHITE,
  17 COLOR m_colAmbient "Ambient color" 'A' = C_BLACK,
  18 CTFileName m_fnmLightAnimation "Light animation file" = CTString(""),

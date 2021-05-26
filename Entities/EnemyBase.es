@@ -84,18 +84,18 @@ properties:
  // moving/attack properties - CAN BE SET
  // these following must be ordered exactly like this for GetProp() to function
  10 FLOAT m_fWalkSpeed = 1.0f,                  // walk speed
- 11 ANGLE m_aWalkRotateSpeed = AngleDeg(10.0f), // walk rotate speed
- 12 FLOAT m_fAttackRunSpeed = 1.0f,                // attack run speed
- 13 ANGLE m_aAttackRotateSpeed = AngleDeg(10.0f),  // attack rotate speed
- 14 FLOAT m_fCloseRunSpeed = 1.0f,                 // close run speed
- 15 ANGLE m_aCloseRotateSpeed = AngleDeg(10.0f),   // close rotate speed
- 20 FLOAT m_fAttackDistance = 50.0f,          // attack distance mode
- 21 FLOAT m_fCloseDistance = 10.0f,           // close distance mode
- 22 FLOAT m_fAttackFireTime = 2.0f,           // attack distance fire time
- 23 FLOAT m_fCloseFireTime = 1.0f,            // close distance fire time
- 24 FLOAT m_fStopDistance = 0.0f,             // stop moving toward enemy if closer than stop distance
- 25 FLOAT m_fIgnoreRange = 200.0f,            // cease attack if enemy farther
- 26 FLOAT m_fLockOnEnemyTime = 0.0f,          // time needed to fire
+ 11 ANGLE m_aWalkRotateSpeed = 10.0f,   // walk rotate speed
+ 12 FLOAT m_fAttackRunSpeed = 1.0f,     // attack run speed
+ 13 ANGLE m_aAttackRotateSpeed = 10.0f, // attack rotate speed
+ 14 FLOAT m_fCloseRunSpeed = 1.0f,      // close run speed
+ 15 ANGLE m_aCloseRotateSpeed = 10.0f,  // close rotate speed
+ 20 FLOAT m_fAttackDistance = 50.0f,    // attack distance mode
+ 21 FLOAT m_fCloseDistance = 10.0f,     // close distance mode
+ 22 FLOAT m_fAttackFireTime = 2.0f,     // attack distance fire time
+ 23 FLOAT m_fCloseFireTime = 1.0f,      // close distance fire time
+ 24 FLOAT m_fStopDistance = 0.0f,       // stop moving toward enemy if closer than stop distance
+ 25 FLOAT m_fIgnoreRange = 200.0f,      // cease attack if enemy farther
+ 26 FLOAT m_fLockOnEnemyTime = 0.0f,    // time needed to fire
 
  // damage/explode properties - CAN BE SET
  40 FLOAT m_fBlowUpAmount = 0.0f,             // damage in minus for blow up
@@ -456,7 +456,7 @@ functions:
     FLOAT3D &vGravity = en_vGravityDir;
     FLOAT fYt;
     FLOAT fXt;
-    FLOAT fA = TanFast(AngleDeg(aPitch));
+    FLOAT fA = TanFast(aPitch);
     FLOAT fTime = 0.0f;
     FLOAT fLastTime = 0.0f;
 
@@ -2488,7 +2488,7 @@ procedures:
   FireOrHit() 
   {
     // if player is in close range and in front
-    if (CalcDist(m_penEnemy)<GetProp(m_fCloseDistance) && CanHitEnemy(m_penEnemy, Cos(AngleDeg(45.0f)))) {
+    if (CalcDist(m_penEnemy)<GetProp(m_fCloseDistance) && CanHitEnemy(m_penEnemy, Cos(45.0f))) {
       // make fuss
       AddToFuss();
       // stop moving (rotation and translation)
@@ -2499,7 +2499,7 @@ procedures:
       autocall Hit() EReturn;
 
     // else if player is in fire range and in front
-    } else if (CalcDist(m_penEnemy)<GetProp(m_fAttackDistance) && CanAttackEnemy(m_penEnemy, Cos(AngleDeg(45.0f)))) {
+    } else if (CalcDist(m_penEnemy)<GetProp(m_fAttackDistance) && CanAttackEnemy(m_penEnemy, Cos(45.0f))) {
       // make fuss
       AddToFuss();
       // stop moving (rotation and translation)

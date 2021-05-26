@@ -925,11 +925,11 @@ functions:
       plWeapon
         = CPlacement3D(FLOAT3D(wpn_fX[iWeaponData] + plPlayer->m_fChainsawShakeDX * 0.35f,
                                wpn_fY[iWeaponData] + plPlayer->m_fChainsawShakeDY * 0.35f, wpn_fZ[iWeaponData]),
-                       ANGLE3D(AngleDeg(wpn_fH[iWeaponData]), AngleDeg(wpn_fP[iWeaponData]), AngleDeg(wpn_fB[iWeaponData])));
+                       ANGLE3D(wpn_fH[iWeaponData], wpn_fP[iWeaponData], wpn_fB[iWeaponData]));
     } else {
       plWeapon
         = CPlacement3D(FLOAT3D(wpn_fX[iWeaponData], wpn_fY[iWeaponData], wpn_fZ[iWeaponData]),
-                       ANGLE3D(AngleDeg(wpn_fH[iWeaponData]), AngleDeg(wpn_fP[iWeaponData]), AngleDeg(wpn_fB[iWeaponData])));
+                       ANGLE3D(wpn_fH[iWeaponData], wpn_fP[iWeaponData], wpn_fB[iWeaponData]));
     }
 
     // make sure that weapon will be bright enough
@@ -977,7 +977,7 @@ functions:
       prMirror.DepthBufferFarL() = 0.1f;
       CPlacement3D plWeaponMirror(
         FLOAT3D(wpn_fX[iWeaponData], wpn_fY[iWeaponData], wpn_fZ[iWeaponData]),
-        ANGLE3D(AngleDeg(wpn_fH[iWeaponData]), AngleDeg(wpn_fP[iWeaponData]), AngleDeg(wpn_fB[iWeaponData])));
+        ANGLE3D(wpn_fH[iWeaponData], wpn_fP[iWeaponData], wpn_fB[iWeaponData]));
       if (iWeaponData == WEAPON_DOUBLECOLT /*|| iWeaponData == WEAPON_PIPEBOMB*/) {
         FLOATmatrix3D mRotation;
         MakeRotationMatrixFast(mRotation, plView.pl_OrientationAngle);
@@ -985,7 +985,7 @@ functions:
         plWeaponMirror.pl_OrientationAngle(1) = -plWeaponMirror.pl_OrientationAngle(1);
         plWeaponMirror.pl_OrientationAngle(3) = -plWeaponMirror.pl_OrientationAngle(3);
       }
-      ((CPerspectiveProjection3D &)prMirror).FOVL() = AngleDeg(wpn_fFOV[iWeaponData]);
+      ((CPerspectiveProjection3D &)prMirror).FOVL() = wpn_fFOV[iWeaponData];
       CAnyProjection3D apr;
       apr = prMirror;
       Stereo_AdjustProjection(*apr, iEye, 0.1f);
@@ -1019,7 +1019,7 @@ functions:
     prProjection.FrontClipDistanceL() = wpn_fClip[iWeaponData];
     prProjection.DepthBufferNearL() = 0.0f;
     prProjection.DepthBufferFarL() = 0.1f;
-    ((CPerspectiveProjection3D &)prProjection).FOVL() = AngleDeg(wpn_fFOV[iWeaponData]);
+    ((CPerspectiveProjection3D &)prProjection).FOVL() = wpn_fFOV[iWeaponData];
 
     CAnyProjection3D apr;
     apr = prProjection;
@@ -2790,8 +2790,6 @@ functions:
       m_penPlayer->SendEvent(eMsg);
     }
 
-    // must be -1 for default (still have to implement dropping weapons in deathmatch !!!!)
-    ASSERT(Ewi.iAmmo == -1);
     // add the ammunition
     AddDefaultAmmoForWeapon(Ewi.iWeapon, 0);
 

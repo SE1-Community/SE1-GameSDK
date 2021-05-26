@@ -705,7 +705,7 @@ procedures:
 
     // setup moving speed
     m_fWalkSpeed = 0.0f;
-    m_aWalkRotateSpeed = AngleDeg(FRnd() * 10.0f + 245.0f);
+    m_aWalkRotateSpeed = FRnd() * 10.0f + 245.0f;
     m_fAttackRunSpeed = m_fWalkSpeed;
     m_aAttackRotateSpeed = m_aWalkRotateSpeed;
     m_fCloseRunSpeed = m_fWalkSpeed;

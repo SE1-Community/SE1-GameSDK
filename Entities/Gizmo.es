@@ -305,11 +305,11 @@ procedures:
     SetModelMainTexture(TEXTURE_GIZMO);
     // setup moving speed
     m_fWalkSpeed = FRnd() + 1.5f;
-    m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 500.0f);
+    m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
     m_fAttackRunSpeed = FRnd()*5.0f + 15.0f;
-    m_aAttackRotateSpeed = AngleDeg(FRnd()*100 + 600.0f);
+    m_aAttackRotateSpeed = FRnd()*100 + 600.0f;
     m_fCloseRunSpeed = FRnd()*5.0f + 15.0f;
-    m_aCloseRotateSpeed = AngleDeg(360.0f);
+    m_aCloseRotateSpeed = 360.0f;
     // setup attack distances
     m_fAttackDistance = 400.0f;
     m_fCloseDistance = 250.0f;

@@ -493,7 +493,7 @@ procedures:
     StandingAnim();
     // setup moving speed
     m_fWalkSpeed = FRnd()*1.5f + 9.0f;
-    m_aWalkRotateSpeed = AngleDeg(FRnd()*50.0f + 500.0f);
+    m_aWalkRotateSpeed = FRnd()*50.0f + 500.0f;
     m_fAttackRunSpeed = m_fWalkSpeed;
     m_aAttackRotateSpeed = m_aWalkRotateSpeed/2;
     m_fCloseRunSpeed = m_fWalkSpeed;

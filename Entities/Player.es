@@ -2309,8 +2309,7 @@ functions:
                  BOOL bCamera) {
     // read the exact placement of the view for this tick
     GetLerpedAbsoluteViewPlacement(plViewer);
-    ASSERT(IsValidFloat(plViewer.pl_OrientationAngle(1)) && IsValidFloat(plViewer.pl_OrientationAngle(2))
-           && IsValidFloat(plViewer.pl_OrientationAngle(3)));
+
     // get current entity that the player views from
     penViewer = GetViewEntity();
 
@@ -2442,8 +2441,6 @@ functions:
       Stereo_AdjustProjection(*apr, iEye, 1);
 
       // render the view
-      ASSERT(IsValidFloat(plViewer.pl_OrientationAngle(1)) && IsValidFloat(plViewer.pl_OrientationAngle(2))
-             && IsValidFloat(plViewer.pl_OrientationAngle(3)));
       _ulPlayerRenderingMask = 1 << GetMyPlayerIndex();
       RenderView(*en_pwoWorld, *penViewer, apr, *pdp);
       _ulPlayerRenderingMask = 0;
@@ -2534,8 +2531,6 @@ functions:
       Stereo_AdjustProjection(*apr, iEye, 1);
 
       // render the view
-      ASSERT(IsValidFloat(plViewer.pl_OrientationAngle(1)) && IsValidFloat(plViewer.pl_OrientationAngle(2))
-             && IsValidFloat(plViewer.pl_OrientationAngle(3)));
       _ulPlayerRenderingMask = 1 << GetMyPlayerIndex();
       RenderView(*en_pwoWorld, *penViewer, apr, *pdpCamera);
       _ulPlayerRenderingMask = 0;
@@ -4291,8 +4286,6 @@ functions:
   void DeathActions(const CPlayerAction &paAction) {
     // set heading, pitch and banking from the normal rotation into the camera view rotation
     if (m_penView != NULL) {
-      ASSERT(IsPredicted() && m_penView->IsPredicted() || IsPredictor() && m_penView->IsPredictor()
-             || !IsPredicted() && !m_penView->IsPredicted() && !IsPredictor() && !m_penView->IsPredictor());
       en_plViewpoint.pl_PositionVector = FLOAT3D(0, 1, 0);
       en_plViewpoint.pl_OrientationAngle += (ANGLE3D((ANGLE)((FLOAT)paAction.pa_aRotation(1) * _pTimer->TickQuantum),
                                                      (ANGLE)((FLOAT)paAction.pa_aRotation(2) * _pTimer->TickQuantum),

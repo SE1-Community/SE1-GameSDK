@@ -1521,11 +1521,11 @@ procedures:
       m_fSpawnDamage = 2000.0f;
       // setup moving speed
       m_fWalkSpeed = FRnd()/2 + 1.0f;
-      m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 25.0f);
+      m_aWalkRotateSpeed = FRnd()*10.0f + 25.0f;
       m_fAttackRunSpeed = FRnd() + 2.0f;
-      m_aAttackRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+      m_aAttackRotateSpeed = FRnd()*50 + 245.0f;
       m_fCloseRunSpeed = FRnd() + 2.0f;
-      m_aCloseRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+      m_aCloseRotateSpeed = FRnd()*50 + 245.0f;
       // setup attack distances
       m_fAttackDistance = 300.0f;
       m_fCloseDistance = 60.0f;
@@ -1544,11 +1544,11 @@ procedures:
       m_fSpawnDamage = 500.0f;
       // setup moving speed
       m_fWalkSpeed = FRnd() + 1.5f;
-      m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 25.0f);
+      m_aWalkRotateSpeed = FRnd()*10.0f + 25.0f;
       m_fAttackRunSpeed = FRnd()*1.0f + 6.0f;
-      m_aAttackRotateSpeed = AngleDeg(FRnd()*50 + 300.0f);
+      m_aAttackRotateSpeed = FRnd()*50 + 300.0f;
       m_fCloseRunSpeed = FRnd()*2.0f + 2.0f;
-      m_aCloseRotateSpeed = AngleDeg(FRnd()*50 + 300.0f);
+      m_aCloseRotateSpeed = FRnd()*50 + 300.0f;
       // setup attack distances
       m_fAttackDistance = 150.0f;
       m_fCloseDistance = 20.0f;
@@ -1566,11 +1566,11 @@ procedures:
       m_fMaxHealth = 100.0f;
       // setup moving speed
       m_fWalkSpeed = FRnd() + 1.5f;
-      m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 25.0f);
+      m_aWalkRotateSpeed = FRnd()*10.0f + 25.0f;
       m_fAttackRunSpeed = FRnd()*2.0f + 6.0f;
-      m_aAttackRotateSpeed = AngleDeg(FRnd()*50 + 500.0f);
+      m_aAttackRotateSpeed = FRnd()*50 + 500.0f;
       m_fCloseRunSpeed = FRnd()*3.0f + 4.0f;
-      m_aCloseRotateSpeed = AngleDeg(FRnd()*50 + 500.0f);
+      m_aCloseRotateSpeed = FRnd()*50 + 500.0f;
       // setup attack distances
       m_fAttackDistance = 100.0f;
       m_fCloseDistance = 10.0f;

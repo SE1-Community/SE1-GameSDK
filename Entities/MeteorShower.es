@@ -29,7 +29,7 @@ features  "IsTargetable", "HasName";
 properties:
   1 CTString m_strName "Name" 'N' = "Meteor Shower", // class name
  
- 10 ANGLE3D m_aAngle "Shoot Angle" 'S' = ANGLE3D(AngleDeg(0.0f), AngleDeg(0.0f), AngleDeg(0.0f)),
+ 10 ANGLE3D m_aAngle "Shoot Angle" 'S' = ANGLE3D(0.0f, 0.0f, 0.0f),
  11 INDEX m_iPerTickLaunchChance "Density (1-100)" 'D' = 10, // 0-100
 
  15 FLOAT m_fMinStretch "Min. Stretch" = 1.0f,

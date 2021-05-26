@@ -1240,11 +1240,11 @@ procedures:
     m_fBodyParts = 0;
     // setup moving speed
     m_fWalkSpeed = 0.0f;
-    m_aWalkRotateSpeed = AngleDeg(270.0f);
+    m_aWalkRotateSpeed = 270.0f;
     m_fAttackRunSpeed = 0.0f;
-    m_aAttackRotateSpeed = AngleDeg(270.0f);
+    m_aAttackRotateSpeed = 270.0f;
     m_fCloseRunSpeed = 0.0f;
-    m_aCloseRotateSpeed = AngleDeg(270.0f);
+    m_aCloseRotateSpeed = 270.0f;
     // setup attack distances
     m_fAttackDistance = 500.0f;
     m_fCloseDistance = 50.0f;

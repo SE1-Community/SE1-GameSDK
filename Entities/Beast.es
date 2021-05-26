@@ -369,7 +369,7 @@ procedures:
       autowait(0.51f);
 
       ShootProjectile(PRT_BEAST_PROJECTILE, FLOAT3D(0.0f, 1.5f * BEAST_STRETCH, 0.0f),
-                      ANGLE3D(AngleDeg((FRnd() - 0.5f) * 30.0f), AngleDeg(FRnd() * 10.0f), 0.0f));
+                      ANGLE3D((FRnd() - 0.5f) * 30.0f, FRnd() * 10.0f, 0.0f));
 
       autowait(0.3f);
     }
@@ -387,7 +387,7 @@ procedures:
           autowait(0.34f);
 
           ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D(0.0f, 1.5f*BIG_BEAST_STRETCH, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
-                          //ANGLE3D(AngleDeg(40.0f * Cos(m_iCounter * 360.0f / 6.0f)), AngleDeg(20.0f * Sin(m_iCounter * 180.0f / 6.0f)), 0.0f));
+                          //ANGLE3D(40.0f * Cos(m_iCounter * 360.0f / 6.0f), 20.0f * Sin(m_iCounter * 180.0f / 6.0f), 0.0f));
 
           //autowait(0.15f);
 
@@ -410,7 +410,7 @@ procedures:
           autowait(0.5f);
 
           ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D(0.0f, 1.5f * BIG_BEAST_STRETCH, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
-                          //ANGLE3D(AngleDeg(20.0f * Cos(m_iCounter * 360.0f / 3.0f)), AngleDeg(10.0f * Sin(m_iCounter * 180.0f / 3.0f)), 0.0f));
+                          //ANGLE3D(20.0f * Cos(m_iCounter * 360.0f / 3.0f), 10.0f * Sin(m_iCounter * 180.0f / 3.0f), 0.0f));
                           //ANGLE3D(FRnd() * 20.0f - 10.0f, FRnd() * 10.0f - 5.0f, 0.0f));
 
           //autowait(0.25f);
@@ -434,7 +434,7 @@ procedures:
           autowait(0.34f);
 
           ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D(0.0f, 1.5f * HUGE_BEAST_STRETCH, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
-                          //ANGLE3D(AngleDeg(40.0f * Cos(m_iCounter * 360.0f / 6.0f)), AngleDeg(20.0f * Sin(m_iCounter * 180.0f / 6.0f)), 0.0f));
+                          //ANGLE3D(40.0f * Cos(m_iCounter * 360.0f / 6.0f), 20.0f * Sin(m_iCounter * 180.0f / 6.0f), 0.0f));
 
           //autowait(0.15f);
 
@@ -457,7 +457,7 @@ procedures:
           autowait(0.5f);
 
           ShootProjectile(PRT_BEAST_BIG_PROJECTILE, FLOAT3D(0.0f, 1.5f * HUGE_BEAST_STRETCH, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
-                          //ANGLE3D(AngleDeg(20.0f * Cos(m_iCounter * 360.0f / 3.0f)), AngleDeg(10.0f * Sin(m_iCounter * 180.0f / 3.0f)), 0.0f));
+                          //ANGLE3D(20.0f * Cos(m_iCounter * 360.0f / 3.0f), 10.0f * Sin(m_iCounter * 180.0f / 3.0f), 0.0f));
                           //ANGLE3D(FRnd() * 20.0f - 10.0f, FRnd() * 10.0f - 5.0f, 0.0f));
 
           //autowait(0.25f);
@@ -536,9 +536,9 @@ procedures:
 
     // setup moving speed
     m_fWalkSpeed = FRnd()*2.0f + 5.0f;
-    m_aWalkRotateSpeed = AngleDeg(FRnd() * 20.0f + 50.0f);
+    m_aWalkRotateSpeed = FRnd() * 20.0f + 50.0f;
     m_fCloseRunSpeed = FRnd() + 10.0f;
-    m_aCloseRotateSpeed = AngleDeg(FRnd() * 100.0f + 900.0f);
+    m_aCloseRotateSpeed = FRnd() * 100.0f + 900.0f;
 
     // setup attack distances
     m_fAttackDistance = 500.0f;
@@ -556,7 +556,7 @@ procedures:
     switch (m_bcType) {
       case BT_NORMAL:
         m_fAttackRunSpeed = 6.0f;
-        m_aAttackRotateSpeed = AngleDeg(3600.0f);
+        m_aAttackRotateSpeed = 3600.0f;
 
         SetHealth(400.0f);
         SetModelMainTexture(TEXTURE_BEAST_NORMAL);
@@ -576,7 +576,7 @@ procedures:
 
       case BT_BIG:
         m_fAttackRunSpeed = 25.0f;
-        m_aAttackRotateSpeed = AngleDeg(600.0f);
+        m_aAttackRotateSpeed = 600.0f;
 
         SetHealth(3000.0f);
         SetModelMainTexture(TEXTURE_BEAST_BIG);
@@ -598,7 +598,7 @@ procedures:
 
       case BT_HUGE:
         m_fAttackRunSpeed = 35.0f;
-        m_aAttackRotateSpeed = AngleDeg(600.0f);
+        m_aAttackRotateSpeed = 600.0f;
 
         SetHealth(6000.0f);
         SetModelMainTexture(TEXTURE_BEAST_HUGE);

@@ -851,7 +851,7 @@ void RenderMessageModel(CDrawPort *pdp, const CTString &strModel) {
   for (INDEX iEye = STEREO_LEFT; iEye <= (Stereo_IsEnabled() ? STEREO_RIGHT : STEREO_LEFT); iEye++) {
     // prepare projection
     CPerspectiveProjection3D pr;
-    pr.FOVL() = AngleDeg(_fFOV);
+    pr.FOVL() = _fFOV;
     pr.ScreenBBoxL() = FLOATaabbox2D(FLOAT2D(0.0f, 0.0f), FLOAT2D((float)pdp->GetWidth(), (float)pdp->GetHeight()));
     pr.AspectRatioL() = 1.0f;
     pr.FrontClipDistanceL() = 0.3f;

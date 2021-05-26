@@ -39,11 +39,11 @@ properties:
  // moving/attack properties - CAN BE SET
  // these following must be ordered exactly like this for GetProp() to function
  10 FLOAT m_fDiveWalkSpeed = 1.0f,                    // dive walk speed
- 11 ANGLE m_aDiveWalkRotateSpeed = AngleDeg(10.0f),   // dive walk rotate speed
- 12 FLOAT m_fDiveAttackRunSpeed = 1.0f,               // dive attack run speed
- 13 ANGLE m_aDiveAttackRotateSpeed = AngleDeg(10.0f), // dive attack rotate speed
- 14 FLOAT m_fDiveCloseRunSpeed = 1.0f,                // dive close run speed
- 15 ANGLE m_aDiveCloseRotateSpeed = AngleDeg(10.0f),  // dive close rotate speed
+ 11 ANGLE m_aDiveWalkRotateSpeed = 10.0f,   // dive walk rotate speed
+ 12 FLOAT m_fDiveAttackRunSpeed = 1.0f,     // dive attack run speed
+ 13 ANGLE m_aDiveAttackRotateSpeed = 10.0f, // dive attack rotate speed
+ 14 FLOAT m_fDiveCloseRunSpeed = 1.0f,      // dive close run speed
+ 15 ANGLE m_aDiveCloseRotateSpeed = 10.0f,  // dive close rotate speed
  20 FLOAT m_fDiveAttackDistance = 50.0f, // dive attack distance mode
  21 FLOAT m_fDiveCloseDistance = 10.0f,  // dive close distance mode
  22 FLOAT m_fDiveAttackFireTime = 2.0f,  // dive attack distance fire time

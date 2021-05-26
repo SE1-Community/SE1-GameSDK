@@ -492,14 +492,14 @@ procedures:
     m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
     if (m_EecChar == EYC_SERGEANT) {
       m_fAttackRunSpeed = FRnd()*2.0f + 10.0f;
-      m_aAttackRotateSpeed = AngleDeg(FRnd()*100 + 600.0f);
+      m_aAttackRotateSpeed = FRnd()*100 + 600.0f;
       m_fCloseRunSpeed = FRnd()*2.0f + 10.0f;
-      m_aCloseRotateSpeed = AngleDeg(FRnd()*100 + 600.0f);
+      m_aCloseRotateSpeed = FRnd()*100 + 600.0f;
     } else {
       m_fAttackRunSpeed = FRnd()*2.0f + 9.0f;
-      m_aAttackRotateSpeed = AngleDeg(FRnd()*100 + 600.0f);
+      m_aAttackRotateSpeed = FRnd()*100 + 600.0f;
       m_fCloseRunSpeed = FRnd()*2.0f + 9.0f;
-      m_aCloseRotateSpeed = AngleDeg(FRnd()*100 + 600.0f);
+      m_aCloseRotateSpeed = FRnd()*100 + 600.0f;
     }
     // setup attack distances
     m_fAttackDistance = 100.0f;

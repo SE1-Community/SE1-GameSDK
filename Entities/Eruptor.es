@@ -63,7 +63,7 @@ functions:
                                     FLOAT3D vSpeedDest, ANGLE aPitch, ANGLE &aHeading, FLOAT &fLaunchSpeed) {
     FLOAT3D vNewTarget = vTarget;
     FLOAT3D &vGravity = penTarget->en_vGravityDir;
-    FLOAT fa = TanFast(AngleDeg(aPitch));
+    FLOAT fa = TanFast(aPitch);
 
     FLOAT3D vd, vyd0;
     FLOAT fd, fyd0;
@@ -89,7 +89,7 @@ functions:
     } while (Abs(fTime - fLastTime) > _pTimer->TickQuantum && iIterations < 10);
 
     // calculate launch speed
-    fLaunchSpeed = 0.707108f * fd / (Cos(AngleDeg(aPitch)) * Sqrt((fa * fd - fyd0) / penTarget->en_fGravityA));
+    fLaunchSpeed = 0.707108f * fd / (Cos(aPitch) * Sqrt((fa * fd - fyd0) / penTarget->en_fGravityA));
 
     // calculate heading correction
     FLOAT3D vDir = (vNewTarget - vShooting).Normalize();

@@ -203,9 +203,9 @@ procedures:
     m_fAttackRunSpeed = 1.0f;
     m_fCloseRunSpeed = 1.0f;
 
-    m_aWalkRotateSpeed = AngleDeg(30.0f);
-    m_aAttackRotateSpeed = AngleDeg(30.0f);
-    m_aCloseRotateSpeed = AngleDeg(30.0f);
+    m_aWalkRotateSpeed = 30.0f;
+    m_aAttackRotateSpeed = 30.0f;
+    m_aCloseRotateSpeed = 30.0f;
 
     // setup attack distances
     m_fAttackDistance = 50.0f;

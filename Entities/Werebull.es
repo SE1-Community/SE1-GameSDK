@@ -263,7 +263,7 @@ procedures:
         vDirection.Normalize();
         InflictDirectDamage(m_penEnemy, this, DMT_CLOSERANGE, 20.0f, FLOAT3D(0.0f, 0.0f, 0.0f), vDirection);
         FLOAT3D vSpeed;
-        GetPitchDirection(AngleDeg(90.0f), vSpeed);
+        GetPitchDirection(90.0f, vSpeed);
         vSpeed = vSpeed * 10.0f;
         KickEntity(m_penEnemy, vSpeed);
       }
@@ -295,12 +295,12 @@ procedures:
     StandingAnim();
     // setup moving speed
     m_fWalkSpeed = FRnd() + 2.5f;
-    m_aWalkRotateSpeed = AngleDeg(FRnd()*25.0f + 45.0f);
+    m_aWalkRotateSpeed = FRnd()*25.0f + 45.0f;
     m_fAttackRunSpeed = FRnd()*5.0f + 22.5f;
-    m_fAttackRotateRunInto = AngleDeg(FRnd()*60 + 100.0f);
+    m_fAttackRotateRunInto = FRnd()*60 + 100.0f;
     m_aAttackRotateSpeed = m_fAttackRotateRunInto;
     m_fCloseRunSpeed = FRnd()*5.0f + 15.0f;
-    m_aCloseRotateSpeed = AngleDeg(FRnd()*50 + 500.0f);
+    m_aCloseRotateSpeed = FRnd()*50 + 500.0f;
     // setup attack distances
     m_fAttackDistance = 100.0f;
     m_fCloseDistance = 7.0f;

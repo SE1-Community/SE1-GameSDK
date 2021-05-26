@@ -50,11 +50,11 @@ properties:
 
  // these following must be ordered exactly like this for GetProp() to function
  10 FLOAT m_fFlyWalkSpeed = 1.0f,                    // fly walk speed
- 11 ANGLE m_aFlyWalkRotateSpeed = AngleDeg(10.0f),   // fly walk rotate speed
- 12 FLOAT m_fFlyAttackRunSpeed = 1.0f,               // fly attack run speed
- 13 ANGLE m_aFlyAttackRotateSpeed = AngleDeg(10.0f), // fly attack rotate speed
- 14 FLOAT m_fFlyCloseRunSpeed = 1.0f,                // fly close run speed
- 15 ANGLE m_aFlyCloseRotateSpeed = AngleDeg(10.0f),  // fly close rotate speed
+ 11 ANGLE m_aFlyWalkRotateSpeed = 10.0f,   // fly walk rotate speed
+ 12 FLOAT m_fFlyAttackRunSpeed = 1.0f,     // fly attack run speed
+ 13 ANGLE m_aFlyAttackRotateSpeed = 10.0f, // fly attack rotate speed
+ 14 FLOAT m_fFlyCloseRunSpeed = 1.0f,      // fly close run speed
+ 15 ANGLE m_aFlyCloseRotateSpeed = 10.0f,  // fly close rotate speed
  20 FLOAT m_fFlyAttackDistance = 50.0f, // fly attack distance mode
  21 FLOAT m_fFlyCloseDistance = 10.0f,  // fly close distance mode
  22 FLOAT m_fFlyAttackFireTime = 2.0f,  // fly attack distance fire time

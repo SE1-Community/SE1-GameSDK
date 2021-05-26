@@ -1729,8 +1729,8 @@ functions:
       CPlacement3D pl = GetPlacement();
       pl.pl_PositionVector(2) += 2.0f;
       pl.pl_OrientationAngle = m_penLauncher->GetPlacement().pl_OrientationAngle;
-      pl.pl_OrientationAngle(1) += AngleDeg(fHeading);
-      pl.pl_OrientationAngle(2) = AngleDeg(fPitch);
+      pl.pl_OrientationAngle(1) += fHeading;
+      pl.pl_OrientationAngle(2) = fPitch;
 
       CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
       ELaunchProjectile eLaunch;
@@ -2044,11 +2044,11 @@ functions:
 
       // launch
       CPlacement3D pl = GetPlacement();
-      pl.pl_OrientationAngle(1) += AngleDeg(fHeading);
+      pl.pl_OrientationAngle(1) += fHeading;
 
       // turn to other way
       fHeading = -fHeading;
-      pl.pl_OrientationAngle(2) = AngleDeg(fPitch);
+      pl.pl_OrientationAngle(2) = fPitch;
 
       CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
       ELaunchProjectile eLaunch;
@@ -2106,8 +2106,8 @@ functions:
 
       // launch
       CPlacement3D pl = GetPlacement();
-      pl.pl_OrientationAngle(1) += AngleDeg(fHeading);
-      pl.pl_OrientationAngle(2) += AngleDeg(fPitch);
+      pl.pl_OrientationAngle(1) += fHeading;
+      pl.pl_OrientationAngle(2) += fPitch;
 
       CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
 
@@ -2361,8 +2361,8 @@ functions:
 
       // launch
       CPlacement3D pl = GetPlacement();
-      pl.pl_OrientationAngle(1) += AngleDeg(fHeading);
-      pl.pl_OrientationAngle(2) += AngleDeg(fPitch);
+      pl.pl_OrientationAngle(1) += fHeading;
+      pl.pl_OrientationAngle(2) += fPitch;
 
       CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
 

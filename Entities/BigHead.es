@@ -349,11 +349,11 @@ procedures:
 
     // setup moving speed
     m_fWalkSpeed = FRnd() + 1.5f;
-    m_aWalkRotateSpeed = AngleDeg(FRnd() * 10.0f + 500.0f);
+    m_aWalkRotateSpeed = FRnd() * 10.0f + 500.0f;
     m_fAttackRunSpeed = FRnd() * 2.0f + 6.0f;
-    m_aAttackRotateSpeed = AngleDeg(FRnd() * 50.0f + 245.0f);
+    m_aAttackRotateSpeed = FRnd() * 50.0f + 245.0f;
     m_fCloseRunSpeed = FRnd() * 2.0f + 6.0f;
-    m_aCloseRotateSpeed = AngleDeg(FRnd() * 50.0f + 245.0f);
+    m_aCloseRotateSpeed = FRnd() * 50.0f + 245.0f;
 
     // setup attack distances
     m_fAttackDistance = 50.0f;

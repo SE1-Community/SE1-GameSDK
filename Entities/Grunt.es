@@ -309,11 +309,11 @@ procedures:
         AddAttachment(GRUNT_ATTACHMENT_GUN_SMALL, MODEL_GUN_SOLDIER, TEXTURE_GUN_SOLDIER);
         // setup moving speed
         m_fWalkSpeed = FRnd() + 2.5f;
-        m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 500.0f);
+        m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
         m_fAttackRunSpeed = FRnd() + 6.5f;
-        m_aAttackRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aAttackRotateSpeed = FRnd()*50 + 245.0f;
         m_fCloseRunSpeed = FRnd() + 6.5f;
-        m_aCloseRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aCloseRotateSpeed = FRnd()*50 + 245.0f;
         // setup attack distances
         m_fAttackDistance = 80.0f;
         m_fCloseDistance = 0.0f;
@@ -338,11 +338,11 @@ procedures:
         AddAttachment(GRUNT_ATTACHMENT_GUN_COMMANDER, MODEL_GUN_COMMANDER, TEXTURE_GUN_COMMANDER);
         // setup moving speed
         m_fWalkSpeed = FRnd() + 2.5f;
-        m_aWalkRotateSpeed = AngleDeg(FRnd()*10.0f + 500.0f);
+        m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
         m_fAttackRunSpeed = FRnd() + 8.0f;
-        m_aAttackRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aAttackRotateSpeed = FRnd()*50 + 245.0f;
         m_fCloseRunSpeed = FRnd() + 8.0f;
-        m_aCloseRotateSpeed = AngleDeg(FRnd()*50 + 245.0f);
+        m_aCloseRotateSpeed = FRnd()*50 + 245.0f;
         // setup attack distances
         m_fAttackDistance = 90.0f;
         m_fCloseDistance = 0.0f;
