@@ -157,9 +157,9 @@ struct AmmoInfo {
   CTextureObject *ai_ptoAmmo;
   struct WeaponInfo *ai_pwiWeapon1;
   struct WeaponInfo *ai_pwiWeapon2;
-  INDEX ai_iAmmoAmmount;
-  INDEX ai_iMaxAmmoAmmount;
-  INDEX ai_iLastAmmoAmmount;
+  INDEX ai_iAmmoAmount;
+  INDEX ai_iMaxAmmoAmount;
+  INDEX ai_iLastAmmoAmount;
   TIME ai_tmAmmoChanged;
   BOOL ai_bHasWeapon;
 };
@@ -308,10 +308,9 @@ static void PrepareColorTransitions(COLOR colFine, COLOR colHigh, COLOR colMediu
   _cttHUD.ctt_bSmooth = bSmooth;
 }
 
-// calculates shake ammount and color value depanding on value change
+// calculates shake amount and color value depanding on value change
 #define SHAKE_TIME (2.0f)
-static COLOR AddShaker(PIX const pixAmmount, INDEX const iCurrentValue, INDEX &iLastValue, TIME &tmChanged, FLOAT &fMoverX,
-                       FLOAT &fMoverY) {
+static COLOR AddShaker(PIX const pixAmount, INDEX const iCurrentValue, INDEX &iLastValue, TIME &tmChanged, FLOAT &fMoverX, FLOAT &fMoverY) {
   // update shaking if needed
   fMoverX = fMoverY = 0.0f;
   const TIME tmNow = _pTimer->GetLerpedCurrentTick();
@@ -329,16 +328,16 @@ static COLOR AddShaker(PIX const pixAmmount, INDEX const iCurrentValue, INDEX &i
     return NONE;
   ASSERT(tmDelta >= 0);
   // shake, baby shake!
-  const FLOAT fAmmount = _fResolutionScaling * _fCustomScaling * pixAmmount;
-  const FLOAT fMultiplier = (SHAKE_TIME - tmDelta) / SHAKE_TIME * fAmmount;
-  const INDEX iRandomizer = (INDEX)(tmNow * 511.0f) * fAmmount * iCurrentValue;
+  const FLOAT fAmount = _fResolutionScaling * _fCustomScaling * pixAmount;
+  const FLOAT fMultiplier = (SHAKE_TIME - tmDelta) / SHAKE_TIME * fAmount;
+  const INDEX iRandomizer = (INDEX)(tmNow * 511.0f) * fAmount * iCurrentValue;
   const FLOAT fNormRnd1 = (FLOAT)((iRandomizer ^ (iRandomizer >> 9)) & 1023) * 0.0009775f; // 1/1023 - normalized
   const FLOAT fNormRnd2 = (FLOAT)((iRandomizer ^ (iRandomizer >> 7)) & 1023) * 0.0009775f; // 1/1023 - normalized
   fMoverX = (fNormRnd1 - 0.5f) * fMultiplier;
   fMoverY = (fNormRnd2 - 0.5f) * fMultiplier;
-  // clamp to adjusted ammount (pixels relative to resolution and HUD scale
-  fMoverX = Clamp(fMoverX, -fAmmount, fAmmount);
-  fMoverY = Clamp(fMoverY, -fAmmount, fAmmount);
+  // clamp to adjusted amount (pixels relative to resolution and HUD scale
+  fMoverX = Clamp(fMoverX, -fAmount, fAmount);
+  fMoverY = Clamp(fMoverY, -fAmount, fAmount);
   if (tmDelta < SHAKE_TIME / 3)
     return C_WHITE;
   else
@@ -673,22 +672,22 @@ static void HUD_DrawSniperMask(void) {
 // fill weapon and ammo table with current state
 static void FillWeaponAmmoTables(void) {
   // ammo quantities
-  _aaiAmmo[0].ai_iAmmoAmmount = _penWeapons->m_iShells;
-  _aaiAmmo[0].ai_iMaxAmmoAmmount = _penWeapons->m_iMaxShells;
-  _aaiAmmo[1].ai_iAmmoAmmount = _penWeapons->m_iBullets;
-  _aaiAmmo[1].ai_iMaxAmmoAmmount = _penWeapons->m_iMaxBullets;
-  _aaiAmmo[2].ai_iAmmoAmmount = _penWeapons->m_iRockets;
-  _aaiAmmo[2].ai_iMaxAmmoAmmount = _penWeapons->m_iMaxRockets;
-  _aaiAmmo[3].ai_iAmmoAmmount = _penWeapons->m_iGrenades;
-  _aaiAmmo[3].ai_iMaxAmmoAmmount = _penWeapons->m_iMaxGrenades;
-  _aaiAmmo[4].ai_iAmmoAmmount = _penWeapons->m_iNapalm;
-  _aaiAmmo[4].ai_iMaxAmmoAmmount = _penWeapons->m_iMaxNapalm;
-  _aaiAmmo[5].ai_iAmmoAmmount = _penWeapons->m_iElectricity;
-  _aaiAmmo[5].ai_iMaxAmmoAmmount = _penWeapons->m_iMaxElectricity;
-  _aaiAmmo[6].ai_iAmmoAmmount = _penWeapons->m_iIronBalls;
-  _aaiAmmo[6].ai_iMaxAmmoAmmount = _penWeapons->m_iMaxIronBalls;
-  _aaiAmmo[7].ai_iAmmoAmmount = _penWeapons->m_iSniperBullets;
-  _aaiAmmo[7].ai_iMaxAmmoAmmount = _penWeapons->m_iMaxSniperBullets;
+  _aaiAmmo[0].ai_iAmmoAmount = _penWeapons->m_iShells;
+  _aaiAmmo[0].ai_iMaxAmmoAmount = _penWeapons->m_iMaxShells;
+  _aaiAmmo[1].ai_iAmmoAmount = _penWeapons->m_iBullets;
+  _aaiAmmo[1].ai_iMaxAmmoAmount = _penWeapons->m_iMaxBullets;
+  _aaiAmmo[2].ai_iAmmoAmount = _penWeapons->m_iRockets;
+  _aaiAmmo[2].ai_iMaxAmmoAmount = _penWeapons->m_iMaxRockets;
+  _aaiAmmo[3].ai_iAmmoAmount = _penWeapons->m_iGrenades;
+  _aaiAmmo[3].ai_iMaxAmmoAmount = _penWeapons->m_iMaxGrenades;
+  _aaiAmmo[4].ai_iAmmoAmount = _penWeapons->m_iNapalm;
+  _aaiAmmo[4].ai_iMaxAmmoAmount = _penWeapons->m_iMaxNapalm;
+  _aaiAmmo[5].ai_iAmmoAmount = _penWeapons->m_iElectricity;
+  _aaiAmmo[5].ai_iMaxAmmoAmount = _penWeapons->m_iMaxElectricity;
+  _aaiAmmo[6].ai_iAmmoAmount = _penWeapons->m_iIronBalls;
+  _aaiAmmo[6].ai_iMaxAmmoAmount = _penWeapons->m_iMaxIronBalls;
+  _aaiAmmo[7].ai_iAmmoAmount = _penWeapons->m_iSniperBullets;
+  _aaiAmmo[7].ai_iMaxAmmoAmount = _penWeapons->m_iMaxSniperBullets;
 
   // prepare ammo table for weapon possesion
   INDEX i, iAvailableWeapons = _penWeapons->m_iAvailableWeapons;
@@ -968,17 +967,17 @@ extern void DrawHUD(const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOOL
       i = aiAmmoRemap[ii];
       // if no ammo and hasn't got that weapon - just skip this ammo
       AmmoInfo &ai = _aaiAmmo[i];
-      ASSERT(ai.ai_iAmmoAmmount >= 0);
-      if (ai.ai_iAmmoAmmount == 0 && !ai.ai_bHasWeapon)
+      ASSERT(ai.ai_iAmmoAmount >= 0);
+      if (ai.ai_iAmmoAmount == 0 && !ai.ai_bHasWeapon)
         continue;
       // display ammo info
       colIcon = C_WHITE /*_colHUD*/;
-      if (ai.ai_iAmmoAmmount == 0)
+      if (ai.ai_iAmmoAmount == 0)
         colIcon = C_mdGRAY;
       if (ptoCurrentAmmo == ai.ai_ptoAmmo)
         colIcon = C_WHITE;
-      fNormValue = (FLOAT)ai.ai_iAmmoAmmount / ai.ai_iMaxAmmoAmmount;
-      colBar = AddShaker(4, ai.ai_iAmmoAmmount, ai.ai_iLastAmmoAmmount, ai.ai_tmAmmoChanged, fMoverX, fMoverY);
+      fNormValue = (FLOAT)ai.ai_iAmmoAmount / ai.ai_iMaxAmmoAmount;
+      colBar = AddShaker(4, ai.ai_iAmmoAmount, ai.ai_iLastAmmoAmount, ai.ai_tmAmmoChanged, fMoverX, fMoverY);
       HUD_DrawBorder(fCol, fRow + fMoverY, fOneUnitS, fOneUnitS, colBorder);
       HUD_DrawIcon(fCol, fRow + fMoverY, *_aaiAmmo[i].ai_ptoAmmo, colIcon, fNormValue, FALSE);
       HUD_DrawBar(fCol + fBarPos, fRow + fMoverY, fOneUnitS / 5, fOneUnitS - 2, BO_DOWN, colBar, fNormValue);
@@ -1046,7 +1045,7 @@ extern void DrawHUD(const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOOL
         colBorder = 0xffcc0000;
       }
       // no ammo
-      if (_awiWeapons[i].wi_paiAmmo != NULL && _awiWeapons[i].wi_paiAmmo->ai_iAmmoAmmount == 0) {
+      if (_awiWeapons[i].wi_paiAmmo != NULL && _awiWeapons[i].wi_paiAmmo->ai_iAmmoAmount == 0) {
         HUD_DrawBorder(fCol, fRow, fOneUnit, fOneUnit, 0x22334400);
         HUD_DrawIcon(fCol, fRow, *_awiWeapons[i].wi_ptoWeapon, 0x22334400, 1.0f, FALSE);
         // yes ammo

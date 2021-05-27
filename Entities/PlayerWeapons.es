@@ -2539,7 +2539,7 @@ functions:
 
   // RECEIVE FUNCTIONS
 
-  // clamp ammounts of all ammunition to maximum values
+  // clamp amounts of all ammunition to maximum values
   void ClampAllAmmo(void) {
     m_iBullets = ClampUp(m_iBullets, m_iMaxBullets);
     m_iShells = ClampUp(m_iShells, m_iMaxShells);
@@ -2552,9 +2552,10 @@ functions:
     m_iSniperBullets = ClampUp(m_iSniperBullets, m_iMaxSniperBullets);
   }
 
-  // add default ammount of ammunition when receiving a weapon
+  // add default amount of ammunition when receiving a weapon
   void AddDefaultAmmoForWeapon(INDEX iWeapon, FLOAT fMaxAmmoRatio) {
     INDEX iAmmoPicked;
+
     // add ammo
     switch (iWeapon) {
       // unlimited ammo

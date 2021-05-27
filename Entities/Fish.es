@@ -91,15 +91,15 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     if (dmtType == DMT_DROWNING) {
       //en_tmMaxHoldBreath = -5.0f;
-      fDamageAmmount /= 2.0f;
+      fDamage /= 2.0f;
     }
 
     // fish can't harm fish
     if (!IsOfClass(penInflictor, "Fish")) {
-      CEnemyDive::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+      CEnemyDive::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
     }
   };
 

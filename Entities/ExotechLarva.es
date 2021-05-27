@@ -367,8 +367,7 @@ functions:
                              m_aExpGunRot);
   }
 
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
-                     const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     if (m_bInvulnerable) {
       return;
     }
@@ -379,42 +378,47 @@ functions:
     }
 
     // preliminary adjustment of damage
+
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType == DMT_BULLET && fDamageAmmount > 100.0f) {
-      fDamageAmmount *= 0.66f;
+    if (dmtType == DMT_BULLET && fDamage > 100.0f) {
+      fDamage *= 0.66f;
     }
+
     // cannonballs inflict less damage then the default
     if (dmtType == DMT_CANNONBALL) {
-      fDamageAmmount *= 0.5f;
+      fDamage *= 0.5f;
     }
 
     FLOAT fHealthNow = GetHealth();
-    FLOAT fHealthAfter = GetHealth() - fDamageAmmount;
+    FLOAT fHealthAfter = GetHealth() - fDamage;
     FLOAT fHealthBlow01 = m_fMaxHealth * PERCENT_RIGHTBLOW;
     FLOAT fHealthBlow02 = m_fMaxHealth * PERCENT_LEFTBLOW;
 
     // adjust damage
-    fDamageAmmount *= DamageStrength(((EntityInfo *)GetEntityInfo())->Eeibt, dmtType);
+    fDamage *= DamageStrength(((EntityInfo *)GetEntityInfo())->Eeibt, dmtType);
     // apply game extra damage per enemy and per player
-    fDamageAmmount *= GetGameDamageMultiplier();
+    fDamage *= GetGameDamageMultiplier();
 
     // enough damage to blow both arms
     if (fHealthNow > fHealthBlow01 && fHealthAfter < fHealthBlow02) {
-      fDamageAmmount = fHealthNow - fHealthBlow01 - 1;
+      fDamage = fHealthNow - fHealthBlow01 - 1;
+
     } else if (m_bExploding) {
       // if damage would cause the second explosion
       if (fHealthNow > fHealthBlow02 && fHealthAfter < fHealthBlow02) {
-        fDamageAmmount = fHealthNow - fHealthBlow02 - 1;
-        // make sure we don't die while exploding
+        fDamage = fHealthNow - fHealthBlow02 - 1;
+
+      // make sure we don't die while exploding
       } else if (fHealthAfter < 0.0f) {
-        fDamageAmmount = fHealthNow - 1;
+        fDamage = fHealthNow - 1;
       }
+
     } else if (fHealthNow > fHealthBlow02 && fHealthAfter < 0) {
-      fDamageAmmount = fHealthNow - 1;
+      fDamage = fHealthNow - 1;
     }
 
     // if no damage
-    if (fDamageAmmount == 0) {
+    if (fDamage == 0.0f) {
       // do nothing
       return;
     }
@@ -424,13 +428,17 @@ functions:
     m_penSpray = CreateEntity(plSpray, CLASS_BLOOD_SPRAY);
     ESpawnSpray eSpawnSpray;
     eSpawnSpray.colBurnColor = C_WHITE | CT_OPAQUE;
-    if (m_fMaxDamageAmmount > 10.0f) {
+
+    if (m_fMaxDamageAmount > 10.0f) {
       eSpawnSpray.fDamagePower = 3.0f;
-    } else if (m_fSprayDamage + fDamageAmmount > 50.0f) {
+
+    } else if (m_fSprayDamage + fDamage > 50.0f) {
       eSpawnSpray.fDamagePower = 2.0f;
+
     } else {
       eSpawnSpray.fDamagePower = 1.0f;
     }
+
     switch (IRnd() % 4) {
       case 0:
       case 1:
@@ -463,15 +471,15 @@ functions:
     m_penSpray->Initialize(eSpawnSpray);
     m_tmSpraySpawned = _pTimer->CurrentTick();
     m_fSprayDamage = 0.0f;
-    m_fMaxDamageAmmount = 0.0f;
+    m_fMaxDamageAmount = 0.0f;
 
     // instead of:
-    // CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount,
-    //                          vHitPoint, vDirection);
+    // CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
     // do this (because we don't want an event posted each time we're damaged):
 
     // reduce your health
-    en_fHealth -= fDamageAmmount;
+    en_fHealth -= fDamage;
+
     // if health reached zero
     if (en_fHealth <= 0) {
       // throw an event that you have died

@@ -69,7 +69,7 @@ functions:
     pes->es_strName = m_fnModel.FileName();
 
     pes->es_ctCount = 1;
-    pes->es_ctAmmount = 1;
+    pes->es_ctAmount = 1;
     pes->es_fValue = 0;
     pes->es_iScore = 0;
 
@@ -87,7 +87,7 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
   };
 
   BOOL IsTargetable(void) const {

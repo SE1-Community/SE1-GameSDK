@@ -118,10 +118,10 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // eyeman can't harm eyeman
     if (!IsOfClass(penInflictor, "Eyeman")) {
-      CEnemyFly::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+      CEnemyFly::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
 
       // if died of chainsaw
       if (dmtType == DMT_CHAINSAW && GetHealth() <= 0) {

@@ -159,7 +159,7 @@ functions:
   // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes) {
     pes->es_ctCount = 1;
-    pes->es_ctAmmount = m_fValue;
+    pes->es_ctAmount = m_fValue;
 
     switch (m_EaitType) {
       case AIT_SHELLS:

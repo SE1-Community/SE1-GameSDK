@@ -30,7 +30,7 @@ properties:
   5 FLOAT m_fSpeed = 0.0f, // current speed
   6 FLOAT m_fDampFactor     "Damp factor" = 0.9f, // dump factor
   7 FLOAT m_fPendulumFactor "Pendulum factor" = 1.0f, // pendulum factor
-  8 FLOAT m_fImpulseFactor  "Damage impulse factor" = 0.01f, // factor applied to damage ammount
+  8 FLOAT m_fImpulseFactor  "Damage impulse factor" = 0.01f, // factor applied to damage amount
   9 FLOAT m_fTriggerImpulse "Impulse on trigger" = 10.0f, // ipulse given on trigger
  10 BOOL m_bActive          "Active" 'A' = TRUE, // if pendulum is active by default
 
@@ -38,7 +38,7 @@ components:
 
 functions:
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     if (!m_bActive) {
       return;
     }
@@ -51,7 +51,7 @@ functions:
     FLOAT fImpulse = vDirection % vOscilatingDirection;
 
     // calculate impulse strength
-    fImpulse *= fDamageAmmount * m_fImpulseFactor;
+    fImpulse *= fDamage * m_fImpulseFactor;
 
     // apply impulse
     m_fSpeed += fImpulse;

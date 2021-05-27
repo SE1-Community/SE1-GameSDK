@@ -110,11 +110,10 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount,
-                     const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // boneman can't harm boneman
     if (!IsOfClass(penInflictor, "Boneman")) {
-      CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+      CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
     }
   };
 

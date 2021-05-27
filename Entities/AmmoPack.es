@@ -91,7 +91,7 @@ functions:
   // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats *pes) {
     pes->es_ctCount = 1;
-    pes->es_ctAmmount = 1;
+    pes->es_ctAmount = 1;
 
     // compile description
     pes->es_strName.PrintF("Back pack: %d Shells, %d Bullets, %d Rockets, %d Grenades, %d Napalm, %d Electricity, %d Iron balls, %d Sniper bullets",

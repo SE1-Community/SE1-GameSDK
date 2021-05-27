@@ -26,10 +26,10 @@ features  "HasName", "IsTargetable";
 properties:
   1 CTString m_strName "Name" 'N' = "Damager",
   2 CTString m_strDescription = "",
-  3 enum EDamageType m_dmtType "Type" 'Y' = DMT_ABYSS,    // type of damage
-  4 FLOAT m_fAmmount "Ammount" 'A' = 1000.0f,             // ammount of damage
-  5 CEntityPointer m_penToDamage "Entity to Damage" 'E',  // entity to damage, NULL to damage the triggerer
-  6 BOOL m_bDamageFromTriggerer "DamageFromTriggerer" 'S' = FALSE,  // make the triggerer inflictor of the damage
+  3 enum EDamageType m_dmtType "Type" 'Y' = DMT_ABYSS, // type of damage
+  4 FLOAT m_fAmount            "Amount" 'A' = 1000.0f, // amount of damage
+  5 CEntityPointer m_penToDamage "Entity to Damage" 'E', // entity to damage, NULL to damage the triggerer
+  6 BOOL m_bDamageFromTriggerer "DamageFromTriggerer" 'S' = FALSE, // make the triggerer inflictor of the damage
  10 CEntityPointer m_penLastDamaged,
  11 FLOAT m_tmLastDamage = 0.0f,
 
@@ -53,7 +53,7 @@ procedures:
     SetModel(MODEL_DAMAGER);
     SetModelMainTexture(TEXTURE_DAMAGER);
 
-    ((CTString&)m_strDescription).PrintF("%s:%g", EDamageType_enum.NameForValue(INDEX(m_dmtType)), m_fAmmount);
+    ((CTString&)m_strDescription).PrintF("%s:%g", EDamageType_enum.NameForValue(INDEX(m_dmtType)), m_fAmount);
 
     while (TRUE) {
       // wait for someone to trigger you and then damage it
@@ -75,7 +75,7 @@ procedures:
  
           if (penVictim != NULL) {
             if (!(penVictim == m_penLastDamaged && _pTimer->CurrentTick() < m_tmLastDamage + 0.1f)) {
-              InflictDirectDamage(penVictim, penInflictor,  m_dmtType, m_fAmmount, 
+              InflictDirectDamage(penVictim, penInflictor,  m_dmtType, m_fAmount, 
                                   penVictim->GetPlacement().pl_PositionVector, FLOAT3D(0.0f, 1.0f, 0.0f));
 
               m_penLastDamaged = penVictim;

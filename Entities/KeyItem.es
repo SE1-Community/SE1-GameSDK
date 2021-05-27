@@ -144,7 +144,7 @@ functions:
   BOOL FillEntityStatistics(EntityStats *pes) {
     pes->es_strName = GetKeyName(m_kitType);
     pes->es_ctCount = 1;
-    pes->es_ctAmmount = 1;
+    pes->es_ctAmount = 1;
     pes->es_fValue = 1;
     pes->es_iScore = 0;
 

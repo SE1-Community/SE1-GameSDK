@@ -119,7 +119,7 @@ BOOL _bDiscard3rdView=FALSE;
 
 #define NAME name
 
-const FLOAT _fBlowUpAmmount = 70.0f;
+const FLOAT _fBlowUpAmount = 70.0f;
 
 // computer message adding flags
 #define CMF_READ       (1L << 0)
@@ -1020,7 +1020,7 @@ properties:
  21 INDEX m_iLastViewState=PVT_PLAYEREYES,    // last view state
 
  26 CAnimObject m_aoLightAnimation,           // light animation object
- 27 FLOAT m_fDamageAmmount = 0.0f,            // how much was last wound
+ 27 FLOAT m_fDamageAmount = 0.0f,             // how much was last wound
  28 TICK m_llWoundedTime  = 0.0f,             // when was last wound
  29 TICK m_llScreamTime   = 0.0f,             // when was last wound sound played
 
@@ -1046,7 +1046,7 @@ properties:
  44 CEntityPointer m_penMainMusicHolder,
 
  51 TICK m_llLastDamage = -1.0f,
- 52 FLOAT m_fMaxDamageAmmount = 0.0f,
+ 52 FLOAT m_fMaxDamageAmount = 0.0f,
  53 FLOAT3D m_vDamage = FLOAT3D(0.0f, 0.0f, 0.0f),
  54 TICK m_llSpraySpawned = -1.0f,
  55 FLOAT m_fSprayDamage = 0.0f,
@@ -1107,7 +1107,7 @@ properties:
  // 'picked up' display vars
  120 TICK m_llLastPicked = -10000,      // when something was last picked up
  121 CTString m_strPickedName = "",     // name of item picked
- 122 FLOAT m_fPickedAmmount = 0.0f,     // total picked ammount
+ 122 FLOAT m_fPickedAmount = 0.0f,      // total picked amount
  123 FLOAT m_fPickedMana = 0.0f,        // total picked mana
 
  // shaker values
@@ -1146,8 +1146,8 @@ properties:
  183 FLOAT m_fChainsawShakeDX = 0.0f, 
  184 FLOAT m_fChainsawShakeDY = 0.0f,
 
- 190 INDEX m_iSeriousBombCount = 0,      // ammount of serious bombs player owns
- 191 INDEX m_iLastSeriousBombCount = 0,  // ammount of serious bombs player had before firing
+ 190 INDEX m_iSeriousBombCount = 0,      // amount of serious bombs player owns
+ 191 INDEX m_iLastSeriousBombCount = 0,  // amount of serious bombs player had before firing
  192 TICK m_llSeriousBombFired = -10000, // when the bomb was last fired
 
 {
@@ -2016,23 +2016,27 @@ functions:
   }
 
   // mark that an item was picked
-  void ItemPicked(const CTString &strName, FLOAT fAmmount) {
+  void ItemPicked(const CTString &strName, FLOAT fAmount) {
     // if nothing picked too long
     if (_pTimer->GetGameTick() > m_llLastPicked + PICKEDREPORT_TIME) {
       // kill the name
       m_strPickedName = "";
+
       // reset picked mana
       m_fPickedMana = 0;
     }
+
     // if different than last picked
     if (m_strPickedName != strName) {
       // remember name
       m_strPickedName = strName;
-      // reset picked ammount
-      m_fPickedAmmount = 0;
+
+      // reset picked amount
+      m_fPickedAmount = 0;
     }
-    // increase ammount
-    m_fPickedAmmount += fAmmount;
+
+    // increase amount
+    m_fPickedAmount += fAmount;
     m_llLastPicked = _pTimer->GetGameTick();
   }
 
@@ -2481,12 +2485,15 @@ functions:
       pdp->SetFont(_pfdDisplayFont);
       pdp->SetTextScaling(fScale);
       pdp->SetTextAspect(1.0f);
+
       CTString strPicked;
-      if (m_fPickedAmmount == 0) {
+
+      if (m_fPickedAmount == 0) {
         strPicked = m_strPickedName;
       } else {
-        strPicked.PrintF("%s +%d", m_strPickedName, int(m_fPickedAmmount));
+        strPicked.PrintF("%s +%d", m_strPickedName, int(m_fPickedAmount));
       }
+
       pdp->PutTextCXY(strPicked, pixDPWidth * 0.5f, pixDPHeight * 0.82f, C_WHITE | 0xDD);
       if (!GetSP()->sp_bCooperative && !GetSP()->sp_bUseFrags && m_fPickedMana >= 1) {
         CTString strValue;
@@ -2811,7 +2818,7 @@ functions:
     }
   };
 
-  void DamageImpact(INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void DamageImpact(INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // if exploded
     if (GetRenderType() != RT_MODEL) {
       // do nothing
@@ -2822,15 +2829,18 @@ functions:
       return;
     }
 
-    fDamageAmmount = Clamp(fDamageAmmount, 0.0f, 5000.0f);
+    fDamage = Clamp(fDamage, 0.0f, 5000.0f);
 
-    FLOAT fKickDamage = fDamageAmmount;
-    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CB_EXPLOSION)) {
+    FLOAT fKickDamage = fDamage;
+
+    if (dmtType == DMT_EXPLOSION || dmtType == DMT_IMPACT || dmtType == DMT_CB_EXPLOSION) {
       fKickDamage *= 1.5;
     }
+
     if (dmtType == DMT_DROWNING || dmtType == DMT_CLOSERANGE) {
       fKickDamage /= 10;
     }
+
     if (dmtType == DMT_CHAINSAW) {
       fKickDamage /= 10;
     }
@@ -2891,11 +2901,12 @@ functions:
       }
     }
 
-    if (m_fMaxDamageAmmount < fDamageAmmount) {
-      m_fMaxDamageAmmount = fDamageAmmount;
+    if (m_fMaxDamageAmount < fDamage) {
+      m_fMaxDamageAmount = fDamage;
     }
+
     // if it has no spray, or if this damage overflows it
-    if ((m_llSpraySpawned <= _pTimer->GetGameTick() - 8 /*_pTimer->TickQuantum*8*/ || m_fSprayDamage + fDamageAmmount > 50.0f)) {
+    if (m_llSpraySpawned <= _pTimer->GetGameTick() - 8 /*_pTimer->TickQuantum*8*/ || m_fSprayDamage + fDamage > 50.0f) {
       // spawn blood spray
       CPlacement3D plSpray = CPlacement3D(vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
       m_penSpray = CreateEntity(plSpray, CLASS_BLOOD_SPRAY);
@@ -2903,10 +2914,12 @@ functions:
       ESpawnSpray eSpawnSpray;
       eSpawnSpray.colBurnColor = C_WHITE | CT_OPAQUE;
 
-      if (m_fMaxDamageAmmount > 10.0f) {
+      if (m_fMaxDamageAmount > 10.0f) {
         eSpawnSpray.fDamagePower = 3.0f;
-      } else if (m_fSprayDamage + fDamageAmmount > 50.0f) {
+
+      } else if (m_fSprayDamage + fDamage > 50.0f) {
         eSpawnSpray.fDamagePower = 2.0f;
+
       } else {
         eSpawnSpray.fDamagePower = 1.0f;
       }
@@ -2932,19 +2945,19 @@ functions:
       m_penSpray->Initialize(eSpawnSpray);
       m_llSpraySpawned = _pTimer->GetGameTick();
       m_fSprayDamage = 0.0f;
-      m_fMaxDamageAmmount = 0.0f;
+      m_fMaxDamageAmount = 0.0f;
     }
-    m_fSprayDamage += fDamageAmmount;
+
+    m_fSprayDamage += fDamage;
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity * penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
-                     const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity * penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // don't harm yourself with knife or with rocket in easy/tourist mode
     if (penInflictor == this
-        && (dmtType == DMT_CLOSERANGE || dmtType == DMT_CHAINSAW
-            || ((dmtType == DMT_EXPLOSION || dmtType == DMT_CB_EXPLOSION || dmtType == DMT_PROJECTILE)
-                && GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY))) {
+     && (dmtType == DMT_CLOSERANGE || dmtType == DMT_CHAINSAW
+     || ((dmtType == DMT_EXPLOSION || dmtType == DMT_CB_EXPLOSION || dmtType == DMT_PROJECTILE)
+     && GetSP()->sp_gdGameDifficulty <= CSessionProperties::GD_EASY))) {
       return;
     }
 
@@ -2987,24 +3000,28 @@ functions:
     // adjust for difficulty
     FLOAT fDifficultyDamage = GetSP()->sp_fDamageStrength;
     if (fDifficultyDamage <= 1.0f || penInflictor != this) {
-      fDamageAmmount *= fDifficultyDamage;
+      fDamage *= fDifficultyDamage;
     }
 
     // ignore zero damages
-    if (fDamageAmmount <= 0) {
+    if (fDamage <= 0) {
       return;
     }
 
     FLOAT fSubHealth, fSubArmor;
+
     if (dmtType == DMT_DROWNING) {
       // drowning
-      fSubHealth = fDamageAmmount;
+      fSubHealth = fDamage;
+
     } else {
       // damage and armor
-      fSubArmor = fDamageAmmount * 2.0f / 3.0f; // 2/3 on armor damage
-      fSubHealth = fDamageAmmount - fSubArmor;  // 1/3 on health damage
-      m_fArmor -= fSubArmor;                    // decrease armor
-      if (m_fArmor < 0) {                       // armor below zero -> add difference to health damage
+      fSubArmor = fDamage * 2.0f / 3.0f; // 2/3 on armor damage
+      fSubHealth = fDamage - fSubArmor; // 1/3 on health damage
+      m_fArmor -= fSubArmor; // decrease armor
+
+      // add difference to health damage if below zero
+      if (m_fArmor < 0.0f) {
         fSubHealth -= m_fArmor;
         m_fArmor = 0.0f;
       }
@@ -3039,15 +3056,15 @@ functions:
     CPlayerEntity::ReceiveDamage(penInflictor, dmtType, fSubHealth, vHitPoint, vDirection);
 
     // red screen and hit translation
-    if (fDamageAmmount > 1.0f) {
+    if (fDamage > 1.0f) {
       // !!!! this is obsolete, DamageImpact is used instead!
-      if (dmtType == DMT_EXPLOSION || dmtType == DMT_PROJECTILE || dmtType == DMT_BULLET || dmtType == DMT_IMPACT
-          || dmtType == DMT_CANNONBALL || dmtType == DMT_CB_EXPLOSION) {
-        //        GiveImpulseTranslationAbsolute( vDirection*(fDamageAmmount/7.5f)
-        //                                        -en_vGravityDir*(fDamageAmmount/15.0f));
+      if (dmtType == DMT_EXPLOSION || dmtType == DMT_PROJECTILE || dmtType == DMT_BULLET
+       || dmtType == DMT_IMPACT || dmtType == DMT_CANNONBALL || dmtType == DMT_CB_EXPLOSION) {
+        //GiveImpulseTranslationAbsolute(vDirection * (fDamage / 7.5f) - en_vGravityDir * (fDamage / 15.0f));
       }
+
       if (GetFlags() & ENF_ALIVE) {
-        m_fDamageAmmount += fDamageAmmount;
+        m_fDamageAmount += fDamage;
         m_llWoundedTime = _pTimer->GetGameTick();
       }
     }
@@ -3069,27 +3086,35 @@ functions:
       PlaySound(m_soLocalAmbientOnce, SOUND_WATERBUBBLES, SOF_3D | SOF_VOLUMETRIC | SOF_LOCAL);
       m_soLocalAmbientOnce.Set3DParameters(25.0f, 5.0f, 2.0f, Lerp(0.5f, 1.5f, FRnd()));
       SpawnBubbles(10 + INDEX(FRnd() * 10));
-    } else if (m_fDamageAmmount > 1.0f) {
+
+    } else if (m_fDamageAmount > 1.0f) {
       // if not dead
       if (GetFlags() & ENF_ALIVE) {
         // determine corresponding sound
         INDEX iSound;
         char *strIFeel = NULL;
-        if (m_fDamageAmmount < 5.0f) {
+
+        if (m_fDamageAmount < 5.0f) {
           iSound = GenderSound(SOUND_WOUNDWEAK);
           strIFeel = "WoundWeak";
-        } else if (m_fDamageAmmount < 25.0f) {
+
+        } else if (m_fDamageAmount < 25.0f) {
           iSound = GenderSound(SOUND_WOUNDMEDIUM);
           strIFeel = "WoundMedium";
+
         } else {
           iSound = GenderSound(SOUND_WOUNDSTRONG);
           strIFeel = "WoundStrong";
         }
+
+        // override for diving
         if (m_pstState == PST_DIVE) {
           iSound = GenderSound(SOUND_WOUNDWATER);
           strIFeel = "WoundWater";
-        } // override for diving
+        }
+
         SetRandomMouthPitch(0.9f, 1.1f);
+
         // give some pause inbetween screaming
         TICK llNow = _pTimer->GetGameTick();
         if (llNow - m_llScreamTime > CTimer::InTicks(1.0f)) {
@@ -3105,21 +3130,15 @@ functions:
 
   // should this player blow up (spawn debris)
   BOOL ShouldBlowUp(void) {
-    // blow up if
-    return
-      // allowed
-      GetSP()->sp_bGibs &&
-      // dead and
-      (GetHealth() <= 0) &&
-      // has received large enough damage lately and
-      (m_vDamage.Length() > _fBlowUpAmmount) &&
-      // is not blown up already
-      GetRenderType() == RT_MODEL;
+    // blow up if allowed, dead and
+    return GetSP()->sp_bGibs && GetHealth() <= 0
+      // has received large enough damage and is not invisible
+      && m_vDamage.Length() > _fBlowUpAmount && GetRenderType() == RT_MODEL;
   };
 
   // spawn body parts
   void BlowUp(void) {
-    FLOAT3D vNormalizedDamage = m_vDamage - m_vDamage * (_fBlowUpAmmount / m_vDamage.Length());
+    FLOAT3D vNormalizedDamage = m_vDamage - m_vDamage * (_fBlowUpAmount / m_vDamage.Length());
     vNormalizedDamage /= Sqrt(vNormalizedDamage.Length());
     vNormalizedDamage *= 0.75f;
 
@@ -3747,12 +3766,14 @@ functions:
 
     // if less than few seconds elapsed since last damage
     TICK llSinceWounding = _pTimer->GetGameTick() - m_llWoundedTime;
+
     if (llSinceWounding < CTimer::InTicks(4.0f)) {
-      // decrease damage ammount
-      m_fDamageAmmount *= 1.0f - CTimer::InSeconds(llSinceWounding) / 4.0f;
+      // decrease damage amount
+      m_fDamageAmount *= 1.0f - CTimer::InSeconds(llSinceWounding) / 4.0f;
+
     } else {
-      // reset damage ammount
-      m_fDamageAmmount = 0.0f;
+      // reset damage amount
+      m_fDamageAmount = 0.0f;
     }
   }
 
@@ -4726,19 +4747,20 @@ functions:
     CPlayer *pen = (CPlayer *)GetPredictionTail();
     // do screen blending
     ULONG ulR = 255, ulG = 0, ulB = 0; // red for wounding
-    ULONG ulA = pen->m_fDamageAmmount * 5.0f;
+    ULONG ulA = pen->m_fDamageAmount * 5.0f;
 
     // if less than few seconds elapsed since last damage
     FLOAT tmSinceWounding = CTimer::InSeconds(_pTimer->GetGameTick() - pen->m_llWoundedTime);
     if (tmSinceWounding < 4.0f) {
-      // decrease damage ammount
+      // decrease damage amount
       if (tmSinceWounding < 0.001f) {
         ulA = (ulA + 64) / 2;
       }
     }
 
-    // add rest of blend ammount
+    // add rest of blend amount
     ulA = ClampUp(ulA, (ULONG)224);
+
     if (m_iViewState == PVT_PLAYEREYES) {
       pdp->dp_ulBlendingRA += ulR * ulA;
       pdp->dp_ulBlendingGA += ulG * ulA;
@@ -4864,7 +4886,7 @@ functions:
     m_ulFlags &= PLF_INITIALIZED | PLF_LEVELSTARTED | PLF_RESPAWNINPLACE; // must not clear initialized flag
     m_llFallTime = 0;
     m_pstState = PST_STAND;
-    m_fDamageAmmount = 0.0f;
+    m_fDamageAmount = 0.0f;
     m_llWoundedTime = 0;
     m_llInvisibility = 0;
     m_llInvulnerability = 0;

@@ -176,21 +176,21 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount,
-                     const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+    // [Cecil] TODO: Add a special damage type for this
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType == DMT_BULLET && fDamageAmmount > 100.0f) {
-      fDamageAmmount *= 0.5f;
+    if (dmtType == DMT_BULLET && fDamage > 100.0f) {
+      fDamage *= 0.5f;
     }
 
     // cannonballs inflict less damage then the default
     if (m_bcType == BT_BIG && dmtType == DMT_CANNONBALL) {
-      fDamageAmmount *= 0.3333f;
+      fDamage *= 0.3333f;
     }
 
     // can't harm own class
     if (!IsOfClass(penInflictor, "Beast")) {
-      CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+      CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
     }
   };
 

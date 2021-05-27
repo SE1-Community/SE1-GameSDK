@@ -135,7 +135,7 @@ struct EntityInfo {
 struct EntityStats {
   CTString es_strName;
   INDEX es_ctCount;
-  INDEX es_ctAmmount;
+  INDEX es_ctAmount;
   FLOAT es_fValue;
   INDEX es_iScore;
 };

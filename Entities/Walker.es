@@ -173,16 +173,15 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
-                     const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // take less damage from heavy bullets (e.g. sniper)
-    if (dmtType == DMT_BULLET && fDamageAmmount > 100.0f) {
-      fDamageAmmount *= 0.666f;
+    if (dmtType == DMT_BULLET && fDamage > 100.0f) {
+      fDamage *= 0.666f;
     }
 
     // walker can't harm walker
     if (!IsOfClass(penInflictor, "Walker") || ((CWalker *)penInflictor)->m_EwcChar != m_EwcChar) {
-      CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+      CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
     }
   };
 

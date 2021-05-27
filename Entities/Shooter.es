@@ -75,7 +75,7 @@ functions:
     PrecacheClass(CLASS_CANNONBALL);
   };
 
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // receive damage if not indestructable, and shooter can't hurt another shooter
     if (!m_bIndestructable && !IsOfClass(penInflictor, "Shooter")) {
       if (m_tmSpraySpawned <= _pTimer->CurrentTick() - _pTimer->TickQuantum * 8.0f && m_penDestruction != NULL) {
@@ -90,10 +90,10 @@ functions:
         eSpawnSpray.colBurnColor = C_WHITE | CT_OPAQUE;
 
         // adjust spray power
-        if (fDamageAmmount > 50.0f) {
+        if (fDamage > 50.0f) {
           eSpawnSpray.fDamagePower = 3.0f;
 
-        } else if (fDamageAmmount > 25.0f) {
+        } else if (fDamage > 25.0f) {
           eSpawnSpray.fDamagePower = 2.0f;
 
         } else {
@@ -127,7 +127,7 @@ functions:
         m_tmSpraySpawned = _pTimer->CurrentTick();
       }
 
-      CRationalEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+      CRationalEntity::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
     }
   }
 

@@ -167,10 +167,11 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     if (m_bMoveOnDamage) {
       EHit eHit;
       SendEvent(eHit);
+
       return;
     }
 
@@ -199,13 +200,13 @@ functions:
 
     } else if (m_bBlowupByDamager) {
       if (dmtType == DMT_DAMAGER) {
-        CMovableBrushEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+        CMovableBrushEntity::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
       }
 
     } else {
       // react only on explosions
-      if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_PROJECTILE) || (dmtType == DMT_CANNONBALL)) {
-        CMovableBrushEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+      if (dmtType == DMT_EXPLOSION || dmtType == DMT_PROJECTILE || dmtType == DMT_CANNONBALL) {
+        CMovableBrushEntity::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
       }
     }
   };

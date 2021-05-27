@@ -86,15 +86,14 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount,
-                     const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // cannot be damaged immediately after spawning
-    if ((_pTimer->CurrentTick() - m_tmStarted < 1.0f)
-     || (dmtType == DMT_CB_EXPLOSION) && (_pTimer->CurrentTick() - m_tmStarted < 5.0f)) {
+    if (_pTimer->CurrentTick() - m_tmStarted < 1.0f
+     || (dmtType == DMT_CB_EXPLOSION && _pTimer->CurrentTick() - m_tmStarted < 5.0f)) {
       return;
     }
 
-    CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+    CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
   };
 
   // Fade out

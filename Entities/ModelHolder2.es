@@ -97,9 +97,9 @@ properties:
  63 CEntityPointer m_penDestroyTarget "Destruction Target" COLOR(C_WHITE|0xFF), // targeted when destroyed
  64 CEntityPointer m_penLastDamager,
  65 FLOAT m_tmSpraySpawned = 0.0f, // time when damage has been applied
- 66 FLOAT m_fSprayDamage = 0.0f, // total ammount of damage
+ 66 FLOAT m_fSprayDamage = 0.0f, // total amount of damage
  67 CEntityPointer m_penSpray, // the blood spray
- 68 FLOAT m_fMaxDamageAmmount = 0.0f, // max ammount of damage recived in in last xxx ticks
+ 68 FLOAT m_fMaxDamageAmount = 0.0f, // max amount of damage recived in in last xxx ticks
 
  70 FLOAT m_fClassificationStretch  "Classification stretch" = 1.0f, // classification box multiplier
  80 COLOR m_colBurning = COLOR(C_WHITE|CT_OPAQUE), // color applied when burning
@@ -125,7 +125,7 @@ functions:
   BOOL FillEntityStatistics(EntityStats *pes) {
     pes->es_strName = m_fnModel.FileName() + ", " + m_fnTexture.FileName();
     pes->es_ctCount = 1;
-    pes->es_ctAmmount = 1;
+    pes->es_ctAmount = 1;
 
     if (m_penDestruction != NULL) {
       pes->es_strName += " (destroyable)";
@@ -151,8 +151,8 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
-    FLOAT fNewDamage = fDamageAmmount;
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+    FLOAT fNewDamage = fDamage;
 
     // if not destroyable
     if (m_penDestruction == NULL) {
@@ -238,8 +238,8 @@ functions:
       }
     }
 
-    if (m_fMaxDamageAmmount < fDamageAmmount) {
-      m_fMaxDamageAmmount = fDamageAmmount;
+    if (m_fMaxDamageAmount < fDamage) {
+      m_fMaxDamageAmount = fDamage;
     }
 
     // if it has no spray, or if this damage overflows it
@@ -253,7 +253,7 @@ functions:
       ESpawnSpray eSpawnSpray;
 
       // adjust spray power
-      if (m_fMaxDamageAmmount > 10.0f) {
+      if (m_fMaxDamageAmount > 10.0f) {
         eSpawnSpray.fDamagePower = 3.0f;
 
       } else if (m_fSprayDamage + fNewDamage > 50.0f) {
@@ -289,11 +289,11 @@ functions:
 
       m_tmSpraySpawned = _pTimer->CurrentTick();
       m_fSprayDamage = 0.0f;
-      m_fMaxDamageAmmount = 0.0f;
+      m_fMaxDamageAmount = 0.0f;
     }
 
     if (dmtType == DMT_CHAINSAW && m_fChainSawCutDamage > 0) {
-      m_fChainSawCutDamage -= fDamageAmmount;
+      m_fChainSawCutDamage -= fDamage;
 
       if (m_fChainSawCutDamage <= 0) {
         EDeath eDeath; // we don't need any extra parameters

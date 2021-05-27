@@ -185,13 +185,12 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
-                     const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // firecracker and rocketman can't harm headman
     if (!IsOfClass(penInflictor, "Headman")
-        || !(((CHeadman *)penInflictor)->m_hdtType == HDT_FIRECRACKER
-             || ((CHeadman *)penInflictor)->m_hdtType == HDT_ROCKETMAN)) {
-      CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+     || !(((CHeadman *)penInflictor)->m_hdtType == HDT_FIRECRACKER
+     || ((CHeadman *)penInflictor)->m_hdtType == HDT_ROCKETMAN)) {
+      CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
 
       // if died of chainsaw
       if (dmtType == DMT_CHAINSAW && GetHealth() <= 0) {

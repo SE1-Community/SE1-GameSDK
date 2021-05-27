@@ -202,8 +202,7 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount,
-                     const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // nothing can harm elemental during initial animation
     if (m_bInitialAnim) {
       return;
@@ -211,11 +210,11 @@ functions:
 
     // make sure we don't trigger another growth while growing
     FLOAT fHealth = GetHealth();
-    FLOAT fFullDamage = fDamageAmmount * DamageStrength(((EntityInfo *)GetEntityInfo())->Eeibt, dmtType) * GetGameDamageMultiplier();
+    FLOAT fFullDamage = fDamage * DamageStrength(((EntityInfo *)GetEntityInfo())->Eeibt, dmtType) * GetGameDamageMultiplier();
 
     if (m_bAttGrow && m_iSize < 2) {
       if (fHealth - fFullDamage < afGrowArray[m_iSize + 1][0] * m_fMaxHealth) {
-        CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+        CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
         SetHealth(fHealth);
 
         return;
@@ -223,7 +222,7 @@ functions:
 
     } else if (m_bAttGrow && m_iSize == 2) {
       if (fHealth - fFullDamage < 1.0f) {
-        CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+        CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
         SetHealth(fHealth);
 
         return;
@@ -247,11 +246,11 @@ functions:
 
     // cannonballs inflict less damage then the default
     if (dmtType == DMT_CANNONBALL) {
-      fDamageAmmount *= 0.6f;
+      fDamage *= 0.6f;
     }
 
     FLOAT fOldHealth = GetHealth();
-    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
 
     FLOAT fNewHealth = GetHealth();
 

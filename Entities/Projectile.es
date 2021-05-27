@@ -3213,18 +3213,17 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount,
-                     const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // cannonball immediately destroys demons fireball
     if (m_prtType == PRT_DEMON_FIREBALL && dmtType == DMT_CANNONBALL) {
-      fDamageAmmount *= 10001.0f;
+      fDamage *= 10001.0f;
     }
 
     if (m_prtType == PRT_FLAME && IsOfClass(penInflictor, "Moving Brush")) {
       Destroy();
     }
 
-    CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+    CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
   }
 
 procedures:

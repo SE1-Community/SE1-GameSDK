@@ -18,8 +18,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #define TM_APPLY_DAMAGE_QUANTUM 0.25f
 #define TM_APPLY_WHOLE_DAMAGE 7.5f
-#define DAMAGE_AMMOUNT 30.0f
-#define MIN_DAMAGE_QUANTUM (DAMAGE_AMMOUNT/TM_APPLY_WHOLE_DAMAGE*TM_APPLY_DAMAGE_QUANTUM)
+#define DAMAGE_AMOUNT 30.0f
+#define MIN_DAMAGE_QUANTUM (DAMAGE_AMOUNT / TM_APPLY_WHOLE_DAMAGE * TM_APPLY_DAMAGE_QUANTUM)
 #define MAX_DAMAGE_QUANTUM (MIN_DAMAGE_QUANTUM*10.0f)
 #define DEATH_BURN_TIME 4.0f
 
@@ -355,7 +355,7 @@ procedures:
           FLOAT fTimeLeft = m_tmStart + TM_APPLY_WHOLE_DAMAGE - _pTimer->CurrentTick();
           FLOAT fDamageLeft = (fTimeLeft / TM_APPLY_DAMAGE_QUANTUM) * m_fDamageStep;
 
-          m_fDamageToApply = ClampUp(fDamageLeft + DAMAGE_AMMOUNT, 80.0f);
+          m_fDamageToApply = ClampUp(fDamageLeft + DAMAGE_AMOUNT, 80.0f);
           m_tmStart = _pTimer->CurrentTick();
           m_fDamageStep = m_fDamageToApply / (TM_APPLY_WHOLE_DAMAGE / TM_APPLY_DAMAGE_QUANTUM);
           resume;

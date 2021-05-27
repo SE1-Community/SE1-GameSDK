@@ -76,20 +76,20 @@ static void MakeWorldStatistics(void) {
     // if such stats exists
     if (pesOld != NULL) {
       // update the existing stats
-      pesOld->es_ctCount    += esCurrent.es_ctCount;
-      pesOld->es_ctAmmount  += esCurrent.es_ctAmmount*esCurrent.es_ctCount;
-      pesOld->es_fValue     += esCurrent.es_fValue*esCurrent.es_ctCount;
-      pesOld->es_iScore     += esCurrent.es_iScore*esCurrent.es_ctCount;
+      pesOld->es_ctCount  += esCurrent.es_ctCount;
+      pesOld->es_ctAmount += esCurrent.es_ctAmount*esCurrent.es_ctCount;
+      pesOld->es_fValue   += esCurrent.es_fValue*esCurrent.es_ctCount;
+      pesOld->es_iScore   += esCurrent.es_iScore*esCurrent.es_ctCount;
 
     // if this a new name
     } else {
       // create new stats
       EntityStats &esNew = *_aes.New();
-      esNew.es_strName    = esCurrent.es_strName;
-      esNew.es_ctCount    = esCurrent.es_ctCount;
-      esNew.es_ctAmmount  = esCurrent.es_ctAmmount*esCurrent.es_ctCount;
-      esNew.es_fValue     = esCurrent.es_fValue*esCurrent.es_ctCount;
-      esNew.es_iScore     = esCurrent.es_iScore*esCurrent.es_ctCount;
+      esNew.es_strName  = esCurrent.es_strName;
+      esNew.es_ctCount  = esCurrent.es_ctCount;
+      esNew.es_ctAmount = esCurrent.es_ctAmount*esCurrent.es_ctCount;
+      esNew.es_fValue   = esCurrent.es_fValue*esCurrent.es_ctCount;
+      esNew.es_iScore   = esCurrent.es_iScore*esCurrent.es_ctCount;
     }
   }}
 
@@ -100,13 +100,13 @@ static void MakeWorldStatistics(void) {
     strm.Create_t(fnm);
 
     CTString strLine;
-    strLine.PrintF("%-40s: %8s %8s %10s %10s", "name", "count", "ammount", "health", "score");
+    strLine.PrintF("%-40s: %8s %8s %10s %10s", "name", "count", "amount", "health", "score");
     strm.PutLine_t(strLine);
 
     {FOREACHINDYNAMICARRAY(_aes, EntityStats, ites) {
       EntityStats &es = *ites;
       CTString strLine;
-      strLine.PrintF("%-40s: %8d %8d %10g %10d", es.es_strName, es.es_ctCount, es.es_ctAmmount, es.es_fValue, es.es_iScore);
+      strLine.PrintF("%-40s: %8d %8d %10g %10d", es.es_strName, es.es_ctCount, es.es_ctAmount, es.es_fValue, es.es_iScore);
       strm.PutLine_t(strLine);
     }}
 

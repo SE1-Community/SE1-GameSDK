@@ -707,8 +707,7 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
-                     const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // don't allow telefrag damage
     if (dmtType == DMT_TELEPORT) {
       return;
@@ -723,10 +722,10 @@ functions:
         return;
       }
 
-      fDamageAmmount = ClampUp(fDamageAmmount, GetHealth() / 2.0f);
+      fDamage = ClampUp(fDamage, GetHealth() / 2.0f);
     }
 
-    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
   };
 
   BOOL AdjustShadingParameters(FLOAT3D &vLightDirection, COLOR &colLight, COLOR &colAmbient) {
@@ -905,7 +904,7 @@ functions:
       CPrintF("m_fSpiritStartTime = %g\n", m_fSpiritStartTime);
       CPrintF("m_tmSpraySpawned = %g\n", m_tmSpraySpawned);
       CPrintF("m_fSprayDamage = %g\n", m_fSprayDamage);
-      CPrintF("m_fMaxDamageAmmount  = %g\n", m_fMaxDamageAmmount);
+      CPrintF("m_fMaxDamageAmount  = %g\n", m_fMaxDamageAmount);
     }
 
     vLightDirection = FLOAT3D(0.0f, 270.0f, 0.0f);

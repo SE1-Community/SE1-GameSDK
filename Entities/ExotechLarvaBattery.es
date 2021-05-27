@@ -88,7 +88,7 @@ functions:
     return TRUE;
   };
 
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     if (GetHealth() < 0.0f) {
       return;
     }
@@ -113,7 +113,7 @@ functions:
     }
 
     FLOAT fLastHealth = GetHealth();
-    CRationalEntity::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+    CRationalEntity::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
 
     FLOAT fNewHealth = GetHealth();
 

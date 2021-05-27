@@ -100,7 +100,7 @@ functions:
   BOOL FillEntityStatistics(EntityStats *pes) {
     pes->es_strName = "Health";
     pes->es_ctCount = 1;
-    pes->es_ctAmmount = m_fValue;
+    pes->es_ctAmount = m_fValue;
     pes->es_fValue = m_fValue;
     pes->es_iScore = 0;
 

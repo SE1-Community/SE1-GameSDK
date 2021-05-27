@@ -376,8 +376,7 @@ functions:
   };
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
-                     const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // while we are invulnerable, receive no damage
     if (m_bInvulnerable) {
       return;
@@ -395,11 +394,11 @@ functions:
 
     // cannonballs inflict less damage then the default
     if (dmtType == DMT_CANNONBALL) {
-      fDamageAmmount *= 0.5f;
+      fDamage *= 0.5f;
     }
 
     FLOAT fOldHealth = GetHealth();
-    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
     FLOAT fNewHealth = GetHealth();
 
     // increase temp. damage

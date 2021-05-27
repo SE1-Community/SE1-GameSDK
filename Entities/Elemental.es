@@ -438,7 +438,7 @@ functions:
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity *penInflictor, INDEX dmtType, FLOAT fDamage, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // elemental can't harm elemental
     if (IsOfClass(penInflictor, "Elemental")) {
       return;
@@ -450,8 +450,8 @@ functions:
     }
 
     // elementals take less damage from heavy bullets (e.g. sniper)
-    if (m_EecChar == ELC_BIG && dmtType == DMT_BULLET && fDamageAmmount > 100.0f) {
-      fDamageAmmount /= 2.5f;
+    if (m_EecChar == ELC_BIG && dmtType == DMT_BULLET && fDamage > 100.0f) {
+      fDamage /= 2.5f;
     }
 
     INDEX ctShouldSpawn = Clamp(INDEX((m_fMaxHealth - GetHealth()) / m_fSpawnDamage), INDEX(0), INDEX(10));
@@ -470,7 +470,7 @@ functions:
       return;
     }
 
-    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamageAmmount, vHitPoint, vDirection);
+    CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
   };
 
   void LeaveStain(BOOL bGrow) {
@@ -1604,7 +1604,7 @@ procedures:
       SetHealth(10000.0f);
       m_fMaxHealth = 10000.0f;
 
-      // after loosing this ammount of damage we will spawn new elemental
+      // after loosing this amount of damage we will spawn new elemental
       m_fSpawnDamage = 2000.0f;
 
       // setup moving speed
@@ -1631,7 +1631,7 @@ procedures:
       SetHealth(800.0f);
       m_fMaxHealth = 800.0f;
 
-      // after loosing this ammount of damage we will spawn new elemental
+      // after loosing this amount of damage we will spawn new elemental
       m_fSpawnDamage = 500.0f;
 
       // setup moving speed
