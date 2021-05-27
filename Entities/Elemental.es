@@ -327,6 +327,7 @@ functions:
         switch (m_EecChar) {
           case ELC_LARGE:
             PrecacheClass(CLASS_PROJECTILE, PRT_LAVAMAN_BIG_BOMB);
+
           case ELC_BIG:
             PrecacheClass(CLASS_PROJECTILE, PRT_LAVAMAN_BOMB);
             break;
@@ -1057,117 +1058,139 @@ procedures:
     return EReturn();
   };
 
-  // [Cecil] TODO: Continue refactoring from here
-
-// FIRE PROCEDURES
-
-  //
-  // STONEMAN
-  //
-/*  StonemanFire(EVoid) {
+  // Stoneman attack
+  /*StonemanFire(EVoid) {
     StartModelAnim(STONEMAN_ANIM_ATTACK05, 0);
+
     autowait(0.7f);
+
     // throw rocks
     if (m_EecChar == ELC_LARGE) {
       ThrowRocks(PRT_STONEMAN_LARGE_FIRE);
+
     } else if (m_EecChar == ELC_BIG) {
       ThrowRocks(PRT_STONEMAN_BIG_FIRE);
+
     } else {
       ThrowRocks(PRT_STONEMAN_FIRE);
     }
+
     PlaySound(m_soSound, SOUND_LAVA_FIRE, SOF_3D);
+
     autowait(0.9f);
+
     // stand a while
     StandingAnim();
-    autowait(FRnd()/3+_pTimer->TickQuantum);
+
+    autowait(FRnd() / 3.0f + _pTimer->TickQuantum);
     return EReturn();
   };
 
   StonemanHit(EVoid) {
     StartModelAnim(STONEMAN_ANIM_ATTACK06, 0);
+
     autowait(0.6f);
+
     HitGround();
     PlaySound(m_soSound, SOUND_LAVA_KICK, SOF_3D);
+
     autowait(0.5f);
+
     // stand a while
     StandingAnim();
-    autowait(FRnd()/3+_pTimer->TickQuantum);
+
+    autowait(FRnd() / 3.0f + _pTimer->TickQuantum);
     return EReturn();
   };
-  */
+*/
 
-  //
-  // LAVAMAN
-  //
-
-  LavamanFire(EVoid)
-  {
+  // Lavaman attack
+  LavamanFire(EVoid) {
     m_bSpawnEnabled = TRUE;
+
     // shoot projectiles
-    if (m_EecChar == ELC_LARGE)
-    {
+    if (m_EecChar == ELC_LARGE) {
       CModelObject &mo = *GetModelObject();
-      FLOAT tmWait = mo.GetAnimLength( mo.ao_iCurrentAnim )-mo.GetPassedTime();
+      FLOAT tmWait = mo.GetAnimLength(mo.ao_iCurrentAnim) - mo.GetPassedTime();
+
       StartModelAnim(ELEMENTALLAVA_ANIM_ATTACKBOSS, AOF_SMOOTHCHANGE);
-      autowait(tmWait+0.95f);
+
+      autowait(tmWait + 0.95f);
+
       BossFirePredictedLavaRock(LAVAMAN_FIRE_LARGE_RIGHT);
       PlaySound(m_soFireR, SOUND_LAVA_FIRE, SOF_3D);
-      autowait(2.0150f-0.95f);
+
+      // [Cecil] TODO: Should be 1.05 or 1.1
+      autowait(1.065f);
+
       BossFirePredictedLavaRock(LAVAMAN_FIRE_LARGE_LEFT);
       PlaySound(m_soFireL, SOUND_LAVA_FIRE, SOF_3D);
+
       StartModelAnim(ELEMENTALLAVA_ANIM_WALKBIG, AOF_SMOOTHCHANGE);
       autocall CMovableModelEntity::WaitUntilScheduledAnimStarts() EReturn;
+
       MaybeSwitchToAnotherPlayer();
+
       // set next shoot time
-      m_fShootTime = _pTimer->CurrentTick() + m_fAttackFireTime*(1.0f + FRnd()/5.0f);
+      m_fShootTime = _pTimer->CurrentTick() + m_fAttackFireTime * (1.0f + FRnd() / 5.0f);
+
       return EReturn();
-    }
-    else if (m_EecChar == ELC_BIG)
-    {
+
+    } else if (m_EecChar == ELC_BIG) {
       CModelObject &mo = *GetModelObject();
-      FLOAT tmWait = mo.GetAnimLength( mo.ao_iCurrentAnim )-mo.GetPassedTime();
+      FLOAT tmWait = mo.GetAnimLength(mo.ao_iCurrentAnim) - mo.GetPassedTime();
+
       StartModelAnim(ELEMENTALLAVA_ANIM_ATTACKLEFTHAND, AOF_SMOOTHCHANGE);
-      autowait(tmWait+0.90f);
+
+      autowait(tmWait + 0.90f);
+
       FLOAT3D vShooting = GetPlacement().pl_PositionVector;
       FLOAT3D vTarget = m_penEnemy->GetPlacement().pl_PositionVector;
-      FLOAT3D vSpeedDest = ((CMovableEntity&) *m_penEnemy).en_vCurrentTranslationAbsolute;
+      FLOAT3D vSpeedDest = ((CMovableEntity&)*m_penEnemy).en_vCurrentTranslationAbsolute;
+
       FLOAT fLaunchSpeed;
       FLOAT fRelativeHdg;
-      
       FLOAT fPitch = 20.0f;
       
       // calculate parameters for predicted angular launch curve
-      EntityInfo *peiTarget = (EntityInfo*) (m_penEnemy->GetEntityInfo());
-      CalculateAngularLaunchParams( vShooting, LAVAMAN_FIRE_BIG(2)-peiTarget->vTargetCenter[1]-1.5f/3.0f, vTarget, 
-        vSpeedDest, fPitch, fLaunchSpeed, fRelativeHdg);
+      EntityInfo *peiTarget = (EntityInfo*)m_penEnemy->GetEntityInfo();
+      CalculateAngularLaunchParams(vShooting, LAVAMAN_FIRE_BIG(2) - peiTarget->vTargetCenter[1] - 1.5f / 3.0f,
+                                   vTarget, vSpeedDest, fPitch, fLaunchSpeed, fRelativeHdg);
 
       // target enemy body
       FLOAT3D vShootTarget;
       GetEntityInfoPosition(m_penEnemy, peiTarget->vTargetCenter, vShootTarget);
+
       // launch
       CPlacement3D pl;
       PrepareFreeFlyingProjectile(pl, vShootTarget, LAVAMAN_FIRE_BIG, ANGLE3D(fRelativeHdg, fPitch, 0));
+
       CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
+
       ELaunchProjectile eLaunch;
       eLaunch.penLauncher = this;
       eLaunch.prtType = PRT_LAVAMAN_BOMB;
       eLaunch.fSpeed = fLaunchSpeed;
+
       penProjectile->Initialize(eLaunch);
       PlaySound(m_soSound, SOUND_LAVA_FIRE, SOF_3D);
-    }
-    else if (TRUE)
-    {
+
+    } else if (TRUE) {
       CModelObject &mo = *GetModelObject();
-      FLOAT tmWait = mo.GetAnimLength( mo.ao_iCurrentAnim )-mo.GetPassedTime();
+      FLOAT tmWait = mo.GetAnimLength(mo.ao_iCurrentAnim) - mo.GetPassedTime();
+
       StartModelAnim(ELEMENTALLAVA_ANIM_ATTACKLEFTHAND, AOF_SMOOTHCHANGE);
-      autowait(tmWait+0.8f);
+
+      autowait(tmWait + 0.8f);
+
       ShootProjectile(PRT_LAVAMAN_STONE, LAVAMAN_FIRE_SMALL, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soSound, SOUND_LAVA_FIRE, SOF_3D);
     }
 
-    autowait( GetModelObject()->GetAnimLength( ELEMENTALLAVA_ANIM_ATTACKLEFTHAND) - 0.9f);
+    autowait(GetModelObject()->GetAnimLength(ELEMENTALLAVA_ANIM_ATTACKLEFTHAND) - 0.9f);
 
     StandingAnim();
+
     autowait(_pTimer->TickQuantum);
 
     if (m_EecChar != ELC_SMALL) {
@@ -1180,308 +1203,366 @@ procedures:
     return EReturn();
   };
 
-  LavamanStones(EVoid)
-  {
+  LavamanStones(EVoid) {
     StartModelAnim(ELEMENTALLAVA_ANIM_ATTACKLEFTHAND, 0);
+
     autowait(0.7f);
+
     // throw rocks
     if (m_EecChar == ELC_LARGE) {
       ThrowRocks(PRT_LAVAMAN_STONE);
+
     } else if (m_EecChar == ELC_BIG) {
       ThrowRocks(PRT_LAVAMAN_STONE);
+
     } else {
       ThrowRocks(PRT_LAVAMAN_STONE);
     }
+
     PlaySound(m_soSound, SOUND_LAVA_FIRE, SOF_3D);
+
     autowait(0.9f);
+
     // stand a while
     StandingAnim();
-    autowait(FRnd()/3+_pTimer->TickQuantum);
+
+    autowait(FRnd() / 3.0f + _pTimer->TickQuantum);
     return EReturn();
   };
 
-  LavamanHit(EVoid)
-  {
+  LavamanHit(EVoid) {
     StartModelAnim(ELEMENTALLAVA_ANIM_ATTACKTWOHANDS, 0);
+
     autowait(0.6f);
+
     HitGround();
     PlaySound(m_soFireL, SOUND_LAVA_KICK, SOF_3D);
+
     StartModelAnim(ELEMENTALLAVA_ANIM_WALKBIG, AOF_SMOOTHCHANGE);
     autocall CMovableModelEntity::WaitUntilScheduledAnimStarts() EReturn;
+
     return EReturn();
   };
 
 /*
-  //
-  // ICEMAN
-  //
+  // Iceman attack
   IcemanFire(EVoid) {
     StartModelAnim(STONEMAN_ANIM_ATTACK05, 0);
+
     autowait(0.7f);
+
     // throw rocks
     if (m_EecChar == ELC_LARGE) {
       ThrowRocks(PRT_ICEMAN_LARGE_FIRE);
+
     } else if (m_EecChar == ELC_BIG) {
       ThrowRocks(PRT_ICEMAN_BIG_FIRE);
+
     } else {
       ThrowRocks(PRT_ICEMAN_FIRE);
     }
+
     PlaySound(m_soSound, SOUND_LAVA_FIRE, SOF_3D);
+
     autowait(0.9f);
+
     // stand a while
     StandingAnim();
-    autowait(FRnd()/3+_pTimer->TickQuantum);
+
+    autowait(FRnd() / 3.0f + _pTimer->TickQuantum);
     return EReturn();
   };
 
   IcemanHit(EVoid) {
     StartModelAnim(STONEMAN_ANIM_ATTACK01, 0);
+
     autowait(0.6f);
+
     HitGround();
     PlaySound(m_soSound, SOUND_LAVA_KICK, SOF_3D);
+
     autowait(0.5f);
+
     // stand a while
     StandingAnim();
-    autowait(FRnd()/3+_pTimer->TickQuantum);
+
+    autowait(FRnd() / 3.0f + _pTimer->TickQuantum);
     return EReturn();
   };
 
 
-  //
-  // AIRMAN
-  //
+  // Airman attack
   AirmanFire(EVoid) {
     StartModelAnim(STONEMAN_ANIM_ATTACK06, 0);
+
     autowait(1.0f);
+
     // spawn twister
     CPlacement3D pl = m_penEnemy->GetPlacement();
     FLOAT fR, fA;
     ETwister et;
-    fA = FRnd()*360.0f;
+
+    fA = FRnd() * 360.0f;
+
     if (m_EecChar == ELC_LARGE) {
-      fR = FRnd()*10.0f;
+      fR = FRnd() * 10.0f;
       et.EtsSize = TWS_LARGE;
+
     } else if (m_EecChar == ELC_BIG) {
-      fR = FRnd()*7.5f;
+      fR = FRnd() * 7.5f;
       et.EtsSize = TWS_BIG;
+
     } else {
-      fR = FRnd()*5.0f;
+      fR = FRnd() * 5.0f;
       et.EtsSize = TWS_SMALL;
     }
-    pl.pl_PositionVector += FLOAT3D(CosFast(fA)*fR, 0, SinFast(fA)*fR);;
+
+    pl.pl_PositionVector += FLOAT3D(CosFast(fA) * fR, 0, SinFast(fA) * fR);
+
     CEntityPointer penTwister = CreateEntity(pl, CLASS_TWISTER);
     et.penOwner = this;
     penTwister->Initialize(et);
+
     PlaySound(m_soSound, SOUND_LAVA_FIRE, SOF_3D);
+
     autowait(0.6f);
+
     // stand a while
     StandingAnim();
-    autowait(FRnd()/3+_pTimer->TickQuantum);
+
+    autowait(FRnd() / 3.0f + _pTimer->TickQuantum);
     return EReturn();
   };
 
 
-  //
-  // WATERMAN
-  //
+  // Waterman attack
   WatermanFire(EVoid) {
     StartModelAnim(STONEMAN_ANIM_ATTACK02, 0);
+
     autowait(0.5f);
+
     // throw rocks
     FireWater();
     PlaySound(m_soSound, SOUND_LAVA_FIRE, SOF_3D);
+
     autowait(0.6f);
+
     // stand a while
     StandingAnim();
-    autowait(FRnd()/3+_pTimer->TickQuantum);
+
+    autowait(FRnd() / 3.0f + _pTimer->TickQuantum);
     return EReturn();
   };
-  */
-
-
-// PROCEDURES WHEN HARMED
+*/
 
   // Play wound animation and falling body part
   BeWounded(EDamage eDamage) : CEnemyBase::BeWounded {
     // spawn additional elemental
-    if (m_bSpawnEnabled)
-    {
+    if (m_bSpawnEnabled) {
       SpawnNewElemental();
     }
+
     jump CEnemyBase::BeWounded(eDamage);
   };
 
-// CHANGE STATE PROCEDURES
+  // State changing
 
-   // box to normal
+  // Box to normal
   BoxToNormal(EVoid) {
     m_EesCurrentState = ELS_NORMAL;
     SetPhysicsFlags(EPF_MODEL_WALKING);
+
     ChangeCollisionBoxIndexWhenPossible(STONEMAN_COLLISION_BOX_NORMAL);
     PlaySound(m_soFireL, SOUND_LAVA_GROW, SOF_3D);
+
     StartModelAnim(STONEMAN_ANIM_MORPHBOXUP, 0);
     AddAttachments();
+
     autowait(GetModelObject()->GetAnimLength(STONEMAN_ANIM_MORPHBOXUP));
     return EReturn();
   };
 
-  // normal to box
-/*  NormalToBox(EVoid) {
+  // Normal to box
+  /*NormalToBox(EVoid) {
     StartModelAnim(STONEMAN_ANIM_MORPHBOXDOWN, 0);
+
     autowait(GetModelObject()->GetAnimLength(STONEMAN_ANIM_MORPHBOXDOWN));
+
     m_EesCurrentState = ELS_BOX;
     SetPhysicsFlags(EPF_BOX_PLANE_ELEMENTAL);
+
     ChangeCollisionBoxIndexWhenPossible(STONEMAN_COLLISION_BOX_BOX);
     RemoveAttachments();
+
     return EReturn();
   };*/
 
-  // plane to normal
+  // Plane to normal
   PlaneToNormal(EVoid) {
     m_EesCurrentState = ELS_NORMAL;
     SwitchToModel();
     SetPhysicsFlags(EPF_MODEL_WALKING);
+
     ChangeCollisionBoxIndexWhenPossible(ELEMENTALLAVA_COLLISION_BOX_NORMAL);
     PlaySound(m_soFireL, SOUND_LAVA_GROW, SOF_3D);
+
     INDEX iAnim;
+
     if (m_EetType == ELT_LAVA) {
       iAnim = ELEMENTALLAVA_ANIM_MELTUP;
     } else {
-//      iAnim = STONEMAN_ANIM_MORPHPLANEUP;
+      //iAnim = STONEMAN_ANIM_MORPHPLANEUP;
     }
+
     StartModelAnim(iAnim, 0);
     AddAttachments();
+
     autowait(GetModelObject()->GetAnimLength(iAnim));
     return EReturn();
   };
 
-// ATTACK ENEMY
+  // Attack enemy
   InitializeAttack(EVoid) : CEnemyBase::InitializeAttack {
     // change state from box to normal
-    if (m_EesCurrentState == ELS_BOX)
-    {
+    if (m_EesCurrentState == ELS_BOX) {
       autocall BoxToNormal() EReturn;
-    }
+
     // change state from plane to normal
-    else if (m_EesCurrentState == ELS_PLANE)
-    {
+    } else if (m_EesCurrentState == ELS_PLANE) {
       autocall PlaneToNormal() EReturn;
     }
+
     jump CEnemyBase::InitializeAttack();
   };
 
   Fire(EVoid) : CEnemyBase::Fire {
     // fire projectile
     switch (m_EetType) {
-//      case ELT_STONE: jump StonemanFire(); break;
+      //case ELT_STONE: jump StonemanFire(); break;
       case ELT_LAVA: jump LavamanFire(); break;
-//      case ELT_ICE: jump IcemanFire(); break;
-//      case ELT_AIR: jump AirmanFire(); break;
-//      case ELT_WATER: jump WatermanFire(); break;
+      //case ELT_ICE: jump IcemanFire(); break;
+      //case ELT_AIR: jump AirmanFire(); break;
+      //case ELT_WATER: jump WatermanFire(); break;
     }
+
     return EReturn();
   };
 
   Hit(EVoid) : CEnemyBase::Hit {
     // hit ground
     switch (m_EetType) {
-//      case ELT_STONE: jump StonemanHit(); break;
+      //case ELT_STONE: jump StonemanHit(); break;
       case ELT_LAVA: jump LavamanHit(); break;
-//      case ELT_ICE: jump IcemanHit(); break;
-//      case ELT_AIR: jump AirmanFire(); break;
-//      case ELT_WATER: jump WatermanFire(); break;
+      //case ELT_ICE: jump IcemanHit(); break;
+      //case ELT_AIR: jump AirmanFire(); break;
+      //case ELT_WATER: jump WatermanFire(); break;
     }
     return EReturn();
   };
 
-// DEATH
-  Death(EVoid) : CEnemyBase::Death
-  {
+  Death(EVoid) : CEnemyBase::Death {
     if (m_bSpawnOnBlowUp && (m_EecChar == ELC_LARGE || m_EecChar == ELC_BIG)) {
       SpawnNewElemental();
       SpawnNewElemental();
     }
+
     // air fade out
     if (m_EetType == ELT_AIR) {
       m_fFadeStartTime = _pTimer->CurrentTick();
       m_bFadeOut = TRUE;
       m_fFadeTime = 2.0f;
+
       autowait(m_fFadeTime);
     }
+
     autocall CEnemyBase::Death() EEnd;
-    GetModelObject()->mo_toBump.SetData( NULL);
+
+    GetModelObject()->mo_toBump.SetData(NULL);
     return EEnd();
   };
 
-  BossAppear(EVoid)
-  {
+  BossAppear(EVoid) {
     autowait(2.0f);
+
     m_fFadeStartTime = _pTimer->CurrentTick();
+
     GetModelObject()->PlayAnim(ELEMENTALLAVA_ANIM_ANGER, 0);
     PlaySound(m_soSound, SOUND_LAVA_ANGER, SOF_3D);
-    autowait(GetModelObject()->GetAnimLength(ELEMENTALLAVA_ANIM_ANGER)-_pTimer->TickQuantum);
+
+    autowait(GetModelObject()->GetAnimLength(ELEMENTALLAVA_ANIM_ANGER) - _pTimer->TickQuantum);
 
     StartModelAnim(ELEMENTALLAVA_ANIM_ATTACKTWOHANDS, AOF_SMOOTHCHANGE);
+
     autowait(0.7f);
+
     HitGround();
     PlaySound(m_soFireL, SOUND_LAVA_KICK, SOF_3D);
-    autowait(GetModelObject()->GetAnimLength(ELEMENTALLAVA_ANIM_ATTACKTWOHANDS)-0.7f-_pTimer->TickQuantum);
+
+    autowait(GetModelObject()->GetAnimLength(ELEMENTALLAVA_ANIM_ATTACKTWOHANDS) - 0.7f - _pTimer->TickQuantum);
 
     StartModelAnim(ELEMENTALLAVA_ANIM_ATTACKTWOHANDS, 0);
+
     autowait(0.6f);
+
     HitGround();
     PlaySound(m_soFireR, SOUND_LAVA_KICK, SOF_3D);
-    autowait(GetModelObject()->GetAnimLength(ELEMENTALLAVA_ANIM_ATTACKTWOHANDS)-0.6f-_pTimer->TickQuantum);
 
+    autowait(GetModelObject()->GetAnimLength(ELEMENTALLAVA_ANIM_ATTACKTWOHANDS) - 0.6f - _pTimer->TickQuantum);
 
     return EReturn();
   }
 
-  // overridable called before main enemy loop actually begins
-  PreMainLoop(EVoid) : CEnemyBase::PreMainLoop
-  {
+  // Overridable called before main enemy loop actually begins
+  PreMainLoop(EVoid) : CEnemyBase::PreMainLoop {
     // if spawned by other entity
     if (m_bSpawned) {
       m_bSpawned = FALSE;
       m_bCountAsKill = FALSE;
+
       // wait till touching the ground
       autocall FallOnFloor() EReturn;
     }
 
-    if (m_EecChar == ELC_LARGE || m_EecChar == ELC_BIG && m_EetType == ELT_LAVA)
-    {
+    if ((m_EecChar == ELC_LARGE || m_EecChar == ELC_BIG) && m_EetType == ELT_LAVA) {
       PlaySound(m_soBackground, SOUND_LAVA_LAVABURN, SOF_3D|SOF_LOOP);
     }
 
-    if (m_EecChar == ELC_LARGE)
-    {
+    if (m_EecChar == ELC_LARGE) {
       autocall BossAppear() EReturn;
     }
+
     return EReturn();
   }
 
   // Entry point
   Main() {
     if (m_EetType != ELT_LAVA) {
-      m_EetType=ELT_LAVA;
+      m_EetType = ELT_LAVA;
     }
+
     // declare yourself as a model
     InitAsModel();
+
     // movable
     if (m_bMovable) {
       SetPhysicsFlags(EPF_MODEL_WALKING);
+
     // non movable
     } else {
-      SetPhysicsFlags(EPF_MODEL_IMMATERIAL|EPF_MOVABLE);
+      SetPhysicsFlags(EPF_MODEL_IMMATERIAL | EPF_MOVABLE);
     }
+
     // air elemental
     if (m_EetType == ELT_AIR) {
       SetCollisionFlags(ECF_AIR);
+
     // solid elemental
     } else {
       SetCollisionFlags(ECF_MODEL);
     }
-    SetFlags(GetFlags()|ENF_ALIVE);
+
+    SetFlags(GetFlags() | ENF_ALIVE);
+
     en_fDensity = m_fDensity;
     m_fSpawnDamage = 1e6f;
     m_fDamageWounded = 1e6f;
@@ -1490,42 +1571,50 @@ procedures:
 
     // set your appearance
     switch (m_EetType) {
-/*      case ELT_AIR: 
+      /*case ELT_AIR: 
         SetComponents(this, *GetModelObject(), MODEL_AIR, TEXTURE_AIR, 0, 0, 0); 
         break;
+
       case ELT_ICE: 
         SetComponents(this, *GetModelObject(), MODEL_ICE, TEXTURE_ICE, TEXTURE_ICE, TEX_SPEC_STRONG, 0); 
         break;*/
+
       case ELT_LAVA:
         m_fBlowUpAmount = 1E30f;
         SetComponents(this, *GetModelObject(), MODEL_LAVA, TEXTURE_LAVA, 0, 0, TEXTURE_LAVA_DETAIL);
         break;
-/*      case ELT_STONE: 
+
+      /*case ELT_STONE: 
         SetComponents(this, *GetModelObject(), MODEL_STONE, TEXTURE_STONE, 0, 0, 0); 
         break;
+
       case ELT_WATER: 
         SetComponents(this, *GetModelObject(), MODEL_WATER, TEXTURE_WATER, TEXTURE_WATER, TEX_SPEC_STRONG, 0); 
         break;*/
     }
+
     ModelChangeNotify();
 
     // character settings
-    if (m_EecChar == ELC_LARGE)
-    {
+    if (m_EecChar == ELC_LARGE) {
       // this one is boss!
       m_sptType = SPT_SMALL_LAVA;
       m_bBoss = TRUE;
+
       SetHealth(10000.0f);
       m_fMaxHealth = 10000.0f;
+
       // after loosing this ammount of damage we will spawn new elemental
       m_fSpawnDamage = 2000.0f;
+
       // setup moving speed
-      m_fWalkSpeed = FRnd()/2 + 1.0f;
-      m_aWalkRotateSpeed = FRnd()*10.0f + 25.0f;
+      m_fWalkSpeed = FRnd() / 2.0f + 1.0f;
+      m_aWalkRotateSpeed = FRnd() * 10.0f + 25.0f;
       m_fAttackRunSpeed = FRnd() + 2.0f;
-      m_aAttackRotateSpeed = FRnd()*50 + 245.0f;
+      m_aAttackRotateSpeed = FRnd() * 50.0f + 245.0f;
       m_fCloseRunSpeed = FRnd() + 2.0f;
-      m_aCloseRotateSpeed = FRnd()*50 + 245.0f;
+      m_aCloseRotateSpeed = FRnd() * 50.0f + 245.0f;
+
       // setup attack distances
       m_fAttackDistance = 300.0f;
       m_fCloseDistance = 60.0f;
@@ -1533,22 +1622,26 @@ procedures:
       m_fAttackFireTime = 0.5f;
       m_fCloseFireTime = 1.0f;
       m_fIgnoreRange = 600.0f;
+
       m_iScore = 50000;
-    }
-    else if (m_EecChar == ELC_BIG)
-    {
+
+    } else if (m_EecChar == ELC_BIG) {
       m_sptType = SPT_LAVA;
+
       SetHealth(800.0f);
       m_fMaxHealth = 800.0f;
+
       // after loosing this ammount of damage we will spawn new elemental
       m_fSpawnDamage = 500.0f;
+
       // setup moving speed
       m_fWalkSpeed = FRnd() + 1.5f;
-      m_aWalkRotateSpeed = FRnd()*10.0f + 25.0f;
-      m_fAttackRunSpeed = FRnd()*1.0f + 6.0f;
-      m_aAttackRotateSpeed = FRnd()*50 + 300.0f;
-      m_fCloseRunSpeed = FRnd()*2.0f + 2.0f;
-      m_aCloseRotateSpeed = FRnd()*50 + 300.0f;
+      m_aWalkRotateSpeed = FRnd() * 10.0f + 25.0f;
+      m_fAttackRunSpeed = FRnd() * 1.0f + 6.0f;
+      m_aAttackRotateSpeed = FRnd() * 50.0f + 300.0f;
+      m_fCloseRunSpeed = FRnd() * 2.0f + 2.0f;
+      m_aCloseRotateSpeed = FRnd() * 50.0f + 300.0f;
+
       // setup attack distances
       m_fAttackDistance = 150.0f;
       m_fCloseDistance = 20.0f;
@@ -1556,21 +1649,23 @@ procedures:
       m_fAttackFireTime = 0.5f;
       m_fCloseFireTime = 1.0f;
       m_fIgnoreRange = 400.0f;
-      // damage/explode properties
+
       m_iScore = 2500;
-    }
-    else
-    {
+
+    } else {
       m_sptType = SPT_LAVA;
+
       SetHealth(100.0f);
       m_fMaxHealth = 100.0f;
+
       // setup moving speed
       m_fWalkSpeed = FRnd() + 1.5f;
-      m_aWalkRotateSpeed = FRnd()*10.0f + 25.0f;
-      m_fAttackRunSpeed = FRnd()*2.0f + 6.0f;
-      m_aAttackRotateSpeed = FRnd()*50 + 500.0f;
-      m_fCloseRunSpeed = FRnd()*3.0f + 4.0f;
-      m_aCloseRotateSpeed = FRnd()*50 + 500.0f;
+      m_aWalkRotateSpeed = FRnd() * 10.0f + 25.0f;
+      m_fAttackRunSpeed = FRnd() * 2.0f + 6.0f;
+      m_aAttackRotateSpeed = FRnd() * 50.0f + 500.0f;
+      m_fCloseRunSpeed = FRnd() * 3.0f + 4.0f;
+      m_aCloseRotateSpeed = FRnd() * 50.0f + 500.0f;
+
       // setup attack distances
       m_fAttackDistance = 100.0f;
       m_fCloseDistance = 10.0f;
@@ -1578,19 +1673,18 @@ procedures:
       m_fAttackFireTime = 1.5f;
       m_fCloseFireTime = 1.0f;
       m_fIgnoreRange = 200.0f;
-      // damage/explode properties
+
       m_iScore = 500;
     }
 
     // non movable
-    if (!m_bMovable)
-    {
+    if (!m_bMovable) {
       m_EesStartState = ELS_NORMAL;
       m_bSpawnWhenHarmed = FALSE;
       m_bSpawnOnBlowUp = FALSE;
+
       // fire count
-      if (m_iFireCount <= 0)
-      {
+      if (m_iFireCount <= 0) {
         WarningMessage("Entity: %s - Fire count must be greater than zero", GetName());
         m_iFireCount = 1;
       }
@@ -1599,30 +1693,36 @@ procedures:
     // state and flare attachments
     m_EesCurrentState = m_EesStartState;
     RemoveAttachments();
+
     switch (m_EesCurrentState) {
       case ELS_NORMAL:
         SetPhysicsFlags(EPF_MODEL_WALKING);
         AddAttachments();
         break;
+
       case ELS_BOX:
         SetPhysicsFlags(EPF_BOX_PLANE_ELEMENTAL);
         break;
+
       case ELS_PLANE:
-        SetPhysicsFlags(EPF_MODEL_IMMATERIAL|EPF_MOVABLE);
+        SetPhysicsFlags(EPF_MODEL_IMMATERIAL | EPF_MOVABLE);
         SwitchToEditorModel();
         break;
     }
+
     StandingAnim();
 
     // stretch
     if (m_EecChar == ELC_SMALL) {
       GetModelObject()->StretchModel(FLOAT3D(LAVAMAN_SMALL_STRETCH, LAVAMAN_SMALL_STRETCH, LAVAMAN_SMALL_STRETCH));
-    }
-    else if (m_EecChar == ELC_LARGE) {
+
+    } else if (m_EecChar == ELC_LARGE) {
       GetModelObject()->StretchModel(FLOAT3D(LAVAMAN_LARGE_STRETCH, LAVAMAN_LARGE_STRETCH, LAVAMAN_LARGE_STRETCH));
+
     } else if (m_EecChar == ELC_BIG) {
       GetModelObject()->StretchModel(FLOAT3D(LAVAMAN_BIG_STRETCH, LAVAMAN_BIG_STRETCH, LAVAMAN_BIG_STRETCH));
     }
+
     ModelChangeNotify();
 
     // continue behavior in base class

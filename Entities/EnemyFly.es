@@ -37,19 +37,19 @@ thumbnail "";
 
 properties:
   1 enum EnemyFlyType m_EeftType "Type" 'T' = EFT_FLY_GROUND_AIR, // fly type
-  2 BOOL m_bInAir = FALSE, // entity is in air
-  3 BOOL m_bAirAttack = FALSE, // start air attack
+  2 BOOL m_bInAir = FALSE,      // entity is in air
+  3 BOOL m_bAirAttack = FALSE,  // start air attack
   4 BOOL m_bStartInAir = FALSE, // initially in air
 
  // moving/attack properties - CAN BE SET
  16 FLOAT m_fGroundToAirSpeed = 2.0f, // ground to air speed
  17 FLOAT m_fAirToGroundSpeed = 4.0f, // air to ground speed
- 18 FLOAT m_fAirToGroundMin = 1.0f, // how long to fly up before attacking
+ 18 FLOAT m_fAirToGroundMin = 1.0f,   // how long to fly up before attacking
  19 FLOAT m_fAirToGroundMax = 2.0f,
  27 FLOAT m_fFlyHeight = 2.0f, // fly height above player handle
 
  // these following must be ordered exactly like this for GetProp() to function
- 10 FLOAT m_fFlyWalkSpeed = 1.0f,                    // fly walk speed
+ 10 FLOAT m_fFlyWalkSpeed = 1.0f,          // fly walk speed
  11 ANGLE m_aFlyWalkRotateSpeed = 10.0f,   // fly walk rotate speed
  12 FLOAT m_fFlyAttackRunSpeed = 1.0f,     // fly attack run speed
  13 ANGLE m_aFlyAttackRotateSpeed = 10.0f, // fly attack rotate speed
@@ -109,7 +109,7 @@ functions:
          + FLOAT3D(m_penEnemy->en_mRotation(1, 2), m_penEnemy->en_mRotation(2, 2), m_penEnemy->en_mRotation(3, 2)) * fHeight;
   }
 
-  // flying enemies never use pathfinding
+  // Flying enemies never use pathfinding
   void StartPathFinding(void) {
     if (m_bInAir) {
       m_dtDestination = DT_PLAYERSPOTTED;
@@ -124,9 +124,9 @@ functions:
     FLOAT fMoveSpeed = GetSP()->sp_fEnemyMovementSpeed;
     FLOAT fAttackSpeed = GetSP()->sp_fEnemyMovementSpeed;
 
-    m_fFlyAttackFireTime *= 1 / fAttackSpeed;
-    m_fFlyCloseFireTime *= 1 / fAttackSpeed;
-    m_fFlyLockOnEnemyTime *= 1 / fAttackSpeed;
+    m_fFlyAttackFireTime *= 1.0f / fAttackSpeed;
+    m_fFlyCloseFireTime *= 1.0f / fAttackSpeed;
+    m_fFlyLockOnEnemyTime *= 1.0f / fAttackSpeed;
 
     //m_fFlyWalkSpeed *= fMoveSpeed;
     //m_aFlyWalkRotateSpeed *= fMoveSpeed;
@@ -184,8 +184,10 @@ functions:
   // Set entity position
   void SetEntityPosition() {
     switch (m_EeftType) {
-      case EFT_GROUND_ONLY: // ground only enemy
-      case EFT_FLY_GROUND_GROUND: // fly, on ground, start attack on ground
+      // ground only enemy
+      case EFT_GROUND_ONLY:
+      // fly, on ground, start attack on ground
+      case EFT_FLY_GROUND_GROUND:
         m_bAirAttack = FALSE;
         m_bStartInAir = m_bInAir = FALSE;
         m_bFlyToMarker = FALSE;
@@ -194,7 +196,8 @@ functions:
         ChangeCollisionToGround();
         break;
 
-      case EFT_FLY_GROUND_AIR: // fly, on ground, start attack in air
+      // fly, on ground, start attack in air
+      case EFT_FLY_GROUND_AIR:
         m_bAirAttack = TRUE;
         m_bStartInAir = m_bInAir = FALSE;
         m_bFlyToMarker = FALSE;
@@ -203,7 +206,8 @@ functions:
         ChangeCollisionToGround();
         break;
 
-      case EFT_FLY_AIR_GROUND: // fly, in air, start attack on ground
+      // fly, in air, start attack on ground
+      case EFT_FLY_AIR_GROUND:
         m_bAirAttack = FALSE;
         m_bStartInAir = m_bInAir = TRUE;
         m_bFlyToMarker = TRUE;
@@ -212,8 +216,10 @@ functions:
         ChangeCollisionToAir();
         break;
 
-      case EFT_FLY_ONLY: // air only enemy
-      case EFT_FLY_AIR_AIR: // fly, in air, start attack in air
+      // air only enemy
+      case EFT_FLY_ONLY:
+      // fly, in air, start attack in air
+      case EFT_FLY_AIR_AIR:
         m_bAirAttack = TRUE;
         m_bStartInAir = m_bInAir = TRUE;
         m_bFlyToMarker = TRUE;
@@ -250,6 +256,7 @@ procedures:
         on (EBegin) : {
           FlyToPosition();
         }
+
         on (ETimer) : {
           stop;
         }
@@ -287,17 +294,21 @@ procedures:
   // Return to start position
   ReturnToStartPosition(EVoid) : CEnemyBase::ReturnToStartPosition {
     jump CEnemyBase::BeIdle();
+
     // if on ground, but can fly
     /*if (!m_bInAir && m_EeftType != EFT_GROUND_ONLY) {
       // fly up
       autocall GroundToAir() EReturn;
     }
 
-    GetWatcher()->StartPlayers(); // start watching
+    // start watching
+    GetWatcher()->StartPlayers();
+
     m_vDesiredPosition = m_vStartPosition - en_vGravityDir * 2.0f;
     m_vStartDirection = (GetPlacement().pl_PositionVector - m_vStartPosition).Normalize();
     m_fMoveSpeed = m_fAttackRunSpeed;
     m_aRotateSpeed = m_aAttackRotateSpeed;
+
     RunningAnim();
 
     autocall MoveToDestinationFlying() EReturn;
@@ -443,6 +454,7 @@ procedures:
     }
 
     SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
+
     return EReturn();
   };
 
@@ -470,18 +482,18 @@ procedures:
   Hit(EVoid) : CEnemyBase::Hit {
     if (m_bInAir) {
       jump FlyHit();
-    } else {
-      jump GroundHit();
     }
+    
+    jump GroundHit();
   }
 
   // This is called to shoot at player when far away or otherwise unreachable
   Fire(EVoid) : CEnemyBase::Fire {
     if (m_bInAir) {
       jump FlyFire();
-    } else {
-      jump GroundFire();
     }
+
+    jump GroundFire();
   }
 
   // Death

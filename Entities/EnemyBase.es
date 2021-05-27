@@ -19,6 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Entities/Common/PathFinding.h"
 #include "Entities/NavigationMarker.h"
 #include "Entities/TacticsHolder.h"
+
 extern void JumpFromBouncer(CEntity *penToBounce, CEntity *penBouncer);
 extern INDEX ent_bReportBrokenChains;
 %}
@@ -34,11 +35,11 @@ uses "Entities/BloodSpray";
 event ERestartAttack {
 };
 
-// self sent in Active loop to reconsider what enemy should do
+// Self sent in Active loop to reconsider what enemy should do
 event EReconsiderBehavior {
 };
 
-// force wound
+// Force wound
 event EForceWound {
 };
 
@@ -56,9 +57,9 @@ enum DestinationType {
 };
 
 %{
-#define MF_MOVEZ    (1L << 0)
-#define MF_ROTATEH  (1L << 1)
-#define MF_MOVEXZY  (1L << 2)
+#define MF_MOVEZ   (1L << 0)
+#define MF_ROTATEH (1L << 1)
+#define MF_MOVEXZY (1L << 2)
 %}
 
 class export CEnemyBase : CMovableModelEntity {
@@ -67,23 +68,23 @@ thumbnail "";
 features  "HasName", "IsTargetable", "CanBePredictable";
 
 properties:
-  1 CEntityPointer m_penWatcher,      // watcher
-  2 FLOAT3D m_vStartPosition = FLOAT3D(0.0f, 0.0f, 0.0f),         // start position
-  3 CEntityPointer m_penEnemy,        // current enemy
+  1 CEntityPointer m_penWatcher, // watcher
+  2 FLOAT3D m_vStartPosition = FLOAT3D(0.0f, 0.0f, 0.0f), // start position
+  3 CEntityPointer m_penEnemy, // current enemy
   4 enum TargetType m_ttTarget = TT_NONE, // type of target
   5 CTString m_strDescription = "Enemy base",
   6 CTString m_strName  "Name" 'N' = "Enemy base",
   7 CSoundObject m_soSound,
-  8 FLOAT3D m_vStartDirection = FLOAT3D(0,0,-1),         // for returning to start
+  8 FLOAT3D m_vStartDirection = FLOAT3D(0.0f, 0.0f, -1.0f), // for returning to start
   9 BOOL m_bOnStartPosition = TRUE,
  29 FLOAT m_fFallHeight "Fall height" = 8.0f,
  31 FLOAT m_fStepHeight "Step height" = -1.0f,
- 17 RANGE m_fSenseRange "Sense Range" = 0.0f,       // immediately spots any player that gets closer than this
+ 17 RANGE m_fSenseRange "Sense Range" = 0.0f, // immediately spots any player that gets closer than this
  28 FLOAT m_fViewAngle "View angle" 'V' = 360.0f, // view frustum angle for spotting players
 
  // moving/attack properties - CAN BE SET
  // these following must be ordered exactly like this for GetProp() to function
- 10 FLOAT m_fWalkSpeed = 1.0f,                  // walk speed
+ 10 FLOAT m_fWalkSpeed = 1.0f,          // walk speed
  11 ANGLE m_aWalkRotateSpeed = 10.0f,   // walk rotate speed
  12 FLOAT m_fAttackRunSpeed = 1.0f,     // attack run speed
  13 ANGLE m_aAttackRotateSpeed = 10.0f, // attack rotate speed
@@ -98,20 +99,20 @@ properties:
  26 FLOAT m_fLockOnEnemyTime = 0.0f,    // time needed to fire
 
  // damage/explode properties - CAN BE SET
- 40 FLOAT m_fBlowUpAmount = 0.0f,             // damage in minus for blow up
+ 40 FLOAT m_fBlowUpAmount = 0.0f, // damage in minus for blow up
  // [Cecil] TODO: Rename to m_iBodyParts to match the type
- 41 INDEX m_fBodyParts = 4,                   // number of spawned body parts
- 42 FLOAT m_fDamageWounded = 0.0f,            // damage amount to be wounded
- 43 FLOAT3D m_vDamage = FLOAT3D(0.0f, 0.0f, 0.0f),       // current damage impact
+ 41 INDEX m_fBodyParts = 4, // number of spawned body parts
+ 42 FLOAT m_fDamageWounded = 0.0f, // damage amount to be wounded
+ 43 FLOAT3D m_vDamage = FLOAT3D(0.0f, 0.0f, 0.0f), // current damage impact
  44 FLOAT m_tmLastDamage = -1000.0f,
- 46 BOOL m_bRobotBlowup = FALSE,    // set for robots parts blowup, otherwise blowup flesh
+ 46 BOOL m_bRobotBlowup = FALSE, // set for robots parts blowup, otherwise blowup flesh
  47 FLOAT m_fBlowUpSize = 2.0f,
 
  // logic temporary variables -> DO NOT USE
 133 FLOAT m_fMoveTime = 0.0f,
  52 FLOAT3D m_vDesiredPosition = FLOAT3D(0.0f, 0.0f, 0.0f),
- 53 enum DestinationType m_dtDestination =  DT_PLAYERCURRENT, // type of current desired position
- 59 CEntityPointer m_penPathMarker,   // current path finding marker
+ 53 enum DestinationType m_dtDestination = DT_PLAYERCURRENT, // type of current desired position
+ 59 CEntityPointer m_penPathMarker, // current path finding marker
  18 FLOAT3D m_vPlayerSpotted =  FLOAT3D(0.0f, 0.0f, 0.0f), // where player was last spotted
  54 FLOAT m_fMoveFrequency = 0.0f,
  55 FLOAT m_fMoveSpeed = 0.0f,
@@ -123,90 +124,89 @@ properties:
 132 FLOAT m_fFadeTime = 0.0f,
 
  // attack temporary -> DO NOT USE
- 60 FLOAT m_fShootTime = 0.0f,                // time when entity will try to shoot on enemy
- 61 FLOAT m_fDamageConfused = 0.0f,           // damage amount when entity shoot concentration is spoiled
- 62 INDEX m_iChargeHitAnimation = 0.0f,       // charge hit (close attack) properties
+ 60 FLOAT m_fShootTime = 0.0f, // time when entity will try to shoot on enemy
+ 61 FLOAT m_fDamageConfused = 0.0f, // damage amount when entity shoot concentration is spoiled
+ 62 INDEX m_iChargeHitAnimation = 0.0f, // charge hit (close attack) properties
  63 FLOAT m_fChargeHitDamage = 0.0f,
  64 FLOAT m_fChargeHitAngle = 0.0f,
  65 FLOAT m_fChargeHitSpeed = 0.0f,
 
  // editor variables
- 83 CEntityPointer m_penSpawnerTarget,                 // for re-spawning
- 84 CEntityPointer m_penDeathTarget "Death target" 'D',                 // death target
+ 83 CEntityPointer m_penSpawnerTarget, // for re-spawning
+ 84 CEntityPointer m_penDeathTarget "Death target" 'D', // death target
  85 enum EEventType m_eetDeathType  "Death event type" 'F' = EET_TRIGGER, // death event type
- 86 BOOL m_bTemplate "Template" = FALSE,                  // template enemy for spawning new enemies
+ 86 BOOL m_bTemplate "Template" = FALSE, // template enemy for spawning new enemies
  88 RANGE m_fAttackRadius "Radius of attack" 'A' = 10000.0f, // attack sphere range radius
- 89 COLOR m_colColor "Color" 'L' = 0x00,    // color
- 90 BOOL  m_bDeaf "Deaf" = FALSE,    // deaf
- 91 BOOL  m_bBlind "Blind" = FALSE,    // blind
- 92 FLOAT m_tmGiveUp "Give up time" = 5.0f,    // how fast enemy gives up attack
- 93 FLOAT m_tmReflexMin "Reflex Min" = 0.0f,  // how much to wait before reacting on spotting the player
+ 89 COLOR m_colColor "Color" 'L' = 0x00, // color
+ 90 BOOL m_bDeaf "Deaf" = FALSE, // deaf
+ 91 BOOL m_bBlind "Blind" = FALSE, // blind
+ 92 FLOAT m_tmGiveUp "Give up time" = 5.0f, // how fast enemy gives up attack
+ 93 FLOAT m_tmReflexMin "Reflex Min" = 0.0f, // how much to wait before reacting on spotting the player
  94 FLOAT m_tmReflexMax "Reflex Max" = 0.0f,
  95 FLOAT m_fActivityRange "Activity Range" = 0.0f,
 
  // random values variables
-106 BOOL m_bApplyRandomStretch "Apply random stretch" = FALSE,       // apply random stretch
-107 FLOAT m_fRandomStretchFactor "Random stretch factor" = 0.1f,     // random stretch
-108 FLOAT m_fStretchMultiplier "Stretch multiplier" =  1.0f,         // stretch multiplier
-109 FLOAT m_fRandomStretchMultiplier = 1.0f,                         // calculated random stretch
+106 BOOL m_bApplyRandomStretch "Apply random stretch" = FALSE, // apply random stretch
+107 FLOAT m_fRandomStretchFactor "Random stretch factor" = 0.1f, // random stretch
+108 FLOAT m_fStretchMultiplier "Stretch multiplier" =  1.0f, // stretch multiplier
+109 FLOAT m_fRandomStretchMultiplier = 1.0f, // calculated random stretch
 
  // marker variables
-120 CEntityPointer m_penMarker "Marker" 'M' COLOR(C_RED|0xFF),       // enemy marker pointer
+120 CEntityPointer m_penMarker "Marker" 'M' COLOR(C_RED | 0xFF), // enemy marker pointer
 
 // fuss variables
 140 CEntityPointer m_penMainMusicHolder,
 141 FLOAT m_tmLastFussTime = 0.0f,
 
-142 FLOAT m_iScore = -100000,        // how many points this enemy gives when killed
-143 FLOAT m_fMaxHealth = -1.0f,      // must set this because of crosshair colorizing
-144 BOOL  m_bBoss = FALSE,           // set for bosses (for health display)
+142 FLOAT m_iScore = -100000, // how many points this enemy gives when killed
+143 FLOAT m_fMaxHealth = -1.0f, // must set this because of crosshair colorizing
+144 BOOL m_bBoss = FALSE, // set for bosses (for health display)
 
 145 FLOAT m_fSpiritStartTime = 0.0f, // time when spirit effect has started
 
-146 FLOAT m_tmSpraySpawned = 0.0f,   // time when damage has been applied
-147 FLOAT m_fSprayDamage = 0.0f,     // total ammount of damage
-148 CEntityPointer m_penSpray,       // the blood spray
-149 FLOAT m_fMaxDamageAmmount  = 0.0f, // max ammount of damage received in in last few ticks
-150 FLOAT3D m_vLastStain  = FLOAT3D(0.0f, 0.0f, 0.0f), // where last stain was left
+146 FLOAT m_tmSpraySpawned = 0.0f, // time when damage has been applied
+147 FLOAT m_fSprayDamage = 0.0f, // total ammount of damage
+148 CEntityPointer m_penSpray, // the blood spray
+149 FLOAT m_fMaxDamageAmmount = 0.0f, // max ammount of damage received in in last few ticks
+150 FLOAT3D m_vLastStain = FLOAT3D(0.0f, 0.0f, 0.0f), // where last stain was left
 151 enum SprayParticlesType m_sptType = SPT_BLOOD, // type of particles
 
 160 CEntityPointer m_penTacticsHolder "Tactics Holder",
 161 BOOL  m_bTacticActive = FALSE,
 162 FLOAT m_tmTacticsActivation = 0.0f,
+
 // warning! tactic variables are also used for dust spawning
 163 FLOAT3D m_vTacticsStartPosition = FLOAT3D(0.0f, 0.0f, 0.0f),
 165 FLOAT m_fTacticVar1 = 0.0f,
 166 FLOAT m_fTacticVar2 = 0.0f,
 167 FLOAT m_fTacticVar3 = 0.0f,
 168 FLOAT m_fTacticVar4 = 0.0f,
-169 FLOAT m_fTacticVar5 = 0.0f,      
-170 BOOL  m_bTacticsStartOnSense "Tactics start on sense" = FALSE, 
-180 COLOR m_colBurning = COLOR(C_WHITE|CT_OPAQUE), // color applied when burning
+169 FLOAT m_fTacticVar5 = 0.0f,
+170 BOOL m_bTacticsStartOnSense "Tactics start on sense" = FALSE,
 
+180 COLOR m_colBurning = COLOR(C_WHITE | CT_OPAQUE), // color applied when burning
 181 BOOL  m_bResizeAttachments "Stretch attachments" = FALSE, // for small enemies with big guns
 
 //171 INDEX m_iTacticsRetried = 0,
 
-  {
-    TICK m_llPredict;  // time to predict the entity to
-  }
-
+{
+  TICK m_llPredict; // time to predict the entity to
+}
 
 components:
-
-  1 class   CLASS_WATCHER         "Classes\\Watcher.ecl",
-  2 class   CLASS_PROJECTILE      "Classes\\Projectile.ecl",
-  3 class   CLASS_DEBRIS          "Classes\\Debris.ecl",
-  4 class   CLASS_BASIC_EFFECT    "Classes\\BasicEffect.ecl",
-  5 class   CLASS_BLOOD_SPRAY     "Classes\\BloodSpray.ecl",
+  1 class CLASS_WATCHER      "Classes\\Watcher.ecl",
+  2 class CLASS_PROJECTILE   "Classes\\Projectile.ecl",
+  3 class CLASS_DEBRIS       "Classes\\Debris.ecl",
+  4 class CLASS_BASIC_EFFECT "Classes\\BasicEffect.ecl",
+  5 class CLASS_BLOOD_SPRAY  "Classes\\BloodSpray.ecl",
 
 // ************** FLESH PARTS **************
- 10 model   MODEL_FLESH          "Models\\Effects\\Debris\\Flesh\\Flesh.mdl",
- 11 model   MODEL_FLESH_APPLE    "Models\\Effects\\Debris\\Fruits\\Apple.mdl",
- 12 model   MODEL_FLESH_BANANA   "Models\\Effects\\Debris\\Fruits\\Banana.mdl",
- 13 model   MODEL_FLESH_BURGER   "Models\\Effects\\Debris\\Fruits\\CheeseBurger.mdl",
- 14 model   MODEL_FLESH_LOLLY    "Models\\Effects\\Debris\\Fruits\\LollyPop.mdl",
- 15 model   MODEL_FLESH_ORANGE   "Models\\Effects\\Debris\\Fruits\\Orange.mdl",
+ 10 model MODEL_FLESH        "Models\\Effects\\Debris\\Flesh\\Flesh.mdl",
+ 11 model MODEL_FLESH_APPLE  "Models\\Effects\\Debris\\Fruits\\Apple.mdl",
+ 12 model MODEL_FLESH_BANANA "Models\\Effects\\Debris\\Fruits\\Banana.mdl",
+ 13 model MODEL_FLESH_BURGER "Models\\Effects\\Debris\\Fruits\\CheeseBurger.mdl",
+ 14 model MODEL_FLESH_LOLLY  "Models\\Effects\\Debris\\Fruits\\LollyPop.mdl",
+ 15 model MODEL_FLESH_ORANGE "Models\\Effects\\Debris\\Fruits\\Orange.mdl",
 
  20 texture TEXTURE_FLESH_RED    "Models\\Effects\\Debris\\Flesh\\FleshRed.tex",
  21 texture TEXTURE_FLESH_GREEN  "Models\\Effects\\Debris\\Flesh\\FleshGreen.tex",
@@ -217,33 +217,33 @@ components:
  26 texture TEXTURE_FLESH_ORANGE "Models\\Effects\\Debris\\Fruits\\Orange.tex",
 
 // ************** MACHINE PARTS **************
- 31 model   MODEL_MACHINE        "Models\\Effects\\Debris\\Stone\\Stone.mdl",
- 32 texture TEXTURE_MACHINE      "Models\\Effects\\Debris\\Stone\\Stone.tex",
-
+ 31 model   MODEL_MACHINE   "Models\\Effects\\Debris\\Stone\\Stone.mdl",
+ 32 texture TEXTURE_MACHINE "Models\\Effects\\Debris\\Stone\\Stone.tex",
 
 functions:
-  void CEnemyBase(void)
-  {
+  void CEnemyBase(void) {
     m_llPredict = 0;
   }
 
-  // called by other entities to set time prediction parameter
-  void SetPredictionTime(TICK llAdvance) // give time interval in advance to set
-  {
+  // Called by other entities to set time prediction parameter
+  void SetPredictionTime(TICK llAdvance) {
     ASSERT(!IsPredictor());
+
+    // give time interval in advance to set
     m_llPredict = _pTimer->GetGameTick() + llAdvance;
   }
 
-  // called by engine to get the upper time limit
-  TICK GetPredictionTime(void) // return moment in time up to which to predict this entity
-  {
+  // Called by engine to get the upper time limit
+  TICK GetPredictionTime(void) {
+    // return moment in time up to which to predict this entity
     return m_llPredict;
   }
 
-  // describe how this enemy killed player
+  // Describe how this enemy killed player
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath) {
     CTString str;
     str.PrintF(TRANS("%s killed %s"), GetClass()->ec_pdecDLLClass->dec_strName, strPlayerName);
+
     return str;
   }
 
@@ -251,7 +251,7 @@ functions:
     return 0.0f;
   }
 
-  // if should be counted as kill
+  // If should be counted as kill
   virtual BOOL CountAsKill(void) {
     return TRUE;
   }
@@ -260,18 +260,18 @@ functions:
     return FALSE;
   }
 
-  // overridable function for access to different properties of derived classes (flying/diving)
-  virtual FLOAT &GetProp(FLOAT & m_fBase) {
+  // Overridable function for access to different properties of derived classes (flying/diving)
+  virtual FLOAT &GetProp(FLOAT &m_fBase) {
     return m_fBase;
   }
 
-  // overridable function to get range for switching to another player
+  // Overridable function to get range for switching to another player
   virtual FLOAT GetThreatDistance(void) {
     // closer of close or stop range
     return Max(GetProp(m_fCloseDistance), GetProp(m_fStopDistance));
   }
 
-  // check if we maybe switch to some other player (for large beasts in coop)
+  // Check if we maybe switch to some other player (for large beasts in coop)
   void MaybeSwitchToAnotherPlayer(void) {
     // if in single player
     if (GetSP()->sp_bSinglePlayer) {
@@ -284,8 +284,10 @@ functions:
       // do not switch
       return;
     }
+
     // maybe switch
     CEntity *penNewEnemy = GetWatcher()->CheckAnotherPlayer(m_penEnemy);
+
     if (penNewEnemy != m_penEnemy && penNewEnemy != NULL) {
       m_penEnemy = penNewEnemy;
       SendEvent(EReconsiderBehavior());
@@ -296,9 +298,11 @@ functions:
     ASSERT(m_penWatcher != NULL);
     return (CWatcher *)&*m_penWatcher;
   }
-  export void Copy(CEntity & enOther, ULONG ulFlags) {
+
+  export void Copy(CEntity &enOther, ULONG ulFlags) {
     CMovableModelEntity::Copy(enOther, ulFlags);
-    CEnemyBase *penOther = (CEnemyBase *)(&enOther);
+
+    CEnemyBase *penOther = (CEnemyBase*)&enOther;
   }
 
   void Precache(void) {
@@ -315,6 +319,7 @@ functions:
     PrecacheTexture(TEXTURE_FLESH_BURGER);
     PrecacheTexture(TEXTURE_FLESH_LOLLY);
     PrecacheTexture(TEXTURE_FLESH_ORANGE);
+
     PrecacheClass(CLASS_BASIC_EFFECT, BET_BLOODSPILL);
     PrecacheClass(CLASS_BASIC_EFFECT, BET_BLOODSTAIN);
     PrecacheClass(CLASS_BASIC_EFFECT, BET_BLOODSTAINGROW);
@@ -324,18 +329,20 @@ functions:
     PrecacheClass(CLASS_DEBRIS);
   }
 
-  // get position you would like to go to when following player
+  // Get position you would like to go to when following player
   virtual FLOAT3D PlayerDestinationPos(void) {
     return m_penEnemy->GetPlacement().pl_PositionVector;
   }
 
-  // calculate delta to given entity
+  // Calculate delta to given entity
   FLOAT3D CalcDelta(CEntity *penEntity) {
     ASSERT(penEntity != NULL);
+
     // find vector from you to target
     return penEntity->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector;
   };
-  // calculate distance to given entity
+
+  // Calculate distance to given entity
   FLOAT CalcDist(CEntity *penEntity) {
     return CalcDelta(penEntity).Length();
   };
@@ -343,81 +350,95 @@ functions:
   BOOL IfTargetCrushed(CEntity *penOther, const FLOAT3D &vDirection) {
     if (IsOfClass(penOther, "ModelHolder2")) {
       FLOAT fCrushHealth = GetCrushHealth();
+
       if (fCrushHealth > ((CRationalEntity &)*penOther).GetHealth()) {
         InflictDirectDamage(penOther, this, DMT_EXPLOSION, fCrushHealth, GetPlacement().pl_PositionVector, vDirection);
         return TRUE;
       }
     }
+
     return FALSE;
   }
 
-  // calculate delta to given entity in current gravity plane
+  // Calculate delta to given entity in current gravity plane
   FLOAT3D CalcPlaneDelta(CEntity * penEntity) {
     ASSERT(penEntity != NULL);
-    FLOAT3D vPlaneDelta;
+    
     // find vector from you to target in XZ plane
-    GetNormalComponent(penEntity->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector, en_vGravityDir,
-                       vPlaneDelta);
+    FLOAT3D vPlaneDelta;
+    GetNormalComponent(penEntity->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector, en_vGravityDir, vPlaneDelta);
+
     return vPlaneDelta;
   };
 
-  // calculate distance to given entity in current gravity plane
-  FLOAT CalcPlaneDist(CEntity * penEntity) {
+  // Calculate distance to given entity in current gravity plane
+  FLOAT CalcPlaneDist(CEntity *penEntity) {
     return CalcPlaneDelta(penEntity).Length();
   };
 
-  // get cos of angle in direction
+  // Get cos of angle in direction
   FLOAT GetFrustumAngle(const FLOAT3D &vDir) {
     // find front vector
     FLOAT3D vFront = -GetRotationMatrix().GetColumn(3);
+
     // make dot product to determine if you can see target (view angle)
     return (vDir / vDir.Length()) % vFront;
   }
 
-  // get cos of angle in direction in current gravity plane
+  // Get cos of angle in direction in current gravity plane
   FLOAT GetPlaneFrustumAngle(const FLOAT3D &vDir) {
-    FLOAT3D vPlaneDelta;
     // find vector from you to target in XZ plane
+    FLOAT3D vPlaneDelta;
     GetNormalComponent(vDir, en_vGravityDir, vPlaneDelta);
+
     // find front vector
     FLOAT3D vFront = -GetRotationMatrix().GetColumn(3);
     FLOAT3D vPlaneFront;
     GetNormalComponent(vFront, en_vGravityDir, vPlaneFront);
+
     // make dot product to determine if you can see target (view angle)
     vPlaneDelta.SafeNormalize();
     vPlaneFront.SafeNormalize();
+
     return vPlaneDelta % vPlaneFront;
   }
 
-  // determine if you can see something in given direction
+  // Determine if you can see something in given direction
   BOOL IsInFrustum(CEntity * penEntity, FLOAT fCosHalfFrustum) {
     // get direction to the entity
     FLOAT3D vDelta = CalcDelta(penEntity);
+
     // find front vector
     FLOAT3D vFront = -GetRotationMatrix().GetColumn(3);
+
     // make dot product to determine if you can see target (view angle)
     FLOAT fDotProduct = (vDelta / vDelta.Length()) % vFront;
+
     return fDotProduct >= fCosHalfFrustum;
   };
 
-  // determine if you can see something in given direction in current gravity plane
+  // Determine if you can see something in given direction in current gravity plane
   BOOL IsInPlaneFrustum(CEntity * penEntity, FLOAT fCosHalfFrustum) {
     // get direction to the entity
     FLOAT3D vPlaneDelta = CalcPlaneDelta(penEntity);
+
     // find front vector
     FLOAT3D vFront = -GetRotationMatrix().GetColumn(3);
     FLOAT3D vPlaneFront;
     GetNormalComponent(vFront, en_vGravityDir, vPlaneFront);
+
     // make dot product to determine if you can see target (view angle)
     vPlaneDelta.SafeNormalize();
     vPlaneFront.SafeNormalize();
+
     FLOAT fDot = vPlaneDelta % vPlaneFront;
     return fDot >= fCosHalfFrustum;
   };
 
-  // cast a ray to entity checking only for brushes
+  // Cast a ray to entity checking only for brushes
   BOOL IsVisible(CEntity * penEntity) {
     ASSERT(penEntity != NULL);
+
     // get ray source and target
     FLOAT3D vSource, vTarget;
     GetPositionCastRay(this, penEntity, vSource, vTarget);
@@ -432,9 +453,10 @@ functions:
     return (crRay.cr_penHit == NULL);
   };
 
-  // cast a ray to entity checking all
+  // Cast a ray to entity checking all
   BOOL IsVisibleCheckAll(CEntity * penEntity) {
     ASSERT(penEntity != NULL);
+
     // get ray source and target
     FLOAT3D vSource, vTarget;
     GetPositionCastRay(this, penEntity, vSource, vTarget);
@@ -449,11 +471,12 @@ functions:
     return crRay.cr_penHit == penEntity;
   };
 
-  // calculates launch velocity and heading correction for angular launch
-  void CalculateAngularLaunchParams(FLOAT3D vShooting, FLOAT fShootHeight, FLOAT3D vTarget, FLOAT3D vSpeedDest, ANGLE aPitch,
-                                    FLOAT & fLaunchSpeed, FLOAT & fRelativeHdg) {
+  // Calculates launch velocity and heading correction for angular launch
+  void CalculateAngularLaunchParams(FLOAT3D vShooting, FLOAT fShootHeight, FLOAT3D vTarget, FLOAT3D vSpeedDest,
+                                    ANGLE aPitch, FLOAT &fLaunchSpeed, FLOAT &fRelativeHdg) {
     FLOAT3D vNewTarget = vTarget;
     FLOAT3D &vGravity = en_vGravityDir;
+
     FLOAT fYt;
     FLOAT fXt;
     FLOAT fA = TanFast(aPitch);
@@ -461,19 +484,26 @@ functions:
     FLOAT fLastTime = 0.0f;
 
     INDEX iIterations = 0;
+
     do {
       iIterations++;
+
       FLOAT3D vDistance = vNewTarget - vShooting;
       FLOAT3D vXt, vYt;
       GetParallelAndNormalComponents(vDistance, vGravity, vYt, vXt);
+
       fYt = vYt.Length();
+
       if (vGravity % vYt > 0) {
         fYt = -fYt;
       }
+
       fXt = vXt.Length();
       fLastTime = fTime;
       fTime = Sqrt(2.0f) * Sqrt((fA * fXt + fShootHeight - fYt) / en_fGravityA);
+
       vNewTarget = vTarget + vSpeedDest * fTime;
+
     } while ((Abs(fTime - fLastTime) > _pTimer->TickQuantum) && (iIterations < 10));
 
     // calculate launch speed
@@ -482,46 +512,57 @@ functions:
     // calculate heading correction
     FLOAT fHdgTargetNow = GetRelativeHeading((vTarget - vShooting).SafeNormalize());
     FLOAT fHdgTargetMoved = GetRelativeHeading((vNewTarget - vShooting).SafeNormalize());
+
     fRelativeHdg = fHdgTargetMoved - fHdgTargetNow;
   }
 
-  // calculates predicted position for propelled projectile
+  // Calculates predicted position for propelled projectile
   FLOAT3D CalculatePredictedPosition(FLOAT3D vShootPos, FLOAT3D vTarget, FLOAT fSpeedSrc, FLOAT3D vSpeedDst, FLOAT fClampY) {
     FLOAT3D vNewTarget = vTarget;
     FLOAT3D &vGravity = en_vGravityDir;
+
     FLOAT fTime = 0.0f;
     FLOAT fLastTime = 0.0f;
     INDEX iIterations = 0;
+
     FLOAT3D vDistance = vNewTarget - vShootPos;
 
     // iterate to obtain accurate position
     do {
       iIterations++;
+
       fLastTime = fTime;
       fTime = vDistance.Length() / fSpeedSrc;
+
       vNewTarget = vTarget + vSpeedDst * fTime + vGravity * 0.5f * fTime * fTime;
       vNewTarget(2) = ClampDn(vNewTarget(2), fClampY);
       vDistance = vNewTarget - vShootPos;
+
     } while ((Abs(fTime - fLastTime) > _pTimer->TickQuantum) && (iIterations < 10));
+
     return vNewTarget;
   }
 
-  // Check if entity is moved on a route set up by its targets.
-  BOOL MovesByTargetedRoute(CTString & strTargetProperty) const {
+  // Check if entity is moved on a route set up by its targets
+  BOOL MovesByTargetedRoute(CTString &strTargetProperty) const {
     strTargetProperty = "Marker";
     return TRUE;
   };
-  // Check if entity can drop marker for making linked route.
-  BOOL DropsMarker(CTFileName & fnmMarkerClass, CTString & strTargetProperty) const {
+
+  // Check if entity can drop marker for making linked route
+  BOOL DropsMarker(CTFileName &fnmMarkerClass, CTString &strTargetProperty) const {
     fnmMarkerClass = CTFILENAME("Classes\\EnemyMarker.ecl");
     strTargetProperty = "Marker";
     return TRUE;
   }
+
   const CTString &GetDescription(void) const {
     ((CTString &)m_strDescription).PrintF("-><none>");
+
     if (m_penMarker != NULL) {
       ((CTString &)m_strDescription).PrintF("->%s", m_penMarker->GetName());
     }
+
     return m_strDescription;
   }
 
@@ -530,23 +571,26 @@ functions:
     return fnm;
   }
 
-  // add to prediction any entities that this entity depends on
+  // Add to prediction any entities that this entity depends on
   void AddDependentsToPrediction(void) {
     m_penSpray->AddToPrediction();
+
     if (m_penWatcher != NULL) {
       GetWatcher()->AddToPrediction();
     }
   }
 
-  // create a checksum value for sync-check
-  void ChecksumForSync(ULONG & ulCRC, INDEX iExtensiveSyncCheck) {
+  // Create a checksum value for sync-check
+  void ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck) {
     CMovableModelEntity::ChecksumForSync(ulCRC, iExtensiveSyncCheck);
   }
-  // dump sync data to text file
-  void DumpSync_t(CTStream & strm, INDEX iExtensiveSyncCheck) // throw char *
-  {
+
+  // Dump sync data to text file
+  void DumpSync_t(CTStream & strm, INDEX iExtensiveSyncCheck) {
     CMovableModelEntity ::DumpSync_t(strm, iExtensiveSyncCheck);
+
     strm.FPrintF_t("enemy: ");
+
     if (m_penEnemy != NULL) {
       strm.FPrintF_t("id: %08X\n", m_penEnemy->en_ulID);
     } else {
@@ -555,14 +599,15 @@ functions:
 
     /*INDEX ctStates = en_stslStateStack.Count();
     strm.FPrintF_t("state stack @%gs:\n", _pTimer->CurrentTick());
+
     for (INDEX iState=ctStates-1; iState >= 0; iState--) {
       SLONG slState = en_stslStateStack[iState];
       strm.FPrintF_t("  0x%08x %s\n", slState, en_pecClass->ec_pdecDLLClass->HandlerNameForState(slState));
     }*/
   }
 
-  // Read from stream.
-  void Read_t(CTStream * istr) {
+  // Read from stream
+  void Read_t(CTStream *istr) {
     CMovableModelEntity::Read_t(istr);
 
     // add to fuss if needed
@@ -574,20 +619,22 @@ functions:
   // Fill in entity statistics - for AI purposes only
   BOOL FillEntityStatistics(EntityStats * pes) {
     pes->es_strName = GetClass()->ec_pdecDLLClass->dec_strName;
+
     if (m_bTemplate) {
       pes->es_ctCount = 0;
     } else {
       pes->es_ctCount = 1;
     }
+
     pes->es_ctAmmount = 1;
     pes->es_fValue = GetHealth();
     pes->es_iScore = m_iScore;
+
     return TRUE;
   }
 
   // Receive damage
-  void ReceiveDamage(CEntity * penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint,
-                     const FLOAT3D &vDirection) {
+  void ReceiveDamage(CEntity * penInflictor, INDEX dmtType, FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection) {
     // if template
     if (m_bTemplate) {
       // do nothing
@@ -598,6 +645,7 @@ functions:
 
     // adjust damage
     fNewDamage *= DamageStrength(((EntityInfo *)GetEntityInfo())->Eeibt, dmtType);
+
     // apply game extra damage per enemy and per player
     fNewDamage *= GetGameDamageMultiplier();
 
@@ -606,19 +654,26 @@ functions:
       // do nothing
       return;
     }
+
     FLOAT fKickDamage = fNewDamage;
-    if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_IMPACT) || (dmtType == DMT_CB_EXPLOSION)) {
+
+    if (dmtType == DMT_EXPLOSION || dmtType == DMT_IMPACT || dmtType == DMT_CB_EXPLOSION) {
       fKickDamage *= 1.5;
     }
+
     if (dmtType == DMT_DROWNING || dmtType == DMT_CLOSERANGE || dmtType == DMT_CHAINSAW) {
       fKickDamage /= 10;
     }
+
     if (dmtType == DMT_BURNING) {
       fKickDamage /= 100000;
+
       UBYTE ubR, ubG, ubB, ubA;
       FLOAT fColorFactor = fNewDamage / m_fMaxHealth * 255.0f;
+
       ColorToRGBA(m_colBurning, ubR, ubG, ubB, ubA);
       ubR = ClampDn(ubR - fColorFactor, 32.0f);
+
       m_colBurning = RGBAToColor(ubR, ubR, ubR, ubA);
     }
 
@@ -628,23 +683,26 @@ functions:
     m_tmLastDamage = tmNow;
 
     // fade damage out
-    if (tmDelta >= _pTimer->TickQuantum * 3) {
+    if (tmDelta >= _pTimer->TickQuantum * 3.0f) {
       m_vDamage = FLOAT3D(0.0f, 0.0f, 0.0f);
     }
+
     // add new damage
     FLOAT3D vDirectionFixed;
+
     if (vDirection.ManhattanNorm() > 0.5f) {
       vDirectionFixed = vDirection;
     } else {
       vDirectionFixed = -en_vGravityDir;
     }
+
     FLOAT3D vDamageOld = m_vDamage;
-    /*if ((dmtType == DMT_EXPLOSION) || (dmtType == DMT_CB_EXPLOSION) )
-    {
-      m_vDamage+=(vDirectionFixed/2-en_vGravityDir/2)*fKickDamage;
+
+    /*if (dmtType == DMT_EXPLOSION || dmtType == DMT_CB_EXPLOSION) {
+      m_vDamage += (vDirectionFixed / 2.0f - en_vGravityDir / 2.0f) * fKickDamage;
+    } else*/ {
+      m_vDamage += (vDirectionFixed - en_vGravityDir / 2.0f) * fKickDamage;
     }
-    else*/
-    { m_vDamage += (vDirectionFixed - en_vGravityDir / 2) * fKickDamage; }
 
     FLOAT fOldLen = vDamageOld.Length();
     FLOAT fNewLen = m_vDamage.Length();
@@ -662,24 +720,26 @@ functions:
       GiveImpulseTranslationAbsolute(-vDamageOld / fOldRootLen * fMassFactor);
     }
 
-    //-en_vGravityDir*fPushStrength/10
+    //-en_vGravityDir * fPushStrength / 10.0f
 
     // push it back
     GiveImpulseTranslationAbsolute(m_vDamage / fNewRootLen * fMassFactor);
 
-    /*if ((m_tmSpraySpawned <= _pTimer->CurrentTick()-_pTimer->TickQuantum ||
-      m_fSprayDamage+fNewDamage>50.0f)
-      && m_fSpiritStartTime == 0) {*/
+    /*if ((m_tmSpraySpawned <= _pTimer->CurrentTick() - _pTimer->TickQuantum
+     || m_fSprayDamage + fNewDamage > 50.0f)
+     && m_fSpiritStartTime == 0) {*/
 
     if (m_fMaxDamageAmmount < fDamageAmmount) {
       m_fMaxDamageAmmount = fDamageAmmount;
     }
+
     // if it has no spray, or if this damage overflows it, and not already disappearing
-    if ((m_tmSpraySpawned <= _pTimer->CurrentTick() - _pTimer->TickQuantum * 8 || m_fSprayDamage + fNewDamage > 50.0f)
-        && m_fSpiritStartTime == 0 && dmtType != DMT_CHAINSAW && !(dmtType == DMT_BURNING && GetHealth() < 0)) {
+    if ((m_tmSpraySpawned <= _pTimer->CurrentTick() - _pTimer->TickQuantum * 8.0f || m_fSprayDamage + fNewDamage > 50.0f)
+     && m_fSpiritStartTime == 0.0f && dmtType != DMT_CHAINSAW && !(dmtType == DMT_BURNING && GetHealth() < 0.0f)) {
       // spawn blood spray
       CPlacement3D plSpray = CPlacement3D(vHitPoint, ANGLE3D(0.0f, 0.0f, 0.0f));
       m_penSpray = CreateEntity(plSpray, CLASS_BLOOD_SPRAY);
+
       if (m_sptType != SPT_SPARKS_BLOOD) {
         m_penSpray->SetParent(this);
       }
@@ -689,8 +749,10 @@ functions:
 
       if (m_fMaxDamageAmmount > 10.0f) {
         eSpawnSpray.fDamagePower = 3.0f;
+
       } else if (m_fSprayDamage + fNewDamage > 50.0f) {
         eSpawnSpray.fDamagePower = 2.0f;
+
       } else {
         eSpawnSpray.fDamagePower = 1.0f;
       }
@@ -712,8 +774,7 @@ functions:
       eSpawnSpray.vDirection = vSpilDirection;
       eSpawnSpray.penOwner = this;
 
-      /*if (dmtType == DMT_BURNING && GetHealth()<0)
-      {
+      /*if (dmtType == DMT_BURNING && GetHealth() < 0.0f) {
         eSpawnSpray.fDamagePower = 1.0f;
       }*/
 
@@ -723,27 +784,35 @@ functions:
       m_fSprayDamage = 0.0f;
       m_fMaxDamageAmmount = 0.0f;
     }
+
     m_fSprayDamage += fNewDamage;
 
     CMovableModelEntity::ReceiveDamage(penInflictor, dmtType, fNewDamage, vHitPoint, vDirection);
   };
 
-  // FADE OUT
+  // Fade out
   BOOL AdjustShadingParameters(FLOAT3D & vLightDirection, COLOR & colLight, COLOR & colAmbient) {
     colAmbient = AddColors(colAmbient, m_colColor);
+
     if (m_bFadeOut) {
       FLOAT fTimeRemain = m_fFadeStartTime + m_fFadeTime - _pTimer->CurrentTick();
+
       if (fTimeRemain < 0.0f) {
         fTimeRemain = 0.0f;
       }
+
       COLOR colAlpha;
+
       if (en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
         colAlpha = GetModelInstance()->GetModelColor();
         colAlpha = (colAlpha & 0xFFFFFF00) + (COLOR(fTimeRemain / m_fFadeTime * 0xFF) & 0xFF);
+
         GetModelInstance()->SetModelColor(colAlpha);
+
       } else {
         colAlpha = GetModelObject()->mo_colBlendColor;
         colAlpha = (colAlpha & 0xFFFFFF00) + (COLOR(fTimeRemain / m_fFadeTime * 0xFF) & 0xFF);
+
         GetModelObject()->mo_colBlendColor = colAlpha;
       }
 
@@ -752,13 +821,16 @@ functions:
         if (GetHealth() <= 0) {
           if (en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
             GetModelInstance()->SetModelColor(C_WHITE & 0xFF);
+
           } else {
             GetModelObject()->mo_colBlendColor = C_WHITE & 0xFF;
           }
+
         } else {
           extern FLOAT ent_tmMentalIn;
           extern FLOAT ent_tmMentalOut;
           extern FLOAT ent_tmMentalFade;
+
           FLOAT tmIn = ent_tmMentalIn;
           FLOAT tmOut = ent_tmMentalOut;
           FLOAT tmFade = ent_tmMentalFade;
@@ -767,6 +839,7 @@ functions:
 
           FLOAT tmTime = _pTimer->GetLerpedCurrentTick();
           FLOAT fFactor = 1;
+
           if (tmTime > 0.1f) {
             tmTime += en_ulID * 123.456f;
             tmTime = fmod(tmTime, tmTotal);
@@ -775,20 +848,23 @@ functions:
 
           if (en_RenderType == RT_SKAMODEL || en_RenderType == RT_SKAEDITORMODEL) {
             GetModelInstance()->SetModelColor(C_WHITE | INDEX(0xFF * fFactor));
+
           } else {
             GetModelObject()->mo_colBlendColor = C_WHITE | INDEX(0xFF * fFactor);
           }
         }
       }
     }
+
     if (m_colBurning != COLOR(C_WHITE | CT_OPAQUE)) {
       colAmbient = MulColors(colAmbient, m_colBurning);
       colLight = MulColors(colLight, m_colBurning);
     }
+
     return CMovableModelEntity::AdjustShadingParameters(vLightDirection, colLight, colAmbient);
   };
 
-  // fuss functions
+  // Fuss functions
   void AddToFuss(void) {
     if (IsPredictor()) {
       // remember last fuss time
@@ -800,45 +876,56 @@ functions:
     if (m_penMainMusicHolder == NULL) {
       // find main music holder
       m_penMainMusicHolder = _pNetwork->GetEntityWithName("MusicHolder", 0);
+
       // if no music holder found
       if (m_penMainMusicHolder == NULL) {
         // just remember last fuss time
         m_tmLastFussTime = _pTimer->CurrentTick();
+
         // cannot make fuss
         return;
       }
+
       // add to end of fuss list
       ((CMusicHolder &)*m_penMainMusicHolder).m_cenFussMakers.Add(this);
+
       // if boss set as boss
       if (m_bBoss) {
         ((CMusicHolder &)*m_penMainMusicHolder).m_penBoss = this;
       }
+
       // remember last fuss time
       m_tmLastFussTime = _pTimer->CurrentTick();
 
-      // if music holder remembered - still in fuss
+    // if music holder remembered - still in fuss
     } else {
       // must be in list
       ASSERT(((CMusicHolder &)*m_penMainMusicHolder).m_cenFussMakers.IsMember(this));
+
       // if boss set as boss
       if (m_bBoss) {
         ((CMusicHolder &)*m_penMainMusicHolder).m_penBoss = this;
       }
+
       // just remember last fuss time
       m_tmLastFussTime = _pTimer->CurrentTick();
     }
   }
+
   void RemoveFromFuss(void) {
     if (IsPredictor()) {
       return;
     }
+
     // if no music holder remembered
     if (m_penMainMusicHolder == NULL) {
       // not in fuss
       return;
     }
+
     // just remove from list
     ((CMusicHolder &)*m_penMainMusicHolder).m_cenFussMakers.Remove(this);
+
     // if boss, clear boss
     if (m_bBoss) {
       if (((CMusicHolder &)*m_penMainMusicHolder).m_penBoss != this) {
@@ -846,21 +933,24 @@ functions:
         ((CMusicHolder &)*m_penMainMusicHolder).m_penBoss = NULL;
       }
     }
+
     m_penMainMusicHolder = NULL;
   }
 
-  // check if should give up attacking
+  // Check if should give up attacking
   BOOL ShouldCeaseAttack(void) {
     // if there is no valid the enemy
     if (m_penEnemy == NULL || !(m_penEnemy->GetFlags() & ENF_ALIVE) || (m_penEnemy->GetFlags() & ENF_DELETED)) {
       // cease attack
       return TRUE;
     }
+
     // if not active in fighting
     if (_pTimer->CurrentTick() > m_tmLastFussTime + m_tmGiveUp) {
       // cease attack
       return TRUE;
     }
+
     // otherwise, continue
     return FALSE;
   }
@@ -876,6 +966,7 @@ functions:
     if (m_bApplyRandomStretch) {
       // will be done only when user clicks "Apply random" switch
       m_bApplyRandomStretch = FALSE;
+
       // get rnd for random stretch
       m_fRandomStretchMultiplier = (FRnd() - 0.5f) * m_fRandomStretchFactor + 1.0f;
     }
@@ -885,141 +976,156 @@ functions:
 
     if (m_bResizeAttachments) {
       StretchModel(vStretch);
+
     } else if (TRUE) {
       StretchSingleModel(vStretch);
     }
+
     ModelChangeNotify();
   };
 
-  // check if an entity is valid for being your new enemy
+  // Check if an entity is valid for being your new enemy
   BOOL IsValidForEnemy(CEntity * penPlayer) {
     return penPlayer != NULL && IsDerivedFromClass(penPlayer, "Player") && penPlayer->GetFlags() & ENF_ALIVE;
   }
 
-  // unset target
+  // Unset target
   void SetTargetNone(void) {
     m_ttTarget = TT_NONE;
     m_dtDestination = DT_PLAYERCURRENT;
     m_penEnemy = NULL;
   }
 
-  // set new player as soft target if possible
+  // Set new player as soft target if possible
   BOOL SetTargetSoft(CEntity * penPlayer) {
     // if invalid target
     if (!IsValidForEnemy(penPlayer)) {
       // do nothing
       return FALSE;
     }
+
     // if we already have any kind of target
     if (m_ttTarget != TT_NONE) {
       // do nothing
       return FALSE;
     }
+
     // remember new soft target
     CEntity *penOld = m_penEnemy;
+
     m_ttTarget = TT_SOFT;
     m_dtDestination = DT_PLAYERCURRENT;
     m_penEnemy = penPlayer;
+
     return penOld != penPlayer;
   }
 
-  // set new player as hard target if possible
+  // Set new player as hard target if possible
   BOOL SetTargetHard(CEntity * penPlayer) {
     // if invalid target
     if (!IsValidForEnemy(penPlayer)) {
       // do nothing
       return FALSE;
     }
+
     // if we already have hard target
     if (m_ttTarget == TT_HARD) {
       // do nothing
       return FALSE;
     }
+
     // remember new hard target
     CEntity *penOld = m_penEnemy;
+
     m_ttTarget = TT_HARD;
     m_dtDestination = DT_PLAYERCURRENT;
     m_penEnemy = penPlayer;
+
     return penOld != penPlayer;
   }
 
-  // force new player to be hard target
+  // Force new player to be hard target
   BOOL SetTargetHardForce(CEntity * penPlayer) {
     // if invalid target
     if (!IsValidForEnemy(penPlayer)) {
       // do nothing
       return FALSE;
     }
+
     // remember new hard target
     CEntity *penOld = m_penEnemy;
+
     m_ttTarget = TT_HARD;
     m_dtDestination = DT_PLAYERCURRENT;
     m_penEnemy = penPlayer;
+
     return penOld != penPlayer;
   }
 
-  // MOVING FUNCTIONS
+  // Moving functions
 
-  // get movement frequency for attack
+  // Get movement frequency for attack
   virtual FLOAT GetAttackMoveFrequency(FLOAT fEnemyDistance) {
     if (fEnemyDistance > GetProp(m_fCloseDistance)) {
       return 0.5f;
-    } else {
-      return 0.25f;
     }
+
+    return 0.25f;
   }
 
-  // set speeds for movement towards desired position
+  // Set speeds for movement towards desired position
   virtual void SetSpeedsToDesiredPosition(const FLOAT3D &vPosDelta, FLOAT fPosDist, BOOL bGoingToPlayer) {
     FLOAT fEnemyDistance = CalcDist(m_penEnemy);
     FLOAT fCloseDistance = GetProp(m_fCloseDistance);
     FLOAT fStopDistance = GetProp(m_fStopDistance);
+
     // find relative direction angle
     FLOAT fCos = GetPlaneFrustumAngle(vPosDelta);
-    // if may move and
-    if (MayMoveToAttack() &&
-        // more or less ahead and
-        fCos > CosFast(45.0f) &&
-        // not too close
-        fEnemyDistance > fStopDistance) {
+
+    // if may move and more or less ahead and not too close
+    if (MayMoveToAttack() && fCos > CosFast(45.0f) && fEnemyDistance > fStopDistance) {
       // move and rotate towards it
       if (fEnemyDistance < fCloseDistance) {
         m_fMoveSpeed = GetProp(m_fCloseRunSpeed);
         m_aRotateSpeed = GetProp(m_aCloseRotateSpeed);
+
       } else {
         m_fMoveSpeed = GetProp(m_fAttackRunSpeed);
         m_aRotateSpeed = GetProp(m_aAttackRotateSpeed);
       }
 
-      // otherwise if following tactics, move anyway
+    // otherwise if following tactics, move anyway
     } else if (m_bTacticActive) {
       // move and rotate towards it
       if (fEnemyDistance < fCloseDistance) {
         m_fMoveSpeed = GetProp(m_fCloseRunSpeed);
         m_aRotateSpeed = GetProp(m_aCloseRotateSpeed);
+
       } else {
         m_fMoveSpeed = GetProp(m_fAttackRunSpeed);
         m_aRotateSpeed = GetProp(m_aAttackRotateSpeed);
       }
 
-      // otherwise if not exactly in front
+    // otherwise if not exactly in front
     } else if (fCos < CosFast(15.0f)) {
       // just rotate towards it
       m_fMoveSpeed = 0;
+
       if (fEnemyDistance < fCloseDistance) {
         m_aRotateSpeed = GetProp(m_aCloseRotateSpeed);
       } else {
         m_aRotateSpeed = GetProp(m_aAttackRotateSpeed);
       }
 
-      // otherwise (stop range)
+    // otherwise (stop range)
     } else {
       // if going towards player, or would leave attackradius
       if (bGoingToPlayer || !WouldNotLeaveAttackRadius()) {
         // stand in place
         m_fMoveSpeed = 0;
         m_aRotateSpeed = 0;
-        // if going to some other location (some pathfinding AI scheme)
+
+      // if going to some other location (some pathfinding AI scheme)
       } else {
         m_fMoveSpeed = GetProp(m_fCloseRunSpeed);
         m_aRotateSpeed = GetProp(m_aCloseRotateSpeed);
@@ -1027,27 +1133,32 @@ functions:
     }
   }
 
-  // get movement animation for given flags with current movement type
+  // Get movement animation for given flags with current movement type
   virtual void MovementAnimation(ULONG ulFlags) {
     if (ulFlags & MF_MOVEZ) {
-      if (m_fMoveSpeed == GetProp(m_fAttackRunSpeed) || m_fMoveSpeed == GetProp(m_fCloseRunSpeed)
-          || m_fMoveSpeed > GetProp(m_fWalkSpeed)) {
+      if (m_fMoveSpeed == GetProp(m_fAttackRunSpeed)
+       || m_fMoveSpeed == GetProp(m_fCloseRunSpeed)
+       || m_fMoveSpeed > GetProp(m_fWalkSpeed)) {
         RunningAnim();
+
       } else {
         WalkingAnim();
       }
+
     } else if (ulFlags & MF_ROTATEH) {
       RotatingAnim();
+
     } else {
       if (m_penEnemy != NULL) {
         StandingAnimFight();
+
       } else {
         StandingAnim();
       }
     }
   }
 
-  // set desired rotation and translation to go/orient towards desired position
+  // Set desired rotation and translation to go/orient towards desired position
   // and get the resulting movement type
   virtual ULONG SetDesiredMovement(void) {
     ULONG ulFlags = 0;
@@ -1064,6 +1175,7 @@ functions:
       // get desired heading orientation
       FLOAT3D vDir = vDelta;
       vDir.SafeNormalize();
+
       ANGLE aWantedHeadingRelative = GetRelativeHeading(vDir);
 
       // normalize it to [-180,+180] degrees
@@ -1074,23 +1186,26 @@ functions:
       if (aWantedHeadingRelative < -m_aRotateSpeed * m_fMoveFrequency) {
         // start turning left
         aHeadingRotation = -m_aRotateSpeed;
-        // if desired position is right
+
+      // if desired position is right
       } else if (aWantedHeadingRelative > m_aRotateSpeed * m_fMoveFrequency) {
         // start turning right
         aHeadingRotation = +m_aRotateSpeed;
-        // if desired position is more-less ahead
+
+      // if desired position is more-less ahead
       } else {
         // keep just the adjusting fraction of speed
         aHeadingRotation = aWantedHeadingRelative / m_fMoveFrequency;
       }
+
       // start rotating
-      SetDesiredRotation(ANGLE3D(aHeadingRotation, 0, 0));
+      SetDesiredRotation(ANGLE3D(aHeadingRotation, 0.0f, 0.0f));
 
       if (Abs(aHeadingRotation) > 1.0f) {
         ulFlags |= MF_ROTATEH;
       }
 
-      // if we may not rotate
+    // if we may not rotate
     } else {
       // stop rotating
       SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
@@ -1107,7 +1222,7 @@ functions:
 
       ulFlags |= MF_MOVEZ;
 
-      // if we may not move
+    // if we may not move
     } else {
       // stop translating
       SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
@@ -1116,63 +1231,72 @@ functions:
     return ulFlags;
   };
 
-  // stop moving entity
+  // Stop moving entity
   void StopMoving() {
     StopRotating();
     StopTranslating();
   };
 
-  // stop desired rotation
+  // Stop desired rotation
   void StopRotating() {
     SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
   };
 
-  // stop desired translation
+  // Stop desired translation
   void StopTranslating() {
     SetDesiredTranslation(FLOAT3D(0.0f, 0.0f, 0.0f));
   };
 
-  // calc distance to entity in one plane (relative to owner gravity)
+  // Calculate distance to entity in one plane (relative to owner gravity)
   FLOAT CalcDistanceInPlaneToDestination(void) {
     // find vector from you to target in XZ plane
     FLOAT3D vNormal;
     GetNormalComponent(m_vDesiredPosition - GetPlacement().pl_PositionVector, en_vGravityDir, vNormal);
+
     return vNormal.Length();
   };
 
-  // initialize path finding
+  // Initialize path finding
   virtual void StartPathFinding(void) {
     ASSERT(m_dtDestination == DT_PATHPERSISTENT || m_dtDestination == DT_PATHTEMPORARY);
 
     CEntity *penMarker;
     FLOAT3D vPath;
+
     // find first marker to go to
     PATH_FindFirstMarker(this, GetPlacement().pl_PositionVector, m_penEnemy->GetPlacement().pl_PositionVector, penMarker, vPath);
+
     // if not found, or not visible
     if (penMarker == NULL || !IsVisible(penMarker)) {
       // no path finding
       m_dtDestination = DT_PLAYERSPOTTED;
+
       // remember as if spotted position
       m_vPlayerSpotted = PlayerDestinationPos();
+
       return;
     }
+
     // remember the marker and position
     m_vDesiredPosition = vPath, m_penPathMarker = penMarker;
   }
 
-  // find next navigation marker to go to
+  // Find next navigation marker to go to
   virtual void FindNextPathMarker(void) {
     // if invalid situation
     if (m_penPathMarker == NULL) {
       // this should not happen
       ASSERT(FALSE);
+
       // no path finding
       m_dtDestination = DT_PLAYERCURRENT;
+
       return;
     }
 
     // find first marker to go to
     CEntity *penMarker = m_penPathMarker;
+
     FLOAT3D vPath;
     PATH_FindNextMarker(this, GetPlacement().pl_PositionVector, m_penEnemy->GetPlacement().pl_PositionVector, penMarker, vPath);
 
@@ -1180,6 +1304,7 @@ functions:
     if (penMarker == NULL || !IsVisible(penMarker)) {
       // no path finding
       m_dtDestination = DT_PLAYERSPOTTED;
+
       // remember as if spotted position
       m_vPlayerSpotted = PlayerDestinationPos();
       return;
@@ -1189,7 +1314,7 @@ functions:
     m_vDesiredPosition = vPath, m_penPathMarker = penMarker;
   }
 
-  // check if a touch event triggers pathfinding
+  // Check if a touch event triggers pathfinding
   BOOL CheckTouchForPathFinding(const ETouch &eTouch) {
     // if no enemy
     if (m_penEnemy == NULL) {
@@ -1206,6 +1331,7 @@ functions:
     FLOAT3D vDir = en_vDesiredTranslationRelative;
     vDir.SafeNormalize();
     vDir *= GetRotationMatrix();
+
     // if the touched plane is more or less orthogonal to the current velocity
     if ((eTouch.plCollision % vDir) < -0.5f) {
       if (m_penEnemy != NULL && IsVisible(m_penEnemy)) {
@@ -1213,14 +1339,16 @@ functions:
       } else {
         m_dtDestination = DT_PATHTEMPORARY;
       }
+
       StartPathFinding();
+
       return m_penPathMarker != NULL;
-    } else {
-      return FALSE;
     }
+
+    return FALSE;
   }
 
-  // check if a wouldfall event triggers pathfinding
+  // Check if a wouldfall event triggers pathfinding
   BOOL CheckFallForPathFinding(const EWouldFall &eWouldFall) {
     // if no enemy
     if (m_penEnemy == NULL) {
@@ -1239,13 +1367,13 @@ functions:
     } else {
       m_dtDestination = DT_PATHTEMPORARY;
     }
+
     StartPathFinding();
 
     return m_penPathMarker != NULL;
   }
 
-  // TACTICS FUNCTIONS
-
+  // Tactics functions
   void InitializeTactics(void) {
     // return if there is no tactics manager or if it points to wrong type of entity
     // or if there is no enemy
@@ -1255,17 +1383,20 @@ functions:
 
     CTacticsHolder *penTactics = &(CTacticsHolder &)*m_penTacticsHolder;
 
-    // m_tmTacticsActivation = penTactics->m_tmLastActivation;
+    //m_tmTacticsActivation = penTactics->m_tmLastActivation;
     m_tmTacticsActivation = _pTimer->CurrentTick();
     m_vTacticsStartPosition = GetPlacement().pl_PositionVector;
-    // m_iTacticsRetried = penTactics->m_bRetryCount;
+    //m_iTacticsRetried = penTactics->m_bRetryCount;
 
     FLOAT fSign;
+
     // sign for randomized parameters
     if (Sgn(penTactics->m_fParam2) > 0 && Sgn(penTactics->m_fParam1) > 0) {
       fSign = +1.0f;
+
     } else if (Sgn(penTactics->m_fParam2) < 0 && Sgn(penTactics->m_fParam1) < 0) {
       fSign = -1.0f;
+
     } else {
       fSign = Sgn(FRnd() - 0.5f);
     }
@@ -1274,29 +1405,39 @@ functions:
       case TCT_DAMP_ANGLE_STRIFE: {
         // 1) random angle (<max, >min)
         m_fTacticVar1 = Lerp(Abs(penTactics->m_fParam1), Abs(penTactics->m_fParam2), FRnd()) * fSign;
+
         // 2) time dump
         m_fTacticVar2 = penTactics->m_fParam4;
+
         // 3) dump factor, factor (0-1) of min distance when linear behaviour begins
         m_fTacticVar3 = penTactics->m_fParam3;
+
         // 4) initial distance
         m_fTacticVar4 = (m_penEnemy->GetPlacement().pl_PositionVector - m_vTacticsStartPosition).Length();
+
         // 5) tactics stop distance
         m_fTacticVar5 = penTactics->m_fParam5;
+
         break;
       }
 
       case TCT_PARALLEL_RANDOM_DISTANCE:
         // 1) randomized distance
         m_fTacticVar1 = Lerp(penTactics->m_fParam4, penTactics->m_fParam5, FRnd());
+
         // 4) emission angle
         m_fTacticVar4 = Lerp(Abs(penTactics->m_fParam1), Abs(penTactics->m_fParam2), FRnd()) * fSign;
+
         // 2) tolerance strip width
         m_fTacticVar2 = m_fAttackRunSpeed * 2.0f * 90.0f / m_aAttackRotateSpeed;
-        // m_fTacticVar2=2.0f*m_fAttackRunSpeed;
+        //m_fTacticVar2 = 2.0f * m_fAttackRunSpeed;
+
         // 3) fade in/out ratio
         m_fTacticVar3 = penTactics->m_fParam3;
+
         // 5) initial distance
         m_fTacticVar5 = (GetPlacement().pl_PositionVector - m_penEnemy->GetPlacement().pl_PositionVector).Length();
+
         // as a precausion, assume minimal strip width of 2m
         m_fTacticVar2 = ClampDn(m_fTacticVar2, 2.0f);
 
@@ -1305,15 +1446,16 @@ functions:
       case TCT_STATIC_RANDOM_V_DISTANCE:
         // 1) starting angle
         m_fTacticVar1 = Lerp(Abs(penTactics->m_fParam1), Abs(penTactics->m_fParam2), FRnd()) * fSign;
+
         // 2) time to run in the desired V direction
         m_fTacticVar2 = Lerp(penTactics->m_fParam3, penTactics->m_fParam4, FRnd());
+
         break;
     }
   }
 
   virtual void ApplyTactics(FLOAT3D & vDesiredPos) {
-    // return if there is no tactics manager or if it points to wrong type of entity
-    // or if there is no enemy
+    // return if there is no tactics manager or if it points to wrong type of entity or if there is no enemy
     if (m_penTacticsHolder == NULL || !IsOfClass(m_penTacticsHolder, "TacticsHolder") || m_penEnemy == NULL) {
       return;
     }
@@ -1324,6 +1466,7 @@ functions:
     // time of this monster. If so, start (or reinitialize) the tactics.
     if (penTactics->m_tmLastActivation == -1 || penTactics->m_tctType == TCT_NONE) {
       m_bTacticActive = FALSE;
+
     } else if (m_tmTacticsActivation < penTactics->m_tmLastActivation) {
       InitializeTactics();
       m_bTacticActive = TRUE;
@@ -1334,8 +1477,9 @@ functions:
       FLOAT3D vEnemyDistance = m_vTacticsStartPosition - m_penEnemy->GetPlacement().pl_PositionVector;
       FLOAT fEnemyDistance = vEnemyDistance.Length();
       vEnemyDistance.SafeNormalize();
+
       ANGLE3D angEnemy = ANGLE3D(0.0f, 0.0f, 0.0f);
-      // DirectionVectorToAngles(vEnemyDistance, angEnemy);
+      //DirectionVectorToAngles(vEnemyDistance, angEnemy);
 
       FLOAT fDistanceRatio = 0.0f;
       FLOAT fTimeRatio = 0.0f;
@@ -1348,6 +1492,7 @@ functions:
           }
 
           fDistanceRatio = 1.0f;
+
           if (m_fTacticVar3 > 0) {
             // get enemy distance
             FLOAT fClamped = Clamp(CalcDist(m_penEnemy) - (m_fTacticVar4 * m_fTacticVar3), 0.0f, m_fTacticVar4);
@@ -1355,6 +1500,7 @@ functions:
           }
 
           fTimeRatio = 1.0f;
+
           if (m_fTacticVar2 > 0) {
             fTimeRatio = 1.0f - (ClampUp((_pTimer->CurrentTick() - m_tmTacticsActivation) / m_fTacticVar2, 1.0f));
           }
@@ -1365,16 +1511,16 @@ functions:
 
           FLOATmatrix3D mHeading;
           MakeRotationMatrixFast(mHeading, angEnemy);
+
           vDesiredPos = vDesiredPos * !en_mRotation;
           vDesiredPos = vDesiredPos * mHeading;
           vDesiredPos = vDesiredPos * en_mRotation;
-
-          break;
-        }
+        } break;
 
         case TCT_PARALLEL_RANDOM_DISTANCE: {
           // line from spawner to player
           FLOAT3D vLinePlayerToSpawn = m_vTacticsStartPosition - m_penEnemy->GetPlacement().pl_PositionVector;
+
           // line from *this to player
           FLOAT3D vLinePlayerToThis = GetPlacement().pl_PositionVector - m_penEnemy->GetPlacement().pl_PositionVector;
 
@@ -1385,60 +1531,65 @@ functions:
 
           FLOATmatrix3D mHeading;
 
-          // CPrintF("line dst = %f at %f\n", fLineDist, _pTimer->CurrentTick());
           // if close enough to enemy stop tactics and go linear
           if (vLinePlayerToThis.Length() < m_fTacticVar1) {
             m_bTacticActive = FALSE;
-            // if closer to spawner-enemy line then supposed to
+
+          // if closer to spawner-enemy line then supposed to
           } else if (fLineDist < m_fTacticVar1) {
             if (fLineDist < 1.0f) {
               fLineDist = 1.0f;
             }
+
             angEnemy(1) = m_fTacticVar4 / fLineDist;
             angEnemy(2) = 0.0f;
             angEnemy(3) = 0.0f;
 
             MakeRotationMatrixFast(mHeading, angEnemy);
+
             vDesiredPos = vDesiredPos * !en_mRotation;
             vDesiredPos = vDesiredPos * mHeading;
             vDesiredPos = vDesiredPos * en_mRotation;
-            // if further from spawner-enemy line then supposed to
+
+          // if further from spawner-enemy line then supposed to
           } else if (fLineDist > m_fTacticVar1 + m_fTacticVar2) {
             if (fLineDist < 1.0f) {
               fLineDist = 1.0f;
             }
+
             angEnemy(1) = -m_fTacticVar4 / fLineDist;
             angEnemy(2) = 0.0f;
             angEnemy(3) = 0.0f;
 
             MakeRotationMatrixFast(mHeading, angEnemy);
+
             vDesiredPos = vDesiredPos * !en_mRotation;
             vDesiredPos = vDesiredPos * mHeading;
             vDesiredPos = vDesiredPos * en_mRotation;
-            // right on the line
+
+          // right on the line
           } else {
             vDesiredPos = -vLinePlayerToSpawn;
           }
-          break;
-        }
+        } break;
 
         case TCT_STATIC_RANDOM_V_DISTANCE: {
           if (_pTimer->CurrentTick() < m_tmTacticsActivation + m_fTacticVar2) {
             angEnemy(1) = m_fTacticVar1;
             angEnemy(2) = 0.0f;
             angEnemy(3) = 0.0f;
+
           } else {
             m_bTacticActive = FALSE;
           }
 
           FLOATmatrix3D mHeading;
           MakeRotationMatrixFast(mHeading, angEnemy);
+
           vDesiredPos = vDesiredPos * !en_mRotation;
           vDesiredPos = vDesiredPos * mHeading;
           vDesiredPos = vDesiredPos * en_mRotation;
-
-          break;
-        }
+        } break;
       }
     }
   }
@@ -1447,45 +1598,50 @@ functions:
     m_tmTacticsActivation = -1.0f;
   }
 
-  // ATTACK SPECIFIC
+  // Attack specific
 
-  // can attack (shoot) at entity in plane - ground support
-  BOOL CanAttackEnemy(CEntity * penTarget, FLOAT fCosAngle) {
+  // Can attack (shoot) at entity in plane - ground support
+  BOOL CanAttackEnemy(CEntity *penTarget, FLOAT fCosAngle) {
     if (IsInPlaneFrustum(penTarget, fCosAngle)) {
       if (IsVisibleCheckAll(penTarget)) {
         return TRUE;
       }
     }
+
     return FALSE;
   };
 
-  // close attack if possible
-  virtual BOOL CanHitEnemy(CEntity * penTarget, FLOAT fCosAngle) {
+  // Close attack if possible
+  virtual BOOL CanHitEnemy(CEntity *penTarget, FLOAT fCosAngle) {
     if (IsInFrustum(penTarget, fCosAngle)) {
       return IsVisibleCheckAll(penTarget);
     }
+
     return FALSE;
   };
 
-  // see entity
-  BOOL SeeEntity(CEntity * pen, FLOAT fCosAngle) {
+  // See entity
+  BOOL SeeEntity(CEntity *pen, FLOAT fCosAngle) {
     if (IsInFrustum(pen, fCosAngle)) {
       return IsVisible(pen);
     }
+
     return FALSE;
   };
 
-  // see entity in plane
-  BOOL SeeEntityInPlane(CEntity * pen, FLOAT fCosAngle) {
+  // See entity in plane
+  BOOL SeeEntityInPlane(CEntity *pen, FLOAT fCosAngle) {
     CalcPlaneDist(pen);
+
     if (IsInPlaneFrustum(pen, fCosAngle)) {
       return IsVisible(pen);
     }
+
     return FALSE;
   };
 
-  // prepare propelled projectile
-  void PreparePropelledProjectile(CPlacement3D & plProjectile, FLOAT3D vShootTarget, FLOAT3D & vOffset, ANGLE3D & aOffset) {
+  // Prepare propelled projectile
+  void PreparePropelledProjectile(CPlacement3D &plProjectile, FLOAT3D vShootTarget, FLOAT3D &vOffset, ANGLE3D &aOffset) {
     FLOAT3D vDiff = (vShootTarget - (GetPlacement().pl_PositionVector + vOffset * GetRotationMatrix())).SafeNormalize();
 
     // find orientation towards target
@@ -1494,6 +1650,7 @@ functions:
     mToTargetY = -en_vGravityDir;
     mToTargetX = (mToTargetY * mToTargetZ).SafeNormalize();
     mToTargetY = (mToTargetZ * mToTargetX).SafeNormalize();
+
     FLOATmatrix3D mToTarget;
     mToTarget(1, 1) = mToTargetX(1);
     mToTarget(1, 2) = mToTargetY(1);
@@ -1507,12 +1664,14 @@ functions:
 
     // calculate placement of projectile to be at given offset
     plProjectile.pl_PositionVector = GetPlacement().pl_PositionVector + vOffset * GetRotationMatrix();
+
     FLOATmatrix3D mDirection;
     MakeRotationMatrixFast(mDirection, aOffset);
+
     DecomposeRotationMatrixNoSnap(plProjectile.pl_OrientationAngle, mToTarget * mDirection);
   };
 
-  // prepare free flying projectile
+  // Prepare free flying projectile
   void PrepareFreeFlyingProjectile(CPlacement3D & plProjectile, FLOAT3D vShootTarget, FLOAT3D & vOffset, ANGLE3D & aOffset) {
     FLOAT3D vDiff = (vShootTarget - (GetPlacement().pl_PositionVector + vOffset * GetRotationMatrix())).SafeNormalize();
 
@@ -1522,6 +1681,7 @@ functions:
     mToTargetY = -en_vGravityDir;
     mToTargetX = (mToTargetY * mToTargetZ).SafeNormalize();
     mToTargetZ = (mToTargetX * mToTargetY).SafeNormalize();
+
     FLOATmatrix3D mToTarget;
     mToTarget(1, 1) = mToTargetX(1);
     mToTarget(1, 2) = mToTargetY(1);
@@ -1535,68 +1695,83 @@ functions:
 
     // calculate placement of projectile to be at given offset
     plProjectile.pl_PositionVector = GetPlacement().pl_PositionVector + vOffset * GetRotationMatrix();
+
     FLOATmatrix3D mDirection;
     MakeRotationMatrixFast(mDirection, aOffset);
+
     DecomposeRotationMatrixNoSnap(plProjectile.pl_OrientationAngle, mToTarget * mDirection);
   };
 
-  // shoot projectile on enemy
-  CEntity *ShootProjectile(enum ProjectileType pt, FLOAT3D & vOffset, ANGLE3D & aOffset) {
+  // Shoot projectile on enemy
+  CEntity *ShootProjectile(enum ProjectileType pt, FLOAT3D &vOffset, ANGLE3D &aOffset) {
     ASSERT(m_penEnemy != NULL);
 
     // target enemy body
-    EntityInfo *peiTarget = (EntityInfo *)(m_penEnemy->GetEntityInfo());
+    EntityInfo *peiTarget = (EntityInfo *)m_penEnemy->GetEntityInfo();
     FLOAT3D vShootTarget;
     GetEntityInfoPosition(m_penEnemy, peiTarget->vTargetCenter, vShootTarget);
 
     // launch
     CPlacement3D pl;
     PreparePropelledProjectile(pl, vShootTarget, vOffset, aOffset);
+
     CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
+
     ELaunchProjectile eLaunch;
     eLaunch.penLauncher = this;
     eLaunch.fStretch = 1.0f;
     eLaunch.prtType = pt;
+
     penProjectile->Initialize(eLaunch);
 
     return penProjectile;
   };
 
-  // shoot projectile at an exact spot
-  CEntity *ShootProjectileAt(FLOAT3D vShootTarget, enum ProjectileType pt, FLOAT3D & vOffset, ANGLE3D & aOffset) {
+  // Shoot projectile at an exact spot
+  CEntity *ShootProjectileAt(FLOAT3D vShootTarget, enum ProjectileType pt, FLOAT3D &vOffset, ANGLE3D &aOffset) {
     // launch
     CPlacement3D pl;
     PreparePropelledProjectile(pl, vShootTarget, vOffset, aOffset);
+
     CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
+
     ELaunchProjectile eLaunch;
     eLaunch.penLauncher = this;
     eLaunch.prtType = pt;
+
     penProjectile->Initialize(eLaunch);
 
     return penProjectile;
   };
 
-  // shoot projectile on enemy
-  CEntity *ShootPredictedProjectile(enum ProjectileType pt, FLOAT3D vPredictedPos, FLOAT3D & vOffset, ANGLE3D & aOffset) {
+  // Shoot projectile on enemy
+  CEntity *ShootPredictedProjectile(enum ProjectileType pt, FLOAT3D vPredictedPos, FLOAT3D &vOffset, ANGLE3D &aOffset) {
     ASSERT(m_penEnemy != NULL);
 
     // target enemy body (predicted)
     EntityInfo *peiTarget = (EntityInfo *)(m_penEnemy->GetEntityInfo());
     FLOAT3D vShootTarget = vPredictedPos;
+
     if (peiTarget != NULL) {
       // get body center vector
       FLOAT3D vBody = FLOAT3D(peiTarget->vTargetCenter[0], peiTarget->vTargetCenter[1], peiTarget->vTargetCenter[2]);
+
       FLOATmatrix3D mRotation;
       MakeRotationMatrixFast(mRotation, m_penEnemy->GetPlacement().pl_OrientationAngle);
+
       vShootTarget = vPredictedPos + vBody * mRotation;
     }
+
     // launch
     CPlacement3D pl;
     PreparePropelledProjectile(pl, vShootTarget, vOffset, aOffset);
+
     CEntityPointer penProjectile = CreateEntity(pl, CLASS_PROJECTILE);
+
     ELaunchProjectile eLaunch;
     eLaunch.penLauncher = this;
     eLaunch.prtType = pt;
+
     penProjectile->Initialize(eLaunch);
 
     return penProjectile;
@@ -1606,27 +1781,32 @@ functions:
     if (m_fAttackRadius <= 0) {
       return FALSE;
     }
+
     // test if we are inside radius
     BOOL bInsideNow = (m_vStartPosition - GetPlacement().pl_PositionVector).Length() < m_fAttackRadius;
+
     // test if going towards enemy leads us to center of attack radius circle
     BOOL bEnemyTowardsCenter = (m_vStartPosition - m_penEnemy->GetPlacement().pl_PositionVector).Length()
-                               < (GetPlacement().pl_PositionVector - m_penEnemy->GetPlacement().pl_PositionVector).Length();
+                             < (GetPlacement().pl_PositionVector - m_penEnemy->GetPlacement().pl_PositionVector).Length();
+
     return bInsideNow || bEnemyTowardsCenter;
   }
 
-  // check whether may move while attacking
+  // Check whether may move while attacking
   virtual BOOL MayMoveToAttack(void) {
     // check if enemy is diving
     CMovableEntity *pen = (CMovableEntity *)&*m_penEnemy;
     CContentType &ctUp = pen->en_pwoWorld->wo_actContentTypes[pen->en_iUpContent];
+
     BOOL bEnemyDiving = !(ctUp.ct_ulFlags & CTF_BREATHABLE_LUNGS);
+
     // may move if can go to enemy without leaving attack radius, and entity is not diving
     return WouldNotLeaveAttackRadius() && !bEnemyDiving;
   };
 
-  // BLOW UP FUNCTIONS
+  // Blow up functions
 
-  // should this enemy blow up (spawn debris)
+  // Should this enemy blow up (spawn debris)
   virtual BOOL ShouldBlowUp(void) {
     // [Cecil] TODO: Shouldn't be here
     // exotech larva boss allways blows up
@@ -1634,47 +1814,47 @@ functions:
       return TRUE;
     }
 
-    // blow up if
-    return
-      // allowed
-      GetSP()->sp_bGibs &&
-      // dead and
-      GetHealth() <= 0 &&
-      // has received large enough damage lately and
-      m_vDamage.Length() > m_fBlowUpAmount &&
-      // not already disappearing
-      m_fSpiritStartTime == 0;
+    // blow up if allowed, dead and
+    return GetSP()->sp_bGibs && GetHealth() <= 0
+      // has received large enough damage lately and not already disappearing
+      && m_vDamage.Length() > m_fBlowUpAmount && m_fSpiritStartTime == 0;
   }
 
-  // base function for blowing up
+  // Base function for blowing up
   void BlowUpBase(void) {
     // call derived function
     BlowUp();
   }
 
-  // spawn body parts
+  // Spawn body parts
   virtual void BlowUp(void) {
     // blow up notify
     BlowUpNotify();
+
     const BOOL bGibs = GetSP()->sp_bGibs;
 
     FLOAT3D vNormalizedDamage = m_vDamage - m_vDamage * (m_fBlowUpAmount / m_vDamage.Length());
     vNormalizedDamage /= Sqrt(vNormalizedDamage.Length());
     vNormalizedDamage *= 0.75f;
+
     FLOAT3D vBodySpeed = en_vCurrentTranslationAbsolute - en_vGravityDir * (en_vGravityDir % en_vCurrentTranslationAbsolute);
 
     // if allowed and fleshy
     if (bGibs && !m_bRobotBlowup) {
       // readout blood type
       const INDEX iBloodType = GetSP()->sp_iBlood;
+
       // determine debris texture (color)
       ULONG ulFleshTexture = TEXTURE_FLESH_GREEN;
       ULONG ulFleshModel = MODEL_FLESH;
+
       if (iBloodType == 2) {
         ulFleshTexture = TEXTURE_FLESH_RED;
       }
+
       // spawn debris
       Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, m_fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
+
       for (INDEX iDebris = 0; iDebris < m_fBodyParts; iDebris++) {
         // flowerpower mode?
         if (iBloodType == 3) {
@@ -1682,33 +1862,34 @@ functions:
             case 1: {
               ulFleshModel = MODEL_FLESH_APPLE;
               ulFleshTexture = TEXTURE_FLESH_APPLE;
-              break;
-            }
+            } break;
+
             case 2: {
               ulFleshModel = MODEL_FLESH_BANANA;
               ulFleshTexture = TEXTURE_FLESH_BANANA;
-              break;
-            }
+            } break;
+
             case 3: {
               ulFleshModel = MODEL_FLESH_BURGER;
               ulFleshTexture = TEXTURE_FLESH_BURGER;
-              break;
-            }
+            } break;
+
             case 4: {
               ulFleshModel = MODEL_FLESH_LOLLY;
               ulFleshTexture = TEXTURE_FLESH_LOLLY;
-              break;
-            }
+            } break;
+
             default: {
               ulFleshModel = MODEL_FLESH_ORANGE;
               ulFleshTexture = TEXTURE_FLESH_ORANGE;
-              break;
-            }
+            } break;
           }
         }
+
         Debris_Spawn(this, this, ulFleshModel, ulFleshTexture, 0, 0, 0, IRnd() % 4, 0.5f,
                      FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
       }
+
       // leave a stain beneath
       LeaveStain(FALSE);
     }
@@ -1717,35 +1898,42 @@ functions:
     if (bGibs && m_bRobotBlowup) {
       // spawn debris
       Debris_Begin(EIBT_ROBOT, DPR_SMOKETRAIL, BET_EXPLOSIONSTAIN, m_fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
+
       for (INDEX iDebris = 0; iDebris < m_fBodyParts; iDebris++) {
         Debris_Spawn(this, this, MODEL_MACHINE, TEXTURE_MACHINE, 0, 0, 0, IRnd() % 4, 0.2f,
                      FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
       }
+
       // spawn explosion
       CPlacement3D plExplosion = GetPlacement();
       CEntityPointer penExplosion = CreateEntity(plExplosion, CLASS_BASIC_EFFECT);
+
       ESpawnEffect eSpawnEffect;
       eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
       eSpawnEffect.betType = BET_BOMB;
+
       FLOAT fSize = m_fBlowUpSize * 0.3f;
       eSpawnEffect.vStretch = FLOAT3D(fSize, fSize, fSize);
+
       penExplosion->Initialize(eSpawnEffect);
     }
 
     // hide yourself (must do this after spawning debris)
     SwitchToEditorModel();
+
     SetPhysicsFlags(EPF_MODEL_IMMATERIAL);
     SetCollisionFlags(ECF_IMMATERIAL);
   }
 
-  // CLASS SUPPORT FUNCTIONS
+  // Class support functions
 
-  // leave stain
+  // Leave stain
   virtual void LeaveStain(BOOL bGrow) {
     ESpawnEffect ese;
     FLOAT3D vPoint;
     FLOATplane3D vPlaneNormal;
     FLOAT fDistanceToEdge;
+
     // get your size
     FLOATaabbox3D box;
     GetBoundingBox(box);
@@ -1755,20 +1943,26 @@ functions:
       // if near to polygon and away from last stain point
       if ((vPoint - GetPlacement().pl_PositionVector).Length() < 0.5f && (m_vLastStain - vPoint).Length() > 1.0f) {
         m_vLastStain = vPoint;
+
         FLOAT fStretch = box.Size().Length();
         ese.colMuliplier = C_WHITE | CT_OPAQUE;
+
         // stain
         if (bGrow) {
           ese.betType = BET_BLOODSTAINGROW;
           ese.vStretch = FLOAT3D(fStretch * 1.5f, fStretch * 1.5f, 1.0f);
+
         } else {
           ese.betType = BET_BLOODSTAIN;
           ese.vStretch = FLOAT3D(fStretch * 0.75f, fStretch * 0.75f, 1.0f);
         }
+
         ese.vNormal = FLOAT3D(vPlaneNormal);
         ese.vDirection = FLOAT3D(0, 0, 0);
+
         FLOAT3D vPos = vPoint + ese.vNormal / 50.0f * (FRnd() + 0.5f);
         CEntityPointer penEffect = CreateEntity(CPlacement3D(vPos, ANGLE3D(0.0f, 0.0f, 0.0f)), CLASS_BASIC_EFFECT);
+
         penEffect->Initialize(ese);
       }
     }
@@ -1777,33 +1971,26 @@ functions:
   virtual void AdjustDifficulty(void) {
     FLOAT fMoveSpeed = GetSP()->sp_fEnemyMovementSpeed;
     FLOAT fAttackSpeed = GetSP()->sp_fEnemyMovementSpeed;
-    //    m_fWalkSpeed *= fMoveSpeed;
-    //    m_aWalkRotateSpeed *= fMoveSpeed;
+    //m_fWalkSpeed *= fMoveSpeed;
+    //m_aWalkRotateSpeed *= fMoveSpeed;
     m_fAttackRunSpeed *= fMoveSpeed;
     m_aAttackRotateSpeed *= fMoveSpeed;
     m_fCloseRunSpeed *= fMoveSpeed;
     m_aCloseRotateSpeed *= fMoveSpeed;
     m_fAttackFireTime *= 1 / fAttackSpeed;
     m_fCloseFireTime *= 1 / fAttackSpeed;
-    /*
-        CSessionProperties::GameDificulty gd = GetSP()->sp_gdGameDificulty;
 
-        switch (gd) {
-        case CSessionProperties::GD_EASY: {
-                                          } break;
-        case CSessionProperties::GD_NORMAL: {
-                                          } break;
-        case CSessionProperties::GD_HARD: {
-                                          } break;
-        case CSessionProperties::GD_SERIOUS: {
-                                          } break;
-        }
-        */
+    /*switch (GetSP()->sp_gdGameDificulty) {
+      case CSessionProperties::GD_EASY: break;
+      case CSessionProperties::GD_NORMAL: break;
+      case CSessionProperties::GD_HARD: break;
+      case CSessionProperties::GD_SERIOUS: break;
+    }*/
   }
 
-  // SOUND VIRTUAL FUNCTIONS
+  // Sound virtual functions
 
-  // wounded -> yell
+  // Wounded -> yell
   void WoundedNotify(const EDamage &eDamage) {
     // if no enemy
     if (m_penEnemy == NULL) {
@@ -1817,176 +2004,197 @@ functions:
       ESound eSound;
       eSound.EsndtSound = SNDT_YELL;
       eSound.penTarget = m_penEnemy;
+
       SendEventInRange(eSound, FLOATaabbox3D(GetPlacement().pl_PositionVector, 25.0f));
     }
   };
 
-  // see enemy -> shout
+  // See enemy -> shout
   void SeeNotify() {
     // if no enemy
     if (m_penEnemy == NULL) {
       // do nothing
       return;
     }
+
     // yell
     ESound eSound;
     eSound.EsndtSound = SNDT_SHOUT;
     eSound.penTarget = m_penEnemy;
+
     SendEventInRange(eSound, FLOATaabbox3D(GetPlacement().pl_PositionVector, 50.0f));
   };
 
-  // VIRTUAL FUNCTIONS THAT NEED OVERRIDE
+  // Virtual functions that need override
   virtual void StandingAnim(void) {};
+
   virtual void StandingAnimFight(void) {
     StandingAnim();
   };
+
   virtual void WalkingAnim(void) {};
   virtual void RunningAnim(void) {};
   virtual void RotatingAnim(void) {};
   virtual void ChargeAnim(void) {};
+
   virtual INDEX AnimForDamage(FLOAT fDamage) {
     return 0;
   };
+
   virtual void BlowUpNotify(void) {};
+
   virtual INDEX AnimForDeath(void) {
     return 0;
   };
+
   virtual FLOAT WaitForDust(FLOAT3D & vStretch) {
     return -1;
   };
+
   virtual void DeathNotify(void) {};
   virtual void IdleSound(void) {};
   virtual void SightSound(void) {};
   virtual void WoundSound(void) {};
   virtual void DeathSound(void) {};
+
   virtual FLOAT GetLockRotationSpeed(void) {
     return 2000.0f;
   };
 
-  // render particles
+  // Render particles
   void RenderParticles(void) {
     // no particles when not existing
     if (GetRenderType() != CEntity::RT_MODEL && GetRenderType() != CEntity::RT_SKAMODEL) {
       return;
     }
+
     // if is dead
     if (m_fSpiritStartTime != 0.0f) {
-      // const FLOAT tmNow = _pTimer->CurrentTick();
-      // Particles_ModelGlow(this, tmNow + 20,PT_STAR08, 0.15f, 2, 0.03f, 0xff00ff00);
+      //const FLOAT tmNow = _pTimer->CurrentTick();
+      //Particles_ModelGlow(this, tmNow + 20,PT_STAR08, 0.15f, 2, 0.03f, 0xFF00FF00);
       Particles_Death(this, m_fSpiritStartTime);
     }
   }
 
-  // adjust sound and watcher parameters here if needed
+  // Adjust sound and watcher parameters here if needed
   virtual void EnemyPostInit(void) {};
 
-  // Handle an event, return false if the event is not handled.
+  // Handle an event, return false if the event is not handled
   BOOL HandleEvent(const CEntityEvent &ee) {
     if (ee.ee_slEvent == EVENTCODE_ETouch) {
       if (GetCrushHealth() != 0.0f) {
         ETouch eTouch = ((ETouch &)ee);
-        if (IsOfClass(eTouch.penOther, "ModelHolder2") || IsOfClass(eTouch.penOther, "MovingBrush")
-            || IsOfClass(eTouch.penOther, "DestroyableArchitecture")) {
+
+        if (IsOfClass(eTouch.penOther, "ModelHolder2")
+         || IsOfClass(eTouch.penOther, "MovingBrush")
+         || IsOfClass(eTouch.penOther, "DestroyableArchitecture")) {
           InflictDirectDamage(eTouch.penOther, this, DMT_EXPLOSION, GetCrushHealth(),
                               eTouch.penOther->GetPlacement().pl_PositionVector, -(FLOAT3D &)eTouch.plCollision);
         }
       }
     }
+
     return CMovableModelEntity::HandleEvent(ee);
   }
 
-  // returns length of animation
+  // Return length of animation
   FLOAT GetAnimLength(int iAnim) {
     if (en_RenderType == RT_SKAMODEL) {
       return GetModelInstance()->GetAnimLength(iAnim);
-    } else {
-      return GetModelObject()->GetAnimLength(iAnim);
     }
+
+    return GetModelObject()->GetAnimLength(iAnim);
   }
 
-  // returns lenght of current anim length
+  // Returns length of current anim length
   FLOAT GetCurrentAnimLength() {
     if (en_RenderType == RT_SKAMODEL) {
-      return 0.5f;
-    } else {
-      return GetModelObject()->GetCurrentAnimLength();
+      return 0.5f; // [Cecil] TODO: Fix this?
     }
+
+    return GetModelObject()->GetCurrentAnimLength();
   }
 
-  // is animation finished
+  // Is animation finished
   BOOL IsAnimFinished() {
     if (en_RenderType == RT_SKAMODEL) {
-      return TRUE;
-    } else {
-      return GetModelObject()->IsAnimFinished();
+      return TRUE; // [Cecil] TODO: Fix this?
     }
+
+    return GetModelObject()->IsAnimFinished();
   }
 
-  //
+  // Get passed time from the animation start
   FLOAT GetPassedTime() {
     if (en_RenderType == RT_SKAMODEL) {
-      return 0.0f;
-    } else {
-      return GetModelObject()->GetPassedTime();
+      return 0.0f; // [Cecil] TODO: Fix this?
     }
+
+    return GetModelObject()->GetPassedTime();
   }
 
   FLOAT3D &GetModelStretch() {
     if (en_RenderType == RT_SKAMODEL) {
       return GetModelInstance()->mi_vStretch;
-    } else {
-      return GetModelObject()->mo_Stretch;
     }
+
+    return GetModelObject()->mo_Stretch;
   }
 
   // Stretch model
   void StretchModel(FLOAT3D vStretch) {
     if (en_RenderType == RT_SKAMODEL) {
       GetModelInstance()->StretchModel(vStretch);
-    } else {
-      GetModelObject()->StretchModel(vStretch);
     }
+
+    GetModelObject()->StretchModel(vStretch);
   }
 
   // Stretch single model
   void StretchSingleModel(FLOAT3D vStretch) {
     if (en_RenderType == RT_SKAMODEL) {
       GetModelInstance()->StretchSingleModel(vStretch);
-    } else {
-      GetModelObject()->StretchSingleModel(vStretch);
     }
+
+    GetModelObject()->StretchSingleModel(vStretch);
   }
 
   // Return bytes of memory used by this object
   SLONG GetUsedMemory(void) {
     // initial
     SLONG slUsedMemory = sizeof(CEnemyBase) - sizeof(CMovableModelEntity) + CMovableModelEntity::GetUsedMemory();
+
     // add some more
     slUsedMemory += m_strDescription.Length();
     slUsedMemory += m_strName.Length();
     slUsedMemory += 1 * sizeof(CSoundObject);
+
     return slUsedMemory;
   }
 
 procedures:
-  // move to given destination position
-  MoveToDestination(EVoid) 
-  {
+  // Move to given destination position
+  MoveToDestination(EVoid) {
     // setup parameters
     m_fMoveFrequency = 0.25f;
     m_fMoveTime = _pTimer->CurrentTick() + 45.0f;
+
     // while not there and time not expired
-    while (CalcDistanceInPlaneToDestination()>m_fMoveSpeed*m_fMoveFrequency*2.0f &&
-           m_fMoveTime>_pTimer->CurrentTick()) {
+    while (CalcDistanceInPlaneToDestination() > m_fMoveSpeed * m_fMoveFrequency * 2.0f
+        && m_fMoveTime > _pTimer->CurrentTick()) {
       // every once in a while
       wait (m_fMoveFrequency) {
         on (EBegin) : { 
           // adjust direction and speed
           ULONG ulFlags = SetDesiredMovement(); 
           MovementAnimation(ulFlags);
+
           resume;
         }
-        on (ETimer) : { stop; }
+
+        on (ETimer) : {
+          stop;
+        }
       }
     }
 
@@ -1994,64 +2202,71 @@ procedures:
     return EReturn();
   };
 
-  // go to next randomly choosen position inside patrol range
-  MoveToRandomPatrolPosition(EVoid) 
-  {
+  // Go to next randomly choosen position inside patrol range
+  MoveToRandomPatrolPosition(EVoid) {
     // if the marker is invalid
     if (!IsOfClass(m_penMarker, "Enemy Marker")) {
       // this should not happen
       ASSERT(FALSE);
+
       // return to caller
       return EReturn();
     }
+
     // get the marker
     CEnemyMarker *pem = (CEnemyMarker *)&*m_penMarker;
 
     // get random destination position 
     FLOAT fMin = pem->m_fPatrolAreaInner;
     FLOAT fMax = pem->m_fPatrolAreaOuter;
-    if (fMin<0) {
+
+    if (fMin < 0) {
       fMin = 0;
     }
-    if (fMax<fMin) {
+
+    if (fMax < fMin) {
       fMax = fMin;
     }
+
     FLOAT fR = Lerp(fMin, fMax, FRnd());
-    FLOAT fA = FRnd()*360.0f;
+    FLOAT fA = FRnd() * 360.0f;
+
     FLOAT3D vOffsetDir;
     GetHeadingDirection(fA, vOffsetDir);
-    m_vDesiredPosition = m_vStartPosition+vOffsetDir*fR;
+
+    m_vDesiredPosition = m_vStartPosition + vOffsetDir * fR;
 
     // use walking to get there
     m_fMoveSpeed = GetProp(m_fWalkSpeed);
     m_aRotateSpeed = GetProp(m_aWalkRotateSpeed);
+    
+    // go
     WalkingAnim();
 
-    // go
     autocall MoveToDestination() EReturn;
 
     // return to caller
     return EReturn();
   };
 
-  // patrol around start position
-  DoPatrolling()
-  {
+  // Patrol around start position
+  DoPatrolling() {
     // repeat forever
     while (TRUE) {
       // stop where you are
       StopMoving();
       StandingAnim();
+
       // wait a bit
-      autowait(0.5f + FRnd()/2);
+      autowait(0.5f + FRnd() / 2.0f);
+
       // patrol to a random position
       autocall MoveToRandomPatrolPosition() EReturn;
     }
   }
 
-  // just wait until something happens
-  BeIdle(EVoid)
-  {
+  // Just wait until something happens
+  BeIdle(EVoid) {
     // start watching
     GetWatcher()->SendEvent(EStart());
 
@@ -2062,28 +2277,31 @@ procedures:
     while (TRUE) {
       // wait some time
       autowait(Lerp(5.0f, 20.0f, FRnd()));
+
       // play idle sound
       IdleSound();
     }
   }
 
-  // return to start position
-  ReturnToStartPosition(EVoid) 
-  {
+  // Return to start position
+  ReturnToStartPosition(EVoid) {
     jump BeIdle();
-/*
+
     // start watching
-    GetWatcher()->SendEvent(EStart());
+    /*GetWatcher()->SendEvent(EStart());
 
     m_vDesiredPosition = m_vStartPosition;
-    m_vStartDirection = (GetPlacement().pl_PositionVector-m_vStartPosition).SafeNormalize();
+    m_vStartDirection = (GetPlacement().pl_PositionVector - m_vStartPosition).SafeNormalize();
     m_fMoveSpeed = GetProp(m_fAttackRunSpeed);
     m_aRotateSpeed = GetProp(m_aAttackRotateSpeed);
+
     RunningAnim();
+
     autocall MoveToDestination() EReturn;
 
     WalkingAnim();
     m_vDesiredAngle = m_vStartDirection;
+
     StopTranslating();
 
     autocall RotateToStartDirection() EReturn;
@@ -2091,29 +2309,24 @@ procedures:
     StopMoving();
     StandingAnim();
 
-    jump BeIdle();
-    */
+    jump BeIdle();*/
   };
-  /*
-  // rotate to destination
-  RotateToStartDirection(EVoid) 
-  {
 
+  // Rotate to destination
+  /*RotateToStartDirection(EVoid) {
     m_fMoveFrequency = 0.1f;
     m_fMoveTime = _pTimer->CurrentTick() + 45.0f;
-    while (Abs(GetRelativeHeading(GetDesiredPositionDir()))>GetProp(m_aRotateSpeed)*m_fMoveFrequency*1.5f &&
-           m_fMoveTime>_pTimer->CurrentTick()) {
+
+    while (Abs(GetRelativeHeading(GetDesiredPositionDir())) > GetProp(m_aRotateSpeed) * m_fMoveFrequency * 1.5f
+        && m_fMoveTime > _pTimer->CurrentTick()) {
       autowait(m_fMoveFrequency);
     }
 
     return EReturn();
-  };
-  */
+  };*/
 
-
-  // move through markers
-  MoveThroughMarkers() 
-  {
+  // Move through markers
+  MoveThroughMarkers() {
     // start watching
     GetWatcher()->SendEvent(EStart());
   
@@ -2123,22 +2336,28 @@ procedures:
 
       // the marker position is our new start position for attack range
       m_vStartPosition = m_penMarker->GetPlacement().pl_PositionVector;
+
       // make a random position to walk to at the marker
-      FLOAT fR = FRnd()*pem->m_fMarkerRange;
-      FLOAT fA = FRnd()*360.0f;
-      m_vDesiredPosition = m_vStartPosition+FLOAT3D(CosFast(fA)*fR, 0, SinFast(fA)*fR);
+      FLOAT fR = FRnd() * pem->m_fMarkerRange;
+      FLOAT fA = FRnd() * 360.0f;
+
+      m_vDesiredPosition = m_vStartPosition+FLOAT3D(CosFast(fA) * fR, 0, SinFast(fA) * fR);
+
       // if running 
       if (pem->m_betRunToMarker == BET_TRUE) {
         // use attack speeds
         m_fMoveSpeed = GetProp(m_fAttackRunSpeed);
         m_aRotateSpeed = GetProp(m_aAttackRotateSpeed);
+
         // start running anim
         RunningAnim();
+
       // if not running
       } else {
         // use walk speeds
         m_fMoveSpeed = GetProp(m_fWalkSpeed);
         m_aRotateSpeed = GetProp(m_aWalkRotateSpeed);
+
         // start walking anim
         WalkingAnim();
       }
@@ -2149,21 +2368,23 @@ procedures:
       // read new blind/deaf values
       CEnemyMarker *pem = (CEnemyMarker *)&*m_penMarker;
       SetBoolFromBoolEType(m_bBlind, pem->m_betBlind);
-      SetBoolFromBoolEType(m_bDeaf,  pem->m_betDeaf);
+      SetBoolFromBoolEType(m_bDeaf, pem->m_betDeaf);
 
       // if should start tactics
       if (pem->m_bStartTactics) {
         // start to see/hear
         m_bBlind = FALSE;
         m_bDeaf = FALSE;
+
         // unconditional tactics start
         StartTacticsNow();
       }
       
       // if should patrol there
-      if (pem->m_fPatrolTime>0.0f) {
+      if (pem->m_fPatrolTime > 0.0f) {
         // spawn a reminder to notify us when the time is up
         SpawnReminder(this, pem->m_fPatrolTime, 0);
+
         // wait
         wait() {
           // initially
@@ -2171,6 +2392,7 @@ procedures:
             // start patroling
             call DoPatrolling(); 
           }
+
           // if time is up
           on (EReminder) : {
             // stop patroling
@@ -2180,11 +2402,13 @@ procedures:
       }
 
       CEnemyMarker *pem = (CEnemyMarker *)&*m_penMarker;
+
       // if should wait on the marker
       if (pem->m_fWaitTime > 0.0f) {
         // stop there
         StopMoving();
         StandingAnim();
+
         // wait
         autowait(pem->m_fWaitTime);
       }
@@ -2194,9 +2418,9 @@ procedures:
 
       // take next marker in loop
       m_penMarker = ((CEnemyMarker&)*m_penMarker).m_penTarget;
-    } // when no more markers
+    }
 
-    // stop where you are
+    // stop where you are when no more markers
     StopMoving();
     StandingAnim();
 
@@ -2204,8 +2428,9 @@ procedures:
     return EReturn();
   };
 
+  // Attack procedures
 
-// ATTACK PROCEDURES
+  // [Cecil] TODO: Continue refactoring from here
 
   // sequence that is activated when a new player is spotted visually or heard
   NewEnemySpotted()

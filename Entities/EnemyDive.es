@@ -38,7 +38,7 @@ properties:
 
  // moving/attack properties - CAN BE SET
  // these following must be ordered exactly like this for GetProp() to function
- 10 FLOAT m_fDiveWalkSpeed = 1.0f,                    // dive walk speed
+ 10 FLOAT m_fDiveWalkSpeed = 1.0f,          // dive walk speed
  11 ANGLE m_aDiveWalkRotateSpeed = 10.0f,   // dive walk rotate speed
  12 FLOAT m_fDiveAttackRunSpeed = 1.0f,     // dive attack run speed
  13 ANGLE m_aDiveAttackRotateSpeed = 10.0f, // dive attack rotate speed
@@ -57,12 +57,12 @@ components:
 
 functions:
   // Overridable function for access to different properties of derived classes (flying/diving)
-  virtual FLOAT &GetProp(FLOAT &m_fBase) {
+  virtual FLOAT &GetProp(FLOAT &fBase) {
     if (m_bInLiquid) {
-      return *((&m_fBase) + (&m_fDiveWalkSpeed - &m_fWalkSpeed));
-    } else {
-      return m_fBase;
+      return *((&fBase) + (&m_fDiveWalkSpeed - &m_fWalkSpeed));
     }
+
+    return fBase;
   }
 
   // Diving enemies never use pathfinding
@@ -81,9 +81,9 @@ functions:
     m_aDiveAttackRotateSpeed *= fMoveSpeed;
     m_fDiveCloseRunSpeed *= fMoveSpeed;
     m_aDiveCloseRotateSpeed *= fMoveSpeed;
-    m_fDiveAttackFireTime *= 1 / fAttackSpeed;
-    m_fDiveCloseFireTime *= 1 / fAttackSpeed;
-    m_fDiveLockOnEnemyTime *= 1 / fAttackSpeed;
+    m_fDiveAttackFireTime *= 1.0f / fAttackSpeed;
+    m_fDiveCloseFireTime *= 1.0f / fAttackSpeed;
+    m_fDiveLockOnEnemyTime *= 1.0f / fAttackSpeed;
 
     CEnemyBase::AdjustDifficulty();
   }
@@ -93,6 +93,7 @@ functions:
     if (IsInPlaneFrustum(penTarget, fCosAngle)) {
       return IsVisibleCheckAll(penTarget);
     }
+
     return FALSE;
   };
 
@@ -188,18 +189,18 @@ procedures:
   Hit(EVoid) : CEnemyBase::Hit {
     if (m_bInLiquid) {
       jump DiveHit();
-    } else {
-      jump GroundHit();
     }
+    
+    jump GroundHit();
   }
 
   // This is called to shoot at player when far away or otherwise unreachable
   Fire(EVoid) : CEnemyBase::Fire {
     if (m_bInLiquid) {
       jump DiveFire();
-    } else {
-      jump GroundFire();
     }
+    
+    jump GroundFire();
   }
 
   // Main loop
