@@ -562,7 +562,7 @@ procedures:
         SetModelMainTexture(TEXTURE_BEAST_NORMAL);
 
         m_fBlowUpAmount = 10000.0f;
-        m_fBodyParts = 4;
+        m_iBodyParts = 4;
         m_fDamageWounded = 250.0f;
         m_iScore = 5000;
 
@@ -582,7 +582,7 @@ procedures:
         SetModelMainTexture(TEXTURE_BEAST_BIG);
 
         m_fBlowUpAmount = 10000.0f;
-        m_fBodyParts = 6;
+        m_iBodyParts = 6;
         m_fDamageWounded = 650.0f;
         m_iScore = 25000;
         m_fStopDistance = 15;
@@ -604,7 +604,7 @@ procedures:
         SetModelMainTexture(TEXTURE_BEAST_HUGE);
 
         m_fBlowUpAmount = 100000.0f;
-        m_fBodyParts = 6;
+        m_iBodyParts = 6;
         m_fDamageWounded = 1650.0f;
         m_iScore = 40000;
         m_fStopDistance = 75;

@@ -1573,7 +1573,7 @@ procedures:
     // setup attack distances
     m_fStopDistance = m_fStopRadius;
     m_fBlowUpAmount = 100.0f;
-    m_fBodyParts = 0;
+    m_iBodyParts = 0;
     m_fDamageWounded = 0.0f;
     m_iScore = 750000;
     m_sptType = SPT_BLOOD;

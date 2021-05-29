@@ -2331,7 +2331,7 @@ procedures:
 
     m_fMaxHealth = BOSS_HEALTH;
     m_fBlowUpAmount = 1e6;
-    m_fBodyParts = 6;
+    m_iBodyParts = 6;
     m_fDamageWounded = 1e9;
     en_fDensity = 2500.0f;
     m_bHasUpperWeapons = FALSE;

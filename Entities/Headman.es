@@ -689,7 +689,7 @@ procedures:
 
         // damage/explode properties
         m_fBlowUpAmount = 65.0f;
-        m_fBodyParts = 4;
+        m_iBodyParts = 4;
         m_fDamageWounded = 0.0f;
 
         m_iScore = 200;
@@ -719,7 +719,7 @@ procedures:
 
         // damage/explode properties
         m_fBlowUpAmount = 65.0f;
-        m_fBodyParts = 4;
+        m_iBodyParts = 4;
         m_fDamageWounded = 0.0f;
 
         m_iScore = 100;
@@ -748,7 +748,7 @@ procedures:
 
         // damage/explode properties
         m_fBlowUpAmount = 65.0f;
-        m_fBodyParts = 4;
+        m_iBodyParts = 4;
         m_fDamageWounded = 0.0f;
 
         m_iScore = 500;
@@ -778,7 +778,7 @@ procedures:
 
         // damage/explode properties
         m_fBlowUpAmount = 0.0f;
-        m_fBodyParts = 4;
+        m_iBodyParts = 4;
         m_fDamageWounded = 0.0f;
 
         m_iScore = 2500;

@@ -269,7 +269,7 @@ procedures:
     // damage/explode properties
     m_fDamageWounded = 1E10f;
     m_fBlowUpAmount = 1E10f;
-    m_fBodyParts = 30;
+    m_iBodyParts = 30;
 
     // setup attack distances
     m_fAttackDistance = 150.0f;

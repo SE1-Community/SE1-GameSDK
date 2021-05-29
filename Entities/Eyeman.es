@@ -490,7 +490,7 @@ procedures:
 
       // damage/explode properties
       m_fBlowUpAmount = 130.0f;
-      m_fBodyParts = 5;
+      m_iBodyParts = 5;
       m_fBlowUpSize = 2.5f;
       m_fDamageWounded = 40.0f;
 
@@ -500,7 +500,7 @@ procedures:
 
       // damage/explode properties
       m_fBlowUpAmount = 100.0f;
-      m_fBodyParts = 5;
+      m_iBodyParts = 5;
       m_fBlowUpSize = 2.0f;
       m_fDamageWounded = 25.0f;
     }

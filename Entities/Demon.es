@@ -338,7 +338,7 @@ procedures:
     m_fMaxHealth = GetHealth();
     SetModelMainTexture(TEXTURE_DEMON);
     m_fBlowUpAmount = 10000.0f;
-    m_fBodyParts = 4;
+    m_iBodyParts = 4;
     m_fDamageWounded = 1000.0f;
     m_iScore = 5000;
     m_fLockOnEnemyTime = 3.0f;

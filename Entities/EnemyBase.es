@@ -100,8 +100,7 @@ properties:
 
  // damage/explode properties - CAN BE SET
  40 FLOAT m_fBlowUpAmount = 0.0f, // damage in minus for blow up
- // [Cecil] TODO: Rename to m_iBodyParts to match the type
- 41 INDEX m_fBodyParts = 4, // number of spawned body parts
+ 41 INDEX m_iBodyParts = 4, // number of spawned body parts
  42 FLOAT m_fDamageWounded = 0.0f, // damage amount to be wounded
  43 FLOAT3D m_vDamage = FLOAT3D(0.0f, 0.0f, 0.0f), // current damage impact
  44 FLOAT m_tmLastDamage = -1000.0f,
@@ -1855,7 +1854,7 @@ functions:
       // spawn debris
       Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, m_fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
 
-      for (INDEX iDebris = 0; iDebris < m_fBodyParts; iDebris++) {
+      for (INDEX iDebris = 0; iDebris < m_iBodyParts; iDebris++) {
         // flowerpower mode?
         if (iBloodType == 3) {
           switch (IRnd() % 5) {
@@ -1899,7 +1898,7 @@ functions:
       // spawn debris
       Debris_Begin(EIBT_ROBOT, DPR_SMOKETRAIL, BET_EXPLOSIONSTAIN, m_fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
 
-      for (INDEX iDebris = 0; iDebris < m_fBodyParts; iDebris++) {
+      for (INDEX iDebris = 0; iDebris < m_iBodyParts; iDebris++) {
         Debris_Spawn(this, this, MODEL_MACHINE, TEXTURE_MACHINE, 0, 0, 0, IRnd() % 4, 0.2f,
                      FLOAT3D(FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f, FRnd() * 0.6f + 0.2f));
       }

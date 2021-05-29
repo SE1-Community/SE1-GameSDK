@@ -352,7 +352,7 @@ procedures:
         m_fIgnoreRange = 200.0f;
 
         m_fBlowUpAmount = 80.0f;
-        m_fBodyParts = 4;
+        m_iBodyParts = 4;
         m_fDamageWounded = 0.0f;
         m_iScore = 500;
 
@@ -386,7 +386,7 @@ procedures:
 
         // damage/explode properties
         m_fBlowUpAmount = 180.0f;
-        m_fBodyParts = 5;
+        m_iBodyParts = 5;
         m_fDamageWounded = 0.0f;
         m_iScore = 800;
 

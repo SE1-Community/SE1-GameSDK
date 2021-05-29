@@ -523,7 +523,7 @@ procedures:
     m_fStopDistance = 100.0f;
     //m_fBlowUpAmount = 65.0f;
     m_fBlowUpAmount = 100.0f;
-    m_fBodyParts = 4;
+    m_iBodyParts = 4;
     m_fDamageWounded = 0.0f;
     m_iScore = 750;
     m_sptType = SPT_WOOD;

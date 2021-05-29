@@ -1324,7 +1324,7 @@ procedures:
     SetHealth(SUMMONER_HEALTH);
     m_fMaxHealth = SUMMONER_HEALTH;
 
-    m_fBodyParts = 0;
+    m_iBodyParts = 0;
 
     // setup moving speed
     m_fWalkSpeed = 0.0f;

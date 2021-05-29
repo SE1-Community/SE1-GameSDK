@@ -562,7 +562,7 @@ procedures:
     m_fIgnoreRange = 300.0f;
 
     // damage/explode properties
-    m_fBodyParts = 8;
+    m_iBodyParts = 8;
     m_fDamageWounded = 100000.0f;
 
     // continue behavior in base class

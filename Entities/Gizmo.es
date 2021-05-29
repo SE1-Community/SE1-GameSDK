@@ -362,7 +362,7 @@ procedures:
 
     // damage/explode properties
     m_fBlowUpAmount = 0.0f;
-    m_fBodyParts = 0;
+    m_iBodyParts = 0;
     m_fDamageWounded = 0.0f;
     m_iScore = 500;
     m_sptType = SPT_SLIME;
