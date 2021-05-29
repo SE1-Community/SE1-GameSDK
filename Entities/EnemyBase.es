@@ -2432,9 +2432,8 @@ procedures:
 
   // [Cecil] TODO: Continue refactoring from here
 
-  // sequence that is activated when a new player is spotted visually or heard
-  NewEnemySpotted()
-  {
+  // Sequence that is activated when a new player is spotted visually or heard
+  NewEnemySpotted() {
     // calculate reflex time
     FLOAT tmReflex = Lerp(m_tmReflexMin, m_tmReflexMax, FRnd());
     tmReflex = ClampDn(tmReflex, 0.0f);
@@ -2447,13 +2446,24 @@ procedures:
 
       // wait the reflex time
       wait(tmReflex) {
-        on (ETimer) : { stop; }
+        on (ETimer) : {
+          stop;
+        }
+
         // pass all damage events
-        on (EDamage) : { pass; }
+        on (EDamage) : {
+          pass;
+        }
+
         // pass space beam hit
-        on (EHitBySpaceShipBeam) : { pass;}
+        on (EHitBySpaceShipBeam) : {
+          pass;
+        }
+
         // ignore all other events
-        otherwise () : { resume; }
+        otherwise () : {
+          resume;
+        }
       }
     }
 
@@ -2464,46 +2474,50 @@ procedures:
     return EReturn();
   }
 
-  // stop attack
+  // Stop attack
   StopAttack(EVoid) {
     // start watching
     GetWatcher()->SendEvent(EStart());
+
     // no damager
     SetTargetNone();
     m_fDamageConfused = 0.0f;
+
     // stop moving
     StopMoving();
 
     return EReturn();
   };
 
-  // initial preparation
-  InitializeAttack(EVoid) 
-  {
+  // Initial preparation
+  InitializeAttack(EVoid) {
     // disable blind/deaf mode
     m_bBlind = FALSE;
     m_bDeaf = FALSE;
 
-    SeeNotify();          // notify seeing
-    GetWatcher()->SendEvent(EStop());   // stop looking
+    // stop looking
+    SeeNotify();
+    GetWatcher()->SendEvent(EStop());
+
     // make fuss
     AddToFuss();
+
     // remember spotted position
     m_vPlayerSpotted = PlayerDestinationPos();
 
     // set timers
-    if (CalcDist(m_penEnemy)<GetProp(m_fCloseDistance)) {
+    if (CalcDist(m_penEnemy) < GetProp(m_fCloseDistance)) {
       m_fShootTime = 0.0f;
     } else {
       m_fShootTime = _pTimer->CurrentTick() + FRnd();
     }
+
     m_fDamageConfused = m_fDamageWounded;
 
     return EReturn();
   };
 
-
-  // attack enemy
+  // Attack enemy
   AttackEnemy(EVoid) {
     // initial preparation
     autocall InitializeAttack() EReturn;
@@ -2521,9 +2535,8 @@ procedures:
     return EBegin();
   };
 
-  // repeat attacking enemy until enemy is dead or you give up
-  PerformAttack()
-  {
+  // Repeat attacking enemy until enemy is dead or you give up
+  PerformAttack() {
     // reset last range
     m_fRangeLast = 1E9f;
 
@@ -2532,8 +2545,7 @@ procedures:
     m_dtDestination = DT_PLAYERCURRENT;
 
     // repeat
-    while (TRUE)
-    {
+    while (TRUE) {
       // if attacking is futile
       if (ShouldCeaseAttack()) {
         // cease it
@@ -2543,35 +2555,42 @@ procedures:
 
       // get distance from enemy
       FLOAT fEnemyDistance = CalcDist(m_penEnemy);
+
       // if just entered close range
-      if (m_fRangeLast>GetProp(m_fCloseDistance) && fEnemyDistance <= GetProp(m_fCloseDistance)) {
+      if (m_fRangeLast > GetProp(m_fCloseDistance) && fEnemyDistance <= GetProp(m_fCloseDistance)) {
         // reset shoot time to make it attack immediately
         m_fShootTime = 0.0f;
       }
+
       m_fRangeLast = fEnemyDistance;
 
       // determine movement frequency depending on enemy distance or path finding
       m_fMoveFrequency = GetAttackMoveFrequency(fEnemyDistance);
-      if (m_dtDestination == DT_PATHPERSISTENT||m_dtDestination == DT_PATHTEMPORARY) {
+
+      if (m_dtDestination == DT_PATHPERSISTENT || m_dtDestination == DT_PATHTEMPORARY) {
         m_fMoveFrequency = 0.1f;
       }
 
       // wait one time interval
-      wait(m_fMoveFrequency) {
-        on (ETimer) : { stop; }
+      wait (m_fMoveFrequency) {
+        on (ETimer) : {
+          stop;
+        }
+
         // initially
         on (EBegin) : {
-
           // if you haven't fired/hit enemy for some time
           if (_pTimer->CurrentTick() > m_fShootTime) {
-
             // if you have new player visible closer than current and in threat distance
             CEntity *penNewEnemy = GetWatcher()->CheckCloserPlayer(m_penEnemy, GetThreatDistance());
+
             if (penNewEnemy != NULL) {
               // switch to that player
               SetTargetHardForce(penNewEnemy);
+
               // start new behavior
               SendEvent(EReconsiderBehavior());
+
               stop;
             }
 
@@ -2579,10 +2598,11 @@ procedures:
             if (IsVisible(m_penEnemy)) {
               // remember spotted position
               m_vPlayerSpotted = PlayerDestinationPos();
+
               // if going to player spotted or temporary path position
-              if (m_dtDestination == DT_PLAYERSPOTTED||m_dtDestination == DT_PATHTEMPORARY) {
+              if (m_dtDestination == DT_PLAYERSPOTTED || m_dtDestination == DT_PATHTEMPORARY) {
                 // switch to player current position
-                m_dtDestination=DT_PLAYERCURRENT;
+                m_dtDestination = DT_PLAYERCURRENT;
               }
 
             // if you cannot see player
@@ -2590,7 +2610,7 @@ procedures:
               // if going to player's current position
               if (m_dtDestination == DT_PLAYERCURRENT) {
                 // switch to position where player was last seen
-                m_dtDestination=DT_PLAYERSPOTTED;
+                m_dtDestination = DT_PLAYERSPOTTED;
               }
             }
 
@@ -2600,36 +2620,40 @@ procedures:
           // if between two fire/hit moments
           } else {
             // if going to player spotted or temporary path position and you just seen the player
-            if ((m_dtDestination == DT_PLAYERSPOTTED||m_dtDestination == DT_PATHTEMPORARY)
-              && IsVisible(m_penEnemy)) {
+            if ((m_dtDestination == DT_PLAYERSPOTTED || m_dtDestination == DT_PATHTEMPORARY)
+             && IsVisible(m_penEnemy)) {
               // switch to player current position
-              m_dtDestination=DT_PLAYERCURRENT;
+              m_dtDestination = DT_PLAYERCURRENT;
+
               // remember spotted position
               m_vPlayerSpotted = PlayerDestinationPos();
             }
           }
 
           // if you are not following the player and you are near current destination position
-          FLOAT fAllowedError = m_fMoveSpeed*m_fMoveFrequency*2.0f;
-          if (m_dtDestination == DT_PATHPERSISTENT||m_dtDestination == DT_PATHTEMPORARY) {
+          FLOAT fAllowedError = m_fMoveSpeed * m_fMoveFrequency * 2.0f;
+
+          if (m_dtDestination == DT_PATHPERSISTENT || m_dtDestination == DT_PATHTEMPORARY) {
             fAllowedError = ((CNavigationMarker&)*m_penPathMarker).m_fMarkerRange;
           }
-          if (m_dtDestination != DT_PLAYERCURRENT &&
-            (CalcDistanceInPlaneToDestination()<fAllowedError || fAllowedError<0.1f)) {
+
+          if (m_dtDestination != DT_PLAYERCURRENT && (CalcDistanceInPlaneToDestination() < fAllowedError || fAllowedError < 0.1f)) {
             // if going to where player was last spotted
             if (m_dtDestination == DT_PLAYERSPOTTED) {
               // if you see the player
               if (IsVisible(m_penEnemy)) {
                 // switch to following player
-                m_dtDestination=DT_PLAYERCURRENT;
+                m_dtDestination = DT_PLAYERCURRENT;
+
               // if you don't see him
               } else {
                 // switch to temporary path finding
-                m_dtDestination=DT_PATHTEMPORARY;
+                m_dtDestination = DT_PATHTEMPORARY;
                 StartPathFinding();
               }
+
             // if using pathfinding
-            } else if (m_dtDestination == DT_PATHTEMPORARY||m_dtDestination == DT_PATHPERSISTENT) {
+            } else if (m_dtDestination == DT_PATHTEMPORARY || m_dtDestination == DT_PATHPERSISTENT) {
               // find next path marker
               FindNextPathMarker();
             }
@@ -2647,7 +2671,7 @@ procedures:
           }
 
           // set speeds for movement towards desired position
-          FLOAT3D vPosDelta = m_vDesiredPosition-GetPlacement().pl_PositionVector;
+          FLOAT3D vPosDelta = m_vDesiredPosition - GetPlacement().pl_PositionVector;
           FLOAT fPosDistance = vPosDelta.Length();
           
           SetSpeedsToDesiredPosition(vPosDelta, fPosDistance, m_dtDestination == DT_PLAYERCURRENT);
@@ -2655,86 +2679,112 @@ procedures:
           // adjust direction and speed
           ULONG ulFlags = SetDesiredMovement(); 
           MovementAnimation(ulFlags);
+
           resume;
         }
+
         // if touched something
         on (ETouch eTouch) : { 
-          if (IfTargetCrushed(eTouch.penOther, (FLOAT3D&)eTouch.plCollision))
-          {
+          if (IfTargetCrushed(eTouch.penOther, (FLOAT3D&)eTouch.plCollision)) {
             resume;
-          }
+
           // if pathfinding must begin
-          else if (CheckTouchForPathFinding(eTouch)) {
+          } else if (CheckTouchForPathFinding(eTouch)) {
             // stop the loop
             stop;
+
           // if touch is ignored
           } else if (m_bTacticActive) {
             // reinitialize tactics?
             if (eTouch.penOther->GetRenderType() == CEntity::RT_BRUSH) {
               FLOAT3D vDir = en_vDesiredTranslationRelative;
               vDir.SafeNormalize();
-              vDir*=GetRotationMatrix();
+              vDir *= GetRotationMatrix();
+
               // if the touched plane is more or less orthogonal to the current velocity
-              if ((eTouch.plCollision%vDir)<-0.5f) { m_bTacticActive = 0; }
+              if ((eTouch.plCollision % vDir) < -0.5f) {
+                m_bTacticActive = 0;
+              }
+
               resume;
+
             } else {
               resume;
             }
+
           } else {
             // pass the event
             pass;
           }
         }
+
         // if came to an edge
         on (EWouldFall eWouldFall) : { 
           // if pathfinding must begin
           if (CheckFallForPathFinding(eWouldFall)) {
             // stop the loop
             stop;
+
           } else if (m_bTacticActive) {
             // stop tactics
             m_bTacticActive = 0;
             resume;
+
           // if edge is ignored
           } else {
             // pass the event
             pass;
           }
         }
-        on (ESound) : { resume; }     // ignore all sounds
-        on (EWatch) : { resume; }     // ignore watch
-        on (EReturn) : { stop; }  // returned from subprocedure
+
+        // ignore sounds and watching
+        on (ESound) : {
+          resume;
+        }
+
+        on (EWatch) : {
+          resume;
+        }
+
+        // returned from subprocedure
+        on (EReturn) : {
+          stop;
+        }
       }
     }
   }
 
-
-  // fire or hit the enemy if possible
-  FireOrHit() 
-  {
+  // Fire or hit the enemy if possible
+  FireOrHit() {
     // if player is in close range and in front
-    if (CalcDist(m_penEnemy)<GetProp(m_fCloseDistance) && CanHitEnemy(m_penEnemy, Cos(45.0f))) {
+    if (CalcDist(m_penEnemy) < GetProp(m_fCloseDistance) && CanHitEnemy(m_penEnemy, Cos(45.0f))) {
       // make fuss
       AddToFuss();
+
       // stop moving (rotation and translation)
       StopMoving();
+
       // set next shoot time
-      m_fShootTime = _pTimer->CurrentTick() + GetProp(m_fCloseFireTime)*(1.0f + FRnd()/3.0f);
+      m_fShootTime = _pTimer->CurrentTick() + GetProp(m_fCloseFireTime) * (1.0f + FRnd() / 3.0f);
+
       // hit
       autocall Hit() EReturn;
 
     // else if player is in fire range and in front
-    } else if (CalcDist(m_penEnemy)<GetProp(m_fAttackDistance) && CanAttackEnemy(m_penEnemy, Cos(45.0f))) {
+    } else if (CalcDist(m_penEnemy) < GetProp(m_fAttackDistance) && CanAttackEnemy(m_penEnemy, Cos(45.0f))) {
       // make fuss
       AddToFuss();
+
       // stop moving (rotation and translation)
       StopMoving();
+
       // set next shoot time
       if (CalcDist(m_penEnemy)<GetProp(m_fCloseDistance)) {
-        m_fShootTime = _pTimer->CurrentTick() + GetProp(m_fCloseFireTime)*(1.0f + FRnd()/3.0f);
+        m_fShootTime = _pTimer->CurrentTick() + GetProp(m_fCloseFireTime) * (1.0f + FRnd() / 3.0f);
       } else {
-        m_fShootTime = _pTimer->CurrentTick() + GetProp(m_fAttackFireTime)*(1.0f + FRnd()/3.0f);
+        m_fShootTime = _pTimer->CurrentTick() + GetProp(m_fAttackFireTime) * (1.0f + FRnd() / 3.0f);
       }
+
       // fire
       autocall Fire() EReturn;
 
@@ -2748,54 +2798,61 @@ procedures:
     return EReturn();
   };
 
-// COMBAT IMPLEMENTATION
-
-  // this is called to hit the player when near
-  Hit(EVoid) 
-  { 
+  // This is called to hit the player when near
+  Hit(EVoid) {
     return EReturn(); 
   }
 
-  // this is called to shoot at player when far away or otherwise unreachable
-  Fire(EVoid) 
-  { 
+  // This is called to shoot at player when far away or otherwise unreachable
+  Fire(EVoid) {
     return EReturn(); 
   }
 
-// COMBAT HELPERS
+  // Combat helpers
 
-  // call this to lock on player for some time - set m_fLockOnEnemyTime before calling
-  LockOnEnemy(EVoid) 
-  {
+  // Call this to lock on player for some time - set m_fLockOnEnemyTime before calling
+  LockOnEnemy(EVoid)  {
     // stop moving
     StopMoving();
+
     // play animation for locking
     ChargeAnim();
+
     // wait charge time
     m_fLockStartTime = _pTimer->CurrentTick();
-    while (m_fLockStartTime+GetProp(m_fLockOnEnemyTime) > _pTimer->CurrentTick()) {
+
+    while (m_fLockStartTime + GetProp(m_fLockOnEnemyTime) > _pTimer->CurrentTick()) {
       // each tick
       m_fMoveFrequency = 0.05f;
+
       wait (m_fMoveFrequency) {
-        on (ETimer) : { stop; }
+        on (ETimer) : {
+          stop;
+        }
+
         on (EBegin) : {
           m_vDesiredPosition = PlayerDestinationPos();
+
           // if not heading towards enemy
           if (!IsInPlaneFrustum(m_penEnemy, CosFast(5.0f))) {
             m_fMoveSpeed = 0.0f;
             m_aRotateSpeed = GetLockRotationSpeed();
+
           // if heading towards enemy
           } else {
             m_fMoveSpeed = 0.0f;
             m_aRotateSpeed = 0.0f;
           }
+
           // adjust direction and speed
-          ULONG ulFlags = SetDesiredMovement(); 
-          //MovementAnimation(ulFlags);  don't do this, or they start to jive
+          ULONG ulFlags = SetDesiredMovement();
+          //MovementAnimation(ulFlags); // don't do this, or they start to jive
+
           resume;
         }
       }
     }
+
     // stop rotating
     StopRotating();
 
@@ -2803,45 +2860,65 @@ procedures:
     return EReturn();
   };
 
-  // call this to jump onto player - set charge properties before calling and spawn a reminder
-  ChargeHitEnemy(EVoid) 
-  {
+  // Call this to jump onto player - set charge properties before calling and spawn a reminder
+  ChargeHitEnemy(EVoid) {
     // wait for length of hit animation
-    wait(GetAnimLength(m_iChargeHitAnimation)) {
-      on (EBegin) : { resume; }
-      on (ETimer) : { stop; }
+    wait (GetAnimLength(m_iChargeHitAnimation)) {
+      on (EBegin) : {
+        resume;
+      }
+
+      on (ETimer) : {
+        stop;
+      }
+
       // ignore damages
-      on (EDamage) : { resume; }
+      on (EDamage) : {
+        resume;
+      }
+
       // if user-set reminder expired
       on (EReminder) : {
         // stop moving
         StopMoving();
         resume;
       }
+
       // if you touch some entity
       on (ETouch etouch) : {
         // if it is alive and in front
-        if ((etouch.penOther->GetFlags()&ENF_ALIVE) && IsInPlaneFrustum(etouch.penOther, CosFast(60.0f))) {
+        if ((etouch.penOther->GetFlags() & ENF_ALIVE) && IsInPlaneFrustum(etouch.penOther, CosFast(60.0f))) {
           // get your direction
           FLOAT3D vSpeed;
           GetHeadingDirection(m_fChargeHitAngle, vSpeed);
+
           // damage entity in that direction
           InflictDirectDamage(etouch.penOther, this, DMT_CLOSERANGE, m_fChargeHitDamage, FLOAT3D(0.0f, 0.0f, 0.0f), vSpeed);
+
           // push it away
           vSpeed = vSpeed * m_fChargeHitSpeed;
           KickEntity(etouch.penOther, vSpeed);
+
           // stop waiting
           stop;
         }
+
         pass;
       }
     }
+
     // if the anim is not yet finished
     if (!IsAnimFinished()) {
       // wait the rest of time till the anim end
-      wait(GetCurrentAnimLength() - GetPassedTime()) {
-        on (EBegin) : { resume; }
-        on (ETimer) : { stop; }
+      wait (GetCurrentAnimLength() - GetPassedTime()) {
+        on (EBegin) : {
+          resume;
+        }
+
+        on (ETimer) : {
+          stop;
+        }
+
         // if timer expired
         on (EReminder) : {
           // stop moving
@@ -2855,31 +2932,30 @@ procedures:
     return EReturn();
   };
 
-// WOUNDING AND DYING PROCEDURES
-
-  // play wounding animation
-  BeWounded(EDamage eDamage)
-  { 
+  // Play wounding animation
+  BeWounded(EDamage eDamage) {
     StopMoving();
+
     // determine damage anim and play the wounding
     autowait(GetAnimLength(AnimForDamage(eDamage.fAmount)));
+
     return EReturn();
   };
 
-  // we get here once the enemy is dead
-  Die(EDeath eDeath)
-  {
+  // We get here once the enemy is dead
+  Die(EDeath eDeath) {
     // not alive anymore
-    SetFlags(GetFlags()&~ENF_ALIVE);
+    SetFlags(GetFlags() & ~ENF_ALIVE);
 
     // find the one who killed, or other best suitable player
     CEntityPointer penKiller = eDeath.eLastDamage.penInflictor;
+
     if (penKiller == NULL || !IsOfClass(penKiller, "Player")) {
       penKiller = m_penEnemy;
     }
 
     if (penKiller == NULL || !IsOfClass(penKiller, "Player")) {
-      penKiller = FixupCausedToPlayer(this, penKiller, /*bWarning=*/FALSE);
+      penKiller = FixupCausedToPlayer(this, penKiller, FALSE);
     }
 
     // if killed by someone
@@ -2887,21 +2963,23 @@ procedures:
       // give him score
       EReceiveScore eScore;
       eScore.iPoints = m_iScore;
+
       penKiller->SendEvent(eScore);
-      if (CountAsKill())
-      {
+
+      if (CountAsKill()) {
         penKiller->SendEvent(EKilledEnemy());
       }
+
       // send computer message if in coop
       if (GetSP()->sp_bCooperative) {
         EComputerMessage eMsg;
         eMsg.fnmMessage = GetComputerMessageName();
+
         if (eMsg.fnmMessage != "") {
           penKiller->SendEvent(eMsg);
         }
       }
     }
-
 
     // destroy watcher class
     GetWatcher()->SendEvent(EStop());
@@ -2909,12 +2987,12 @@ procedures:
 
     // send event to death target
     SendToTarget(m_penDeathTarget, m_eetDeathType, penKiller);
+
     // send event to spawner if any
     // NOTE: trigger's penCaused has been changed from penKiller to THIS;
     if (m_penSpawnerTarget) {
       SendToTarget(m_penSpawnerTarget, EET_TRIGGER, this);
     }
-    
 
     // wait
     wait() {
@@ -2924,26 +3002,32 @@ procedures:
         if (ShouldBlowUp()) {
           // blow up now
           BlowUpBase();
+
           // stop waiting
           stop;
+
         // if shouldn't blow up yet
         } else {
           // invoke death animation sequence
           call DeathSequence();
         }
       }
+
       // if damaged
       on (EDamage) : {
         // if should already blow up
         if (ShouldBlowUp()) {
           // blow up now
           BlowUpBase();
+
           // stop waiting
           stop;
         }
+
         // otherwise, ignore the damage
         resume;
       }
+
       // if death sequence is over
       on (EEnd) : { 
         // stop waiting
@@ -2953,6 +3037,7 @@ procedures:
 
     // stop making fuss
     RemoveFromFuss();
+
     // cease to exist
     Destroy();
 
@@ -2960,10 +3045,9 @@ procedures:
     return;
   };
 
-  Death(EVoid) 
-  {
-    StopMoving();     // stop moving
-    DeathSound();     // death sound
+  Death(EVoid)  {
+    StopMoving();
+    DeathSound();
     LeaveStain(FALSE);
 
     // set physic flags
@@ -2979,40 +3063,45 @@ procedures:
 
     // start death anim
     INDEX iAnim = AnimForDeath();
+
     // use tactic variables for temporary data
-    m_vTacticsStartPosition=FLOAT3D(1.0f, 1.0f, 1.0f);
-    m_fTacticVar4=WaitForDust(m_vTacticsStartPosition);
+    m_vTacticsStartPosition = FLOAT3D(1.0f, 1.0f, 1.0f);
+    m_fTacticVar4 = WaitForDust(m_vTacticsStartPosition);
+
     // remember start time
-    m_fTacticVar5=_pTimer->CurrentTick();
+    m_fTacticVar5 = _pTimer->CurrentTick();
+
     // mark that we didn't spawned dust yet
-    m_fTacticVar3=-1;
+    m_fTacticVar3 = -1.0f;
+
     // if no dust should be spawned
-    if (m_fTacticVar4<0)
-    {
+    if (m_fTacticVar4 < 0.0f) {
       autowait(GetAnimLength(iAnim));
-    }
+
     // should spawn dust
-    else if (TRUE)
-    {
-      while (_pTimer->CurrentTick()<m_fTacticVar5+GetCurrentAnimLength())
-      {
+    } else if (TRUE) {
+      while (_pTimer->CurrentTick()<m_fTacticVar5+GetCurrentAnimLength()) {
         autowait(_pTimer->TickQuantum);
-        if (en_penReference != NULL && _pTimer->CurrentTick() >= m_fTacticVar5+m_fTacticVar4 && m_fTacticVar3<0)
-        {
+
+        if (en_penReference != NULL && _pTimer->CurrentTick() >= m_fTacticVar5 + m_fTacticVar4 && m_fTacticVar3 < 0.0f) {
           // spawn dust effect
-          CPlacement3D plFX=GetPlacement();
+          CPlacement3D plFX = GetPlacement();
+
           ESpawnEffect ese;
-          ese.colMuliplier = C_WHITE|CT_OPAQUE;
+          ese.colMuliplier = C_WHITE | CT_OPAQUE;
           ese.vStretch = m_vTacticsStartPosition;
           ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
           ese.betType = BET_DUST_FALL;
-          CPlacement3D plSmoke=plFX;
-          plSmoke.pl_PositionVector+=FLOAT3D(0,0.35f*m_vTacticsStartPosition(2),0);
+
+          CPlacement3D plSmoke = plFX;
+          plSmoke.pl_PositionVector += FLOAT3D(0.0f, 0.35f * m_vTacticsStartPosition(2), 0.0f);
+
           CEntityPointer penFX = CreateEntity(plSmoke, CLASS_BASIC_EFFECT);
           penFX->Initialize(ese);
           penFX->SetParent(this);
+
           // mark that we spawned dust
-          m_fTacticVar3=1;
+          m_fTacticVar3 = 1.0f;
         }
       }
     }
@@ -3020,8 +3109,7 @@ procedures:
     return EEnd();
   };
 
-  DeathSequence(EVoid)
-  {
+  DeathSequence(EVoid) {
     // entity death
     autocall Death() EEnd;
 
@@ -3030,11 +3118,11 @@ procedures:
 
     // check if you have attached flame
     CEntityPointer penFlame = GetChildOfClass("Flame");
-    if (penFlame != NULL)
-    {
+
+    if (penFlame != NULL) {
       // send the event to stop burning
       EStopFlaming esf;
-      esf.m_bNow=FALSE;
+      esf.m_bNow = FALSE;
       penFlame->SendEvent(esf);
     }
 
@@ -3045,22 +3133,25 @@ procedures:
     m_fFadeStartTime = _pTimer->CurrentTick();
     m_fFadeTime = 1.0f,
     m_bFadeOut = TRUE;
+
     // become passable even if very large corpse
-    SetCollisionFlags(ECF_CORPSE&~((ECBI_PROJECTILE_MAGIC|ECBI_PROJECTILE_SOLID) << ECB_TEST));
+    SetCollisionFlags(ECF_CORPSE & ~((ECBI_PROJECTILE_MAGIC | ECBI_PROJECTILE_SOLID) << ECB_TEST));
+
     // wait for fading
     autowait(m_fFadeTime);
+
     // wait for the stardust effect
     autowait(6.0f);
 
     return EEnd();
   }
   
-// MAIN LOOP PROCEDURES
+  // Main loop procedures
 
-  // move
-  Active(EVoid) 
-  {
+  // Move
+  Active(EVoid) {
     m_fDamageConfused = 0.0f;
+
     // logic loop
     wait () {
       // initially
@@ -3069,40 +3160,48 @@ procedures:
         SendEvent(EReconsiderBehavior());
         resume;
       }
+
       // if new behavior is requested
       on (EReconsiderBehavior) : {
         // if we have an enemy
         if (m_penEnemy != NULL) {
           // attack it
           call AttackEnemy();
+
         // if we have a marker to walk to
         } else if (m_penMarker != NULL) {
           // go to the marker
           call MoveThroughMarkers();
+
         // if on start position
         } else if (m_bOnStartPosition) {
           // just wait here
           m_bOnStartPosition = FALSE;
           call BeIdle();
+
         // otherwise
         } else {
           // return to start position
           call ReturnToStartPosition();
         }
+
         resume;
       }
+
       // on return from some of the sub-procedures
       on (EReturn) : {
         // start new behavior
         SendEvent(EReconsiderBehavior());
         resume;
       }
+
       // if attack restart is requested
       on (ERestartAttack) : {
         // start new behavior
         SendEvent(EReconsiderBehavior());
         resume;
       }
+
       // if enemy has been seen
       on (EWatch eWatch) : {
         // if new enemy
@@ -3111,11 +3210,14 @@ procedures:
           if (m_bBlind && m_bTacticsStartOnSense ) {
             StartTacticsNow();
           }
+
           // react to it
           call NewEnemySpotted();
         }
+
         resume;
       }
+
       // if you get damaged by someone
       on (EDamage eDamage) : {
         // eventually set new hard target
@@ -3123,22 +3225,28 @@ procedures:
 
         // if confused
         m_fDamageConfused -= eDamage.fAmount;
+
         if (m_fDamageConfused < 0.001f) {
           m_fDamageConfused = m_fDamageWounded;
+
           // notify wounding to others
           WoundedNotify(eDamage);
+
           // make pain sound
           WoundSound();
+
           // play wounding animation
           call BeWounded(eDamage);
         }
+
         resume;
       }
-      on (EForceWound) :
-      {
+
+      on (EForceWound) : {
         call BeWounded(EDamage());
         resume;
       }
+
       // if you hear something
       on (ESound eSound) : {
         // if deaf
@@ -3152,33 +3260,43 @@ procedures:
           // react to it
           call NewEnemySpotted();
         }
+
         resume;
       }
+
       // on touch
       on (ETouch eTouch) : {
         // set the new target if needed
         BOOL bTargetChanged = SetTargetHard(eTouch.penOther);
+
         // if target changed
         if (bTargetChanged) {
           // make sound that you spotted the player
           SightSound();
+
           // start new behavior
           SendEvent(EReconsiderBehavior());
         }
+
         pass;
       }
+
       // if triggered manually
       on (ETrigger eTrigger) : {
         CEntity *penCaused = FixupCausedToPlayer(this, eTrigger.penCaused);
+
         // if can set the trigerer as soft target
         if (SetTargetSoft(penCaused)) {
           // make sound that you spotted the player
           SightSound();
+
           // start new behavior
           SendEvent(EReconsiderBehavior());
         }
+
         resume;
       }
+
       // on stop -> stop enemy
       on (EStop) : {
         jump Inactive();
@@ -3189,6 +3307,7 @@ procedures:
         //CPrintF("%s: StartAttack event is obsolete!\n", GetName());
         resume;
       }
+
       on (EStopAttack) : {
         //CPrintF("%s: StopAttack event is obsolete!\n", GetName());
         resume;
@@ -3196,76 +3315,84 @@ procedures:
     }
   };
 
-  // not doing anything, waiting until some player comes close enough to start patroling or similar
-  Inactive(EVoid) 
-  {
+  // Not doing anything, waiting until some player comes close enough to start patroling or similar
+  Inactive(EVoid) {
     // stop moving
     StopMoving();
     StandingAnim();
+
     // start watching
     GetWatcher()->SendEvent(EStart());
+
     // wait forever
     wait() {
-      on (EBegin) : { resume; }
+      on (EBegin) : {
+        resume;
+      }
+
       // if watcher detects that a player is near
       on (EStart) : { 
         // become active (patroling etc.)
         jump Active(); 
       }
+
       // if returned from wounding
       on (EReturn) : { 
         // become active (this will attack the enemy)
         jump Active(); 
       }
+
       // if triggered manually
       on (ETrigger eTrigger) : {
         CEntity *penCaused = FixupCausedToPlayer(this, eTrigger.penCaused);
+
         // if can set the trigerer as soft target
         if (SetTargetSoft(penCaused)) {
           // become active (this will attack the player)
           jump Active(); 
         }
       }
+
       // if you get damaged by someone
       on (EDamage eDamage) : {
         // if can set the damager as hard target
         if (SetTargetHard(eDamage.penInflictor)) {
           // notify wounding to others
           WoundedNotify(eDamage);
+
           // make pain sound
           WoundSound();
+
           // play wounding animation
           call BeWounded(eDamage);
         }
+
         return;
       }
     }
   };
 
-  // overridable called before main enemy loop actually begins
-  PreMainLoop(EVoid)
-  {
+  // Overridable called before main enemy loop actually begins
+  PreMainLoop(EVoid) {
     return EReturn();
   }
 
-  // main entry point for enemy behavior
-  MainLoop(EVoid) 
-  {
+  // Main entry point for enemy behavior
+  MainLoop(EVoid) {
     // setup some model parameters that are global for all enemies
     SizeModel();
-    // check that max health is properly set
-    ASSERT(m_fMaxHealth == GetHealth() || IsOfClass(this, "Devil") || IsOfClass(this, "ExotechLarva") || IsOfClass(this, "AirElemental") || IsOfClass(this, "Summoner"));
 
     // normalize parameters
-    if (m_tmReflexMin<0) {
+    if (m_tmReflexMin < 0.0f) {
       m_tmReflexMin = 0.0f;
     }
-    if (m_tmReflexMin>m_tmReflexMax) {
+
+    if (m_tmReflexMin > m_tmReflexMax) {
       m_tmReflexMax = m_tmReflexMin;
     }
 
     // adjust falldown and step up values
-    if (m_fStepHeight == -1) {
+    if (m_fStepHeight == -1.0f) {
       m_fStepHeight = 2.0f;
     }
 
@@ -3286,8 +3413,10 @@ procedures:
 
     // spawn your watcher
     m_penWatcher = CreateEntity(GetPlacement(), CLASS_WATCHER);
+
     EWatcherInit eInitWatcher;
     eInitWatcher.penOwner = this;
+
     GetWatcher()->Initialize(eInitWatcher);
 
     // switch to next marker (enemies usually point to the marker they stand on)
@@ -3296,7 +3425,6 @@ procedures:
       m_penMarker = pem->m_penTarget;
     }
 
-
     // store starting position
     m_vStartPosition = GetPlacement().pl_PositionVector;
 
@@ -3304,8 +3432,8 @@ procedures:
     m_soSound.Set3DParameters(80.0f, 5.0f, 1.0f, 1.0f);
 
     // adjust falldown and step up values
-    en_fStepUpHeight = m_fStepHeight+0.01f;
-    en_fStepDnHeight = m_fFallHeight+0.01f;
+    en_fStepUpHeight = m_fStepHeight + 0.01f;
+    en_fStepDnHeight = m_fFallHeight + 0.01f;
 
     // let derived class(es) adjust parameters if needed
     EnemyPostInit();
@@ -3326,8 +3454,7 @@ procedures:
     jump StandardBehavior();
   }
 
-  StandardBehavior(EVoid)
-  {
+  StandardBehavior(EVoid) {
     // this is the main enemy loop
     wait() {
       // initially
@@ -3335,39 +3462,47 @@ procedures:
         // start in active or inactive state
         if (m_penEnemy != NULL) {
           call Active();
+
         } else {
           call Inactive();
         }
-      };
+      }
+
       // if dead
       on (EDeath eDeath) : {
         // die
         jump Die(eDeath);
       }
+
       // if an entity exits a teleport nearby
       on (ETeleport et) : {
         // proceed message to watcher (so watcher can quickly recheck for players)
         GetWatcher()->SendEvent(et);
         resume;
       }
+
       // if should stop being blind
       on (EStopBlindness) : {
         // stop being blind
         m_bBlind = FALSE;
         resume;
       }
+
       // if should stop being deaf
       on (EStopDeafness) : {
         // stop being deaf
         m_bDeaf = FALSE;
         resume;
       }
+
       // support for jumping using bouncers
       on (ETouch eTouch) : {
         IfTargetCrushed(eTouch.penOther, (FLOAT3D&)eTouch.plCollision);
+
         if (IsOfClass(eTouch.penOther, "Bouncer")) {
           JumpFromBouncer(this, eTouch.penOther);
         }
+
         resume;
       }
     }

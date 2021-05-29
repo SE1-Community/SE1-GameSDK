@@ -19,19 +19,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "ModelsMP/Player/SeriousSam/Player.h"
 #include "ModelsMP/Player/SeriousSam/Body.h"
 #include "ModelsMP/Player/SeriousSam/Head.h"
+
+extern BOOL SetPlayerAppearance_internal(CModelObject *pmo, const CTFileName &fnmAMC, CTString &strName, BOOL bPreview);
 %}
 
 uses "Entities/EnemyBase";
 
 %{
-// info structure
+// Info structure
 static EntityInfo eiSanta = {
   EIBT_AIR, 100.0f,
   0.0f, 1.6f, 0.0f, // source (eyes)
   0.0f, 1.0f, 0.0f, // target (body)
 };
 %}
-
 
 class CSanta : CEnemyBase {
 name      "Santa";
@@ -41,7 +42,7 @@ properties:
   1 FLOAT m_tmLastSpawnTime = -10000.0f,
   2 FLOAT m_tmMinSpawnInterval "Min spawn interval" = 1.0f,
   3 FLOAT m_fSantaHealth "Santa Health" = 100.0f,
-  4 CSoundObject m_soRunning,            // for running sound
+  4 CSoundObject m_soRunning, // for running sound
   5 BOOL m_bRunSoundPlaying = FALSE,
 
   10 CEntityPointer m_penTemplate0 "Item template 0",
@@ -51,24 +52,26 @@ properties:
   14 CEntityPointer m_penTemplate4 "Item template 4",
   
 components:
-  0 class   CLASS_BASE        "Classes\\EnemyBase.ecl",
+  0 class CLASS_BASE "Classes\\EnemyBase.ecl",
 
 // ************** SOUNDS **************
- 50 sound   SOUND_RUN       "ModelsMP\\CutSequences\\Santa\\Sounds\\Running.wav",
- 51 sound   SOUND_WOUND     "ModelsMP\\CutSequences\\Santa\\Sounds\\Wound.wav",
- 52 sound   SOUND_DEATH     "ModelsMP\\CutSequences\\Santa\\Sounds\\Death.wav",
+ 50 sound SOUND_RUN   "ModelsMP\\CutSequences\\Santa\\Sounds\\Running.wav",
+ 51 sound SOUND_WOUND "ModelsMP\\CutSequences\\Santa\\Sounds\\Wound.wav",
+ 52 sound SOUND_DEATH "ModelsMP\\CutSequences\\Santa\\Sounds\\Death.wav",
 
 functions:
   void Precache(void) {
     CEnemyBase::Precache();
+
     PrecacheSound(SOUND_RUN);
     PrecacheSound(SOUND_WOUND);
     PrecacheSound(SOUND_DEATH);
   };
 
   virtual const CTFileName &GetComputerMessageName(void) const {
-    // static DECLARE_CTFILENAME(fnm, "DataMP\\Messages\\Enemies\\Santa.txt");
+    //static DECLARE_CTFILENAME(fnm, "DataMP\\Messages\\Enemies\\Santa.txt");
     static CTFileName fnm;
+
     return fnm;
   };
 
@@ -77,21 +80,22 @@ functions:
     return &eiSanta;
   };
 
-  // running sounds
+  // Running sounds
   void ActivateRunningSound(void) {
     if (!m_bRunSoundPlaying) {
       PlaySound(m_soRunning, SOUND_RUN, SOF_3D | SOF_LOOP);
       m_bRunSoundPlaying = TRUE;
     }
   }
+
   void DeactivateRunningSound(void) {
     m_soRunning.Stop();
     m_bRunSoundPlaying = FALSE;
   }
 
-  // Handle an event, return false if the event is not handled.
+  // Handle an event, return false if the event is not handled
   BOOL HandleEvent(const CEntityEvent &ee) {
-    // ignore touching, damaging...
+    // ignore touch and damage
     if (ee.ee_slEvent == EVENTCODE_ETouch || ee.ee_slEvent == EVENTCODE_EDamage) {
       return TRUE;
     }
@@ -115,26 +119,34 @@ functions:
 
     // remember time
     m_tmLastSpawnTime = _pTimer->CurrentTick();
+
     // choose an item to spawn
     INDEX ctTemplates = 0;
+
     if (m_penTemplate0 != NULL) {
       ctTemplates++;
     }
+
     if (m_penTemplate1 != NULL) {
       ctTemplates++;
     }
+
     if (m_penTemplate2 != NULL) {
       ctTemplates++;
     }
+
     if (m_penTemplate3 != NULL) {
       ctTemplates++;
     }
+
     if (m_penTemplate4 != NULL) {
       ctTemplates++;
     }
+
     if (ctTemplates == 0) {
       return;
     }
+
     INDEX iTemplate = IRnd() % ctTemplates;
     CEntity *penItem = (&m_penTemplate0)[iTemplate];
 
@@ -144,32 +156,34 @@ functions:
       return;
     }
 
-    CEntity *penSpawned = GetWorld()->CopyEntityInWorld(
-      *penItem, CPlacement3D(FLOAT3D(-32000.0f + FRnd() * 200.0f, -32000.0f + FRnd() * 200.0f, 0), ANGLE3D(0.0f, 0.0f, 0.0f)));
+    CEntity *penSpawned = GetWorld()->CopyEntityInWorld(*penItem,
+      CPlacement3D(FLOAT3D(-32000.0f + FRnd() * 200.0f, -32000.0f + FRnd() * 200.0f, 0.0f), ANGLE3D(0.0f, 0.0f, 0.0f)));
 
     // teleport back
     CPlacement3D pl = GetPlacement();
     pl.pl_PositionVector += GetRotationMatrix().GetColumn(2) * 1.5f; // a bit up in the air
+
     penSpawned->Teleport(pl, FALSE);
   };
 
   void LeaveStain(BOOL bGrow) {}
 
-  // damage anim
+  // Damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
-    //    StartModelAnim(iAnim, 0);
+    //StartModelAnim(iAnim, 0);
     return 0;
   };
 
-  // death
+  // Death
   INDEX AnimForDeath(void) {
-    //    StartModelAnim(iAnim, 0);
+    //StartModelAnim(iAnim, 0);
     return 0;
   };
 
   void DeathNotify(void) {
     SwitchToEditorModel();
-    //    ChangeCollisionBoxIndexWhenPossible(PLAYER_COLLISION_BOX_DEATH);
+    //ChangeCollisionBoxIndexWhenPossible(PLAYER_COLLISION_BOX_DEATH);
+
     SetCollisionFlags(ECF_MODEL);
     DeactivateRunningSound();
   };
@@ -178,54 +192,58 @@ functions:
     return &GetModelObject()->GetAttachmentModel(PLAYER_ATTACHMENT_TORSO)->amo_moModelObject;
   }
 
-  // virtual anim functions
+  // Virtual anim functions
   void StandingAnim(void) {
-    //    StartModelAnim(PLAYER_ANIM_STAND, AOF_LOOPING|AOF_NORESTART);
-    //    GetBody()->PlayAnim(BODY_ANIM_WAIT, AOF_LOOPING|AOF_NORESTART);
-  };
-  void WalkingAnim(void) {
-    ActivateRunningSound();
-    //    StartModelAnim(PLAYER_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
-    //    GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
-  };
-  void RunningAnim(void) {
-    ActivateRunningSound();
-    //    StartModelAnim(PLAYER_ANIM_RUN, AOF_LOOPING|AOF_NORESTART);
-    //    GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
-  };
-  void RotatingAnim(void) {
-    ActivateRunningSound();
-    //    StartModelAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
-    //    GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING|AOF_NORESTART);
+    //StartModelAnim(PLAYER_ANIM_STAND, AOF_LOOPING | AOF_NORESTART);
+    //GetBody()->PlayAnim(BODY_ANIM_WAIT, AOF_LOOPING | AOF_NORESTART);
   };
 
-  // virtual sound functions
+  void WalkingAnim(void) {
+    ActivateRunningSound();
+    //StartModelAnim(PLAYER_ANIM_NORMALWALK, AOF_LOOPING | AOF_NORESTART);
+    //GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING | AOF_NORESTART);
+  };
+
+  void RunningAnim(void) {
+    ActivateRunningSound();
+    //StartModelAnim(PLAYER_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
+    //GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING | AOF_NORESTART);
+  };
+
+  void RotatingAnim(void) {
+    ActivateRunningSound();
+    //StartModelAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING | AOF_NORESTART);
+    //GetBody()->PlayAnim(BODY_ANIM_NORMALWALK, AOF_LOOPING | AOF_NORESTART);
+  };
+
+  // Virtual sound functions
   void IdleSound(void) {
-    //    PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
+    //PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
   };
+
   void SightSound(void) {
-    //    PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
+    //PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
   };
+
   void WoundSound(void) {
     PlaySound(m_soSound, SOUND_WOUND, SOF_3D);
   };
+
   void DeathSound(void) {
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
   };
 
-  // adjust sound and watcher parameters here if needed
+  // Adjust sound and watcher parameters here if needed
   void EnemyPostInit(void) {
     // set sound default parameters
     m_soSound.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
   };
 
 procedures:
-  // shoot
   Fire(EVoid) : CEnemyBase::Fire{
     return EReturn();
   };
 
-  // hit enemy
   Hit(EVoid) : CEnemyBase::Hit {
     return EReturn();
   };
@@ -234,23 +252,25 @@ procedures:
   Main() {
     // declare yourself as a model
     InitAsModel();
-    SetPhysicsFlags(EPF_MODEL_WALKING|EPF_HASLUNGS);
+    SetPhysicsFlags(EPF_MODEL_WALKING | EPF_HASLUNGS);
     SetCollisionFlags(ECF_MODEL);
-    SetFlags(GetFlags()|ENF_ALIVE);
+    SetFlags(GetFlags() | ENF_ALIVE);
+
     en_tmMaxHoldBreath = 25.0f;
     en_fDensity = 3000.0f;
 
     // set your appearance
     CTString strDummy;
-    extern BOOL SetPlayerAppearance_internal(CModelObject *pmo, const CTFileName &fnmAMC, CTString &strName, BOOL bPreview);
-    SetPlayerAppearance_internal(GetModelObject(), CTFILENAME("ModelsMP\\CutSequences\\Santa\\Santa.amc"), strDummy, /*bPreview=*/FALSE);
+    SetPlayerAppearance_internal(GetModelObject(), CTFILENAME("ModelsMP\\CutSequences\\Santa\\Santa.amc"), strDummy, FALSE);
 
     SetHealth(m_fSantaHealth);
     m_fMaxHealth = m_fSantaHealth;
+
     // damage/explode properties
     m_fDamageWounded = 1E10f;
     m_fBlowUpAmount = 1E10f;
     m_fBodyParts = 30;
+
     // setup attack distances
     m_fAttackDistance = 150.0f;
     m_fCloseDistance = 5.0f;
@@ -259,20 +279,22 @@ procedures:
     m_fCloseFireTime = 1.0f;
     m_fIgnoreRange = 300.0f;
     m_iScore = 1000;
+
     // setup moving speed
-    m_fWalkSpeed = (FRnd() + 1.5f)*1.5f;
-    m_aWalkRotateSpeed = FRnd()*20.0f + 550.0f;
-    m_fAttackRunSpeed = FRnd()*1.5f + 4.5f;
-    m_aAttackRotateSpeed = FRnd()*50.0f + 275.0f;
-    m_fCloseRunSpeed = FRnd()*1.5f + 4.5f;
-    m_aCloseRotateSpeed = FRnd()*50.0f + 275.0f;
+    m_fWalkSpeed = (FRnd() + 1.5f) * 1.5f;
+    m_aWalkRotateSpeed = FRnd() * 20.0f + 550.0f;
+    m_fAttackRunSpeed = FRnd() * 1.5f + 4.5f;
+    m_aAttackRotateSpeed = FRnd() * 50.0f + 275.0f;
+    m_fCloseRunSpeed = FRnd() * 1.5f + 4.5f;
+    m_aCloseRotateSpeed = FRnd() * 50.0f + 275.0f;
 
     // set stretch factors for height and width
     CEnemyBase::SizeModel();
+
     m_soRunning.Set3DParameters(500.0f, 50.0f, 1.0f, 1.0f);
     m_bRunSoundPlaying = FALSE;
+
     // continue behavior in base class
     jump CEnemyBase::MainLoop();
-
   };
 };

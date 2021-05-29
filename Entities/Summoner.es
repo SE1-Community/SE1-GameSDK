@@ -34,50 +34,51 @@ event ESummonerTeleport {
 };
 
 %{
-#define RAND_05 (FLOAT(rand())/RAND_MAX-0.5f)
+#define RAND_05 (FLOAT(rand()) / RAND_MAX - 0.5f)
 #define SUMMONER_SIZE 7.0f
 #define TM_WAIT_BEFORE_FIRE 1.9f
 #define SUMMONER_HEALTH 15000.0f
-// info structure
+
+// Info structure
 static EntityInfo eiSummoner = {
   EIBT_FLESH, 1500.0f,
-  0.0f, 1.7f*SUMMONER_SIZE, 0.0f,
-  0.0f, 1.0f*SUMMONER_SIZE, 0.0f,
+  0.0f, 1.7f * SUMMONER_SIZE, 0.0f,
+  0.0f, 1.0f * SUMMONER_SIZE, 0.0f,
 };
 
 //#define FIREPOS_ARMS FLOAT3D(-0.22f, 1.63f, 0.96f)
 #define FIREPOS_ARMS FLOAT3D(0.131292f, 1.61069f, -0.314068f)
 
 #define SUMMONER_MAX_SS 6
-                                        // hlth  grp1  grp2  grp3 
-INDEX aiSpawnScheme[SUMMONER_MAX_SS][7] = {100,  4,7,  0,0,  0,0, 
-                                            90,  3,5,  2,4,  0,0, 
-                                            70,  3,4,  3,4,  0,0, 
-                                            50,  1,3,  3,5,  1,1, 
-                                            30,  1,2,  2,3,  2,2, 
-                                            15,  1,1,  2,4,  2,3 };
+
+//                                                hlth  grp1  grp2  grp3 
+static INDEX _aiSpawnScheme[SUMMONER_MAX_SS][7] = {100,  4,7,  0,0,  0,0, 
+                                                    90,  3,5,  2,4,  0,0, 
+                                                    70,  3,4,  3,4,  0,0, 
+                                                    50,  1,3,  3,5,  1,1, 
+                                                    30,  1,2,  2,3,  2,2, 
+                                                    15,  1,1,  2,4,  2,3 };
+
 #define SUMMONER_TEMP_PER_GROUP 6
 %}
-
 
 class CSummoner : CEnemyBase {
 name      "Summoner";
 thumbnail "Thumbnails\\Summoner.tbn";
 
 properties:
-  
    1 BOOL  m_bInvulnerable = FALSE, // can we be hurt?
-   2 CEntityPointer m_penBeginDeathTarget "Sum. Begin Death Target",   
-   3 CEntityPointer m_penEndDeathTarget "Sum. End Death Target",
+   2 CEntityPointer m_penBeginDeathTarget   "Sum. Begin Death Target",   
+   3 CEntityPointer m_penEndDeathTarget     "Sum. End Death Target",
    4 CEntityPointer m_penExplodeDeathTarget "Sum. Explode Target",
    5 BOOL  m_bShouldTeleport = FALSE, // are we allowed to teleport?
    6 FLOAT m_fFirePeriod = 3.0f,
    7 FLOAT m_fImmaterialDuration "Sum. Immaterial Duration" = 5.0f, // how long to stay immaterial
-   8 FLOAT m_fCorporealDuration "Sum. Corporeal Duration" = 5.0f, // how long to stay material
+   8 FLOAT m_fCorporealDuration  "Sum. Corporeal Duration" = 5.0f,  // how long to stay material
    9 FLOAT m_tmMaterializationTime = 0.0f, // when we materialized
 
   10 FLOAT m_fStretch "Sum. Stretch" = SUMMONER_SIZE,
-  11 INDEX m_iSize = 1,     // how big it is (gets bigger when harmed)
+  11 INDEX m_iSize = 1, // how big it is (gets bigger when harmed)
   12 CEntityPointer m_penControlArea "Sum. Control Area",
   
   // NOTE: if number of templates per group changes, you MUST change the
@@ -118,16 +119,17 @@ properties:
   72 FLOAT m_fMaxBeginFuss "Sum. Max Begin Fuss" = 10000.0f, 
   73 FLOAT m_fMaxEndFuss "Sum. Max End Fuss" = 60000.0f, 
   75 INDEX m_iSpawnScheme = 0,
-  76 BOOL  m_bFireOK = TRUE,
-  79 BOOL  m_bFiredThisTurn = FALSE,
+  76 BOOL m_bFireOK = TRUE,
+  79 BOOL m_bFiredThisTurn = FALSE,
   77 FLOAT m_fDamageSinceLastSpawn = 0.0f,
 
-  88 BOOL  m_bExploded = FALSE, // still alive and embodied
-  90 BOOL  m_bDying = FALSE,  // set when dying
+  88 BOOL m_bExploded = FALSE, // still alive and embodied
+  90 BOOL m_bDying = FALSE, // set when dying
   92 FLOAT m_tmDeathBegin = 0.0f,
   93 FLOAT m_fDeathDuration = 0.0f,
   94 CEntityPointer m_penDeathInflictor,
  111 CEntityPointer m_penKiller,
+
   // internal variables
   95 FLOAT3D m_vDeathPosition = FLOAT3D(0.0f, 0.0f, 0.0f),
   96 CEntityPointer m_penDeathMarker "Sum. Death marker",
@@ -135,9 +137,9 @@ properties:
 
  102 INDEX m_iTaunt = 0, // index of currently active taunt
 
- 110 FLOAT m_tmParticlesDisappearStart=-1e6,
+ 110 FLOAT m_tmParticlesDisappearStart = -1e6,
  
- 120 FLOAT m_tmLastAnimation=0.0f,
+ 120 FLOAT m_tmLastAnimation = 0.0f,
 
  150 CSoundObject m_soExplosion,
  151 CSoundObject m_soSound,
@@ -149,97 +151,84 @@ properties:
 }
 
 components:
-  0 class   CLASS_BASE               "Classes\\EnemyBase.ecl",
-  1 class   CLASS_BLOOD_SPRAY        "Classes\\BloodSpray.ecl",
-  2 class   CLASS_SPAWNER_PROJECTILE "Classes\\SpawnerProjectile.ecl",
-  3 class   CLASS_BASIC_EFFECT       "Classes\\BasicEffect.ecl",
-  4 class   CLASS_EFFECTOR           "Classes\\Effector.ecl",
+  0 class CLASS_BASE               "Classes\\EnemyBase.ecl",
+  1 class CLASS_BLOOD_SPRAY        "Classes\\BloodSpray.ecl",
+  2 class CLASS_SPAWNER_PROJECTILE "Classes\\SpawnerProjectile.ecl",
+  3 class CLASS_BASIC_EFFECT       "Classes\\BasicEffect.ecl",
+  4 class CLASS_EFFECTOR           "Classes\\Effector.ecl",
   
 // ************** MAIN MODEL **************
-
- 10 model   MODEL_SUMMONER      "ModelsMP\\Enemies\\Summoner\\Summoner.mdl",
- 11 texture TEXTURE_SUMMONER    "ModelsMP\\Enemies\\Summoner\\Summoner.tex",
- 12 model   MODEL_STAFF         "ModelsMP\\Enemies\\Summoner\\Staff.mdl",
- 13 texture TEXTURE_STAFF       "ModelsMP\\Enemies\\Summoner\\Staff.tex",
+ 10 model   MODEL_SUMMONER   "ModelsMP\\Enemies\\Summoner\\Summoner.mdl",
+ 11 texture TEXTURE_SUMMONER "ModelsMP\\Enemies\\Summoner\\Summoner.tex",
+ 12 model   MODEL_STAFF      "ModelsMP\\Enemies\\Summoner\\Staff.mdl",
+ 13 texture TEXTURE_STAFF    "ModelsMP\\Enemies\\Summoner\\Staff.tex",
  
- 16 model   MODEL_DEBRIS01      "ModelsMP\\Enemies\\Summoner\\Debris\\Cloth01.mdl",
- 17 model   MODEL_DEBRIS02      "ModelsMP\\Enemies\\Summoner\\Debris\\Cloth02.mdl",
- 18 model   MODEL_DEBRIS03      "ModelsMP\\Enemies\\Summoner\\Debris\\Cloth03.mdl",
- 19 model   MODEL_DEBRIS_FLESH  "Models\\Effects\\Debris\\Flesh\\Flesh.mdl",
+ 16 model   MODEL_DEBRIS01        "ModelsMP\\Enemies\\Summoner\\Debris\\Cloth01.mdl",
+ 17 model   MODEL_DEBRIS02        "ModelsMP\\Enemies\\Summoner\\Debris\\Cloth02.mdl",
+ 18 model   MODEL_DEBRIS03        "ModelsMP\\Enemies\\Summoner\\Debris\\Cloth03.mdl",
+ 19 model   MODEL_DEBRIS_FLESH    "Models\\Effects\\Debris\\Flesh\\Flesh.mdl",
  20 texture TEXTURE_DEBRIS_FLESH  "Models\\Effects\\Debris\\Flesh\\FleshRed.tex",
 
 
 // ************** SOUNDS **************
-//200 sound   SOUND_IDLE   "ModelsMP\\Enemies\\Summoner\\Sounds\\Idle.wav",
-101 sound  SOUND_LAUGH      "ModelsMP\\Enemies\\Summoner\\Sounds\\Laugh.wav",
-102 sound  SOUND_EXPLODE    "ModelsMP\\Enemies\\Summoner\\Sounds\\Explode.wav",
-103 sound  SOUND_TREMORS    "ModelsMP\\Enemies\\Summoner\\Sounds\\Tremors.wav",
-104 sound  SOUND_DEATH      "ModelsMP\\Enemies\\Summoner\\Sounds\\Death.wav",
-105 sound  SOUND_LASTWORDS  "ModelsMP\\Enemies\\Summoner\\Sounds\\LastWords.wav",
-106 sound  SOUND_FIRE       "ModelsMP\\Enemies\\Summoner\\Sounds\\Fire.wav",
-108 sound  SOUND_CHIMES     "ModelsMP\\Enemies\\Summoner\\Sounds\\Chimes.wav",
-107 sound  SOUND_MATERIALIZE "ModelsMP\\Enemies\\Summoner\\Sounds\\Materialize.wav",
-109 sound  SOUND_TELEPORT    "ModelsMP\\Enemies\\Summoner\\Sounds\\Teleport.wav",
+//200 sound SOUND_IDLE        "ModelsMP\\Enemies\\Summoner\\Sounds\\Idle.wav",
+101 sound SOUND_LAUGH       "ModelsMP\\Enemies\\Summoner\\Sounds\\Laugh.wav",
+102 sound SOUND_EXPLODE     "ModelsMP\\Enemies\\Summoner\\Sounds\\Explode.wav",
+103 sound SOUND_TREMORS     "ModelsMP\\Enemies\\Summoner\\Sounds\\Tremors.wav",
+104 sound SOUND_DEATH       "ModelsMP\\Enemies\\Summoner\\Sounds\\Death.wav",
+105 sound SOUND_LASTWORDS   "ModelsMP\\Enemies\\Summoner\\Sounds\\LastWords.wav",
+106 sound SOUND_FIRE        "ModelsMP\\Enemies\\Summoner\\Sounds\\Fire.wav",
+108 sound SOUND_CHIMES      "ModelsMP\\Enemies\\Summoner\\Sounds\\Chimes.wav",
+107 sound SOUND_MATERIALIZE "ModelsMP\\Enemies\\Summoner\\Sounds\\Materialize.wav",
+109 sound SOUND_TELEPORT    "ModelsMP\\Enemies\\Summoner\\Sounds\\Teleport.wav",
 
 // ***** TAUNTS ******
-150 sound  SOUND_TAUNT01    "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote03.wav",
-151 sound  SOUND_TAUNT02    "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote05.wav",
-152 sound  SOUND_TAUNT03    "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote07.wav",
-153 sound  SOUND_TAUNT04    "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote08.wav",
-154 sound  SOUND_TAUNT05    "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote10.wav",
-155 sound  SOUND_TAUNT06    "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote11.wav",
-156 sound  SOUND_TAUNT07    "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote14.wav",
-157 sound  SOUND_TAUNT08    "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote15.wav",
-158 sound  SOUND_TAUNTLAST  "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote16.wav",
+150 sound SOUND_TAUNT01   "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote03.wav",
+151 sound SOUND_TAUNT02   "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote05.wav",
+152 sound SOUND_TAUNT03   "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote07.wav",
+153 sound SOUND_TAUNT04   "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote08.wav",
+154 sound SOUND_TAUNT05   "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote10.wav",
+155 sound SOUND_TAUNT06   "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote11.wav",
+156 sound SOUND_TAUNT07   "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote14.wav",
+157 sound SOUND_TAUNT08   "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote15.wav",
+158 sound SOUND_TAUNTLAST "ModelsMP\\Enemies\\Summoner\\Sounds\\Quote16.wav",
 
 functions:
-  void Read_t( CTStream *istr) // throw char *
-  {
+  void Read_t( CTStream *istr) {
     CEnemyBase::Read_t(istr);
     m_emEmiter.Read_t(*istr);
   }
 
-  void Write_t(CTStream *istr) // throw char *
-  {
+  void Write_t(CTStream *istr) {
     CEnemyBase::Write_t(istr);
     m_emEmiter.Write_t(*istr);
   }
 
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget) {
     if (slPropertyOffset >= offsetof(CSummoner, m_penGroup01Template01)
-        && slPropertyOffset <= offsetof(CSummoner, m_penGroup03Template06)) {
+     && slPropertyOffset <= offsetof(CSummoner, m_penGroup03Template06))
+    {
       if (IsDerivedFromClass(penTarget, "Enemy Base")) {
-        if (((CEnemyBase &)*penTarget).m_bTemplate) {
-          return TRUE;
-        } else {
-          return FALSE;
-        }
+        return ((CEnemyBase &)*penTarget).m_bTemplate;
+
       } else {
         return FALSE;
       }
     }
+
     if (slPropertyOffset == offsetof(CSummoner, m_penControlArea)) {
-      if (IsDerivedFromClass(penTarget, "AreaMarker")) {
-        return TRUE;
-      } else {
-        return FALSE;
-      }
+      return IsDerivedFromClass(penTarget, "AreaMarker");
     }
+
     if (slPropertyOffset == offsetof(CSummoner, m_penSpawnMarker)) {
-      if (IsDerivedFromClass(penTarget, "Enemy Marker")) {
-        return TRUE;
-      } else {
-        return FALSE;
-      }
+      return IsDerivedFromClass(penTarget, "Enemy Marker");
     }
+
     if (slPropertyOffset == offsetof(CSummoner, m_penTeleportMarker)
-        || slPropertyOffset == offsetof(CSummoner, m_penDeathMarker)) {
-      if (IsDerivedFromClass(penTarget, "SummonerMarker")) {
-        return TRUE;
-      } else {
-        return FALSE;
-      }
+     || slPropertyOffset == offsetof(CSummoner, m_penDeathMarker)) {
+      return IsDerivedFromClass(penTarget, "SummonerMarker");
     }
+
     return CEntity::IsTargetValid(slPropertyOffset, penTarget);
   }
 
@@ -248,29 +237,35 @@ functions:
       WarningMessage("No valid Spawn Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
+
     if (m_penTeleportMarker == NULL) {
       WarningMessage("No valid Teleport Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
+
     if (m_penDeathMarker == NULL) {
       WarningMessage("No valid Death Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
+
     if (m_penControlArea == NULL) {
       WarningMessage("No valid Area Marker for Summoner boss! Destroying boss...");
       return FALSE;
     }
+
     if (m_iGroup01Count < 1 || m_iGroup02Count < 1 || m_iGroup03Count < 1) {
       WarningMessage("At least one template in each group required! Destroying boss...");
       return FALSE;
     }
+
     return TRUE;
   }
 
-  // describe how this enemy killed player
+  // Describe how this enemy killed player
   virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath) {
     CTString str;
     str.PrintF(TRANS("The Summoner unsummoned %s"), strPlayerName);
+
     return str;
   }
 
@@ -321,6 +316,7 @@ functions:
   CMusicHolder *GetMusicHolder() {
     CEntity *penMusicHolder;
     penMusicHolder = _pNetwork->GetEntityWithName("MusicHolder", 0);
+
     return (CMusicHolder *)&*penMusicHolder;
   }
 
@@ -331,6 +327,7 @@ functions:
 
     for (INDEX i = 0; i < ctMaxPlayers; i++) {
       penPlayer = GetPlayerEntity(i);
+
       if (penPlayer) {
         if (DistanceTo(this, penPlayer) < fDistance) {
           return FALSE;
@@ -343,6 +340,7 @@ functions:
   // Shake ground
   void ShakeItBaby(FLOAT tmShaketime, FLOAT fPower, BOOL bFadeIn) {
     CWorldSettingsController *pwsc = GetWSC(this);
+
     if (pwsc != NULL) {
       pwsc->m_tmShakeStarted = tmShaketime;
       pwsc->m_vShakePos = GetPlacement().pl_PositionVector;
@@ -367,6 +365,7 @@ functions:
 
     for (INDEX i = 0; i < ctMaxPlayers; i++) {
       penPlayer = GetPlayerEntity(i);
+
       if (penPlayer) {
         // set totals for level and increment for game
         ((CPlayer &)*penPlayer).m_psLevelTotal.ps_iKills += iDelta;
@@ -399,6 +398,7 @@ functions:
 
     FLOAT fOldHealth = GetHealth();
     CEnemyBase::ReceiveDamage(penInflictor, dmtType, fDamage, vHitPoint, vDirection);
+
     FLOAT fNewHealth = GetHealth();
 
     // increase temp. damage
@@ -406,7 +406,8 @@ functions:
 
     // see if we have to change the spawning scheme
     for (INDEX i = 0; i < SUMMONER_MAX_SS; i++) {
-      FLOAT fHealth = (FLOAT)aiSpawnScheme[i][0] * m_fMaxHealth / 100.0f;
+      FLOAT fHealth = (FLOAT)_aiSpawnScheme[i][0] * m_fMaxHealth / 100.0f;
+
       if (fHealth <= fOldHealth && fHealth > fNewHealth) {
         m_iSpawnScheme = i;
       }
@@ -419,19 +420,20 @@ functions:
     m_colBurning = COLOR(C_WHITE | CT_OPAQUE);
   };
 
-  // damage anim
+  // Damage anim
   /*INDEX AnimForDamage(FLOAT fDamage) {
     INDEX iAnim;
     iAnim = SUMMONER_ANIM_WOUND;
     StartModelAnim(iAnim, 0);
+
     return iAnim;
   };*/
-
+  
+  // Virtual anim functions
   void StandingAnimFight(void) {
     StartModelAnim(SUMMONER_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
 
-  // virtual anim functions
   void StandingAnim(void) {
     StartModelAnim(SUMMONER_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
@@ -452,39 +454,44 @@ functions:
     INDEX iAnim;
     iAnim = SUMMONER_ANIM_DEATH;
     StartModelAnim(iAnim, 0);
+
     return iAnim;
   };*/
 
-  // virtual sound functions
+  // Virtual sound functions
   void IdleSound(void) {
-    // PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
+    //PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
   };
 
   FLOAT3D AcquireTarget() {
-    CEnemyMarker *marker;
-    marker = &((CEnemyMarker &)*m_penSpawnMarker);
-
+    CEnemyMarker *penMarker = (CEnemyMarker *)&*m_penSpawnMarker;
     INDEX iMarker = IRnd() % m_iSpawnMarkers;
 
     while (iMarker > 0) {
-      marker = &((CEnemyMarker &)*marker->m_penTarget);
+      penMarker = (CEnemyMarker *)&*penMarker->m_penTarget;
       iMarker--;
     }
-    FLOAT3D vTarget = marker->GetPlacement().pl_PositionVector;
-    FLOAT fR = FRnd() * marker->m_fMarkerRange;
+
+    FLOAT3D vTarget = penMarker->GetPlacement().pl_PositionVector;
+    FLOAT fR = FRnd() * penMarker->m_fMarkerRange;
     FLOAT fA = FRnd() * 360.0f;
+
     vTarget += FLOAT3D(CosFast(fA) * fR, 0.05f, SinFast(fA) * fR);
+
     return vTarget;
   };
 
   void LaunchMonster(FLOAT3D vTarget, CEntity *penTemplate) {
     ASSERT(penTemplate != NULL);
+
     // calculate parameters for predicted angular launch curve
     FLOAT3D vFirePos = FIREPOS_ARMS * m_fStretch;
     FLOAT3D vShooting = GetPlacement().pl_PositionVector + vFirePos * GetRotationMatrix();
+
     FLOAT fLaunchSpeed;
     FLOAT fRelativeHdg;
-    // FLOAT fPitch = FRnd()*30.0f - 5.0f;
+
+    //FLOAT fPitch = FRnd() * 30.0f - 5.0f;
     FLOAT fPitch = FRnd() * 10.0f + 25.0f;
 
     CPlacement3D pl;
@@ -492,14 +499,15 @@ functions:
 
     PrepareFreeFlyingProjectile(pl, vTarget, vFirePos, ANGLE3D(fRelativeHdg, fPitch, 0.0f));
 
-    ESpawnerProjectile esp;
     CEntityPointer penSProjectile = CreateEntity(pl, CLASS_SPAWNER_PROJECTILE);
+
+    ESpawnerProjectile esp;
     esp.penOwner = this;
     esp.penTemplate = penTemplate;
+
     penSProjectile->Initialize(esp);
 
-    ((CMovableEntity &)*penSProjectile)
-      .LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -fLaunchSpeed), (CMovableEntity *)(CEntity *)this);
+    ((CMovableEntity &)*penSProjectile).LaunchAsFreeProjectile(FLOAT3D(0.0f, 0.0f, -fLaunchSpeed), (CMovableEntity *)this);
   }
 
   FLOAT FussModifier(INDEX iEnemyCount) {
@@ -530,21 +538,22 @@ functions:
 
     // if too much fuss, make disable firing
     if (m_fFuss > m_fMaxCurrentFuss) {
-      // CPrintF("FIRE DISABLED -> too much fuss\n");
+      //CPrintF("FIRE DISABLED -> too much fuss\n");
       m_bFireOK = FALSE;
-      // enable firing only when very little fuss
+
+    // enable firing only when very little fuss
     } else if (m_fFuss < 0.4 * m_fMaxCurrentFuss) {
-      // CPrintF("FIRE ENABLE -> fuss more then %f\n", 0.4*m_fMaxCurrentFuss);
+      //CPrintF("FIRE ENABLE -> fuss more then %f\n", 0.4 * m_fMaxCurrentFuss);
       m_bFireOK = TRUE;
-      // but if significant damage since last spawn, enable firing anyway
+
+    // but if significant damage since last spawn, enable firing anyway
     } else if (m_fDamageSinceLastSpawn > 0.07f * m_fMaxHealth) {
-      // CPrintF("FIRE ENABLED -> much damagesincelastspawn - %f\n", m_fDamageSinceLastSpawn);
+      //CPrintF("FIRE ENABLED -> much damagesincelastspawn - %f\n", m_fDamageSinceLastSpawn);
       m_bFireOK = TRUE;
     }
 
-    // CPrintF("Fuss = %f/%f (%d enemies) at %f\n", m_fFuss, m_fMaxCurrentFuss, m_iEnemyCount, _pTimer->CurrentTick());
-    // CPrintF("health: %f, scheme: %i\n", GetHealth(), m_iSpawnScheme);
-    return;
+    //CPrintF("Fuss = %f/%f (%d enemies) at %f\n", m_fFuss, m_fMaxCurrentFuss, m_iEnemyCount, _pTimer->CurrentTick());
+    //CPrintF("health: %f, scheme: %i\n", GetHealth(), m_iSpawnScheme);
   }
 
   void CountEnemiesAndScoreValue(INDEX &iEnemies, FLOAT &fScore) {
@@ -566,58 +575,67 @@ functions:
         }
       }
     }
-    return;
   }
 
   CEnemyBase *GetRandomTemplate(INDEX iGroup) {
     CEntityPointer *pen;
     INDEX iCount;
+
     if (iGroup == 0) {
       pen = &m_penGroup01Template01;
       iCount = IRnd() % m_iGroup01Count + 1;
+
     } else if (iGroup == 1) {
       pen = &m_penGroup02Template01;
       iCount = IRnd() % m_iGroup02Count + 1;
+
     } else if (iGroup == 2) {
       pen = &m_penGroup03Template01;
       iCount = IRnd() % m_iGroup03Count + 1;
+
     } else {
       ASSERT("Invalid group!");
     }
+
     ASSERT(iCount > 0);
 
     INDEX i = -1;
+
     while (iCount > 0) {
       i++;
+
       while (&*pen[i] == NULL) {
         i++;
       }
+
       iCount--;
     }
+
     ASSERT(&(CEnemyBase &)*pen[i] != NULL);
     return &(CEnemyBase &)*pen[i];
   }
 
   void DisappearEffect(void) {
     CPlacement3D plFX = GetPlacement();
+
     ESpawnEffect ese;
     ese.colMuliplier = C_WHITE | CT_OPAQUE;
-    ese.vStretch = FLOAT3D(3, 3, 3);
+    ese.vStretch = FLOAT3D(3.0f, 3.0f, 3.0f);
     ese.vNormal = FLOAT3D(0.0f, 1.0f, 0.0f);
     ese.betType = BET_DUST_FALL;
+
     for (INDEX iSmoke = 0; iSmoke < 3; iSmoke++) {
       CPlacement3D plSmoke = plFX;
-      plSmoke.pl_PositionVector += FLOAT3D(0, iSmoke * 4 + 4.0f, 0);
+      plSmoke.pl_PositionVector += FLOAT3D(0.0f, iSmoke * 4 + 4.0f, 0.0f);
+
       CEntityPointer penFX = CreateEntity(plSmoke, CLASS_BASIC_EFFECT);
       penFX->Initialize(ese);
     }
 
-    /*
     // growing swirl
-    ese.betType = BET_DISAPPEAR_DUST;
+    /*ese.betType = BET_DISAPPEAR_DUST;
     penFX = CreateEntity(plFX, CLASS_BASIC_EFFECT);
-    penFX->Initialize(ese);
-    */
+    penFX->Initialize(ese);*/
   }
 
   void SpawnTeleportEffect(void) {
@@ -628,26 +646,31 @@ functions:
 
     // explosion debris
     ese.betType = BET_EXPLOSION_DEBRIS;
+
     CPlacement3D plFX = GetPlacement();
     CEntityPointer penFX = CreateEntity(plFX, CLASS_BASIC_EFFECT);
     penFX->Initialize(ese);
+
     ese.colMuliplier = C_MAGENTA | CT_OPAQUE;
+
     CEntityPointer penFX2 = CreateEntity(plFX, CLASS_BASIC_EFFECT);
     penFX2->Initialize(ese);
+
     ese.colMuliplier = C_lCYAN | CT_OPAQUE;
+
     CEntityPointer penFX3 = CreateEntity(plFX, CLASS_BASIC_EFFECT);
     penFX3->Initialize(ese);
+
     ese.betType = BET_CANNON;
     ese.colMuliplier = C_CYAN | CT_OPAQUE;
+
     CEntityPointer penFX4 = CreateEntity(plFX, CLASS_BASIC_EFFECT);
     penFX4->Initialize(ese);
 
     // explosion smoke
-    /*
-    ese.betType = BET_EXPLOSION_SMOKE;
+    /*ese.betType = BET_EXPLOSION_SMOKE;
     penFX = CreateEntity(plFX, CLASS_BASIC_EFFECT);
-    penFX->Initialize(ese);
-    */
+    penFX->Initialize(ese);*/
 
     ESpawnEffector eLightning;
     eLightning.eetType = ET_LIGHTNING;
@@ -660,8 +683,10 @@ functions:
 
     FLOAT3D vRndDir;
     AnglesToDirectionVector(angRnd, vRndDir);
+
     FLOAT3D vDest = plFX.pl_PositionVector;
     vDest += vRndDir * 512.0f;
+
     eLightning.vDestination = vDest;
     penLightning->Initialize(eLightning);
   }
@@ -682,26 +707,33 @@ functions:
           eDeath2.eLastDamage.vHitPoint = eDeath2.eLastDamage.vDirection;
           eDeath2.eLastDamage.fAmount = 10000.0f;
           eDeath2.eLastDamage.dmtType = DMT_CLOSERANGE;
+
           apenNearEntities[i]->SendEvent(eDeath);
         }
       }
 
       CMusicHolder *penMusicHolder = GetMusicHolder();
+
       if (IsOfClass(apenNearEntities[i], "SpawnerProjectile")) {
         CPlacement3D pl;
         pl.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
         pl.pl_PositionVector = apenNearEntities[i]->GetPlacement().pl_PositionVector;
+
         CEntityPointer penExplosion = CreateEntity(pl, CLASS_BASIC_EFFECT);
+
         ESpawnEffect eSpawnEffect;
         eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
         eSpawnEffect.betType = BET_CANNON;
         eSpawnEffect.vStretch = FLOAT3D(2.0f, 2.0f, 2.0f);
+
         penExplosion->Initialize(eSpawnEffect);
         apenNearEntities[i]->Destroy();
+
         // decrease the number of spawned enemies for those that haven't been born
         if (penMusicHolder != NULL) {
           penMusicHolder->m_ctEnemiesInWorld--;
         }
+
         ChangeEnemyNumberForAllPlayers(-1);
       }
     }
@@ -709,12 +741,14 @@ functions:
 
   void RenderParticles(void) {
     FLOAT tmNow = _pTimer->CurrentTick();
+
     if (tmNow > m_tmParticlesDisappearStart && tmNow < m_tmParticlesDisappearStart + 4.0f) {
       Particles_SummonerDisappear(this, m_tmParticlesDisappearStart);
     }
 
     if (tmNow > m_tmLastAnimation) {
       INDEX ctInterpolations = 2;
+
       // if invisible or dead don't add new sparks
       if (!m_bInvulnerable && !m_bExploded && GetHealth() > 0) {
         for (INDEX iInter = 0; iInter < ctInterpolations; iInter++) {
@@ -723,6 +757,7 @@ functions:
           FLOATmatrix3D mRot;
           FLOAT3D vPos;
           FLOAT tmBirth = tmNow + iInter * _pTimer->TickQuantum / ctInterpolations;
+
           // head
           FLOAT fLife = 2.5f;
           FLOAT fCone = 360.0f;
@@ -731,15 +766,19 @@ functions:
           COLOR col = C_lYELLOW | CT_OPAQUE;
 
           MakeRotationMatrixFast(mRot, ANGLE3D(0.0f, 0.0f, 0.0f));
+
           vPos = FLOAT3D(0.0f, 0.0f, 0.0f);
           GetModelObject()->GetAttachmentTransformations(SUMMONER_ATTACHMENT_STAFF, mRot, vPos, FALSE);
+
           // next in hierarchy
           CAttachmentModelObject *pamo = GetModelObject()->GetAttachmentModel(SUMMONER_ATTACHMENT_STAFF);
           pamo->amo_moModelObject.GetAttachmentTransformations(STAFF_ATTACHMENT_PARTICLES, mRot, vPos, TRUE);
+
           vPos = GetPlacement().pl_PositionVector + vPos * GetRotationMatrix();
 
           FLOAT3D vSpeed = FLOAT3D(0.1f + RAND_05, 0.1f + RAND_05, -1.0f - RAND_05);
           vSpeed = vSpeed.Normalize() * 8.0f;
+
           m_emEmiter.AddParticle(vPos, vSpeed * mRot * mEn, RAND_05 * 360.0f, fRotSpeed, tmBirth, fLife, fStretch, col);
         }
       }
@@ -749,12 +788,12 @@ functions:
       m_emEmiter.AnimateParticles();
       m_tmLastAnimation = tmNow;
     }
+
     m_emEmiter.RenderParticles();
   }
 
 procedures:
-  InitiateTeleport()
-  {
+  InitiateTeleport() {
     m_bInvulnerable = TRUE;
     StartModelAnim(SUMMONER_ANIM_VANISHING, 0);
 
@@ -764,25 +803,25 @@ procedures:
 
     PlaySound(m_soSound, SOUND_TELEPORT, SOF_3D);
 
-    autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_VANISHING)-0.2f);
+    autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_VANISHING) - 0.2f);
     jump Immaterial();
   }
   
   Fire(EVoid) : CEnemyBase::Fire {
-    
     // if not allready fired
     if (!m_bFiredThisTurn) {
       // if not too much fuss, we can really fire
       if (m_bFireOK) {
-                
-        INDEX iTaunt = SOUND_TAUNT01 + m_iTaunt%(SOUND_TAUNTLAST-SOUND_TAUNT01+1);
+        INDEX iTaunt = SOUND_TAUNT01 + m_iTaunt % (SOUND_TAUNTLAST - SOUND_TAUNT01 + 1);
         PlaySound(m_soChant, iTaunt, SOF_3D);
+
         m_iTaunt++;
 
         StartModelAnim(SUMMONER_ANIM_MAGICATTACK, SOF_SMOOTHCHANGE);
         
-        //wait to get into spawner emitting position
+        // wait to get into spawner emitting position
         autowait(TM_WAIT_BEFORE_FIRE);
+
         PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
 
         INDEX i,j;
@@ -791,6 +830,7 @@ procedures:
         INDEX iTotalSpawnedCount = 0;
         INDEX iEnemyCount;
         FLOAT fScore;
+
         CountEnemiesAndScoreValue(iEnemyCount, fScore);
         
         CMusicHolder *penMusicHolder = GetMusicHolder();
@@ -798,26 +838,35 @@ procedures:
         FLOAT fTmpFuss = 0.0f;
         
         // for each group in current spawn scheme
-        for (i=0; i<3; i++) {
-          INDEX iMin = aiSpawnScheme[m_iSpawnScheme][i*2+1];
-          INDEX iMax = aiSpawnScheme[m_iSpawnScheme][i*2+2];
+        for (i = 0; i < 3; i++) {
+          INDEX iMin = _aiSpawnScheme[m_iSpawnScheme][i * 2 + 1];
+          INDEX iMax = _aiSpawnScheme[m_iSpawnScheme][i * 2 + 2];
+
           ASSERT(iMin <= iMax);
+
           INDEX iToSpawn;
-          iToSpawn = iMin + IRnd()%(iMax - iMin + 1);
-          for (j=0; j<iToSpawn; j++) {
+          iToSpawn = iMin + IRnd() % (iMax - iMin + 1);
+
+          for (j = 0; j < iToSpawn; j++) {
             CEnemyBase *penTemplate = GetRandomTemplate(i);
+
             vTarget = AcquireTarget();
             LaunchMonster(vTarget, penTemplate);
-            fTotalSpawnedScore+= penTemplate->m_iScore;
+
+            fTotalSpawnedScore += penTemplate->m_iScore;
             iTotalSpawnedCount++;
+
             // increase the number of spawned enemies in music holder
             if (penMusicHolder != NULL) {
               penMusicHolder->m_ctEnemiesInWorld++;
             }
+
             ChangeEnemyNumberForAllPlayers(+1);
+
             // stop spawning if too much fuss or too many enemies
-            fTmpFuss = (fTotalSpawnedScore+fScore)*FussModifier(iTotalSpawnedCount+iEnemyCount);
-            if (fTmpFuss>m_fMaxCurrentFuss) { 
+            fTmpFuss = (fTotalSpawnedScore + fScore) * FussModifier(iTotalSpawnedCount + iEnemyCount);
+
+            if (fTmpFuss > m_fMaxCurrentFuss) { 
               break; 
             }
           }
@@ -825,76 +874,87 @@ procedures:
         
         m_fDamageSinceLastSpawn = 0.0f;
                 
-        //wait for firing animation to stop
-        autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_MAGICATTACK)-TM_WAIT_BEFORE_FIRE);
+        // wait for firing animation to stop
+        autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_MAGICATTACK) - TM_WAIT_BEFORE_FIRE);
         
         // stand a while
         StartModelAnim(SUMMONER_ANIM_IDLE, SOF_SMOOTHCHANGE);
         
         // teleport by sending an event to ourselves
         ESummonerTeleport est;
-        est.fWait = FRnd()*1.0f+3.0f;
+        est.fWait = FRnd() * 1.0f + 3.0f;
+
         SendEvent(est);
+
       // if too much fuss, just laugh and initiate teleport
       } else if (TRUE) {
-      
         PlaySound(m_soExplosion, SOUND_LAUGH, SOF_3D);
+
         autowait(1.0f);
+
         StartModelAnim(SUMMONER_ANIM_MAGICATTACK, SOF_SMOOTHCHANGE);
         
-        INDEX iTaunt = SOUND_TAUNT01 + m_iTaunt%(SOUND_TAUNTLAST-SOUND_TAUNT01+1);
+        INDEX iTaunt = SOUND_TAUNT01 + m_iTaunt % (SOUND_TAUNTLAST - SOUND_TAUNT01 + 1);
         PlaySound(m_soChant, iTaunt, SOF_3D);
         m_iTaunt++;
         
-        //wait to get into spawner emitting position
+        // wait to get into spawner emitting position
         autowait(TM_WAIT_BEFORE_FIRE);
+
         PlaySound(m_soSound, SOUND_FIRE, SOF_3D);
 
         INDEX iEnemyCount;
         FLOAT fScore;
-        CountEnemiesAndScoreValue(iEnemyCount, fScore);
-        FLOAT fToSpawn;
 
+        CountEnemiesAndScoreValue(iEnemyCount, fScore);
+
+        FLOAT fToSpawn;
         INDEX iScheme;
+
         // find last active scheme
-        for (INDEX i=0; i<3; i++) {
-          if (aiSpawnScheme[m_iSpawnScheme][i*2+2]>0) {
+        for (INDEX i = 0; i < 3; i++) {
+          if (_aiSpawnScheme[m_iSpawnScheme][i * 2 + 2] > 0) {
             iScheme = i;
           }
         }
         
-        if (m_iSpawnScheme>3) {
-          iEnemyCount += (m_iSpawnScheme-3);
+        if (m_iSpawnScheme > 3) {
+          iEnemyCount += (m_iSpawnScheme - 3);
         }
         
-        if (iEnemyCount<6) {
-          fToSpawn = (6.0 - (FLOAT)iEnemyCount)/2.0f;
+        if (iEnemyCount < 6) {
+          fToSpawn = (6.0 - (FLOAT)iEnemyCount) / 2.0f;
         } else {
           fToSpawn = 1.0f;
         }
+
         INDEX iToSpawn = ceilf(fToSpawn);
         
         CMusicHolder *penMusicHolder = GetMusicHolder();
-//CPrintF("spawning %d from %d group\n", iToSpawn, iScheme);
+        //CPrintF("spawning %d from %d group\n", iToSpawn, iScheme);
+
         // spawn
-        for (INDEX j=0; j<iToSpawn; j++) {
+        for (INDEX j = 0; j < iToSpawn; j++) {
           CEnemyBase *penTemplate = GetRandomTemplate(iScheme);
+
           FLOAT3D vTarget = AcquireTarget();
           LaunchMonster(vTarget, penTemplate);
+
           // increase the number of spawned enemies in music holder
           if (penMusicHolder != NULL) {
             penMusicHolder->m_ctEnemiesInWorld++;
           }
+
           ChangeEnemyNumberForAllPlayers(+1);
         }
 
         // teleport by sending an event to ourselves
         ESummonerTeleport est;
-        est.fWait = FRnd()*1.0f+3.0f;
+        est.fWait = FRnd() * 1.0f + 3.0f;
         SendEvent(est);
+
         // laugh
         autowait(1.0f);
-        
       }
 
       m_bFiredThisTurn = TRUE;
@@ -902,45 +962,44 @@ procedures:
 
     return EReturn();
   };
-      
+
   Hit(EVoid) : CEnemyBase::Hit {
     jump Fire();
     return EReturn();
   };
 
-// DEATH
-  
-  Die(EDeath eDeath) : CEnemyBase::Die
-  {
-  
+  // Death
+  Die(EDeath eDeath) : CEnemyBase::Die {
     m_bDying = TRUE;
-
     m_penDeathInflictor = eDeath.eLastDamage.penInflictor;
 
     // find the one who killed, or other best suitable player
     m_penKiller = m_penDeathInflictor;
+
     if (m_penKiller == NULL || !IsOfClass(m_penKiller, "Player")) {
       m_penKiller = m_penEnemy;
     }
 
     if (m_penKiller == NULL || !IsOfClass(m_penKiller, "Player")) {
-      m_penKiller = FixupCausedToPlayer(this, m_penKiller, /*bWarning=*/FALSE);
+      m_penKiller = FixupCausedToPlayer(this, m_penKiller, FALSE);
     }
 
     // stop rotations
     SetDesiredRotation(ANGLE3D(0.0f, 0.0f, 0.0f));
+
     // first kill off all enemies inside the control area
     KillAllEnemiesInArea(eDeath);
 
     StartModelAnim(SUMMONER_ANIM_CHANTING, SOF_SMOOTHCHANGE);
     PlaySound(m_soExplosion, SOUND_LASTWORDS, SOF_3D);
-    autowait(4.0f);
 
+    autowait(4.0f);
     autocall TeleportToDeathMarker() EReturn;
 
     // do this once more, just in case anything survived
     EDeath eDeath;
     eDeath.eLastDamage.penInflictor = m_penDeathInflictor;
+
     KillAllEnemiesInArea(eDeath);
 
     // slowly start shaking
@@ -956,7 +1015,8 @@ procedures:
     
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
     StartModelAnim(SUMMONER_ANIM_DEATHBLOW, SOF_SMOOTHCHANGE);
-    autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_DEATHBLOW)-0.25f);
+
+    autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_DEATHBLOW) - 0.25f);
 
     // hide model
     SwitchToEditorModel();
@@ -964,52 +1024,56 @@ procedures:
     // start death starts
     CPlacement3D plStars;
     plStars = GetPlacement();
+
     ESpawnEffect eSpawnEffect;
     eSpawnEffect.betType = BET_SUMMONERSTAREXPLOSION;
-    eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
+    eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
+
     CEntityPointer penStars = CreateEntity(plStars, CLASS_BASIC_EFFECT);
     penStars->Initialize(eSpawnEffect);
 
     m_tmDeathBegin = _pTimer->CurrentTick();
     m_fDeathDuration = 12.0f;
     m_bExploded = TRUE;
-    ShakeItBaby(_pTimer->CurrentTick(), 5.0f, FALSE);
 
+    ShakeItBaby(_pTimer->CurrentTick(), 5.0f, FALSE);
     PlaySound(m_soExplosion, SOUND_EXPLODE, SOF_3D);
 
     // spawn debris
     Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, 1.0f, 
       FLOAT3D(0.0f, 10.0f, 0.0f), FLOAT3D(0.0f, 0.0f, 0.0f), 5.0f, 2.0f);
-    for (INDEX i=0; i<15; i++) {
-      
-      FLOAT3D vSpeed = FLOAT3D(0.3f+FRnd()*0.1f, 1.0f+FRnd()*0.5f, 0.3f+FRnd()*0.1f)*1.5f*m_fStretch;
+
+    for (INDEX i = 0; i < 15; i++) {
+      FLOAT3D vSpeed = FLOAT3D(0.3f + FRnd() * 0.1f, 1.0f + FRnd() * 0.5f, 0.3f + FRnd() * 0.1f) * 1.5f * m_fStretch;
       FLOAT3D vPos = vSpeed + GetPlacement().pl_PositionVector;
-      ANGLE3D aAng = ANGLE3D(FRnd()*360.0f, FRnd()*360.0f, FRnd()*360.0f);
+      ANGLE3D aAng = ANGLE3D(FRnd() * 360.0f, FRnd() * 360.0f, FRnd() * 360.0f);
       
       vSpeed.Normalize();
       vSpeed(2) *= vSpeed(2);
 
       CPlacement3D plPos = CPlacement3D (vPos, aAng);
       
-      switch (i%3) {
-      case 0:
-        Debris_Spawn_Independent(this, this, MODEL_DEBRIS01, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
-          plPos, vSpeed*70.0f, aAng);
-        Debris_Spawn_Independent(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch*0.33f, 
-          plPos, vSpeed*70.0f, aAng);
-        break;
-      case 1:
-        Debris_Spawn_Independent(this, this, MODEL_DEBRIS02, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
-          plPos, vSpeed*70.0f, aAng);
-        Debris_Spawn_Independent(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch*0.33f, 
-          plPos, vSpeed*70.0f, aAng);
-        break;
-      case 2:
-        Debris_Spawn_Independent(this, this, MODEL_DEBRIS03, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
-          plPos, vSpeed*70.0f, aAng);
-        Debris_Spawn_Independent(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch*0.33f, 
-          plPos, vSpeed*70.0f, aAng);
-        break;
+      switch (i % 3) {
+        case 0:
+          Debris_Spawn_Independent(this, this, MODEL_DEBRIS01, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
+            plPos, vSpeed * 70.0f, aAng);
+          Debris_Spawn_Independent(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch * 0.33f, 
+            plPos, vSpeed * 70.0f, aAng);
+          break;
+
+        case 1:
+          Debris_Spawn_Independent(this, this, MODEL_DEBRIS02, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
+            plPos, vSpeed * 70.0f, aAng);
+          Debris_Spawn_Independent(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch * 0.33f, 
+            plPos, vSpeed * 70.0f, aAng);
+          break;
+
+        case 2:
+          Debris_Spawn_Independent(this, this, MODEL_DEBRIS03, TEXTURE_SUMMONER, 0, 0, 0, 0, m_fStretch, 
+            plPos, vSpeed * 70.0f, aAng);
+          Debris_Spawn_Independent(this, this, MODEL_DEBRIS_FLESH, TEXTURE_DEBRIS_FLESH , 0, 0, 0, 0, m_fStretch * 0.33f, 
+            plPos, vSpeed * 70.0f, aAng);
+          break;
       }
     }
  
@@ -1025,22 +1089,26 @@ procedures:
     PlaySound(m_soSound, SOUND_CHIMES, SOF_3D);
 
     m_iIndex = 20;
-    while ((m_iIndex--)>1) {
+
+    while (m_iIndex-- > 1) {
       CPlacement3D plExplosion;
       plExplosion.pl_OrientationAngle = ANGLE3D(0.0f, 0.0f, 0.0f);
-      plExplosion.pl_PositionVector = FLOAT3D(0.3f+FRnd()*0.1f, 1.0f+FRnd()*0.5f, 0.3f+FRnd()*0.1f)*m_fStretch;
+      plExplosion.pl_PositionVector = FLOAT3D(0.3f + FRnd() * 0.1f, 1.0f + FRnd() * 0.5f, 0.3f + FRnd() * 0.1f) * m_fStretch;
       plExplosion.pl_PositionVector += GetPlacement().pl_PositionVector;
+
       ESpawnEffect eSpawnEffect;
-      eSpawnEffect.colMuliplier = C_WHITE|CT_OPAQUE;
+      eSpawnEffect.colMuliplier = C_WHITE | CT_OPAQUE;
       eSpawnEffect.betType = BET_CANNON;
-      FLOAT fSize = (m_fStretch*m_iIndex)*0.333f;
+
+      FLOAT fSize = (m_fStretch * m_iIndex) * 0.333f;
       eSpawnEffect.vStretch = FLOAT3D(fSize, fSize, fSize);
+
       CEntityPointer penExplosion = CreateEntity(plExplosion, CLASS_BASIC_EFFECT);
       penExplosion->Initialize(eSpawnEffect);
 
-      ShakeItBaby(_pTimer->CurrentTick(), m_iIndex/4.0f, FALSE);
+      ShakeItBaby(_pTimer->CurrentTick(), m_iIndex / 4.0f, FALSE);
 
-      autowait(0.05f + FRnd()*0.2f);
+      autowait(0.05f + FRnd() * 0.2f);
     }
 
     autowait(m_fDeathDuration);
@@ -1052,12 +1120,11 @@ procedures:
 
     EDeath eDeath;
     eDeath.eLastDamage.penInflictor = m_penDeathInflictor;
+
     jump CEnemyBase::Die(eDeath);
   }
 
-  TeleportToDeathMarker(EVoid)
-  {
-
+  TeleportToDeathMarker(EVoid) {
     m_bInvulnerable = TRUE;
 
     StartModelAnim(SUMMONER_ANIM_VANISHING, SOF_SMOOTHCHANGE);
@@ -1070,6 +1137,7 @@ procedures:
     
     // destroy possible flames
     CEntityPointer penFlame = GetChildOfClass("Flame");
+
     if (penFlame != NULL) {
       penFlame->Destroy();
     }
@@ -1079,13 +1147,17 @@ procedures:
 
     CPlacement3D pl;
     pl.pl_PositionVector = m_penDeathMarker->GetPlacement().pl_PositionVector;
+
     FLOAT3D vToPlayer;
+
     if (m_penEnemy != NULL) {
       vToPlayer = m_penEnemy->GetPlacement().pl_PositionVector - pl.pl_PositionVector;
     } else {
       vToPlayer = m_vPlayerSpotted - pl.pl_PositionVector;
     }
+
     vToPlayer.Normalize();
+
     DirectionVectorToAngles(vToPlayer, pl.pl_OrientationAngle);
     Teleport(pl);
 
@@ -1093,31 +1165,29 @@ procedures:
     SpawnTeleportEffect();
 
     autowait(0.5f);
+
     SwitchToModel();
     SetCollisionFlags(ECF_MODEL);
     
     m_bInvulnerable = FALSE;
 
     StartModelAnim(SUMMONER_ANIM_APPEARING, SOF_SMOOTHCHANGE);
-    autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_APPEARING));
 
+    autowait(GetModelObject()->GetAnimLength(SUMMONER_ANIM_APPEARING));
     return EReturn();
   }
 
-  BossAppear(EVoid)
-  {
+  BossAppear(EVoid) {
     return EReturn();
   }
 
   // overridable called before main enemy loop actually begins
-  PreMainLoop(EVoid) : CEnemyBase::PreMainLoop
-  {
+  PreMainLoop(EVoid) : CEnemyBase::PreMainLoop {
     autocall BossAppear() EReturn;
     return EReturn();
   }
 
   Immaterial() {
-    
     // hide model
     DisappearEffect();
     SwitchToEditorModel();
@@ -1125,38 +1195,48 @@ procedures:
     
     // destroy possible flames
     CEntityPointer penFlame = GetChildOfClass("Flame");
+
     if (penFlame != NULL) {
       penFlame->Destroy();
     }
 
     // wait required time
-    autowait(m_fImmaterialDuration+FRnd()*2.0f-1.0f);
+    autowait(m_fImmaterialDuration + FRnd() * 2.0f - 1.0f);
     
     INDEX iMaxTries = 10;
     FLOAT3D vTarget;
+
     // move to a new position
     do {
-      CSummonerMarker *marker = &((CSummonerMarker &)*m_penTeleportMarker);
-      INDEX iMarker = IRnd()%m_iTeleportMarkers;
-      while (iMarker>0) {
-        marker = &((CSummonerMarker &)*marker->m_penTarget);
+      CSummonerMarker *penMarker = (CSummonerMarker *)&*m_penTeleportMarker;
+      INDEX iMarker = IRnd() % m_iTeleportMarkers;
+
+      while (iMarker > 0) {
+        penMarker = (CSummonerMarker *)&*penMarker->m_penTarget;
         iMarker--;
       }
-      vTarget = marker->GetPlacement().pl_PositionVector;
-      FLOAT fR = FRnd()*marker->m_fMarkerRange;
-      FLOAT fA = FRnd()*360.0f;
-      vTarget += FLOAT3D(CosFast(fA)*fR, 0.05f, SinFast(fA)*fR);
-    } while (!DistanceToAllPlayersGreaterThen(1.0f) || (iMaxTries--)<1);
+
+      vTarget = penMarker->GetPlacement().pl_PositionVector;
+
+      FLOAT fR = FRnd() * penMarker->m_fMarkerRange;
+      FLOAT fA = FRnd() * 360.0f;
+      vTarget += FLOAT3D(CosFast(fA) * fR, 0.05f, SinFast(fA) * fR);
+
+    } while (!DistanceToAllPlayersGreaterThen(1.0f) || iMaxTries-- < 1);
     
     CPlacement3D pl;
     pl.pl_PositionVector = vTarget;
+
     FLOAT3D vToPlayer;
+
     if (m_penEnemy != NULL) {
       vToPlayer = m_penEnemy->GetPlacement().pl_PositionVector - vTarget;
     } else {
       vToPlayer = m_vPlayerSpotted - vTarget;
     }
+
     vToPlayer.Normalize();
+
     DirectionVectorToAngles(vToPlayer, pl.pl_OrientationAngle);
     Teleport(pl);
 
@@ -1178,42 +1258,48 @@ procedures:
 
     SendEvent(EBegin());
     return EReturn();
-
   }
 
   SummonerLoop() {
     // spawn a 1sec reminder
     SpawnReminder(this, 1.0f, 128);
+
     wait () {
-      on (EBegin) :
-      {
+      on (EBegin) : {
         call CEnemyBase::MainLoop();
       }
-      on (EReminder er) :
-      {
+
+      on (EReminder er) : {
         // pass all reminders but the 128 one
         if (er.iValue == 128) {
           RecalculateFuss();
+
           // see if we have to teleport
-          if (_pTimer->CurrentTick()>m_tmMaterializationTime+m_fCorporealDuration) {
+          if (_pTimer->CurrentTick() > m_tmMaterializationTime + m_fCorporealDuration) {
             m_bShouldTeleport = TRUE;
           }
+
           // spawn the reminder again so that we return here
           SpawnReminder(this, 1.0f, 128);
+
         } else if (er.iValue == 129 && !m_bDying) {
           call InitiateTeleport();
+
         } else if (TRUE) {
           pass;
         }
-        resume;
-      }      
-      // we want to teleport in near future
-      on (ESummonerTeleport est) :
-      {
-        //m_fTeleportWaitTime = est.fWait;
-        SpawnReminder(this, est.fWait, 129);
+
         resume;
       }
+
+      // we want to teleport in near future
+      on (ESummonerTeleport est) : {
+        //m_fTeleportWaitTime = est.fWait;
+        SpawnReminder(this, est.fWait, 129);
+
+        resume;
+      }
+
       otherwise () : {
         resume;
       }
@@ -1227,16 +1313,19 @@ procedures:
     
     SetPhysicsFlags(EPF_MODEL_WALKING);
     SetCollisionFlags(ECF_IMMATERIAL);
-    SetFlags(GetFlags()|ENF_ALIVE);
+    SetFlags(GetFlags() | ENF_ALIVE);
     
     en_fDensity = 10000.0f;
     m_fDamageWounded = 1e6f;
     
     m_sptType = SPT_BLOOD;
     m_bBoss = TRUE;
+
     SetHealth(SUMMONER_HEALTH);
     m_fMaxHealth = SUMMONER_HEALTH;
+
     m_fBodyParts = 0;
+
     // setup moving speed
     m_fWalkSpeed = 0.0f;
     m_aWalkRotateSpeed = 270.0f;
@@ -1244,12 +1333,14 @@ procedures:
     m_aAttackRotateSpeed = 270.0f;
     m_fCloseRunSpeed = 0.0f;
     m_aCloseRotateSpeed = 270.0f;
+
     // setup attack distances
     m_fAttackDistance = 500.0f;
     m_fCloseDistance = 50.0f;
     m_fStopDistance = 500.0f;
     m_fIgnoreRange = 600.0f;
     m_iScore = 1000000;
+
     // setup attack times
     m_fAttackFireTime = m_fFirePeriod;
     m_fCloseFireTime = m_fFirePeriod;
@@ -1259,9 +1350,11 @@ procedures:
 
     // set your appearance
     //m_fStretch = SIZE;
+
     SetComponents(this, *GetModelObject(), MODEL_SUMMONER, TEXTURE_SUMMONER, 0, 0, 0); 
     AddAttachmentToModel(this, *GetModelObject(), SUMMONER_ATTACHMENT_STAFF, MODEL_STAFF, TEXTURE_STAFF, 0, 0, 0);
-    GetModelObject()->StretchModel(FLOAT3D(m_fStretch, m_fStretch, m_fStretch ));
+
+    GetModelObject()->StretchModel(FLOAT3D(m_fStretch, m_fStretch, m_fStretch));
     ModelChangeNotify();
 
     AddToMovers();
@@ -1269,25 +1362,35 @@ procedures:
     autowait(_pTimer->TickQuantum);
 
     m_emEmiter.Initialize(this);
-    m_emEmiter.em_etType=ET_SUMMONER_STAFF;
+    m_emEmiter.em_etType = ET_SUMMONER_STAFF;
 
     // count templates by groups
     INDEX i;
-    CEntityPointer *pen;
+    CEntityPointer *pen = &m_penGroup01Template01;
     m_iGroup01Count = 0;
-    pen = &m_penGroup01Template01;
-    for (i=0; i<SUMMONER_TEMP_PER_GROUP; i++) {
-      if (&*pen[i] != NULL) { m_iGroup01Count++; }
+
+    for (i = 0; i < SUMMONER_TEMP_PER_GROUP; i++) {
+      if (&*pen[i] != NULL) {
+        m_iGroup01Count++;
+      }
     }
-    m_iGroup02Count = 0;
+
     pen = &m_penGroup02Template01;
-    for (i=0; i<SUMMONER_TEMP_PER_GROUP; i++) {
-      if (&*pen[i] != NULL) { m_iGroup02Count++; }
+    m_iGroup02Count = 0;
+
+    for (i = 0; i < SUMMONER_TEMP_PER_GROUP; i++) {
+      if (&*pen[i] != NULL) {
+        m_iGroup02Count++;
+      }
     }
-    m_iGroup03Count = 0;
+
     pen = &m_penGroup03Template01;
-    for (i=0; i<SUMMONER_TEMP_PER_GROUP; i++) {
-      if (&*pen[i] != NULL) { m_iGroup03Count++; }
+    m_iGroup03Count = 0;
+
+    for (i = 0; i < SUMMONER_TEMP_PER_GROUP; i++) {
+      if (&*pen[i] != NULL) {
+        m_iGroup03Count++;
+      }
     }
 
     if (!DoSafetyChecks()) {
@@ -1296,22 +1399,21 @@ procedures:
     }
    
     // count spawn markers
-    CEnemyMarker *it;
+    CEnemyMarker *penSpawnMarker = &((CEnemyMarker &)*m_penSpawnMarker);
     m_iSpawnMarkers = 1;
-    it = &((CEnemyMarker &)*m_penSpawnMarker);
-    while (it->m_penTarget != NULL)
-    {
-      it = &((CEnemyMarker &)*it->m_penTarget);
-      m_iSpawnMarkers ++;
+
+    while (penSpawnMarker->m_penTarget != NULL) {
+      penSpawnMarker = (CEnemyMarker *)&*penSpawnMarker->m_penTarget;
+      m_iSpawnMarkers++;
     }
 
     // count teleport markers
+    penSpawnMarker = (CEnemyMarker *)&*m_penTeleportMarker;
     m_iTeleportMarkers = 1;
-    it = &((CEnemyMarker &)*m_penTeleportMarker);
-    while (it->m_penTarget != NULL)
-    {
-      it = &((CEnemyMarker &)*it->m_penTarget);
-      m_iTeleportMarkers ++;
+
+    while (penSpawnMarker->m_penTarget != NULL) {
+      penSpawnMarker = (CEnemyMarker *)&*penSpawnMarker->m_penTarget;
+      m_iTeleportMarkers++;
     }
 
     m_iSpawnScheme = 0;
@@ -1324,9 +1426,17 @@ procedures:
 
     // wait to be triggered
     wait() {
-      on (EBegin) : { resume; }
-      on (ETrigger) : { stop; }
-      otherwise (): { resume; }
+      on (EBegin) : {
+        resume;
+      }
+
+      on (ETrigger) : {
+        stop;
+      }
+
+      otherwise (): {
+        resume;
+      }
     }
 
     m_soExplosion.Set3DParameters(1500.0f, 1000.0f, 2.0f, 1.0f);
@@ -1336,9 +1446,11 @@ procedures:
     m_iTaunt = 0;
 
     //PlaySound(m_soSound, SOUND_APPEAR, SOF_3D);
+
     // teleport in
     SpawnTeleportEffect();
     SwitchToModel();
+
     m_bInvulnerable = FALSE;
     SetCollisionFlags(ECF_MODEL);
 

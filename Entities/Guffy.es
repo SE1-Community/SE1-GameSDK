@@ -22,30 +22,26 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 uses "Entities/EnemyBase";
 uses "Entities/Projectile";
 
-
 %{
-// info structure
+// Info structure
 static EntityInfo eiGuffy = {
   EIBT_FLESH, 800.0f,
   0.0f, 1.9f, 0.0f, // source (eyes)
   0.0f, 1.0f, 0.0f, // target (body)
 };
 
-#define FIRE_LEFT_ARM   FLOAT3D(-0.56f, +1.125f, -1.32f)
-#define FIRE_RIGHT_ARM  FLOAT3D(+0.50f, +1.060f, -0.82f)
+#define FIRE_LEFT_ARM  FLOAT3D(-0.56f, +1.125f, -1.32f)
+#define FIRE_RIGHT_ARM FLOAT3D(+0.50f, +1.060f, -0.82f)
 
-//#define FIRE_DEATH_LEFT   FLOAT3D(0.0f, 7.0f, -2.0f)
-//#define FIRE_DEATH_RIGHT  FLOAT3D(3.75f, 4.2f, -2.5f)
-
+//#define FIRE_DEATH_LEFT  FLOAT3D(0.0f, 7.0f, -2.0f)
+//#define FIRE_DEATH_RIGHT FLOAT3D(3.75f, 4.2f, -2.5f)
 %}
-
 
 class CGuffy : CEnemyBase {
 name      "Guffy";
 thumbnail "Thumbnails\\Guffy.tbn";
 
 properties:
-  
   2 INDEX m_iLoopCounter = 0,
   3 FLOAT m_fSize = 1.0f,
   4 BOOL  m_bWalkSoundPlaying = FALSE,
@@ -53,31 +49,31 @@ properties:
   6 BOOL  m_bEnemyToTheLeft = FALSE,
 
   //10 CSoundObject m_soFeet,
-  10 CSoundObject m_soFire1,
-  11 CSoundObject m_soFire2,
+  11 CSoundObject m_soFire1,
+  12 CSoundObject m_soFire2,
   
 components:
-  0 class   CLASS_BASE          "Classes\\EnemyBase.ecl",
-  1 class   CLASS_PROJECTILE    "Classes\\Projectile.ecl",
+  0 class CLASS_BASE       "Classes\\EnemyBase.ecl",
+  1 class CLASS_PROJECTILE "Classes\\Projectile.ecl",
 
- 10 model   MODEL_GUFFY         "ModelsMP\\Enemies\\Guffy\\Guffy.mdl",
- 11 texture TEXTURE_GUFFY       "ModelsMP\\Enemies\\Guffy\\Guffy.tex",
- 12 model   MODEL_GUN           "ModelsMP\\Enemies\\Guffy\\Gun.mdl",
- 13 texture TEXTURE_GUN         "ModelsMP\\Enemies\\Guffy\\Gun.tex",
+ 10 model   MODEL_GUFFY   "ModelsMP\\Enemies\\Guffy\\Guffy.mdl",
+ 11 texture TEXTURE_GUFFY "ModelsMP\\Enemies\\Guffy\\Guffy.tex",
+ 12 model   MODEL_GUN     "ModelsMP\\Enemies\\Guffy\\Gun.mdl",
+ 13 texture TEXTURE_GUN   "ModelsMP\\Enemies\\Guffy\\Gun.tex",
 
 // ************** SOUNDS **************
- 40 sound   SOUND_IDLE          "ModelsMP\\Enemies\\Guffy\\Sounds\\Idle.wav",
- 41 sound   SOUND_SIGHT         "ModelsMP\\Enemies\\Guffy\\Sounds\\Sight.wav",
- 43 sound   SOUND_FIRE          "ModelsMP\\Enemies\\Guffy\\Sounds\\Fire.wav",
- 44 sound   SOUND_WOUND         "ModelsMP\\Enemies\\Guffy\\Sounds\\Wound.wav",
- 45 sound   SOUND_DEATH         "ModelsMP\\Enemies\\Guffy\\Sounds\\Death.wav",
+ 40 sound SOUND_IDLE  "ModelsMP\\Enemies\\Guffy\\Sounds\\Idle.wav",
+ 41 sound SOUND_SIGHT "ModelsMP\\Enemies\\Guffy\\Sounds\\Sight.wav",
+ 43 sound SOUND_FIRE  "ModelsMP\\Enemies\\Guffy\\Sounds\\Fire.wav",
+ 44 sound SOUND_WOUND "ModelsMP\\Enemies\\Guffy\\Sounds\\Wound.wav",
+ 45 sound SOUND_DEATH "ModelsMP\\Enemies\\Guffy\\Sounds\\Death.wav",
 
 functions:
-// describe how this enemy killed player
-  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath)
-  {
+  // Describe how this enemy killed player
+  virtual CTString GetPlayerKillDescription(const CTString &strPlayerName, const EDeath &eDeath) {
     CTString str;
     str.PrintF(TRANS("Guffy gunned %s down"), strPlayerName);
+
     return str;
   }
 
@@ -85,17 +81,17 @@ functions:
     static DECLARE_CTFILENAME(fnmSoldier, "DataMP\\Messages\\Enemies\\Guffy.txt");
     return fnmSoldier;
   }
-  /*// overridable function to get range for switching to another player
-  FLOAT GetThreatDistance(void)
-  {
+
+  // Overridable function to get range for switching to another player
+  /*FLOAT GetThreatDistance(void) {
     return m_fThreatDistance;
   }*/
 
-  /*BOOL ForcesCannonballToExplode(void)
-  {
+  /*BOOL ForcesCannonballToExplode(void) {
     if (m_EwcChar == WLC_SERGEANT) {
       return TRUE;
     }
+
     return CEnemyBase::ForcesCannonballToExplode();
   }*/
 
@@ -126,11 +122,11 @@ functions:
     return &eiGuffy;
   };
 
-  /*FLOAT GetCrushHealth(void)
-  {
+  /*FLOAT GetCrushHealth(void) {
     if (m_EwcChar == WLC_SERGEANT) {
       return 100.0f;
     }
+
     return 0.0f;
   }*/
 
@@ -142,52 +138,61 @@ functions:
     }
   };
 
-  // virtual anim functions
+  // Virtual anim functions
   void StandingAnim(void) {
     StartModelAnim(GUFFY_ANIM_IDLE, AOF_LOOPING | AOF_NORESTART);
   };
-  /*void StandingAnimFight(void)
-  {
+
+  /*void StandingAnimFight(void) {
     StartModelAnim(GUFFY_ANIM_FIRE, AOF_LOOPING|AOF_NORESTART);
   }*/
+
   void RunningAnim(void) {
     StartModelAnim(GUFFY_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
   };
+
   void WalkingAnim(void) {
     RunningAnim();
   };
+
   void RotatingAnim(void) {
     StartModelAnim(GUFFY_ANIM_RUN, AOF_LOOPING | AOF_NORESTART);
   };
 
-  // virtual sound functions
+  // Virtual sound functions
   void IdleSound(void) {
     PlaySound(m_soSound, SOUND_IDLE, SOF_3D);
   };
+
   void SightSound(void) {
     PlaySound(m_soSound, SOUND_SIGHT, SOF_3D);
   };
+
   void WoundSound(void) {
     PlaySound(m_soSound, SOUND_WOUND, SOF_3D);
   };
+
   void DeathSound(void) {
     PlaySound(m_soSound, SOUND_DEATH, SOF_3D);
   };
 
-  // fire rocket
+  // Fire rocket
   void FireRocket(FLOAT3D &vPos) {
     CPlacement3D plRocket;
     plRocket.pl_PositionVector = vPos;
     plRocket.pl_OrientationAngle = ANGLE3D(0, -5.0f - FRnd() * 10.0f, 0);
     plRocket.RelativeToAbsolute(GetPlacement());
+
     CEntityPointer penProjectile = CreateEntity(plRocket, CLASS_PROJECTILE);
+
     ELaunchProjectile eLaunch;
     eLaunch.penLauncher = this;
     eLaunch.prtType = PRT_GUFFY_PROJECTILE;
+
     penProjectile->Initialize(eLaunch);
   };
 
-  // adjust sound and watcher parameters here if needed
+  // Adjust sound and watcher parameters here if needed
   void EnemyPostInit(void) {
     // set sound default parameters
     m_soSound.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
@@ -195,20 +200,24 @@ functions:
     m_soFire2.Set3DParameters(160.0f, 50.0f, 1.0f, 1.0f);
   };
 
-  // damage anim
+  // Damage anim
   INDEX AnimForDamage(FLOAT fDamage) {
     INDEX iAnim;
     iAnim = GUFFY_ANIM_WOUND;
     StartModelAnim(iAnim, 0);
+
     return iAnim;
   };
 
-  // death
+  // Death
   INDEX AnimForDeath(void) {
     INDEX iAnim;
+
     FLOAT3D vFront;
     GetHeadingDirection(0, vFront);
+
     FLOAT fDamageDir = m_vDamage % vFront;
+
     if (fDamageDir < 0) {
       iAnim = GUFFY_ANIM_DEATHBACKWARD;
     } else {
@@ -216,67 +225,71 @@ functions:
     }
 
     StartModelAnim(iAnim, 0);
+
     return iAnim;
   };
 
-  // death
+  // Death
   FLOAT WaitForDust(FLOAT3D &vStretch) {
-    vStretch = FLOAT3D(1, 1, 2) * 1.5f;
+    vStretch = FLOAT3D(1.0f, 1.0f, 2.0f) * 1.5f;
+
     if (GetModelObject()->GetAnim() == GUFFY_ANIM_DEATHBACKWARD) {
       return 0.48f;
+
     } else if (GetModelObject()->GetAnim() == GUFFY_ANIM_DEATHFORWARD) {
       return 1.0f;
     }
+
     return -1.0f;
   };
 
 procedures:
   Fire(EVoid) : CEnemyBase::Fire {
-    
     StartModelAnim(GUFFY_ANIM_FIRE, AOF_LOOPING);
     
     // wait for animation to bring the left hand into firing position
     autowait(0.1f);
 
     FLOATmatrix3D m;
-    FLOAT3D fLookRight = FLOAT3D(1.0f, 0.0f, 0.0f);
     MakeRotationMatrixFast(m, GetPlacement().pl_OrientationAngle);
-    fLookRight = fLookRight * m;
+    
+    FLOAT3D fLookRight = FLOAT3D(1.0f, 0.0f, 0.0f) * m;
     BOOL bEnemyRight = fLookRight % (m_penEnemy->GetPlacement().pl_PositionVector - GetPlacement().pl_PositionVector);
 
-    if (bEnemyRight >= 0) {  // enemy is to the right of guffy
-      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_LEFT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
+    // enemy is to the right of guffy
+    if (bEnemyRight >= 0) {
+      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_LEFT_ARM * m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soFire1, SOUND_FIRE, SOF_3D);
       
-      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(-9, 0, 0));
+      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_RIGHT_ARM * m_fSize, ANGLE3D(-9.0f, 0.0f, 0.0f));
       PlaySound(m_soFire2, SOUND_FIRE, SOF_3D);
-    } else { // enemy is to the left of guffy
-      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_LEFT_ARM*m_fSize, ANGLE3D(9, 0, 0));
+
+    // enemy is to the left of guffy
+    } else {
+      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_LEFT_ARM * m_fSize, ANGLE3D(9.0f, 0.0f, 0.0f));
       PlaySound(m_soFire1, SOUND_FIRE, SOF_3D);
       
-      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_RIGHT_ARM*m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
+      ShootProjectile(PRT_GUFFY_PROJECTILE, FIRE_RIGHT_ARM * m_fSize, ANGLE3D(0.0f, 0.0f, 0.0f));
       PlaySound(m_soFire2, SOUND_FIRE, SOF_3D);
     }
     
     autowait(1.0f);
     
     StopMoving();
-    
     MaybeSwitchToAnotherPlayer();
 
     // wait for a while
     StandingAnimFight();
-    autowait(FRnd()*0.25f+0.25f);
+    autowait(FRnd() * 0.25f + 0.25f);
 
     return EReturn();
   };
 
-
-// DEATH
+  // Death
   /*Death(EVoid) : CEnemyBase::Death {
     // stop moving
     StopMoving();
-    DeathSound();     // death sound
+    DeathSound();
     
     // set physic flags
     SetCollisionFlags(ECF_MODEL);
@@ -298,21 +311,28 @@ procedures:
     InitAsModel();
     SetPhysicsFlags(EPF_MODEL_WALKING);
     SetCollisionFlags(ECF_MODEL);
-    SetFlags(GetFlags()|ENF_ALIVE);
+    SetFlags(GetFlags() | ENF_ALIVE);
+
     SetHealth(210.0f);
     m_fMaxHealth = 210.0f;
+
     en_fDensity = 2000.0f;
 
     // set your appearance
     SetModel(MODEL_GUFFY);
-    m_fSize = 1.5f;
     SetModelMainTexture(TEXTURE_GUFFY);
+
+    m_fSize = 1.5f;
+
     AddAttachment(GUFFY_ATTACHMENT_GUNRIGHT, MODEL_GUN, TEXTURE_GUN);
     AddAttachment(GUFFY_ATTACHMENT_GUNLEFT, MODEL_GUN, TEXTURE_GUN);
+
     GetModelObject()->StretchModel(FLOAT3D(m_fSize, m_fSize, m_fSize));
     ModelChangeNotify();
+
     CModelObject *pmoRight = &GetModelObject()->GetAttachmentModel(GUFFY_ATTACHMENT_GUNRIGHT)->amo_moModelObject;
-    pmoRight->StretchModel(FLOAT3D(-1,1,1));
+    pmoRight->StretchModel(FLOAT3D(-1.0f, 1.0f, 1.0f));
+
     m_fBlowUpAmount = 10000.0f;
     m_iScore = 3000;
     //m_fThreatDistance = 15;
@@ -322,13 +342,15 @@ procedures:
     }
 
     StandingAnim();
+
     // setup moving speed
     m_fWalkSpeed = FRnd() + 2.5f;
-    m_aWalkRotateSpeed = FRnd()*10.0f + 500.0f;
+    m_aWalkRotateSpeed = FRnd() * 10.0f + 500.0f;
     m_fAttackRunSpeed = FRnd() + 5.0f;
-    m_aAttackRotateSpeed = FRnd()*50 + 245.0f;
+    m_aAttackRotateSpeed = FRnd() * 50.0f + 245.0f;
     m_fCloseRunSpeed = FRnd() + 5.0f;
-    m_aCloseRotateSpeed = FRnd()*50 + 245.0f;
+    m_aCloseRotateSpeed = FRnd() * 50.0f + 245.0f;
+
     // setup attack distances
     m_fAttackDistance = 150.0f;
     m_fCloseDistance = 0.0f;
@@ -336,6 +358,7 @@ procedures:
     m_fAttackFireTime = 5.0f;
     m_fCloseFireTime = 5.0f;
     m_fIgnoreRange = 250.0f;
+
     // damage/explode properties
     m_fBodyParts = 5;
     m_fDamageWounded = 100.0f;
